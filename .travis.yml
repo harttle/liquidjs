@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - "4"
+before_script:
+  - npm install -g mocha
+after_script: 
+  - NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage

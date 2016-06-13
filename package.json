@@ -1,0 +1,36 @@
+{
+  "name": "shopify-liquid",
+  "version": "1.0.0",
+  "description": "A Shopify Liquid Implementation in Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harttle/shopify-liquid.git"
+  },
+  "keywords": [
+    "Shopify",
+    "Liquid"
+  ],
+  "author": "Harttle",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harttle/shopify-liquid/issues"
+  },
+  "homepage": "https://github.com/harttle/shopify-liquid#readme",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "debug": "^2.2.0",
+    "lodash": "^4.13.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "coveralls": "^2.11.9",
+    "istanbul": "^0.4.3",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.4"
+  }
+}
