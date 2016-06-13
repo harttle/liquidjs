@@ -29,7 +29,7 @@ describe('tokenizer', function() {
         tokens[1].type.should.equal('output');
         tokens[1].value.should.equal('foo | date: "%Y-%m-%d"');
     });
-    it('should handle successive output and tags', function(){
+    it('should handle successive outputs and tags', function(){
         var html = '{{foo}}{{bar}}{%foo%}{%bar%}';
         var tokens = tokenizer.parse(html);
 
