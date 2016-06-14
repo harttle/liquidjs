@@ -1,6 +1,6 @@
 var chai = require("chai");
 var should = chai.should();
-chai.use(require("chai-as-promised"));
+var expect = chai.expect;
 
 var context = require('../context.js');
 
@@ -29,9 +29,17 @@ describe('context', function() {
         ctx.get('bar[1].b[1]').should.equal(2);
     });
 
-    it('should merge context', function() {
-        ctx.merge({foo: 'foo', foo1: 'foo1'});
+    it('should push context', function() {
+        ctx.push({foo: 'foo', foo1: 'foo1'});
         ctx.get('foo').should.equal('foo');
         ctx.get('foo1').should.equal('foo1');
+        ctx.get('bar[1].b[1]').should.equal(2);
+    });
+
+    it('should pop context', function() {
+        ctx.pop();
+        expect(ctx.get('foo')).to.equal('bar');
+        expect(ctx.get('foo1')).to.equal('');
+        expect(ctx.get('bar[1].b[1]')).to.equal(2);
     });
 });

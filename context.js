@@ -1,26 +1,33 @@
 const _ = require('lodash');
-const identifier = require('./identifier.js');
+const lexical = require('./lexical.js');
 
 var context = {
-    get: function(str){
-        if(identifier.isLiteral(str)){
-            return identifier.parseLiteral(str);
-        } 
-        if(identifier.isVariable(str)){
-            return _.get(this.context, str);
+    get: function(str) {
+        str = str && str.trim();
+        if(!str) return '';
+
+        if (lexical.isLiteral(str)) {
+            var a = lexical.parseLiteral(str);
+            return lexical.parseLiteral(str);
+        }
+        if (lexical.isVariable(str)) {
+            for (var i = this.context.length - 1; i >= 0; i--) {
+                var v = _.get(this.context[i], str);
+                if (v !== undefined) return v;
+            }
         }
         return '';
     },
-    init: function(ctx){
-        this.context = ctx;
+    push: function(ctx) {
+        return this.context.push(ctx);
     },
-    merge: function(ctx){
-        _.merge(this.context, ctx);
+    pop: function() {
+        return this.context.pop();
     }
 };
 
-exports.factory = function(_ctx){
+exports.factory = function(_ctx) {
     var ctx = Object.create(context);
-    ctx.init(_ctx);
+    ctx.context = [_ctx];
     return ctx;
 };

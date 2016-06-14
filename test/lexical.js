@@ -2,7 +2,7 @@ var chai = require("chai");
 var should = chai.should();
 chai.use(require("chai-as-promised"));
 
-var identifier = require('../identifier.js');
+var identifier = require('../lexical.js');
 
 describe('identifier', function() {
     it('should test boolean literal', function() {
