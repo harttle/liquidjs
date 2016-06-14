@@ -3,7 +3,8 @@ const lexical = require('./lexical.js');
 var _tagInstance = {
     render: function(tokens, ctx) {
         var obj = hash(this.markup, ctx);
-        return this.tag.render(tokens, ctx, this.markup, obj);
+        var res = this.tag.render(tokens, ctx, this.markup, obj);
+        return res === undefined ? '' : res;
     }
 };
 

@@ -6,7 +6,7 @@ var context = require('../context.js');
 
 describe('context', function() {
     var ctx;
-    before(function(){
+    beforeEach(function(){
         ctx = context.factory({
             foo: 'bar',
             bar: ['a', {b: [1, 2]}]
@@ -23,6 +23,11 @@ describe('context', function() {
         ctx.get('foo').should.equal('bar');
     });
 
+    it('should set property', function() {
+        ctx.set('foo', 'FOO');
+        ctx.get('foo').should.equal('FOO');
+    });
+
     it('should get desendent property', function() {
         ctx.get('bar[0]').should.equal('a');
         ctx.get('bar[1].b').should.deep.equal([1, 2]);
@@ -37,6 +42,7 @@ describe('context', function() {
     });
 
     it('should pop context', function() {
+        ctx.push({foo: 'foo', foo1: 'foo1'});
         ctx.pop();
         expect(ctx.get('foo')).to.equal('bar');
         expect(ctx.get('foo1')).to.equal('');

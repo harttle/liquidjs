@@ -8,7 +8,7 @@ chai.use(sinonChai);
 var tag = require('../tag.js')();
 var context = require('../context.js');
 var filter = require('../filter')();
-var render = require('../render.js')(filter, tag);
+var render = require('../render.js')(filter, tag).render;
 
 describe('render', function() {
     var ctx, htmlToken, tagToken, filterToken;

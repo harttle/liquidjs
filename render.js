@@ -1,44 +1,49 @@
-module.exports = (Filter, Tag) =>
+module.exports = function(Filter, Tag) {
     function render(tokens, ctx) {
         var html = '';
-        for (var i = 0; i < tokens.length; i++) {
+        while (tokens.length) {
             var token = tokens.shift();
             switch (token.type) {
                 case 'html':
                     html += token.value;
                     break;
                 case 'output':
-                    html += renderOutput(token);
+                    html += evaluate(token.value, ctx);
                     break;
                 case 'tag':
-                    html += renderTag(token);
+                    html += renderTag(token, tokens, ctx);
                     break;
                 default:
                     throw new Error(`unexpected type: ${token.type}`);
             }
         }
         return html;
+    }
 
-        function renderOutput(token) {
-            var filters = token.value.split('|');
-            var val = ctx.get(filters.shift());
-            return filters
-                .map(str => Filter.parse(str))
-                .reduce((v, filter) => filter.render(v, ctx), val);
-        }
+    function evaluate(str, ctx) {
+        var filters = str.split('|');
+        var val = ctx.get(filters.shift());
+        return filters
+            .map(str => Filter.parse(str))
+            .reduce((v, filter) => filter.render(v, ctx), val);
+    }
 
-        function renderTag(token) {
-            var tag = Tag.parse(token.value),
-                subTokens = [];
-            if (tag.needClose) {
-                var curToken, endToken = 'end' + tag.name;
-                while ((curToken = tokens.shift()).value !== endToken) {
-                    subTokens.push(curToken);
-                }
-                if (curToken.value !== endToken) {
-                    throw new Error(`${token.value} not closed`);
-                }
+    function renderTag(token, tokens, ctx) {
+        var tag = Tag.parse(token.value),
+            subTokens = [];
+        if (tag.needClose) {
+            var curToken, endToken = 'end' + tag.name;
+            while ((curToken = tokens.shift()).value !== endToken) {
+                subTokens.push(curToken);
             }
-            return tag.render(subTokens, ctx);
+            if (curToken.value !== endToken) {
+                throw new Error(`${token.value} not closed`);
+            }
         }
+        return tag.render(subTokens, ctx);
+    }
+
+    return {
+        render, evaluate, renderTag
     };
+};

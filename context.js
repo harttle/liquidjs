@@ -18,6 +18,10 @@ var context = {
         }
         return '';
     },
+    set: function(k, v){
+        this.context[this.context.length-1][k] = v;
+        return this;
+    },
     push: function(ctx) {
         return this.context.push(ctx);
     },
