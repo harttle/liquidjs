@@ -5,10 +5,10 @@ const expect = chai.expect;
 
 chai.use(sinonChai);
 
-var tag = require('../tag.js');
+var tag = require('../tag.js')();
 var context = require('../context.js');
-var filter = require('../filter');
-var render = require('../render.js');
+var filter = require('../filter')();
+var render = require('../render.js')(filter, tag);
 
 describe('render', function() {
     var ctx, htmlToken, tagToken, filterToken;

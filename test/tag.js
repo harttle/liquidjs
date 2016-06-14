@@ -4,7 +4,7 @@ var sinon = require("sinon");
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var tag = require('../tag.js');
+var tag = require('../tag.js')();
 var context = require('../context.js');
 
 describe('tag', function() {

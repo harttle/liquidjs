@@ -14,7 +14,7 @@ describe('identifier', function() {
     it('should test number literal', function() {
         identifier.isLiteral('2.3').should.equal(true);
         identifier.isLiteral('.3').should.equal(true);
-        identifier.isLiteral('3.').should.equal(true);
+        identifier.isLiteral('-3.').should.equal(true);
         identifier.isLiteral('23').should.equal(true);
     });
 
@@ -58,7 +58,7 @@ describe('identifier', function() {
     it('should parse number literal', function() {
         identifier.parseLiteral('2.3').should.equal(2.3);
         identifier.parseLiteral('.32').should.equal(0.32);
-        identifier.parseLiteral('23.').should.equal(23);
+        identifier.parseLiteral('-23.').should.equal(-23);
         identifier.parseLiteral('23').should.equal(23);
     });
 

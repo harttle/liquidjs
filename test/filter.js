@@ -5,7 +5,7 @@ const expect = chai.expect;
 
 chai.use(sinonChai);
 
-var filter = require('../filter.js');
+var filter = require('../filter.js')();
 var context = require('../context.js');
 
 describe('filter', function() {

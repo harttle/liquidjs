@@ -3,7 +3,7 @@ const _ = require('lodash');
 var singleQuoted = /'[^']*'/;
 var doubleQuoted = /"[^"]*"/;
 
-var number = /\d+\.?\d*|\.?\d+/;
+var number = /-?\d+\.?\d*|\.?\d+/;
 var bool = /true|false/i;
 var range = /\((\d+)\.\.(\d+)\)/;
 var identifier = /[a-zA-Z_$][a-zA-Z_$0-9]*/;
