@@ -1,4 +1,4 @@
-const context = require('./context');
+const scope = require('./scope');
 const tokenizer = require('./tokenizer.js');
 const Render = require('./render.js');
 const lexical = require('./lexical.js');
@@ -25,10 +25,14 @@ function factory(){
     engine.filter = Filter();
 
     var renderer = Render(engine.filter, engine.tag);
-    engine.evaluate = renderer.evaluate;
+
+    engine.evaluate = renderer.evalExp;
+    engine.evalExp = renderer.evalExp;
+    engine.evalFilter = renderer.evalFilter;
+
     engine.renderTokens = renderer.render;
     engine.render = function(html, ctx) {
-        return engine.renderTokens(tokenizer.parse(html), context.factory(ctx));
+        return engine.renderTokens(tokenizer.parse(html), scope.factory(ctx));
     },
 
     fs.readdirSync(tagsPath).map(function(f){
@@ -36,12 +40,7 @@ function factory(){
         if(!match) return;
         require("./tags/" + f)(engine);
     });
-
-    fs.readdirSync(filtersPath).map(function(f){
-        var match = /^(\w+)\.js$/.exec(f);
-        if(!match) return;
-        require("./filters/" + f)(engine);
-    });
+    require("./filters.js")(engine);
     return engine;
 }
 

@@ -1,21 +1,21 @@
 const lexical = require('./lexical.js');
 
 var _tagInstance = {
-    render: function(tokens, ctx) {
-        var obj = hash(this.markup, ctx);
-        var res = this.tag.render(tokens, ctx, this.markup, obj);
+    render: function(tokens, scope) {
+        var obj = hash(this.token.args, scope);
+        var res = this.tag.render(tokens, scope, this.token, obj);
         return res === undefined ? '' : res;
     }
 };
 
-function hash(markup, ctx) {
+function hash(markup, scope) {
     var obj = {};
-    lexical.patterns.hash.lastIndex = 0;
-    while (match = lexical.patterns.hash.exec(markup)) {
+    lexical.hash.lastIndex = 0;
+    while (match = lexical.hash.exec(markup)) {
         var k = match[1],
             v = match[2];
         if (!k) continue;
-        obj[k] = ctx.get(v);
+        obj[k] = scope.get(v);
     }
     return obj;
 }
@@ -35,8 +35,7 @@ module.exports = function() {
         if (!tag) throw new Error(`tag ${token.name} not found`);
 
         var instance = Object.create(_tagInstance);
-        instance.name = token.name;
-        instance.markup = token.value;
+        instance.token = token;
         instance.tag = tag;
         instance.needClose = tag.needClose;
         return instance;

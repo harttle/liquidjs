@@ -2,8 +2,8 @@ const lexical = require('./lexical.js');
 const _ = require('lodash');
 
 var _filterInstance = {
-    render: function(output, ctx) {
-        var args = this.args.map(arg => ctx.get(arg));
+    render: function(output, scope) {
+        var args = this.args.map(arg => scope.get(arg));
         args.unshift(output);
         return this.filter.apply(null, args);
     }
@@ -13,7 +13,7 @@ module.exports = function() {
     var filters = {};
 
     function construct(str) {
-        var match = lexical.patterns.filterLine.exec(str.trim());
+        var match = lexical.filterLine.exec(str.trim());
         if (!match) {
             throw new Error('illegal filter: ' + str);
         }

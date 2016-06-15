@@ -1,5 +1,8 @@
+const lexical = require('./lexical.js');
+const syntax = require('./syntax.js');
+
 module.exports = function(Filter, Tag) {
-    function render(tokens, ctx) {
+    function render(tokens, scope) {
         var html = '';
         while (tokens.length) {
             var token = tokens.shift();
@@ -8,10 +11,10 @@ module.exports = function(Filter, Tag) {
                     html += token.value;
                     break;
                 case 'output':
-                    html += evaluate(token.value, ctx);
+                    html += evalFilter(token.value, scope);
                     break;
                 case 'tag':
-                    html += renderTag(token, tokens, ctx);
+                    html += renderTag(token, tokens, scope);
                     break;
                 default:
                     throw new Error(`unexpected type: ${token.type}`);
@@ -20,20 +23,37 @@ module.exports = function(Filter, Tag) {
         return html;
     }
 
-    function evaluate(str, ctx) {
-        if(!ctx) throw new Error('ctx is needed to evaluate');
-        var filters = str.split('|');
-        var val = ctx.get(filters.shift());
-        return filters
-            .map(str => Filter.construct(str))
-            .reduce((v, filter) => filter.render(v, ctx), val);
+    function evalExp(exp, scope) {
+        if(!scope) throw new Error('unable to evalExp: scope undefined');
+        var operatorREs = lexical.operators;
+        for (var i = 0; i < operatorREs.length; i++) {
+            var operatorRE = operatorREs[i];
+            var expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`);
+            var match = exp.match(expRE);
+            if (match) {
+                var l = evalExp(match[1], scope);
+                var op = syntax.operators[match[2].trim()];
+                var r = evalExp(match[3], scope);
+                return op(l, r);
+            }
+        }
+        return evalFilter(exp, scope);
     }
 
-    function renderTag(token, tokens, ctx) {
+    function evalFilter(str, scope){
+        if(!scope) throw new Error('unable to evalFilter: scope undefined');
+        var filters = str.split('|');
+        var val = scope.get(filters.shift());
+        return filters
+            .map(str => Filter.construct(str))
+            .reduce((v, filter) => filter.render(v, scope), val);
+    }
+
+    function renderTag(token, tokens, scope) {
         var tag = Tag.construct(token),
             subTokens = [];
         if (tag.needClose) {
-            var curToken, endToken = 'end' + tag.name;
+            var curToken, endToken = 'end' + tag.token.name;
             while ((curToken = tokens.shift()) && curToken.value !== endToken) {
                 subTokens.push(curToken);
             }
@@ -41,10 +61,10 @@ module.exports = function(Filter, Tag) {
                 throw new Error(`${token.value} not closed`);
             }
         }
-        return tag.render(subTokens, ctx);
+        return tag.render(subTokens, scope);
     }
 
     return {
-        render, evaluate, renderTag
+        render, renderTag, evalFilter, evalExp
     };
 };

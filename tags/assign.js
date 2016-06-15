@@ -1,14 +1,14 @@
 var Liquid = require('..');
-var patterns = Liquid.lexical.patterns;
-var re = new RegExp(`(${patterns.identifier.source})\\s*=(.*)`);
+var lexical = Liquid.lexical;
+var re = new RegExp(`(${lexical.identifier.source})\\s*=(.*)`);
 
 module.exports = function(liquid) {
 
     liquid.registerTag('assign', {
-        render: function(tokens, ctx, markup, hash) {
-            var match = markup.match(re);
+        render: function(tokens, scope, token, hash) {
+            var match = token.value.match(re);
             var k = match[1], v = match[2];
-            ctx.set(k, liquid.evaluate(v, ctx));
+            scope.set(k, liquid.evaluate(v, scope));
         }
     });
 

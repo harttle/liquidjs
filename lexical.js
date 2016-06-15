@@ -15,7 +15,9 @@ var variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subs
 var value = new RegExp(`${literal.source}|${variable.source}`, 'i');
 var hash = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g');
 var filter = new RegExp(`(${identifier.source})(?:\\s*:\\s*(${value.source}))?`);
+var quoteBalanced = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source}|[^'"])*`);
 
+var tagLine = new RegExp(`^\\s*(${identifier.source})\\s*(.*)\\s*$`);
 var literalLine = new RegExp(`^(?:${literal.source})$`, 'i');
 var variableLine = new RegExp(`^(?:${variable.source})$`);
 var numberLine = new RegExp(`^(?:${number.source})$`);
@@ -24,20 +26,22 @@ var quotedLine = new RegExp(`^(?:${quoted.source})$`);
 var rangeLine = new RegExp(`^(?:${range.source})$`);
 var filterLine = new RegExp(`^(?:${filter.source})$`);
 
-exports.patterns = {
-    quoted, number, bool, range, literal, hash, filter, identifier, value,
-    quotedLine, numberLine, boolLine, rangeLine, literalLine, filterLine
-};
+var operators = [
+    /\s+or\s+/,
+    /\s+and\s+/,
+    /==|!=|<=|>=|<|>|\s+contains\s+/
+];
 
-exports.isLiteral = function(str) {
+
+function isLiteral (str) {
     return literalLine.test(str);
-};
+}
 
-exports.isVariable = function(str) {
+function isVariable (str) {
     return variableLine.test(str);
-};
+}
 
-exports.parseLiteral = function(str) {
+function parseLiteral (str) {
     var res;
     if (res = str.match(numberLine)) {
         return Number(str);
@@ -51,4 +55,12 @@ exports.parseLiteral = function(str) {
     if (res = str.match(rangeLine)) {
         return _.range(res[1], res[2]);
     }
+}
+
+module.exports = {
+    quoted, number, bool, range, literal, hash, filter, 
+    identifier, value, quoteBalanced, operators,
+    quotedLine, numberLine, boolLine, rangeLine, literalLine, filterLine, tagLine,
+    isLiteral, isVariable, parseLiteral
 };
+

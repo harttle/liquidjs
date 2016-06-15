@@ -6,15 +6,20 @@ const expect = chai.expect;
 chai.use(sinonChai);
 
 var tag = require('../tag.js')();
-var context = require('../context.js');
+var Scope = require('../scope.js');
 var filter = require('../filter')();
-var render = require('../render.js')(filter, tag).render;
+var Render = require('../render.js')(filter, tag);
+var render = Render.render;
+var evalExp = Render.evalExp;
+var evalFilter = Render.evalFilter;
 
 describe('render', function() {
-    var ctx, htmlToken, tagToken, filterToken;
+    var scope, htmlToken, tagToken, filterToken;
 
     before(function() {
-        ctx = context.factory({
+        scope = Scope.factory({
+            one: 1,
+            two: 2,
             x: 'XXX',
             foo: {
                 bar: ['a', 2]
@@ -23,7 +28,8 @@ describe('render', function() {
         tagToken = {
             type: 'tag',
             value: 'foo bar:x foo:"FOO" num:2.3',
-            name: 'foo'
+            name: 'foo',
+            args: 'bar:x foo:"FOO" num:2.3'
         };
         htmlToken = {
             type: 'html',
@@ -41,21 +47,21 @@ describe('render', function() {
     });
 
     it('should render html', function() {
-        expect(render([htmlToken], ctx)).to.equal('<p>');
+        expect(render([htmlToken], scope)).to.equal('<p>');
     });
 
     it('should render with tag function', function() {
         tag.register('foo', {
             render: x => 'X'
         });
-        expect(render([tagToken], ctx)).to.equal('X');
+        expect(render([tagToken], scope)).to.equal('X');
     });
 
     it('should call tag with correct arguments', function() {
         var spy = sinon.spy();
         tag.register('foo', { render: spy });
-        render([tagToken], ctx);
-        expect(spy).to.have.been.calledWithMatch([], ctx, tagToken.value, {
+        render([tagToken], scope);
+        expect(spy).to.have.been.calledWithMatch([], scope, tagToken, {
             bar: 'XXX',
             foo: 'FOO',
             num: 2.3
@@ -65,7 +71,7 @@ describe('render', function() {
     it('should render with filter function', function() {
         filter.register('date', (l, r) => l + r);
         filter.register('time', (l, r) => l + 3*r);
-        expect(render([filterToken], ctx)).to.equal('ab6');
+        expect(render([filterToken], scope)).to.equal('ab6');
     });
 
     it('should call filter with correct arguments', function() {
@@ -73,8 +79,23 @@ describe('render', function() {
         var time = sinon.spy();
         filter.register('date', date);
         filter.register('time', time);
-        render([filterToken], ctx);
+        render([filterToken], scope);
         expect(date).to.have.been.calledWith('a', 'b');
         expect(time).to.have.been.calledWith('y', 2);
+    });
+
+    it('should eval expression', function(){
+        expect(evalExp('1<2', scope)).to.equal(true);
+        expect(evalExp('2<=2', scope)).to.equal(true);
+        expect(evalExp('one<=two', scope)).to.equal(true);
+        expect(function(){
+            evalExp('1 contains "x"', scope);
+        }).to.throw();
+        expect(evalExp('x contains "x"', scope)).to.equal(false);
+        expect(evalExp('x contains "X"', scope)).to.equal(true);
+        expect(evalExp('x contains z', scope)).to.equal(true);
+        expect(evalExp('1<2 and x contains "x"', scope)).to.equal(false);
+        expect(evalExp('1<2 or x contains "x"', scope)).to.equal(true);
+        expect(evalExp('"<=" == "<="', scope)).to.equal(true);
     });
 });

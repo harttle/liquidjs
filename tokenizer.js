@@ -16,19 +16,28 @@ function parse(html){
                 value: htmlFragment
             });
         }
-        if(result[1]){
-            var match = result[1].trim().match(lexical.patterns.identifier);
-            if (!match) throw new Error('illegal tag: ' + result[1]);
+        var rawTag = result[1],
+            cleanTag = result[2],
+            rawOut = result[3],
+            cleanOut = result[4];
+
+        if(rawTag){
+            var match = cleanTag.trim().match(lexical.tagLine);
+            if (!match) throw new Error('illegal tag: ' + rawTag);
+            var name = match[1], args = match[2];
+
             tokens.push({
                 type: 'tag',
-                name: match[0],
-                value: result[2].trim()
+                value: cleanTag.trim(),
+                raw: rawTag,
+                args, name
             });
         }
         else{
             tokens.push({
                 type: 'output',
-                value: result[4].trim()
+                raw: rawOut,
+                value: cleanOut.trim()
             });
         }
         idx = syntax.lastIndex;

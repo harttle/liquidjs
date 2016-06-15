@@ -1,6 +1,6 @@
 {
   "name": "shopify-liquid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Shopify Liquid Implementation in Node.js",
   "main": "index.js",
   "scripts": {

@@ -5,12 +5,12 @@ var expect = chai.expect;
 chai.use(sinonChai);
 
 var tag = require('../tag.js')();
-var context = require('../context.js');
+var Scope = require('../scope.js');
 
 describe('tag', function() {
-    var ctx;
+    var scope;
     before(function() {
-        ctx = context.factory({
+        scope = Scope.factory({
             foo: 'bar',
             arr: [2, 1]
         });
@@ -52,7 +52,7 @@ describe('tag', function() {
             type: 'tag',
             value: 'foo',
             name: 'foo'
-        }).render(tokens, ctx);
+        }).render(tokens, scope);
         expect(spy).to.have.been.called;
     });
 
@@ -62,13 +62,14 @@ describe('tag', function() {
         tag.register('foo', {
             render: spy
         });
-        var t = tag.construct({
+        var token = {
             type: 'tag',
             value: 'foo aa:foo bb: arr[0] cc: 2.3',
-            name: 'foo'
-        });
-        t.render(tokens, ctx);
-        expect(spy).to.have.been.calledWithMatch(tokens, ctx, 'foo', {
+            name: 'foo',
+            args: 'aa:foo bb: arr[0] cc: 2.3'
+        };
+        tag.construct(token).render(tokens, scope);
+        expect(spy).to.have.been.calledWithMatch(tokens, scope, token, {
             aa: 'bar',
             bb: 2,
             cc: 2.3
