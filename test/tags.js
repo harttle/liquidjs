@@ -44,5 +44,12 @@ describe('tags', function() {
         expect(liquid.render('{% unless 1 %}yes{%else%}no{%endunless%}', ctx)).to.equal('no');
         expect(liquid.render('{% unless 1>2 %}yes{%endunless%}', ctx)).to.equal('yes');
     });
+
+    it('should support capture', function(){
+        expect(liquid.render('{% capture f %}{{"a" | capitalize}}{%endcapture%}{{f}}', ctx)).to.equal('A');
+        expect(function(){
+            liquid.render('{% capture = %}{%endcapture%}', ctx);
+        }).to.throw(/= not valid identifier/);
+    });
 });
 

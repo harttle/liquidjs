@@ -34,7 +34,7 @@ Documentation: <https://shopify.github.io/liquid/basics/introduction/#tags>
 - [ ] tablerow [Document](https://shopify.github.io/liquid/tags/iteration/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/.js) [Test][tt]
 - [ ] tablerow [Document: cols,limit,offset,range](https://shopify.github.io/liquid/tags/iteration/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/.js) [Test][tt]
 - [x] assign [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/assign.js) [Test][tt]
-- [ ] capture [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/.js) [Test][tt]
+- [x] capture [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/.js) [Test][tt]
 - [ ] increment [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/.js) [Test][tt]
 - [ ] decrement [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/.js) [Test][tt]
 
