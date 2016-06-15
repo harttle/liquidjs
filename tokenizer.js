@@ -1,11 +1,12 @@
 const lexical = require('./lexical.js');
+const error = require('./error.js');
 
 function parse(html){
     var tokens = [];
     if(!html) return tokens;
 
     var syntax = /({%(.*?)%})|({{(.*?)}})/g;
-    var result, htmlFragment;
+    var result, htmlFragment, token;
     var idx = 0;
 
     while ((result = syntax.exec(html)) !== null) {
@@ -16,29 +17,19 @@ function parse(html){
                 value: htmlFragment
             });
         }
-        var rawTag = result[1],
-            cleanTag = result[2],
-            rawOut = result[3],
-            cleanOut = result[4];
 
-        if(rawTag){
-            var match = cleanTag.trim().match(lexical.tagLine);
-            if (!match) throw new Error('illegal tag: ' + rawTag);
-            var name = match[1], args = match[2];
+        if(result[1]){
+            token = factory('tag', 1, result);
+            var match = token.value.match(lexical.tagLine);
+            if (!match) error('illegal tag', token);
 
-            tokens.push({
-                type: 'tag',
-                value: cleanTag.trim(),
-                raw: rawTag,
-                args, name
-            });
+            token.name = match[1];
+            token.args = match[2];
+            tokens.push(token);
         }
         else{
-            tokens.push({
-                type: 'output',
-                raw: rawOut,
-                value: cleanOut.trim()
-            });
+            token = factory('output', 3, result);
+            tokens.push(token);
         }
         idx = syntax.lastIndex;
     }
@@ -51,6 +42,24 @@ function parse(html){
         });
     }
     return tokens;
+
+    function factory(type, offset, match){
+        var token = {
+            type,
+            raw: match[offset],
+            value: match[offset + 1].trim(),
+            line: crCount(match.index) + 1
+        };
+        return token;
+    }
+
+    var lastIdx = -1;
+    var lastCount = 0;
+    function crCount(idx){
+        lastCount += html.slice(lastIdx+1, idx);
+        lastIdx = idx;
+        return lastCount;
+    }
 }
 
 exports.parse = parse;

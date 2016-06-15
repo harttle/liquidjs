@@ -14,12 +14,9 @@ module.exports = function() {
 
     function construct(str) {
         var match = lexical.filterLine.exec(str.trim());
-        if (!match) {
-            throw new Error('illegal filter: ' + str);
-        }
-        var k = match[1],
-            v = match[2];
+        if (!match) error('illegal filter: ' + str);
 
+        var k = match[1], v = match[2];
         return factory(k, [v]);
     }
 

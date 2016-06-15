@@ -1,5 +1,6 @@
 const lexical = require('./lexical.js');
 const syntax = require('./syntax.js');
+const error = require('./error.js');
 
 module.exports = function(Filter, Tag) {
     function render(tokens, scope) {
@@ -17,14 +18,14 @@ module.exports = function(Filter, Tag) {
                     html += renderTag(token, tokens, scope);
                     break;
                 default:
-                    throw new Error(`unexpected type: ${token.type}`);
+                    error(`unexpected type: ${token.type}`, token);
             }
         }
         return html;
     }
 
     function evalExp(exp, scope) {
-        if(!scope) throw new Error('unable to evalExp: scope undefined');
+        if(!scope) error('unable to evalExp: scope undefined');
         var operatorREs = lexical.operators;
         for (var i = 0; i < operatorREs.length; i++) {
             var operatorRE = operatorREs[i];
@@ -41,7 +42,7 @@ module.exports = function(Filter, Tag) {
     }
 
     function evalFilter(str, scope){
-        if(!scope) throw new Error('unable to evalFilter: scope undefined');
+        if(!scope) error('unable to evalFilter: scope undefined');
         var filters = str.split('|');
         var val = scope.get(filters.shift());
         return filters
@@ -57,9 +58,7 @@ module.exports = function(Filter, Tag) {
             while ((curToken = tokens.shift()) && curToken.value !== endToken) {
                 subTokens.push(curToken);
             }
-            if (!curToken) {
-                throw new Error(`${token.value} not closed`);
-            }
+            if (!curToken) error(`${token.value} not closed`);
         }
         return tag.render(subTokens, scope);
     }

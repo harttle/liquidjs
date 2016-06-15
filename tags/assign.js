@@ -6,7 +6,7 @@ module.exports = function(liquid) {
 
     liquid.registerTag('assign', {
         render: function(tokens, scope, token, hash) {
-            var match = token.value.match(re);
+            var match = token.args.match(re);
             var k = match[1], v = match[2];
             scope.set(k, liquid.evaluate(v, scope));
         }

@@ -6,6 +6,7 @@ const path = require("path");
 const fs = require('fs');
 const Tag = require('./tag.js');
 const Filter = require('./filter.js');
+const error = require('./error.js');
 
 const tagsPath = path.join(__dirname, "tags");
 const filtersPath = path.join(__dirname, "filters");
@@ -45,5 +46,6 @@ function factory(){
 }
 
 factory.lexical = lexical;
+factory.error = error;
 
 module.exports = factory;
