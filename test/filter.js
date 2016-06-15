@@ -16,19 +16,19 @@ describe('filter', function() {
     });
     it('should throw when not registered', function() {
         expect(function() {
-            filter.parse('foo');
+            filter.construct('foo');
         }).to.throw(/filter foo not found/);
     });
 
     it('should register a simple filter', function(){
         filter.register('foo', x => x.toUpperCase());
-        expect(filter.parse('foo').render('foo', ctx)).to.equal('FOO');
+        expect(filter.construct('foo').render('foo', ctx)).to.equal('FOO');
     });
 
     it('should call filter with corrct arguments', function(){
         var spy = sinon.spy();
         filter.register('foo', spy);
-        filter.parse('foo: 33').render('foo', ctx);
+        filter.construct('foo: 33').render('foo', ctx);
         expect(spy).to.have.been.calledWith('foo', 33);
     });
 });

@@ -30,22 +30,15 @@ module.exports = function() {
         tags[name] = tag;
     }
 
-    function parse(str) {
-        var match = lexical.patterns.identifier.exec(str.trim());
-        if (!match) throw new Error('illegal tag: ' + str);
-
-        var tagInstance = factory(match[0], str);
-        return tagInstance;
-    }
-
-    function factory(name, markup) {
-        var tag = tags[name];
-        if (!tag) throw new Error(`tag ${name} not found`);
+    function construct(token) {
+        var tag = tags[token.name];
+        if (!tag) throw new Error(`tag ${token.name} not found`);
 
         var instance = Object.create(_tagInstance);
-        instance.name = name;
-        instance.markup = markup;
+        instance.name = token.name;
+        instance.markup = token.value;
         instance.tag = tag;
+        instance.needClose = tag.needClose;
         return instance;
     }
 
@@ -54,6 +47,6 @@ module.exports = function() {
     }
 
     return {
-        parse, register, hash, clear
+        construct, register, hash, clear
     };
 };

@@ -1,3 +1,4 @@
+const lexical = require('./lexical.js');
 
 function parse(html){
     var tokens = [];
@@ -12,21 +13,21 @@ function parse(html){
             htmlFragment = html.slice(idx, result.index);
             tokens.push({
                 type: 'html',
-                raw: htmlFragment,
                 value: htmlFragment
             });
         }
         if(result[1]){
+            var match = result[1].trim().match(lexical.patterns.identifier);
+            if (!match) throw new Error('illegal tag: ' + result[1]);
             tokens.push({
                 type: 'tag',
-                raw: result[1],
+                name: match[0],
                 value: result[2].trim()
             });
         }
         else{
             tokens.push({
                 type: 'output',
-                raw: result[3],
                 value: result[4].trim()
             });
         }
@@ -37,7 +38,6 @@ function parse(html){
         htmlFragment = html.slice(idx, html.length);
         tokens.push({
             type: 'html',
-            raw: htmlFragment,
             value: htmlFragment
         });
     }

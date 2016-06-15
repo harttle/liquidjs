@@ -16,7 +16,7 @@ shall be implemented.
 Documentation: <https://shopify.github.io/liquid/basics/introduction/#tags>
 
 - [x] [assign](https://shopify.github.io/liquid/tags/control-flow/)
-- [ ] [case/when](https://shopify.github.io/liquid/tags/control-flow/)
+- [x] [case/when](https://shopify.github.io/liquid/tags/control-flow/)
 - [ ] [if](https://shopify.github.io/liquid/tags/control-flow/)
 - [ ] [unless](https://shopify.github.io/liquid/tags/control-flow/)
 - [ ] [elsif/else](https://shopify.github.io/liquid/tags/control-flow/)

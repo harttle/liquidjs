@@ -21,22 +21,23 @@ module.exports = function(Filter, Tag) {
     }
 
     function evaluate(str, ctx) {
+        if(!ctx) throw new Error('ctx is needed to evaluate');
         var filters = str.split('|');
         var val = ctx.get(filters.shift());
         return filters
-            .map(str => Filter.parse(str))
+            .map(str => Filter.construct(str))
             .reduce((v, filter) => filter.render(v, ctx), val);
     }
 
     function renderTag(token, tokens, ctx) {
-        var tag = Tag.parse(token.value),
+        var tag = Tag.construct(token),
             subTokens = [];
         if (tag.needClose) {
             var curToken, endToken = 'end' + tag.name;
-            while ((curToken = tokens.shift()).value !== endToken) {
+            while ((curToken = tokens.shift()) && curToken.value !== endToken) {
                 subTokens.push(curToken);
             }
-            if (curToken.value !== endToken) {
+            if (!curToken) {
                 throw new Error(`${token.value} not closed`);
             }
         }

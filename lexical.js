@@ -25,7 +25,7 @@ var rangeLine = new RegExp(`^(?:${range.source})$`);
 var filterLine = new RegExp(`^(?:${filter.source})$`);
 
 exports.patterns = {
-    quoted, number, bool, range, literal, hash, filter, identifier,
+    quoted, number, bool, range, literal, hash, filter, identifier, value,
     quotedLine, numberLine, boolLine, rangeLine, literalLine, filterLine
 };
 

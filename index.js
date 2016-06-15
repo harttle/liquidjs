@@ -24,11 +24,12 @@ function factory(){
     engine.tag = Tag();
     engine.filter = Filter();
 
-    var render = Render(engine.filter, engine.tag);
+    var renderer = Render(engine.filter, engine.tag);
+    engine.evaluate = renderer.evaluate;
+    engine.renderTokens = renderer.render;
     engine.render = function(html, ctx) {
-        return render.render(tokenizer.parse(html), context.factory(ctx));
+        return engine.renderTokens(tokenizer.parse(html), context.factory(ctx));
     },
-    engine.evaluate = render.evaluate;
 
     fs.readdirSync(tagsPath).map(function(f){
         var match = /^(\w+)\.js$/.exec(f);

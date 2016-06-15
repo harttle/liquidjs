@@ -22,7 +22,8 @@ describe('render', function() {
         });
         tagToken = {
             type: 'tag',
-            value: 'foo bar:x foo:"FOO" num:2.3'
+            value: 'foo bar:x foo:"FOO" num:2.3',
+            name: 'foo'
         };
         htmlToken = {
             type: 'html',

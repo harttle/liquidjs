@@ -12,7 +12,7 @@ var _filterInstance = {
 module.exports = function() {
     var filters = {};
 
-    function parse(str) {
+    function construct(str) {
         var match = lexical.patterns.filterLine.exec(str.trim());
         if (!match) {
             throw new Error('illegal filter: ' + str);
@@ -43,6 +43,6 @@ module.exports = function() {
     }
 
     return {
-        parse, register, clear
+        construct, register, clear
     };
 };
