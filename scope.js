@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const lexical = require('./lexical.js');
+const error = require('./error.js');
 
 var scope = {
     get: function(str) {
@@ -23,6 +24,7 @@ var scope = {
         return this;
     },
     push: function(ctx) {
+        if(!ctx) error(`trying to push ${ctx} into scopes`);
         return this.scopes.push(ctx);
     },
     pop: function() {
@@ -32,6 +34,6 @@ var scope = {
 
 exports.factory = function(_ctx) {
     var ctx = Object.create(scope);
-    ctx.scopes = [_ctx];
+    ctx.scopes = _ctx ? [_ctx] : [];
     return ctx;
 };

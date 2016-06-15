@@ -1,53 +1,66 @@
 const chai = require("chai");
 const expect = chai.expect;
 
-var liquid = require('..')();
+var liquid = require('..')(), ctx;
 
-describe('filters', function() {
-    var ctx = {
+function test(src, dst) {
+    ctx = {
+        date: new Date(),
         foo: 'bar',
         arr: [-2, 'a']
     };
+    expect(liquid.render(src, ctx)).to.equal(dst);
+}
 
+describe('filters', function() {
     it('should support abs', function() {
-        expect(liquid.render('{{ -3 | abs }}')).to.equal('3');
-        expect(liquid.render('{{ arr[0] | abs }}', ctx)).to.equal('2');
+        test('{{ -3 | abs }}', '3');
+        test('{{ arr[0] | abs }}', '2');
     });
 
     it('should support append', function() {
-        expect(liquid.render('{{ -3 | append: "abc" }}')).to.equal('-3abc');
-        expect(liquid.render('{{ "a" | append: foo }}', ctx)).to.equal('abar');
+        test('{{ -3 | append: "abc" }}', '-3abc');
+        test('{{ "a" | append: foo }}', 'abar');
     });
 
     it('should support capitalize', function() {
-        expect(liquid.render('{{ "i am good" | capitalize }}')).to.equal('I am good');
+        test('{{ "i am good" | capitalize }}', 'I am good');
     });
 
     it('should support ceil', function() {
-        expect(liquid.render('{{ 1.2 | ceil }}')).to.equal('2');
-        expect(liquid.render('{{ 2.0 | ceil }}')).to.equal('2');
-        expect(liquid.render('{{ "3.5" | ceil }}')).to.equal('4');
-        expect(liquid.render('{{ 183.357 | ceil }}')).to.equal('184');
+        test('{{ 1.2 | ceil }}', '2');
+        test('{{ 2.0 | ceil }}', '2');
+        test('{{ "3.5" | ceil }}', '4');
+        test('{{ 183.357 | ceil }}', '184');
     });
 
     it('should support date', function() {
-        var d = ctx.date = new Date();
-        str = d.toDateString();
-        expect(liquid.render('{{ date | date:"%a %b %d %Y"}}', ctx)).to.equal(str);
+        str = ctx.date.toDateString();
+        test('{{ date | date:"%a %b %d %Y"}}', str);
     });
 
     it('should support default', function() {
-        expect(liquid.render('{{false |default: "a"}}')).to.equal('a');
+        test('{{false |default: "a"}}', 'a');
     });
 
     it('should support divided_by', function() {
-        expect(liquid.render('{{4 | divided_by: 2}}')).to.equal('2');
-        expect(liquid.render('{{16 | divided_by: 4}}')).to.equal('4');
-        expect(liquid.render('{{5 | divided_by: 3}}')).to.equal('1');
+        test('{{4 | divided_by: 2}}', '2');
+        test('{{16 | divided_by: 4}}', '4');
+        test('{{5 | divided_by: 3}}', '1');
     });
 
     it('should support downcase', function() {
-        expect(liquid.render('{{ "Parker Moore" | downcase }}')).to.equal('parker moore');
-        expect(liquid.render('{{ "apple" | downcase }}')).to.equal('apple');
+        test('{{ "Parker Moore" | downcase }}', 'parker moore');
+        test('{{ "apple" | downcase }}', 'apple');
+    });
+    it('should support escape', function() {
+        test('{{ "Have you read \'James & the Giant Peach\'?" | escape }}',
+            'Have you read &#39;James &amp; the Giant Peach&#39;?');
+        test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara');
+    });
+    it('should support escape_once', function() {
+        test('{{ "1 < 2 & 3" | escape_once }}', '1 &lt; 2 &amp; 3');
+        test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3');
     });
 });
+

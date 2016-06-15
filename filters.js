@@ -10,4 +10,6 @@ module.exports = function(liquid) {
     liquid.registerFilter('default', (v, arg) => arg || v);
     liquid.registerFilter('divided_by', (v, arg) => Math.floor(v/arg));
     liquid.registerFilter('downcase', v => v.toLowerCase());
+    liquid.registerFilter('escape', v => _.escape(v));
+    liquid.registerFilter('escape_once', v => _.escape(_.unescape(v)));
 };
