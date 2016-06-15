@@ -5,7 +5,6 @@ var liquid = require('..')();
 
 describe('filters', function() {
     var ctx = {
-        date: new Date('1995-12-17T03:24:00'),
         foo: 'bar',
         arr: [-2, 'a']
     };
@@ -32,8 +31,9 @@ describe('filters', function() {
     });
 
     it('should support date', function() {
-        expect(liquid.render('{{ date | date:"%Y-%m-%d %H:%M:%S"}}', ctx)).to.equal('1995-12-17 11:24:00');
-        expect(liquid.render('{{ date | date:"%a, %b %d, %y"}}', ctx)).to.equal('Sun, Dec 17, 95');
+        var d = ctx.date = new Date();
+        str = d.toDateString();
+        expect(liquid.render('{{ date | date:"%a %b %d %Y"}}', ctx)).to.equal(str);
     });
 
     it('should support default', function() {
