@@ -7,12 +7,21 @@ function test(src, dst) {
     ctx = {
         date: new Date(),
         foo: 'bar',
-        arr: [-2, 'a']
+        arr: [-2, 'a'],
+        obj: {
+            foo: 'bar'
+        }
     };
     expect(liquid.render(src, ctx)).to.equal(dst);
 }
 
 describe('filters', function() {
+    it('should output object', function(){
+        test('{{obj}}', '{"foo":"bar"}');
+    });
+    it('should output array', function(){
+        test('{{arr}}', '[-2,"a"]');
+    });
     it('should support abs', function() {
         test('{{ -3 | abs }}', '3');
         test('{{ arr[0] | abs }}', '2');

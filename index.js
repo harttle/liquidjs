@@ -7,9 +7,9 @@ const fs = require('fs');
 const Tag = require('./tag.js');
 const Filter = require('./filter.js');
 const error = require('./error.js');
+const Template = require('./template');
 
 const tagsPath = path.join(__dirname, "tags");
-const filtersPath = path.join(__dirname, "filters");
 
 var _engine = {
     registerFilter : function(name, filter){
@@ -22,18 +22,26 @@ var _engine = {
 
 function factory(){
     var engine = Object.create(_engine);
+
     engine.tag = Tag();
     engine.filter = Filter();
+    engine.tokenize = tokenizer.parse;
+
+    var template = Template(engine.tag);
+    engine.parse = template.parse;
+    engine.parseTag = template.parseTag;
+    engine.parseStream = template.parseStream;
 
     var renderer = Render(engine.filter, engine.tag);
-
     engine.evaluate = renderer.evalExp;
     engine.evalExp = renderer.evalExp;
     engine.evalFilter = renderer.evalFilter;
+    engine.renderTemplates = renderer.renderTemplates;
 
-    engine.renderTokens = renderer.render;
     engine.render = function(html, ctx) {
-        return engine.renderTokens(tokenizer.parse(html), scope.factory(ctx));
+        var tokens = engine.tokenize(html);
+        var templates = engine.parse(tokens);
+        return engine.renderTemplates(templates, scope.factory(ctx));
     },
 
     fs.readdirSync(tagsPath).map(function(f){
@@ -47,5 +55,7 @@ function factory(){
 
 factory.lexical = lexical;
 factory.error = error;
+factory.isTruthy = Render.isTruthy;
+factory.stringify = Render.stringify;
 
 module.exports = factory;

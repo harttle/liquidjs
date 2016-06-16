@@ -52,7 +52,7 @@ describe('tag', function() {
             type: 'tag',
             value: 'foo',
             name: 'foo'
-        }).render(tokens, scope);
+        }).render(scope);
         expect(spy).to.have.been.called;
     });
 
@@ -68,8 +68,8 @@ describe('tag', function() {
             name: 'foo',
             args: 'aa:foo bb: arr[0] cc: 2.3'
         };
-        tag.construct(token).render(tokens, scope);
-        expect(spy).to.have.been.calledWithMatch(tokens, scope, token, {
+        tag.construct(token).render(scope);
+        expect(spy).to.have.been.calledWithMatch(scope, {
             aa: 'bar',
             bb: 2,
             cc: 2.3
