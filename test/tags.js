@@ -136,4 +136,47 @@ describe('tags', function() {
         test('{% decrement foo %}{%decrement foo%}{{foo}}', '-2');
         test('{% decrement one %}{{one}}', '0');
     });
+
+    it('should support tablerow', function() {
+        src = '{% tablerow i in alpha cols:2 %}{{ i }}{% endtablerow %}';
+        dst = '<table>' +
+            '<tr class="row1"><td class="col1">a</td><td class="col2">b</td></tr>' +
+            '<tr class="row2"><td class="col1">c</td></tr>' +
+            '</table>';
+        test(src, dst);
+    });
+
+    it('should support tablerow with range', function() {
+        src = '{% tablerow i in (1..5) cols:2 %}{{ i }}{% endtablerow %}';
+        dst = '<table>' +
+            '<tr class="row1"><td class="col1">1</td><td class="col2">2</td></tr>' +
+            '<tr class="row2"><td class="col1">3</td><td class="col2">4</td></tr>' +
+            '<tr class="row3"><td class="col1">5</td></tr>' +
+            '</table>';
+        test(src, dst);
+    });
+
+    it('tablerow should throw on illegal cols', function() {
+        testThrow('{% tablerow i in (1..5) cols:0 %}{{ i }}{% endtablerow %}',
+            /illegal cols: 0/);
+        testThrow('{% tablerow i in (1..5) %}{{ i }}{% endtablerow %}',
+            /illegal cols: undefined/);
+    });
+
+    it('should support tablerow with limit', function() {
+        src = '{% tablerow i in (1..5) cols:2 limit:3 %}{{ i }}{% endtablerow %}';
+        dst = '<table>' +
+            '<tr class="row1"><td class="col1">1</td><td class="col2">2</td></tr>' +
+            '<tr class="row2"><td class="col1">3</td></tr>' +
+            '</table>';
+        test(src, dst);
+    });
+
+    it('should support tablerow with offset', function() {
+        src = '{% tablerow i in (1..5) cols:2 offset:3 %}{{ i }}{% endtablerow %}';
+        dst = '<table>' +
+            '<tr class="row1"><td class="col1">4</td><td class="col2">5</td></tr>' +
+            '</table>';
+        test(src, dst);
+    });
 });

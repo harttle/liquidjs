@@ -1,11 +1,21 @@
-
-function factory(msg, token){
-    var err = new Error(msg || 'unkown error');
-    if(token){
-        err.token = token.raw;
-        err.line = token.line;
-    }
-    throw err;
+function TokenizationError(message, input, line, stack) {
+    this.name = "TokenizationError";
+    this.message = (message || "");
+    this.input = input;
+    this.line = line;
+    if(stack) this.stack = stack;
 }
+TokenizationError.prototype = Error.prototype;
 
-module.exports = factory;
+function ParseError(message, input, line, stack) {
+    this.name = "ParseError";
+    this.message = (message || "");
+    this.input = input;
+    this.line = line;
+    if(stack) this.stack = stack;
+}
+ParseError.prototype = Error.prototype;
+
+module.exports = {
+    TokenizationError, ParseError
+};

@@ -1,5 +1,6 @@
 const lexical = require('./lexical.js');
 const error = require('./error.js');
+const ParseError = require('./error.js').ParseError;
 
 module.exports = function(Tag) {
 
@@ -26,10 +27,9 @@ module.exports = function(Tag) {
                 var template;
                 if (token.type == 'tag') {
                     if (this.trigger(`tag:${token.name}`, token)) continue;
-                    if (token.name === 'continue' || token.name === 'break'){
+                    if (token.name === 'continue' || token.name === 'break') {
                         template = token;
-                    }
-                    else{
+                    } else {
                         template = parseTag(token, this.tokens);
                     }
                 } else {
@@ -71,9 +71,13 @@ module.exports = function(Tag) {
     }
 
     function parseTag(token, tokens) {
-        return Tag.construct(token).parse(tokens);
+        try {
+            return Tag.construct(token).parse(tokens);
+        } catch (e) {
+            throw new ParseError(e.message,
+                token.input, token.line, e.stack);
+        }
     }
-
 
     function parseStream(tokens) {
         var s = Object.create(stream);

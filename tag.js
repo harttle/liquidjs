@@ -1,10 +1,11 @@
 const lexical = require('./lexical.js');
 const Exp = require('./expression.js');
+const TokenizationError = require('./error.js').TokenizationError;
 
 var _tagInstance = {
     render: function(scope, register) {
         var reg = register[this.name];
-        if(!reg) reg = register[this.name] = {}
+        if(!reg) reg = register[this.name] = {};
         var obj = hash(this.token.args, scope);
         return this.tagImpl.render(scope, obj, reg) || '';
     },

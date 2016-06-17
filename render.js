@@ -9,6 +9,7 @@ function stringify(val) {
 
 function factory(Filter, Tag) {
     function renderTemplates(templates, scope) {
+        if (!scope) throw new Error('unable to evalTemplates: scope undefined');
         var html = '';
         templates.some(template => {
             if (scope.get('forloop.skip')) return true;
@@ -45,7 +46,7 @@ function factory(Filter, Tag) {
     return {
         renderTemplates, evalFilter
     };
-};
+}
 
 factory.stringify = stringify;
 
