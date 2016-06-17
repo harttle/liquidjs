@@ -4,27 +4,18 @@ const error = require('./error.js');
 
 var scope = {
     get: function(str) {
-        str = str && str.trim();
-        if(!str) return '';
-
-        if (lexical.isLiteral(str)) {
-            var a = lexical.parseLiteral(str);
-            return lexical.parseLiteral(str);
-        }
-        if (lexical.isVariable(str)) {
-            for (var i = this.scopes.length - 1; i >= 0; i--) {
-                var v = _.get(this.scopes[i], str);
-                if (v !== undefined) return v;
-            }
+        for (var i = this.scopes.length - 1; i >= 0; i--) {
+            var v = _.get(this.scopes[i], str);
+            if (v !== undefined) return v;
         }
         return '';
     },
-    set: function(k, v){
-        this.scopes[this.scopes.length-1][k] = v;
+    set: function(k, v) {
+        _.set(this.scopes[this.scopes.length - 1], k, v);
         return this;
     },
     push: function(ctx) {
-        if(!ctx) error(`trying to push ${ctx} into scopes`);
+        if (!ctx) error(`trying to push ${ctx} into scopes`);
         return this.scopes.push(ctx);
     },
     pop: function() {

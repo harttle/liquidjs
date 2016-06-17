@@ -1,9 +1,10 @@
 const lexical = require('./lexical.js');
 const _ = require('lodash');
+const Exp = require('./expression.js');
 
 var _filterInstance = {
     render: function(output, scope) {
-        var args = this.args.map(arg => scope.get(arg));
+        var args = this.args.map(arg => Exp.evalValue(arg, scope));
         args.unshift(output);
         return this.filter.apply(null, args);
     }

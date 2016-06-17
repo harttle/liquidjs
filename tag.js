@@ -1,24 +1,28 @@
 const lexical = require('./lexical.js');
+const Exp = require('./expression.js');
 
 var _tagInstance = {
-    render: function(scope) {
+    render: function(scope, register) {
+        var reg = register[this.name];
+        if(!reg) reg = register[this.name] = {}
         var obj = hash(this.token.args, scope);
-        return this.tagImpl.render(scope, obj) || '';
+        return this.tagImpl.render(scope, obj, reg) || '';
     },
     parse: function(tokens){
-        this.tagImpl.parse(this.token, tokens);
+        if(this.tagImpl.parse){
+            this.tagImpl.parse(this.token, tokens);
+        }
         return this;
     }
 };
 
 function hash(markup, scope) {
     var obj = {};
-    lexical.hash.lastIndex = 0;
-    while (match = lexical.hash.exec(markup)) {
+    lexical.hashCapture.lastIndex = 0;
+    while (match = lexical.hashCapture.exec(markup)) {
         var k = match[1],
             v = match[2];
-        if (!k) continue;
-        obj[k] = scope.get(v);
+        obj[k] = Exp.evalValue(v, scope);
     }
     return obj;
 }

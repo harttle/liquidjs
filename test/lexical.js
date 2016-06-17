@@ -17,15 +17,17 @@ describe('identifier', function() {
         identifier.isLiteral('23').should.equal(true);
     });
 
+    it("should test range literal", function() {
+        identifier.isRange("(12..32)").should.equal(true);
+        identifier.isRange("(12..foo)").should.equal(true);
+        identifier.isRange("(foo.bar..foo)").should.equal(true);
+    });
+
     it('should test string literal', function() {
         identifier.isLiteral('""').should.equal(true);
         identifier.isLiteral('"a\'b"').should.equal(true);
         identifier.isLiteral("''").should.equal(true);
         identifier.isLiteral("'a bcd'").should.equal(true);
-    });
-
-    it("should test range literal", function() {
-        identifier.isLiteral("(12..32)").should.equal(true);
     });
 
     it("should test variable", function() {
@@ -65,11 +67,4 @@ describe('identifier', function() {
         identifier.parseLiteral('"ab\'c"').should.equal("ab\'c");
     });
 
-    it("should parse range literal", function() {
-        var arr = identifier.parseLiteral("(12..32)");
-        arr.length.should.equal(20);
-        arr[0].should.equal(12);
-        arr[1].should.equal(13);
-        arr[19].should.equal(31);
-    });
 });

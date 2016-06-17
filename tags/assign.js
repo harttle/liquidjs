@@ -5,10 +5,14 @@ var re = new RegExp(`(${lexical.identifier.source})\\s*=(.*)`);
 module.exports = function(liquid) {
 
     liquid.registerTag('assign', {
-        render: function(tokens, scope, token, hash) {
+        parse: function(token){
             var match = token.args.match(re);
-            var k = match[1], v = match[2];
-            scope.set(k, liquid.evaluate(v, scope));
+            if(!match) error(`illegal token ${token.raw}`, token);
+            this.key = match[1];
+            this.value = match[2];
+        },
+        render: function(scope, hash) {
+            scope.set(this.key, Liquid.evalValue(this.value, scope));
         }
     });
 

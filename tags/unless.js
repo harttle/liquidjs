@@ -34,7 +34,7 @@ module.exports = function(liquid) {
         render: function(scope, hash) {
             for (var i = 0; i < this.branches.length; i++) {
                 var branch = this.branches[i];
-                var cond = liquid.evaluate(branch.cond, scope);
+                var cond = Liquid.evalExp(branch.cond, scope);
                 cond = Liquid.isTruthy(cond);
                 if (i === 0) cond = !cond;
                 if (cond) {

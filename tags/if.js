@@ -5,6 +5,7 @@ module.exports = function(liquid) {
     liquid.registerTag('if', {
 
         parse: function(tagToken, remainTokens) {
+
             this.branches = [];
             this.elseTemplates = [];
 
@@ -34,7 +35,7 @@ module.exports = function(liquid) {
         render: function(scope, hash) {
             for (var i = 0; i < this.branches.length; i++) {
                 var branch = this.branches[i];
-                var cond = liquid.evaluate(branch.cond, scope);
+                var cond = Liquid.evalExp(branch.cond, scope);
                 if (Liquid.isTruthy(cond)) {
                     return liquid.renderTemplates(branch.templates, scope);
                 }

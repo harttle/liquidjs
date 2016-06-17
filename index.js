@@ -8,6 +8,7 @@ const Tag = require('./tag.js');
 const Filter = require('./filter.js');
 const error = require('./error.js');
 const Template = require('./template');
+const Expression = require('./expression.js');
 
 const tagsPath = path.join(__dirname, "tags");
 
@@ -33,14 +34,13 @@ function factory(){
     engine.parseStream = template.parseStream;
 
     var renderer = Render(engine.filter, engine.tag);
-    engine.evaluate = renderer.evalExp;
-    engine.evalExp = renderer.evalExp;
     engine.evalFilter = renderer.evalFilter;
     engine.renderTemplates = renderer.renderTemplates;
 
     engine.render = function(html, ctx) {
         var tokens = engine.tokenize(html);
         var templates = engine.parse(tokens);
+        engine.register = {};
         return engine.renderTemplates(templates, scope.factory(ctx));
     },
 
@@ -55,7 +55,11 @@ function factory(){
 
 factory.lexical = lexical;
 factory.error = error;
-factory.isTruthy = Render.isTruthy;
+factory.isTruthy = Expression.isTruthy;
+factory.isFalsy = Expression.isFalsy;
 factory.stringify = Render.stringify;
+factory.evalExp = Expression.evalExp;
+factory.evalValue = Expression.evalValue;
+
 
 module.exports = factory;

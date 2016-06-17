@@ -13,12 +13,6 @@ describe('scope', function() {
         });
     });
 
-    it('should parse literal', function() {
-        scope.get('2.3').should.equal(2.3);
-        scope.get('(2..4)').should.deep.equal([2,3]);
-        scope.get('"foo"').should.equal("foo");
-    });
-
     it('should get property', function() {
         scope.get('foo').should.equal('bar');
     });
@@ -26,6 +20,11 @@ describe('scope', function() {
     it('should set property', function() {
         scope.set('foo', 'FOO');
         scope.get('foo').should.equal('FOO');
+    });
+
+    it('should set child property', function() {
+        scope.set('oo.bar', 'FOO');
+        scope.get('oo.bar').should.equal('FOO');
     });
 
     it('should get desendent property', function() {

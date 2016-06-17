@@ -26,7 +26,12 @@ module.exports = function(Tag) {
                 var template;
                 if (token.type == 'tag') {
                     if (this.trigger(`tag:${token.name}`, token)) continue;
-                    template = parseTag(token, this.tokens);
+                    if (token.name === 'continue' || token.name === 'break'){
+                        template = token;
+                    }
+                    else{
+                        template = parseTag(token, this.tokens);
+                    }
                 } else {
                     template = token;
                 }

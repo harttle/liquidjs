@@ -2,7 +2,7 @@ const chai = require("chai");
 const expect = chai.expect;
 
 var liquid = require('..')(),
-    ctx;
+    ctx, src, dst;
 
 function test(src, dst) {
     expect(liquid.render(src, ctx)).to.equal(dst);
@@ -22,30 +22,29 @@ describe('tags', function() {
             leq: '<=',
             empty: '',
             foo: 'bar',
-            arr: [-2, 'a', {
-                foo: 'bar'
-            }],
+            arr: [-2, 'a'],
+            alpha: ['a', 'b', 'c'],
             emptyArray: []
         };
     });
-    //it('should support assign', function() {
-    //test('{% assign foo="bar"%}{{foo}}', 'bar');
-    //});
-    //it('should support case', function() {
-    //testThrow('{% case "foo"%}', /case "foo" not closed/);
-    //test('{% case "foo"%}' +
-    //'{% when "foo" %}foo{% when "bar"%}bar' +
-    //'{%endcase%}', 'foo');
-    //test('{% case empty %}' +
-    //'{% when "foo" %}foo{% when ""%}bar' +
-    //'{%endcase%}', 'bar');
-    //test('{% case false %}' +
-    //'{% when "foo" %}foo{% when ""%}bar' +
-    //'{%endcase%}', '');
-    //test('{% case "a" %}' +
-    //'{% when "b" %}b{% when "c"%}c{%else %}d' +
-    //'{%endcase%}', 'd');
-    //});
+    it('should support assign', function() {
+        test('{% assign foo="bar"%}{{foo}}', 'bar');
+    });
+    it('should support case', function() {
+        testThrow('{% case "foo"%}', /{% case "foo"%} not closed/);
+        test('{% case "foo"%}' +
+            '{% when "foo" %}foo{% when "bar"%}bar' +
+            '{%endcase%}', 'foo');
+        test('{% case empty %}' +
+            '{% when "foo" %}foo{% when ""%}bar' +
+            '{%endcase%}', 'bar');
+        test('{% case false %}' +
+            '{% when "foo" %}foo{% when ""%}bar' +
+            '{%endcase%}', '');
+        test('{% case "a" %}' +
+            '{% when "b" %}b{% when "c"%}c{%else %}d' +
+            '{%endcase%}', 'd');
+    });
 
     it('should support if', function() {
         testThrow('{% if false%}yes', /tag {% if false%} not closed/);
@@ -68,17 +67,73 @@ describe('tags', function() {
         testThrow('{% capture = %}{%endcapture%}', /= not valid identifier/);
     });
 
-    //it('should support for', function() {
-        //test('{%for i in arr%}{{"a" | capitalize}}{%endcapture%}{{f}}', 'A');
-    //});
+    it('should support for', function() {
+        test('{%for c in alpha%}{{c}}{%endfor%}', 'abc');
+    });
 
-    //it('should support increment', function() {
-    //test('{% increment foo %}{%increment foo%}{{foo}}', '2');
-    //test('{% increment one %}{{one}}', '2');
-    //});
+    it('should support for with forloop', function() {
+        src = '{%for c in alpha%}' +
+            '{{forloop.first}}.{{forloop.index}}.{{forloop.index0}}.' +
+            '{{forloop.last}}.{{forloop.length}}.' +
+            '{{forloop.rindex}}.{{forloop.rindex0}}' +
+            '{{c}}\n' +
+            '{%endfor%}';
+        dst = 'true.1.0.false.3.3.2a\n' +
+            'false.2.1.false.3.2.1b\n' +
+            'false.3.2.true.3.1.0c\n';
+        test(src, dst);
+    });
 
-    //it('should support decrement', function() {
-    //test('{% decrement foo %}{%decrement foo%}{{foo}}', '-2');
-    //test('{% decrement one %}{{one}}', '0');
-    //});
+    it('should support for with continue and break', function() {
+        src = '{% for i in (1..5) %}' +
+            '{% if i == 4 %}{% continue %}' +
+            '{% else %}{{ i }}' +
+            '{% endif %}' +
+            '{% endfor %}';
+        test(src, '1235');
+        src = '{% for i in (one..5) %}' +
+            '{% if i == 4 %}{% break %}{% endif %}' +
+            '{{ i }}' +
+            '{% endfor %}';
+        test(src, '123');
+    });
+
+    it('should support for with limit and offset', function() {
+        src = '{% for i in (1..5) limit:2 %}{{ i }}{% endfor %}';
+        test(src, '12');
+        src = '{% for i in (1..10) limit:2 offset:5%}{{ i }}{% endfor %}';
+        test(src, '67');
+    });
+
+    it('should support for reversed', function() {
+        src = '{% for i in (1..5) limit:2 reversed %}{{ i }}{% endfor %}';
+        test(src, '21');
+    });
+
+    it('should support cycle', function() {
+        src = "{% cycle '1', '2', '3' %}";
+        test(src + src + src + src, '1231');
+    });
+
+    it('should support cycle in for block', function() {
+        src = '{% for i in (1..5) %}{% cycle one, "e"%}{% endfor %}';
+        test(src, '1e1e1');
+    });
+
+    it('should support cycle group', function() {
+        src = "{% cycle one: '1', '2', '3'%}" +
+            "{% cycle 1: '1', '2', '3'%}" +
+            "{% cycle 2: '1', '2', '3'%}";
+        test(src, '121');
+    });
+
+    it('should support increment', function() {
+        test('{% increment foo %}{%increment foo%}{{foo}}', '2');
+        test('{% increment one %}{{one}}', '2');
+    });
+
+    it('should support decrement', function() {
+        test('{% decrement foo %}{%decrement foo%}{{foo}}', '-2');
+        test('{% decrement one %}{{one}}', '0');
+    });
 });
