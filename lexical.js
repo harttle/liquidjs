@@ -6,12 +6,12 @@ var doubleQuoted = /"[^"]*"/;
 var quoteBalanced = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source}|[^'"])*`);
 
 var number = /(?:-?\d+\.?\d*|\.?\d+)/;
-var bool = /true|false/i;
+var bool = /true|false/;
 var identifier = /[a-zA-Z_$][a-zA-Z_$0-9]*/;
 var subscript = /\[\d+\]/;
 
 var quoted = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source})`);
-var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`, 'i');
+var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`);
 var variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subscript.source})*`);
 
 // range related
@@ -19,10 +19,10 @@ var rangeLimit = new RegExp(`(?:${variable.source}|${number.source})`);
 var range = new RegExp(`\\(${rangeLimit.source}\\.\\.${rangeLimit.source}\\)`);
 var rangeCapture = new RegExp(`\\((${rangeLimit.source})\\.\\.(${rangeLimit.source})\\)`);
 
-var value = new RegExp(`(?:${literal.source}|${variable.source}|${range.source})`, 'i');
+var value = new RegExp(`(?:${literal.source}|${variable.source}|${range.source})`);
 
 // hash related
-var hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`, 'g');
+var hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`);
 var hashCapture = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g');
 
 var tagLine = new RegExp(`^\\s*(${identifier.source})\\s*(.*)\\s*$`);

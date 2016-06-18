@@ -77,7 +77,7 @@ module.exports = function(Tag, Filter) {
 
     function parseTag(token, tokens) {
         if (token.name === 'continue' || token.name === 'break') return token;
-        return Tag.construct(token).parse(tokens);
+        return Tag.construct(token, tokens);
     }
 
     function parseOutput(str) {

@@ -20,7 +20,7 @@ module.exports = function(liquid) {
             }
 
             if (!this.candidates.length){
-                throw new Error(`illegal tag: ${tagToken.raw}`);
+                throw new Error(`empty candidates: ${tagToken.raw}`);
             }
         },
 

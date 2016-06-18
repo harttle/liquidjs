@@ -27,11 +27,13 @@ describe('tags', function() {
             emptyArray: []
         };
     });
+
     it('should support assign', function() {
         test('{% assign foo="bar" %}{{foo}}', 'bar');
         test('{% assign foo=(1..3) %}{{foo}}', '[1,2,3]');
         test('{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}', 'A');
     });
+
     it('should support case', function() {
         testThrow('{% case "foo"%}', /{% case "foo"%} not closed/);
         test('{% case "foo"%}' +
@@ -69,8 +71,20 @@ describe('tags', function() {
         testThrow('{% capture = %}{%endcapture%}', /= not valid identifier/);
     });
 
+    it('should throw when for capture closed', function() {
+        testThrow('{%capture c%}{{c}}', /tag .* not closed/);
+    });
+
     it('should support for', function() {
         test('{%for c in alpha%}{{c}}{%endfor%}', 'abc');
+    });
+
+    it('should throw when for not closed', function() {
+        testThrow('{%for c in alpha%}{{c}}', /tag .* not closed/);
+    });
+
+    it('should support for else', function() {
+        test('{%for c in ""%}a{%else%}b{%endfor%}', 'b');
     });
 
     it('should support for with forloop', function() {
@@ -115,6 +129,10 @@ describe('tags', function() {
     it('should support cycle', function() {
         src = "{% cycle '1', '2', '3' %}";
         test(src + src + src + src, '1231');
+    });
+
+    it('should throw when cycle candidates empty', function() {
+        testThrow('{%cycle%}', /empty candidates/);
     });
 
     it('should support cycle in for block', function() {
