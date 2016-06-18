@@ -2,33 +2,42 @@ const lexical = require('./lexical.js');
 const _ = require('lodash');
 const Exp = require('./expression.js');
 
-var _filterInstance = {
-    render: function(output, scope) {
-        var args = this.args.map(arg => Exp.evalValue(arg, scope));
-        args.unshift(output);
-        return this.filter.apply(null, args);
-    }
-};
+var valueRE = new RegExp(`${lexical.value.source}`, 'g');
 
 module.exports = function() {
     var filters = {};
 
+    var _filterInstance = {
+        render: function(output, scope) {
+            var args = this.args.map(arg => Exp.evalValue(arg, scope));
+            args.unshift(output);
+            return this.filter.apply(null, args);
+        },
+        parse: function(str) {
+            var match = lexical.filterLine.exec(str);
+            if (!match) throw new Error('illegal filter: ' + str);
+
+            var name = match[1], argList = match[2] || '', filter = filters[name];
+            if (typeof filter !== 'function'){
+                throw new Error(`filter "${name}" not found`);
+            }
+
+            var args = [];
+            while(match = valueRE.exec(argList.trim())){
+                args.push(match[0]);
+            }
+
+            this.name = name;
+            this.filter = filter;
+            this.args = args;
+
+            return this;
+        }
+    };
+
     function construct(str) {
-        var match = lexical.filterLine.exec(str.trim());
-        if (!match) error('illegal filter: ' + str);
-
-        var k = match[1], v = match[2];
-        return factory(k, [v]);
-    }
-
-    function factory(name, args) {
-        var filter = filters[name];
-        if (typeof filter !== 'function')
-            throw new Error(`filter ${name} not found`);
-
         var instance = Object.create(_filterInstance);
-        instance.args = args;
-        instance.filter = filter;
+        instance.parse(str);
         return instance;
     }
 

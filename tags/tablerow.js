@@ -1,7 +1,7 @@
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
-    `(${lexical.variableOrRange.source})` +
+    `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*$`);
 
 module.exports = function(liquid) {
@@ -14,11 +14,9 @@ module.exports = function(liquid) {
             this.collection = match[2];
 
             this.templates = [];
-            this.elseTemplates = [];
 
             var p, stream = liquid.parseStream(remainTokens)
                 .onStart(x => p = this.templates)
-                .onTag('else', token => p = this.elseTemplates)
                 .onTag('endtablerow', token => stream.stop())
                 .onTemplate(tpl => p.push(tpl))
                 .onEnd(x => {
@@ -29,10 +27,7 @@ module.exports = function(liquid) {
         },
 
         render: function(scope, hash) {
-            var collection = Liquid.evalExp(this.collection, scope);
-            if (Liquid.isFalsy(collection)) {
-                return liquid.renderTemplates(this.elseTemplates, scope);
-            }
+            var collection = Liquid.evalExp(this.collection, scope) || [];
 
             var html = '<table>',
                 ctx = {},
@@ -40,12 +35,12 @@ module.exports = function(liquid) {
             var offset = hash.offset || 0;
             var limit = (hash.limit === undefined) ? collection.length : hash.limit;
 
-            var cols = hash.cols;
+            var cols = hash.cols, row, col;
             if (!cols) throw new Error(`illegal cols: ${cols}`);
 
             collection.slice(offset, offset + limit).some((item, i) => {
-                var row = Math.floor(i / cols) + 1,
-                    col = (i % cols) + 1;
+                row = Math.floor(i / cols) + 1;
+                col = (i % cols) + 1;
                 if(col === 1){
                     if(row !== 1){
                         html += '</tr>';
@@ -60,7 +55,8 @@ module.exports = function(liquid) {
                 html += '</td>';
                 scope.pop(ctx);
             });
-            html += '</tr></table>';
+            if(row > 0) html += '</tr>';
+            html += '</table>';
             return html;
         }
     });

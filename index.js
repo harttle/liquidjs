@@ -28,21 +28,22 @@ function factory(){
     engine.filter = Filter();
     engine.tokenize = tokenizer.parse;
 
-    var template = Template(engine.tag);
-    engine.parse = template.parse;
-    engine.parseTag = template.parseTag;
-    engine.parseStream = template.parseStream;
+    engine.template = Template(engine.tag, engine.filter);
+    engine.parseStream = engine.template.parseStream;
 
     var renderer = Render(engine.filter, engine.tag);
-    engine.evalFilter = renderer.evalFilter;
     engine.renderTemplates = renderer.renderTemplates;
 
     engine.render = function(html, ctx) {
         var tokens = engine.tokenize(html);
-        var templates = engine.parse(tokens);
+        var templates = engine.template.parse(tokens);
         engine.register = {};
         return engine.renderTemplates(templates, scope.factory(ctx));
-    },
+    };
+    engine.evalOutput = function(str, scope) {
+        var template = engine.template.parseOutput(str.trim());
+        return renderer.evalOutput(template, scope);
+    };
 
     fs.readdirSync(tagsPath).map(function(f){
         var match = /^(\w+)\.js$/.exec(f);

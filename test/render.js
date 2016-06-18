@@ -8,14 +8,14 @@ chai.use(sinonChai);
 var tag = require('../tag.js')();
 var Scope = require('../scope.js');
 var filter = require('../filter')();
-var Render = require('../render.js')(filter, tag);
-var render = Render.renderTemplates;
-var evalFilter = Render.evalFilter;
+var Render = require('../render.js');
+var Template = require('../template.js')(tag, filter);
 
 describe('render', function() {
-    var scope;
+    var scope, render;
 
     beforeEach(function() {
+        render = Render(filter, tag);
         scope = Scope.factory({
             foo: {
                 bar: ['a', 2]
@@ -25,8 +25,18 @@ describe('render', function() {
         tag.clear();
     });
 
+    it('should stringify object', function() {
+        expect(Render.stringify({
+            foo: 'bar'
+        })).to.equal('{"foo":"bar"}');
+    });
+
+    it('should stringify object', function() {
+        expect(Render.stringify([1, 2, 3])).to.equal('[1,2,3]');
+    });
+
     it('should render html', function() {
-        expect(render([{
+        expect(render.renderTemplates([{
             type: 'html',
             value: '<p>'
         }], scope)).to.equal('<p>');
@@ -37,14 +47,16 @@ describe('render', function() {
         var time = sinon.spy();
         filter.register('date', date);
         filter.register('time', time);
-        evalFilter('foo.bar[0] | date: "b" | time:2', scope);
+        var tpl = Template.parseOutput('foo.bar[0] | date: "b" | time:2');
+        render.evalOutput(tpl, scope);
         expect(date).to.have.been.calledWith('a', 'b');
         expect(time).to.have.been.calledWith('y', 2);
     });
 
-    it('should eval filter', function() {
+    it('should eval output', function() {
         filter.register('date', (l, r) => l + r);
         filter.register('time', (l, r) => l + 3 * r);
-        expect(evalFilter('foo.bar[0] | date: "b" | time:2', scope)).to.equal('ab6');
+        var tpl = Template.parseOutput('foo.bar[0] | date: "b" | time:2');
+        expect(render.evalOutput(tpl, scope)).to.equal('ab6');
     });
 });

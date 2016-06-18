@@ -5,12 +5,12 @@ const _ = require('lodash');
 
 function evalExp(exp, scope) {
     if (!scope) throw new Error('unable to evalExp: scope undefined');
-    var operatorREs = lexical.operators;
+    var operatorREs = lexical.operators,
+        match;
     for (var i = 0; i < operatorREs.length; i++) {
         var operatorRE = operatorREs[i];
         var expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`);
-        var match = exp.match(expRE);
-        if (match) {
+        if (match = exp.match(expRE)) {
             var l = evalExp(match[1], scope);
             var op = syntax.operators[match[2].trim()];
             var r = evalExp(match[3], scope);

@@ -1,6 +1,6 @@
-const lexical = require('./lexical.js');
 const error = require('./error.js');
 const Exp = require('./expression.js');
+const assert = require('assert');
 
 function stringify(val) {
     if (typeof val === 'string') return val;
@@ -8,43 +8,51 @@ function stringify(val) {
 }
 
 function factory(Filter, Tag) {
+
     function renderTemplates(templates, scope) {
-        if (!scope) throw new Error('unable to evalTemplates: scope undefined');
-        var html = '';
+        assert(scope, 'unable to evalTemplates: scope undefined');
+        var html = '', partial;
         templates.some(template => {
             if (scope.get('forloop.skip')) return true;
-            if (template.type === 'tag') {
-                if (template.name === 'continue') {
-                    scope.set('forloop.skip', true);
-                    return true;
-                }
-                if (template.name === 'break') {
-                    scope.set('forloop.stop', true);
-                    scope.set('forloop.skip', true);
-                    return true;
-                }
-                html += template.render(scope, this.register);
-            } else if (template.type === 'html') {
-                html += template.value;
-            } else if (template.type === 'output') {
-                var val = evalFilter(template.value, scope);
-                html += stringify(val);
+            switch (template.type) {
+                case 'tag':
+                    partial = renderTag(template, scope, this.register);
+                    if(partial === undefined) return true;
+                    html += partial;
+                    break;
+                case 'html':
+                    html += template.value;
+                    break;
+                case 'output':
+                    var val = evalOutput(template, scope);
+                    html += stringify(val);
             }
         });
         return html;
     }
 
-    function evalFilter(str, scope) {
-        if (!scope) throw new Error('unable to evalFilter: scope undefined');
-        var filters = str.split('|');
-        var val = Exp.evalValue(filters.shift(), scope);
-        return filters
-            .map(str => Filter.construct(str))
+    function renderTag(template, scope, register) {
+        if (template.name === 'continue') {
+            scope.set('forloop.skip', true);
+            return;
+        }
+        if (template.name === 'break') {
+            scope.set('forloop.stop', true);
+            scope.set('forloop.skip', true);
+            return;
+        }
+        return template.render(scope, register);
+    }
+
+    function evalOutput(template, scope) {
+        assert(scope, 'unable to evalOutput: scope undefined');
+        var val = Exp.evalExp(template.initial, scope);
+        return template.filters
             .reduce((v, filter) => filter.render(v, scope), val);
     }
 
     return {
-        renderTemplates, evalFilter
+        renderTemplates, evalOutput, renderTag
     };
 }
 

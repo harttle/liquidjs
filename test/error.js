@@ -38,6 +38,16 @@ describe('error', function() {
         });
     });
 
+    it('should throw ParseError when filter not exist', function() {
+        test(function(){
+            liquid.render('{{ a | xz }}', {});
+        }, function(err){
+            expect(err.name).to.equal('ParseError');
+            expect(err.message).to.equal('filter "xz" not found');
+            expect(err.input).to.equal('{{ a | xz }}');
+            expect(err.line).to.equal(1);
+        });
+    });
     it('should throw ParseError when tag not exist', function() {
         test(function(){
             liquid.render('{% a %}', {});

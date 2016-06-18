@@ -28,7 +28,9 @@ describe('tags', function() {
         };
     });
     it('should support assign', function() {
-        test('{% assign foo="bar"%}{{foo}}', 'bar');
+        test('{% assign foo="bar" %}{{foo}}', 'bar');
+        test('{% assign foo=(1..3) %}{{foo}}', '[1,2,3]');
+        test('{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}', 'A');
     });
     it('should support case', function() {
         testThrow('{% case "foo"%}', /{% case "foo"%} not closed/);
@@ -143,6 +145,12 @@ describe('tags', function() {
             '<tr class="row1"><td class="col1">a</td><td class="col2">b</td></tr>' +
             '<tr class="row2"><td class="col1">c</td></tr>' +
             '</table>';
+        test(src, dst);
+    });
+
+    it('should support empty tablerow', function() {
+        src = '{% tablerow i in (1..0) cols:2 %}{{ i }}{% endtablerow %}';
+        dst = '<table></table>';
         test(src, dst);
     });
 

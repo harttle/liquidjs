@@ -2,7 +2,7 @@ const lexical = require('./lexical.js');
 const error = require('./error.js');
 const ParseError = require('./error.js').ParseError;
 
-module.exports = function(Tag) {
+module.exports = function(Tag, Filter) {
 
     var stream = {
         init: function(tokens) {
@@ -24,17 +24,11 @@ module.exports = function(Tag) {
         start: function() {
             this.trigger('start');
             while (!this.stopRequested && (token = this.tokens.shift())) {
-                var template;
-                if (token.type == 'tag') {
-                    if (this.trigger(`tag:${token.name}`, token)) continue;
-                    if (token.name === 'continue' || token.name === 'break') {
-                        template = token;
-                    } else {
-                        template = parseTag(token, this.tokens);
-                    }
-                } else {
-                    template = token;
+                if (token.type == 'tag' &&
+                    this.trigger(`tag:${token.name}`, token)) {
+                    continue;
                 }
+                var template = parseToken(token, this.tokens);
                 this.trigger('template', template);
             }
             if (!this.stopRequested) this.trigger('end');
@@ -59,24 +53,50 @@ module.exports = function(Tag) {
     };
 
     function parse(tokens) {
-        var templates = [];
-        var token;
+        var token, templates = [];
         while (token = tokens.shift()) {
-            if (token.type === 'tag') {
-                var tagInstance = parseTag(token, tokens);
-                templates.push(tagInstance);
-            } else templates.push(token);
+            templates.push(parseToken(token, tokens));
         }
         return templates;
     }
 
-    function parseTag(token, tokens) {
+    function parseToken(token, tokens) {
         try {
-            return Tag.construct(token).parse(tokens);
+            switch (token.type) {
+                case 'tag':
+                    return parseTag(token, tokens);
+                case 'output':
+                    return parseOutput(token.value);
+                case 'html':
+                    return token;
+            }
         } catch (e) {
-            throw new ParseError(e.message,
-                token.input, token.line, e.stack);
+            throw new ParseError(e.message, token.input, token.line, e.stack);
         }
+    }
+
+    function parseTag(token, tokens) {
+        if (token.name === 'continue' || token.name === 'break') return token;
+        return Tag.construct(token).parse(tokens);
+    }
+
+    function parseOutput(str) {
+        var match = lexical.value.exec(str);
+        if(!match) throw new Error(`illegal output string: ${str}`);
+
+        var initial = match[0];
+        str = str.substr(match.index + match[0].length);
+
+        var filters = [];
+        while(match = lexical.filter.exec(str)){
+            filters.push([match[0].trim()]);
+        }
+
+        return {
+            type: 'output',
+            initial: initial,
+            filters: filters.map(str => Filter.construct(str))
+        };
     }
 
     function parseStream(tokens) {
@@ -85,6 +105,6 @@ module.exports = function(Tag) {
     }
 
     return {
-        parse, parseTag, parseStream
+        parse, parseTag, parseStream, parseOutput
     };
 };

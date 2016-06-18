@@ -1,7 +1,7 @@
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
-    `(${lexical.variableOrRange.source})` +
+    `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*` +
     `(?:\\s+(reversed))?$`);
 
