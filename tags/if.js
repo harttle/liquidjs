@@ -9,7 +9,7 @@ module.exports = function(liquid) {
             this.branches = [];
             this.elseTemplates = [];
 
-            var p, stream = liquid.parseStream(remainTokens)
+            var p, stream = liquid.parser.parseStream(remainTokens)
                 .onStart(x => this.branches.push({
                     cond: tagToken.args,
                     templates: p = []
@@ -37,10 +37,10 @@ module.exports = function(liquid) {
                 var branch = this.branches[i];
                 var cond = Liquid.evalExp(branch.cond, scope);
                 if (Liquid.isTruthy(cond)) {
-                    return liquid.renderTemplates(branch.templates, scope);
+                    return liquid.renderer.renderTemplates(branch.templates, scope);
                 }
             }
-            return liquid.renderTemplates(this.elseTemplates, scope);
+            return liquid.renderer.renderTemplates(this.elseTemplates, scope);
         }
 
     });

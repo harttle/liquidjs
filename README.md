@@ -11,6 +11,58 @@ shall be implemented.
 
 > [Shopify liquid][shopify-liquid] is used by [Jekyll][jekyll] and [Github Pages][gh].
 
+## Usage
+
+Install:
+
+```bash
+npm install --save shopify-liquid
+```
+
+Parse and Render:
+
+```javascript
+var Liquid = require('shopify-liquid');
+var engine = Liquid();
+
+engine.parseAndRender('{{name | capitalize}}', {name: 'alice'});  // Alice
+```
+
+Caching templates:
+
+```javascript
+var tpl = engine.parse('{{name | capitalize}}');
+engine.render(tpl, {name: 'alice'}); // Alice
+```
+
+Register Filters:
+
+```javascript
+// Usage: {{ name | uppper }}
+engine.registerFilter('upper', function(v){
+  return v.toUpperCase();
+});
+```
+
+> See existing filter implementations: <https://github.com/harttle/shopify-liquid/blob/master/filters.js>
+
+Register Tags:
+
+```javascript
+// Usage: {% upper name%}
+engine.registerTag('upper', {
+    parse: function(tagToken, remainTokens) {
+        this.str = tagToken.args; // name
+    },
+    render: function(scope, hash) {
+        var str = Liquid.evalValue(this.str, scope); // 'alice'
+        return str.toUpperCase(); // 'Alice'
+    }
+});
+```
+
+> See existing tag implementations: <https://github.com/harttle/shopify-liquid/blob/master/tags/>
+
 ## Operators
 
 Documentation: <https://shopify.github.io/liquid/basics/operators/>

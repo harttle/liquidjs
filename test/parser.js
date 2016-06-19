@@ -8,7 +8,7 @@ chai.use(sinonChai);
 
 var filter = require('../filter.js')();
 var tag = require('../tag.js')();
-var Template = require('../template.js');
+var Template = require('../parser.js');
 
 describe('template', function() {
     var scope, template, add = (l, r) => l + r;

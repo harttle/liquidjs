@@ -10,7 +10,7 @@ module.exports = function(liquid) {
             this.elseTemplates = [];
 
             var p = [],
-                stream = liquid.parseStream(remainTokens)
+                stream = liquid.parser.parseStream(remainTokens)
                 .onTag('when', token => {
                     if (!this.cases[token.args]) {
                         this.cases.push({
@@ -35,10 +35,10 @@ module.exports = function(liquid) {
                 var val = Liquid.evalExp(branch.val, scope);
                 var cond = Liquid.evalExp(this.cond, scope);
                 if (val === cond) {
-                    return liquid.renderTemplates(branch.templates, scope);
+                    return liquid.renderer.renderTemplates(branch.templates, scope);
                 }
             }
-            return liquid.renderTemplates(this.elseTemplates, scope);
+            return liquid.renderer.renderTemplates(this.elseTemplates, scope);
         }
 
     });

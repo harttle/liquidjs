@@ -5,12 +5,12 @@ var liquid = require('..')(),
     ctx, src, dst;
 
 function test(src, dst) {
-    expect(liquid.render(src, ctx)).to.equal(dst);
+    expect(liquid.parseAndRender(src, ctx)).to.equal(dst);
 }
 
 function testThrow(src, pattern) {
     expect(function() {
-        liquid.render(src, ctx);
+        liquid.parseAndRender(src, ctx);
     }).to.throw(pattern);
 }
 

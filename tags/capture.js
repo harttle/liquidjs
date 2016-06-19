@@ -12,7 +12,7 @@ module.exports = function(liquid) {
             this.variable = match[1];
             this.templates = [];
 
-            var stream = liquid.parseStream(remainTokens);
+            var stream = liquid.parser.parseStream(remainTokens);
             stream.onTag('endcapture', token => stream.stop())
                 .onTemplate(tpl => this.templates.push(tpl))
                 .onEnd(x => {
@@ -21,7 +21,7 @@ module.exports = function(liquid) {
             stream.start();
         },
         render: function(scope, hash) {
-            var html = liquid.renderTemplates(this.templates, scope);
+            var html = liquid.renderer.renderTemplates(this.templates, scope);
             scope.set(this.variable, html);
         }
     });

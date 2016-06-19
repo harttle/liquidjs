@@ -18,7 +18,7 @@ function test(src, dst) {
             category: 'bar'
         }]
     };
-    expect(liquid.render(src, ctx)).to.equal(dst);
+    expect(liquid.parseAndRender(src, ctx)).to.equal(dst);
 }
 
 describe('filters', function() {

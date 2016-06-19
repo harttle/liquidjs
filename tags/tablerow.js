@@ -15,7 +15,7 @@ module.exports = function(liquid) {
 
             this.templates = [];
 
-            var p, stream = liquid.parseStream(remainTokens)
+            var p, stream = liquid.parser.parseStream(remainTokens)
                 .onStart(x => p = this.templates)
                 .onTag('endtablerow', token => stream.stop())
                 .onTemplate(tpl => p.push(tpl))
@@ -51,7 +51,7 @@ module.exports = function(liquid) {
                 ctx[this.variable] = item;
                 scope.push(ctx);
                 html += `<td class="col${col}">`;
-                html += liquid.renderTemplates(this.templates, scope);
+                html += liquid.renderer.renderTemplates(this.templates, scope);
                 html += '</td>';
                 scope.pop(ctx);
             });

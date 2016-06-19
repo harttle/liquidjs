@@ -9,13 +9,12 @@ var tag = require('../tag.js')();
 var Scope = require('../scope.js');
 var filter = require('../filter')();
 var Render = require('../render.js');
-var Template = require('../template.js')(tag, filter);
+var Template = require('../parser.js')(tag, filter);
 
 describe('render', function() {
     var scope, render;
 
     beforeEach(function() {
-        render = Render(filter, tag);
         scope = Scope.factory({
             foo: {
                 bar: ['a', 2]
@@ -23,16 +22,7 @@ describe('render', function() {
         });
         filter.clear();
         tag.clear();
-    });
-
-    it('should stringify object', function() {
-        expect(Render.stringify({
-            foo: 'bar'
-        })).to.equal('{"foo":"bar"}');
-    });
-
-    it('should stringify object', function() {
-        expect(Render.stringify([1, 2, 3])).to.equal('[1,2,3]');
+        render = Render();
     });
 
     it('should render html', function() {

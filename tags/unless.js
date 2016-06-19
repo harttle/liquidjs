@@ -4,7 +4,7 @@ var lexical = Liquid.lexical;
 module.exports = function(liquid) {
     liquid.registerTag('unless', {
         parse: function(tagToken, remainTokens) {
-            var p, stream = liquid.parseStream(remainTokens)
+            var p, stream = liquid.parser.parseStream(remainTokens)
                 .onStart(x => {
                     p = this.templates = [];
                     this.cond = tagToken.args;
@@ -22,8 +22,8 @@ module.exports = function(liquid) {
         render: function(scope, hash) {
             var cond = Liquid.evalExp(this.cond, scope);
             return Liquid.isFalsy(cond) ?
-                liquid.renderTemplates(this.templates, scope) :
-                liquid.renderTemplates(this.elseTemplates, scope);
+                liquid.renderer.renderTemplates(this.templates, scope) :
+                liquid.renderer.renderTemplates(this.elseTemplates, scope);
         }
     });
 };

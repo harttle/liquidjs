@@ -18,7 +18,7 @@ module.exports = function(liquid) {
             this.templates = [];
             this.elseTemplates = [];
 
-            var p, stream = liquid.parseStream(remainTokens)
+            var p, stream = liquid.parser.parseStream(remainTokens)
                 .onStart(x => p = this.templates)
                 .onTag('else', token => p = this.elseTemplates)
                 .onTag('endfor', token => stream.stop())
@@ -33,7 +33,7 @@ module.exports = function(liquid) {
         render: function(scope, hash) {
             var collection = Liquid.evalExp(this.collection, scope);
             if (Liquid.isFalsy(collection)) {
-                return liquid.renderTemplates(this.elseTemplates, scope);
+                return liquid.renderer.renderTemplates(this.elseTemplates, scope);
             }
 
             var html = '',
@@ -58,7 +58,7 @@ module.exports = function(liquid) {
                     skip: false
                 };
                 scope.push(ctx);
-                html += liquid.renderTemplates(this.templates, scope);
+                html += liquid.renderer.renderTemplates(this.templates, scope);
                 var breakloop = scope.get('forloop.stop');
                 scope.pop(ctx);
 
