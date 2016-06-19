@@ -22,12 +22,6 @@ function test(src, dst) {
 }
 
 describe('filters', function() {
-    it('should output object', function() {
-        test('{{obj}}', '{"foo":"bar"}');
-    });
-    it('should output array', function() {
-        test('{{arr}}', '[-2,"a"]');
-    });
     it('should support abs', function() {
         test('{{ -3 | abs }}', '3');
         test('{{ arr[0] | abs }}', '2');

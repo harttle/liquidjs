@@ -54,8 +54,8 @@ describe('tags', function() {
         testThrow('{% if false%}yes', /tag {% if false%} not closed/);
         test('{%if emptyArray%}a{%endif%}', '');
         test('{% if 2==3 %}yes{%else%}no{%endif%}', 'no');
-        test('{% if 1==2 and one<two %}a{%endif%}', '');
-        test('{% if false %}yes{%else%}no{%endif%}', 'no');
+        test('{% if 1>=2 and one<two %}a{%endif%}', '');
+        test('{% if one!=two %}yes{%else%}no{%endif%}', 'yes');
         test('{% if false %}1{%elsif true%}2{%else%}3{%endif%}', '2');
         test('{%if false%}{%if true%}{%else%}a{%endif%}{%endif%}', '');
     });
