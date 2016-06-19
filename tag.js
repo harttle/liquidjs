@@ -21,7 +21,7 @@ module.exports = function() {
             var reg = register[this.name];
             if(!reg) reg = register[this.name] = {};
             var obj = hash(this.token.args, scope);
-            return this.tagImpl.render(scope, obj, reg) || '';
+            return this.tagImpl.render && this.tagImpl.render(scope, obj, reg) || '';
         },
         parse: function(token, tokens){
             this.type = 'tag';
@@ -38,9 +38,6 @@ module.exports = function() {
     };
 
     function register(name, tag) {
-        if (typeof tag.render !== 'function') {
-            throw new Error(`expect ${name}.render to be a function`);
-        }
         tagImpls[name] = tag;
     }
 

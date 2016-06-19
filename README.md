@@ -89,6 +89,8 @@ Documentation: <https://shopify.github.io/liquid/basics/introduction/#tags>
 - [x] capture [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/capture.js) [Test][tt]
 - [x] increment [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/increment.js) [Test][tt]
 - [x] decrement [Document](https://shopify.github.io/liquid/tags/variable/) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/decrement.js) [Test][tt]
+- [x] raw [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#raw) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/raw.js) [Test][tt]
+- [x] comment [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#comment) [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/comment.js) [Test][tt]
 
 
 ## Filters

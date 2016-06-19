@@ -27,12 +27,6 @@ describe('tag', function() {
         }).to.throw(/tag foo not found/);
     });
 
-    it('should throw when render method not defined', function() {
-        expect(function() {
-            tag.register('foo', {});
-        }).to.throw(/expect foo.render to be a function/);
-    });
-
     it('should register simple tag', function() {
         expect(
             function() {

@@ -16,10 +16,10 @@ module.exports = function(liquid) {
             this.templates = [];
 
             var p, stream = liquid.parser.parseStream(remainTokens)
-                .onStart(x => p = this.templates)
-                .onTag('endtablerow', token => stream.stop())
-                .onTemplate(tpl => p.push(tpl))
-                .onEnd(x => {
+                .on('start', x => p = this.templates)
+                .on('tag:endtablerow', token => stream.stop())
+                .on('template', tpl => p.push(tpl))
+                .on('end', x => {
                     throw new Error(`tag ${tagToken.raw} not closed`);
                 });
 

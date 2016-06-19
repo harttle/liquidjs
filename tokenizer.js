@@ -17,6 +17,7 @@ function parse(html) {
             htmlFragment = html.slice(idx, result.index);
             tokens.push({
                 type: 'html',
+                raw: htmlFragment,
                 value: htmlFragment
             });
         }
@@ -47,6 +48,7 @@ function parse(html) {
         htmlFragment = html.slice(idx, html.length);
         tokens.push({
             type: 'html',
+            raw: htmlFragment,
             value: htmlFragment
         });
     }

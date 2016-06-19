@@ -1,5 +1,6 @@
 var chai = require("chai");
 var should = chai.should();
+var expect = chai.expect;
 
 var tokenizer = require('../tokenizer.js');
 
@@ -38,5 +39,14 @@ describe('tokenizer', function() {
 
         tokens[1].value.should.equal('bar');
         tokens[2].value.should.equal('foo');
+    });
+    it('should keep white spaces and newlines', function(){
+        var html = '{{foo}}\n{%bar %}  \n {{alice}}';
+        var tokens = tokenizer.parse(html);
+        expect(tokens.length).to.equal(5);
+        expect(tokens[1].type).to.equal('html');
+        expect(tokens[1].raw).to.equal('\n');
+        expect(tokens[3].type).to.equal('html');
+        expect(tokens[3].raw).to.equal('  \n ');
     });
 });

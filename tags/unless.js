@@ -5,14 +5,14 @@ module.exports = function(liquid) {
     liquid.registerTag('unless', {
         parse: function(tagToken, remainTokens) {
             var p, stream = liquid.parser.parseStream(remainTokens)
-                .onStart(x => {
+                .on('start', x => {
                     p = this.templates = [];
                     this.cond = tagToken.args;
                 })
-                .onTag('else', token => this.elseTemplates = p = [])
-                .onTag('endunless', token => stream.stop())
-                .onTemplate(tpl => p.push(tpl))
-                .onEnd(x => {
+                .on('tag:else', token => this.elseTemplates = p = [])
+                .on('tag:endunless', token => stream.stop())
+                .on('template', tpl => p.push(tpl))
+                .on('end', x => {
                     throw new Error(`tag ${tagToken.raw} not closed`);
                 });
 

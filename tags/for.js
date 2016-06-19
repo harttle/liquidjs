@@ -19,11 +19,11 @@ module.exports = function(liquid) {
             this.elseTemplates = [];
 
             var p, stream = liquid.parser.parseStream(remainTokens)
-                .onStart(x => p = this.templates)
-                .onTag('else', token => p = this.elseTemplates)
-                .onTag('endfor', token => stream.stop())
-                .onTemplate(tpl => p.push(tpl))
-                .onEnd(x => {
+                .on('start', x => p = this.templates)
+                .on('tag:else', token => p = this.elseTemplates)
+                .on('tag:endfor', token => stream.stop())
+                .on('template', tpl => p.push(tpl))
+                .on('end', x => {
                     throw new Error(`tag ${tagToken.raw} not closed`);
                 });
 

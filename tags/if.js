@@ -10,11 +10,11 @@ module.exports = function(liquid) {
             this.elseTemplates = [];
 
             var p, stream = liquid.parser.parseStream(remainTokens)
-                .onStart(x => this.branches.push({
+                .on('start', x => this.branches.push({
                     cond: tagToken.args,
                     templates: p = []
                 }))
-                .onTag('elsif', token => {
+                .on('tag:elsif', token => {
                     if (!this.branches[token.args]) {
                         this.branches.push({
                             cond: token.args,
@@ -22,10 +22,10 @@ module.exports = function(liquid) {
                         });
                     }
                 })
-                .onTag('else', token => p = this.elseTemplates)
-                .onTag('endif', token => stream.stop())
-                .onTemplate(tpl => p.push(tpl))
-                .onEnd(x => {
+                .on('tag:else', token => p = this.elseTemplates)
+                .on('tag:endif', token => stream.stop())
+                .on('template', tpl => p.push(tpl))
+                .on('end', x => {
                     throw new Error(`tag ${tagToken.raw} not closed`);
                 });
 

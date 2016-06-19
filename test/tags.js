@@ -34,6 +34,18 @@ describe('tags', function() {
         test('{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}', 'A');
     });
 
+    it('should support raw', function() {
+        testThrow('{% raw%}', /{% raw%} not closed/);
+        test('{% raw %}{{ 5 | plus: 6 }}{% endraw %} is equal to 11.', '{{ 5 | plus: 6 }} is equal to 11.');
+        test('{% raw %}\n{{ foo}} \n{% endraw %}', '\n{{ foo}} \n');
+    });
+
+    it('should support comment', function() {
+        testThrow('{% comment %}{% raw%}', /{% comment %} not closed/);
+        test('My name is {% comment %}super{% endcomment %} Shopify.', 'My name is  Shopify.');
+        test('{% comment %}\n{{ foo}} \n{% endcomment %}', '');
+    });
+
     it('should support case', function() {
         testThrow('{% case "foo"%}', /{% case "foo"%} not closed/);
         test('{% case "foo"%}' +

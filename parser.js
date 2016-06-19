@@ -24,6 +24,7 @@ module.exports = function(Tag, Filter) {
         start: function() {
             this.trigger('start');
             while (!this.stopRequested && (token = this.tokens.shift())) {
+                if (this.trigger('token', token)) continue;
                 if (token.type == 'tag' &&
                     this.trigger(`tag:${token.name}`, token)) {
                     continue;
@@ -37,18 +38,6 @@ module.exports = function(Tag, Filter) {
         stop: function() {
             this.stopRequested = true;
             return this;
-        },
-        onStart: function(cb) {
-            return this.on('start', cb);
-        },
-        onEnd: function(cb) {
-            return this.on('end', cb);
-        },
-        onTag: function(name, cb) {
-            return this.on(`tag:${name}`, cb);
-        },
-        onTemplate: function(cb) {
-            return this.on('template', cb);
         }
     };
 

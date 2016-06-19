@@ -11,7 +11,7 @@ module.exports = function(liquid) {
 
             var p = [],
                 stream = liquid.parser.parseStream(remainTokens)
-                .onTag('when', token => {
+                .on('tag:when', token => {
                     if (!this.cases[token.args]) {
                         this.cases.push({
                             val: token.args,
@@ -19,10 +19,10 @@ module.exports = function(liquid) {
                         });
                     }
                 })
-                .onTag('else', token => p = this.elseTemplates)
-                .onTag('endcase', token => stream.stop())
-                .onTemplate(tpl => p.push(tpl))
-                .onEnd(x => {
+                .on('tag:else', token => p = this.elseTemplates)
+                .on('tag:endcase', token => stream.stop())
+                .on('template', tpl => p.push(tpl))
+                .on('end', x => {
                     throw new Error(`tag ${tagToken.raw} not closed`);
                 });
 
