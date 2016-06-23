@@ -2,7 +2,7 @@ var chai = require("chai");
 var should = chai.should();
 var expect = chai.expect;
 
-var tokenizer = require('../tokenizer.js');
+var tokenizer = require('../src/tokenizer.js');
 
 describe('tokenizer', function() {
     it('should handle plain HTML', function() {

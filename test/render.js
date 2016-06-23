@@ -5,11 +5,11 @@ const expect = chai.expect;
 
 chai.use(sinonChai);
 
-var tag = require('../tag.js')();
-var Scope = require('../scope.js');
-var filter = require('../filter')();
-var Render = require('../render.js');
-var Template = require('../parser.js')(tag, filter);
+var tag = require('../src/tag.js')();
+var Scope = require('../src/scope.js');
+var filter = require('../src/filter')();
+var Render = require('../src/render.js');
+var Template = require('../src/parser.js')(tag, filter);
 
 describe('render', function() {
     var scope, render;

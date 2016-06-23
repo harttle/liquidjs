@@ -6,9 +6,9 @@ const expect = chai.expect;
 
 chai.use(sinonChai);
 
-var filter = require('../filter.js')();
-var tag = require('../tag.js')();
-var Template = require('../parser.js');
+var filter = require('../src/filter.js')();
+var tag = require('../src/tag.js')();
+var Template = require('../src/parser.js');
 
 describe('template', function() {
     var scope, template, add = (l, r) => l + r;

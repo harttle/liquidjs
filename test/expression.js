@@ -1,7 +1,7 @@
 const chai = require("chai");
 const expect = chai.expect;
-var expression = require('../expression.js');
-var Scope = require('../scope.js');
+var expression = require('../src/expression.js');
+var Scope = require('../src/scope.js');
 
 var evalExp = expression.evalExp;
 var evalValue = expression.evalValue;

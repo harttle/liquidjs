@@ -2,7 +2,7 @@ var chai = require("chai");
 var should = chai.should();
 var expect = chai.expect;
 
-var Scope = require('../scope.js');
+var Scope = require('../src/scope.js');
 
 describe('scope', function() {
     var scope;

@@ -1,7 +1,11 @@
 const chai = require("chai");
 const expect = chai.expect;
-
-var liquid = require('..')(),
+const Liquid = require('..');
+const mock = require('mock-fs');
+var liquid = Liquid({
+        root: '/',
+        extname: '.html'
+    }),
     ctx, src, dst;
 
 function test(src, dst) {
@@ -26,6 +30,20 @@ describe('tags', function() {
             alpha: ['a', 'b', 'c'],
             emptyArray: []
         };
+        mock({
+            '/files/foo.html': 'foo',
+            '/current.html': 'bar{% include "foo.html" %}bar',
+            '/relative.html': 'bar{% include "../files/foo.html" %}bar',
+            '/foo.html': 'FOO',
+            '/user.html': '{{name}} : {{role}} : {{alias}}',
+            '/color.html': 'color:{{color}}, shape:{{shape}}',
+            '/with.html': '{% include "color" with "red", shape: "rect" %}',
+            '/scope.html': '{% assign shape="triangle" %}{% assign color="yellow" %}{% include "color.html" %}',
+            '/hash.html': '{% assign name="harttle" %}{% include "user.html", role: "admin", alias: name %}'
+        });
+    });
+    afterEach(function() {
+        mock.restore();
     });
 
     it('should support assign', function() {
@@ -217,4 +235,27 @@ describe('tags', function() {
             '</table>';
         test(src, dst);
     });
+
+    it('should support include', function() {
+        expect(liquid.renderFile('/current.html', ctx)).to.equal('barFOObar');
+    });
+
+    it('should support include with relative path', function() {
+        expect(liquid.renderFile('relative.html', ctx)).to.equal('barfoobar');
+    });
+
+    it('should support include: hash list', function() {
+        expect(liquid.renderFile('hash.html', ctx)).to.equal('harttle : admin : harttle');
+    });
+
+    it('should support include: parent scope', function() {
+        expect(liquid.renderFile('scope.html', ctx)).to.equal('color:yellow, shape:triangle');
+    });
+
+    it('should support include: with', function() {
+        var filepath = 'with.html';
+        var dst = 'color:red, shape:rect';
+        expect(liquid.renderFile(filepath, ctx)).to.equal(dst);
+    });
+
 });

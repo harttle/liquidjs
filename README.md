@@ -11,13 +11,13 @@ shall be implemented.
 
 > [Shopify liquid][shopify-liquid] is used by [Jekyll][jekyll] and [Github Pages][gh].
 
-## Usage
-
-Install:
+Installation:
 
 ```bash
 npm install --save shopify-liquid
 ```
+
+## Render from String
 
 Parse and Render:
 
@@ -34,6 +34,43 @@ Caching templates:
 var tpl = engine.parse('{{name | capitalize}}');
 engine.render(tpl, {name: 'alice'}); // Alice
 ```
+
+## Render from File
+
+```javascript
+var engine = Liquid({
+    root: path.resolve(__dirname, 'views/'),
+    extname: '.liquid',
+    cache: false
+});
+// equivalent to: engine.renderFile("hello", {name: 'alice'});
+var html = engine.renderFile("hello.html", {name: 'alice'});
+```
+
+`cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
+
+## Include
+
+```
+// file: color.liquid
+color: '{{ color }}' shape: '{{ shape }}'
+
+// file: theme.liquid
+{% assign shape = 'circle' %}
+{% include 'color' %}
+{% include 'color' with 'red' %}
+{% include 'color', color: 'yellow', shape: 'square' %}
+```
+
+The output will be:
+
+```
+color: '' shape: 'circle'
+color: 'red' shape: 'circle'
+color: 'yellow' shape: 'square'
+```
+
+## Extension
 
 Register Filters:
 
@@ -93,6 +130,7 @@ Tag | Document | Source | Test
 `decrement` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/decrement.js) | [Test][tt]
 `raw` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#raw) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/raw.js) | [Test][tt]
 `comment` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#comment) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/comment.js) | [Test][tt]
+`include` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#include) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/include.js) | [Test][tt]
 
 
 ## Filters
@@ -143,10 +181,6 @@ Filter | Document | Source | Test
 `upcase` | [Document](https://shopify.github.io/liquid/filters/upcase) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
 `url_encode` | [Document](https://shopify.github.io/liquid/filters/url_encode) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
 
-## Differences from Shopify Liquid
-
-* `url_encode` is based on `encodeURIComponent`, ` ` will be converted to `%20`.
-
 ## Async Support
 
 harttle/shopify-liquid do NOT support async rendering, this is by design.
@@ -156,8 +190,8 @@ Async rendering introduces extra complexity in both implementation and extension
 
 For template-driven projects, checkout these Liquid-like engines:
 
-* [liquid-node][liquid-node]: <https://github.com/sirlantis/liquid-node> 
-* [nunjucks][nunjucks]: <http://mozilla.github.io/nunjucks/>
+* liquid-node: <https://github.com/sirlantis/liquid-node> 
+* nunjucks: <http://mozilla.github.io/nunjucks/>
 
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node

@@ -1,17 +1,24 @@
-const scope = require('./scope');
-const tokenizer = require('./tokenizer.js');
-const Render = require('./render.js');
-const lexical = require('./lexical.js');
+const scope = require('./src/scope');
+const assert = require('assert');
+const _ = require('lodash');
+const tokenizer = require('./src/tokenizer.js');
+const Render = require('./src/render.js');
+const lexical = require('./src/lexical.js');
 const path = require("path");
 const fs = require('fs');
-const Tag = require('./tag.js');
-const Filter = require('./filter.js');
-const Template = require('./parser');
-const Expression = require('./expression.js');
-const tagsPath = path.join(__dirname, "tags");
+const Tag = require('./src/tag.js');
+const Filter = require('./src/filter.js');
+const Template = require('./src/parser');
+const Expression = require('./src/expression.js');
+const tagsPath = path.join(__dirname, "tags/");
+const filtersPath = path.join(__dirname, "filters.js");
 
 var _engine = {
-    init: function(tag, filter) {
+    init: function(tag, filter, options) {
+        if (options.cache) {
+            this.cache = {};
+        }
+        this.options = options;
         this.tag = tag;
         this.filter = filter;
         this.parser = Template(tag, filter);
@@ -30,6 +37,10 @@ var _engine = {
         var tpl = this.parse(html);
         return this.render(tpl, ctx);
     },
+    renderFile: function(filepath, ctx) {
+        var tpl = this.handleCache(filepath);
+        return this.render(tpl, ctx);
+    },
     evalOutput: function(str, scope) {
         var tpl = this.parser.parseOutput(str.trim());
         return this.renderer.evalOutput(tpl, scope);
@@ -40,11 +51,26 @@ var _engine = {
     registerTag: function(name, tag) {
         return this.tag.register(name, tag);
     },
+    handleCache: function(filepath) {
+        assert(filepath, 'filepath cannot be null');
+        filepath = path.resolve(this.options.root, filepath);
+        if(path.extname(filepath) === ''){
+            filepath += this.options.extname;
+        }
+        var tpl = this.options.cache && this.cache[filepath] ||
+            this.parse(fs.readFileSync(filepath));
+        return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+    }
 };
 
-function factory() {
+function factory(options) {
+    options = _.defaults(options || {
+        root: '',
+        extname: '.liquid'
+    });
     var engine = Object.create(_engine);
-    engine.init(Tag(), Filter());
+
+    engine.init(Tag(), Filter(), options);
     registerTagsAndFilters(engine);
     return engine;
 }
@@ -55,7 +81,7 @@ function registerTagsAndFilters(engine) {
         if (!match) return;
         require("./tags/" + f)(engine);
     });
-    require("./filters.js")(engine);
+    require(filtersPath)(engine);
 }
 
 factory.lexical = lexical;

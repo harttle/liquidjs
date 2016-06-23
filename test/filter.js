@@ -5,8 +5,8 @@ const expect = chai.expect;
 
 chai.use(sinonChai);
 
-var filter = require('../filter.js')();
-var Scope = require('../scope.js');
+var filter = require('../src/filter.js')();
+var Scope = require('../src/scope.js');
 
 describe('filter', function() {
     var scope;

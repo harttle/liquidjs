@@ -2,7 +2,7 @@ var chai = require("chai");
 var should = chai.should();
 var expect = chai.expect;
 
-var lexical = require('../lexical.js');
+var lexical = require('../src/lexical.js');
 
 describe('lexical', function() {
     it('should test filter syntax', function(){

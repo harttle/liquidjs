@@ -4,8 +4,8 @@ var sinon = require("sinon");
 var expect = chai.expect;
 chai.use(sinonChai);
 
-var tag = require('../tag.js')();
-var Scope = require('../scope.js');
+var tag = require('../src/tag.js')();
+var Scope = require('../src/scope.js');
 
 describe('tag', function() {
     var scope;
