@@ -7,14 +7,12 @@ function parse(html) {
 
     var syntax = /({%(.*?)%})|({{(.*?)}})/g;
     var result, htmlFragment, token;
-    var idx = 0;
-    var _idx = -1;
-    var _count = 0;
+    var lastMatchEnd = 0, lastMatchBegin = -1, parsedLinesCount = 0;
 
     while ((result = syntax.exec(html)) !== null) {
         // passed html fragments
-        if (result.index > idx) {
-            htmlFragment = html.slice(idx, result.index);
+        if (result.index > lastMatchEnd) {
+            htmlFragment = html.slice(lastMatchEnd, result.index);
             tokens.push({
                 type: 'html',
                 raw: htmlFragment,
@@ -40,12 +38,12 @@ function parse(html) {
             token = factory('output', 3, result);
             tokens.push(token);
         }
-        idx = syntax.lastIndex;
+        lastMatchEnd = syntax.lastIndex;
     }
 
     // remaining html
-    if (html.length > idx) {
-        htmlFragment = html.slice(idx, html.length);
+    if (html.length > lastMatchEnd) {
+        htmlFragment = html.slice(lastMatchEnd, html.length);
         tokens.push({
             type: 'html',
             raw: htmlFragment,
@@ -72,10 +70,10 @@ function parse(html) {
     }
 
     function getLineNum(match) {
-        var lines = match.input.slice(_idx + 1, match.index).split('\n');
-        _count += lines.length - 1;
-        _idx = match.index;
-        return _count + 1;
+        var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n');
+        parsedLinesCount += lines.length - 1;
+        lastMatchBegin = match.index;
+        return parsedLinesCount + 1;
     }
 }
 

@@ -52,6 +52,6 @@ module.exports = function() {
     }
 
     return {
-        construct, register, hash, clear
+        construct, register, clear
     };
 };

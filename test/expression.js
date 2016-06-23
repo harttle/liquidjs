@@ -1,12 +1,8 @@
 const chai = require("chai");
-const sinonChai = require("sinon-chai");
-const sinon = require("sinon");
 const expect = chai.expect;
-
-chai.use(sinonChai);
-
 var expression = require('../expression.js');
 var Scope = require('../scope.js');
+
 var evalExp = expression.evalExp;
 var evalValue = expression.evalValue;
 

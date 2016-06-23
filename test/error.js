@@ -1,9 +1,5 @@
 var chai = require("chai");
-var sinonChai = require("sinon-chai");
-var sinon = require("sinon");
 var expect = chai.expect;
-chai.use(sinonChai);
-
 var engine = require('..')(), ctx;
 
 function test(func, cb){
