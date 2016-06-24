@@ -58,7 +58,7 @@ var _engine = {
             filepath += this.options.extname;
         }
         var tpl = this.options.cache && this.cache[filepath] ||
-            this.parse(fs.readFileSync(filepath));
+            this.parse(fs.readFileSync(filepath, 'utf8'));
         return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
     }
 };

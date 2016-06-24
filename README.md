@@ -49,7 +49,9 @@ var html = engine.renderFile("hello.html", {name: 'alice'});
 
 `cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
 
-## Include
+## Includes and Layouts
+
+### Includes
 
 ```
 // file: color.liquid
@@ -69,6 +71,30 @@ color: '' shape: 'circle'
 color: 'red' shape: 'circle'
 color: 'yellow' shape: 'square'
 ```
+
+### Layouts
+
+```
+// file: default-layout.html
+Header
+{% block content %}My default content{% endblock %}
+Footer
+
+// file: page.html
+{% layout "default-layout" %}
+{% block content %}My page content{% endblock %}
+```
+
+The output of `page.html`:
+
+```
+Header
+My page content
+Footer
+```
+
+* It's possible to define multiple blocks.
+* block name is optional when there's only one block.
 
 ## Extension
 
@@ -131,6 +157,7 @@ Tag | Document | Source | Test
 `raw` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#raw) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/raw.js) | [Test][tt]
 `comment` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#comment) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/comment.js) | [Test][tt]
 `include` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#include) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/include.js) | [Test][tt]
+`layout, block` | [Document](http://docs.mixture.io/templates/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/layout.js) | [Test][tt]
 
 
 ## Filters

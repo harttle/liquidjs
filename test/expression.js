@@ -40,7 +40,7 @@ describe('expression', function() {
         expect(evalExp('one<=two', scope)).to.equal(true);
         expect(evalExp('x contains "x"', scope)).to.equal(false);
         expect(evalExp('x contains "X"', scope)).to.equal(true);
-        expect(evalExp('x contains z', scope)).to.equal(true);
+        expect(evalExp('x contains z', scope)).to.equal(false);
         expect(evalExp('"<=" == "<="', scope)).to.equal(true);
     });
 

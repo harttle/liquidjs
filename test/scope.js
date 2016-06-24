@@ -44,7 +44,7 @@ describe('scope', function() {
         scope.push({foo: 'foo', foo1: 'foo1'});
         scope.pop();
         expect(scope.get('foo')).to.equal('bar');
-        expect(scope.get('foo1')).to.equal('');
+        expect(scope.get('foo1')).to.equal(undefined);
         expect(scope.get('bar[1].b[1]')).to.equal(2);
     });
 });

@@ -8,7 +8,6 @@ var scope = {
             var v = _.get(this.scopes[i], str);
             if (v !== undefined) return v;
         }
-        return '';
     },
     set: function(k, v) {
         _.set(this.scopes[this.scopes.length - 1], k, v);

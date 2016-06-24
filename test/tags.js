@@ -31,6 +31,9 @@ describe('tags', function() {
             emptyArray: []
         };
         mock({
+            '/default-layout.html': 'foo{% block %}Default{% endblock %}foo',
+            '/multi-blocks-layout.html': 'foo{% block "a"%}{% endblock %}{% block b%}{%endblock%}foo',
+            '/multi-blocks.html': '{% layout "multi-blocks-layout" %}{%block a%}aaa{%endblock%},{%block b%};{%block c%}ccc{%endblock%};{%endblock%}',
             '/files/foo.html': 'foo',
             '/current.html': 'bar{% include "foo.html" %}bar',
             '/relative.html': 'bar{% include "../files/foo.html" %}bar',
@@ -202,6 +205,11 @@ describe('tags', function() {
         test(src, dst);
     });
 
+    it('should throw when tablerow not closed', function() {
+        src = '{% tablerow i in (1..0) cols:2 %}{{ i }}';
+        testThrow(src, /tag .* not closed/);
+    });
+
     it('should support tablerow with range', function() {
         src = '{% tablerow i in (1..5) cols:2 %}{{ i }}{% endtablerow %}';
         dst = '<table>' +
@@ -257,5 +265,24 @@ describe('tags', function() {
         var dst = 'color:red, shape:rect';
         expect(liquid.renderFile(filepath, ctx)).to.equal(dst);
     });
-
+    it('should throw when block not closed', function() {
+        src = '{% layout "default-layout" %}{%block%}bar';
+        testThrow(src, /tag {%block%} not closed/);
+    });
+    it('should support layout', function() {
+        src = '{% layout "default-layout" %}{%block%}bar{%endblock%}';
+        test(src, 'foobarfoo');
+    });
+    it('should support layout: multiple blocks', function() {
+        src = '{% layout "multi-blocks-layout" %}' +
+            '{%block a%}bara{%endblock%}' +
+            '{%block b%}barb{%endblock%}';
+        test(src, 'foobarabarbfoo');
+    });
+    it('should support layout: nested', function() {
+        src = '{% layout "multi-blocks" %}{% block a%}A{%endblock%}{%block c%}C{%endblock%}';
+        test(src, 'fooA;C;foo');
+        src = '{% layout "multi-blocks" %}{%block c%}C{%endblock%}';
+        test(src, 'fooaaa;C;foo');
+    });
 });
