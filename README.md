@@ -49,9 +49,7 @@ var html = engine.renderFile("hello.html", {name: 'alice'});
 
 `cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
 
-## Includes and Layouts
-
-### Includes
+## Includes
 
 ```
 // file: color.liquid
@@ -72,7 +70,7 @@ color: 'red' shape: 'circle'
 color: 'yellow' shape: 'square'
 ```
 
-### Layouts
+## Layouts
 
 ```
 // file: default-layout.html
