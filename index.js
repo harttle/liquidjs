@@ -42,8 +42,14 @@ var _engine = {
         return this.render(tpl, ctx);
     },
     renderFile: function(filepath, ctx) {
-        var tpl = this.handleCache(filepath);
-        return this.render(tpl, ctx);
+        try{
+            var tpl = this.handleCache(filepath);
+            return this.render(tpl, ctx);
+        }
+        catch(e){
+            e.file = filepath;
+            throw e;
+        }
     },
     evalOutput: function(str, scope) {
         var tpl = this.parser.parseOutput(str.trim());

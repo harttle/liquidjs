@@ -1,6 +1,7 @@
 var chai = require("chai");
 var expect = chai.expect;
 var engine = require('..')(), ctx;
+const mock = require('mock-fs');
 
 function test(func, cb){
     try{
@@ -31,6 +32,19 @@ describe('error', function() {
         }, function(err){
             expect(err.input).to.equal('{% -a %}');
             expect(err.line).to.equal(3);
+        });
+    });
+
+    it('should throw correct error info for files', function() {
+        mock({
+            "/foo.html": '<html>\n<head>\n\n{% raw %}\n\n'
+        });
+        test(function(){
+            engine.renderFile('/foo.html', {});
+        }, function(err){
+            expect(err.input).to.equal('{% raw %}');
+            expect(err.line).to.equal(4);
+            expect(err.file).to.equal('/foo.html');
         });
     });
 
