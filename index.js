@@ -10,8 +10,8 @@ const Tag = require('./src/tag.js');
 const Filter = require('./src/filter.js');
 const Template = require('./src/parser');
 const Expression = require('./src/expression.js');
-const tagsPath = path.join(__dirname, "tags/");
-const filtersPath = path.join(__dirname, "filters.js");
+const tags = require('./tags');
+const filters = require('./filters');
 
 var _engine = {
     init: function(tag, filter, options) {
@@ -23,6 +23,10 @@ var _engine = {
         this.filter = filter;
         this.parser = Template(tag, filter);
         this.renderer = Render();
+
+        tags(this);
+        filters(this);
+
         return this;
     },
     parse: function(html) {
@@ -54,12 +58,22 @@ var _engine = {
     handleCache: function(filepath) {
         assert(filepath, 'filepath cannot be null');
         filepath = path.resolve(this.options.root, filepath);
-        if(path.extname(filepath) === ''){
+        if (path.extname(filepath) === '') {
             filepath += this.options.extname;
         }
         var tpl = this.options.cache && this.cache[filepath] ||
             this.parse(fs.readFileSync(filepath, 'utf8'));
         return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+    },
+    express: function() {
+        return (filePath, options, callback) => {
+            try {
+                var html = this.renderFile(filePath, options);
+                return callback(null, html);
+            } catch (e) {
+                return callback(e);
+            }
+        };
     }
 };
 
@@ -71,17 +85,7 @@ function factory(options) {
     var engine = Object.create(_engine);
 
     engine.init(Tag(), Filter(), options);
-    registerTagsAndFilters(engine);
     return engine;
-}
-
-function registerTagsAndFilters(engine) {
-    fs.readdirSync(tagsPath).map(f => {
-        var match = /^(\w+)\.js$/.exec(f);
-        if (!match) return;
-        require("./tags/" + f)(engine);
-    });
-    require(filtersPath)(engine);
 }
 
 factory.lexical = lexical;

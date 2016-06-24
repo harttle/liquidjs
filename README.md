@@ -39,7 +39,7 @@ engine.render(tpl, {name: 'alice'}); // Alice
 
 ```javascript
 var engine = Liquid({
-    root: path.resolve(__dirname, 'views/'),
+    root: path.resolve(__dirname, 'views/'),  // for layouts and partials
     extname: '.liquid',
     cache: false
 });
@@ -48,6 +48,14 @@ var html = engine.renderFile("hello.html", {name: 'alice'});
 ```
 
 `cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
+
+## Use with Express.js
+
+```javascript
+app.engine('liquid', engine.express());
+app.set('views', './views');        // specify the views directory
+app.set('view engine', 'liquid');   // register the template engine
+```
 
 ## Includes
 

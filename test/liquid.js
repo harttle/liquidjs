@@ -23,7 +23,7 @@ describe('liquid', function() {
             '/root/files/name.html': 'My name is {{name}}.'
         });
     });
-    afterEach(function(){
+    afterEach(function() {
         mock.restore();
     });
     it('should output object', function() {
@@ -33,10 +33,10 @@ describe('liquid', function() {
         engine.parseAndRender('{{arr}}', ctx).should.equal('[-2,"a"]');
     });
     it('should parse html', function() {
-        (function(){
+        (function() {
             engine.parse('{{obj}}');
         }).should.not.throw();
-        (function(){
+        (function() {
             engine.parse('<html><head>{{obj}}</head></html>');
         }).should.not.throw();
     });
@@ -49,38 +49,51 @@ describe('liquid', function() {
         var template = engine.parse('<p>{{arr | join: "_"}}</p>');
         engine.render(template, ctx).should.equal('<p>-2_a</p>');
     });
-    it('should render file', function(){
-        engine.renderFile('/root/files/foo.html', ctx).should.equal('foo');
-    });
-    it('should render file relative to root', function(){
-        engine.renderFile('files/foo.html', ctx).should.equal('foo');
-    });
-    it('should render file with context', function(){
-        engine.renderFile('/root/files/name.html', ctx).should.equal('My name is harttle.');
-    });
-    it('should render file with default extname', function() {
-        engine.renderFile('files/name', ctx).should.equal('My name is harttle.');
-    });
-    it('should disable cache by default', function(){
-        mock({
-            '/root/files/foo.html': 'bar'
+    describe('#renderFile()', function(){
+        it('should render file', function() {
+            engine.renderFile('/root/files/foo.html', ctx).should.equal('foo');
         });
-        engine.renderFile('files/foo', ctx).should.equal('bar');
+        it('should render file relative to root', function() {
+            engine.renderFile('files/foo.html', ctx).should.equal('foo');
+        });
+        it('should render file with context', function() {
+            engine.renderFile('/root/files/name.html', ctx).should.equal('My name is harttle.');
+        });
+        it('should render file with default extname', function() {
+            engine.renderFile('files/name', ctx).should.equal('My name is harttle.');
+        });
     });
-    it('should respect cache option', function(){
-        mock.restore();
-        engine = Liquid({
-            root: '/root/',
-            extname: '.html',
-            cache: true
+    describe('#express()', function() {
+        it('should render templates', function() {
+            engine.express()('/root/files/name.html', ctx, function(err, html) {
+                expect(err).to.equal(null);
+                expect(html).to.equal('My name is harttle.');
+            });
         });
-        mock({
-            '/root/files/foo.html': 'foo'
+        it('should pass error when file not found', function() {
+            engine.express()('/root/files/name1.html', ctx, function(err, html) {
+                expect(err.code).to.equal('ENOENT');
+            });
         });
-        engine.renderFile('files/foo', ctx).should.equal('foo');
-        mock({
-            '/root/files/foo.html': 'bar'
+    });
+    describe('cache', function() {
+        it('should be disabled by default', function() {
+            mock({
+                '/root/files/foo.html': 'bar'
+            });
+            engine.renderFile('files/foo', ctx).should.equal('bar');
         });
-        engine.renderFile('files/foo', ctx).should.equal('foo');
+        it('should respect cache=true option', function() {
+            engine = Liquid({
+                root: '/root/',
+                extname: '.html',
+                cache: true
+            });
+            engine.renderFile('files/foo', ctx).should.equal('foo');
+            mock({
+                '/root/files/foo.html': 'bar'
+            });
+            engine.renderFile('files/foo', ctx).should.equal('foo');
+        });
     });
 });
