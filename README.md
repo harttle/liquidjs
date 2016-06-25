@@ -44,7 +44,7 @@ var engine = Liquid({
     cache: false
 });
 // equivalent to: engine.renderFile("hello", {name: 'alice'});
-var html = engine.renderFile("hello.html", {name: 'alice'});
+var html = engine.renderFile("hello.liquid", {name: 'alice'});
 ```
 
 `cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
@@ -81,17 +81,17 @@ color: 'yellow' shape: 'square'
 ## Layouts
 
 ```
-// file: default-layout.html
+// file: default-layout.liquid
 Header
 {% block content %}My default content{% endblock %}
 Footer
 
-// file: page.html
+// file: page.liquid
 {% layout "default-layout" %}
 {% block content %}My page content{% endblock %}
 ```
 
-The output of `page.html`:
+The output of `page.liquid`:
 
 ```
 Header
