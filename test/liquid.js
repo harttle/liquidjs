@@ -32,6 +32,9 @@ describe('liquid', function() {
     it('should output array', function() {
         engine.parseAndRender('{{arr}}', ctx).should.equal('[-2,"a"]');
     });
+    it('should output undefined to empty', function() {
+        engine.parseAndRender('foo{{zzz}}bar', ctx).should.equal('foobar');
+    });
     it('should parse html', function() {
         (function() {
             engine.parse('{{obj}}');

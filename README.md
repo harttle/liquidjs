@@ -102,9 +102,7 @@ Footer
 * It's possible to define multiple blocks.
 * block name is optional when there's only one block.
 
-## Extension
-
-Register Filters:
+## Register Filters
 
 ```javascript
 // Usage: {{ name | uppper }}
@@ -115,7 +113,7 @@ engine.registerFilter('upper', function(v){
 
 > See existing filter implementations: <https://github.com/harttle/shopify-liquid/blob/master/filters.js>
 
-Register Tags:
+## Register Tags
 
 ```javascript
 // Usage: {% upper name%}

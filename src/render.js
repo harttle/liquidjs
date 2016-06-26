@@ -21,7 +21,7 @@ var render = {
                     break;
                 case 'output':
                     var val = this.evalOutput(template, scope);
-                    html += stringify(val);
+                    html += val === undefined ? '' : stringify(val);
             }
         });
         return html;
