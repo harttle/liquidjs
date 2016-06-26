@@ -5,16 +5,23 @@ var expect = chai.expect;
 var Scope = require('../src/scope.js');
 
 describe('scope', function() {
-    var scope;
+    var scope, ctx;
     beforeEach(function(){
-        scope = Scope.factory({
+        ctx = {
             foo: 'bar',
             bar: ['a', {b: [1, 2]}]
-        });
+        };
+        scope = Scope.factory(ctx);
     });
 
     it('should get property', function() {
         scope.get('foo').should.equal('bar');
+    });
+
+    it('should get all property', function() {
+        scope.get().should.deep.equal(ctx);
+        expect(scope.get('')).to.equal(undefined);
+        expect(scope.get(false)).to.equal(undefined);
     });
 
     it('should set property', function() {

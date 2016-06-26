@@ -4,9 +4,16 @@ const error = require('./error.js');
 
 var scope = {
     get: function(str) {
+        var ctx = {};
         for (var i = this.scopes.length - 1; i >= 0; i--) {
+            if(str === undefined){
+                _.merge(ctx, this.scopes[i]);
+            }
             var v = _.get(this.scopes[i], str);
             if (v !== undefined) return v;
+            if(str === undefined){
+                return ctx;
+            }
         }
     },
     set: function(k, v) {
