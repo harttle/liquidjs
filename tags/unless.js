@@ -4,12 +4,14 @@ var lexical = Liquid.lexical;
 module.exports = function(liquid) {
     liquid.registerTag('unless', {
         parse: function(tagToken, remainTokens) {
+            this.templates = [];
+            this.elseTemplates = [];
             var p, stream = liquid.parser.parseStream(remainTokens)
                 .on('start', x => {
-                    p = this.templates = [];
+                    p = this.templates;
                     this.cond = tagToken.args;
                 })
-                .on('tag:else', token => this.elseTemplates = p = [])
+                .on('tag:else', token => p = this.elseTemplates)
                 .on('tag:endunless', token => stream.stop())
                 .on('template', tpl => p.push(tpl))
                 .on('end', x => {

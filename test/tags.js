@@ -97,6 +97,7 @@ describe('tags', function() {
         test('{% unless 1 %}yes{%else%}no{%endunless%}', 'no');
         testThrow('{% unless 1>2 %}yes', /tag {% unless 1>2 %} not closed/);
         test('{% unless 1>2 %}yes{%endunless%}', 'yes');
+        test('{% unless true %}{%endunless%}', '');
     });
 
     it('should support capture', function() {
