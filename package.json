@@ -23,11 +23,13 @@
   },
   "homepage": "https://github.com/harttle/shopify-liquid#readme",
   "dependencies": {
+    "bluebird": "^3.4.3",
     "lodash": "^4.13.1",
     "strftime": "^0.9.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "coveralls": "^2.11.9",
     "express": "^4.14.0",
     "istanbul": "^0.4.3",

@@ -1,30 +1,38 @@
 const error = require('./error.js');
 const Exp = require('./expression.js');
 const assert = require('assert');
+const Promise = require("bluebird");
 
 var render = {
 
     renderTemplates: function(templates, scope) {
         assert(scope, 'unable to evalTemplates: scope undefined');
-        var html = '',
-            partial;
-        templates.some(template => {
+        var htmlBlocks = [],
+            partial,
+            promises = [];
+        templates.some((template, index) => {
             if (scope.get('forloop.skip')) return true;
             switch (template.type) {
                 case 'tag':
-                    partial = this.renderTag(template, scope, this.register);
-                    if (partial === undefined) return true;
-                    html += partial;
+                    promises.push(this.renderTag(template, scope, this.register)
+                        .then((partial) => {
+                            if (partial === undefined) return true;
+                            return htmlBlocks[index] = partial;
+                        }));
                     break;
                 case 'html':
-                    html += template.value;
+                    promises.push(Promise.resolve(htmlBlocks[index] = template.value));
                     break;
                 case 'output':
                     var val = this.evalOutput(template, scope);
-                    html += val === undefined ? '' : stringify(val);
+                    htmlBlocks[index] = val === undefined ? '' : stringify(val);
+                    promises.push(Promise.resolve(htmlBlocks[index]));
             }
         });
-        return html;
+        return Promise.all(promises)
+            .then((results) => {
+                return htmlBlocks.join('');
+            });
     },
 
     renderTag: function(template, scope, register) {

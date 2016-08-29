@@ -12,6 +12,7 @@ const Template = require('./src/parser');
 const Expression = require('./src/expression.js');
 const tags = require('./tags');
 const filters = require('./filters');
+const Promise = require("bluebird");
 
 var _engine = {
     init: function(tag, filter, options) {
@@ -43,8 +44,14 @@ var _engine = {
     },
     renderFile: function(filepath, ctx) {
         try{
-            var tpl = this.handleCache(filepath);
-            return this.render(tpl, ctx);
+            return this.handleCache(filepath)
+                .then((templates) => {
+                    return this.render(templates, ctx);
+                })
+                .catch((e) => {
+                    e.file = filepath;
+                    throw e;
+                });
         }
         catch(e){
             e.file = filepath;
@@ -67,9 +74,16 @@ var _engine = {
         if (path.extname(filepath) === '') {
             filepath += this.options.extname;
         }
-        var tpl = this.options.cache && this.cache[filepath] ||
-            this.parse(fs.readFileSync(filepath, 'utf8'));
-        return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+
+        return this.getTemplate(filepath)
+            .then((html) => {
+                var tpl = this.options.cache && this.cache[filepath] || this.parse(html);
+                return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+            });
+    },
+    getTemplate: function(filepath) {
+        var html = fs.readFileSync(filepath, 'utf8');
+        return Promise.resolve(html);
     },
     express: function() {
         return (filePath, options, callback) => {

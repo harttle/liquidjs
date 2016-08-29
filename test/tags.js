@@ -1,7 +1,9 @@
 const chai = require("chai");
+const should = chai.should();
 const expect = chai.expect;
 const Liquid = require('..');
 const mock = require('mock-fs');
+chai.use(require("chai-as-promised"));
 var liquid = Liquid({
         root: '/',
         extname: '.html'
@@ -28,7 +30,14 @@ describe('tags', function() {
             foo: 'bar',
             arr: [-2, 'a'],
             alpha: ['a', 'b', 'c'],
-            emptyArray: []
+            emptyArray: [],
+            person: {
+                firstName: 'Joe',
+                lastName: 'Shmoe',
+                address: {
+                    city: 'Dallas'
+                }
+            }
         };
         mock({
             '/default-layout.html': 'foo{% block %}Default{% endblock %}foo',
@@ -42,7 +51,10 @@ describe('tags', function() {
             '/color.html': 'color:{{color}}, shape:{{shape}}',
             '/with.html': '{% include "color" with "red", shape: "rect" %}',
             '/scope.html': '{% assign shape="triangle" %}{% assign color="yellow" %}{% include "color.html" %}',
-            '/hash.html': '{% assign name="harttle" %}{% include "user.html", role: "admin", alias: name %}'
+            '/hash.html': '{% assign name="harttle" %}{% include "user.html", role: "admin", alias: name %}',
+            '/personInfo.html': 'This is a person {% include "card.html" %}',
+            '/card.html': '<p>{{person.firstName}} {{person.lastName}}<br/>{% include "address" %}</p>',
+            '/address.html': 'City: {{person.address.city}}'
         });
     });
     afterEach(function() {
@@ -266,6 +278,12 @@ describe('tags', function() {
         var dst = 'color:red, shape:rect';
         expect(liquid.renderFile(filepath, ctx)).to.equal(dst);
     });
+
+    it.only('should support nested includes', function() {
+        //expect(liquid.renderFile('personInfo.html', ctx)).to.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>');
+        return liquid.renderFile('personInfo.html', ctx).should.eventually.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
+    });
+
     it('should throw when block not closed', function() {
         src = '{% layout "default-layout" %}{%block%}bar';
         testThrow(src, /tag {%block%} not closed/);

@@ -1,4 +1,5 @@
 var Liquid = require('..');
+var Promise = require("bluebird");
 var lexical = Liquid.lexical;
 var withRE = new RegExp(`with\\s+(${lexical.value.source})`);
 
@@ -20,11 +21,16 @@ module.exports = function(liquid) {
             if(this.with){
                 hash[filepath] = Liquid.evalValue(this.with, scope);
             }
-            var tpl = liquid.handleCache(filepath);
-            scope.push(hash);
-            var html = liquid.renderer.renderTemplates(tpl, scope);
-            scope.pop();
-            return html;
+            return liquid.handleCache(filepath)
+                .then((templates) => {
+                    scope.push(hash);
+                    return liquid.renderer.renderTemplates(templates, scope);
+                })
+                .then((html) => {
+                    scope.pop();
+                    return html;
+                });
+
         }
     });
 
