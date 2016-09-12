@@ -1,5 +1,5 @@
 var Liquid = require('..');
-var Promise = require("bluebird");
+var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var withRE = new RegExp(`with\\s+(${lexical.value.source})`);
 

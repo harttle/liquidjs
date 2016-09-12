@@ -12,7 +12,7 @@ const Template = require('./src/parser');
 const Expression = require('./src/expression.js');
 const tags = require('./tags');
 const filters = require('./filters');
-const Promise = require("bluebird");
+const Promise = require('any-promise');
 
 var _engine = {
     init: function(tag, filter, options) {

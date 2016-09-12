@@ -1,7 +1,7 @@
 const error = require('./error.js');
 const Exp = require('./expression.js');
 const assert = require('assert');
-const Promise = require("bluebird");
+const Promise = require('any-promise');
 
 var render = {
 
