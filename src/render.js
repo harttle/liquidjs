@@ -38,12 +38,12 @@ var render = {
     renderTag: function(template, scope, register) {
         if (template.name === 'continue') {
             scope.set('forloop.skip', true);
-            return;
+            return Promise.resolve('');
         }
         if (template.name === 'break') {
             scope.set('forloop.stop', true);
             scope.set('forloop.skip', true);
-            return;
+            return Promise.resolve('');
         }
         return template.render(scope, register);
     },

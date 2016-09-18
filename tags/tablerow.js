@@ -51,6 +51,7 @@ module.exports = function(liquid) {
                 ctx[this.variable] = item;
                 scope.push(ctx);
                 html += `<td class="col${col}">`;
+                // todo: replace with sequential promises, see for.js
                 html += liquid.renderer.renderTemplates(this.templates, scope);
                 html += '</td>';
                 scope.pop(ctx);

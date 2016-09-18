@@ -11,7 +11,11 @@ var liquid = Liquid({
     ctx, src, dst;
 
 function test(src, dst) {
-    expect(liquid.parseAndRender(src, ctx)).to.equal(dst);
+    liquid.parseAndRender(src, ctx)
+        .then((result) => {
+            expect(result.to.equal(dst));
+        });
+    //expect(liquid.parseAndRender(src, ctx)).to.equal(dst);
 }
 
 function testThrow(src, pattern) {
@@ -203,7 +207,7 @@ describe('tags', function() {
         test('{% decrement one %}{{one}}', '0');
     });
 
-    it('should support tablerow', function() {
+    it.only('should support tablerow', function() {
         src = '{% tablerow i in alpha cols:2 %}{{ i }}{% endtablerow %}';
         dst = '<table>' +
             '<tr class="row1"><td class="col1">a</td><td class="col2">b</td></tr>' +
@@ -279,7 +283,7 @@ describe('tags', function() {
         expect(liquid.renderFile(filepath, ctx)).to.equal(dst);
     });
 
-    it.only('should support nested includes', function() {
+    it('should support nested includes', function() {
         //expect(liquid.renderFile('personInfo.html', ctx)).to.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>');
         return liquid.renderFile('personInfo.html', ctx).should.eventually.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
     });

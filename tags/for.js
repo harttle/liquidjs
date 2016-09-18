@@ -1,4 +1,6 @@
 var Liquid = require('..');
+var Promise = require('any-promise');
+var _ = require('lodash');
 var lexical = Liquid.lexical;
 var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
@@ -44,6 +46,8 @@ module.exports = function(liquid) {
 
             collection = collection.slice(offset, offset + limit);
             if(this.reversed) collection.reverse();
+
+            var scopes = [];
             collection.some((item, i) => {
                 ctx[this.variable] = item;
                 ctx.forloop = {
@@ -57,14 +61,47 @@ module.exports = function(liquid) {
                     stop: false,
                     skip: false
                 };
+                // todo: verify scope management is good here.  Make sure we don't consume too many resources here with the clone.
+                //  Is there a simpler solution?
                 scope.push(ctx);
-                html += liquid.renderer.renderTemplates(this.templates, scope);
-                var breakloop = scope.get('forloop.stop');
+                // We are just putting together an array of the arguments we will be passing to our sequential promises
+                scopes.push(_.clone(scope));
                 scope.pop(ctx);
-
-                if (breakloop) return true;
             });
-            return html;
+
+            // This is some pretty tricksy javascript, at least to me.  Bluebird would have made this a lot easier, but
+            //  we are trying to not use anything that can't be done in native node Promises.
+            // This basically just processes an array of promises sequentially for every argument in the array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
+            var lastPromise = scopes.reduce((promise, scope) => {
+                return promise.then(function(partial) {
+                    var breakloop = scope.get('forloop.stop');
+                    if (breakloop)
+                        throw new Error('forloop.stop'); // this will stop the sequential promise chain
+
+                    html += partial;
+                    return liquid.renderer.renderTemplates(this.templates, scope);
+                })
+                .catch((error) => {
+                    if (error === 'forloop.stop') {
+                        // the error is a controlled, purposeful stop. so just return the html that we have up to this point
+                        return html;
+                    } else {
+                        // rethrow actual error
+                        throw new Error(error);
+                    }
+                });
+            }, Promise.resolve());  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
+                                    //  in our reduce callback will be the returned promise from our "then" above.  In this
+                                    //  case, the promise returned from liquid.renderer.renderTemplates.
+
+            lastPromise
+                .then(() => {
+                    return Promise.resolve(html);
+                })
+                .catch((error) => {
+                    throw new Error(error);
+                });
+
         }
     });
 };
