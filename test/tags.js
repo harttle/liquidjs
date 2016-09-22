@@ -1,3 +1,5 @@
+// temporary
+var Promise = require('any-promise');
 const chai = require("chai");
 const should = chai.should();
 const expect = chai.expect;
@@ -207,7 +209,7 @@ describe('tags', function() {
         test('{% decrement one %}{{one}}', '0');
     });
 
-    it.only('should support tablerow', function() {
+    it('should support tablerow', function() {
         src = '{% tablerow i in alpha cols:2 %}{{ i }}{% endtablerow %}';
         dst = '<table>' +
             '<tr class="row1"><td class="col1">a</td><td class="col2">b</td></tr>' +
@@ -261,8 +263,8 @@ describe('tags', function() {
         test(src, dst);
     });
 
-    it('should support include', function() {
-        expect(liquid.renderFile('/current.html', ctx)).to.equal('barFOObar');
+    it.only('should support include', function() {
+        return liquid.renderFile('/current.html', ctx).should.eventually.equal('barFOObar');
     });
 
     it('should support include with relative path', function() {

@@ -7,32 +7,106 @@ var render = {
 
     renderTemplates: function(templates, scope) {
         assert(scope, 'unable to evalTemplates: scope undefined');
-        var htmlBlocks = [],
-            partial,
-            promises = [];
-        templates.some((template, index) => {
-            if (scope.get('forloop.skip')) return true;
-            switch (template.type) {
-                case 'tag':
-                    promises.push(this.renderTag(template, scope, this.register)
-                        .then((partial) => {
-                            if (partial === undefined) return true;
-                            return htmlBlocks[index] = partial;
-                        }));
-                    break;
-                case 'html':
-                    promises.push(Promise.resolve(htmlBlocks[index] = template.value));
-                    break;
-                case 'output':
-                    var val = this.evalOutput(template, scope);
-                    htmlBlocks[index] = val === undefined ? '' : stringify(val);
-                    promises.push(Promise.resolve(htmlBlocks[index]));
-            }
-        });
-        return Promise.all(promises)
-            .then((results) => {
-                return htmlBlocks.join('');
+
+        var html = '';
+//        var promiseChain = Promise.resolve(''); // create an empty promise to begin the chain;
+//        templates.some((template, index) => {
+//            if (scope.get('forloop.skip')) return true;
+//            var promiseLink = Promise.resolve('');
+//            switch (template.type) {
+//                case 'tag':
+//                    // Add Promises to the chain that need to be resolved sequentially
+//                    promiseLink = this.renderTag(template, scope, this.register)
+//                        .then((partial) => {
+//                            if (partial === undefined) return true; // basically a noop (do nothing)
+//                            html += partial;
+//                        });
+//                    promiseChain = promiseChain.then(promiseLink); // add a link to the chain
+//                    break;
+//                case 'html':
+//                    promiseLink = Promise.resolve(template.value)
+//                        .then((partial) => {
+//                            html += partial;
+//                        });
+//                    promiseChain = promiseChain.then(promiseLink); // add a link to the chain
+//                    break;
+//                case 'output':
+//                    var val = this.evalOutput(template, scope);
+//                    promiseLink = Promise.resolve(val === undefined ? '' : stringify(val))
+//                        .then((partial) => {
+//                            html += partial;
+//                        });
+//                    promiseChain = promiseChain.then(promiseLink); // add a link to the chain
+//            }
+//        });
+//        return promiseChain.then((result) => {
+//            // this should happen after all of the above promises are finished, and they should have resolved in order
+//            return html;
+//        });
+
+
+        // This executes an array of promises sequentially for every template in the templates array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
+        // It's fundamentally equivalent to the following...
+        //  emptyPromise.then(renderTag(template0).then(renderTag(template1).then(renderTag(template2)...
+        var lastPromise = templates.reduce((promise, template) => {
+            return promise.then((partial) => {
+                if (scope.get('forloop.skip')) {
+                    return Promise.resolve('');
+                }
+                if (scope.get('forloop.stop')) {
+                    throw new Error('forloop.stop'); // this will stop/break the sequential promise chain and go to the catch
+                }
+
+                var promiseLink = Promise.resolve('');
+                switch (template.type) {
+                    case 'tag':
+                        // Add Promises to the chain
+                        promiseLink = this.renderTag(template, scope, this.register)
+                            .then((partial) => {
+                                if (partial === undefined) {
+                                    return true; // basically a noop (do nothing)
+                                }
+                                return html += partial;
+                            });
+                        break;
+                    case 'html':
+                        promiseLink = Promise.resolve(template.value)
+                            .then((partial) => {
+                                return html += partial;
+                            });
+                        break;
+                    case 'output':
+                        var val = this.evalOutput(template, scope);
+                        promiseLink = Promise.resolve(val === undefined ? '' : stringify(val))
+                            .then((partial) => {
+                                return html += partial;
+                            });
+                        break;
+                }
+
+                return promiseLink;
+            })
+            .catch((error) => {
+                if (error === 'forloop.stop') {
+                    // the error is a controlled, purposeful stop. so just return the html that we have up to this point
+                    return html;
+                } else {
+                    // rethrow actual error
+                    throw new Error(error);
+                }
             });
+        }, Promise.resolve(''));  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
+        //  in our reduce callback will be the returned promise from our "then" above.  In this
+        //  case, that's the promise returned from this.renderTag or a resolved promise with raw html.
+
+        return lastPromise
+            .then(() => {
+                return html;
+            })
+            .catch((error) => {
+                throw new Error(error);
+            });
+
     },
 
     renderTag: function(template, scope, register) {

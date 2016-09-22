@@ -47,7 +47,10 @@ module.exports = function(liquid) {
             collection = collection.slice(offset, offset + limit);
             if(this.reversed) collection.reverse();
 
-            var scopes = [];
+            // for needs to execute the promises sequentially, not just resolve them sequentially, due to break and continue.
+            // We can't just loop through executing everything then resolve them all sequentially like we do for render.renderTemplates
+            // First, we build the array of parameters we are going to use for each call to renderTemplates
+            var contexts = [];
             collection.some((item, i) => {
                 ctx[this.variable] = item;
                 ctx.forloop = {
@@ -61,25 +64,30 @@ module.exports = function(liquid) {
                     stop: false,
                     skip: false
                 };
-                // todo: verify scope management is good here.  Make sure we don't consume too many resources here with the clone.
-                //  Is there a simpler solution?
-                scope.push(ctx);
                 // We are just putting together an array of the arguments we will be passing to our sequential promises
-                scopes.push(_.clone(scope));
-                scope.pop(ctx);
+                contexts.push(ctx);
             });
 
-            // This is some pretty tricksy javascript, at least to me.  Bluebird would have made this a lot easier, but
-            //  we are trying to not use anything that can't be done in native node Promises.
-            // This basically just processes an array of promises sequentially for every argument in the array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
-            var lastPromise = scopes.reduce((promise, scope) => {
-                return promise.then(function(partial) {
-                    var breakloop = scope.get('forloop.stop');
-                    if (breakloop)
+            // This is some pretty tricksy javascript, at least to me.
+            // This executes an array of promises sequentially for every argument in the contexts array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
+            // It's fundamentally equivalent to the following...
+            //  emptyPromise.then(renderTemplates(args0).then(renderTemplates(args1).then(renderTemplates(args2)...
+            var lastPromise = contexts.reduce((promise, context) => {
+                return promise.then((partial) => {
+                    if (scope.get('forloop.stop')) {
                         throw new Error('forloop.stop'); // this will stop the sequential promise chain
+                    }
 
                     html += partial;
+                    // todo: Make sure our scope management is sound here.  Create some tests that revolve around loops
+                    //  with sections that take differing amounts of time to complete.  Make sure the order is maintained
+                    //  and scope doesn't bleed over into other renderTemplate calls.
+                    scope.push(context);
                     return liquid.renderer.renderTemplates(this.templates, scope);
+                })
+                .then((partial) => {
+                    scope.pop(context);
+                    return partial;
                 })
                 .catch((error) => {
                     if (error === 'forloop.stop') {
@@ -94,9 +102,9 @@ module.exports = function(liquid) {
                                     //  in our reduce callback will be the returned promise from our "then" above.  In this
                                     //  case, the promise returned from liquid.renderer.renderTemplates.
 
-            lastPromise
+            return lastPromise
                 .then(() => {
-                    return Promise.resolve(html);
+                    return html;
                 })
                 .catch((error) => {
                     throw new Error(error);
