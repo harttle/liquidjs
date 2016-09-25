@@ -39,24 +39,25 @@ var _engine = {
         return this.renderer.renderTemplates(tpl, scope.factory(ctx));
     },
     parseAndRender: function(html, ctx) {
-        var tpl = this.parse(html);
-        return this.render(tpl, ctx);
+        try {
+            var tpl = this.parse(html);
+            return this.render(tpl, ctx);
+        }
+        catch (error) {
+            // A throw inside of a then or catch of a Promise automatically rejects, but since we mix a sync call
+            //  with an async call, we need to do this in case the sync call throws.
+            return Promise.reject(error);
+        }
     },
     renderFile: function(filepath, ctx) {
-        try{
-            return this.handleCache(filepath)
-                .then((templates) => {
-                    return this.render(templates, ctx);
-                })
-                .catch((e) => {
-                    e.file = filepath;
-                    throw e;
-                });
-        }
-        catch(e){
-            e.file = filepath;
-            throw e;
-        }
+        return this.handleCache(filepath)
+            .then((templates) => {
+                return this.render(templates, ctx);
+            })
+            .catch((e) => {
+                e.file = filepath;
+                throw e;
+            });
     },
     evalOutput: function(str, scope) {
         var tpl = this.parser.parseOutput(str.trim());

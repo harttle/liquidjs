@@ -9,41 +9,6 @@ var render = {
         assert(scope, 'unable to evalTemplates: scope undefined');
 
         var html = '';
-//        var promiseChain = Promise.resolve(''); // create an empty promise to begin the chain;
-//        templates.some((template, index) => {
-//            if (scope.get('forloop.skip')) return true;
-//            var promiseLink = Promise.resolve('');
-//            switch (template.type) {
-//                case 'tag':
-//                    // Add Promises to the chain that need to be resolved sequentially
-//                    promiseLink = this.renderTag(template, scope, this.register)
-//                        .then((partial) => {
-//                            if (partial === undefined) return true; // basically a noop (do nothing)
-//                            html += partial;
-//                        });
-//                    promiseChain = promiseChain.then(promiseLink); // add a link to the chain
-//                    break;
-//                case 'html':
-//                    promiseLink = Promise.resolve(template.value)
-//                        .then((partial) => {
-//                            html += partial;
-//                        });
-//                    promiseChain = promiseChain.then(promiseLink); // add a link to the chain
-//                    break;
-//                case 'output':
-//                    var val = this.evalOutput(template, scope);
-//                    promiseLink = Promise.resolve(val === undefined ? '' : stringify(val))
-//                        .then((partial) => {
-//                            html += partial;
-//                        });
-//                    promiseChain = promiseChain.then(promiseLink); // add a link to the chain
-//            }
-//        });
-//        return promiseChain.then((result) => {
-//            // this should happen after all of the above promises are finished, and they should have resolved in order
-//            return html;
-//        });
-
 
         // This executes an array of promises sequentially for every template in the templates array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
         // It's fundamentally equivalent to the following...
@@ -87,12 +52,12 @@ var render = {
                 return promiseLink;
             })
             .catch((error) => {
-                if (error === 'forloop.stop') {
+                if (error.message === 'forloop.skip') {
                     // the error is a controlled, purposeful stop. so just return the html that we have up to this point
                     return html;
                 } else {
                     // rethrow actual error
-                    throw new Error(error);
+                    throw error;
                 }
             });
         }, Promise.resolve(''));  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
@@ -100,11 +65,11 @@ var render = {
         //  case, that's the promise returned from this.renderTag or a resolved promise with raw html.
 
         return lastPromise
-            .then(() => {
-                return html;
+            .then((renderedHtml) => {
+                return renderedHtml;
             })
             .catch((error) => {
-                throw new Error(error);
+                throw error;
             });
 
     },
@@ -117,7 +82,7 @@ var render = {
         if (template.name === 'break') {
             scope.set('forloop.stop', true);
             scope.set('forloop.skip', true);
-            return Promise.resolve('');
+            return Promise.reject(new Error('forloop.stop')); // this will stop the sequential promise chain
         }
         return template.render(scope, register);
     },

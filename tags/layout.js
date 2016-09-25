@@ -1,4 +1,5 @@
 var Liquid = require('..');
+var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var withRE = new RegExp(`with\\s+(${lexical.value.source})`);
 
@@ -14,13 +15,34 @@ module.exports = function(liquid) {
         },
         render: function(scope, hash) {
             var layout = Liquid.evalValue(this.layout, scope);
-            var tpl = liquid.handleCache(layout);
 
+            var html = '';
             scope.push({});
-            liquid.renderer.renderTemplates(this.tpls, scope);
-            var html = liquid.renderer.renderTemplates(tpl, scope);
-            scope.pop();
-            return html;
+            // not sure if this first one is needed, since the results are ignored
+            return liquid.renderer.renderTemplates(this.tpls, scope)
+                .then((partial) => {
+                    html += partial;
+                    return liquid.handleCache(layout)
+                })
+                .then((templates) => {
+                    return liquid.renderer.renderTemplates(templates, scope);
+                })
+                .then((partial) => {
+                    scope.pop();
+                    return partial;
+                })
+                .catch((e) => {
+                    e.file = layout;
+                    throw e;
+                });
+
+//            var tpl = liquid.handleCache(layout);
+//
+//            scope.push({});
+//            liquid.renderer.renderTemplates(this.tpls, scope);  // what's the point of this line?
+//            var html = liquid.renderer.renderTemplates(tpl, scope);
+//            scope.pop();
+//            return html;
         }
     });
 
@@ -40,11 +62,25 @@ module.exports = function(liquid) {
         },
         render: function(scope, hash){
             var html = scope.get(`_liquid.blocks.${this.block}`);
-            if(html === undefined){
-                html = liquid.renderer.renderTemplates(this.tpls, scope);
+            var promise = Promise.resolve('');
+            if (html === undefined) {
+                promise = liquid.renderer.renderTemplates(this.tpls, scope)
+                    .then((partial) => {
+                        scope.set(`_liquid.blocks.${this.block}`, partial);
+                        return partial;
+                    });
             }
-            scope.set(`_liquid.blocks.${this.block}`, html);
-            return html;
+            else {
+                scope.set(`_liquid.blocks.${this.block}`, html);
+                promise = Promise.resolve(html);
+            }
+            return promise;
+
+//            if(html === undefined){
+//                html = liquid.renderer.renderTemplates(this.tpls, scope);
+//            }
+//            scope.set(`_liquid.blocks.${this.block}`, html);
+//            return html;
         }
     });
 

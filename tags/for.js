@@ -38,9 +38,8 @@ module.exports = function(liquid) {
                 return liquid.renderer.renderTemplates(this.elseTemplates, scope);
             }
 
-            var html = '',
-                ctx = {},
-                length = collection.length;
+            var html = '';
+            var length = collection.length;
             var offset = hash.offset || 0;
             var limit = (hash.limit === undefined) ? collection.length : hash.limit;
 
@@ -52,6 +51,7 @@ module.exports = function(liquid) {
             // First, we build the array of parameters we are going to use for each call to renderTemplates
             var contexts = [];
             collection.some((item, i) => {
+                var ctx = {};
                 ctx[this.variable] = item;
                 ctx.forloop = {
                     first: i === 0,
@@ -78,7 +78,9 @@ module.exports = function(liquid) {
                         throw new Error('forloop.stop'); // this will stop the sequential promise chain
                     }
 
-                    html += partial;
+                    return html += partial;
+                })
+                .then((partial) => {
                     // todo: Make sure our scope management is sound here.  Create some tests that revolve around loops
                     //  with sections that take differing amounts of time to complete.  Make sure the order is maintained
                     //  and scope doesn't bleed over into other renderTemplate calls.
@@ -88,26 +90,23 @@ module.exports = function(liquid) {
                 .then((partial) => {
                     scope.pop(context);
                     return partial;
-                })
-                .catch((error) => {
-                    if (error === 'forloop.stop') {
-                        // the error is a controlled, purposeful stop. so just return the html that we have up to this point
-                        return html;
-                    } else {
-                        // rethrow actual error
-                        throw new Error(error);
-                    }
                 });
-            }, Promise.resolve());  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
+            }, Promise.resolve(''));  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
                                     //  in our reduce callback will be the returned promise from our "then" above.  In this
                                     //  case, the promise returned from liquid.renderer.renderTemplates.
 
             return lastPromise
-                .then(() => {
-                    return html;
+                .then((partial) => {
+                    return html += partial;
                 })
                 .catch((error) => {
-                    throw new Error(error);
+                    if (error.message === 'forloop.stop') {
+                        // the error is a controlled, purposeful stop. so just return the html that we have up to this point
+                        return html;
+                    } else {
+                        // rethrow actual error
+                        throw error;
+                    }
                 });
 
         }

@@ -1,4 +1,5 @@
 var Liquid = require('..');
+var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
@@ -31,7 +32,6 @@ module.exports = function(liquid) {
 
             var html = '<table>',
                 promiseChain = Promise.resolve(''); // create an empty promise to begin the chain
-                ctx = {},
                 length = collection.length;
             var offset = hash.offset || 0;
             var limit = (hash.limit === undefined) ? collection.length : hash.limit;
@@ -40,7 +40,14 @@ module.exports = function(liquid) {
             if (!cols) throw new Error(`illegal cols: ${cols}`);
 
             // build array of arguments to pass to sequential promises...
-            var contexts = collection.slice(offset, offset + limit);
+            collection = collection.slice(offset, offset + limit);
+            var contexts = [];
+            collection.some((item, i) => {
+                var ctx = {};
+                ctx[this.variable] = item;
+                // We are just putting together an array of the arguments we will be passing to our sequential promises
+                contexts.push(ctx);
+            });
 
             // This executes an array of promises sequentially for every argument in the contexts array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
             // It's fundamentally equivalent to the following...
@@ -56,32 +63,33 @@ module.exports = function(liquid) {
                         html += `<tr class="row${row}">`;
                     }
 
-                    ctx[this.variable] = context;
-                    scope.push(ctx);
-                    html += `<td class="col${col}">`;
+                    //ctx[this.variable] = context;
+
+                    return html += `<td class="col${col}">`;
+                })
+                .then((partial) => {
+                    scope.push(context);
                     return liquid.renderer.renderTemplates(this.templates, scope)
                 })
                 .then((partial) => {
-                    html += partial;
-                    html += '</td>';
                     scope.pop(context);
-                    return partial; // I think this is currently unused (partial is not used in the above "then")
-                })
-                .catch((error) => {
-                    throw new Error(error);
+                    html += partial;
+                    return html += '</td>';
                 });
-            }, Promise.resolve());  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
-                                    //  in our reduce callback will be the returned promise from our "then" above.  In this
-                                    //  case, the promise returned from liquid.renderer.renderTemplates.
+            }, Promise.resolve(''));    // start the reduce chain with a resolved Promise. After first run, the "promise" argument
+                                        //  in our reduce callback will be the returned promise from our "then" above.  In this
+                                        //  case, the promise returned from liquid.renderer.renderTemplates.
 
-            lastPromise
+            return lastPromise
                 .then(() => {
-                    if(row > 0) html += '</tr>';
+                    if(row > 0) {
+                        html += '</tr>';
+                    }
                     html += '</table>';
                     return html;
                 })
                 .catch((error) => {
-                    throw new Error(error);
+                    throw error;
                 });
         }
     });
