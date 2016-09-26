@@ -1,5 +1,4 @@
 const lexical = require('./lexical.js');
-const _ = require('lodash');
 const Exp = require('./expression.js');
 
 var valueRE = new RegExp(`${lexical.value.source}`, 'g');

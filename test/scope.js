@@ -24,6 +24,8 @@ describe('scope', function() {
 		}
         expect(fn).to.not.throw();
         expect(scope.get('notdefined')).to.equal(undefined);
+        expect(scope.get('')).to.equal(undefined);
+        expect(scope.get(false)).to.equal(undefined);
     });
 
     it('should throw undefined in strict mode', function() {
@@ -38,8 +40,6 @@ describe('scope', function() {
 
     it('should get all property', function() {
         scope.get().should.deep.equal(ctx);
-        expect(scope.get('')).to.equal(undefined);
-        expect(scope.get(false)).to.equal(undefined);
     });
 
     it('should set property', function() {

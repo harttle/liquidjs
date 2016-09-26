@@ -24,32 +24,32 @@ function test(src, dst) {
 }
 
 describe('filters', function() {
-    it('should support abs 1', function() { return test('{{ -3 | abs }}', '3'); });
-    it('should support abs 2', function() { return test('{{ arr[0] | abs }}', '2'); });
+    it('should support abs 1', () => test('{{ -3 | abs }}', '3'));
+    it('should support abs 2', () => test('{{ arr[0] | abs }}', '2'));
 
-    it('should support append 1', function() { return test('{{ -3 | append: "abc" }}', '-3abc'); });
-    it('should support append 2', function() { return test('{{ "a" | append: foo }}', 'abar');; });
+    it('should support append 1', () => test('{{ -3 | append: "abc" }}', '-3abc'));
+    it('should support append 2', () => test('{{ "a" | append: foo }}', 'abar'));
 
-    it('should support capitalize', function() { return test('{{ "i am good" | capitalize }}', 'I am good'); });
+    it('should support capitalize', () => test('{{ "i am good" | capitalize }}', 'I am good'));
 
-    it('should support ceil 1', function() { return test('{{ 1.2 | ceil }}', '2'); });
-    it('should support ceil 2', function() { return test('{{ 2.0 | ceil }}', '2'); });
-    it('should support ceil 3', function() { return test('{{ "3.5" | ceil }}', '4'); });
-    it('should support ceil 4', function() { return test('{{ 183.357 | ceil }}', '184'); });
+    it('should support ceil 1', () => test('{{ 1.2 | ceil }}', '2'));
+    it('should support ceil 2', () => test('{{ 2.0 | ceil }}', '2'));
+    it('should support ceil 3', () => test('{{ "3.5" | ceil }}', '4'));
+    it('should support ceil 4', () => test('{{ 183.357 | ceil }}', '184'));
 
     it('should support date', function() {
         str = ctx.date.toDateString();
         return test('{{ date | date:"%a %b %d %Y"}}', str);
     });
 
-    it('should support default', function() { return test('{{false |default: "a"}}', 'a'); });
+    it('should support default', () => test('{{false |default: "a"}}', 'a'));
 
-    it('should support divided_by 1', function() { return test('{{4 | divided_by: 2}}', '2'); });
-    it('should support divided_by 2', function() { return test('{{16 | divided_by: 4}}', '4'); });
-    it('should support divided_by 3', function() { return test('{{5 | divided_by: 3}}', '1'); });
+    it('should support divided_by 1', () => test('{{4 | divided_by: 2}}', '2'));
+    it('should support divided_by 2', () => test('{{16 | divided_by: 4}}', '4'));
+    it('should support divided_by 3', () => test('{{5 | divided_by: 3}}', '1'));
 
-    it('should support downcase 1', function() { return test('{{ "Parker Moore" | downcase }}', 'parker moore'); });
-    it('should support downcase 2', function() { return test('{{ "apple" | downcase }}', 'apple'); });
+    it('should support downcase 1', () => test('{{ "Parker Moore" | downcase }}', 'parker moore'));
+    it('should support downcase 2', () => test('{{ "apple" | downcase }}', 'apple'));
 
     it('should support escape 1', function() {
         return test('{{ "Have you read \'James & the Giant Peach\'?" | escape }}',
@@ -59,8 +59,8 @@ describe('filters', function() {
         return test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara');
     });
 
-    it('should support escape_once 1', function() { return test('{{ "1 < 2 & 3" | escape_once }}', '1 &lt; 2 &amp; 3'); });
-    it('should support escape_once 2', function() { return test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3'); });
+    it('should support escape_once 1', () => test('{{ "1 < 2 & 3" | escape_once }}', '1 &lt; 2 &amp; 3'));
+    it('should support escape_once 2', () => test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3'));
 
     it('should support split/first', function() {
         src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
@@ -68,10 +68,10 @@ describe('filters', function() {
         return test(src, 'apples');
     });
 
-    it('should support floor 1', function() { return test('{{ 1.2 | floor }}', '1'); });
-    it('should support floor 2', function() { return test('{{ 2.0 | floor }}', '2'); });
-    it('should support floor 3', function() { return test('{{ 183.357 | floor }}', '183'); });
-    it('should support floor 4', function() { return test('{{ "3.5" | floor }}', '3'); });
+    it('should support floor 1', () => test('{{ 1.2 | floor }}', '1'));
+    it('should support floor 2', () => test('{{ 2.0 | floor }}', '2'));
+    it('should support floor 3', () => test('{{ 183.357 | floor }}', '183'));
+    it('should support floor 4', () => test('{{ "3.5" | floor }}', '3'));
 
     it('should support join', function() {
         src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
@@ -94,13 +94,13 @@ describe('filters', function() {
         return test('{{posts | map: "category"}}', '["foo","bar"]');
     });
 
-    it('should support minus 1', function() { return test('{{ 4 | minus: 2 }}', '2'); });
-    it('should support minus 2', function() { return test('{{ 16 | minus: 4 }}', '12'); });
-    it('should support minus 3', function() { return test('{{ 183.357 | minus: 12 }}', '171.357'); });
+    it('should support minus 1', () => test('{{ 4 | minus: 2 }}', '2'));
+    it('should support minus 2', () => test('{{ 16 | minus: 4 }}', '12'));
+    it('should support minus 3', () => test('{{ 183.357 | minus: 12 }}', '171.357'));
 
-    it('should support modulo 1', function() { return test('{{ 3 | modulo: 2 }}', '1'); });
-    it('should support modulo 2', function() { return test('{{ 24 | modulo: 7 }}', '3'); });
-    it('should support modulo 3', function() { return test('{{ 183.357 | modulo: 12 }}', '3.357'); });
+    it('should support modulo 1', () => test('{{ 3 | modulo: 2 }}', '1'));
+    it('should support modulo 2', () => test('{{ 24 | modulo: 7 }}', '3'));
+    it('should support modulo 3', () => test('{{ 183.357 | modulo: 12 }}', '3.357'));
 
     it('should support string_with_newlines', function() {
         src = '{% capture string_with_newlines %}\n' +
@@ -114,9 +114,9 @@ describe('filters', function() {
         return test(src, dst);
     });
 
-    it('should support plus 1', function() { return test('{{ 4 | plus: 2 }}', '6'); });
-    it('should support plus 2', function() { return test('{{ 16 | plus: 4 }}', '20'); });
-    it('should support plus 3', function() { return test('{{ 183.357 | plus: 12 }}', '195.357'); });
+    it('should support plus 1', () => test('{{ 4 | plus: 2 }}', '6'));
+    it('should support plus 2', () => test('{{ 16 | plus: 4 }}', '20'));
+    it('should support plus 3', () => test('{{ 183.357 | plus: 12 }}', '195.357'));
 
     it('should support prepend', function() {
         return test('{% assign url = "liquidmarkup.com" %}' +
@@ -150,26 +150,26 @@ describe('filters', function() {
             '.moT rojaM ot lortnoc dnuorG');
     });
 
-    it('should support round 1', function() { return test('{{1.2|round}}', '1'); });
-    it('should support round 2', function() { return test('{{2.7|round}}', '3'); });
-    it('should support round 3', function() { return test('{{183.357|round: 2}}', '183.36'); });
+    it('should support round 1', () => test('{{1.2|round}}', '1'));
+    it('should support round 2', () => test('{{2.7|round}}', '3'));
+    it('should support round 3', () => test('{{183.357|round: 2}}', '183.36'));
 
     it('should support rstrip', function() {
         return test('{{ "          So much room for activities!          " | rstrip }}',
             '          So much room for activities!');
     });
 
-    it('should support size 1', function() { return test('{{ "Ground control to Major Tom." | size }}', '28'); });
+    it('should support size 1', () => test('{{ "Ground control to Major Tom." | size }}', '28'));
     it('should support size 2', function() {
         return test('{% assign my_array = "apples, oranges, peaches, plums"' +
             ' | split: ", " %}{{ my_array | size }}',
             '4');
     });
 
-    it('should support slice 1', function() { return test('{{ "Liquid" | slice: 0 }}', 'L'); });
-    it('should support slice 2', function() { return test('{{ "Liquid" | slice: 2 }}', 'q'); });
-    it('should support slice 3', function() { return test('{{ "Liquid" | slice: 2, 5 }}', 'quid'); });
-    it('should support slice 4', function() { return test('{{ "Liquid" | slice: -3, 2 }}', 'ui'); });
+    it('should support slice 1', () => test('{{ "Liquid" | slice: 0 }}', 'L'));
+    it('should support slice 2', () => test('{{ "Liquid" | slice: 2 }}', 'q'));
+    it('should support slice 3', () => test('{{ "Liquid" | slice: 2, 5 }}', 'quid'));
+    it('should support slice 4', () => test('{{ "Liquid" | slice: -3, 2 }}', 'ui'));
 
     it('should support sort', function() {
         return test('{% assign my_array = "zebra, octopus, giraffe, Sally Snake"' +
@@ -206,9 +206,9 @@ describe('filters', function() {
             'Hellothere');
     });
 
-    it('should support times 1', function() { return test('{{ 3 | times: 2 }}', '6'); });
-    it('should support times 2', function() { return test('{{ 24 | times: 7 }}', '168'); });
-    it('should support times 3', function() { return test('{{ 183.357 | times: 12 }}', '2200.284'); });
+    it('should support times 1', () => test('{{ 3 | times: 2 }}', '6'));
+    it('should support times 2', () => test('{{ 24 | times: 7 }}', '168'));
+    it('should support times 3', () => test('{{ 183.357 | times: 12 }}', '2200.284'));
 
     it('should support truncate 1', function() {
         return test('{{ "Ground control to Major Tom." | truncate: 20 }}',
@@ -250,10 +250,8 @@ describe('filters', function() {
             'ants, bugs, bees');
     });
 
-    it('should support upcase', function() {
-        return test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE');
-    });
+    it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'));
 
-    it('should support url_encode 1', function() { return test('{{ "john@liquid.com" | url_encode }}', 'john%40liquid.com'); });
-    it('should support url_encode 2', function() { return test('{{ "Tetsuro Takara" | url_encode }}', 'Tetsuro%20Takara'); });
+    it('should support url_encode 1', () => test('{{ "john@liquid.com" | url_encode }}', 'john%40liquid.com'));
+    it('should support url_encode 2', () => test('{{ "Tetsuro Takara" | url_encode }}', 'Tetsuro%20Takara'));
 });

@@ -1,7 +1,6 @@
 const syntax = require('./syntax.js');
 const Exp = require('./expression.js');
 const lexical = require('./lexical.js');
-const _ = require('lodash');
 
 function evalExp(exp, scope) {
     if (!scope) throw new Error('unable to evalExp: scope undefined');
@@ -20,8 +19,12 @@ function evalExp(exp, scope) {
 
     if (match = exp.match(lexical.rangeLine)) {
         var low = evalValue(match[1], scope),
-            high = evalValue(match[2], scope) + 1;
-        return _.range(low, high);
+            high = evalValue(match[2], scope);
+        var range = [];
+        for (var j = low; j <= high; j++) {
+            range.push(j);
+        }
+        return range;
     }
 
     return evalValue(exp, scope);

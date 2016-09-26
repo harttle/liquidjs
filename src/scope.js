@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const lexical = require('./lexical.js');
 
 var Scope = {
@@ -8,17 +7,22 @@ var Scope = {
         if (str === undefined) {
             var ctx = {};
             for (i = this.scopes.length - 1; i >= 0; i--) {
-                _.merge(ctx, this.scopes[i]);
+                var scp = this.scopes[i];
+                for (var k in scp) {
+                    if (scp.hasOwnProperty(k)) {
+                        ctx[k] = scp[k];
+                    }
+                }
             }
             return ctx;
         }
         // get one path
         for (i = this.scopes.length - 1; i >= 0; i--) {
-            var v = _.get(this.scopes[i], str);
+            var v = getPropertyByPath(this.scopes[i], str);
             if (v !== undefined) return v;
         }
     },
-    get: function(str){
+    get: function(str) {
         var val = this.safeGet(str);
         if (val === undefined && this.opts.strict) {
             throw new Error(`[strict_variables] undefined variable: ${str}`);
@@ -26,7 +30,7 @@ var Scope = {
         return val;
     },
     set: function(k, v) {
-        _.set(this.scopes[this.scopes.length - 1], k, v);
+        setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
         return this;
     },
     push: function(ctx) {
@@ -38,10 +42,35 @@ var Scope = {
     }
 };
 
+function setPropertyByPath(obj, path, val) {
+    if (path instanceof String || typeof path === 'string') {
+        var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
+        for (var i = 0; i < paths.length; i++) {
+            var key = paths[i];
+            if (i === paths.length - 1) {
+                return obj[key] = val;
+            }
+            if (undefined === obj[key]) obj[key] = {};
+            // case for readonly objects
+            obj = obj[key] || {};
+        }
+        return obj;
+    }
+    return obj[path] = val;
+}
+
+function getPropertyByPath(obj, path) {
+    if (path instanceof String || typeof path === 'string') {
+        var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
+        paths.forEach(p => obj = obj && obj[p]);
+        return obj;
+    }
+    return obj[path];
+}
+
 exports.factory = function(_ctx, opts) {
-    opts = _.defaults(opts, {
-        strict: false
-    });
+    opts = opts || {};
+    opts.strict = opts.strict || false;
 
     var scope = Object.create(Scope);
     scope.opts = opts;

@@ -2,15 +2,13 @@ const error = require('./error.js');
 const Exp = require('./expression.js');
 const assert = require('assert');
 const Promise = require('any-promise');
-const _ = require('lodash');
 
 var render = {
 
     renderTemplates: function(templates, scope, opts) {
         assert(scope, 'unable to evalTemplates: scope undefined');
-        opts = _.defaults(opts, {
-            strict_filters: false
-        });
+        opts = opts || {};
+        opts.strict_filters = opts.strict_filters || false;
 
         var html = '';
 

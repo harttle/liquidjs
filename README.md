@@ -86,7 +86,35 @@ app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 ```
 
-There's an Express demo in [the demo folder](demo/).
+There's an Express demo [here](demo/express/).
+
+## Use in Browser
+
+[Download][releases] the dist files and import into your HTML.
+And `window.Liquid` is what you want.
+
+```html
+<html lang="en">
+<head>
+  <script src="shopify-liquid.min.js"></script>
+</head>
+<body>
+  <script>
+    var engine = window.Liquid();
+    var src = '{{ name | capitalize}}';
+    var ctx = {
+      name: 'welcome to Shopify Liquid'
+    };
+    engine.parseAndRender(src, ctx)
+      .then(function(html) {
+        // html === Welcome to Shopify Liquid 
+      });
+  </script>
+</body>
+</html>
+```
+
+There's also a [demo](demo/browser/).
 
 ## Includes
 
@@ -248,4 +276,4 @@ Documentation: <https://shopify.github.io/liquid/basics/operators/>
 [shopify-liquid]: https://shopify.github.io/liquid/
 [jekyll]: http://jekyllrb.com/
 [gh]: https://pages.github.com/
-(test/filters.js): https://github.com/harttle/shopify-liquid/blob/master/test/filters.js
+[releases]: https://github.com/harttle/shopify-liquid/releases

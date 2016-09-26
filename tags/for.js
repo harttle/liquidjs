@@ -1,6 +1,5 @@
 var Liquid = require('..');
 var Promise = require('any-promise');
-var _ = require('lodash');
 var lexical = Liquid.lexical;
 var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +

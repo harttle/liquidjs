@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../dist/shopify-liquid.min.js"></script>
+</head>
+
+<body>
+  <h2 id="header"></h2>
+  <script>
+    var engine = window.Liquid();
+
+    var src = '{{ name | capitalize}}';
+    var ctx = {
+      name: 'welcome to Shopify Liquid'
+    };
+    engine.parseAndRender(src, ctx)
+      .then(function(html) {
+        document.getElementById('header').innerHTML = html;
+      });
+  </script>
+</body>
+
+</html>

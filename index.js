@@ -1,6 +1,5 @@
 const Scope = require('./src/scope');
 const assert = require('assert');
-const _ = require('lodash');
 const tokenizer = require('./src/tokenizer.js');
 const Render = require('./src/render.js');
 const lexical = require('./src/lexical.js');
@@ -35,10 +34,10 @@ var _engine = {
         return this.parser.parse(tokens);
     },
     render: function(tpl, ctx, opts) {
-        opts = _.defaults(opts, {
-            strict_variables: false,
-            strict_filters: false
-        });
+        opts = opts || {};
+        opts.strict_variables = opts.strict_variables || false;
+        opts.strict_filters = opts.strict_filters || false;
+
         this.renderer.resetRegisters();
         var scope = Scope.factory(ctx, {
             strict: opts.strict_variables,
@@ -105,10 +104,10 @@ var _engine = {
 };
 
 function factory(options) {
-    options = _.defaults(options || {
-        root: '',
-        extname: '.liquid'
-    });
+    options = options || {};
+    options.root = options.root || '';
+    options.extname = options.extname || '.liquid';
+
     var engine = Object.create(_engine);
 
     engine.init(Tag(), Filter(), options);
