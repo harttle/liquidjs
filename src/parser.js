@@ -1,5 +1,4 @@
 const lexical = require('./lexical.js');
-const error = require('./error.js');
 const ParseError = require('./error.js').ParseError;
 
 module.exports = function(Tag, Filter) {
@@ -60,7 +59,7 @@ module.exports = function(Tag, Filter) {
                     return token;
             }
         } catch (e) {
-            throw new ParseError(e.message, token.input, token.line, e.stack);
+            throw new ParseError(e.message, token.input, token.line);
         }
     }
 

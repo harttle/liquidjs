@@ -8,7 +8,7 @@ module.exports = function(liquid) {
     liquid.registerTag('layout', {
         parse: function(token, remainTokens){
             var match = lexical.value.exec(token.args);
-            if(!match) error(`illegal token ${token.raw}`, token);
+            if(!match) throw new Error(`illegal token ${token.raw}`);
 
             this.layout = match[0];
             this.tpls = liquid.parser.parse(remainTokens);
@@ -22,7 +22,7 @@ module.exports = function(liquid) {
             return liquid.renderer.renderTemplates(this.tpls, scope)
                 .then((partial) => {
                     html += partial;
-                    return liquid.handleCache(layout)
+                    return liquid.handleCache(layout);
                 })
                 .then((templates) => {
                     return liquid.renderer.renderTemplates(templates, scope);

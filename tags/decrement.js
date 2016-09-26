@@ -7,7 +7,7 @@ module.exports = function(liquid) {
     liquid.registerTag('decrement', {
         parse: function(token) {
             var match = token.args.match(lexical.identifier);
-            if (!match) error(`illegal identifier ${token.args}`, token);
+            if (!match) throw new Error(`illegal identifier ${token.args}`);
             this.variable = match[0];
         },
         render: function(scope, hash) {

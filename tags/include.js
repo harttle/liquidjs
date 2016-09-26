@@ -8,7 +8,7 @@ module.exports = function(liquid) {
     liquid.registerTag('include', {
         parse: function(token){
             var match = lexical.value.exec(token.args);
-            if(!match) error(`illegal token ${token.raw}`, token);
+            if(!match) throw(new Error(`illegal token ${token.raw}`));
             this.value = match[0];
 
             match = withRE.exec(token.args);

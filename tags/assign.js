@@ -8,7 +8,7 @@ module.exports = function(liquid) {
     liquid.registerTag('assign', {
         parse: function(token){
             var match = token.args.match(re);
-            if(!match) error(`illegal token ${token.raw}`, token);
+            if(!match) throw new Error(`illegal token ${token.raw}`);
             this.key = match[1];
             this.value = match[2];
         },

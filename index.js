@@ -88,12 +88,9 @@ var _engine = {
     },
     express: function() {
         return (filePath, options, callback) => {
-            try {
-                var html = this.renderFile(filePath, options);
-                return callback(null, html);
-            } catch (e) {
-                return callback(e);
-            }
+            this.renderFile(filePath, options)
+                .then(html => callback(null, html))
+                .catch(e => callback(e));
         };
     }
 };

@@ -4,7 +4,7 @@
   "description": "Liquid template engine in Node.js (Shopify compliant)",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "repository": {
     "type": "git",

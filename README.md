@@ -21,14 +21,20 @@ Parse and Render:
 var Liquid = require('shopify-liquid');
 var engine = Liquid();
 
-engine.parseAndRender('{{name | capitalize}}', {name: 'alice'});  // Alice
+engine.parseAndRender('{{name | capitalize}}', {name: 'alice'})
+    .then(function(html){
+        // html === 'Alice'
+    });
 ```
 
 Caching templates:
 
 ```javascript
 var tpl = engine.parse('{{name | capitalize}}');
-engine.render(tpl, {name: 'alice'}); // Alice
+engine.render(tpl, {name: 'alice'})
+    .then(function(html){   
+        // html === 'Alice'
+    });
 ```
 
 ## Render from File
@@ -39,8 +45,15 @@ var engine = Liquid({
     extname: '.liquid',
     cache: false
 });
-// equivalent to: engine.renderFile("hello", {name: 'alice'});
-var html = engine.renderFile("hello.liquid", {name: 'alice'});
+engine.renderFile("hello.liquid", {name: 'alice'})
+    .then(function(html){
+       // html === 'Alice'
+    });
+// equivalent to: 
+engine.renderFile("hello", {name: 'alice'})
+    .then(function(html){
+       // html === 'Alice'
+    });
 ```
 
 `cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
@@ -48,10 +61,12 @@ var html = engine.renderFile("hello.liquid", {name: 'alice'});
 ## Use with Express.js
 
 ```javascript
-app.engine('liquid', engine.express());
-app.set('views', './views');        // specify the views directory
-app.set('view engine', 'liquid');   // register the template engine
+app.engine('liquid', engine.express()); // register liquid engine
+app.set('views', './views');            // specify the views directory
+app.set('view engine', 'liquid');       // set to default
 ```
+
+There's an Express demo in [the demo folder](demo/).
 
 ## Includes
 
@@ -132,26 +147,26 @@ Documentation: <https://shopify.github.io/liquid/basics/introduction/#tags>
 
 Tag | Document | Source | Test
 --- | --- | --- | ---
-`case/when` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/case.js) | [Test][tt]
-`if` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/if.js) | [Test][tt]
-`unless` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/unless.js) | [Test][tt]
-`elsif/else` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/if.js) | [Test][tt]
-`for` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/for.js) | [Test][tt]
-`break` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/for.js) | [Test][tt]
-`continue` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/for.js) | [Test][tt]
-`for: limit,offset,range,reversed` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/for.js) | [Test][tt]
-`cycle` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/cycle.js) | [Test][tt]
-`cycle: group` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/cycle.js) | [Test][tt]
-`tablerow` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/tablerow.js) | [Test][tt]
-`tablerow: cols,limit,offset,range` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/tablerow.js) | [Test][tt]
-`assign` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/assign.js) | [Test][tt]
-`capture` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/capture.js) | [Test][tt]
-`increment` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/increment.js) | [Test][tt]
-`decrement` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/decrement.js) | [Test][tt]
-`raw` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#raw) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/raw.js) | [Test][tt]
-`comment` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#comment) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/comment.js) | [Test][tt]
-`include` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#include) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/include.js) | [Test][tt]
-`layout, block` | [Document](http://docs.mixture.io/templates/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/tags/layout.js) | [Test][tt]
+`case/when` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/case.js) | [Test](test/tags/case.js)
+`if` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/if.js) | [Test](test/tags/if.js)
+`unless` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/unless.js) | [Test](test/tags/unless.js)
+`elsif/else` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/if.js) | [Test](test/tags/if.js)
+`for` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
+`break` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
+`continue` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
+`for: limit,offset,range,reversed` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
+`cycle` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/cycle.js) | [Test](test/tags/cycle.js)
+`cycle: group` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/cycle.js) | [Test](test/tags/cycle.js)
+`tablerow` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/tablerow.js) | [Test](test/tags/tablerow.js)
+`tablerow: cols,limit,offset,range` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/tablerow.js) | [Test](test/tags/tablerow.js)
+`assign` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/assign.js) | [Test](test/tags/assign.js)
+`capture` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/capture.js) | [Test](test/tags/capture.js)
+`increment` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/increment.js) | [Test](test/tags/increment.js)
+`decrement` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/decrement.js) | [Test](test/tags/decrement.js)
+`raw` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#raw) | [Source](tags/raw.js) | [Test](test/tags/raw.js)
+`comment` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#comment) | [Source](tags/comment.js) | [Test](test/tags/comment.js)
+`include` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#include) | [Source](tags/include.js) | [Test](test/tags/include.js)
+`layout, block` | [Document](http://docs.mixture.io/templates/) | [Source](tags/layout.js) | [Test](test/tags/layout.js)
 
 
 ## All Filters
@@ -160,47 +175,47 @@ Documentation: <https://shopify.github.io/liquid/basics/introduction/#filters>
 
 Filter | Document | Source | Test
 --- | --- | --- | ---
-`abs` | [Document](https://shopify.github.io/liquid/filters/abs/) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`append` | [Document](https://shopify.github.io/liquid/filters/append) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`capitalize` | [Document](https://shopify.github.io/liquid/filters/capitalize) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`ceil` | [Document](https://shopify.github.io/liquid/filters/ceil) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`date` | [Document](https://shopify.github.io/liquid/filters/date) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`default` | [Document](https://shopify.github.io/liquid/filters/default) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`divided_by` | [Document](https://shopify.github.io/liquid/filters/divided_by) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`downcase` | [Document](https://shopify.github.io/liquid/filters/downcase) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`escape` | [Document](https://shopify.github.io/liquid/filters/escape) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`escape_once` | [Document](https://shopify.github.io/liquid/filters/escape_once) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`first` | [Document](https://shopify.github.io/liquid/filters/first) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`floor` | [Document](https://shopify.github.io/liquid/filters/floor) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`join` | [Document](https://shopify.github.io/liquid/filters/join) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`last` | [Document](https://shopify.github.io/liquid/filters/last) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`lstrip` | [Document](https://shopify.github.io/liquid/filters/lstrip) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`map` | [Document](https://shopify.github.io/liquid/filters/map) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`minus` | [Document](https://shopify.github.io/liquid/filters/minus) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`modulo` | [Document](https://shopify.github.io/liquid/filters/modulo) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`newline_to_br` | [Document](https://shopify.github.io/liquid/filters/newline_to_br) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`plus` | [Document](https://shopify.github.io/liquid/filters/plus) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`prepend` | [Document](https://shopify.github.io/liquid/filters/prepend) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`remove` | [Document](https://shopify.github.io/liquid/filters/remove) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`remove_first` | [Document](https://shopify.github.io/liquid/filters/remove_first) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`replace` | [Document](https://shopify.github.io/liquid/filters/replace) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`replace_first` | [Document](https://shopify.github.io/liquid/filters/replace_first) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`reverse` | [Document](https://shopify.github.io/liquid/filters/reverse) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`round` | [Document](https://shopify.github.io/liquid/filters/round) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`rstrip` | [Document](https://shopify.github.io/liquid/filters/rstrip) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`size` | [Document](https://shopify.github.io/liquid/filters/size) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`slice` | [Document](https://shopify.github.io/liquid/filters/slice) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`sort` | [Document](https://shopify.github.io/liquid/filters/sort) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`split` | [Document](https://shopify.github.io/liquid/filters/split) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`strip` | [Document](https://shopify.github.io/liquid/filters/strip) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`strip_html` | [Document](https://shopify.github.io/liquid/filters/strip_html) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`strip_newlines` | [Document](https://shopify.github.io/liquid/filters/strip_newlines) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`times` | [Document](https://shopify.github.io/liquid/filters/times) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`truncate` | [Document](https://shopify.github.io/liquid/filters/truncate) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`truncatewords` | [Document](https://shopify.github.io/liquid/filters/truncatewords) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`uniq` | [Document](https://shopify.github.io/liquid/filters/uniq) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`upcase` | [Document](https://shopify.github.io/liquid/filters/upcase) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
-`url_encode` | [Document](https://shopify.github.io/liquid/filters/url_encode) | [Source](https://github.com/harttle/shopify-liquid/blob/master/filters.js) | [Test][ft]
+`abs` | [Document](https://shopify.github.io/liquid/filters/abs/) | [Source](filters.js) | [Test](test/filters.js)
+`append` | [Document](https://shopify.github.io/liquid/filters/append) | [Source](filters.js) | [Test](test/filters.js)
+`capitalize` | [Document](https://shopify.github.io/liquid/filters/capitalize) | [Source](filters.js) | [Test](test/filters.js)
+`ceil` | [Document](https://shopify.github.io/liquid/filters/ceil) | [Source](filters.js) | [Test](test/filters.js)
+`date` | [Document](https://shopify.github.io/liquid/filters/date) | [Source](filters.js) | [Test](test/filters.js)
+`default` | [Document](https://shopify.github.io/liquid/filters/default) | [Source](filters.js) | [Test](test/filters.js)
+`divided_by` | [Document](https://shopify.github.io/liquid/filters/divided_by) | [Source](filters.js) | [Test](test/filters.js)
+`downcase` | [Document](https://shopify.github.io/liquid/filters/downcase) | [Source](filters.js) | [Test](test/filters.js)
+`escape` | [Document](https://shopify.github.io/liquid/filters/escape) | [Source](filters.js) | [Test](test/filters.js)
+`escape_once` | [Document](https://shopify.github.io/liquid/filters/escape_once) | [Source](filters.js) | [Test](test/filters.js)
+`first` | [Document](https://shopify.github.io/liquid/filters/first) | [Source](filters.js) | [Test](test/filters.js)
+`floor` | [Document](https://shopify.github.io/liquid/filters/floor) | [Source](filters.js) | [Test](test/filters.js)
+`join` | [Document](https://shopify.github.io/liquid/filters/join) | [Source](filters.js) | [Test](test/filters.js)
+`last` | [Document](https://shopify.github.io/liquid/filters/last) | [Source](filters.js) | [Test](test/filters.js)
+`lstrip` | [Document](https://shopify.github.io/liquid/filters/lstrip) | [Source](filters.js) | [Test](test/filters.js)
+`map` | [Document](https://shopify.github.io/liquid/filters/map) | [Source](filters.js) | [Test](test/filters.js)
+`minus` | [Document](https://shopify.github.io/liquid/filters/minus) | [Source](filters.js) | [Test](test/filters.js)
+`modulo` | [Document](https://shopify.github.io/liquid/filters/modulo) | [Source](filters.js) | [Test](test/filters.js)
+`newline_to_br` | [Document](https://shopify.github.io/liquid/filters/newline_to_br) | [Source](filters.js) | [Test](test/filters.js)
+`plus` | [Document](https://shopify.github.io/liquid/filters/plus) | [Source](filters.js) | [Test](test/filters.js)
+`prepend` | [Document](https://shopify.github.io/liquid/filters/prepend) | [Source](filters.js) | [Test](test/filters.js)
+`remove` | [Document](https://shopify.github.io/liquid/filters/remove) | [Source](filters.js) | [Test](test/filters.js)
+`remove_first` | [Document](https://shopify.github.io/liquid/filters/remove_first) | [Source](filters.js) | [Test](test/filters.js)
+`replace` | [Document](https://shopify.github.io/liquid/filters/replace) | [Source](filters.js) | [Test](test/filters.js)
+`replace_first` | [Document](https://shopify.github.io/liquid/filters/replace_first) | [Source](filters.js) | [Test](test/filters.js)
+`reverse` | [Document](https://shopify.github.io/liquid/filters/reverse) | [Source](filters.js) | [Test](test/filters.js)
+`round` | [Document](https://shopify.github.io/liquid/filters/round) | [Source](filters.js) | [Test](test/filters.js)
+`rstrip` | [Document](https://shopify.github.io/liquid/filters/rstrip) | [Source](filters.js) | [Test](test/filters.js)
+`size` | [Document](https://shopify.github.io/liquid/filters/size) | [Source](filters.js) | [Test](test/filters.js)
+`slice` | [Document](https://shopify.github.io/liquid/filters/slice) | [Source](filters.js) | [Test](test/filters.js)
+`sort` | [Document](https://shopify.github.io/liquid/filters/sort) | [Source](filters.js) | [Test](test/filters.js)
+`split` | [Document](https://shopify.github.io/liquid/filters/split) | [Source](filters.js) | [Test](test/filters.js)
+`strip` | [Document](https://shopify.github.io/liquid/filters/strip) | [Source](filters.js) | [Test](test/filters.js)
+`strip_html` | [Document](https://shopify.github.io/liquid/filters/strip_html) | [Source](filters.js) | [Test](test/filters.js)
+`strip_newlines` | [Document](https://shopify.github.io/liquid/filters/strip_newlines) | [Source](filters.js) | [Test](test/filters.js)
+`times` | [Document](https://shopify.github.io/liquid/filters/times) | [Source](filters.js) | [Test](test/filters.js)
+`truncate` | [Document](https://shopify.github.io/liquid/filters/truncate) | [Source](filters.js) | [Test](test/filters.js)
+`truncatewords` | [Document](https://shopify.github.io/liquid/filters/truncatewords) | [Source](filters.js) | [Test](test/filters.js)
+`uniq` | [Document](https://shopify.github.io/liquid/filters/uniq) | [Source](filters.js) | [Test](test/filters.js)
+`upcase` | [Document](https://shopify.github.io/liquid/filters/upcase) | [Source](filters.js) | [Test](test/filters.js)
+`url_encode` | [Document](https://shopify.github.io/liquid/filters/url_encode) | [Source](filters.js) | [Test](test/filters.js)
 
 ## Operators
 
@@ -225,5 +240,4 @@ For template-driven projects, checkout these Liquid-like engines:
 [shopify-liquid]: https://shopify.github.io/liquid/
 [jekyll]: http://jekyllrb.com/
 [gh]: https://pages.github.com/
-[tt]: https://github.com/harttle/shopify-liquid/blob/master/test/tags.js
-[ft]: https://github.com/harttle/shopify-liquid/blob/master/test/filters.js
+(test/filters.js): https://github.com/harttle/shopify-liquid/blob/master/test/filters.js

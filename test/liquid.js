@@ -55,8 +55,6 @@ describe('liquid', function() {
             .then((result) => {
                 return expect(result).to.equal('{"foo":"bar"}');
             });
-//        engine.render(template, ctx).should.equal('{"foo":"bar"}');
-//        engine.render(template, ctx).should.equal('{"foo":"bar"}');
     });
     it('should render filters', function() {
         var template = engine.parse('<p>{{arr | join: "_"}}</p>');
