@@ -12,7 +12,7 @@ util.inherits(TokenizationError, Error);
 
 function ParseError(message, input, line) {
     Error.captureStackTrace(this, this.constructor);
-    this.name = "ParseError";
+    this.name = this.constructor.name;
 
     this.message = message || "";
     this.input = input;

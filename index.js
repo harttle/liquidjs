@@ -1,4 +1,4 @@
-const scope = require('./src/scope');
+const Scope = require('./src/scope');
 const assert = require('assert');
 const _ = require('lodash');
 const tokenizer = require('./src/tokenizer.js');
@@ -34,16 +34,22 @@ var _engine = {
         var tokens = tokenizer.parse(html);
         return this.parser.parse(tokens);
     },
-    render: function(tpl, ctx) {
+    render: function(tpl, ctx, opts) {
+        opts = _.defaults(opts, {
+            strict_variables: false,
+            strict_filters: false
+        });
         this.renderer.resetRegisters();
-        return this.renderer.renderTemplates(tpl, scope.factory(ctx));
+        var scope = Scope.factory(ctx, {
+            strict: opts.strict_variables,
+        });
+        return this.renderer.renderTemplates(tpl, scope);
     },
-    parseAndRender: function(html, ctx) {
+    parseAndRender: function(html, ctx, opts) {
         try {
             var tpl = this.parse(html);
-            return this.render(tpl, ctx);
-        }
-        catch (error) {
+            return this.render(tpl, ctx, opts);
+        } catch (error) {
             // A throw inside of a then or catch of a Promise automatically rejects, but since we mix a sync call
             //  with an async call, we need to do this in case the sync call throws.
             return Promise.reject(error);
@@ -83,8 +89,11 @@ var _engine = {
             });
     },
     getTemplate: function(filepath) {
-        var html = fs.readFileSync(filepath, 'utf8');
-        return Promise.resolve(html);
+        return new Promise(function(resolve, reject) {
+            fs.readFile(filepath, 'utf8', function(err, html) {
+                err ? reject(err) : resolve(html);
+            });
+        });
     },
     express: function() {
         return (filePath, options, callback) => {

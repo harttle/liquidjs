@@ -2,11 +2,16 @@ const error = require('./error.js');
 const Exp = require('./expression.js');
 const assert = require('assert');
 const Promise = require('any-promise');
+const _ = require('lodash');
 
 var render = {
 
-    renderTemplates: function(templates, scope) {
+    renderTemplates: function(templates, scope, opts) {
         assert(scope, 'unable to evalTemplates: scope undefined');
+        opts = _.defaults(opts, {
+            strict_variables: false,
+            strict_filters: false
+        });
 
         var html = '';
 
@@ -15,10 +20,10 @@ var render = {
         //  emptyPromise.then(renderTag(template0).then(renderTag(template1).then(renderTag(template2)...
         var lastPromise = templates.reduce((promise, template) => {
             return promise.then((partial) => {
-                if (scope.get('forloop.skip')) {
+                if (scope.safeGet('forloop.skip')) {
                     return Promise.resolve('');
                 }
-                if (scope.get('forloop.stop')) {
+                if (scope.safeGet('forloop.stop')) {
                     throw new Error('forloop.stop'); // this will stop/break the sequential promise chain and go to the catch
                 }
 

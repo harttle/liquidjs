@@ -60,7 +60,7 @@ describe('liquid', function() {
         var template = engine.parse('<p>{{arr | join: "_"}}</p>');
         return engine.render(template, ctx).should.eventually.equal('<p>-2_a</p>');
     });
-    describe('#renderFile()', function(){
+    describe('#renderFile()', function() {
         it('should render file', function() {
             return engine.renderFile('/root/files/foo.html', ctx).should.eventually.equal('foo');
         });
@@ -74,20 +74,41 @@ describe('liquid', function() {
             return engine.renderFile('files/name', ctx).should.eventually.equal('My name is harttle.');
         });
     });
-    // todo: make these async
-//    describe('#express()', function() {
-//        it('should render templates', function() {
-//            engine.express()('/root/files/name.html', ctx, function(err, html) {
-//                expect(err).to.equal(null);
-//                expect(html).to.equal('My name is harttle.');
-//            });
-//        });
-//        it('should pass error when file not found', function() {
-//            engine.express()('/root/files/name1.html', ctx, function(err, html) {
-//                expect(err.code).to.equal('ENOENT');
-//            });
-//        });
-//    });
+    describe('#express()', function() {
+        it('should render templates', function() {
+            engine.express()('/root/files/name.html', ctx, function(err, html) {
+                expect(err).to.equal(null);
+                expect(html).to.equal('My name is harttle.');
+            });
+        });
+        it('should pass error when file not found', function() {
+            engine.express()('/root/files/name1.html', ctx, function(err, html) {
+                expect(err.code).to.equal('ENOENT');
+            });
+        });
+    });
+    describe('strict', function() {
+        it('should not throw when strict_variables false (default)', function() {
+            return expect(engine.parseAndRender('before{{notdefined}}after', ctx)).to
+                .eventually.equal('beforeafter');
+        });
+        it('should throw when strict_variables true', function() {
+            var tpl = engine.parse('before{{notdefined}}after');
+            var opts = {
+                strict_variables: true
+            };
+            return expect(engine.render(tpl, ctx, opts)).to
+                .be.rejectedWith(/undefined variable: notdefined/);
+        });
+        it('should pass strict_variables to render by parseAndRender', function() {
+            var html = 'before{{notdefined}}after';
+            var opts = {
+                strict_variables: true
+            };
+            return expect(engine.parseAndRender(html, ctx, opts)).to
+                .be.rejectedWith(/undefined variable: notdefined/);
+        });
+    });
     describe('cache', function() {
         it('should be disabled by default', function() {
             mock({

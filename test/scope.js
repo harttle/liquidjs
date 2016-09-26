@@ -18,6 +18,24 @@ describe('scope', function() {
         scope.get('foo').should.equal('bar');
     });
 
+    it('should get undefined property', function() {
+		function fn(){
+			scope.get('notdefined');
+		}
+        expect(fn).to.not.throw();
+        expect(scope.get('notdefined')).to.equal(undefined);
+    });
+
+    it('should throw undefined in strict mode', function() {
+		scope = Scope.factory(ctx, {
+			strict: true
+		});
+		function fn(){
+			scope.get('notdefined');
+		}
+		expect(fn).to.throw(/undefined variable: notdefined/);
+    });
+
     it('should get all property', function() {
         scope.get().should.deep.equal(ctx);
         expect(scope.get('')).to.equal(undefined);

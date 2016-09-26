@@ -13,7 +13,8 @@ describe('expression', function() {
         scope = Scope.factory({
             one: 1,
             two: 2,
-            x: 'XXX'
+            x: 'XXX',
+			z: 'z'
         });
     });
 
