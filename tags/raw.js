@@ -1,4 +1,5 @@
 var Liquid = require('..');
+var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var re = new RegExp(`(${lexical.identifier.source})`);
 
@@ -20,7 +21,8 @@ module.exports = function(liquid) {
             stream.start();
         },
         render: function(scope, hash) {
-            return this.tokens.map(token => token.raw).join('');
+            var tokens = this.tokens.map(token => token.raw).join('');
+            return Promise.resolve(tokens);
         }
     });
 

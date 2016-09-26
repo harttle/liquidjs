@@ -1,4 +1,5 @@
 var Liquid = require('..');
+var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var re = new RegExp(`(${lexical.identifier.source})\\s*=(.*)`);
 
@@ -13,6 +14,7 @@ module.exports = function(liquid) {
         },
         render: function(scope, hash) {
             scope.set(this.key, liquid.evalOutput(this.value, scope));
+            return Promise.resolve('');
         }
     });
 

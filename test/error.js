@@ -3,22 +3,20 @@ var expect = chai.expect;
 var engine = require('..')(), ctx;
 const mock = require('mock-fs');
 
-function test(func, cb){
-    try{
-        func();
-        cb({});
-    }
-    catch(e){
-        cb(e);
-    }
+function test(promise, cb){
+    return promise
+        .then((result) => {
+            return cb({});
+        })
+        .catch((error) => {
+            return cb(error);
+        });
 }
 
 describe('error', function() {
 
     it('should throw TokenizationError when tag illegal', function() {
-        test(function(){
-            engine.parseAndRender('{% -a %}', {});
-        }, function(err){
+        return test(engine.parseAndRender('{% -a %}', {}), function(err){
             expect(err.name).to.equal('TokenizationError');
             expect(err.message).to.equal('illegal tag: {% -a %}');
             expect(err.input).to.equal('{% -a %}');
@@ -27,9 +25,7 @@ describe('error', function() {
     });
 
     it('should throw correct error info', function() {
-        test(function(){
-            engine.parseAndRender('{%if true%}\naaa{%endif%}\n{% -a %}\n3', {});
-        }, function(err){
+        return test(engine.parseAndRender('{%if true%}\naaa{%endif%}\n{% -a %}\n3', {}), function(err){
             expect(err.input).to.equal('{% -a %}');
             expect(err.line).to.equal(3);
         });
@@ -39,9 +35,7 @@ describe('error', function() {
         mock({
             "/foo.html": '<html>\n<head>\n\n{% raw %}\n\n'
         });
-        test(function(){
-            engine.renderFile('/foo.html', {});
-        }, function(err){
+        return test(engine.renderFile('/foo.html', {}), function(err){
             expect(err.input).to.equal('{% raw %}');
             expect(err.line).to.equal(4);
             expect(err.file).to.equal('/foo.html');
@@ -49,9 +43,7 @@ describe('error', function() {
     });
 
     it('should throw ParseError when filter not exist', function() {
-        test(function(){
-            engine.parseAndRender('{{ a | xz }}', {});
-        }, function(err){
+        return test(engine.parseAndRender('{{ a | xz }}', {}), function(err){
             expect(err.name).to.equal('ParseError');
             expect(err.message).to.equal('filter "xz" not found');
             expect(err.input).to.equal('{{ a | xz }}');
@@ -59,9 +51,7 @@ describe('error', function() {
         });
     });
     it('should throw ParseError when tag not exist', function() {
-        test(function(){
-            engine.parseAndRender('{% a %}', {});
-        }, function(err){
+        return test(engine.parseAndRender('{% a %}', {}), function(err){
             expect(err.name).to.equal('ParseError');
             expect(err.message).to.equal('tag a not found');
             expect(err.input).to.equal('{% a %}');
@@ -70,9 +60,7 @@ describe('error', function() {
     });
 
     it('should throw ParseError when tag not closed', function() {
-        test(function(){
-            engine.parseAndRender('{% if %}', {});
-        }, function(err){
+        return test(engine.parseAndRender('{% if %}', {}), function(err){
             expect(err.name).to.equal('ParseError');
             expect(err.message).to.equal('tag {% if %} not closed');
             expect(err.input).to.equal('{% if %}');
