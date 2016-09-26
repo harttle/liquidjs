@@ -21,8 +21,10 @@ module.exports = function(liquid) {
             stream.start();
         },
         render: function(scope, hash) {
-            var html = liquid.renderer.renderTemplates(this.templates, scope);
-            scope.set(this.variable, html);
+            return liquid.renderer.renderTemplates(this.templates, scope)
+                .then((html) => {
+                    scope.set(this.variable, html);
+                });
         }
     });
 

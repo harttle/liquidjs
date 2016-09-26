@@ -1,4 +1,5 @@
 var Liquid = require('..');
+var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var groupRE = new RegExp(`^(?:(${lexical.value.source})\\s*:\\s*)?(.*)$`);
 var candidatesRE = new RegExp(lexical.value.source, 'g');
@@ -37,7 +38,7 @@ module.exports = function(liquid) {
             idx = (idx + 1) % this.candidates.length;
             register[fingerprint] = idx;
 
-            return Liquid.evalValue(candidate, scope);
+            return Promise.resolve(Liquid.evalValue(candidate, scope));
         }
     });
 };

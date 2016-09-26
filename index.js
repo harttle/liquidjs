@@ -12,6 +12,7 @@ const Template = require('./src/parser');
 const Expression = require('./src/expression.js');
 const tags = require('./tags');
 const filters = require('./filters');
+const Promise = require('any-promise');
 
 var _engine = {
     init: function(tag, filter, options) {
@@ -38,18 +39,25 @@ var _engine = {
         return this.renderer.renderTemplates(tpl, scope.factory(ctx));
     },
     parseAndRender: function(html, ctx) {
-        var tpl = this.parse(html);
-        return this.render(tpl, ctx);
-    },
-    renderFile: function(filepath, ctx) {
-        try{
-            var tpl = this.handleCache(filepath);
+        try {
+            var tpl = this.parse(html);
             return this.render(tpl, ctx);
         }
-        catch(e){
-            e.file = filepath;
-            throw e;
+        catch (error) {
+            // A throw inside of a then or catch of a Promise automatically rejects, but since we mix a sync call
+            //  with an async call, we need to do this in case the sync call throws.
+            return Promise.reject(error);
         }
+    },
+    renderFile: function(filepath, ctx) {
+        return this.handleCache(filepath)
+            .then((templates) => {
+                return this.render(templates, ctx);
+            })
+            .catch((e) => {
+                e.file = filepath;
+                throw e;
+            });
     },
     evalOutput: function(str, scope) {
         var tpl = this.parser.parseOutput(str.trim());
@@ -67,9 +75,16 @@ var _engine = {
         if (path.extname(filepath) === '') {
             filepath += this.options.extname;
         }
-        var tpl = this.options.cache && this.cache[filepath] ||
-            this.parse(fs.readFileSync(filepath, 'utf8'));
-        return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+
+        return this.getTemplate(filepath)
+            .then((html) => {
+                var tpl = this.options.cache && this.cache[filepath] || this.parse(html);
+                return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+            });
+    },
+    getTemplate: function(filepath) {
+        var html = fs.readFileSync(filepath, 'utf8');
+        return Promise.resolve(html);
     },
     express: function() {
         return (filePath, options, callback) => {

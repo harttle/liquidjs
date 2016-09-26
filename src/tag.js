@@ -1,4 +1,5 @@
 const lexical = require('./lexical.js');
+const Promise = require('any-promise');
 const Exp = require('./expression.js');
 const TokenizationError = require('./error.js').TokenizationError;
 
@@ -21,7 +22,7 @@ module.exports = function() {
             var reg = register[this.name];
             if(!reg) reg = register[this.name] = {};
             var obj = hash(this.token.args, scope);
-            return this.tagImpl.render && this.tagImpl.render(scope, obj, reg) || '';
+            return this.tagImpl.render && this.tagImpl.render(scope, obj, reg) || Promise.resolve('');
         },
         parse: function(token, tokens){
             this.type = 'tag';
