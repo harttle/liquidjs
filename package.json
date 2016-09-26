@@ -36,11 +36,11 @@
     "coveralls": "^2.11.9",
     "express": "^4.14.0",
     "istanbul": "^0.4.3",
-    "mocha": "^2.5.3",
+    "mocha": "^3.0.2",
     "mock-fs": "^3.9.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
-    "supertest": "^1.2.0",
+    "supertest": "^2.0.0",
     "uglifyjs": "^2.4.10"
   }
 }
