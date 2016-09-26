@@ -1,9 +1,12 @@
 const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
+const should = chai.should();
+const expect = chai.expect;
 const sinonChai = require("sinon-chai");
 const sinon = require("sinon");
-const expect = chai.expect;
 
 chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 var tag = require('../src/tag.js')();
 var Scope = require('../src/scope.js');
@@ -26,10 +29,7 @@ describe('render', function() {
     });
 
     it('should render html', function() {
-        expect(render.renderTemplates([{
-            type: 'html',
-            value: '<p>'
-        }], scope)).to.equal('<p>');
+        return render.renderTemplates([{type: 'html', value: '<p>'}], scope).should.eventually.equal('<p>');
     });
 
     it('should eval filter with correct arguments', function() {
