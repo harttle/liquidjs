@@ -37,6 +37,16 @@ describe('liquid', function() {
     it('should output undefined to empty', function() {
         return engine.parseAndRender('foo{{zzz}}bar', ctx).should.eventually.equal('foobar');
     });
+    it('should render as null when filter undefined', function() {
+        return engine.parseAndRender('{{arr | filter1}}', ctx).should.eventually.equal('');
+    });
+    it('should throw upon undefined filter when strict_filters set', function() {
+        var opts = {
+            strict_filters: true
+        };
+        return expect(engine.parseAndRender('{{arr | filter1}}', ctx, opts)).to
+            .be.rejectedWith(/undefined filter: filter1/);
+    });
     it('should parse html', function() {
         (function() {
             engine.parse('{{obj}}');

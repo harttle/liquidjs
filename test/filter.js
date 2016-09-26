@@ -14,10 +14,10 @@ describe('filter', function() {
         filter.clear();
         scope = Scope.factory();
     });
-    it('should throw when not registered', function() {
-        expect(function() {
-            filter.construct('foo');
-        }).to.throw(/filter "foo" not found/);
+    it('should return undefined when not registered', function() {
+        var result = filter.construct('foo');
+        expect(result.name).to.equal('foo');
+        expect(result.error).to.be.an('Error');
     });
 
     it('should parse argument syntax', function(){

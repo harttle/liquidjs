@@ -58,6 +58,26 @@ engine.renderFile("hello", {name: 'alice'})
 
 `cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
 
+## Strict Rendering
+
+Undefined filters and variables will be rendered as empty string by default.
+Enable strict rendering to throw errors upon undefined variables/filters:
+
+```javascript
+var opts = {
+    strict_variables: true, 
+    strict_filters: true
+};
+engine.parseAndRender("{{ foo }}", {}, opts).catch(function(err){
+    // err.message === undefined variable: foo
+});
+engine.parseAndRender("{{ 'foo' | filter1 }}", {}, opts).catch(function(err){
+    // err.message === undefined filter: filter1
+});
+// Note:
+// `engine.render(tpl, ctx, opts)` and `engine.renderFile(path, ctx, opts)` also works.
+```
+
 ## Use with Express.js
 
 ```javascript

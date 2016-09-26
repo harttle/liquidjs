@@ -43,7 +43,7 @@ var _engine = {
         var scope = Scope.factory(ctx, {
             strict: opts.strict_variables,
         });
-        return this.renderer.renderTemplates(tpl, scope);
+        return this.renderer.renderTemplates(tpl, scope, opts);
     },
     parseAndRender: function(html, ctx, opts) {
         try {
@@ -55,10 +55,10 @@ var _engine = {
             return Promise.reject(error);
         }
     },
-    renderFile: function(filepath, ctx) {
+    renderFile: function(filepath, ctx, opts) {
         return this.handleCache(filepath)
             .then((templates) => {
-                return this.render(templates, ctx);
+                return this.render(templates, ctx, opts);
             })
             .catch((e) => {
                 e.file = filepath;

@@ -42,14 +42,6 @@ describe('error', function() {
         });
     });
 
-    it('should throw ParseError when filter not exist', function() {
-        return test(engine.parseAndRender('{{ a | xz }}', {}), function(err){
-            expect(err.name).to.equal('ParseError');
-            expect(err.message).to.equal('filter "xz" not found');
-            expect(err.input).to.equal('{{ a | xz }}');
-            expect(err.line).to.equal(1);
-        });
-    });
     it('should throw ParseError when tag not exist', function() {
         return test(engine.parseAndRender('{% a %}', {}), function(err){
             expect(err.name).to.equal('ParseError');

@@ -19,7 +19,10 @@ module.exports = function() {
 
             var name = match[1], argList = match[2] || '', filter = filters[name];
             if (typeof filter !== 'function'){
-                throw new Error(`filter "${name}" not found`);
+                return {
+                    name: name,
+                    error: new Error(`undefined filter: ${name}`)
+                };
             }
 
             var args = [];
@@ -37,8 +40,7 @@ module.exports = function() {
 
     function construct(str) {
         var instance = Object.create(_filterInstance);
-        instance.parse(str);
-        return instance;
+        return instance.parse(str);
     }
 
     function register(name, filter) {
