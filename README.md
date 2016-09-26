@@ -3,7 +3,7 @@
 [![NPM version](https://img.shields.io/npm/v/shopify-liquid.svg?style=flat)](https://www.npmjs.org/package/shopify-liquid)
 [![Build Status](https://travis-ci.org/harttle/shopify-liquid.svg?branch=master)](https://travis-ci.org/harttle/shopify-liquid)
 [![Coverage Status](https://coveralls.io/repos/github/harttle/shopify-liquid/badge.svg?branch=master&ver=1.1.1)](https://coveralls.io/github/harttle/shopify-liquid?branch=master)
-[![Dependency manager](https://david-dm.org/harttle/shopify-liquid.png)](https://david-dm.org/harttle/shopify-liquid)
+[![Dependency manager](https://img.shields.io/david/dev/harttle/shopify-liquid.svg?style=flat)](https://david-dm.org/harttle/shopify-liquid)
 
 A feature-rich [Liquid][shopify-liquid] implementation for Node.js, with compliance with [Jekyll][jekyll] and [Github Pages][gh].
 
