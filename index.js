@@ -94,9 +94,9 @@ var _engine = {
             });
         });
     },
-    express: function() {
+    express: function(renderingOptions) {
         return (filePath, options, callback) => {
-            this.renderFile(filePath, options)
+            this.renderFile(filePath, options, renderingOptions)
                 .then(html => callback(null, html))
                 .catch(e => callback(e));
         };
