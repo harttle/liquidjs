@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
+    "prepublish": "npm test && make dist",
     "dist": "make dist"
   },
   "repository": {

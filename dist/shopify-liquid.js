@@ -289,11 +289,11 @@ var _engine = {
             });
         });
     },
-    express: function express() {
+    express: function express(renderingOptions) {
         var _this3 = this;
 
         return function (filePath, options, callback) {
-            _this3.renderFile(filePath, options).then(function (html) {
+            _this3.renderFile(filePath, options, renderingOptions).then(function (html) {
                 return callback(null, html);
             }).catch(function (e) {
                 return callback(e);

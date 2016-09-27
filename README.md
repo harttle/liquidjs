@@ -74,14 +74,19 @@ engine.parseAndRender("{{ foo }}", {}, opts).catch(function(err){
 engine.parseAndRender("{{ 'foo' | filter1 }}", {}, opts).catch(function(err){
     // err.message === undefined filter: filter1
 });
-// Note:
-// `engine.render(tpl, ctx, opts)` and `engine.renderFile(path, ctx, opts)` also works.
+// Note: the below opts also work:
+// engine.render(tpl, ctx, opts)
+// engine.renderFile(path, ctx, opts)
 ```
 
 ## Use with Express.js
 
 ```javascript
-app.engine('liquid', engine.express()); // register liquid engine
+// register liquid engine
+app.engine('liquid', engine.express({
+    strict_variables: true,         // Default: fasle
+    strict_filters: true            // Default: false
+})); 
 app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 ```
