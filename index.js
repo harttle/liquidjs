@@ -76,10 +76,6 @@ var _engine = {
     },
     handleCache: function(filepath) {
         assert(filepath, 'filepath cannot be null');
-        filepath = path.resolve(this.options.root, filepath);
-        if (path.extname(filepath) === '') {
-            filepath += this.options.extname;
-        }
 
         return this.getTemplate(filepath)
             .then((html) => {
@@ -88,6 +84,10 @@ var _engine = {
             });
     },
     getTemplate: function(filepath) {
+        filepath = path.resolve(this.options.root, filepath);
+        if (path.extname(filepath) === '') {
+            filepath += this.options.extname;
+        }
         return new Promise(function(resolve, reject) {
             fs.readFile(filepath, 'utf8', function(err, html) {
                 err ? reject(err) : resolve(html);
