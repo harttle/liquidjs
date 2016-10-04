@@ -1,10 +1,9 @@
 const lexical = require('./lexical.js');
 const Promise = require('any-promise');
 const Exp = require('./expression.js');
-const TokenizationError = require('./error.js').TokenizationError;
 
 function hash(markup, scope) {
-    var obj = {};
+    var obj = {}, match;
     lexical.hashCapture.lastIndex = 0;
     while (match = lexical.hashCapture.exec(markup)) {
         var k = match[1],

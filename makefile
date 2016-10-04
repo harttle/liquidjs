@@ -9,8 +9,8 @@ dist:
 	[ -d dist/ ] || mkdir dist/
 	$(BROWSERIFY) index.js -s Liquid \
 		-t [ babelify --global true --presets [ es2015 ] ] \
-		> dist/shopify-liquid.js
-	$(MINIFY) dist/shopify-liquid.js --output dist/shopify-liquid.min.js
+		> dist/liquid.js
+	$(MINIFY) dist/liquid.js --compress warnings=false --mangle --output dist/liquid.min.js
 	ls -lh dist/
 
 clean: 

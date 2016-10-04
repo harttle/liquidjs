@@ -22,6 +22,7 @@ module.exports = function(Tag, Filter) {
         },
         start: function() {
             this.trigger('start');
+            var token;
             while (!this.stopRequested && (token = this.tokens.shift())) {
                 if (this.trigger('token', token)) continue;
                 if (token.type == 'tag' &&
@@ -59,7 +60,7 @@ module.exports = function(Tag, Filter) {
                     return token;
             }
         } catch (e) {
-            throw new ParseError(e.message, token.input, token.line);
+            throw new ParseError(e.message, token.input, token.line, e);
         }
     }
 

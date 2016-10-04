@@ -1,7 +1,3 @@
-var Liquid = require('..');
-var lexical = Liquid.lexical;
-var re = new RegExp(`(${lexical.identifier.source})`);
-
 module.exports = function(liquid) {
 
     liquid.registerTag('comment', {

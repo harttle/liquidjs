@@ -1,5 +1,4 @@
 const syntax = require('./syntax.js');
-const Exp = require('./expression.js');
 const lexical = require('./lexical.js');
 
 function evalExp(exp, scope) {
@@ -35,7 +34,6 @@ function evalValue(str, scope) {
     if (!str) return undefined;
 
     if (lexical.isLiteral(str)) {
-        var a = lexical.parseLiteral(str);
         return lexical.parseLiteral(str);
     }
     if (lexical.isVariable(str)) {

@@ -1,10 +1,8 @@
 const Scope = require('./src/scope');
-const assert = require('assert');
 const tokenizer = require('./src/tokenizer.js');
+const fs = require('fs');
 const Render = require('./src/render.js');
 const lexical = require('./src/lexical.js');
-const path = require("path");
-const fs = require('fs');
 const Tag = require('./src/tag.js');
 const Filter = require('./src/filter.js');
 const Template = require('./src/parser');
@@ -75,9 +73,11 @@ var _engine = {
         return this.tag.register(name, tag);
     },
     handleCache: function(filepath) {
-        assert(filepath, 'filepath cannot be null');
-        filepath = path.resolve(this.options.root, filepath);
-        if (path.extname(filepath) === '') {
+        if (!filepath) throw new Error('filepath cannot be null');
+
+        filepath = resolvePath(this.options.root, filepath);
+
+        if (!filepath.match(/\.\w+$/)) {
             filepath += this.options.extname;
         }
 
@@ -112,6 +112,19 @@ function factory(options) {
 
     engine.init(Tag(), Filter(), options);
     return engine;
+}
+
+function resolvePath(root, path) {
+    if (path[0] == '/') return path;
+
+    var arr = root.split('/').concat(path.split('/'));
+    var result = [];
+    arr.forEach(function(slug) {
+        if (slug == '..') result.pop();
+        else if (!slug || slug == '.');
+        else result.push(slug);
+    });
+    return '/' + result.join('/');
 }
 
 factory.lexical = lexical;

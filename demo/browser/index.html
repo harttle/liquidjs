@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title></title>
-  <script src="../../dist/shopify-liquid.min.js"></script>
+  <script src="../../dist/liquid.js"></script>
 </head>
 
 <body>
@@ -12,9 +12,11 @@
   <script>
     var engine = window.Liquid();
 
-    var src = '{{ name | capitalize}}';
+    var src = 'Welcome to {{ name | capitalize}}, ' +
+      'access time: {{date|date: "%Y-%m-%d %H:%M:%S"}}';
     var ctx = {
-      name: 'welcome to Shopify Liquid'
+      name: 'Liquid',
+      date: new Date()
     };
     engine.parseAndRender(src, ctx)
       .then(function(html) {

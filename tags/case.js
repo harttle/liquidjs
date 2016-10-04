@@ -1,5 +1,4 @@
 var Liquid = require('..');
-var lexical = Liquid.lexical;
 
 module.exports = function(liquid) {
     liquid.registerTag('case', {

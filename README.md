@@ -101,7 +101,7 @@ And `window.Liquid` is what you want.
 ```html
 <html lang="en">
 <head>
-  <script src="shopify-liquid.min.js"></script>
+  <script src="dist/liquid.min.js"></script>
 </head>
 <body>
   <script>

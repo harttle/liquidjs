@@ -1,7 +1,6 @@
 var Liquid = require('..');
 var Promise = require('any-promise');
 var lexical = Liquid.lexical;
-var withRE = new RegExp(`with\\s+(${lexical.value.source})`);
 
 module.exports = function(liquid) {
 
@@ -35,14 +34,6 @@ module.exports = function(liquid) {
                     e.file = layout;
                     throw e;
                 });
-
-//            var tpl = liquid.handleCache(layout);
-//
-//            scope.push({});
-//            liquid.renderer.renderTemplates(this.tpls, scope);  // what's the point of this line?
-//            var html = liquid.renderer.renderTemplates(tpl, scope);
-//            scope.pop();
-//            return html;
         }
     });
 
@@ -75,12 +66,6 @@ module.exports = function(liquid) {
                 promise = Promise.resolve(html);
             }
             return promise;
-
-//            if(html === undefined){
-//                html = liquid.renderer.renderTemplates(this.tpls, scope);
-//            }
-//            scope.set(`_liquid.blocks.${this.block}`, html);
-//            return html;
         }
     });
 

@@ -1,5 +1,3 @@
-const lexical = require('./lexical.js');
-
 var Scope = {
     safeGet: function(str) {
         var i;

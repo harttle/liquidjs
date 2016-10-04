@@ -1,5 +1,3 @@
-const util = require('util');
-
 function TokenizationError(message, input, line) {
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
@@ -8,17 +6,20 @@ function TokenizationError(message, input, line) {
     this.input = input;
     this.line = line;
 }
-util.inherits(TokenizationError, Error);
+TokenizationError.prototype = Object.create(Error.prototype);
+TokenizationError.prototype.constructor = TokenizationError;
 
-function ParseError(message, input, line) {
+function ParseError(message, input, line, e) {
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
+    this.originalError = e;
 
     this.message = message || "";
     this.input = input;
     this.line = line;
 }
-util.inherits(ParseError, Error);
+ParseError.prototype = Object.create(Error.prototype);
+ParseError.prototype.constructor = ParseError;
 
 module.exports = {
     TokenizationError, ParseError

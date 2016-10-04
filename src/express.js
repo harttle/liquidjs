@@ -1,11 +1,11 @@
 const Liquid = require('..');
 
 module.exports = function() {
+    var engine = Liquid({
+        root: '/root/',
+        extname: '.html'
+    });
 
-    var    engine = Liquid({
-            root: '/root/',
-            extname: '.html'
-        });
     function express(filePath, options, callback) {
         fs.readFile(filePath, function(err, content) {
             if (err) return callback(new Error(err));

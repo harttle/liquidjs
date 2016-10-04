@@ -37,7 +37,7 @@ describe('filters', function() {
     it('should support ceil 3', () => test('{{ "3.5" | ceil }}', '4'));
     it('should support ceil 4', () => test('{{ 183.357 | ceil }}', '184'));
 
-    it('should support date', function() {
+    it('should support date: %a %b %d %Y', function() {
         str = ctx.date.toDateString();
         return test('{{ date | date:"%a %b %d %Y"}}', str);
     });

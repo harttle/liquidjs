@@ -1,12 +1,10 @@
-const error = require('./error.js');
 const Exp = require('./expression.js');
-const assert = require('assert');
 const Promise = require('any-promise');
 
 var render = {
 
     renderTemplates: function(templates, scope, opts) {
-        assert(scope, 'unable to evalTemplates: scope undefined');
+        if(!scope) throw new Error('unable to evalTemplates: scope undefined');
         opts = opts || {};
         opts.strict_filters = opts.strict_filters || false;
 
@@ -90,7 +88,7 @@ var render = {
     },
 
     evalOutput: function(template, scope, opts) {
-        assert(scope, 'unable to evalOutput: scope undefined');
+        if(!scope) throw new Error('unable to evalOutput: scope undefined');
         var val = Exp.evalExp(template.initial, scope);
         template.filters.some(filter => {
             if (filter.error) {

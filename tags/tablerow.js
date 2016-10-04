@@ -30,9 +30,7 @@ module.exports = function(liquid) {
         render: function(scope, hash) {
             var collection = Liquid.evalExp(this.collection, scope) || [];
 
-            var html = '<table>',
-                promiseChain = Promise.resolve(''); // create an empty promise to begin the chain
-                length = collection.length;
+            var html = '<table>';
             var offset = hash.offset || 0;
             var limit = (hash.limit === undefined) ? collection.length : hash.limit;
 

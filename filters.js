@@ -1,4 +1,5 @@
-const strftime = require('strftime').timezone(-(new Date()).getTimezoneOffset());
+//const strftime = require('strftime').timezone(-(new Date()).getTimezoneOffset());
+const strftime = require('./src/strftime.js');
 
 module.exports = function(liquid) {
     liquid.registerFilter('abs', v => Math.abs(v));
@@ -7,7 +8,8 @@ module.exports = function(liquid) {
         (str || '').charAt(0).toUpperCase() + str.slice(1));
     liquid.registerFilter('ceil', v => Math.ceil(v));
 
-    liquid.registerFilter('date', (v, arg) => strftime(arg, v));
+    //liquid.registerFilter('date', (v, arg) => strftime(arg, v));
+    liquid.registerFilter('date', (v, arg) => strftime(v, arg));
 
     liquid.registerFilter('default', (v, arg) => arg || v);
     liquid.registerFilter('divided_by', (v, arg) => Math.floor(v / arg));

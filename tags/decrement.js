@@ -1,6 +1,5 @@
 const Liquid = require('..');
 const lexical = Liquid.lexical;
-const error = Liquid.error;
 
 module.exports = function(liquid) {
 

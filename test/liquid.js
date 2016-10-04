@@ -74,14 +74,27 @@ describe('liquid', function() {
         it('should render file', function() {
             return engine.renderFile('/root/files/foo.html', ctx).should.eventually.equal('foo');
         });
-        it('should render file relative to root', function() {
-            return engine.renderFile('files/foo.html', ctx).should.eventually.equal('foo');
+        it('should accept relative path', function() {
+            return expect(engine.renderFile('files/foo.html')).to.eventually.equal('foo');
         });
         it('should render file with context', function() {
             return engine.renderFile('/root/files/name.html', ctx).should.eventually.equal('My name is harttle.');
         });
-        it('should render file with default extname', function() {
+        it('should use default extname', function() {
             return engine.renderFile('files/name', ctx).should.eventually.equal('My name is harttle.');
+        });
+        it('should accept root with no trailing slash', function(){
+            engine = Liquid({
+                root: '/root',
+                extname: '.html'
+            });
+            return expect(engine.renderFile('files/foo.html')).to.eventually.equal('foo');
+        });
+        it('should accept dot path', function(){
+            return expect(engine.renderFile('./files/foo.html')).to.eventually.equal('foo');
+        });
+        it('should accept double-dot path', function(){
+            return expect(engine.renderFile('files/foo/../foo.html')).to.eventually.equal('foo');
         });
     });
     describe('#express()', function() {
