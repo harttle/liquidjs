@@ -273,18 +273,17 @@ var _engine = {
 
         if (!filepath) throw new Error('filepath cannot be null');
 
-        filepath = resolvePath(this.options.root, filepath);
-
-        if (!filepath.match(/\.\w+$/)) {
-            filepath += this.options.extname;
-        }
-
         return this.getTemplate(filepath).then(function (html) {
             var tpl = _this2.options.cache && _this2.cache[filepath] || _this2.parse(html);
             return _this2.options.cache ? _this2.cache[filepath] = tpl : tpl;
         });
     },
     getTemplate: function getTemplate(filepath) {
+        filepath = resolvePath(this.options.root, filepath);
+
+        if (!filepath.match(/\.\w+$/)) {
+            filepath += this.options.extname;
+        }
         return new Promise(function (resolve, reject) {
             fs.readFile(filepath, 'utf8', function (err, html) {
                 err ? reject(err) : resolve(html);

@@ -75,12 +75,6 @@ var _engine = {
     handleCache: function(filepath) {
         if (!filepath) throw new Error('filepath cannot be null');
 
-        filepath = resolvePath(this.options.root, filepath);
-
-        if (!filepath.match(/\.\w+$/)) {
-            filepath += this.options.extname;
-        }
-
         return this.getTemplate(filepath)
             .then((html) => {
                 var tpl = this.options.cache && this.cache[filepath] || this.parse(html);
@@ -88,6 +82,11 @@ var _engine = {
             });
     },
     getTemplate: function(filepath) {
+        filepath = resolvePath(this.options.root, filepath);
+
+        if (!filepath.match(/\.\w+$/)) {
+            filepath += this.options.extname;
+        }
         return new Promise(function(resolve, reject) {
             fs.readFile(filepath, 'utf8', function(err, html) {
                 err ? reject(err) : resolve(html);
