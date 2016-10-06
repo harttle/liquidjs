@@ -21,7 +21,17 @@ module.exports = function(liquid) {
                 hash[filepath] = Liquid.evalValue(this.with, scope);
             }
             return liquid.handleCache(filepath)
-                .then((templates) => {
+                .then((result) => {
+                    var templates = [];
+                    if (Array.isArray(result)) {
+                        templates = result;
+                    }
+                    else if (result !== null && typeof result === 'object' && 'templates' in result) {
+                        // result should be an object with signature {templates: [], model: {}}
+                        templates = result.templates;
+                        // Also push the model from the result onto the scope
+                        scope.push(result.model);
+                    }
                     scope.push(hash);
                     return liquid.renderer.renderTemplates(templates, scope);
                 })
