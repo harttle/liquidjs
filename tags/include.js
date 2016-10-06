@@ -16,6 +16,7 @@ module.exports = function(liquid) {
             }
         },
         render: function(scope, hash) {
+            var isTemplateObject = false;
             var filepath = Liquid.evalValue(this.value, scope);
             if(this.with){
                 hash[filepath] = Liquid.evalValue(this.with, scope);
@@ -28,6 +29,7 @@ module.exports = function(liquid) {
                     }
                     else if (result !== null && typeof result === 'object' && 'templates' in result) {
                         // result should be an object with signature {templates: [], model: {}}
+                        isTemplateObject = true;
                         templates = result.templates;
                         // Also push the model from the result onto the scope
                         scope.push(result.model);
@@ -36,6 +38,9 @@ module.exports = function(liquid) {
                     return liquid.renderer.renderTemplates(templates, scope);
                 })
                 .then((html) => {
+                    if (isTemplateObject) {
+                        scope.pop();
+                    }
                     scope.pop();
                     return html;
                 });
