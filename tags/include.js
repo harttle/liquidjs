@@ -38,10 +38,10 @@ module.exports = function(liquid) {
                     return liquid.renderer.renderTemplates(templates, scope);
                 })
                 .then((html) => {
+                    scope.pop(); // hash
                     if (isTemplateObject) {
-                        scope.pop();
+                        scope.pop(); // template model
                     }
-                    scope.pop();
                     return html;
                 });
 
