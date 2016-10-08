@@ -1,7 +1,5 @@
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
-const should = chai.should();
-const expect = chai.expect;
 var liquid = require('..')(),
     ctx;
 chai.use(chaiAsPromised);
@@ -14,6 +12,7 @@ function test(src, dst) {
         obj: {
             foo: 'bar'
         },
+        func: function() {},
         posts: [{
             category: 'foo'
         }, {
@@ -38,7 +37,7 @@ describe('filters', function() {
     it('should support ceil 4', () => test('{{ 183.357 | ceil }}', '184'));
 
     it('should support date: %a %b %d %Y', function() {
-        str = ctx.date.toDateString();
+        var str = ctx.date.toDateString();
         return test('{{ date | date:"%a %b %d %Y"}}', str);
     });
 
@@ -58,12 +57,15 @@ describe('filters', function() {
     it('should support escape 2', function() {
         return test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara');
     });
+    it('should support excape function', function() {
+        return test('{{ func | escape }}', 'function () {}');
+    });
 
     it('should support escape_once 1', () => test('{{ "1 < 2 & 3" | escape_once }}', '1 &lt; 2 &amp; 3'));
     it('should support escape_once 2', () => test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3'));
 
     it('should support split/first', function() {
-        src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
+        var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
             '{{ my_array | first }}';
         return test(src, 'apples');
     });
@@ -74,19 +76,19 @@ describe('filters', function() {
     it('should support floor 4', () => test('{{ "3.5" | floor }}', '3'));
 
     it('should support join', function() {
-        src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
+        var src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
             '{{ beatles | join: " and " }}';
         return test(src, 'John and Paul and George and Ringo');
     });
 
     it('should support split/last', function() {
-        src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
+        var src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
             '{{ my_array|last }}';
         return test(src, 'tiger');
     });
 
     it('should support lstrip', function() {
-        src = '{{ "          So much room for activities!          " | lstrip }}';
+        var src = '{{ "          So much room for activities!          " | lstrip }}';
         return test(src, 'So much room for activities!          ');
     });
 
@@ -103,12 +105,12 @@ describe('filters', function() {
     it('should support modulo 3', () => test('{{ 183.357 | modulo: 12 }}', '3.357'));
 
     it('should support string_with_newlines', function() {
-        src = '{% capture string_with_newlines %}\n' +
+        var src = '{% capture string_with_newlines %}\n' +
             'Hello\n' +
             'there\n' +
             '{% endcapture %}' +
             '{{ string_with_newlines | newline_to_br }}';
-        dst = '<br />' +
+        var dst = '<br />' +
             'Hello<br />' +
             'there<br />';
         return test(src, dst);

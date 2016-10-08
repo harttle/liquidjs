@@ -12,7 +12,7 @@ module.exports = function (liquid) {
         return v + arg;
     });
     liquid.registerFilter('capitalize', function (str) {
-        return (str || '').charAt(0).toUpperCase() + str.slice(1);
+        return stringify(str).charAt(0).toUpperCase() + str.slice(1);
     });
     liquid.registerFilter('ceil', function (v) {
         return Math.ceil(v);
@@ -42,7 +42,7 @@ module.exports = function (liquid) {
     };
 
     function escape(str) {
-        return (str || '').replace(/&|<|>|"|'/g, function (m) {
+        return stringify(str).replace(/&|<|>|"|'/g, function (m) {
             return escapeMap[m];
         });
     }
@@ -57,7 +57,7 @@ module.exports = function (liquid) {
     };
 
     function unescape(str) {
-        return (str || '').replace(/&(amp|lt|gt|#34|#39);/g, function (m) {
+        return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) {
             return unescapeMap[m];
         });
     }
@@ -77,7 +77,7 @@ module.exports = function (liquid) {
         return v[v.length - 1];
     });
     liquid.registerFilter('lstrip', function (v) {
-        return (v || '').replace(/^\s+/, '');
+        return stringify(v).replace(/^\s+/, '');
     });
     liquid.registerFilter('map', function (arr, arg) {
         return arr.map(function (v) {
@@ -106,20 +106,20 @@ module.exports = function (liquid) {
         return v.replace(l, '');
     });
     liquid.registerFilter('replace', function (v, pattern, replacement) {
-        return (v || '').split(pattern).join(replacement);
+        return stringify(v).split(pattern).join(replacement);
     });
     liquid.registerFilter('replace_first', function (v, arg1, arg2) {
-        return (v || '').replace(arg1, arg2);
+        return stringify(v).replace(arg1, arg2);
     });
     liquid.registerFilter('reverse', function (v) {
-        return (v || '').reverse();
+        return v.reverse();
     });
     liquid.registerFilter('round', function (v, arg) {
         var amp = Math.pow(10, arg || 0);
         return Math.round(v * amp, arg) / amp;
     });
     liquid.registerFilter('rstrip', function (str) {
-        return (str || '').replace(/\s+$/, '');
+        return stringify(str).replace(/\s+$/, '');
     });
     liquid.registerFilter('size', function (v) {
         return v.length;
@@ -128,25 +128,25 @@ module.exports = function (liquid) {
         return v.substr(begin, length === undefined ? 1 : length);
     });
     liquid.registerFilter('sort', function (v, arg) {
-        return (v || '').sort(arg);
+        return v.sort(arg);
     });
     liquid.registerFilter('split', function (v, arg) {
-        return (v || '').split(arg);
+        return stringify(v).split(arg);
     });
     liquid.registerFilter('strip', function (v) {
-        return (v || '').trim();
+        return stringify(v).trim();
     });
     liquid.registerFilter('strip_html', function (v) {
-        return (v || '').replace(/<\/?\s*\w+\s*\/?>/g, '');
+        return stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, '');
     });
     liquid.registerFilter('strip_newlines', function (v) {
-        return (v || '').replace(/\n/g, '');
+        return stringify(v).replace(/\n/g, '');
     });
     liquid.registerFilter('times', function (v, arg) {
         return v * arg;
     });
     liquid.registerFilter('truncate', function (v, l, o) {
-        v = v || '';
+        v = stringify(v);
         o = o === undefined ? '...' : o;
         l = l || 16;
         if (v.length <= l) return v;
@@ -170,7 +170,7 @@ module.exports = function (liquid) {
         });
     });
     liquid.registerFilter('upcase', function (str) {
-        return (str || '').toUpperCase();
+        return stringify(str).toUpperCase();
     });
     liquid.registerFilter('url_encode', encodeURIComponent);
 };
@@ -182,6 +182,11 @@ function getFixed(v) {
 
 function getMaxFixed(l, r) {
     return Math.max(getFixed(l), getFixed(r));
+}
+
+function stringify(obj) {
+    obj = obj || "";
+    return obj + '';
 }
 
 function bindFixed(cb) {
