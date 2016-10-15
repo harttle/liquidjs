@@ -5,7 +5,7 @@ var quoteBalanced = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source}
 
 var number = /(?:-?\d+\.?\d*|\.?\d+)/;
 var bool = /true|false/;
-var identifier = /[a-zA-Z_$][a-zA-Z_$0-9]*/;
+var identifier = /[a-zA-Z_\-$][a-zA-Z_$0-9\-]*/;
 var subscript = new RegExp(`\\[(?:\\d+|${identifier.source}(?:\\.${identifier.source})*)\\]`);
 
 var quoted = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source})`);
