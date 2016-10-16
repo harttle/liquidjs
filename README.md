@@ -6,6 +6,10 @@
 [![Dependency manager](https://img.shields.io/david/harttle/shopify-liquid.svg?style=flat)](https://david-dm.org/harttle/shopify-liquid)
 
 A feature-rich [Liquid][shopify-liquid] implementation for Node.js, with compliance with [Jekyll][jekyll] and [Github Pages][gh].
+See:
+
+* [supported filter list](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters), and
+* [supported tag list](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
 
 Installation:
 
@@ -171,7 +175,7 @@ Footer
 ```javascript
 // Usage: {{ name | uppper }}
 engine.registerFilter('upper', function(v){
-  return v.toUpperCase();
+    return v.toUpperCase();
 });
 ```
 
@@ -194,87 +198,12 @@ engine.registerTag('upper', {
 
 > See existing tag implementations: <https://github.com/harttle/shopify-liquid/blob/master/tags/>
 
-## All Tags
+## Contribution Guide
 
-Documentation: <https://shopify.github.io/liquid/basics/introduction/#tags>
-
-Tag | Document | Source | Test
---- | --- | --- | ---
-`case/when` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/case.js) | [Test](test/tags/case.js)
-`if` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/if.js) | [Test](test/tags/if.js)
-`unless` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/unless.js) | [Test](test/tags/unless.js)
-`elsif/else` | [Document](https://shopify.github.io/liquid/tags/control-flow/) | [Source](tags/if.js) | [Test](test/tags/if.js)
-`for` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
-`break` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
-`continue` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
-`for: limit,offset,range,reversed` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/for.js) | [Test](test/tags/for.js)
-`cycle` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/cycle.js) | [Test](test/tags/cycle.js)
-`cycle: group` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/cycle.js) | [Test](test/tags/cycle.js)
-`tablerow` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/tablerow.js) | [Test](test/tags/tablerow.js)
-`tablerow: cols,limit,offset,range` | [Document](https://shopify.github.io/liquid/tags/iteration/) | [Source](tags/tablerow.js) | [Test](test/tags/tablerow.js)
-`assign` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/assign.js) | [Test](test/tags/assign.js)
-`capture` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/capture.js) | [Test](test/tags/capture.js)
-`increment` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/increment.js) | [Test](test/tags/increment.js)
-`decrement` | [Document](https://shopify.github.io/liquid/tags/variable/) | [Source](tags/decrement.js) | [Test](test/tags/decrement.js)
-`raw` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#raw) | [Source](tags/raw.js) | [Test](test/tags/raw.js)
-`comment` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#comment) | [Source](tags/comment.js) | [Test](test/tags/comment.js)
-`include` | [Document](https://help.shopify.com/themes/liquid/tags/theme-tags#include) | [Source](tags/include.js) | [Test](test/tags/include.js)
-`layout, block` | [Document](http://docs.mixture.io/templates/) | [Source](tags/layout.js) | [Test](test/tags/layout.js)
-
-
-## All Filters
-
-Documentation: <https://shopify.github.io/liquid/basics/introduction/#filters>
-
-Filter | Document | Source | Test
---- | --- | --- | ---
-`abs` | [Document](https://shopify.github.io/liquid/filters/abs/) | [Source](filters.js) | [Test](test/filters.js)
-`append` | [Document](https://shopify.github.io/liquid/filters/append) | [Source](filters.js) | [Test](test/filters.js)
-`capitalize` | [Document](https://shopify.github.io/liquid/filters/capitalize) | [Source](filters.js) | [Test](test/filters.js)
-`ceil` | [Document](https://shopify.github.io/liquid/filters/ceil) | [Source](filters.js) | [Test](test/filters.js)
-`date` | [Document](https://shopify.github.io/liquid/filters/date) | [Source](filters.js) | [Test](test/filters.js)
-`default` | [Document](https://shopify.github.io/liquid/filters/default) | [Source](filters.js) | [Test](test/filters.js)
-`divided_by` | [Document](https://shopify.github.io/liquid/filters/divided_by) | [Source](filters.js) | [Test](test/filters.js)
-`downcase` | [Document](https://shopify.github.io/liquid/filters/downcase) | [Source](filters.js) | [Test](test/filters.js)
-`escape` | [Document](https://shopify.github.io/liquid/filters/escape) | [Source](filters.js) | [Test](test/filters.js)
-`escape_once` | [Document](https://shopify.github.io/liquid/filters/escape_once) | [Source](filters.js) | [Test](test/filters.js)
-`first` | [Document](https://shopify.github.io/liquid/filters/first) | [Source](filters.js) | [Test](test/filters.js)
-`floor` | [Document](https://shopify.github.io/liquid/filters/floor) | [Source](filters.js) | [Test](test/filters.js)
-`join` | [Document](https://shopify.github.io/liquid/filters/join) | [Source](filters.js) | [Test](test/filters.js)
-`last` | [Document](https://shopify.github.io/liquid/filters/last) | [Source](filters.js) | [Test](test/filters.js)
-`lstrip` | [Document](https://shopify.github.io/liquid/filters/lstrip) | [Source](filters.js) | [Test](test/filters.js)
-`map` | [Document](https://shopify.github.io/liquid/filters/map) | [Source](filters.js) | [Test](test/filters.js)
-`minus` | [Document](https://shopify.github.io/liquid/filters/minus) | [Source](filters.js) | [Test](test/filters.js)
-`modulo` | [Document](https://shopify.github.io/liquid/filters/modulo) | [Source](filters.js) | [Test](test/filters.js)
-`newline_to_br` | [Document](https://shopify.github.io/liquid/filters/newline_to_br) | [Source](filters.js) | [Test](test/filters.js)
-`plus` | [Document](https://shopify.github.io/liquid/filters/plus) | [Source](filters.js) | [Test](test/filters.js)
-`prepend` | [Document](https://shopify.github.io/liquid/filters/prepend) | [Source](filters.js) | [Test](test/filters.js)
-`remove` | [Document](https://shopify.github.io/liquid/filters/remove) | [Source](filters.js) | [Test](test/filters.js)
-`remove_first` | [Document](https://shopify.github.io/liquid/filters/remove_first) | [Source](filters.js) | [Test](test/filters.js)
-`replace` | [Document](https://shopify.github.io/liquid/filters/replace) | [Source](filters.js) | [Test](test/filters.js)
-`replace_first` | [Document](https://shopify.github.io/liquid/filters/replace_first) | [Source](filters.js) | [Test](test/filters.js)
-`reverse` | [Document](https://shopify.github.io/liquid/filters/reverse) | [Source](filters.js) | [Test](test/filters.js)
-`round` | [Document](https://shopify.github.io/liquid/filters/round) | [Source](filters.js) | [Test](test/filters.js)
-`rstrip` | [Document](https://shopify.github.io/liquid/filters/rstrip) | [Source](filters.js) | [Test](test/filters.js)
-`size` | [Document](https://shopify.github.io/liquid/filters/size) | [Source](filters.js) | [Test](test/filters.js)
-`slice` | [Document](https://shopify.github.io/liquid/filters/slice) | [Source](filters.js) | [Test](test/filters.js)
-`sort` | [Document](https://shopify.github.io/liquid/filters/sort) | [Source](filters.js) | [Test](test/filters.js)
-`split` | [Document](https://shopify.github.io/liquid/filters/split) | [Source](filters.js) | [Test](test/filters.js)
-`strip` | [Document](https://shopify.github.io/liquid/filters/strip) | [Source](filters.js) | [Test](test/filters.js)
-`strip_html` | [Document](https://shopify.github.io/liquid/filters/strip_html) | [Source](filters.js) | [Test](test/filters.js)
-`strip_newlines` | [Document](https://shopify.github.io/liquid/filters/strip_newlines) | [Source](filters.js) | [Test](test/filters.js)
-`times` | [Document](https://shopify.github.io/liquid/filters/times) | [Source](filters.js) | [Test](test/filters.js)
-`truncate` | [Document](https://shopify.github.io/liquid/filters/truncate) | [Source](filters.js) | [Test](test/filters.js)
-`truncatewords` | [Document](https://shopify.github.io/liquid/filters/truncatewords) | [Source](filters.js) | [Test](test/filters.js)
-`uniq` | [Document](https://shopify.github.io/liquid/filters/uniq) | [Source](filters.js) | [Test](test/filters.js)
-`upcase` | [Document](https://shopify.github.io/liquid/filters/upcase) | [Source](filters.js) | [Test](test/filters.js)
-`url_encode` | [Document](https://shopify.github.io/liquid/filters/url_encode) | [Source](filters.js) | [Test](test/filters.js)
-
-## Operators
-
-Documentation: <https://shopify.github.io/liquid/basics/operators/>
-
-`==`, `!=`, `>`, `<`, `>=`, `<=`, `or`, `and`, `contains`.
+1. Make a clone.
+2. Write a test to demonstrate your feature is not supported yet.
+3. Optionaly, change source files to make all test pass.
+4. Create a pull request.
 
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node
