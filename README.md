@@ -200,7 +200,7 @@ engine.registerTag('upper', {
 
 ## Contribution Guide
 
-1. Make a clone.
+1. Make a fork.
 2. Write a test to demonstrate your feature is not supported yet.
 3. Optionaly, change source files to make all test pass.
 4. Create a pull request.
