@@ -381,6 +381,10 @@ var strftime = function(d, format) {
     var output = '';
     var remaining = format;
 
+    if(d == 'now') {
+      d = new Date();
+    }
+
     while (true) {
         var r = /%./g;
         var results = r.exec(remaining);

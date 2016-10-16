@@ -1,3 +1,5 @@
+const lexical = require('./lexical');
+
 var Scope = {
     safeGet: function(str) {
         var i;
@@ -57,9 +59,15 @@ function setPropertyByPath(obj, path, val) {
     return obj[path] = val;
 }
 
+function resolveHashKeys() {
+  return `.${getPropertyByPath(this, arguments[1])}`;
+}
+
 function getPropertyByPath(obj, path) {
     if (path instanceof String || typeof path === 'string') {
-        var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
+        var resolveRE = new RegExp(`\\[(\\d+|${lexical.identifier.source}(?:\\.${lexical.identifier.source})*)\\]`);
+        var pathWithResolvedBrackets = path.replace(resolveRE, resolveHashKeys.bind(obj));
+        var paths = pathWithResolvedBrackets.split('.');
         paths.forEach(p => obj = obj && obj[p]);
         return obj;
     }

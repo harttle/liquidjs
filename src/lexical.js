@@ -5,8 +5,8 @@ var quoteBalanced = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source}
 
 var number = /(?:-?\d+\.?\d*|\.?\d+)/;
 var bool = /true|false/;
-var identifier = /[a-zA-Z_$][a-zA-Z_$0-9]*/;
-var subscript = /\[\d+\]/;
+var identifier = /[a-zA-Z_\-$][a-zA-Z_$0-9\-]*/;
+var subscript = new RegExp(`\\[(?:\\d+|${identifier.source}(?:\\.${identifier.source})*)\\]`);
 
 var quoted = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source})`);
 var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`);
@@ -70,7 +70,7 @@ function parseLiteral(str) {
 
 module.exports = {
     quoted, number, bool, literal, filter,
-    hash, hashCapture,
+    hash, hashCapture, subscript,
     range, rangeCapture, 
     identifier, value, quoteBalanced, operators,
     quotedLine, numberLine, boolLine, rangeLine, literalLine, filterLine, tagLine,
