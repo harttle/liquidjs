@@ -72,4 +72,19 @@ describe('scope', function() {
         expect(scope.get('foo1')).to.equal(undefined);
         expect(scope.get('bar[1].b[1]')).to.equal(2);
     });
+
+    it('should unshift scope', function() {
+        scope.unshift({foo: 'blue', foo1: 'foo1'})
+        scope.get('foo').should.equal('bar');
+        scope.get('foo1').should.equal('foo1');
+        scope.get('bar[1].b[1]').should.equal(2);
+    });
+
+    it('should shift scope', function() {
+        scope.unshift({foo: 'blue', foo1: 'foo1'});
+        scope.shift();
+        expect(scope.get('foo')).to.equal('bar');
+        expect(scope.get('foo1')).to.equal(undefined);
+        expect(scope.get('bar[1].b[1]')).to.equal(2);
+    });
 });

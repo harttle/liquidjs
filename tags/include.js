@@ -31,8 +31,12 @@ module.exports = function(liquid) {
                         // result should be an object with signature {templates: [], model: {}}
                         isTemplateObject = true;
                         templates = result.templates;
-                        // Also push the model from the result onto the scope
-                        scope.push(result.model);
+                        // Also add the model from the result onto the beginning of the scope array (unshift).
+                        //  We want it at the beginning of the scope stack because we want the outer template to
+                        //  override the default model that comes with this included template. e.g. a partial template
+                        //  called 'header' might have a default title property value, but the template including
+                        //  'header' should have its own title property supersede the default on the header template.
+                        scope.unshift(result.model);
                     }
                     scope.push(hash);
                     return liquid.renderer.renderTemplates(templates, scope);
@@ -40,7 +44,8 @@ module.exports = function(liquid) {
                 .then((html) => {
                     scope.pop(); // hash
                     if (isTemplateObject) {
-                        scope.pop(); // template model
+                        // template model was added to the beginning of the scope array, so remove it (shift)
+                        scope.shift(); // template model
                     }
                     return html;
                 });
