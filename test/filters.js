@@ -1,8 +1,9 @@
 const chai = require("chai");
-const chaiAsPromised = require("chai-as-promised");
+const expect = chai.expect;
+chai.use(require("chai-as-promised"));
+
 var liquid = require('..')(),
     ctx;
-chai.use(chaiAsPromised);
 
 function test(src, dst) {
     ctx = {
@@ -19,7 +20,7 @@ function test(src, dst) {
             category: 'bar'
         }]
     };
-    return liquid.parseAndRender(src, ctx).should.eventually.equal(dst);
+    return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(dst);
 }
 
 describe('filters', function() {
@@ -36,9 +37,16 @@ describe('filters', function() {
     it('should support ceil 3', () => test('{{ "3.5" | ceil }}', '4'));
     it('should support ceil 4', () => test('{{ 183.357 | ceil }}', '184'));
 
-    it('should support date: %a %b %d %Y', function() {
-        var str = ctx.date.toDateString();
-        return test('{{ date | date:"%a %b %d %Y"}}', str);
+    describe('date', function(){
+        it('should support %a %b %d %Y', function() {
+            var str = ctx.date.toDateString();
+            return test('{{ date | date:"%a %b %d %Y"}}', str);
+        });
+        it('should support "now"', function() {
+            var year = (new Date()).getFullYear();
+            var src = '{{ "now" | date: "%Y"}}';
+            return expect(liquid.parseAndRender(src)).to.eventually.match(/\d{4}/);
+        });
     });
 
     it('should support default', () => test('{{false |default: "a"}}', 'a'));

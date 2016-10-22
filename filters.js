@@ -1,5 +1,5 @@
-//const strftime = require('strftime').timezone(-(new Date()).getTimezoneOffset());
 const strftime = require('./src/strftime.js');
+const _ = require('./src/util/underscore.js');
 
 module.exports = function(liquid) {
     liquid.registerFilter('abs', v => Math.abs(v));
@@ -8,8 +8,10 @@ module.exports = function(liquid) {
         stringify(str).charAt(0).toUpperCase() + str.slice(1));
     liquid.registerFilter('ceil', v => Math.ceil(v));
 
-    //liquid.registerFilter('date', (v, arg) => strftime(arg, v));
-    liquid.registerFilter('date', (v, arg) => strftime(v, arg));
+    liquid.registerFilter('date', (v, arg) => {
+        if (v === 'now') v = new Date();
+        return strftime(v, arg);
+    });
 
     liquid.registerFilter('default', (v, arg) => arg || v);
     liquid.registerFilter('divided_by', (v, arg) => Math.floor(v / arg));
@@ -108,7 +110,7 @@ function getMaxFixed(l, r) {
     return Math.max(getFixed(l), getFixed(r));
 }
 
-function stringify(obj){
+function stringify(obj) {
     obj = obj || "";
     return obj + '';
 }
