@@ -8,7 +8,10 @@ describe('util/strftime', function() {
     it('should format week by %U', function() {
         expect(t(now, '%U')).to.equal('43');
     });
-    it('should format GMT string', function() {
-        expect(t(now, '%Y-%m-%dT%H:%M:%S')).to.equal('2016-10-24T00:15:23');
+    it('should format locale date string', function() {
+        expect(t(now, '%Y-%m-%d')).to.equal(now.toLocaleDateString());
+    });
+    it('should format locale date string', function() {
+        expect(t(now, '%H:%M:%S')).to.equal(now.toLocaleTimeString());
     });
 });
