@@ -1,14 +1,16 @@
 // quote related
 var singleQuoted = /'[^']*'/;
 var doubleQuoted = /"[^"]*"/;
-var quoteBalanced = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source}|[^'"])*`);
+var quoted = new RegExp(`${singleQuoted.source}|${doubleQuoted.source}`);
+var quoteBalanced = new RegExp(`(?:${quoted.source}|[^'"])*`);
 
-var number = /(?:-?\d+\.?\d*|\.?\d+)/;
+// values
+var integer = /-?\d+/;
+var number = /-?\d+\.?\d*|\.?\d+/;
 var bool = /true|false/;
-var identifier = /[a-zA-Z_$][a-zA-Z_$0-9]*/;
-var subscript = /\[\d+\]/;
+var identifier = /[\w-]+/;
+var subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`);
 
-var quoted = new RegExp(`(?:${singleQuoted.source}|${doubleQuoted.source})`);
 var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`);
 var variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subscript.source})*`);
 
@@ -69,7 +71,7 @@ function parseLiteral(str) {
 }
 
 module.exports = {
-    quoted, number, bool, literal, filter,
+    quoted, number, bool, literal, filter, integer,
     hash, hashCapture,
     range, rangeCapture, 
     identifier, value, quoteBalanced, operators,

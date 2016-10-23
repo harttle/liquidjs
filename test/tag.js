@@ -1,8 +1,7 @@
-var chai = require("chai");
-var sinonChai = require("sinon-chai");
-var sinon = require("sinon");
-var expect = chai.expect;
-chai.use(sinonChai);
+const chai = require("chai");
+const sinon = require("sinon");
+const expect = chai.expect;
+chai.use(require("sinon-chai"));
 
 var tag = require('../src/tag.js')();
 var Scope = require('../src/scope.js');

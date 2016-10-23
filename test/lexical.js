@@ -39,10 +39,25 @@ describe('lexical', function() {
         lexical.isLiteral("'a bcd'").should.equal(true);
     });
 
-    it("should test variable", function() {
-        lexical.isVariable("foo").should.equal(true);
-        lexical.isVariable("foo.bar.foo").should.equal(true);
-        lexical.isVariable("foo[0].b").should.equal(true);
+    describe('.isVariable()', function() {
+        it('should return true for foo', function(){
+            lexical.isVariable("foo").should.equal(true);
+        });
+        it('should return true for.bar.foo', function(){
+            lexical.isVariable("foo.bar.foo").should.equal(true);
+        });
+        it('should return true for foo[0].b', function(){
+            lexical.isVariable("foo[0].b").should.equal(true);
+        });
+        it('should return true for 0a', function(){
+            lexical.isVariable("0a").should.equal(true);
+        });
+        it('should return true for foo[a.b]', function(){
+            lexical.isVariable("foo[a.b]").should.equal(true);
+        });
+        it('should return true for foo[a.b]', function(){
+            lexical.isVariable("foo['a[0]']").should.equal(true);
+        });
     });
 
     it('should test none literal', function() {
@@ -55,7 +70,6 @@ describe('lexical', function() {
         lexical.isVariable("a.").should.equal(false);
         lexical.isVariable(".b").should.equal(false);
         lexical.isVariable(".").should.equal(false);
-        lexical.isVariable("0a").should.equal(false);
         lexical.isVariable("[0][12].bar[0]").should.equal(false);
     });
 

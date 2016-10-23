@@ -1,93 +1,82 @@
 const strftime = require('./src/strftime.js');
 const _ = require('./src/util/underscore.js');
 
-module.exports = function(liquid) {
-    liquid.registerFilter('abs', v => Math.abs(v));
-    liquid.registerFilter('append', (v, arg) => v + arg);
-    liquid.registerFilter('capitalize', str =>
-        stringify(str).charAt(0).toUpperCase() + str.slice(1));
-    liquid.registerFilter('ceil', v => Math.ceil(v));
+var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&#34;',
+    "'": '&#39;',
+};
+var unescapeMap = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&#34;': '"',
+    '&#39;': "'",
+};
 
-    liquid.registerFilter('date', (v, arg) => {
+var filters = {
+    'abs': v => Math.abs(v),
+    'append': (v, arg) => v + arg,
+    'capitalize': str => stringify(str).charAt(0).toUpperCase() + str.slice(1),
+    'ceil': v => Math.ceil(v),
+    'date': (v, arg) => {
         if (v === 'now') v = new Date();
         return strftime(v, arg);
-    });
+    },
+    'default': (v, arg) => arg || v,
+    'divided_by': (v, arg) => Math.floor(v / arg),
+    'downcase': v => v.toLowerCase(),
+    'escape': escape,
 
-    liquid.registerFilter('default', (v, arg) => arg || v);
-    liquid.registerFilter('divided_by', (v, arg) => Math.floor(v / arg));
-    liquid.registerFilter('downcase', v => v.toLowerCase());
-
-    var escapeMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&#34;',
-        "'": '&#39;',
-    };
-
-    function escape(str) {
-        return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m]);
-    }
-    liquid.registerFilter('escape', escape);
-
-    var unescapeMap = {
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&#34;': '"',
-        '&#39;': "'",
-    };
-
-    function unescape(str) {
-        return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m]);
-    }
-    liquid.registerFilter('escape_once', str => escape(unescape(str)));
-    liquid.registerFilter('first', v => v[0]);
-    liquid.registerFilter('floor', v => Math.floor(v));
-    liquid.registerFilter('join', (v, arg) => v.join(arg));
-    liquid.registerFilter('last', v => v[v.length - 1]);
-    liquid.registerFilter('lstrip', v => stringify(v).replace(/^\s+/, ''));
-    liquid.registerFilter('map', (arr, arg) => arr.map(v => v[arg]));
-    liquid.registerFilter('minus', bindFixed((v, arg) => v - arg));
-    liquid.registerFilter('modulo', bindFixed((v, arg) => v % arg));
-    liquid.registerFilter('newline_to_br', v => v.replace(/\n/g, '<br />'));
-    liquid.registerFilter('plus', bindFixed((v, arg) => v + arg));
-    liquid.registerFilter('prepend', (v, arg) => arg + v);
-    liquid.registerFilter('remove', (v, arg) => v.split(arg).join(''));
-    liquid.registerFilter('remove_first', (v, l) => v.replace(l, ''));
-    liquid.registerFilter('replace', (v, pattern, replacement) =>
-        stringify(v).split(pattern).join(replacement));
-    liquid.registerFilter('replace_first', (v, arg1, arg2) => stringify(v).replace(arg1, arg2));
-    liquid.registerFilter('reverse', v => v.reverse());
-    liquid.registerFilter('round', (v, arg) => {
+    'escape_once': str => escape(unescape(str)),
+    'first': v => v[0],
+    'floor': v => Math.floor(v),
+    'join': (v, arg) => v.join(arg),
+    'last': v => v[v.length - 1],
+    'lstrip': v => stringify(v).replace(/^\s+/, ''),
+    'map': (arr, arg) => arr.map(v => v[arg]),
+    'minus': bindFixed((v, arg) => v - arg),
+    'modulo': bindFixed((v, arg) => v % arg),
+    'newline_to_br': v => v.replace(/\n/g, '<br />'),
+    'plus': bindFixed((v, arg) => v + arg),
+    'prepend': (v, arg) => arg + v,
+    'remove': (v, arg) => v.split(arg).join(''),
+    'remove_first': (v, l) => v.replace(l, ''),
+    'replace': (v, pattern, replacement) =>
+        stringify(v).split(pattern).join(replacement),
+    'replace_first': (v, arg1, arg2) => stringify(v).replace(arg1, arg2),
+    'reverse': v => v.reverse(),
+    'round': (v, arg) => {
         var amp = Math.pow(10, arg || 0);
         return Math.round(v * amp, arg) / amp;
-    });
-    liquid.registerFilter('rstrip', str => stringify(str).replace(/\s+$/, ''));
-    liquid.registerFilter('size', v => v.length);
-    liquid.registerFilter('slice', (v, begin, length) =>
-        v.substr(begin, length === undefined ? 1 : length));
-    liquid.registerFilter('sort', (v, arg) => v.sort(arg));
-    liquid.registerFilter('split', (v, arg) => stringify(v).split(arg));
-    liquid.registerFilter('strip', (v) => stringify(v).trim());
-    liquid.registerFilter('strip_html', v => stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, ''));
-    liquid.registerFilter('strip_newlines', v => stringify(v).replace(/\n/g, ''));
-    liquid.registerFilter('times', (v, arg) => v * arg);
-    liquid.registerFilter('truncate', (v, l, o) => {
+    },
+    'rstrip': str => stringify(str).replace(/\s+$/, ''),
+    'size': v => v.length,
+    'slice': (v, begin, length) =>
+        v.substr(begin, length === undefined ? 1 : length),
+    'sort': (v, arg) => v.sort(arg),
+    'split': (v, arg) => stringify(v).split(arg),
+    'strip': (v) => stringify(v).trim(),
+    'strip_html': v => stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, ''),
+    'strip_newlines': v => stringify(v).replace(/\n/g, ''),
+    'times': (v, arg) => v * arg,
+    'truncate': (v, l, o) => {
         v = stringify(v);
         o = (o === undefined) ? '...' : o;
         l = l || 16;
         if (v.length <= l) return v;
         return v.substr(0, l - o.length) + o;
-    });
-    liquid.registerFilter('truncatewords', (v, l, o) => {
+    },
+    'truncatewords': (v, l, o) => {
         if (o === undefined) o = '...';
         var arr = v.split(' ');
         var ret = arr.slice(0, l).join(' ');
         if (arr.length > l) ret += o;
         return ret;
-    });
-    liquid.registerFilter('uniq', function(arr) {
+    },
+    'uniq': function(arr) {
         var u = {};
         return (arr || []).filter(val => {
             if (u.hasOwnProperty(val)) {
@@ -96,10 +85,18 @@ module.exports = function(liquid) {
             u[val] = true;
             return true;
         });
-    });
-    liquid.registerFilter('upcase', str => stringify(str).toUpperCase());
-    liquid.registerFilter('url_encode', encodeURIComponent);
+    },
+    'upcase': str => stringify(str).toUpperCase(),
+    'url_encode': encodeURIComponent
 };
+
+function escape(str) {
+    return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m]);
+}
+
+function unescape(str) {
+    return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m]);
+}
 
 function getFixed(v) {
     var p = (v + "").split(".");
@@ -121,3 +118,10 @@ function bindFixed(cb) {
         return cb(l, r).toFixed(f);
     };
 }
+
+function registerAll(liquid) {
+    return _.forOwn(filters, (func, name) => liquid.registerFilter(name, func));
+}
+
+registerAll.filters = filters;
+module.exports = registerAll;

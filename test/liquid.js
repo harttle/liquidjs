@@ -70,6 +70,11 @@ describe('liquid', function() {
         var template = engine.parse('<p>{{arr | join: "_"}}</p>');
         return engine.render(template, ctx).should.eventually.equal('<p>-2_a</p>');
     });
+    it('should render accessive filters', function() {
+        var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
+            '{{ my_array | first }}';
+        return expect(engine.parseAndRender(src)).to.eventually.equal('apples');
+    });
     describe('#renderFile()', function() {
         it('should render file', function() {
             return engine.renderFile('/root/files/foo.html', ctx).should.eventually.equal('foo');
@@ -83,17 +88,17 @@ describe('liquid', function() {
         it('should use default extname', function() {
             return engine.renderFile('files/name', ctx).should.eventually.equal('My name is harttle.');
         });
-        it('should accept root with no trailing slash', function(){
+        it('should accept root with no trailing slash', function() {
             engine = Liquid({
                 root: '/root',
                 extname: '.html'
             });
             return expect(engine.renderFile('files/foo.html')).to.eventually.equal('foo');
         });
-        it('should accept dot path', function(){
+        it('should accept dot path', function() {
             return expect(engine.renderFile('./files/foo.html')).to.eventually.equal('foo');
         });
-        it('should accept double-dot path', function(){
+        it('should accept double-dot path', function() {
             return expect(engine.renderFile('files/foo/../foo.html')).to.eventually.equal('foo');
         });
     });
