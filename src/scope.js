@@ -1,3 +1,5 @@
+const _ = require('./util/underscore.js');
+
 var Scope = {
     safeGet: function(str) {
         var i;
@@ -48,7 +50,7 @@ var Scope = {
 };
 
 function setPropertyByPath(obj, path, val) {
-    if (path instanceof String || typeof path === 'string') {
+    if (_.isString(path)) {
         var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
         for (var i = 0; i < paths.length; i++) {
             var key = paths[i];
@@ -65,7 +67,7 @@ function setPropertyByPath(obj, path, val) {
 }
 
 function getPropertyByPath(obj, path) {
-    if (path instanceof String || typeof path === 'string') {
+    if (_.isString(path)) {
         var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
         paths.forEach(p => obj = obj && obj[p]);
         return obj;

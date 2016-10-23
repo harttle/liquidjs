@@ -70,7 +70,7 @@ module.exports = function(Tag, Filter) {
     }
 
     function parseOutput(str) {
-        var match = lexical.value.exec(str);
+        var match = lexical.matchValue(str);
         if(!match) throw new Error(`illegal output string: ${str}`);
 
         var initial = match[0];

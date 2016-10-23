@@ -16,10 +16,10 @@ function test(promise, cb){
 describe('error', function() {
 
     it('should throw TokenizationError when tag illegal', function() {
-        return test(engine.parseAndRender('{% -a %}', {}), function(err){
+        return test(engine.parseAndRender('{% . a %}', {}), function(err){
             expect(err.name).to.equal('TokenizationError');
-            expect(err.message).to.equal('illegal tag: {% -a %}');
-            expect(err.input).to.equal('{% -a %}');
+            expect(err.message).to.equal('illegal tag: {% . a %}');
+            expect(err.input).to.equal('{% . a %}');
             expect(err.line).to.equal(1);
         });
     });

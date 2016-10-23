@@ -1,11 +1,10 @@
-var chai = require("chai");
-var should = chai.should();
-var expect = chai.expect;
+const chai = require("chai");
+const expect = chai.expect;
 
 var lexical = require('../src/lexical.js');
 
 describe('lexical', function() {
-    it('should test filter syntax', function(){
+    it('should test filter syntax', function() {
         lexical.filterLine.test('abs').should.equal(true);
         lexical.filterLine.test('plus:1').should.equal(true);
         lexical.filterLine.test('replace: "a", b').should.equal(true);
@@ -39,10 +38,37 @@ describe('lexical', function() {
         lexical.isLiteral("'a bcd'").should.equal(true);
     });
 
-    it("should test variable", function() {
-        lexical.isVariable("foo").should.equal(true);
-        lexical.isVariable("foo.bar.foo").should.equal(true);
-        lexical.isVariable("foo[0].b").should.equal(true);
+    describe('.isVariable()', function() {
+        it('should return true for foo', function() {
+            lexical.isVariable("foo").should.equal(true);
+        });
+        it('should return true for.bar.foo', function() {
+            lexical.isVariable("foo.bar.foo").should.equal(true);
+        });
+        it('should return true for foo[0].b', function() {
+            lexical.isVariable("foo[0].b").should.equal(true);
+        });
+        it('should return true for 0a', function() {
+            lexical.isVariable("0a").should.equal(true);
+        });
+        it('should return true for foo[a.b]', function() {
+            lexical.isVariable("foo[a.b]").should.equal(true);
+        });
+        it('should return true for foo[a.b]', function() {
+            lexical.isVariable("foo['a[0]']").should.equal(true);
+        });
+        it('should return true for "var-1"', function() {
+            lexical.isVariable("var-1").should.equal(true);
+        });
+        it('should return true for "-var"', function() {
+            lexical.isVariable("-var").should.equal(true);
+        });
+        it('should return true for "var-"', function() {
+            lexical.isVariable("var-").should.equal(true);
+        });
+        it('should return true for "3-4"', function() {
+            lexical.isVariable("3-4").should.equal(true);
+        });
     });
 
     it('should test none literal', function() {
@@ -55,7 +81,6 @@ describe('lexical', function() {
         lexical.isVariable("a.").should.equal(false);
         lexical.isVariable(".b").should.equal(false);
         lexical.isVariable(".").should.equal(false);
-        lexical.isVariable("0a").should.equal(false);
         lexical.isVariable("[0][12].bar[0]").should.equal(false);
     });
 
@@ -76,4 +101,22 @@ describe('lexical', function() {
         lexical.parseLiteral('"ab\'c"').should.equal("ab\'c");
     });
 
+    describe('.matchValue()', function(){
+        it('should match -5-5', function() {
+            var match = lexical.matchValue('-5-5');
+            expect(match && match[0]).to.equal('-5-5');
+        });
+        it('should match 4-3', function() {
+            var match = lexical.matchValue('4-3');
+            expect(match && match[0]).to.equal('4-3');
+        });
+        it('should match 4-3', function() {
+            var match = lexical.matchValue('4-3');
+            expect(match && match[0]).to.equal('4-3');
+        });
+        it('should match var-1', function() {
+            var match = lexical.matchValue('var-1');
+            expect(match && match[0]).to.equal('var-1');
+        });
+    });
 });

@@ -1,7 +1,7 @@
 {
   "name": "shopify-liquid",
-  "version": "1.2.3",
-  "description": "Liquid template engine in Node.js (Shopify compliant)",
+  "version": "1.2.5",
+  "description": "Liquid template engine for JavaScript, Node.js and Browser",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
