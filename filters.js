@@ -1,4 +1,4 @@
-const strftime = require('./src/strftime.js');
+const strftime = require('./src/util/strftime.js');
 const _ = require('./src/util/underscore.js');
 
 var escapeMap = {
