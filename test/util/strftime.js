@@ -9,11 +9,13 @@ describe('util/strftime', function() {
         expect(t(now, '%U')).to.equal('43');
     });
     it('should format locale date string', function() {
-        var date = now.toLocaleDateString('zh-CN');
-        expect(t(now, '%Y-%m-%d')).to.equal(date);
+        var date = now.toLocaleDateString('en-US');
+        expect(t(now, '%m/%d/%Y')).to.equal(date);
     });
     it('should format locale date string', function() {
-        var time = now.toLocaleTimeString('zh-CN');
+        var time = now.toLocaleTimeString({
+            hour12: false
+        });
         expect(t(now, '%H:%M:%S')).to.equal(time);
     });
 });
