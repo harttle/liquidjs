@@ -13,7 +13,7 @@ describe('util/strftime', function() {
         expect(t(now, '%m/%d/%Y')).to.equal(date);
     });
     it('should format locale date string', function() {
-        var time = now.toLocaleTimeString({
+        var time = now.toLocaleTimeString('en-US', {
             hour12: false
         });
         expect(t(now, '%H:%M:%S')).to.equal(time);
