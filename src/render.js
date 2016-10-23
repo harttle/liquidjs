@@ -14,7 +14,7 @@ var render = {
         // It's fundamentally equivalent to the following...
         //  emptyPromise.then(renderTag(template0).then(renderTag(template1).then(renderTag(template2)...
         var lastPromise = templates.reduce((promise, template) => {
-            return promise.then((partial) => {
+            return promise.then(() => {
                     if (scope.safeGet('forloop.skip')) {
                         return Promise.resolve('');
                     }

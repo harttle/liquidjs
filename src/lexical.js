@@ -4,13 +4,14 @@ var doubleQuoted = /"[^"]*"/;
 var quoted = new RegExp(`${singleQuoted.source}|${doubleQuoted.source}`);
 var quoteBalanced = new RegExp(`(?:${quoted.source}|[^'"])*`);
 
-// values
+// basic types
 var integer = /-?\d+/;
 var number = /-?\d+\.?\d*|\.?\d+/;
 var bool = /true|false/;
+
+// peoperty access
 var identifier = /[\w-]+/;
 var subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`);
-
 var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`);
 var variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subscript.source})*`);
 
@@ -19,12 +20,13 @@ var rangeLimit = new RegExp(`(?:${variable.source}|${number.source})`);
 var range = new RegExp(`\\(${rangeLimit.source}\\.\\.${rangeLimit.source}\\)`);
 var rangeCapture = new RegExp(`\\((${rangeLimit.source})\\.\\.(${rangeLimit.source})\\)`);
 
-var value = new RegExp(`(?:${literal.source}|${variable.source}|${range.source})`);
+var value = new RegExp(`(?:${variable.source}|${literal.source}|${range.source})`);
 
 // hash related
 var hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`);
 var hashCapture = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g');
 
+// full match
 var tagLine = new RegExp(`^\\s*(${identifier.source})\\s*(.*)\\s*$`);
 var literalLine = new RegExp(`^${literal.source}$`, 'i');
 var variableLine = new RegExp(`^${variable.source}$`);
@@ -57,6 +59,10 @@ function isVariable(str) {
     return variableLine.test(str);
 }
 
+function matchValue(str) {
+    return value.exec(str);
+}
+
 function parseLiteral(str) {
     var res;
     if (res = str.match(numberLine)) {
@@ -76,5 +82,5 @@ module.exports = {
     range, rangeCapture, 
     identifier, value, quoteBalanced, operators,
     quotedLine, numberLine, boolLine, rangeLine, literalLine, filterLine, tagLine,
-    isLiteral, isVariable, parseLiteral, isRange
+    isLiteral, isVariable, parseLiteral, isRange, matchValue
 };

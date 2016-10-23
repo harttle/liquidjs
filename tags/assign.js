@@ -12,7 +12,7 @@ module.exports = function(liquid) {
             this.key = match[1];
             this.value = match[2];
         },
-        render: function(scope, hash) {
+        render: function(scope) {
             scope.set(this.key, liquid.evalOutput(this.value, scope));
             return Promise.resolve('');
         }
