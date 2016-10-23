@@ -76,9 +76,31 @@ var _engine = {
         if (!filepath) throw new Error('filepath cannot be null');
 
         return this.getTemplate(filepath)
-            .then((html) => {
-                var tpl = this.options.cache && this.cache[filepath] || this.parse(html);
-                return this.options.cache ? (this.cache[filepath] = tpl) : tpl;
+            .then((result) => {
+                var template = '';
+                var isTemplateObject = false;
+                var model = {};
+                // The result should either be actual template markup (a string) or a template object with model
+                //  properties and the template markup in a property named "template"
+                if (typeof result === 'string' || result instanceof String) {
+                    template = result;
+                }
+                else if (result !== null && typeof result === 'object' && 'template' in result) {
+                    isTemplateObject = true;
+                    template = result['template'];
+                    delete result['template'];
+                    model = result;
+                }
+
+                var templates = this.options.cache && this.cache[filepath] || this.parse(template);
+                //return this.options.cache ? (this.cache[filepath] = templates) : templates;
+
+                if (this.options.cache) {
+                    this.cache[filepath] = templates;
+                }
+
+                // return either templates plus model, or just the templates
+                return isTemplateObject ? { templates: templates, model: model } : templates;
             });
     },
     getTemplate: function(filepath) {
