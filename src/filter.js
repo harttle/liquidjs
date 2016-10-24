@@ -1,5 +1,5 @@
 const lexical = require('./lexical.js');
-const Exp = require('./expression.js');
+const Syntax = require('./syntax.js');
 
 var valueRE = new RegExp(`${lexical.value.source}`, 'g');
 
@@ -8,7 +8,7 @@ module.exports = function() {
 
     var _filterInstance = {
         render: function(output, scope) {
-            var args = this.args.map(arg => Exp.evalValue(arg, scope));
+            var args = this.args.map(arg => Syntax.evalValue(arg, scope));
             args.unshift(output);
             return this.filter.apply(null, args);
         },

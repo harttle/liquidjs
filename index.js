@@ -6,7 +6,7 @@ const lexical = require('./src/lexical.js');
 const Tag = require('./src/tag.js');
 const Filter = require('./src/filter.js');
 const Template = require('./src/parser');
-const Expression = require('./src/expression.js');
+const Syntax = require('./src/syntax.js');
 const tags = require('./tags');
 const filters = require('./filters');
 const Promise = require('any-promise');
@@ -127,9 +127,9 @@ function resolvePath(root, path) {
 }
 
 factory.lexical = lexical;
-factory.isTruthy = Expression.isTruthy;
-factory.isFalsy = Expression.isFalsy;
-factory.evalExp = Expression.evalExp;
-factory.evalValue = Expression.evalValue;
+factory.isTruthy = Syntax.isTruthy;
+factory.isFalsy = Syntax.isFalsy;
+factory.evalExp = Syntax.evalExp;
+factory.evalValue = Syntax.evalValue;
 
 module.exports = factory;

@@ -1,4 +1,4 @@
-const Exp = require('./expression.js');
+const Syntax = require('./syntax.js');
 const Promise = require('any-promise');
 
 var render = {
@@ -89,7 +89,7 @@ var render = {
 
     evalOutput: function(template, scope, opts) {
         if(!scope) throw new Error('unable to evalOutput: scope undefined');
-        var val = Exp.evalExp(template.initial, scope);
+        var val = Syntax.evalExp(template.initial, scope);
         template.filters.some(filter => {
             if (filter.error) {
                 if (opts.strict_filters) {

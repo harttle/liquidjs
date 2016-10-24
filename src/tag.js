@@ -1,6 +1,6 @@
 const lexical = require('./lexical.js');
 const Promise = require('any-promise');
-const Exp = require('./expression.js');
+const Syntax = require('./syntax.js');
 
 function hash(markup, scope) {
     var obj = {}, match;
@@ -8,7 +8,7 @@ function hash(markup, scope) {
     while (match = lexical.hashCapture.exec(markup)) {
         var k = match[1],
             v = match[2];
-        obj[k] = Exp.evalValue(v, scope);
+        obj[k] = Syntax.evalValue(v, scope);
     }
     return obj;
 }

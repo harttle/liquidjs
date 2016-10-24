@@ -1,10 +1,10 @@
 const chai = require("chai");
 const expect = chai.expect;
-var expression = require('../src/expression.js');
+var syntax = require('../src/syntax.js');
 var Scope = require('../src/scope.js');
 
-var evalExp = expression.evalExp;
-var evalValue = expression.evalValue;
+var evalExp = syntax.evalExp;
+var evalValue = syntax.evalValue;
 
 describe('expression', function() {
     var scope;
