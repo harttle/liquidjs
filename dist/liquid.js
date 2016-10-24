@@ -1,165 +1,151 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Liquid = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-//const strftime = require('strftime').timezone(-(new Date()).getTimezoneOffset());
-var strftime = require('./src/strftime.js');
+var strftime = require('./src/util/strftime.js');
+var _ = require('./src/util/underscore.js');
 
-module.exports = function (liquid) {
-    liquid.registerFilter('abs', function (v) {
+var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&#34;',
+    "'": '&#39;'
+};
+var unescapeMap = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&#34;': '"',
+    '&#39;': "'"
+};
+
+var filters = {
+    'abs': function abs(v) {
         return Math.abs(v);
-    });
-    liquid.registerFilter('append', function (v, arg) {
+    },
+    'append': function append(v, arg) {
         return v + arg;
-    });
-    liquid.registerFilter('capitalize', function (str) {
+    },
+    'capitalize': function capitalize(str) {
         return stringify(str).charAt(0).toUpperCase() + str.slice(1);
-    });
-    liquid.registerFilter('ceil', function (v) {
+    },
+    'ceil': function ceil(v) {
         return Math.ceil(v);
-    });
-
-    //liquid.registerFilter('date', (v, arg) => strftime(arg, v));
-    liquid.registerFilter('date', function (v, arg) {
+    },
+    'date': function date(v, arg) {
+        if (v === 'now') v = new Date();
         return strftime(v, arg);
-    });
-
-    liquid.registerFilter('default', function (v, arg) {
+    },
+    'default': function _default(v, arg) {
         return arg || v;
-    });
-    liquid.registerFilter('divided_by', function (v, arg) {
+    },
+    'divided_by': function divided_by(v, arg) {
         return Math.floor(v / arg);
-    });
-    liquid.registerFilter('downcase', function (v) {
+    },
+    'downcase': function downcase(v) {
         return v.toLowerCase();
-    });
+    },
+    'escape': escape,
 
-    var escapeMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&#34;',
-        "'": '&#39;'
-    };
-
-    function escape(str) {
-        return stringify(str).replace(/&|<|>|"|'/g, function (m) {
-            return escapeMap[m];
-        });
-    }
-    liquid.registerFilter('escape', escape);
-
-    var unescapeMap = {
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&#34;': '"',
-        '&#39;': "'"
-    };
-
-    function unescape(str) {
-        return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) {
-            return unescapeMap[m];
-        });
-    }
-    liquid.registerFilter('escape_once', function (str) {
+    'escape_once': function escape_once(str) {
         return escape(unescape(str));
-    });
-    liquid.registerFilter('first', function (v) {
+    },
+    'first': function first(v) {
         return v[0];
-    });
-    liquid.registerFilter('floor', function (v) {
+    },
+    'floor': function floor(v) {
         return Math.floor(v);
-    });
-    liquid.registerFilter('join', function (v, arg) {
+    },
+    'join': function join(v, arg) {
         return v.join(arg);
-    });
-    liquid.registerFilter('last', function (v) {
+    },
+    'last': function last(v) {
         return v[v.length - 1];
-    });
-    liquid.registerFilter('lstrip', function (v) {
+    },
+    'lstrip': function lstrip(v) {
         return stringify(v).replace(/^\s+/, '');
-    });
-    liquid.registerFilter('map', function (arr, arg) {
+    },
+    'map': function map(arr, arg) {
         return arr.map(function (v) {
             return v[arg];
         });
-    });
-    liquid.registerFilter('minus', bindFixed(function (v, arg) {
+    },
+    'minus': bindFixed(function (v, arg) {
         return v - arg;
-    }));
-    liquid.registerFilter('modulo', bindFixed(function (v, arg) {
+    }),
+    'modulo': bindFixed(function (v, arg) {
         return v % arg;
-    }));
-    liquid.registerFilter('newline_to_br', function (v) {
+    }),
+    'newline_to_br': function newline_to_br(v) {
         return v.replace(/\n/g, '<br />');
-    });
-    liquid.registerFilter('plus', bindFixed(function (v, arg) {
+    },
+    'plus': bindFixed(function (v, arg) {
         return v + arg;
-    }));
-    liquid.registerFilter('prepend', function (v, arg) {
+    }),
+    'prepend': function prepend(v, arg) {
         return arg + v;
-    });
-    liquid.registerFilter('remove', function (v, arg) {
+    },
+    'remove': function remove(v, arg) {
         return v.split(arg).join('');
-    });
-    liquid.registerFilter('remove_first', function (v, l) {
+    },
+    'remove_first': function remove_first(v, l) {
         return v.replace(l, '');
-    });
-    liquid.registerFilter('replace', function (v, pattern, replacement) {
+    },
+    'replace': function replace(v, pattern, replacement) {
         return stringify(v).split(pattern).join(replacement);
-    });
-    liquid.registerFilter('replace_first', function (v, arg1, arg2) {
+    },
+    'replace_first': function replace_first(v, arg1, arg2) {
         return stringify(v).replace(arg1, arg2);
-    });
-    liquid.registerFilter('reverse', function (v) {
+    },
+    'reverse': function reverse(v) {
         return v.reverse();
-    });
-    liquid.registerFilter('round', function (v, arg) {
+    },
+    'round': function round(v, arg) {
         var amp = Math.pow(10, arg || 0);
         return Math.round(v * amp, arg) / amp;
-    });
-    liquid.registerFilter('rstrip', function (str) {
+    },
+    'rstrip': function rstrip(str) {
         return stringify(str).replace(/\s+$/, '');
-    });
-    liquid.registerFilter('size', function (v) {
+    },
+    'size': function size(v) {
         return v.length;
-    });
-    liquid.registerFilter('slice', function (v, begin, length) {
+    },
+    'slice': function slice(v, begin, length) {
         return v.substr(begin, length === undefined ? 1 : length);
-    });
-    liquid.registerFilter('sort', function (v, arg) {
+    },
+    'sort': function sort(v, arg) {
         return v.sort(arg);
-    });
-    liquid.registerFilter('split', function (v, arg) {
+    },
+    'split': function split(v, arg) {
         return stringify(v).split(arg);
-    });
-    liquid.registerFilter('strip', function (v) {
+    },
+    'strip': function strip(v) {
         return stringify(v).trim();
-    });
-    liquid.registerFilter('strip_html', function (v) {
+    },
+    'strip_html': function strip_html(v) {
         return stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, '');
-    });
-    liquid.registerFilter('strip_newlines', function (v) {
+    },
+    'strip_newlines': function strip_newlines(v) {
         return stringify(v).replace(/\n/g, '');
-    });
-    liquid.registerFilter('times', function (v, arg) {
+    },
+    'times': function times(v, arg) {
         return v * arg;
-    });
-    liquid.registerFilter('truncate', function (v, l, o) {
+    },
+    'truncate': function truncate(v, l, o) {
         v = stringify(v);
         o = o === undefined ? '...' : o;
         l = l || 16;
         if (v.length <= l) return v;
         return v.substr(0, l - o.length) + o;
-    });
-    liquid.registerFilter('truncatewords', function (v, l, o) {
+    },
+    'truncatewords': function truncatewords(v, l, o) {
         if (o === undefined) o = '...';
         var arr = v.split(' ');
         var ret = arr.slice(0, l).join(' ');
         if (arr.length > l) ret += o;
         return ret;
-    });
-    liquid.registerFilter('uniq', function (arr) {
+    },
+    'uniq': function uniq(arr) {
         var u = {};
         return (arr || []).filter(function (val) {
             if (u.hasOwnProperty(val)) {
@@ -168,12 +154,24 @@ module.exports = function (liquid) {
             u[val] = true;
             return true;
         });
-    });
-    liquid.registerFilter('upcase', function (str) {
+    },
+    'upcase': function upcase(str) {
         return stringify(str).toUpperCase();
-    });
-    liquid.registerFilter('url_encode', encodeURIComponent);
+    },
+    'url_encode': encodeURIComponent
 };
+
+function escape(str) {
+    return stringify(str).replace(/&|<|>|"|'/g, function (m) {
+        return escapeMap[m];
+    });
+}
+
+function unescape(str) {
+    return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) {
+        return unescapeMap[m];
+    });
+}
 
 function getFixed(v) {
     var p = (v + "").split(".");
@@ -196,7 +194,16 @@ function bindFixed(cb) {
     };
 }
 
-},{"./src/strftime.js":14}],2:[function(require,module,exports){
+function registerAll(liquid) {
+    return _.forOwn(filters, function (func, name) {
+        return liquid.registerFilter(name, func);
+    });
+}
+
+registerAll.filters = filters;
+module.exports = registerAll;
+
+},{"./src/util/strftime.js":17,"./src/util/underscore.js":18}],2:[function(require,module,exports){
 'use strict';
 
 var Scope = require('./src/scope');
@@ -207,7 +214,7 @@ var lexical = require('./src/lexical.js');
 var Tag = require('./src/tag.js');
 var Filter = require('./src/filter.js');
 var Template = require('./src/parser');
-var Expression = require('./src/expression.js');
+var Syntax = require('./src/syntax.js');
 var tags = require('./tags');
 var filters = require('./filters');
 var Promise = require('any-promise');
@@ -331,14 +338,14 @@ function resolvePath(root, path) {
 }
 
 factory.lexical = lexical;
-factory.isTruthy = Expression.isTruthy;
-factory.isFalsy = Expression.isFalsy;
-factory.evalExp = Expression.evalExp;
-factory.evalValue = Expression.evalValue;
+factory.isTruthy = Syntax.isTruthy;
+factory.isFalsy = Syntax.isFalsy;
+factory.evalExp = Syntax.evalExp;
+factory.evalValue = Syntax.evalValue;
 
 module.exports = factory;
 
-},{"./filters":1,"./src/expression.js":8,"./src/filter.js":9,"./src/lexical.js":10,"./src/parser":11,"./src/render.js":12,"./src/scope":13,"./src/tag.js":16,"./src/tokenizer.js":17,"./tags":28,"any-promise":3,"fs":6}],3:[function(require,module,exports){
+},{"./filters":1,"./src/filter.js":8,"./src/lexical.js":9,"./src/parser":11,"./src/render.js":12,"./src/scope":13,"./src/syntax.js":14,"./src/tag.js":15,"./src/tokenizer.js":16,"./tags":29,"any-promise":3,"fs":6}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./register')().Promise;
@@ -477,67 +484,8 @@ module.exports = {
 },{}],8:[function(require,module,exports){
 'use strict';
 
-var syntax = require('./syntax.js');
 var lexical = require('./lexical.js');
-
-function evalExp(exp, scope) {
-    if (!scope) throw new Error('unable to evalExp: scope undefined');
-    var operatorREs = lexical.operators,
-        match;
-    for (var i = 0; i < operatorREs.length; i++) {
-        var operatorRE = operatorREs[i];
-        var expRE = new RegExp('^(' + lexical.quoteBalanced.source + ')(' + operatorRE.source + ')(' + lexical.quoteBalanced.source + ')$');
-        if (match = exp.match(expRE)) {
-            var l = evalExp(match[1], scope);
-            var op = syntax.operators[match[2].trim()];
-            var r = evalExp(match[3], scope);
-            return op(l, r);
-        }
-    }
-
-    if (match = exp.match(lexical.rangeLine)) {
-        var low = evalValue(match[1], scope),
-            high = evalValue(match[2], scope);
-        var range = [];
-        for (var j = low; j <= high; j++) {
-            range.push(j);
-        }
-        return range;
-    }
-
-    return evalValue(exp, scope);
-}
-
-function evalValue(str, scope) {
-    str = str && str.trim();
-    if (!str) return undefined;
-
-    if (lexical.isLiteral(str)) {
-        return lexical.parseLiteral(str);
-    }
-    if (lexical.isVariable(str)) {
-        return scope.get(str);
-    }
-}
-
-function isTruthy(val) {
-    if (val instanceof Array) return !!val.length;
-    return !!val;
-}
-
-function isFalsy(val) {
-    return !isTruthy(val);
-}
-
-module.exports = {
-    evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
-};
-
-},{"./lexical.js":10,"./syntax.js":15}],9:[function(require,module,exports){
-'use strict';
-
-var lexical = require('./lexical.js');
-var Exp = require('./expression.js');
+var Syntax = require('./syntax.js');
 
 var valueRE = new RegExp('' + lexical.value.source, 'g');
 
@@ -547,7 +495,7 @@ module.exports = function () {
     var _filterInstance = {
         render: function render(output, scope) {
             var args = this.args.map(function (arg) {
-                return Exp.evalValue(arg, scope);
+                return Syntax.evalValue(arg, scope);
             });
             args.unshift(output);
             return this.filter.apply(null, args);
@@ -597,20 +545,23 @@ module.exports = function () {
     };
 };
 
-},{"./expression.js":8,"./lexical.js":10}],10:[function(require,module,exports){
+},{"./lexical.js":9,"./syntax.js":14}],9:[function(require,module,exports){
 'use strict';
 
 // quote related
 var singleQuoted = /'[^']*'/;
 var doubleQuoted = /"[^"]*"/;
-var quoteBalanced = new RegExp('(?:' + singleQuoted.source + '|' + doubleQuoted.source + '|[^\'"])*');
+var quoted = new RegExp(singleQuoted.source + '|' + doubleQuoted.source);
+var quoteBalanced = new RegExp('(?:' + quoted.source + '|[^\'"])*');
 
-var number = /(?:-?\d+\.?\d*|\.?\d+)/;
+// basic types
+var integer = /-?\d+/;
+var number = /-?\d+\.?\d*|\.?\d+/;
 var bool = /true|false/;
-var identifier = /[a-zA-Z_$][a-zA-Z_$0-9]*/;
-var subscript = /\[\d+\]/;
 
-var quoted = new RegExp('(?:' + singleQuoted.source + '|' + doubleQuoted.source + ')');
+// peoperty access
+var identifier = /[\w-]+/;
+var subscript = new RegExp('\\[(?:' + quoted.source + '|[\\w-\\.]+)\\]');
 var literal = new RegExp('(?:' + quoted.source + '|' + bool.source + '|' + number.source + ')');
 var variable = new RegExp(identifier.source + '(?:\\.' + identifier.source + '|' + subscript.source + ')*');
 
@@ -619,12 +570,13 @@ var rangeLimit = new RegExp('(?:' + variable.source + '|' + number.source + ')')
 var range = new RegExp('\\(' + rangeLimit.source + '\\.\\.' + rangeLimit.source + '\\)');
 var rangeCapture = new RegExp('\\((' + rangeLimit.source + ')\\.\\.(' + rangeLimit.source + ')\\)');
 
-var value = new RegExp('(?:' + literal.source + '|' + variable.source + '|' + range.source + ')');
+var value = new RegExp('(?:' + variable.source + '|' + literal.source + '|' + range.source + ')');
 
 // hash related
 var hash = new RegExp('(?:' + identifier.source + ')\\s*:\\s*(?:' + value.source + ')');
 var hashCapture = new RegExp('(' + identifier.source + ')\\s*:\\s*(' + value.source + ')', 'g');
 
+// full match
 var tagLine = new RegExp('^\\s*(' + identifier.source + ')\\s*(.*)\\s*$');
 var literalLine = new RegExp('^' + literal.source + '$', 'i');
 var variableLine = new RegExp('^' + variable.source + '$');
@@ -632,6 +584,7 @@ var numberLine = new RegExp('^' + number.source + '$');
 var boolLine = new RegExp('^' + bool.source + '$', 'i');
 var quotedLine = new RegExp('^' + quoted.source + '$');
 var rangeLine = new RegExp('^' + rangeCapture.source + '$');
+var integerLine = new RegExp('^' + integer.source + '$');
 
 // filter related
 var valueList = new RegExp(value.source + '(\\s*,\\s*' + value.source + ')*');
@@ -640,6 +593,10 @@ var filterCapture = new RegExp('(' + identifier.source + ')(?:\\s*:\\s*(' + valu
 var filterLine = new RegExp('^' + filterCapture.source + '$');
 
 var operators = [/\s+or\s+/, /\s+and\s+/, /==|!=|<=|>=|<|>|\s+contains\s+/];
+
+function isInteger(str) {
+    return integerLine.test(str);
+}
 
 function isLiteral(str) {
     return literalLine.test(str);
@@ -651,6 +608,10 @@ function isRange(str) {
 
 function isVariable(str) {
     return variableLine.test(str);
+}
+
+function matchValue(str) {
+    return value.exec(str);
 }
 
 function parseLiteral(str) {
@@ -667,13 +628,48 @@ function parseLiteral(str) {
 }
 
 module.exports = {
-    quoted: quoted, number: number, bool: bool, literal: literal, filter: filter,
+    quoted: quoted, number: number, bool: bool, literal: literal, filter: filter, integer: integer,
     hash: hash, hashCapture: hashCapture,
     range: range, rangeCapture: rangeCapture,
     identifier: identifier, value: value, quoteBalanced: quoteBalanced, operators: operators,
     quotedLine: quotedLine, numberLine: numberLine, boolLine: boolLine, rangeLine: rangeLine, literalLine: literalLine, filterLine: filterLine, tagLine: tagLine,
-    isLiteral: isLiteral, isVariable: isVariable, parseLiteral: parseLiteral, isRange: isRange
+    isLiteral: isLiteral, isVariable: isVariable, parseLiteral: parseLiteral, isRange: isRange, matchValue: matchValue, isInteger: isInteger
 };
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+var operators = {
+    '==': function _(l, r) {
+        return l == r;
+    },
+    '!=': function _(l, r) {
+        return l != r;
+    },
+    '>': function _(l, r) {
+        return l > r;
+    },
+    '<': function _(l, r) {
+        return l < r;
+    },
+    '>=': function _(l, r) {
+        return l >= r;
+    },
+    '<=': function _(l, r) {
+        return l <= r;
+    },
+    'contains': function contains(l, r) {
+        return l.indexOf(r) > -1;
+    },
+    'and': function and(l, r) {
+        return l && r;
+    },
+    'or': function or(l, r) {
+        return l || r;
+    }
+};
+
+module.exports = operators;
 
 },{}],11:[function(require,module,exports){
 'use strict';
@@ -750,7 +746,7 @@ module.exports = function (Tag, Filter) {
     }
 
     function parseOutput(str) {
-        var match = lexical.value.exec(str);
+        var match = lexical.matchValue(str);
         if (!match) throw new Error('illegal output string: ' + str);
 
         var initial = match[0];
@@ -780,10 +776,10 @@ module.exports = function (Tag, Filter) {
     };
 };
 
-},{"./error.js":7,"./lexical.js":10}],12:[function(require,module,exports){
+},{"./error.js":7,"./lexical.js":9}],12:[function(require,module,exports){
 'use strict';
 
-var Exp = require('./expression.js');
+var Syntax = require('./syntax.js');
 var Promise = require('any-promise');
 
 var render = {
@@ -801,7 +797,7 @@ var render = {
         // It's fundamentally equivalent to the following...
         //  emptyPromise.then(renderTag(template0).then(renderTag(template1).then(renderTag(template2)...
         var lastPromise = templates.reduce(function (promise, template) {
-            return promise.then(function (partial) {
+            return promise.then(function () {
                 if (scope.safeGet('forloop.skip')) {
                     return Promise.resolve('');
                 }
@@ -869,7 +865,7 @@ var render = {
 
     evalOutput: function evalOutput(template, scope, opts) {
         if (!scope) throw new Error('unable to evalOutput: scope undefined');
-        var val = Exp.evalExp(template.initial, scope);
+        var val = Syntax.evalExp(template.initial, scope);
         template.filters.some(function (filter) {
             if (filter.error) {
                 if (opts.strict_filters) {
@@ -903,90 +899,376 @@ function stringify(val) {
 
 module.exports = factory;
 
-},{"./expression.js":8,"any-promise":3}],13:[function(require,module,exports){
+},{"./syntax.js":14,"any-promise":3}],13:[function(require,module,exports){
 'use strict';
 
+var _ = require('./util/underscore.js');
+var lexical = require('./lexical.js');
+
 var Scope = {
-    safeGet: function safeGet(str) {
-        var i;
-        // get all
-        if (str === undefined) {
-            var ctx = {};
-            for (i = this.scopes.length - 1; i >= 0; i--) {
-                var scp = this.scopes[i];
-                for (var k in scp) {
-                    if (scp.hasOwnProperty(k)) {
-                        ctx[k] = scp[k];
-                    }
-                }
-            }
-            return ctx;
-        }
-        // get one path
-        for (i = this.scopes.length - 1; i >= 0; i--) {
-            var v = getPropertyByPath(this.scopes[i], str);
-            if (v !== undefined) return v;
-        }
-    },
-    get: function get(str) {
-        var val = this.safeGet(str);
-        if (val === undefined && this.opts.strict) {
-            throw new Error('[strict_variables] undefined variable: ' + str);
-        }
-        return val;
-    },
-    set: function set(k, v) {
-        setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
-        return this;
-    },
-    push: function push(ctx) {
-        if (!ctx) throw new Error('trying to push ' + ctx + ' into scopes');
-        return this.scopes.push(ctx);
-    },
-    pop: function pop() {
-        return this.scopes.pop();
-    }
+	safeGet: function safeGet(str) {
+		var i;
+		// get all
+		if (str === undefined) {
+			var ctx = {};
+			for (i = this.scopes.length - 1; i >= 0; i--) {
+				var scp = this.scopes[i];
+				for (var k in scp) {
+					if (scp.hasOwnProperty(k)) {
+						ctx[k] = scp[k];
+					}
+				}
+			}
+			return ctx;
+		}
+		// get one path
+		for (i = this.scopes.length - 1; i >= 0; i--) {
+			var v = this.getPropertyByPath(this.scopes[i], str);
+			if (v !== undefined) return v;
+		}
+	},
+	get: function get(str) {
+		var val = this.safeGet(str);
+		if (val === undefined && this.opts.strict) {
+			throw new Error('[strict_variables] undefined variable: ' + str);
+		}
+		return val;
+	},
+	set: function set(k, v) {
+		this.setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
+		return this;
+	},
+	push: function push(ctx) {
+		if (!ctx) throw new Error('trying to push ' + ctx + ' into scopes');
+		return this.scopes.push(ctx);
+	},
+	pop: function pop() {
+		return this.scopes.pop();
+	},
+
+	setPropertyByPath: function setPropertyByPath(obj, path, val) {
+		if (_.isString(path)) {
+			var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
+			for (var i = 0; i < paths.length; i++) {
+				var key = paths[i];
+				if (i === paths.length - 1) {
+					return obj[key] = val;
+				}
+				if (undefined === obj[key]) obj[key] = {};
+				// case for readonly objects
+				obj = obj[key] || {};
+			}
+			return obj;
+		}
+		return obj[path] = val;
+	},
+
+	getPropertyByPath: function getPropertyByPath(obj, path) {
+		if (_.isString(path) && path.length) {
+			var paths = this.propertyAccessSeq(path);
+			paths.forEach(function (p) {
+				return obj = obj && obj[p];
+			});
+			return obj;
+		}
+		return obj[path];
+	},
+
+	/*
+  * Parse property access sequence from access string
+  * @example
+  * accessSeq("foo.bar")			// ['foo', 'bar']
+  * accessSeq("foo['bar']")  	// ['foo', 'bar']
+  * accessSeq("foo['b]r']")  	// ['foo', 'b]r']
+  * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
+  */
+	propertyAccessSeq: function propertyAccessSeq(str) {
+		var seq = [],
+		    name = '';
+		for (var i = 0; i < str.length; i++) {
+			if (str[i] === '[') {
+				seq.push(name);
+				name = '';
+
+				var delemiter = str[i + 1];
+				// foo[bar.coo]
+				if (delemiter !== "'" && delemiter !== '"') {
+					var j = matchRightBracket(str, i + 1);
+					if (j === -1) {
+						throw new Error('unbalanced []: ' + str);
+					}
+					name = str.slice(i + 1, j);
+					// foo[1]
+					if (lexical.isInteger(name)) {
+						seq.push(name);
+					}
+					// foo["bar"]
+					else {
+							seq.push(this.get(name));
+						}
+					name = '';
+					i = j;
+				}
+				// foo["bar"]
+				else {
+						var j = str.indexOf(delemiter, i + 2);
+						if (j === -1) {
+							throw new Error('unbalanced ' + delemiter + ': ' + str);
+						}
+						name = str.slice(i + 2, j);
+						seq.push(name);
+						name = '';
+						i = j + 1;
+					}
+			}
+			// foo.bar
+			else if (str[i] === ".") {
+					seq.push(name);
+					name = '';
+				}
+				//foo.bar
+				else {
+						name += str[i];
+					}
+		}
+		if (name.length) seq.push(name);
+		return seq;
+	}
 };
 
-function setPropertyByPath(obj, path, val) {
-    if (path instanceof String || typeof path === 'string') {
-        var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
-        for (var i = 0; i < paths.length; i++) {
-            var key = paths[i];
-            if (i === paths.length - 1) {
-                return obj[key] = val;
-            }
-            if (undefined === obj[key]) obj[key] = {};
-            // case for readonly objects
-            obj = obj[key] || {};
-        }
-        return obj;
-    }
-    return obj[path] = val;
-}
-
-function getPropertyByPath(obj, path) {
-    if (path instanceof String || typeof path === 'string') {
-        var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
-        paths.forEach(function (p) {
-            return obj = obj && obj[p];
-        });
-        return obj;
-    }
-    return obj[path];
+function matchRightBracket(str, begin) {
+	var stack = 1; // count of '[' - count of ']'
+	for (var i = begin; i < str.length; i++) {
+		if (str[i] === '[') {
+			stack++;
+		}
+		if (str[i] === ']') {
+			stack--;
+			if (stack === 0) {
+				return i;
+			}
+		}
+	}
+	return -1;
 }
 
 exports.factory = function (_ctx, opts) {
-    opts = opts || {};
-    opts.strict = opts.strict || false;
+	opts = opts || {};
+	opts.strict = opts.strict || false;
 
-    var scope = Object.create(Scope);
-    scope.opts = opts;
-    scope.scopes = [_ctx || {}];
-    return scope;
+	var scope = Object.create(Scope);
+	scope.opts = opts;
+	scope.scopes = [_ctx || {}];
+	return scope;
 };
 
-},{}],14:[function(require,module,exports){
+},{"./lexical.js":9,"./util/underscore.js":18}],14:[function(require,module,exports){
+'use strict';
+
+var operators = require('./operators.js');
+var lexical = require('./lexical.js');
+
+function evalExp(exp, scope) {
+    if (!scope) throw new Error('unable to evalExp: scope undefined');
+    var operatorREs = lexical.operators,
+        match;
+    for (var i = 0; i < operatorREs.length; i++) {
+        var operatorRE = operatorREs[i];
+        var expRE = new RegExp('^(' + lexical.quoteBalanced.source + ')(' + operatorRE.source + ')(' + lexical.quoteBalanced.source + ')$');
+        if (match = exp.match(expRE)) {
+            var l = evalExp(match[1], scope);
+            var op = operators[match[2].trim()];
+            var r = evalExp(match[3], scope);
+            return op(l, r);
+        }
+    }
+
+    if (match = exp.match(lexical.rangeLine)) {
+        var low = evalValue(match[1], scope),
+            high = evalValue(match[2], scope);
+        var range = [];
+        for (var j = low; j <= high; j++) {
+            range.push(j);
+        }
+        return range;
+    }
+
+    return evalValue(exp, scope);
+}
+
+function evalValue(str, scope) {
+    str = str && str.trim();
+    if (!str) return undefined;
+
+    if (lexical.isLiteral(str)) {
+        return lexical.parseLiteral(str);
+    }
+    if (lexical.isVariable(str)) {
+        return scope.get(str);
+    }
+}
+
+function isTruthy(val) {
+    if (val instanceof Array) return !!val.length;
+    return !!val;
+}
+
+function isFalsy(val) {
+    return !isTruthy(val);
+}
+
+module.exports = {
+    evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
+};
+
+},{"./lexical.js":9,"./operators.js":10}],15:[function(require,module,exports){
+'use strict';
+
+var lexical = require('./lexical.js');
+var Promise = require('any-promise');
+var Syntax = require('./syntax.js');
+
+function hash(markup, scope) {
+    var obj = {},
+        match;
+    lexical.hashCapture.lastIndex = 0;
+    while (match = lexical.hashCapture.exec(markup)) {
+        var k = match[1],
+            v = match[2];
+        obj[k] = Syntax.evalValue(v, scope);
+    }
+    return obj;
+}
+
+module.exports = function () {
+    var tagImpls = {};
+
+    var _tagInstance = {
+        render: function render(scope, register) {
+            var reg = register[this.name];
+            if (!reg) reg = register[this.name] = {};
+            var obj = hash(this.token.args, scope);
+            return this.tagImpl.render && this.tagImpl.render(scope, obj, reg) || Promise.resolve('');
+        },
+        parse: function parse(token, tokens) {
+            this.type = 'tag';
+            this.token = token;
+            this.name = token.name;
+
+            var tagImpl = tagImpls[this.name];
+            if (!tagImpl) throw new Error('tag ' + this.name + ' not found');
+            this.tagImpl = Object.create(tagImpl);
+            if (this.tagImpl.parse) {
+                this.tagImpl.parse(token, tokens);
+            }
+        }
+    };
+
+    function register(name, tag) {
+        tagImpls[name] = tag;
+    }
+
+    function construct(token, tokens) {
+        var instance = Object.create(_tagInstance);
+        instance.parse(token, tokens);
+        return instance;
+    }
+
+    function clear() {
+        tagImpls = {};
+    }
+
+    return {
+        construct: construct, register: register, clear: clear
+    };
+};
+
+},{"./lexical.js":9,"./syntax.js":14,"any-promise":3}],16:[function(require,module,exports){
+'use strict';
+
+var lexical = require('./lexical.js');
+var TokenizationError = require('./error.js').TokenizationError;
+
+function parse(html) {
+    var tokens = [];
+    if (!html) return tokens;
+
+    var syntax = /({%(.*?)%})|({{(.*?)}})/g;
+    var result, htmlFragment, token;
+    var lastMatchEnd = 0,
+        lastMatchBegin = -1,
+        parsedLinesCount = 0;
+
+    while ((result = syntax.exec(html)) !== null) {
+        // passed html fragments
+        if (result.index > lastMatchEnd) {
+            htmlFragment = html.slice(lastMatchEnd, result.index);
+            tokens.push({
+                type: 'html',
+                raw: htmlFragment,
+                value: htmlFragment
+            });
+        }
+        // tag appeared
+        if (result[1]) {
+            token = factory('tag', 1, result);
+
+            var match = token.value.match(lexical.tagLine);
+            if (!match) {
+                throw new TokenizationError('illegal tag: ' + token.raw, token.input, token.line);
+            }
+            token.name = match[1];
+            token.args = match[2];
+
+            tokens.push(token);
+        }
+        // output
+        else {
+                token = factory('output', 3, result);
+                tokens.push(token);
+            }
+        lastMatchEnd = syntax.lastIndex;
+    }
+
+    // remaining html
+    if (html.length > lastMatchEnd) {
+        htmlFragment = html.slice(lastMatchEnd, html.length);
+        tokens.push({
+            type: 'html',
+            raw: htmlFragment,
+            value: htmlFragment
+        });
+    }
+    return tokens;
+
+    function factory(type, offset, match) {
+        return {
+            type: type,
+            raw: match[offset],
+            value: match[offset + 1].trim(),
+            line: getLineNum(match),
+            input: getLineContent(match)
+        };
+    }
+
+    function getLineContent(match) {
+        var idx1 = match.input.lastIndexOf('\n', match.index);
+        var idx2 = match.input.indexOf('\n', match.index);
+        if (idx2 === -1) idx2 = match.input.length;
+        return match.input.slice(idx1 + 1, idx2);
+    }
+
+    function getLineNum(match) {
+        var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n');
+        parsedLinesCount += lines.length - 1;
+        lastMatchBegin = match.index;
+        return parsedLinesCount + 1;
+    }
+}
+
+exports.parse = parse;
+
+},{"./error.js":7,"./lexical.js":9}],17:[function(require,module,exports){
 "use strict";
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -1062,18 +1344,6 @@ var _date = {
 
     century: function century(d) {
         return parseInt(d.getFullYear().toString().substring(0, 2), 10);
-    }
-};
-
-var _obj = {
-    values_of: function values_of(obj) {
-        var values = [];
-        for (var k in obj) {
-            if (obj.hasOwnProperty(k)) {
-                values.push(obj[k]);
-            }
-        }
-        return values;
     }
 };
 
@@ -1193,151 +1463,6 @@ var format_codes = {
 format_codes.h = format_codes.b;
 format_codes.N = format_codes.L;
 
-// * r stands for regex, p stands for parser
-// * all parseInt calls have to have the base supplied as the second
-//   parameter, otherwise they will default to octal when parsing numbers
-//   with leading zeros. This is most evident when parsing a date with 08 as
-//   the minutes / year as 08 is an invalid octal number, and so returns 0
-var parse_codes = {
-    a: {
-        r: "(?:" + dayNamesShort.join("|") + ")"
-    },
-    A: {
-        r: "(?:" + dayNames.join("|") + ")"
-    },
-    b: {
-        r: "(" + monthNamesShort.join("|") + ")",
-        p: function p(data) {
-            this.month = $.inArray(data, monthNamesShort);
-        }
-    },
-    B: {
-        r: "(" + monthNames.join("|") + ")",
-        p: function p(data) {
-            this.month = $.inArray(data, monthNames);
-        }
-    },
-    C: {
-        r: "(\\d{1,2})",
-        p: function p(d) {
-            this.century = parseInt(d, 10);
-        }
-    },
-    d: {
-        r: "(\\d{1,2})",
-        p: function p(d) {
-            this.day = parseInt(d, 10);
-        }
-    },
-    H: {
-        r: "(\\d{1,2})",
-        p: function p(d) {
-            this.hour = parseInt(d, 10);
-        }
-    },
-    // This gives only the day. Parsing of the month happens at the end because
-    // we also need the year
-    j: {
-        r: "(\\d{1,3})",
-        p: function p(d) {
-            this.day = parseInt(d, 10);
-        }
-    },
-    L: {
-        r: "(\\d{3})",
-        p: function p(d) {
-            this.milliseconds = parseInt(d, 10);
-        }
-    },
-    m: {
-        r: "(\\d{1,2})",
-        p: function p(d) {
-            this.month = parseInt(d, 10) - 1;
-        }
-    },
-    M: {
-        r: "(\\d{2})",
-        p: function p(d) {
-            this.minute = parseInt(d, 10);
-        }
-    },
-    p: {
-        r: "(AM|PM)",
-        p: function p(d) {
-            if (d == 'AM') {
-                if (this.hour == 12) {
-                    this.hour = 0;
-                }
-            } else {
-                if (this.hour < 12) {
-                    this.hour += 12;
-                }
-            }
-        }
-    },
-    P: {
-        r: "(am|pm)",
-        p: function p(d) {
-            if (d == 'am') {
-                if (this.hour == 12) {
-                    this.hour = 0;
-                }
-            } else {
-                if (this.hour < 12) {
-                    this.hour += 12;
-                }
-            }
-        }
-    },
-    q: {
-        r: "(?:" + _obj.values_of(suffixes).join('|') + ")"
-    },
-    S: {
-        r: "(\\d{2})",
-        p: function p(d) {
-            this.second = parseInt(d, 10);
-        }
-    },
-    y: {
-        r: "(\\d{1,2})",
-        p: function p(d) {
-            this.year = parseInt(d, 10);
-        }
-    },
-    Y: {
-        r: "(\\d{4})",
-        p: function p(d) {
-            this.century = Math.floor(parseInt(d, 10) / 100);
-            this.year = parseInt(d, 10) % 100;
-        }
-    },
-    z: { // "Z", "+05:00", "+0500" all acceptable.
-        r: "(Z|[+-]\\d{2}:?\\d{2})",
-        p: function p(d) {
-            // UTC, no offset.
-            if (d == "Z") {
-                this.zone = 0;
-                return;
-            }
-
-            var seconds = parseInt(d[0] + d[1] + d[2], 10) * 3600; // e.g., "+05" or "-08"
-            if (d[3] == ":") {
-                // "+HH:MM" is preferred iso8601 format
-                seconds += parseInt(d[4] + d[5], 10) * 60;
-            } else {
-                // "+HHMM" is frequently used, though.
-                seconds += parseInt(d[3] + d[4], 10) * 60;
-            }
-            this.zone = seconds;
-        }
-    }
-};
-parse_codes.e = parse_codes.d;
-parse_codes.h = parse_codes.b;
-parse_codes.I = parse_codes.H;
-parse_codes.k = parse_codes.H;
-parse_codes.l = parse_codes.H;
-
 var strftime = function strftime(d, format) {
     // I used to use string split with a regex and a capturing block here,
     // which I thought was really clever, but apparently this exact feature is
@@ -1377,189 +1502,40 @@ var strftime = function strftime(d, format) {
 
 module.exports = strftime;
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
-var operators = {
-    '==': function _(l, r) {
-        return l == r;
-    },
-    '!=': function _(l, r) {
-        return l != r;
-    },
-    '>': function _(l, r) {
-        return l > r;
-    },
-    '<': function _(l, r) {
-        return l < r;
-    },
-    '>=': function _(l, r) {
-        return l >= r;
-    },
-    '<=': function _(l, r) {
-        return l <= r;
-    },
-    'contains': function contains(l, r) {
-        return l.indexOf(r) > -1;
-    },
-    'and': function and(l, r) {
-        return l && r;
-    },
-    'or': function or(l, r) {
-        return l || r;
-    }
-};
-
-exports.operators = operators;
-
-},{}],16:[function(require,module,exports){
-'use strict';
-
-var lexical = require('./lexical.js');
-var Promise = require('any-promise');
-var Exp = require('./expression.js');
-
-function hash(markup, scope) {
-    var obj = {},
-        match;
-    lexical.hashCapture.lastIndex = 0;
-    while (match = lexical.hashCapture.exec(markup)) {
-        var k = match[1],
-            v = match[2];
-        obj[k] = Exp.evalValue(v, scope);
-    }
-    return obj;
+/*
+ * Checks if value is classified as a String primitive or object.
+ * @param {any} value The value to check.
+ * @return {Boolean} Returns true if value is a string, else false.
+ */
+function isString(value) {
+    return value instanceof String || typeof value === 'string';
 }
 
-module.exports = function () {
-    var tagImpls = {};
-
-    var _tagInstance = {
-        render: function render(scope, register) {
-            var reg = register[this.name];
-            if (!reg) reg = register[this.name] = {};
-            var obj = hash(this.token.args, scope);
-            return this.tagImpl.render && this.tagImpl.render(scope, obj, reg) || Promise.resolve('');
-        },
-        parse: function parse(token, tokens) {
-            this.type = 'tag';
-            this.token = token;
-            this.name = token.name;
-
-            var tagImpl = tagImpls[this.name];
-            if (!tagImpl) throw new Error('tag ' + this.name + ' not found');
-            this.tagImpl = Object.create(tagImpl);
-            if (this.tagImpl.parse) {
-                this.tagImpl.parse(token, tokens);
-            }
+/*
+ * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property. 
+ * The iteratee is invoked with three arguments: (value, key, object). 
+ * Iteratee functions may exit iteration early by explicitly returning false.
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @return {Object} Returs object.
+ */
+function forOwn(object, iteratee) {
+    object = object || {};
+    for (var k in object) {
+        if (object.hasOwnProperty(k)) {
+            if (iteratee(object[k], k, object) === false) break;
         }
-    };
-
-    function register(name, tag) {
-        tagImpls[name] = tag;
     }
-
-    function construct(token, tokens) {
-        var instance = Object.create(_tagInstance);
-        instance.parse(token, tokens);
-        return instance;
-    }
-
-    function clear() {
-        tagImpls = {};
-    }
-
-    return {
-        construct: construct, register: register, clear: clear
-    };
-};
-
-},{"./expression.js":8,"./lexical.js":10,"any-promise":3}],17:[function(require,module,exports){
-'use strict';
-
-var lexical = require('./lexical.js');
-var TokenizationError = require('./error.js').TokenizationError;
-
-function parse(html) {
-    var tokens = [];
-    if (!html) return tokens;
-
-    var syntax = /({%(.*?)%})|({{(.*?)}})/g;
-    var result, htmlFragment, token;
-    var lastMatchEnd = 0,
-        lastMatchBegin = -1,
-        parsedLinesCount = 0;
-
-    while ((result = syntax.exec(html)) !== null) {
-        // passed html fragments
-        if (result.index > lastMatchEnd) {
-            htmlFragment = html.slice(lastMatchEnd, result.index);
-            tokens.push({
-                type: 'html',
-                raw: htmlFragment,
-                value: htmlFragment
-            });
-        }
-        // tag appeared
-        if (result[1]) {
-            token = factory('tag', 1, result);
-
-            var match = token.value.match(lexical.tagLine);
-            if (!match) {
-                throw new TokenizationError('illegal tag: ' + token.raw, token.input, token.line);
-            }
-            token.name = match[1];
-            token.args = match[2];
-
-            tokens.push(token);
-        }
-        // output
-        else {
-                token = factory('output', 3, result);
-                tokens.push(token);
-            }
-        lastMatchEnd = syntax.lastIndex;
-    }
-
-    // remaining html
-    if (html.length > lastMatchEnd) {
-        htmlFragment = html.slice(lastMatchEnd, html.length);
-        tokens.push({
-            type: 'html',
-            raw: htmlFragment,
-            value: htmlFragment
-        });
-    }
-    return tokens;
-
-    function factory(type, offset, match) {
-        return {
-            type: type,
-            raw: match[offset],
-            value: match[offset + 1].trim(),
-            line: getLineNum(match),
-            input: getLineContent(match)
-        };
-    }
-
-    function getLineContent(match) {
-        var idx1 = match.input.lastIndexOf('\n', match.index);
-        var idx2 = match.input.indexOf('\n', match.index);
-        if (idx2 === -1) idx2 = match.input.length;
-        return match.input.slice(idx1 + 1, idx2);
-    }
-
-    function getLineNum(match) {
-        var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n');
-        parsedLinesCount += lines.length - 1;
-        lastMatchBegin = match.index;
-        return parsedLinesCount + 1;
-    }
+    return object;
 }
 
-exports.parse = parse;
+exports.isString = isString;
+exports.forOwn = forOwn;
 
-},{"./error.js":7,"./lexical.js":10}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1576,14 +1552,14 @@ module.exports = function (liquid) {
             this.key = match[1];
             this.value = match[2];
         },
-        render: function render(scope, hash) {
+        render: function render(scope) {
             scope.set(this.key, liquid.evalOutput(this.value, scope));
             return Promise.resolve('');
         }
     });
 };
 
-},{"..":2,"any-promise":3}],19:[function(require,module,exports){
+},{"..":2,"any-promise":3}],20:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1622,7 +1598,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2}],20:[function(require,module,exports){
+},{"..":2}],21:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1673,7 +1649,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2}],21:[function(require,module,exports){
+},{"..":2}],22:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -1691,7 +1667,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1738,7 +1714,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"any-promise":3}],23:[function(require,module,exports){
+},{"..":2,"any-promise":3}],24:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1760,7 +1736,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2}],24:[function(require,module,exports){
+},{"..":2}],25:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1877,7 +1853,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"any-promise":3}],25:[function(require,module,exports){
+},{"..":2,"any-promise":3}],26:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1931,7 +1907,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2}],26:[function(require,module,exports){
+},{"..":2}],27:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1967,7 +1943,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2}],27:[function(require,module,exports){
+},{"..":2}],28:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1989,7 +1965,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2}],28:[function(require,module,exports){
+},{"..":2}],29:[function(require,module,exports){
 "use strict";
 
 module.exports = function (engine) {
@@ -2009,7 +1985,7 @@ module.exports = function (engine) {
     require("./unless.js")(engine);
 };
 
-},{"./assign.js":18,"./capture.js":19,"./case.js":20,"./comment.js":21,"./cycle.js":22,"./decrement.js":23,"./for.js":24,"./if.js":25,"./include.js":26,"./increment.js":27,"./layout.js":29,"./raw.js":30,"./tablerow.js":31,"./unless.js":32}],29:[function(require,module,exports){
+},{"./assign.js":19,"./capture.js":20,"./case.js":21,"./comment.js":22,"./cycle.js":23,"./decrement.js":24,"./for.js":25,"./if.js":26,"./include.js":27,"./increment.js":28,"./layout.js":30,"./raw.js":31,"./tablerow.js":32,"./unless.js":33}],30:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2052,7 +2028,7 @@ module.exports = function (liquid) {
             var _this = this;
 
             var match = /\w+/.exec(token.args);
-            this.block = match ? match[0] : '';
+            this.block = match ? match[0] : 'anonymous';
 
             this.tpls = [];
             var p,
@@ -2084,7 +2060,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"any-promise":3}],30:[function(require,module,exports){
+},{"..":2,"any-promise":3}],31:[function(require,module,exports){
 'use strict';
 
 var Promise = require('any-promise');
@@ -2114,7 +2090,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"any-promise":3}],31:[function(require,module,exports){
+},{"any-promise":3}],32:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2215,7 +2191,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"any-promise":3}],32:[function(require,module,exports){
+},{"..":2,"any-promise":3}],33:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');

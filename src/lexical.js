@@ -34,6 +34,7 @@ var numberLine = new RegExp(`^${number.source}$`);
 var boolLine = new RegExp(`^${bool.source}$`, 'i');
 var quotedLine = new RegExp(`^${quoted.source}$`);
 var rangeLine = new RegExp(`^${rangeCapture.source}$`);
+var integerLine = new RegExp(`^${integer.source}$`);
 
 // filter related
 var valueList = new RegExp(`${value.source}(\\s*,\\s*${value.source})*`);
@@ -46,6 +47,10 @@ var operators = [
     /\s+and\s+/,
     /==|!=|<=|>=|<|>|\s+contains\s+/
 ];
+
+function isInteger(str){
+    return integerLine.test(str);
+}
 
 function isLiteral(str) {
     return literalLine.test(str);
@@ -82,5 +87,5 @@ module.exports = {
     range, rangeCapture, 
     identifier, value, quoteBalanced, operators,
     quotedLine, numberLine, boolLine, rangeLine, literalLine, filterLine, tagLine,
-    isLiteral, isVariable, parseLiteral, isRange, matchValue
+    isLiteral, isVariable, parseLiteral, isRange, matchValue, isInteger
 };

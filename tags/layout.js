@@ -40,7 +40,7 @@ module.exports = function(liquid) {
     liquid.registerTag('block', {
         parse: function(token, remainTokens){
             var match = /\w+/.exec(token.args);
-            this.block = match ? match[0] : '';
+            this.block = match ? match[0] : 'anonymous';
 
             this.tpls = [];
             var p, stream = liquid.parser.parseStream(remainTokens)

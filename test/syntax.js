@@ -13,8 +13,7 @@ describe('expression', function() {
         scope = Scope.factory({
             one: 1,
             two: 2,
-            x: 'XXX',
-			z: 'z'
+            x: 'XXX'
         });
     });
 
@@ -41,7 +40,6 @@ describe('expression', function() {
         expect(evalExp('one<=two', scope)).to.equal(true);
         expect(evalExp('x contains "x"', scope)).to.equal(false);
         expect(evalExp('x contains "X"', scope)).to.equal(true);
-        expect(evalExp('x contains z', scope)).to.equal(false);
         expect(evalExp('"<=" == "<="', scope)).to.equal(true);
     });
 
@@ -51,7 +49,7 @@ describe('expression', function() {
     });
 
     it("should eval range expression", function() {
-        expect(evalExp('(2..4)', scope)).to.deep.equal([2,3,4]);
-        expect(evalExp('(two..4)', scope)).to.deep.equal([2,3,4]);
+        expect(evalExp('(2..4)', scope)).to.deep.equal([2, 3, 4]);
+        expect(evalExp('(two..4)', scope)).to.deep.equal([2, 3, 4]);
     });
 });
