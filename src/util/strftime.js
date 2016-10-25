@@ -24,20 +24,6 @@ var _date = {
         return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     },
 
-    getTimezone: function(d) {
-        return d.toString().replace(
-            /^.*? ([A-Z]{3}) [0-9]{4}.*$/, "$1"
-        ).replace(
-            /^.*?\(([A-Z])[a-z]+ ([A-Z])[a-z]+ ([A-Z])[a-z]+\)$/, "$1$2$3"
-        );
-    },
-
-    getGMTOffset: function(d) {
-        return (d.getTimezoneOffset() > 0 ? "-" : "+") +
-            _number.pad(Math.floor(d.getTimezoneOffset() / 60), 2) +
-            _number.pad(d.getTimezoneOffset() % 60, 2);
-    },
-
     getDayOfYear: function(d) {
         var num = 0;
         for (var i = 0; i < d.getMonth(); ++i) {
@@ -62,25 +48,10 @@ var _date = {
         return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)));
     },
 
-    getFirstDayOfMonth: function(d) {
-        var day = (d.getDay() - (d.getDate() - 1)) % 7;
-        return (day < 0) ? (day + 7) : day;
-    },
-
-    getLastDayOfMonth: function(d) {
-        var day = (d.getDay() + (_date.daysInMonth(d)[d.getMonth()] - d.getDate())) % 7;
-        return (day < 0) ? (day + 7) : day;
-    },
-
     getSuffix: function(d) {
         var str = d.getDate().toString();
         var index = parseInt(str.slice(-1));
         return suffixes[index] || suffixes['default'];
-    },
-
-    applyOffset: function(date, offset_seconds) {
-        date.setTime(date.valueOf() - offset_seconds * 1000);
-        return date;
     },
 
     century: function(d) {
@@ -191,12 +162,9 @@ var format_codes = {
     Y: function(d) {
         return d.getFullYear();
     },
-    // TODO: guessing the pad function won't work with negative numbers?
-    // TODO: getTimezoneOffset returns a positive number for GMT-7. Verify my
-    // assumption that it will return negative for GMT+x
     z: function(d) {
         var tz = d.getTimezoneOffset() / 60 * 100;
-        return (tz > 0 ? '-' : '+') + _number.pad(tz, 4);
+        return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4);
     },
     "%": function() {
         return '%';
@@ -206,19 +174,6 @@ format_codes.h = format_codes.b;
 format_codes.N = format_codes.L;
 
 var strftime = function(d, format) {
-    // I used to use string split with a regex and a capturing block here,
-    // which I thought was really clever, but apparently this exact feature is
-    // fucked in IE. In every other browser (and languages), the captured
-    // blocks are present in the output. E.g.
-    // var pairs = "hello%athere".split(/(%.)/);
-    // => ['hello', '%a', 'there']
-    // IE however, just treats it the same as if no capturing block is present
-    // => ['hello', 'there']
-    // An alternate implementation of split is available here
-    // http://blog.stevenlevithan.com/archives/cross-browser-split
-    // Because that's a large amount of code for this one specific use case,
-    // I've just decided to loop through a regex instead.
-
     var output = '';
     var remaining = format;
 
