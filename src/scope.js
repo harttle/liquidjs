@@ -41,7 +41,13 @@ var Scope = {
 	pop: function() {
 		return this.scopes.pop();
 	},
-
+    unshift: function(ctx) {
+        if (!ctx) throw new Error('trying to push $(ctx) into scopes');
+        return this.scopes.unshift(ctx);
+    },
+    shift: function() {
+        return this.scopes.shift();
+    },
 	setPropertyByPath: function(obj, path, val) {
 		if (_.isString(path)) {
 			var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');

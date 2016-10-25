@@ -113,5 +113,17 @@ describe('scope', function() {
 			scope.pop();
 			expect(scope.get('foo')).to.equal('zoo');
 		});
+        it('should unshift scope', function() {
+            scope.unshift({foo: 'blue', foo1: 'foo1'})
+            scope.get('foo').should.equal('zoo');
+            scope.get('foo1').should.equal('foo1');
+        });
+
+        it('should shift scope', function() {
+            scope.unshift({foo: 'blue', foo1: 'foo1'});
+            scope.shift();
+            expect(scope.get('foo')).to.equal('zoo');
+            expect(scope.get('foo1')).to.equal(undefined);
+        });
 	});
 });
