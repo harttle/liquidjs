@@ -13,12 +13,18 @@ var Template = require('../src/parser.js');
 describe('template', function() {
     var scope, template, add = (l, r) => l + r;
 
-    beforeEach(function(){
+    beforeEach(function() {
         filter.clear();
         filter.register('add', add);
 
         tag.clear();
         template = Template(tag, filter);
+    });
+
+    it('should throw when output string illegal', function() {
+        expect(function() {
+            template.parseOutput('/');
+        }).to.throw(/illegal output string/);
     });
 
     it('should parse output string', function() {

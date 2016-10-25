@@ -2,7 +2,7 @@ function TokenizationError(message, input, line) {
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
 
-    this.message = message || "";
+    this.message = message;
     this.input = input;
     this.line = line;
 }
@@ -14,7 +14,7 @@ function ParseError(message, input, line, e) {
     this.name = this.constructor.name;
     this.originalError = e;
 
-    this.message = message || "";
+    this.message = message;
     this.input = input;
     this.line = line;
 }

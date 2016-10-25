@@ -5,6 +5,12 @@ chai.use(require("chai-as-promised"));
 
 describe('tags/assign', function() {
     var liquid = Liquid();
+    it('should throw when variable expression illegal', function() {
+        var src = '{% assign / %}';
+        var ctx = {};
+        return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(/illegal/);
+    });
+
     it('should assign as string', function() {
         var src = '{% assign foo="bar" %}{{foo}}';
         return expect(liquid.parseAndRender(src))

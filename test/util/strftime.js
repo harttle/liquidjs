@@ -8,7 +8,7 @@ describe('util/strftime', function() {
     before(function() {
         mockUTC();
         now = new Date('2016-01-04T13:15:23');
-        then = new Date('2016-01-03T03:05:03');
+        then = new Date('2016-03-06T03:05:03');
     });
     after(function() {
         restoreUTC();
@@ -36,7 +36,7 @@ describe('util/strftime', function() {
         expect(t(now, '%I')).to.equal('01');
     });
     it('should format %j as day of year', function() {
-        expect(t(now, '%j')).to.equal('004');
+        expect(t(then, '%j')).to.equal('066');
     });
     it('should format %k as space padded hour', function() {
         expect(t(then, '%k')).to.equal(' 3');
@@ -56,8 +56,13 @@ describe('util/strftime', function() {
         expect(t(then, '%P')).to.equal('am');
     });
     it('should format %q as date suffix', function(){
+        var st = new Date('2016-03-01T03:05:03');
+        var nd = new Date('2016-03-02T03:05:03');
+        var rd = new Date('2016-03-03T03:05:03');
+        expect(t(st, '%q')).to.equal('st');
+        expect(t(nd, '%q')).to.equal('nd');
+        expect(t(rd, '%q')).to.equal('rd');
         expect(t(now, '%q')).to.equal('th');
-        expect(t(then, '%q')).to.equal('rd');
     });
     it('should format %s as UNIX seconds', function(){
         expect(t(now, '%s')).to.be.match(/\d+/);

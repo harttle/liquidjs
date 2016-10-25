@@ -6,6 +6,12 @@ chai.use(require("chai-as-promised"));
 describe('tags/decrement', function() {
     var liquid = Liquid();
 
+    it('should throw when variable expression illegal', function() {
+        var src = '{% decrement / %}{{one}}';
+        var ctx = {};
+        return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(/illegal/);
+    });
+
     it('should support decrement', function() {
         var src = '{% decrement one %}{{one}}';
         var ctx = {

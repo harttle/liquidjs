@@ -36,5 +36,13 @@ describe('util/underscore', function() {
             expect(spy).to.have.been.calledOnce;
             expect(spy).to.have.been.calledWith('bar', 'foo', obj);
         });
+        it('should break when returned false', function() {
+            var spy = sinon.stub().returns(false);
+            _.forOwn({
+                'foo': 'foo',
+                'bar': 'foo'
+            }, spy);
+            expect(spy).to.have.been.calledOnce;
+        });
     });
 });

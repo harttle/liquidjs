@@ -28,8 +28,16 @@ describe('render', function() {
         render = Render();
     });
 
-    it('should render html', function() {
-        return render.renderTemplates([{type: 'html', value: '<p>'}], scope).should.eventually.equal('<p>');
+    describe('.renderTemplates()', function(){
+        it('should throw when scope undefined', function() {
+            expect(function(){
+                render.renderTemplates([]);
+            }).to.throw(/scope undefined/);
+        });
+
+        it('should render html', function() {
+            return render.renderTemplates([{type: 'html', value: '<p>'}], scope).should.eventually.equal('<p>');
+        });
     });
 
     it('should eval filter with correct arguments', function() {
@@ -43,10 +51,17 @@ describe('render', function() {
         expect(time).to.have.been.calledWith('y', 2);
     });
 
-    it('should eval output', function() {
-        filter.register('date', (l, r) => l + r);
-        filter.register('time', (l, r) => l + 3 * r);
-        var tpl = Template.parseOutput('foo.bar[0] | date: "b" | time:2');
-        expect(render.evalOutput(tpl, scope)).to.equal('ab6');
+    describe('.evalOutput()', function(){
+        it('should throw when scope undefined', function() {
+            expect(function(){
+                render.evalOutput();
+            }).to.throw(/scope undefined/);
+        });
+        it('should eval output', function() {
+            filter.register('date', (l, r) => l + r);
+            filter.register('time', (l, r) => l + 3 * r);
+            var tpl = Template.parseOutput('foo.bar[0] | date: "b" | time:2');
+            expect(render.evalOutput(tpl, scope)).to.equal('ab6');
+        });
     });
 });
