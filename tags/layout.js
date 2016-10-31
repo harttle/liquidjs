@@ -12,7 +12,7 @@ module.exports = function(liquid) {
             this.layout = match[0];
             this.tpls = liquid.parser.parse(remainTokens);
         },
-        render: function(scope, hash) {
+        render: function(scope) {
             var layout = Liquid.evalValue(this.layout, scope);
 
             var html = '';
@@ -21,7 +21,7 @@ module.exports = function(liquid) {
             return liquid.renderer.renderTemplates(this.tpls, scope)
                 .then((partial) => {
                     html += partial;
-                    return liquid.handleCache(layout);
+                    return liquid.getTemplate(layout);
                 })
                 .then((templates) => {
                     return liquid.renderer.renderTemplates(templates, scope);
@@ -43,15 +43,15 @@ module.exports = function(liquid) {
             this.block = match ? match[0] : 'anonymous';
 
             this.tpls = [];
-            var p, stream = liquid.parser.parseStream(remainTokens)
-                .on('tag:endblock', token => stream.stop())
+            var stream = liquid.parser.parseStream(remainTokens)
+                .on('tag:endblock', () => stream.stop())
                 .on('template', tpl => this.tpls.push(tpl))
-                .on('end', x => {
+                .on('end', () => {
                     throw new Error(`tag ${token.raw} not closed`);
                 });
             stream.start();
         },
-        render: function(scope, hash){
+        render: function(scope){
             var html = scope.get(`_liquid.blocks.${this.block}`);
             var promise = Promise.resolve('');
             if (html === undefined) {

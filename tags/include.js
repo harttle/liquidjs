@@ -20,7 +20,7 @@ module.exports = function(liquid) {
             if(this.with){
                 hash[filepath] = Liquid.evalValue(this.with, scope);
             }
-            return liquid.handleCache(filepath)
+            return liquid.getTemplate(filepath)
                 .then((templates) => {
                     scope.push(hash);
                     return liquid.renderer.renderTemplates(templates, scope);
@@ -29,7 +29,6 @@ module.exports = function(liquid) {
                     scope.pop();
                     return html;
                 });
-
         }
     });
 

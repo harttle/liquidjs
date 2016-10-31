@@ -13,7 +13,7 @@ function isString(value) {
  * Iteratee functions may exit iteration early by explicitly returning false.
  * @param {Object} object The object to iterate over.
  * @param {Function} iteratee The function invoked per iteration.
- * @return {Object} Returs object.
+ * @return {Object} Returns object.
  */
 function forOwn(object, iteratee) {
     object = object || {};
@@ -25,5 +25,10 @@ function forOwn(object, iteratee) {
     return object;
 }
 
+function isArray(value) {
+    return value instanceof Array;
+}
+
 exports.isString = isString;
+exports.isArray = isArray;
 exports.forOwn = forOwn;

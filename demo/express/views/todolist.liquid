@@ -1,0 +1,11 @@
+{% layout 'layout' %}
+
+<ul>
+  {% for todo in todolist %}
+    <li>{% include 'todo' id=forloop.index %}</li>
+  {% endfor %}
+</ul>
+
+{% block 'footer' %}
+  Copyright @ 2016, Harttle
+{% endblock %}

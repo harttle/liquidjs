@@ -45,4 +45,12 @@ describe('util/underscore', function() {
             expect(spy).to.have.been.calledOnce;
         });
     });
+    describe('.isArray()', function() {
+        it('should return true for []', function() {
+            expect(_.isArray([])).to.be.true;
+        });
+        it('should return false for "foo"', function() {
+            expect(_.isArray("foo")).to.be.false;
+        });
+    });
 });

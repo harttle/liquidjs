@@ -45,7 +45,7 @@ engine.render(tpl, {name: 'alice'})
 
 ```javascript
 var engine = Liquid({
-    root: path.resolve(__dirname, 'views/'),  // for layouts and partials
+    root: path.resolve(__dirname, 'views/'),  // for layouts and includes
     extname: '.liquid',
     cache: false
 });
@@ -60,7 +60,13 @@ engine.renderFile("hello", {name: 'alice'})
     });
 ```
 
-`cache` default to `false`, `extname` default to `.liquid`, `root` default to `""`.
+* `root` is a directory or an array of directories to resolve layouts and includes, as well as the filename passed in when calling `.renderFile()`.
+If an array, the files are looked up in the order they occur in the array.
+Defaults to `["."]`
+
+* `extname` is used to lookup the template file when filepath doesn't include an extension name. Defaults to `.liquid`
+
+* `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
 
 ## Strict Rendering
 
@@ -95,7 +101,9 @@ app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 ```
 
-There's an Express demo [here](demo/express/).
+> There's an Express demo [here](demo/express/).
+
+Note: includes and layouts lookup path should always be specified by `Liquid({root: []})`.
 
 ## Use in Browser
 

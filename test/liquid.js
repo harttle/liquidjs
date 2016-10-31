@@ -1,10 +1,9 @@
 const chai = require("chai");
-const chaiAsPromised = require("chai-as-promised");
 const should = chai.should();
 const expect = chai.expect;
 const Liquid = require('..');
 const mock = require('mock-fs');
-chai.use(chaiAsPromised);
+chai.use(require("chai-as-promised"));
 
 describe('liquid', function() {
     var engine, ctx;
@@ -28,24 +27,26 @@ describe('liquid', function() {
     afterEach(function() {
         mock.restore();
     });
-    it('should output object', function() {
-        return engine.parseAndRender('{{obj}}', ctx).should.eventually.equal('{"foo":"bar"}');
-    });
-    it('should output array', function() {
-        return engine.parseAndRender('{{arr}}', ctx).should.eventually.equal('[-2,"a"]');
-    });
-    it('should output undefined to empty', function() {
-        return engine.parseAndRender('foo{{zzz}}bar', ctx).should.eventually.equal('foobar');
-    });
-    it('should render as null when filter undefined', function() {
-        return engine.parseAndRender('{{arr | filter1}}', ctx).should.eventually.equal('');
-    });
-    it('should throw upon undefined filter when strict_filters set', function() {
-        var opts = {
-            strict_filters: true
-        };
-        return expect(engine.parseAndRender('{{arr | filter1}}', ctx, opts)).to
-            .be.rejectedWith(/undefined filter: filter1/);
+    describe('{{output}}', function() {
+        it('should output object', function() {
+            return engine.parseAndRender('{{obj}}', ctx).should.eventually.equal('{"foo":"bar"}');
+        });
+        it('should output array', function() {
+            return engine.parseAndRender('{{arr}}', ctx).should.eventually.equal('[-2,"a"]');
+        });
+        it('should output undefined to empty', function() {
+            return engine.parseAndRender('foo{{zzz}}bar', ctx).should.eventually.equal('foobar');
+        });
+        it('should render as null when filter undefined', function() {
+            return engine.parseAndRender('{{arr | filter1}}', ctx).should.eventually.equal('');
+        });
+        it('should throw upon undefined filter when strict_filters set', function() {
+            var opts = {
+                strict_filters: true
+            };
+            return expect(engine.parseAndRender('{{arr | filter1}}', ctx, opts)).to
+                .be.rejectedWith(/undefined filter: filter1/);
+        });
     });
     it('should parse html', function() {
         (function() {
@@ -77,10 +78,20 @@ describe('liquid', function() {
     });
     describe('#renderFile()', function() {
         it('should render file', function() {
-            return engine.renderFile('/root/files/foo.html', ctx).should.eventually.equal('foo');
+            return expect(engine.renderFile('/root/files/foo.html', ctx))
+                .to.eventually.equal('foo');
         });
         it('should accept relative path', function() {
-            return expect(engine.renderFile('files/foo.html')).to.eventually.equal('foo');
+            return expect(engine.renderFile('files/foo.html'))
+                .to.eventually.equal('foo');
+        });
+        it('should resolve array as root', function(){
+            engine = Liquid({
+                root: ['/boo', '/root/'],
+                extname: '.html'
+            });
+            return expect(engine.renderFile('files/foo.html'))
+                .to.eventually.equal('foo');
         });
         it('should render file with context', function() {
             return engine.renderFile('/root/files/name.html', ctx).should.eventually.equal('My name is harttle.');
@@ -100,19 +111,6 @@ describe('liquid', function() {
         });
         it('should accept double-dot path', function() {
             return expect(engine.renderFile('files/foo/../foo.html')).to.eventually.equal('foo');
-        });
-    });
-    describe('#express()', function() {
-        it('should render templates', function() {
-            engine.express()('/root/files/name.html', ctx, function(err, html) {
-                expect(err).to.equal(null);
-                expect(html).to.equal('My name is harttle.');
-            });
-        });
-        it('should pass error when file not found', function() {
-            engine.express()('/root/files/name1.html', ctx, function(err, html) {
-                expect(err.code).to.equal('ENOENT');
-            });
         });
     });
     describe('strict', function() {
@@ -163,7 +161,6 @@ describe('liquid', function() {
                 .then((result) => {
                     return expect(result).to.equal('foo');
                 });
-
         });
     });
 });
