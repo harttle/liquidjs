@@ -21,7 +21,10 @@ describe('liquid', function() {
         });
         mock({
             '/root/files/foo.html': 'foo',
-            '/root/files/name.html': 'My name is {{name}}.'
+            '/root/files/name.html': 'My name is {{name}}.',
+            '/un-readable.html': mock.file({
+                mode: '0000'
+            })
         });
     });
     afterEach(function() {
@@ -99,18 +102,17 @@ describe('liquid', function() {
         it('should use default extname', function() {
             return engine.renderFile('files/name', ctx).should.eventually.equal('My name is harttle.');
         });
-        it('should accept root with no trailing slash', function() {
+        it('should throw with lookup list when file not exist', function() {
             engine = Liquid({
-                root: '/root',
+                root: ['/boo', '/root/'],
                 extname: '.html'
             });
-            return expect(engine.renderFile('files/foo.html')).to.eventually.equal('foo');
+            return expect(engine.renderFile('/not/exist.html')).to
+                .be.rejectedWith(/failed to lookup \/not\/exist.html in: \/boo,\/root\//i);
         });
-        it('should accept dot path', function() {
-            return expect(engine.renderFile('./files/foo.html')).to.eventually.equal('foo');
-        });
-        it('should accept double-dot path', function() {
-            return expect(engine.renderFile('files/foo/../foo.html')).to.eventually.equal('foo');
+        it('should throw when file not readable', function() {
+            return expect(engine.renderFile('/un-readable.html')).to
+                .be.rejectedWith(/EACCES/);
         });
     });
     describe('strict', function() {

@@ -48,9 +48,14 @@ describe('engine#express()', function() {
         var file = '/not-exist.html';
         var ctx = {};
         engine.express().call(view, file, ctx, function(err) {
-            expect(err.code).to.equal('ENOENT');
-            console.log(err.message);
-            done();
+            try{
+                expect(err.code).to.equal('ENOENT');
+                expect(err.message).to.match(/Failed to lookup/);
+                done();
+            }
+            catch(e){
+                done(e);
+            }
         });
     });
     it('should respect root option when lookup', function(done) {

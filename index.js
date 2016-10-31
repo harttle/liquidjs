@@ -63,6 +63,9 @@ var _engine = {
             })
             .catch((e) => {
                 e.file = filepath;
+                if (e.code === 'ENOENT') {
+                    e.message = `Failed to lookup ${filepath} in: ${this.options.root}`;
+                }
                 throw e;
             });
     },
