@@ -13,7 +13,7 @@ const Syntax = require('./src/syntax.js');
 const tags = require('./tags');
 const filters = require('./filters');
 const Promise = require('any-promise');
-const someSeries = require('./src/util/promise.js').someSeries;
+const anySeries = require('./src/util/promise.js').anySeries;
 
 var _engine = {
     init: function(tag, filter, options) {
@@ -78,7 +78,7 @@ var _engine = {
     },
     lookup: function(filepath) {
         var paths = this.options.root.map(root => pathResolve(root, filepath));
-        return someSeries(paths, path => statFileAsync(path).then(() => path));
+        return anySeries(paths, path => statFileAsync(path).then(() => path));
     },
     getTemplate: function(filepath) {
         if (!filepath.match(/\.\w+$/)) {
