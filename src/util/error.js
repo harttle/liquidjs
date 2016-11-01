@@ -1,5 +1,7 @@
 function TokenizationError(message, input, line) {
-    Error.captureStackTrace(this, this.constructor);
+    if(Error.captureStackTrace){
+        Error.captureStackTrace(this, this.constructor);
+    }
     this.name = this.constructor.name;
 
     this.message = message;
@@ -10,7 +12,9 @@ TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
 
 function ParseError(message, input, line, e) {
-    Error.captureStackTrace(this, this.constructor);
+    if(Error.captureStackTrace){
+        Error.captureStackTrace(this, this.constructor);
+    }
     this.name = this.constructor.name;
     this.originalError = e;
 
@@ -21,6 +25,16 @@ function ParseError(message, input, line, e) {
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
 
+function RenderBreak(message){
+    if(Error.captureStackTrace){
+        Error.captureStackTrace(this, this.constructor);
+    }
+    this.name = this.constructor.name;
+    this.message = message;
+}
+RenderBreak.prototype = Object.create(Error.prototype);
+RenderBreak.prototype.constructor = RenderBreak;
+
 module.exports = {
-    TokenizationError, ParseError
+    TokenizationError, ParseError, RenderBreak
 };

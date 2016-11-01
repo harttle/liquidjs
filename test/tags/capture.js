@@ -6,18 +6,19 @@ chai.use(require("chai-as-promised"));
 describe('tags/capture', function() {
     var liquid = Liquid();
 
-    it('should support capture 1', function() {
+    it('should support capture', function() {
         var src = '{% capture f %}{{"a" | capitalize}}{%endcapture%}{{f}}';
         return expect(liquid.parseAndRender(src))
             .to.eventually.equal('A');
     });
-    it('should support capture 2', function() {
+
+    it('should throw on invalid identifier', function() {
         var src = '{% capture = %}{%endcapture%}';
         return expect(liquid.parseAndRender(src))
             .to.be.rejectedWith(/= not valid identifier/);
     });
 
-    it('should throw when for capture closed', function() {
+    it('should throw when capture not closed', function() {
         var src = '{%capture c%}{{c}}';
         return expect(liquid.parseAndRender(src))
             .to.be.rejectedWith(/tag .* not closed/);

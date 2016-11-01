@@ -2,7 +2,7 @@ const Liquid = require('../..');
 const mock = require('mock-fs');
 const chai = require("chai");
 const expect = chai.expect;
-const error = require('../../src/error.js');
+const ParseError = Liquid.Types.ParseError;
 chai.use(require("chai-as-promised"));
 
 describe('tags/include', function() {
@@ -52,7 +52,7 @@ describe('tags/include', function() {
 
     it('should throw when illegal', function() {
         return expect(liquid.renderFile('/illegal.html')).to.
-            be.rejectedWith(error.ParseError, /illegal token {%include%}/);
+            be.rejectedWith(ParseError, /illegal token {%include%}/);
     });
 
     it('should support include with relative path', function() {

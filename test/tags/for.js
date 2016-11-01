@@ -46,12 +46,10 @@ describe('tags/for', function() {
 
     it('should support for with continue', function() {
         var src = '{% for i in (1..5) %}' +
-            '{% if i == 4 %}{% continue %}' +
-            '{% else %}{{ i }}' +
-            '{% endif %}' +
+            '{{i}}{% continue %}after' +
             '{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('1235');
+            .to.eventually.equal('12345');
     });
     it('should support for with break', function() {
         src = '{% for i in (one..5) %}' +

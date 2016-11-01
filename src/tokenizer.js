@@ -1,5 +1,5 @@
 const lexical = require('./lexical.js');
-const TokenizationError = require('./error.js').TokenizationError;
+const TokenizationError = require('./util/error.js').TokenizationError;
 const _ = require('./util/underscore.js');
 
 function parse(html) {

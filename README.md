@@ -10,6 +10,7 @@ See:
 
 * [supported filter list](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters), and
 * [supported tag list](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
+* any-promise
 
 Installation:
 
@@ -108,7 +109,7 @@ Note: includes and layouts lookup path should always be specified by `Liquid({ro
 ## Use in Browser
 
 [Download][releases] the dist files and import into your HTML.
-And `window.Liquid` is what you want.
+And `window.Liquid` is what you want. There's also a [demo](demo/browser/).
 
 ```html
 <html lang="en">
@@ -131,7 +132,7 @@ And `window.Liquid` is what you want.
 </html>
 ```
 
-There's also a [demo](demo/browser/).
+Note: any-promise browser requires a polyfill or explicit registration. e.g: `require('any-promise/register/bluebird')`
 
 ## Includes
 

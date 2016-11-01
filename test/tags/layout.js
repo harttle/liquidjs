@@ -2,7 +2,6 @@ const Liquid = require('../..');
 const mock = require('mock-fs');
 const chai = require("chai");
 const expect = chai.expect;
-const error = require('../../src/error.js');
 chai.use(require("chai-as-promised"));
 
 describe('tags/layout', function() {

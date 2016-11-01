@@ -1,7 +1,8 @@
-var chai = require("chai");
-var expect = chai.expect;
-var engine = require('..')(), ctx;
+const chai = require("chai");
+const expect = chai.expect;
 const mock = require('mock-fs');
+
+var engine = require('../..')(), ctx;
 
 function test(promise, cb){
     return promise

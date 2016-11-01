@@ -1,5 +1,7 @@
 const Syntax = require('./syntax.js');
 const Promise = require('any-promise');
+const mapSeries = require('./util/promise.js').mapSeries;
+const RenderBreak = require('./util/error.js').RenderBreak;
 
 var render = {
 
@@ -9,54 +11,36 @@ var render = {
         opts.strict_filters = opts.strict_filters || false;
 
         var html = '';
+        return mapSeries(templates, (tpl) => {
+            return renderTemplate.call(this, tpl)
+                .then(partial => html += partial)
+                .catch(e => {
+                    if(e instanceof RenderBreak){
+                        e.resolvedHTML = html;                
+                    }
+                    throw e;
+                });
+        }).then(() => html);
 
-        // This executes an array of promises sequentially for every template in the templates array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
-        // It's fundamentally equivalent to the following...
-        //  emptyPromise.then(renderTag(template0).then(renderTag(template1).then(renderTag(template2)...
-        var lastPromise = templates.reduce((promise, template) => {
-            return promise.then(() => {
-                var promiseLink = Promise.resolve('');
-                switch (template.type) {
-                    case 'tag':
-                        // Add Promises to the chain
-                        promiseLink = this.renderTag(template, scope, this.register)
-                            .then((partial) => {
-                                if (partial === undefined) {
-                                    return true; // basically a noop (do nothing)
-                                }
-                                return html += partial;
-                            });
-                        break;
-                    case 'html':
-                        promiseLink = Promise.resolve(template.value)
-                            .then((partial) => {
-                                return html += partial;
-                            });
-                        break;
-                    case 'output':
-                        var val = this.evalOutput(template, scope, opts);
-                        promiseLink = Promise.resolve(val === undefined ? '' : stringify(val))
-                            .then((partial) => {
-                                return html += partial;
-                            });
-                        break;
-                }
-
-                return promiseLink;
-            });
-        }, Promise.resolve('')); // start the reduce chain with a resolved Promise. After first run, the "promise" argument
-        //  in our reduce callback will be the returned promise from our "then" above.  In this
-        //  case, that's the promise returned from this.renderTag or a resolved promise with raw html.
-
-        return lastPromise;
+        function renderTemplate(template){
+            if (template.type === 'tag') {
+                return this.renderTag(template, scope, this.register)
+                    .then(partial => partial === undefined ? '' : partial);
+            } else if (template.type === 'output') {
+                return Promise.resolve(this.evalOutput(template, scope, opts))
+                    .then(partial => partial === undefined ? '' : stringify(partial));
+            } else { // template.type === 'html'
+                return Promise.resolve(template.value);
+            }
+        }
     },
 
     renderTag: function(template, scope, register) {
         if (template.name === 'continue') {
-            return Promise.resolve('');
+            return Promise.reject(new RenderBreak('continue'));
         }
         if (template.name === 'break') {
-            return Promise.reject(new Error('forloop.stop')); // this will stop the sequential promise chain
+            return Promise.reject(new RenderBreak('break'));
         }
         return template.render(scope, register);
     },

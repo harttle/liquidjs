@@ -14,6 +14,7 @@ const tags = require('./tags');
 const filters = require('./filters');
 const Promise = require('any-promise');
 const anySeries = require('./src/util/promise.js').anySeries;
+const Errors = require('./src/util/error.js');
 
 var _engine = {
     init: function(tag, filter, options) {
@@ -47,14 +48,15 @@ var _engine = {
         return this.renderer.renderTemplates(tpl, scope, opts);
     },
     parseAndRender: function(html, ctx, opts) {
-        try {
-            var tpl = this.parse(html);
-            return this.render(tpl, ctx, opts);
-        } catch (error) {
-            // A throw inside of a then or catch of a Promise automatically rejects, but since we mix a sync call
-            //  with an async call, we need to do this in case the sync call throws.
-            return Promise.reject(error);
-        }
+        return Promise.resolve()
+            .then(() => this.parse(html))
+            .then(tpl => this.render(tpl, ctx, opts))
+            .catch(e => {
+                if (e instanceof Errors.RenderBreak) {
+                    return e.html;
+                }
+                throw e;
+            });
     },
     renderFile: function(filepath, ctx, opts) {
         return this.getTemplate(filepath)
@@ -137,5 +139,10 @@ factory.isTruthy = Syntax.isTruthy;
 factory.isFalsy = Syntax.isFalsy;
 factory.evalExp = Syntax.evalExp;
 factory.evalValue = Syntax.evalValue;
+factory.Types = {
+    ParseError: Errors.ParseError,
+    TokenizationEroor: Errors.TokenizationError,
+    RenderBreak: Errors.RenderBreak
+};
 
 module.exports = factory;

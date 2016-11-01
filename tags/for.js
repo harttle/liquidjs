@@ -1,7 +1,9 @@
-var Liquid = require('..');
-var Promise = require('any-promise');
-var lexical = Liquid.lexical;
-var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
+const Liquid = require('..');
+const Promise = require('any-promise');
+const lexical = Liquid.lexical;
+const mapSeries = require('../src/util/promise.js').mapSeries;
+const RenderBreak = Liquid.Types.RenderBreak;
+const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*` +
     `(?:\\s+(reversed))?$`);
@@ -37,19 +39,14 @@ module.exports = function(liquid) {
                 return liquid.renderer.renderTemplates(this.elseTemplates, scope);
             }
 
-            var html = '';
             var length = collection.length;
             var offset = hash.offset || 0;
             var limit = (hash.limit === undefined) ? collection.length : hash.limit;
 
             collection = collection.slice(offset, offset + limit);
-            if(this.reversed) collection.reverse();
+            if (this.reversed) collection.reverse();
 
-            // for needs to execute the promises sequentially, not just resolve them sequentially, due to break and continue.
-            // We can't just loop through executing everything then resolve them all sequentially like we do for render.renderTemplates
-            // First, we build the array of parameters we are going to use for each call to renderTemplates
-            var contexts = [];
-            collection.some((item, i) => {
+            var contexts = collection.map((item, i) => {
                 var ctx = {};
                 ctx[this.variable] = item;
                 ctx.forloop = {
@@ -63,51 +60,29 @@ module.exports = function(liquid) {
                     stop: false,
                     skip: false
                 };
-                // We are just putting together an array of the arguments we will be passing to our sequential promises
-                contexts.push(ctx);
+                return ctx;
             });
 
-            // This is some pretty tricksy javascript, at least to me.
-            // This executes an array of promises sequentially for every argument in the contexts array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
-            // It's fundamentally equivalent to the following...
-            //  emptyPromise.then(renderTemplates(args0).then(renderTemplates(args1).then(renderTemplates(args2)...
-            var lastPromise = contexts.reduce((promise, context) => {
-                return promise.then((partial) => {
-                    if (scope.get('forloop.stop')) {
-                        throw new Error('forloop.stop'); // this will stop the sequential promise chain
-                    }
-
-                    return html += partial;
-                })
-                .then((partial) => {
-                    // todo: Make sure our scope management is sound here.  Create some tests that revolve around loops
-                    //  with sections that take differing amounts of time to complete.  Make sure the order is maintained
-                    //  and scope doesn't bleed over into other renderTemplate calls.
-                    scope.push(context);
-                    return liquid.renderer.renderTemplates(this.templates, scope);
-                })
-                .then((partial) => {
-                    scope.pop(context);
-                    return partial;
-                });
-            }, Promise.resolve(''));  // start the reduce chain with a resolved Promise. After first run, the "promise" argument
-                                    //  in our reduce callback will be the returned promise from our "then" above.  In this
-                                    //  case, the promise returned from liquid.renderer.renderTemplates.
-
-            return lastPromise
-                .then((partial) => {
-                    return html += partial;
-                })
-                .catch((error) => {
-                    if (error.message === 'forloop.stop') {
-                        // the error is a controlled, purposeful stop. so just return the html that we have up to this point
-                        return html;
-                    } else {
-                        // rethrow actual error
-                        throw error;
-                    }
-                });
-
+            var html = '';
+            return mapSeries(contexts, (context) => {
+                scope.push(context);
+                return liquid.renderer
+                    .renderTemplates(this.templates, scope)
+                    .then(partial => html += partial)
+                    .catch(e => {
+                        if (e instanceof RenderBreak) {
+                            html += e.resolvedHTML;
+                            if (e.message === 'continue') return;
+                        }
+                        throw e;
+                    })
+                    .then(() => scope.pop());
+            }).catch((e) => {
+                if (e instanceof RenderBreak && e.message === 'break') {
+                    return;
+                }
+                throw e;
+            }).then(() => html);
         }
     });
 };
