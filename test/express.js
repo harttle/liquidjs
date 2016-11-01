@@ -36,6 +36,9 @@ describe('engine#express()', function() {
             });
         });
     });
+    after(function(){
+        mock.restore();
+    });
     it('should render templates', function(done) {
         request(app).get('/name')
             .expect('My name is harttle.')

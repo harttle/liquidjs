@@ -29,10 +29,6 @@ module.exports = function(liquid) {
                 .then((partial) => {
                     scope.pop();
                     return partial;
-                })
-                .catch((e) => {
-                    e.file = layout;
-                    throw e;
                 });
         }
     });

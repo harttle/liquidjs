@@ -40,6 +40,7 @@ describe('error', function() {
             expect(err.input).to.equal('{% raw %}');
             expect(err.line).to.equal(4);
             expect(err.file).to.equal('/foo.html');
+            mock.restore();
         });
     });
 
