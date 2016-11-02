@@ -1,13 +1,14 @@
-var Liquid = require('..');
-var Promise = require('any-promise');
-var lexical = Liquid.lexical;
+const Liquid = require('..');
+const Promise = require('any-promise');
+const lexical = Liquid.lexical;
+const assert = require('../src/util/assert.js');
 
 module.exports = function(liquid) {
 
     liquid.registerTag('layout', {
         parse: function(token, remainTokens){
             var match = lexical.value.exec(token.args);
-            if(!match) throw new Error(`illegal token ${token.raw}`);
+            assert(match, `illegal token ${token.raw}`);
 
             this.layout = match[0];
             this.tpls = liquid.parser.parse(remainTokens);

@@ -1,4 +1,5 @@
-var Liquid = require('..');
+const Liquid = require('..');
+const assert = require('../src/util/assert.js');
 
 module.exports = function(liquid) {
     liquid.registerTag('case', {

@@ -1,5 +1,6 @@
 const _ = require('./util/underscore.js');
 const lexical = require('./lexical.js');
+const assert = require('./util/assert.js');
 
 var Scope = {
     safeGet: function(str) {
@@ -35,14 +36,14 @@ var Scope = {
         return this;
     },
     push: function(ctx) {
-        if (!ctx) throw new Error(`trying to push ${ctx} into scopes`);
+        assert(ctx, `trying to push ${ctx} into scopes`);
         return this.scopes.push(ctx);
     },
     pop: function() {
         return this.scopes.pop();
     },
     unshift: function(ctx) {
-        if (!ctx) throw new Error(`trying to push ${ctx} into scopes`);
+        assert(ctx, `trying to push ${ctx} into scopes`);
         return this.scopes.unshift(ctx);
     },
     shift: function() {
@@ -92,9 +93,7 @@ var Scope = {
                 // foo[bar.coo]
                 if (delemiter !== "'" && delemiter !== '"') {
                     var j = matchRightBracket(str, i + 1);
-                    if (j === -1) {
-                        throw new Error(`unbalanced []: ${str}`);
-                    }
+                    assert(j !== -1, `unbalanced []: ${str}`);
                     name = str.slice(i + 1, j);
                     // foo[1]
                     if(lexical.isInteger(name)){
@@ -110,9 +109,7 @@ var Scope = {
                 // foo["bar"]
                 else {
                     var j = str.indexOf(delemiter, i + 2);
-                    if (j === -1) {
-                        throw new Error(`unbalanced ${delemiter}: ${str}`);
-                    }
+                    assert(j !== -1, `unbalanced ${delemiter}: ${str}`);
                     name = str.slice(i + 2, j);
                     seq.push(name);
                     name = '';

@@ -1,4 +1,4 @@
-var Liquid = require('..');
+const Liquid = require('..');
 
 module.exports = function(liquid) {
     liquid.registerTag('unless', {

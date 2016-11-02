@@ -1,15 +1,16 @@
-var Liquid = require('..');
-var Promise = require('any-promise');
-var lexical = Liquid.lexical;
-var groupRE = new RegExp(`^(?:(${lexical.value.source})\\s*:\\s*)?(.*)$`);
-var candidatesRE = new RegExp(lexical.value.source, 'g');
+const Liquid = require('..');
+const Promise = require('any-promise');
+const lexical = Liquid.lexical;
+const groupRE = new RegExp(`^(?:(${lexical.value.source})\\s*:\\s*)?(.*)$`);
+const candidatesRE = new RegExp(lexical.value.source, 'g');
+const assert = require('../src/util/assert.js');
 
 module.exports = function(liquid) {
     liquid.registerTag('cycle', {
 
         parse: function(tagToken, remainTokens) {
             var match = groupRE.exec(tagToken.args);
-            if(!match) throw new Error(`illegal tag: ${tagToken.raw}`);
+            assert(match, `illegal tag: ${tagToken.raw}`);
 
             this.group = match[1] || '';
             var candidates = match[2];
@@ -20,14 +21,12 @@ module.exports = function(liquid) {
                 this.candidates.push(match[0]);
             }
 
-            if (!this.candidates.length){
-                throw new Error(`empty candidates: ${tagToken.raw}`);
-            }
+            assert(this.candidates.length, `empty candidates: ${tagToken.raw}`);
         },
 
         render: function(scope, hash, register) {
-            var fingerprint = Liquid.evalValue(this.group, scope) + ':' + 
-                this.candidates.join(',');
+            var group = Liquid.evalValue(this.group, scope);
+            var fingerprint = `cycle:${group}:` + this.candidates.join(',');
             var idx = register[fingerprint];
 
             if(idx === undefined){

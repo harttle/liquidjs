@@ -1,5 +1,6 @@
 const lexical = require('./lexical.js');
 const ParseError = require('./util/error.js').ParseError;
+const assert = require('./util/assert.js');
 
 module.exports = function(Tag, Filter) {
 
@@ -71,7 +72,7 @@ module.exports = function(Tag, Filter) {
 
     function parseOutput(str) {
         var match = lexical.matchValue(str);
-        if(!match) throw new Error(`illegal output string: ${str}`);
+        assert(match, `illegal output string: ${str}`);
 
         var initial = match[0];
         str = str.substr(match.index + match[0].length);

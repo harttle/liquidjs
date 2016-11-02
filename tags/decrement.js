@@ -1,12 +1,13 @@
 const Liquid = require('..');
 const lexical = Liquid.lexical;
+const assert = require('../src/util/assert.js');
 
 module.exports = function(liquid) {
 
     liquid.registerTag('decrement', {
         parse: function(token) {
             var match = token.args.match(lexical.identifier);
-            if (!match) throw new Error(`illegal identifier ${token.args}`);
+            assert(match, `illegal identifier ${token.args}`);
             this.variable = match[0];
         },
         render: function(scope, hash) {

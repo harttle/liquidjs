@@ -1,4 +1,4 @@
-var Promise = require('any-promise');
+const Promise = require('any-promise');
 
 module.exports = function(liquid) {
 

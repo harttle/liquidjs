@@ -1,7 +1,8 @@
-var Liquid = require('..');
-var Promise = require('any-promise');
-var lexical = Liquid.lexical;
-var re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
+const Liquid = require('..');
+const Promise = require('any-promise');
+const lexical = Liquid.lexical;
+const assert = require('../src/util/assert.js');
+const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*$`);
 
@@ -10,7 +11,7 @@ module.exports = function(liquid) {
 
         parse: function(tagToken, remainTokens) {
             var match = re.exec(tagToken.args);
-            if (!match) throw new Error(`illegal tag: ${tagToken.raw}`);
+            assert(match, `illegal tag: ${tagToken.raw}`);
             this.variable = match[1];
             this.collection = match[2];
 

@@ -1,5 +1,6 @@
 const lexical = require('./lexical.js');
 const Syntax = require('./syntax.js');
+const assert = require('./util/assert.js');
 
 var valueRE = new RegExp(`${lexical.value.source}`, 'g');
 
@@ -14,7 +15,7 @@ module.exports = function() {
         },
         parse: function(str) {
             var match = lexical.filterLine.exec(str);
-            if (!match) throw new Error('illegal filter: ' + str);
+            assert(match, 'illegal filter: ' + str);
 
             var name = match[1], argList = match[2] || '', filter = filters[name];
             if (typeof filter !== 'function'){

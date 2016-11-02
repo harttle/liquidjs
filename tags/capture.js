@@ -1,13 +1,14 @@
-var Liquid = require('..');
-var lexical = Liquid.lexical;
-var re = new RegExp(`(${lexical.identifier.source})`);
+const Liquid = require('..');
+const lexical = Liquid.lexical;
+const re = new RegExp(`(${lexical.identifier.source})`);
+const assert = require('../src/util/assert.js');
 
 module.exports = function(liquid) {
 
     liquid.registerTag('capture', {
         parse: function(tagToken, remainTokens) {
             var match = tagToken.args.match(re);
-            if (!match) throw new Error(`${tagToken.args} not valid identifier`);
+            assert(match, `${tagToken.args} not valid identifier`);
 
             this.variable = match[1];
             this.templates = [];

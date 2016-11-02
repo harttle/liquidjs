@@ -2,13 +2,12 @@ const Syntax = require('./syntax.js');
 const Promise = require('any-promise');
 const mapSeries = require('./util/promise.js').mapSeries;
 const RenderBreak = require('./util/error.js').RenderBreak;
+const assert = require('./util/assert.js');
 
 var render = {
 
-    renderTemplates: function(templates, scope, opts) {
-        if (!scope) throw new Error('unable to evalTemplates: scope undefined');
-        opts = opts || {};
-        opts.strict_filters = opts.strict_filters || false;
+    renderTemplates: function(templates, scope) {
+        assert(scope, 'unable to evalTemplates: scope undefined');
 
         var html = '';
         return mapSeries(templates, (tpl) => {
@@ -24,10 +23,10 @@ var render = {
 
         function renderTemplate(template){
             if (template.type === 'tag') {
-                return this.renderTag(template, scope, this.register)
+                return this.renderTag(template, scope)
                     .then(partial => partial === undefined ? '' : partial);
             } else if (template.type === 'output') {
-                return Promise.resolve(this.evalOutput(template, scope, opts))
+                return Promise.resolve(this.evalOutput(template, scope))
                     .then(partial => partial === undefined ? '' : stringify(partial));
             } else { // template.type === 'html'
                 return Promise.resolve(template.value);
@@ -35,25 +34,25 @@ var render = {
         }
     },
 
-    renderTag: function(template, scope, register) {
+    renderTag: function(template, scope) {
         if (template.name === 'continue') {
             return Promise.reject(new RenderBreak('continue'));
         }
         if (template.name === 'break') {
             return Promise.reject(new RenderBreak('break'));
         }
-        return template.render(scope, register);
+        return template.render(scope, this.register);
     },
 
-    evalOutput: function(template, scope, opts) {
-        if (!scope) throw new Error('unable to evalOutput: scope undefined');
+    evalOutput: function(template, scope) {
+        assert(scope, 'unable to evalOutput: scope undefined');
         var val = Syntax.evalExp(template.initial, scope);
         template.filters.some(filter => {
             if (filter.error) {
-                if (opts.strict_filters) {
+                if (this.register.strict_filters) {
                     throw filter.error;
-                } else { // render as null
-                    val = '';
+                } else { 
+                    val = ''
                     return true;
                 }
             }
@@ -62,8 +61,8 @@ var render = {
         return val;
     },
 
-    resetRegisters: function() {
-        return this.register = {};
+    initRegister: function(opts) {
+        return this.register = opts;
     }
 };
 

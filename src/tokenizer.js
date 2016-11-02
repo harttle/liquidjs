@@ -1,12 +1,11 @@
 const lexical = require('./lexical.js');
 const TokenizationError = require('./util/error.js').TokenizationError;
 const _ = require('./util/underscore.js');
+const assert = require('../src/util/assert.js');
 
 function parse(html) {
     var tokens = [];
-    if (!_.isString(html)) {
-        throw new TokenizationError('illegal input type');
-    }
+    assert(_.isString(html), new TokenizationError('illegal input type'));
 
     var syntax = /({%(.*?)%})|({{(.*?)}})/g;
     var result, htmlFragment, token;

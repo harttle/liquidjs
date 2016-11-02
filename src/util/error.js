@@ -35,6 +35,16 @@ function RenderBreak(message){
 RenderBreak.prototype = Object.create(Error.prototype);
 RenderBreak.prototype.constructor = RenderBreak;
 
+function AssertionError(message){
+    if(Error.captureStackTrace){
+        Error.captureStackTrace(this, this.constructor);
+    }
+    this.name = this.constructor.name;
+    this.message = message;
+}
+AssertionError.prototype = Object.create(Error.prototype);
+AssertionError.prototype.constructor = AssertionError;
+
 module.exports = {
-    TokenizationError, ParseError, RenderBreak
+    TokenizationError, ParseError, RenderBreak, AssertionError
 };

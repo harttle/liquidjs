@@ -1,6 +1,7 @@
 const lexical = require('./lexical.js');
 const Promise = require('any-promise');
 const Syntax = require('./syntax.js');
+const assert = require('./util/assert.js');
 
 function hash(markup, scope) {
     var obj = {}, match;
@@ -18,10 +19,8 @@ module.exports = function() {
 
     var _tagInstance = {
         render: function(scope, register) {
-            var reg = register[this.name];
-            if(!reg) reg = register[this.name] = {};
             var obj = hash(this.token.args, scope);
-            return this.tagImpl.render && this.tagImpl.render(scope, obj, reg) || Promise.resolve('');
+            return this.tagImpl.render && this.tagImpl.render(scope, obj, register) || Promise.resolve('');
         },
         parse: function(token, tokens){
             this.type = 'tag';
@@ -29,7 +28,7 @@ module.exports = function() {
             this.name = token.name;
 
             var tagImpl = tagImpls[this.name];
-            if (!tagImpl) throw new Error(`tag ${this.name} not found`);
+            assert(tagImpl, `tag ${this.name} not found`);
             this.tagImpl = Object.create(tagImpl);
             if(this.tagImpl.parse){
                 this.tagImpl.parse(token, tokens);

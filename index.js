@@ -1,5 +1,6 @@
 const Scope = require('./src/scope');
 const _ = require('./src/util/underscore.js');
+const assert = require('./src/util/assert.js');
 const tokenizer = require('./src/tokenizer.js');
 const statFileAsync = require('./src/util/fs.js').statFileAsync;
 const readFileAsync = require('./src/util/fs.js').readFileAsync;
@@ -40,12 +41,11 @@ var _engine = {
         opts = opts || {};
         opts.strict_variables = opts.strict_variables || false;
         opts.strict_filters = opts.strict_filters || false;
-
-        this.renderer.resetRegisters();
+        this.renderer.initRegister(opts);
         var scope = Scope.factory(ctx, {
             strict: opts.strict_variables,
         });
-        return this.renderer.renderTemplates(tpl, scope, opts);
+        return this.renderer.renderTemplates(tpl, scope);
     },
     parseAndRender: function(html, ctx, opts) {
         return Promise.resolve()
@@ -59,15 +59,11 @@ var _engine = {
             });
     },
     renderFile: function(filepath, ctx, opts) {
-        return this.getTemplate(filepath)
-            .then((templates) => {
-                return this.render(templates, ctx, opts);
-            })
-            .catch((e) => {
+        opts = opts || {};
+        return this.getTemplate(filepath, opts.root)
+            .then(templates => this.render(templates, ctx, opts))
+            .catch(e => {
                 e.file = filepath;
-                if (e.code === 'ENOENT') {
-                    e.message = `Failed to lookup ${filepath} in: ${this.options.root}`;
-                }
                 throw e;
             });
     },
@@ -81,16 +77,23 @@ var _engine = {
     registerTag: function(name, tag) {
         return this.tag.register(name, tag);
     },
-    lookup: function(filepath) {
-        var paths = this.options.root.map(root => pathResolve(root, filepath));
-        return anySeries(paths, path => statFileAsync(path).then(() => path));
+    lookup: function(filepath, root) {
+        root = this.options.root.concat(root || []);
+        var paths = root.map(root => pathResolve(root, filepath));
+        return anySeries(paths, path => statFileAsync(path).then(() => path))
+            .catch((e) => {
+                if (e.code === 'ENOENT') {
+                    e.message = `Failed to lookup ${filepath} in: ${root}`;
+                }
+                throw e;
+            });
     },
-    getTemplate: function(filepath) {
+    getTemplate: function(filepath, root) {
         if (!filepath.match(/\.\w+$/)) {
             filepath += this.options.extname;
         }
         return this
-            .lookup(filepath)
+            .lookup(filepath, root)
             .then(filepath => {
                 if (this.options.cache) {
                     var tpl = this.cache[filepath];
@@ -107,8 +110,11 @@ var _engine = {
     },
     express: function(renderOption) {
         renderOption = renderOption || {};
-        return (filePath, options, callback) => {
-            this.renderFile(filePath, options, renderOption)
+        var self = this;
+        return function(filePath, options, callback) {
+            assert(_.isArray(this.root), 'illegal views root, are you using express.js?');
+            renderOption.root = this.root;
+            self.renderFile(filePath, options, renderOption)
                 .then(html => callback(null, html))
                 .catch(e => callback(e));
         };

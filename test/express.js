@@ -66,4 +66,9 @@ describe('engine#express()', function() {
             .expect('foo')
             .expect(200, done);
     });
+    it('should respect express settings.views when lookup', function(done) {
+        request(app).get('/include/bar')
+            .expect('bar')
+            .expect(200, done);
+    });
 });
