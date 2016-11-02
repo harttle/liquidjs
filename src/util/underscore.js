@@ -25,6 +25,14 @@ function forOwn(object, iteratee) {
     return object;
 }
 
+function assign(dst, src) {
+    dst = dst || {};
+    forOwn(src, function(v, k) {
+        dst[k] = v;
+    });
+    return dst;
+}
+
 function isArray(value) {
     return value instanceof Array;
 }
@@ -32,3 +40,4 @@ function isArray(value) {
 exports.isString = isString;
 exports.isArray = isArray;
 exports.forOwn = forOwn;
+exports.assign = assign;

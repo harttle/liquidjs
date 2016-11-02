@@ -38,9 +38,11 @@ var _engine = {
         return this.parser.parse(tokens);
     },
     render: function(tpl, ctx, opts) {
-        opts = opts || {};
-        opts.strict_variables = opts.strict_variables || false;
-        opts.strict_filters = opts.strict_filters || false;
+        opts = _.assign({
+            strict_variables: false,
+            strict_filters: false,
+            root: []
+        }, opts);
         this.renderer.initRegister(opts);
         var scope = Scope.factory(ctx, {
             strict: opts.strict_variables,
@@ -59,7 +61,7 @@ var _engine = {
             });
     },
     renderFile: function(filepath, ctx, opts) {
-        opts = opts || {};
+        opts = _.assign({}, opts);
         return this.getTemplate(filepath, opts.root)
             .then(templates => this.render(templates, ctx, opts))
             .catch(e => {
@@ -122,7 +124,7 @@ var _engine = {
 };
 
 function factory(options) {
-    options = options || {};
+    options = _.assign({}, options);
     options.root = normalizeStringArray(options.root);
     if (!options.root.length) options.root = ['.'];
 
@@ -148,7 +150,8 @@ factory.evalValue = Syntax.evalValue;
 factory.Types = {
     ParseError: Errors.ParseError,
     TokenizationEroor: Errors.TokenizationError,
-    RenderBreak: Errors.RenderBreak
+    RenderBreak: Errors.RenderBreak,
+    AssertionError: Errors.AssertionError
 };
 
 module.exports = factory;

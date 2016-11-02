@@ -148,8 +148,9 @@ function matchRightBracket(str, begin) {
 }
 
 exports.factory = function(_ctx, opts) {
-    opts = opts || {};
-    opts.strict = opts.strict || false;
+    opts = _.assign({
+        strict: false
+    }, opts);
 
     var scope = Object.create(Scope);
     scope.opts = opts;
