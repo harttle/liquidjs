@@ -53,4 +53,14 @@ describe('util/underscore', function() {
             expect(_.isArray("foo")).to.be.false;
         });
     });
+    describe('.echo()', function(){
+        it('should be transparent when called', function() {
+            expect(_.echo('foo')('bar')).to.equal('bar');
+        });
+        it('should log the arguments', function() {
+            var log = sinon.spy(console, 'log');
+            _.echo('foo')('bar');
+            expect(log).to.have.been.calledWith('[foo]', 'bar');
+        });
+    });
 });
