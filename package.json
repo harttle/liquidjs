@@ -1,6 +1,6 @@
 {
   "name": "shopify-liquid",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Liquid template engine for JavaScript, Node.js and Browser",
   "main": "index.js",
   "scripts": {
