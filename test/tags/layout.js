@@ -12,43 +12,70 @@ describe('tags/layout', function() {
             extname: '.html'
         });
     });
-    beforeEach(function() {
-        mock({
-            '/default-layout.html': 'foo{% block %}Default{% endblock %}foo',
-            '/multi-blocks-layout.html': 'foo{% block "a"%}{% endblock %}{% block b%}{%endblock%}foo',
-            '/multi-blocks.html': '{% layout "multi-blocks-layout" %}{%block a%}aaa{%endblock%},{%block b%};{%block c%}ccc{%endblock%};{%endblock%}',
-        });
-    });
     afterEach(function() {
         mock.restore();
     });
 
     it('should throw when block not closed', function() {
-        src = '{% layout "default-layout" %}{%block%}bar';
+        mock({
+            '/parent.html': 'parent',
+        });
+        src = '{% layout "parent" %}{%block%}A';
         return expect(liquid.parseAndRender(src)).to
             .be.rejectedWith(/tag {%block%} not closed/);
     });
-    it('should support layout', function() {
-        src = '{% layout "default-layout" %}{%block%}bar{%endblock%}';
+    it('should handle anonymous block', function() {
+        mock({
+            '/parent.html': 'X{%block%}{%endblock%}Y',
+        });
+        src = '{% layout "parent.html" %}{%block%}A{%endblock%}';
         return expect(liquid.parseAndRender(src)).to
-            .eventually.equal('foobarfoo');
+            .eventually.equal('XAY');
     });
-    it('should support layout: multiple blocks', function() {
-        src = '{% layout "multi-blocks-layout" %}' +
-            '{%block a%}bara{%endblock%}' +
-            '{%block b%}barb{%endblock%}';
+    it('should handle named blocks', function() {
+        mock({
+            '/parent.html': 'X{% block "a"%}{% endblock %}Y{% block b%}{%endblock%}Z',
+        });
+        src = '{% layout "parent.html" %}' +
+            '{%block a%}A{%endblock%}' +
+            '{%block b%}B{%endblock%}';
         return expect(liquid.parseAndRender(src)).to
-            .eventually.equal('foobarabarbfoo');
+            .eventually.equal('XAYBZ');
     });
-    it('should support layout: nested 1', function() {
-        src = '{% layout "multi-blocks" %}{% block a%}A{%endblock%}{%block c%}C{%endblock%}';
+    it('should support default block content', function() {
+        mock({
+            '/parent.html': 'X{% block "a"%}A{% endblock %}Y{% block b%}B{%endblock%}Z',
+        });
+        src = '{% layout "parent.html" %}{%block a%}a{%endblock%}';
         return expect(liquid.parseAndRender(src)).to
-            .eventually.equal('fooA;C;foo');
+            .eventually.equal('XaYBZ');
     });
-    it('should support layout: nested 2', function() {
-        src = '{% layout "multi-blocks" %}{%block c%}C{%endblock%}';
-        return expect(liquid.parseAndRender(src)).to
-            .eventually.equal('fooaaa;C;foo');
+    it('should handle nested block', function() {
+        mock({
+            '/grand.html': 'X{%block a%}G{%endblock%}Y',
+            '/parent.html': '{%layout "grand" %}{%block a%}P{%endblock%}',
+            '/main.html': '{%layout "parent"%}{%block a%}A{%endblock%}'
+        })
+        return expect(liquid.renderFile('/main.html')).to
+            .eventually.equal('XAY');
     });
-
+    it('should not bleed scope into included layout', function() {
+        mock({
+            '/parent.html': 'X{%block a%}{%endblock%}Y{%block b%}{%endblock%}Z',
+            '/main.html': '{%layout "parent"%}'+
+                '{%block a%}A{%endblock%}' + 
+                '{%block b%}I{%include "included"%}J{%endblock%}',
+            '/included.html': '{%layout "parent"%}{%block a%}a{%endblock%}'
+        })
+        return expect(liquid.renderFile('main')).to
+            .eventually.equal('XAYIXaYZJZ');
+    });
+    it('should support hash list', function() {
+        mock({
+            '/parent.html': '{{color}}{%block%}{%endblock%}',
+            '/main.html': '{% layout "parent.html" color:"black"%}{%block%}A{%endblock%}'
+        });
+        return expect(liquid.renderFile('/main.html')).to.
+            eventually.equal('blackA');
+    });
 });

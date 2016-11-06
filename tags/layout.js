@@ -13,24 +13,20 @@ module.exports = function(liquid) {
             this.layout = match[0];
             this.tpls = liquid.parser.parse(remainTokens);
         },
-        render: function(scope) {
+        render: function(scope, hash, register) {
             var layout = Liquid.evalValue(this.layout, scope);
+            var reg = scope.get('liquid');
 
-            var html = '';
-            scope.push({});
-            // not sure if this first one is needed, since the results are ignored
+            // render the remaining tokens immediately
             return liquid.renderer.renderTemplates(this.tpls, scope)
-                .then((partial) => {
-                    html += partial;
-                    return liquid.getTemplate(layout);
-                })
-                .then((templates) => {
-                    return liquid.renderer.renderTemplates(templates, scope);
-                })
-                .then((partial) => {
-                    scope.pop();
-                    return partial;
-                });
+                // now register.blocks contains rendered blocks
+                .then(() => liquid.getTemplate(layout, register.root))
+                // push the hash
+                .then(templates => (scope.push(hash), templates))
+                // render the parent
+                .then(templates => liquid.renderer.renderTemplates(templates, scope))
+                // pop the hash
+                .then(partial => (scope.pop(), partial));
         }
     });
 
@@ -49,20 +45,21 @@ module.exports = function(liquid) {
             stream.start();
         },
         render: function(scope){
-            var html = scope.get(`_liquid.blocks.${this.block}`);
-            var promise = Promise.resolve('');
+            var register = scope.get('liquid');
+            var html = register.blocks[this.block];
+            // if not defined yet
             if (html === undefined) {
-                promise = liquid.renderer.renderTemplates(this.tpls, scope)
+                return liquid.renderer.renderTemplates(this.tpls, scope)
                     .then((partial) => {
-                        scope.set(`_liquid.blocks.${this.block}`, partial);
+                        register.blocks[this.block] = partial;
                         return partial;
                     });
             }
+            // if already defined by desendents
             else {
-                scope.set(`_liquid.blocks.${this.block}`, html);
-                promise = Promise.resolve(html);
+                register.blocks[this.block] = html;
+                return Promise.resolve(html);
             }
-            return promise;
         }
     });
 

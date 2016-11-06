@@ -8,7 +8,7 @@ var engine = Liquid({
 });
 
 app.engine('liquid', engine.express()); // register liquid engine
-app.set('views', __dirname);            // specify the views directory
+app.set('views', ['./partials', './views']);            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 
 app.get('/', function (req, res) {

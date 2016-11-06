@@ -147,13 +147,17 @@ function matchRightBracket(str, begin) {
     return -1;
 }
 
-exports.factory = function(_ctx, opts) {
+exports.factory = function(ctx, opts) {
     opts = _.assign({
-        strict: false
+        strict: false,
+        blocks: {}
     }, opts);
+    ctx = _.assign(ctx, {
+        liquid: opts
+    });
 
     var scope = Object.create(Scope);
     scope.opts = opts;
-    scope.scopes = [_ctx || {}];
+    scope.scopes = [ctx];
     return scope;
 };

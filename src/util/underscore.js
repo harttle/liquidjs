@@ -37,7 +37,15 @@ function isArray(value) {
     return value instanceof Array;
 }
 
+function echo(prefix){
+    return v => {
+        console.log('[' + prefix + ']', v);
+        return v;
+    };
+}
+
 exports.isString = isString;
 exports.isArray = isArray;
 exports.forOwn = forOwn;
 exports.assign = assign;
+exports.echo = echo;

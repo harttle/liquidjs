@@ -3,6 +3,7 @@ const Promise = require('any-promise');
 const mapSeries = require('./util/promise.js').mapSeries;
 const RenderBreak = require('./util/error.js').RenderBreak;
 const assert = require('./util/assert.js');
+const _ = require('./util/underscore.js');
 
 var render = {
 
