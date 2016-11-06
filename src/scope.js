@@ -1,33 +1,35 @@
 const _ = require('./util/underscore.js');
 const lexical = require('./lexical.js');
 const assert = require('./util/assert.js');
+const referenceError = /undefined variable|Cannot read property .* of undefined/;
 
 var Scope = {
-    safeGet: function(str) {
-        var i;
-        // get all
-        if (str === undefined) {
-            var ctx = {};
-            for (i = this.scopes.length - 1; i >= 0; i--) {
-                var scp = this.scopes[i];
-                for (var k in scp) {
-                    if (scp.hasOwnProperty(k)) {
-                        ctx[k] = scp[k];
-                    }
-                }
-            }
-            return ctx;
-        }
-        // get one path
+    getAll: function(str) {
+        var ctx = {};
         for (i = this.scopes.length - 1; i >= 0; i--) {
-            var v = this.getPropertyByPath(this.scopes[i], str);
-            if (v !== undefined) return v;
+            _.assign(ctx, this.scopes[i]);
         }
+        return ctx;
     },
     get: function(str) {
-        var val = this.safeGet(str);
-        if (val === undefined && this.opts.strict_variables) {
-            throw new Error(`[strict_variables] undefined variable: ${str}`);
+        for (var i = this.scopes.length - 1; i >= 0; i--) {
+            try {
+                return this.getPropertyByPath(this.scopes[i], str);
+            } catch (e) {
+                if (!referenceError.test(e.message) || this.opts.strict_variables) {
+                    e.message += ': ' + str;
+                    throw e;
+                }
+            }
+        }
+        if(this.opts.strict_variables){
+            throw new TypeError('undefined variable: ' + str);
+        }
+    },
+    safeGet: function(str) {
+        try {
+            var val = this.safeGet(str);
+        } catch (e) {;
         }
         return val;
     },
@@ -65,12 +67,14 @@ var Scope = {
     },
 
     getPropertyByPath: function(obj, path) {
-        if (_.isString(path) && path.length) {
-            var paths = this.propertyAccessSeq(path);
-            paths.forEach(p => obj = obj && obj[p]);
-            return obj;
+        var paths = this.propertyAccessSeq(path + '');
+        var varName = paths.shift();
+        if (!obj.hasOwnProperty(varName)) {
+            throw new TypeError('undefined variable');
         }
-        return obj[path];
+        var variable = obj[varName];
+        paths.forEach(p => variable = variable[p]);
+        return variable;
     },
 
     /*
@@ -96,11 +100,11 @@ var Scope = {
                     assert(j !== -1, `unbalanced []: ${str}`);
                     name = str.slice(i + 1, j);
                     // foo[1]
-                    if(lexical.isInteger(name)){
+                    if (lexical.isInteger(name)) {
                         seq.push(name);
                     }
                     // foo["bar"]
-                    else{
+                    else {
                         seq.push(this.get(name));
                     }
                     name = '';

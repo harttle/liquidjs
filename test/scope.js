@@ -83,7 +83,7 @@ describe('scope', function() {
         });
 
         it('should get all properties when arguments empty', function() {
-            expect(scope.get()).deep.equal(ctx);
+            expect(scope.getAll()).deep.equal(ctx);
         });
 
         it('should access child property via dot syntax', function() {
@@ -116,7 +116,7 @@ describe('scope', function() {
         });
     });
 
-    describe('.push(), .pop()', function() {
+    describe('.push()', function() {
         it('should throw when trying to push non-object', function() {
             expect(function() {
                 scope.push(false);
@@ -130,7 +130,14 @@ describe('scope', function() {
             expect(scope.get('foo')).to.equal('foo');
             expect(scope.get('bar')).to.equal('bar');
         });
-
+        it('should hide deep properties by push', function(){
+            scope.set('bar', {bar: 'bar'});
+            scope.push({bar: {foo: 'foo'}});
+            expect(scope.get('bar.foo')).to.equal('foo');
+            expect(scope.get('bar.bar')).to.equal(undefined);
+        });
+    });
+    describe('.pop()', function() {
         it('should pop scope', function() {
             scope.push({
                 foo: 'foo'
@@ -140,7 +147,7 @@ describe('scope', function() {
         });
     });
 
-    describe('.push(), .pop()', function() {
+    describe('.unshift()', function() {
         it('should throw when trying to unshift non-object', function() {
             expect(function() {
                 scope.unshift(false);
@@ -150,11 +157,12 @@ describe('scope', function() {
             scope.unshift({
                 foo: 'blue',
                 foo1: 'foo1'
-            })
-            scope.get('foo').should.equal('zoo');
-            scope.get('foo1').should.equal('foo1');
+            });
+            expect(scope.get('foo')).to.equal('zoo');
+            expect(scope.get('foo1')).to.equal('foo1');
         });
-
+    });
+    describe('.shift()', function() {
         it('should shift scope', function() {
             scope.unshift({
                 foo: 'blue',
