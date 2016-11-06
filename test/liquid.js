@@ -96,6 +96,17 @@ describe('liquid', function() {
             return expect(engine.renderFile('files/foo.html'))
                 .to.eventually.equal('foo');
         });
+        it('should default root to cwd', function(){
+            var files = {};
+            files[process.cwd() + '/foo.html'] = 'FOO';
+            mock(files);
+
+            engine = Liquid({
+                extname: '.html'
+            });
+            return expect(engine.renderFile('foo.html'))
+                .to.eventually.equal('FOO');
+        });
         it('should render file with context', function() {
             return engine.renderFile('/root/files/name.html', ctx).should.eventually.equal('My name is harttle.');
         });

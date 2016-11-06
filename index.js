@@ -4,7 +4,7 @@ const assert = require('./src/util/assert.js');
 const tokenizer = require('./src/tokenizer.js');
 const statFileAsync = require('./src/util/fs.js').statFileAsync;
 const readFileAsync = require('./src/util/fs.js').readFileAsync;
-const pathResolve = require('./src/util/fs.js').pathResolve;
+const path = require('path');
 const Render = require('./src/render.js');
 const lexical = require('./src/lexical.js');
 const Tag = require('./src/tag.js');
@@ -73,7 +73,7 @@ var _engine = {
     },
     lookup: function(filepath, root) {
         root = this.options.root.concat(root || []);
-        var paths = root.map(root => pathResolve(root, filepath));
+        var paths = root.map(root => path.resolve(root, filepath));
         return anySeries(paths, path => statFileAsync(path).then(() => path))
             .catch((e) => {
                 if (e.code === 'ENOENT') {
@@ -83,7 +83,7 @@ var _engine = {
             });
     },
     getTemplate: function(filepath, root) {
-        if (!filepath.match(/\.\w+$/)) {
+        if(!path.extname(filepath)){
             filepath += this.options.extname;
         }
         return this
