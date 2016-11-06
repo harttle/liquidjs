@@ -139,10 +139,13 @@ describe('liquid', function() {
     });
     describe('cache', function() {
         it('should be disabled by default', function() {
-            mock({
-                '/root/files/foo.html': 'bar'
-            });
-            return engine.renderFile('files/foo', ctx).should.eventually.equal('bar');
+            return engine.renderFile('files/foo')
+                .then(x => expect(x).to.equal('foo'))
+                .then(x => mock({
+                    '/root/files/foo.html': 'bar'
+                }))
+                .then(x => engine.renderFile('files/foo'))
+                .then(x => expect(x).to.equal('bar'));
         });
         it('should respect cache=true option', function() {
             engine = Liquid({
@@ -150,19 +153,13 @@ describe('liquid', function() {
                 extname: '.html',
                 cache: true
             });
-            return engine.renderFile('files/foo', ctx)
-                .then((result) => {
-                    return expect(result).to.equal('foo');
-                })
-                .then((result) => {
-                    mock({
-                        '/root/files/foo.html': 'bar'
-                    });
-                    return engine.renderFile('files/foo', ctx);
-                })
-                .then((result) => {
-                    return expect(result).to.equal('foo');
-                });
+            return engine.renderFile('files/foo')
+                .then(x => expect(x).to.equal('foo'))
+                .then(x => mock({
+                    '/root/files/foo.html': 'bar'
+                }))
+                .then(x => engine.renderFile('files/foo'))
+                .then(x => expect(x).to.equal('foo'));
         });
     });
 });

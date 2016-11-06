@@ -102,13 +102,14 @@ var _engine = {
                 }
             });
     },
-    express: function(renderOption) {
-        renderOption = renderOption || {};
+    express: function(opts) {
+        opts = opts || {};
         var self = this;
-        return function(filePath, options, callback) {
-            assert(_.isArray(this.root), 'illegal views root, are you using express.js?');
-            renderOption.root = this.root;
-            self.renderFile(filePath, options, renderOption)
+        return function(filePath, ctx, callback) {
+            assert(_.isArray(this.root) || _.isString(this.root), 
+                   'illegal views root, are you using express.js?');
+            opts.root = this.root;
+            self.renderFile(filePath, ctx, opts)
                 .then(html => callback(null, html))
                 .catch(e => callback(e));
         };

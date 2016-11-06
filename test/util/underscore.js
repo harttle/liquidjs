@@ -54,7 +54,7 @@ describe('util/underscore', function() {
         });
     });
     describe('.echo()', function(){
-        it('should be transparent when called', function() {
+        it('should be transparent', function() {
             expect(_.echo('foo')('bar')).to.equal('bar');
         });
         it('should log the arguments', function() {
