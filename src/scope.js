@@ -4,9 +4,9 @@ const assert = require('./util/assert.js');
 const referenceError = /undefined variable|Cannot read property .* of undefined/;
 
 var Scope = {
-    getAll: function(str) {
+    getAll: function() {
         var ctx = {};
-        for (i = this.scopes.length - 1; i >= 0; i--) {
+        for (var i = this.scopes.length - 1; i >= 0; i--) {
             _.assign(ctx, this.scopes[i]);
         }
         return ctx;
@@ -25,13 +25,6 @@ var Scope = {
         if(this.opts.strict_variables){
             throw new TypeError('undefined variable: ' + str);
         }
-    },
-    safeGet: function(str) {
-        try {
-            var val = this.safeGet(str);
-        } catch (e) {;
-        }
-        return val;
     },
     set: function(k, v) {
         this.setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
@@ -112,7 +105,7 @@ var Scope = {
                 }
                 // foo["bar"]
                 else {
-                    var j = str.indexOf(delemiter, i + 2);
+                    j = str.indexOf(delemiter, i + 2);
                     assert(j !== -1, `unbalanced ${delemiter}: ${str}`);
                     name = str.slice(i + 2, j);
                     seq.push(name);

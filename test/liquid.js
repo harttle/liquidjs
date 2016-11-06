@@ -1,5 +1,4 @@
 const chai = require("chai");
-const should = chai.should();
 const expect = chai.expect;
 const Liquid = require('..');
 const mock = require('mock-fs');
@@ -152,10 +151,10 @@ describe('liquid', function() {
         it('should be disabled by default', function() {
             return engine.renderFile('files/foo')
                 .then(x => expect(x).to.equal('foo'))
-                .then(x => mock({
+                .then(() => mock({
                     '/root/files/foo.html': 'bar'
                 }))
-                .then(x => engine.renderFile('files/foo'))
+                .then(() => engine.renderFile('files/foo'))
                 .then(x => expect(x).to.equal('bar'));
         });
         it('should respect cache=true option', function() {
@@ -166,10 +165,10 @@ describe('liquid', function() {
             });
             return engine.renderFile('files/foo')
                 .then(x => expect(x).to.equal('foo'))
-                .then(x => mock({
+                .then(() => mock({
                     '/root/files/foo.html': 'bar'
                 }))
-                .then(x => engine.renderFile('files/foo'))
+                .then(() => engine.renderFile('files/foo'))
                 .then(x => expect(x).to.equal('foo'));
         });
     });

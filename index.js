@@ -38,6 +38,7 @@ var _engine = {
         return this.parser.parse(tokens);
     },
     render: function(tpl, ctx, opts) {
+        opts = _.assign({}, this.options, opts);
         var scope = Scope.factory(ctx, opts);
         return this.renderer.renderTemplates(tpl, scope);
     },
@@ -73,6 +74,7 @@ var _engine = {
     },
     lookup: function(filepath, root) {
         root = this.options.root.concat(root || []);
+        root = _.uniq(root);
         var paths = root.map(root => path.resolve(root, filepath));
         return anySeries(paths, path => statFileAsync(path).then(() => path))
             .catch((e) => {

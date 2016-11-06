@@ -21,7 +21,7 @@ module.exports = function() {
             if (typeof filter !== 'function'){
                 return {
                     name: name,
-                    error: new Error(`undefined filter: ${name}`)
+                    error: new TypeError(`undefined filter: ${name}`)
                 };
             }
 

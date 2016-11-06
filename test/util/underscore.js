@@ -11,7 +11,7 @@ describe('util/underscore', function() {
             expect(_.isString('foo')).to.be.true;
         });
         it('should return true String instance', function() {
-            expect(_.isString(new String('foo'))).to.be.true;
+            expect(_.isString(String('foo'))).to.be.true;
         });
         it('should return false for 123 ', function() {
             expect(_.isString(123)).to.be.false;
@@ -53,7 +53,7 @@ describe('util/underscore', function() {
             expect(_.isArray("foo")).to.be.false;
         });
     });
-    describe('.echo()', function(){
+    describe('.echo()', function() {
         it('should be transparent', function() {
             expect(_.echo('foo')('bar')).to.equal('bar');
         });
@@ -61,6 +61,51 @@ describe('util/underscore', function() {
             var log = sinon.spy(console, 'log');
             _.echo('foo')('bar');
             expect(log).to.have.been.calledWith('[foo]', 'bar');
+        });
+    });
+    describe('.assign()', function() {
+        it('should handle null dst', function() {
+            expect(_.assign(null, {
+                foo: 'bar'
+            })).to.deep.equal({
+                foo: 'bar'
+            });
+        });
+        it('should assign 2 objects', function() {
+            var src = {
+                foo: 'foo',
+                bar: 'bar'
+            };
+            var dst = {
+                foo: 'bar',
+                kaa: 'kaa'
+            };
+            expect(_.assign(dst, src)).to.deep.equal({
+                foo: 'foo',
+                bar: 'bar',
+                kaa: 'kaa'
+            });
+        });
+        it('should assign 3 objects', function() {
+            expect(_.assign({
+                foo: 'foo'
+            }, {
+                bar: 'bar'
+            }, {
+                car: 'car'
+            })).to.deep.equal({
+                foo: 'foo',
+                bar: 'bar',
+                car: 'car'
+            });
+        });
+    });
+    describe('.uniq()', function() {
+        it('should handle empty array', function() {
+            expect(_.uniq([])).to.deep.equal([]);
+        });
+        it('should do uniq', function() {
+            expect(_.uniq([1, 'a', 'a', 1])).to.deep.equal([1, 'a']);
         });
     });
 });

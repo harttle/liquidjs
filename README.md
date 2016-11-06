@@ -48,7 +48,9 @@ engine.render(tpl, {name: 'alice'})
 var engine = Liquid({
     root: path.resolve(__dirname, 'views/'),  // for layouts and includes
     extname: '.liquid',
-    cache: false
+    cache: false,
+    strict_filters: false,       // default: false
+    strict_variables: false      // default: false
 });
 engine.renderFile("hello.liquid", {name: 'alice'})
     .then(function(html){
@@ -69,26 +71,11 @@ Defaults to `process.cwd()`
 
 * `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
 
-## Strict Rendering
+* `strict_filters` is used to enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`.
 
-Undefined filters and variables will be rendered as empty string by default.
-Enable strict rendering to throw errors upon undefined variables/filters:
-
-```javascript
-var opts = {
-    strict_variables: true, 
-    strict_filters: true
-};
-engine.parseAndRender("{{ foo }}", {}, opts).catch(function(err){
-    // err.message === undefined variable: foo
-});
-engine.parseAndRender("{{ 'foo' | filter1 }}", {}, opts).catch(function(err){
-    // err.message === undefined filter: filter1
-});
-// Note: the below opts also work:
-// engine.render(tpl, ctx, opts)
-// engine.renderFile(path, ctx, opts)
-```
+* `strict_variables` is used to enable strict variable derivation. 
+If set to `false`, undefined variables will be rendered as empty string.
+Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
 ## Use with Express.js
 
@@ -104,7 +91,8 @@ app.set('view engine', 'liquid');       // set to default
 
 > There's an Express demo [here](demo/express/).
 
-Note: includes and layouts lookup path should always be specified by `Liquid({root: []})`.
+When using with Express.js, partials(includes and layouts) will be looked up in
+both Liquid `root` and Express `views` directories.
 
 ## Use in Browser
 
