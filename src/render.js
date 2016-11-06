@@ -42,7 +42,7 @@ var render = {
         if (template.name === 'break') {
             return Promise.reject(new RenderBreak('break'));
         }
-        return template.render(scope, this.register);
+        return template.render(scope);
     },
 
     evalOutput: function(template, scope) {
@@ -50,7 +50,7 @@ var render = {
         var val = Syntax.evalExp(template.initial, scope);
         template.filters.some(filter => {
             if (filter.error) {
-                if (this.register.strict_filters) {
+                if (scope.get('liquid.strict_filters')) {
                     throw filter.error;
                 } else { 
                     val = ''
@@ -60,16 +60,11 @@ var render = {
             val = filter.render(val, scope);
         });
         return val;
-    },
-
-    initRegister: function(opts) {
-        return this.register = opts;
     }
 };
 
 function factory() {
     var instance = Object.create(render);
-    instance.register = {};
     return instance;
 }
 

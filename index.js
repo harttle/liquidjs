@@ -38,15 +38,7 @@ var _engine = {
         return this.parser.parse(tokens);
     },
     render: function(tpl, ctx, opts) {
-        opts = _.assign({
-            strict_variables: false,
-            strict_filters: false,
-            root: []
-        }, opts);
-        this.renderer.initRegister(opts);
-        var scope = Scope.factory(ctx, {
-            strict: opts.strict_variables,
-        });
+        var scope = Scope.factory(ctx, opts);
         return this.renderer.renderTemplates(tpl, scope);
     },
     parseAndRender: function(html, ctx, opts) {

@@ -24,9 +24,10 @@ module.exports = function(liquid) {
             assert(this.candidates.length, `empty candidates: ${tagToken.raw}`);
         },
 
-        render: function(scope, hash, register) {
+        render: function(scope, hash) {
             var group = Liquid.evalValue(this.group, scope);
             var fingerprint = `cycle:${group}:` + this.candidates.join(',');
+            var register = scope.get('liquid');
             var idx = register[fingerprint];
 
             if(idx === undefined){

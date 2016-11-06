@@ -13,9 +13,9 @@ module.exports = function(liquid) {
             this.layout = match[0];
             this.tpls = liquid.parser.parse(remainTokens);
         },
-        render: function(scope, hash, register) {
+        render: function(scope, hash) {
             var layout = Liquid.evalValue(this.layout, scope);
-            var reg = scope.get('liquid');
+            var register = scope.get('liquid');
 
             // render the remaining tokens immediately
             return liquid.renderer.renderTemplates(this.tpls, scope)

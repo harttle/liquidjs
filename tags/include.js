@@ -16,12 +16,12 @@ module.exports = function(liquid) {
                 this.with = match[1];
             }
         },
-        render: function(scope, hash, register) {
+        render: function(scope, hash) {
             var filepath = Liquid.evalValue(this.value, scope);
 
-            var reg = scope.get('liquid');
-            var originBlocks = reg.blocks;
-            reg.blocks = {};
+            var register = scope.get('liquid');
+            var originBlocks = register.blocks;
+            register.blocks = {};
 
             if(this.with){
                 hash[filepath] = Liquid.evalValue(this.with, scope);
@@ -33,7 +33,7 @@ module.exports = function(liquid) {
                 })
                 .then((html) => {
                     scope.pop();
-                    reg.blocks = originBlocks;
+                    register.blocks = originBlocks;
                     return html;
                 });
         }

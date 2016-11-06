@@ -18,9 +18,9 @@ module.exports = function() {
     var tagImpls = {};
 
     var _tagInstance = {
-        render: function(scope, register) {
+        render: function(scope) {
             var obj = hash(this.token.args, scope);
-            return this.tagImpl.render && this.tagImpl.render(scope, obj, register) || Promise.resolve('');
+            return this.tagImpl.render && this.tagImpl.render(scope, obj) || Promise.resolve('');
         },
         parse: function(token, tokens){
             this.type = 'tag';

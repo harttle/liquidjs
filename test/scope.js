@@ -73,7 +73,7 @@ describe('scope', function() {
 
         it('should throw undefined in strict mode', function() {
             scope = Scope.factory(ctx, {
-                strict: true
+                strict_variables: true
             });
 
             function fn() {

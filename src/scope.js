@@ -26,7 +26,7 @@ var Scope = {
     },
     get: function(str) {
         var val = this.safeGet(str);
-        if (val === undefined && this.opts.strict) {
+        if (val === undefined && this.opts.strict_variables) {
             throw new Error(`[strict_variables] undefined variable: ${str}`);
         }
         return val;
@@ -149,9 +149,12 @@ function matchRightBracket(str, begin) {
 
 exports.factory = function(ctx, opts) {
     opts = _.assign({
-        strict: false,
-        blocks: {}
+        strict_variables: false,
+        strict_filters: false,
+        blocks: {},
+        root: []
     }, opts);
+
     ctx = _.assign(ctx, {
         liquid: opts
     });
