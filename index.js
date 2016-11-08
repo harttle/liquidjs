@@ -9,7 +9,7 @@ const Render = require('./src/render.js');
 const lexical = require('./src/lexical.js');
 const Tag = require('./src/tag.js');
 const Filter = require('./src/filter.js');
-const Template = require('./src/parser');
+const Parser = require('./src/parser');
 const Syntax = require('./src/syntax.js');
 const tags = require('./tags');
 const filters = require('./filters');
@@ -25,7 +25,7 @@ var _engine = {
         this.options = options;
         this.tag = tag;
         this.filter = filter;
-        this.parser = Template(tag, filter);
+        this.parser = Parser(tag, filter);
         this.renderer = Render();
 
         tags(this);
@@ -127,7 +127,7 @@ function factory(options) {
 
     var engine = Object.create(_engine);
 
-    engine.init(Tag(), Filter(), options);
+    engine.init(Tag(), Filter(options), options);
     return engine;
 }
 

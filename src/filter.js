@@ -1,10 +1,12 @@
 const lexical = require('./lexical.js');
 const Syntax = require('./syntax.js');
 const assert = require('./util/assert.js');
+const _ = require('./util/underscore.js');
 
 var valueRE = new RegExp(`${lexical.value.source}`, 'g');
 
-module.exports = function() {
+module.exports = function(options) {
+    options = _.assign({}, options);
     var filters = {};
 
     var _filterInstance = {
@@ -19,10 +21,17 @@ module.exports = function() {
 
             var name = match[1], argList = match[2] || '', filter = filters[name];
             if (typeof filter !== 'function'){
-                return {
-                    name: name,
-                    error: new TypeError(`undefined filter: ${name}`)
-                };
+                if(options.strict_filters){
+                    throw new TypeError(`undefined filter: ${name}`);
+                }
+                this.name= name;
+                this.filter= x => x;
+                this.args= [];
+                return this;
+                //return {
+                    //name: name,
+                    //error: new TypeError(`undefined filter: ${name}`)
+                //};
             }
 
             var args = [];

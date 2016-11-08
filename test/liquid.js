@@ -5,7 +5,7 @@ const mock = require('mock-fs');
 chai.use(require("chai-as-promised"));
 
 describe('liquid', function() {
-    var engine, ctx;
+    var engine, strictEngine, ctx;
     beforeEach(function() {
         ctx = {
             name: 'harttle',
@@ -17,6 +17,11 @@ describe('liquid', function() {
         engine = Liquid({
             root: '/root/',
             extname: '.html'
+        });
+        strictEngine = Liquid({
+            root: '/root',
+            extname: '.html',
+            strict_filters: true
         });
         mock({
             '/root/files/foo.html': 'foo',
@@ -40,13 +45,10 @@ describe('liquid', function() {
             return engine.parseAndRender('foo{{zzz}}bar', ctx).should.eventually.equal('foobar');
         });
         it('should render as null when filter undefined', function() {
-            return engine.parseAndRender('{{arr | filter1}}', ctx).should.eventually.equal('');
+            return engine.parseAndRender('{{"foo" | filter1}}', ctx).should.eventually.equal('foo');
         });
         it('should throw upon undefined filter when strict_filters set', function() {
-            var opts = {
-                strict_filters: true
-            };
-            return expect(engine.parseAndRender('{{arr | filter1}}', ctx, opts)).to
+            return expect(strictEngine.parseAndRender('{{arr | filter1}}', ctx)).to
                 .be.rejectedWith(/undefined filter: filter1/);
         });
     });

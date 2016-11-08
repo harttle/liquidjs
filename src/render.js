@@ -15,15 +15,15 @@ var render = {
             return renderTemplate.call(this, tpl)
                 .then(partial => html += partial)
                 .catch(e => {
-                    if(e instanceof RenderBreakError){
-                        e.resolvedHTML = html;                
+                    if (e instanceof RenderBreakError) {
+                        e.resolvedHTML = html;
                         throw e;
                     }
                     throw new RenderError(e, tpl);
                 });
         }).then(() => html);
 
-        function renderTemplate(template){
+        function renderTemplate(template) {
             if (template.type === 'tag') {
                 return this.renderTag(template, scope)
                     .then(partial => partial === undefined ? '' : partial);
@@ -49,19 +49,9 @@ var render = {
 
     evalOutput: function(template, scope) {
         assert(scope, 'unable to evalOutput: scope undefined');
-        var val = Syntax.evalExp(template.initial, scope);
-        template.filters.some(filter => {
-            if (filter.error) {
-                if (scope.get('liquid.strict_filters')) {
-                    throw filter.error;
-                } else { 
-                    val = '';
-                    return true;
-                }
-            }
-            val = filter.render(val, scope);
-        });
-        return val;
+        return template.filters.reduce(
+            (prev, filter) => filter.render(prev, scope),
+            Syntax.evalExp(template.initial, scope));
     }
 };
 

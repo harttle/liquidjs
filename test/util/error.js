@@ -130,14 +130,6 @@ describe('error', function() {
                     expect(e.message).to.contain('undefined variable: a');
                 });
         });
-        it('should throw RenderError when filter not defined', function() {
-            return expect(strictEngine.parseAndRender('{{1 | a}}')).to.eventually
-                .be.rejected
-                .then(function(e) {
-                    expect(e).to.have.property('name', 'RenderError');
-                    expect(e.message).to.contain('undefined filter: a');
-                });
-        });
         it('should contain template content in err.message', function() {
             var html = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th'];
             var message = [
@@ -206,6 +198,14 @@ describe('error', function() {
                     throw new Error('intended parse error');
                 }
             });
+        });
+        it('should throw RenderError when filter not defined', function() {
+            return expect(strictEngine.parseAndRender('{{1 | a}}')).to.eventually
+                .be.rejected
+                .then(function(e) {
+                    expect(e).to.have.property('name', 'ParseError');
+                    expect(e.message).to.contain('undefined filter: a');
+                });
         });
         it('should throw ParseError when tag not closed', function() {
             return expect(engine.parseAndRender('{% if %}')).to.eventually

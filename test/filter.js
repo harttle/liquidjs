@@ -14,10 +14,9 @@ describe('filter', function() {
         filter.clear();
         scope = Scope.factory();
     });
-    it('should return undefined when not registered', function() {
+    it('should return default filter when not registered', function() {
         var result = filter.construct('foo');
         expect(result.name).to.equal('foo');
-        expect(result.error).to.be.an('Error');
     });
 
     it('should throw when filter name illegal', function() {
