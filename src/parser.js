@@ -52,16 +52,18 @@ module.exports = function(Tag, Filter) {
 
     function parseToken(token, tokens) {
         try {
-            switch (token.type) {
-                case 'tag':
-                    return parseTag(token, tokens);
-                case 'output':
-                    return parseOutput(token.value);
-                case 'html':
-                    return token;
+            var tpl = null;
+            if (token.type === 'tag') {
+                tpl = parseTag(token, tokens);
+            } else if (token.type === 'output') {
+                tpl = parseOutput(token.value);
+            } else { // token.type === 'html'
+                tpl = token;
             }
+            tpl.token = token;
+            return tpl;
         } catch (e) {
-            throw new ParseError(e.message, token.input, token.line, e);
+            throw new ParseError(e, token);
         }
     }
 
@@ -78,7 +80,7 @@ module.exports = function(Tag, Filter) {
         str = str.substr(match.index + match[0].length);
 
         var filters = [];
-        while(match = lexical.filter.exec(str)){
+        while (match = lexical.filter.exec(str)) {
             filters.push([match[0].trim()]);
         }
 
@@ -95,6 +97,9 @@ module.exports = function(Tag, Filter) {
     }
 
     return {
-        parse, parseTag, parseStream, parseOutput
+        parse,
+        parseTag,
+        parseStream,
+        parseOutput
     };
 };

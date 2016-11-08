@@ -41,12 +41,14 @@ describe('tag', function() {
         tag.register('foo', {
             render: spy
         });
-        tag.construct({
-            type: 'tag',
-            value: 'foo',
-            name: 'foo'
-        }, []).render(scope, {});
-        expect(spy).to.have.been.called;
+        return tag
+            .construct({
+                type: 'tag',
+                value: 'foo',
+                name: 'foo'
+            }, [])
+            .render(scope, {})
+            .then(() => expect(spy).to.have.been.called);
     });
 
     it('should call tag.render with resolved hash', function() {
@@ -61,11 +63,11 @@ describe('tag', function() {
             name: 'foo',
             args: 'aa:foo bb: arr[0] cc: 2.3'
         };
-        tag.construct(token, []).render(scope, {});
-        expect(spy).to.have.been.calledWithMatch(scope, {
-            aa: 'bar',
-            bb: 2,
-            cc: 2.3
-        });
+        return tag.construct(token, []).render(scope, {})
+            .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
+                aa: 'bar',
+                bb: 2,
+                cc: 2.3
+            }));
     });
 });

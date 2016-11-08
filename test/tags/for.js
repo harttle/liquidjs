@@ -52,27 +52,30 @@ describe('tags/for', function() {
             .to.eventually.equal('12345');
     });
     it('should support for with break', function() {
-        src = '{% for i in (one..5) %}' +
+        var src = '{% for i in (one..5) %}' +
             '{% if i == 4 %}{% break %}{% endif %}' +
             '{{ i }}' +
             '{% endfor %}';
+        //return liquid.parseAndRender(src, ctx).catch(e => {
+            //console.log(e.stack);
+        //});
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('123');
     });
 
     it('should support for with limit', function() {
-        src = '{% for i in (1..5) limit:2 %}{{ i }}{% endfor %}';
+        var src = '{% for i in (1..5) limit:2 %}{{ i }}{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('12');
     });
     it('should support for with limit and offset', function() {
-        src = '{% for i in (1..10) limit:2 offset:5%}{{ i }}{% endfor %}';
+        var src = '{% for i in (1..10) limit:2 offset:5%}{{ i }}{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('67');
     });
 
     it('should support for reversed', function() {
-        src = '{% for i in (1..5) limit:2 reversed %}{{ i }}{% endfor %}';
+        var src = '{% for i in (1..5) limit:2 reversed %}{{ i }}{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('21');
     });

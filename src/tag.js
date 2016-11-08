@@ -1,10 +1,12 @@
 const lexical = require('./lexical.js');
+const _ = require('./util/underscore.js');
 const Promise = require('any-promise');
 const Syntax = require('./syntax.js');
 const assert = require('./util/assert.js');
 
 function hash(markup, scope) {
-    var obj = {}, match;
+    var obj = {},
+        match;
     lexical.hashCapture.lastIndex = 0;
     while (match = lexical.hashCapture.exec(markup)) {
         var k = match[1],
@@ -20,9 +22,22 @@ module.exports = function() {
     var _tagInstance = {
         render: function(scope) {
             var obj = hash(this.token.args, scope);
-            return this.tagImpl.render && this.tagImpl.render(scope, obj) || Promise.resolve('');
+            var impl = this.tagImpl;
+            if (typeof impl.render !== 'function') {
+                return Promise.resolve('');
+            }
+            return Promise.resolve()
+                .then(() => typeof impl.render === 'function' ?
+                    impl.render(scope, obj) : '')
+                .catch(function(e) {
+                    if (_.isError(e)) {
+                        throw e;
+                    }
+                    var msg = `Please reject with an Error in ${impl.render}, got ${e}`;
+                    throw new Error(msg);
+                });
         },
-        parse: function(token, tokens){
+        parse: function(token, tokens) {
             this.type = 'tag';
             this.token = token;
             this.name = token.name;
@@ -30,7 +45,7 @@ module.exports = function() {
             var tagImpl = tagImpls[this.name];
             assert(tagImpl, `tag ${this.name} not found`);
             this.tagImpl = Object.create(tagImpl);
-            if(this.tagImpl.parse){
+            if (this.tagImpl.parse) {
                 this.tagImpl.parse(token, tokens);
             }
         }
@@ -51,6 +66,8 @@ module.exports = function() {
     }
 
     return {
-        construct, register, clear
+        construct,
+        register,
+        clear
     };
 };

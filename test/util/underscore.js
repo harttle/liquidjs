@@ -1,11 +1,28 @@
 const chai = require("chai");
 const sinon = require('sinon');
 const expect = chai.expect;
+const Errors = require('../../src/util/error.js');
 chai.use(require("sinon-chai"));
 
 var _ = require('../../src/util/underscore.js');
 
 describe('util/underscore', function() {
+    describe('.isError()', function() {
+        it('should return true for new Error', function() {
+            expect(_.isError(new Error())).to.be.true;
+        });
+        it('should return true for RenderError', function() {
+            var tpl = {
+                token: {
+                    input: 'xx'
+                }
+            };
+            expect(_.isError(new Errors.RenderError(new Error(), tpl))).to.be.true;
+        });
+        it('should return true for RenderBreakError', function() {
+            expect(_.isError(new Errors.RenderBreakError())).to.be.true;
+        });
+    });
     describe('.isString()', function() {
         it('should return true for literal string', function() {
             expect(_.isString('foo')).to.be.true;

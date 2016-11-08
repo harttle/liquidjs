@@ -1,8 +1,7 @@
 const Liquid = require('..');
-const Promise = require('any-promise');
 const lexical = Liquid.lexical;
 const mapSeries = require('../src/util/promise.js').mapSeries;
-const RenderBreak = Liquid.Types.RenderBreak;
+const RenderBreakError = Liquid.Types.RenderBreakError;
 const assert = require('../src/util/assert.js');
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
@@ -23,11 +22,11 @@ module.exports = function(liquid) {
             this.elseTemplates = [];
 
             var p, stream = liquid.parser.parseStream(remainTokens)
-                .on('start', x => p = this.templates)
-                .on('tag:else', token => p = this.elseTemplates)
-                .on('tag:endfor', token => stream.stop())
+                .on('start', () => p = this.templates)
+                .on('tag:else', () => p = this.elseTemplates)
+                .on('tag:endfor', () => stream.stop())
                 .on('template', tpl => p.push(tpl))
-                .on('end', x => {
+                .on('end', () => {
                     throw new Error(`tag ${tagToken.raw} not closed`);
                 });
 
@@ -71,7 +70,7 @@ module.exports = function(liquid) {
                     .renderTemplates(this.templates, scope)
                     .then(partial => html += partial)
                     .catch(e => {
-                        if (e instanceof RenderBreak) {
+                        if (e instanceof RenderBreakError) {
                             html += e.resolvedHTML;
                             if (e.message === 'continue') return;
                         }
@@ -79,7 +78,7 @@ module.exports = function(liquid) {
                     })
                     .then(() => scope.pop());
             }).catch((e) => {
-                if (e instanceof RenderBreak && e.message === 'break') {
+                if (e instanceof RenderBreakError && e.message === 'break') {
                     return;
                 }
                 throw e;

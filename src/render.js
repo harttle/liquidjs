@@ -1,9 +1,9 @@
 const Syntax = require('./syntax.js');
 const Promise = require('any-promise');
 const mapSeries = require('./util/promise.js').mapSeries;
-const RenderBreak = require('./util/error.js').RenderBreak;
+const RenderBreakError = require('./util/error.js').RenderBreakError;
+const RenderError = require('./util/error.js').RenderError;
 const assert = require('./util/assert.js');
-const _ = require('./util/underscore.js');
 
 var render = {
 
@@ -15,10 +15,11 @@ var render = {
             return renderTemplate.call(this, tpl)
                 .then(partial => html += partial)
                 .catch(e => {
-                    if(e instanceof RenderBreak){
+                    if(e instanceof RenderBreakError){
                         e.resolvedHTML = html;                
+                        throw e;
                     }
-                    throw e;
+                    throw new RenderError(e, tpl);
                 });
         }).then(() => html);
 
@@ -27,7 +28,8 @@ var render = {
                 return this.renderTag(template, scope)
                     .then(partial => partial === undefined ? '' : partial);
             } else if (template.type === 'output') {
-                return Promise.resolve(this.evalOutput(template, scope))
+                return Promise.resolve()
+                    .then(() => this.evalOutput(template, scope))
                     .then(partial => partial === undefined ? '' : stringify(partial));
             } else { // template.type === 'html'
                 return Promise.resolve(template.value);
@@ -37,10 +39,10 @@ var render = {
 
     renderTag: function(template, scope) {
         if (template.name === 'continue') {
-            return Promise.reject(new RenderBreak('continue'));
+            return Promise.reject(new RenderBreakError('continue'));
         }
         if (template.name === 'break') {
-            return Promise.reject(new RenderBreak('break'));
+            return Promise.reject(new RenderBreakError('break'));
         }
         return template.render(scope);
     },
@@ -53,7 +55,7 @@ var render = {
                 if (scope.get('liquid.strict_filters')) {
                     throw filter.error;
                 } else { 
-                    val = ''
+                    val = '';
                     return true;
                 }
             }

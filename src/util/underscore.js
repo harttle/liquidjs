@@ -7,6 +7,13 @@ function isString(value) {
     return value instanceof String || typeof value === 'string';
 }
 
+function isError(value) {
+    var signature = Object.prototype.toString.call(value);
+    // [object XXXError]
+    return signature.substr(-6, 5) === 'Error' ||
+        (typeof value.message == 'string' && typeof value.name == 'string');
+}
+
 /*
  * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property. 
  * The iteratee is invoked with three arguments: (value, key, object). 
@@ -88,9 +95,34 @@ function isObject(value) {
     return value !== null && typeof value === 'object';
 }
 
+/*
+ * A function to create flexibly-numbered lists of integers, 
+ * handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. 
+ * Returns a list of integers from start (inclusive) to stop (exclusive), 
+ * incremented (or decremented) by step, exclusive. 
+ * Note that ranges that stop before they start are considered to be zero-length instead of 
+ * negative — if you'd like a negative range, use a negative step.
+ */
+function range(start, stop, step) {
+    if (arguments.length === 1) {
+        stop = start;
+        start = 0;
+    }
+    step = step || 1;
+
+    var arr = [];
+    for (var i = start; i < stop; i += step) {
+        arr.push(i);
+    }
+    return arr;
+}
+
 exports.isString = isString;
 exports.isArray = isArray;
 exports.isObject = isObject;
+exports.isError = isError;
+
+exports.range = range;
 
 exports.forOwn = forOwn;
 exports.assign = assign;

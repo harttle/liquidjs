@@ -47,7 +47,7 @@ var _engine = {
             .then(() => this.parse(html))
             .then(tpl => this.render(tpl, ctx, opts))
             .catch(e => {
-                if (e instanceof Errors.RenderBreak) {
+                if (e instanceof Errors.RenderBreakError) {
                     return e.html;
                 }
                 throw e;
@@ -145,7 +145,7 @@ factory.evalValue = Syntax.evalValue;
 factory.Types = {
     ParseError: Errors.ParseError,
     TokenizationEroor: Errors.TokenizationError,
-    RenderBreak: Errors.RenderBreak,
+    RenderBreakError: Errors.RenderBreakError,
     AssertionError: Errors.AssertionError
 };
 

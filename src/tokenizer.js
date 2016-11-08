@@ -4,9 +4,9 @@ const _ = require('./util/underscore.js');
 const assert = require('../src/util/assert.js');
 
 function parse(html) {
-    var tokens = [];
-    assert(_.isString(html), new TokenizationError('illegal input type'));
+    assert(_.isString(html), 'illegal input type');
 
+    var tokens = [];
     var syntax = /({%(.*?)%})|({{(.*?)}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0, lastMatchBegin = -1, parsedLinesCount = 0;
@@ -27,8 +27,7 @@ function parse(html) {
 
             var match = token.value.match(lexical.tagLine);
             if (!match) {
-                throw new TokenizationError(`illegal tag: ${token.raw}`,
-                    token.input, token.line);
+                throw new TokenizationError(`illegal tag syntax`, token);
             }
             token.name = match[1];
             token.args = match[2];
@@ -36,8 +35,7 @@ function parse(html) {
             tokens.push(token);
         }
         // output
-        else {
-            token = factory('output', 3, result);
+        else { token = factory('output', 3, result);
             tokens.push(token);
         }
         lastMatchEnd = syntax.lastIndex;
@@ -60,15 +58,8 @@ function parse(html) {
             raw: match[offset],
             value: match[offset + 1].trim(),
             line: getLineNum(match),
-            input: getLineContent(match)
+            input: html
         };
-    }
-
-    function getLineContent(match) {
-        var idx1 = match.input.lastIndexOf('\n', match.index);
-        var idx2 = match.input.indexOf('\n', match.index);
-        if (idx2 === -1) idx2 = match.input.length;
-        return match.input.slice(idx1 + 1, idx2);
     }
 
     function getLineNum(match) {
