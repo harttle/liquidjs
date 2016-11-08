@@ -1,7 +1,6 @@
 const _ = require('./util/underscore.js');
 const lexical = require('./lexical.js');
 const assert = require('./util/assert.js');
-const referenceError = /undefined variable|Cannot read property .* of undefined/;
 
 var Scope = {
     getAll: function() {
@@ -16,13 +15,23 @@ var Scope = {
             try {
                 return this.getPropertyByPath(this.scopes[i], str);
             } catch (e) {
-                if (!referenceError.test(e.message) || this.opts.strict_variables) {
+                if (/undefined variable/.test(e.message)) {
+                    continue;
+                }
+                if (/Cannot read property/.test(e.message)) {
+                    if (this.opts.strict_variables) {
+                        e.message += ': ' + str;
+                        throw e;
+                    } else {
+                        continue;
+                    }
+                } else {
                     e.message += ': ' + str;
                     throw e;
                 }
             }
         }
-        if(this.opts.strict_variables){
+        if (this.opts.strict_variables) {
             throw new TypeError('undefined variable: ' + str);
         }
     },

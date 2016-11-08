@@ -71,21 +71,6 @@ describe('scope', function() {
             }).to.throw(/unbalanced '/);
         });
 
-        it('should throw undefined in strict mode', function() {
-            scope = Scope.factory(ctx, {
-                strict_variables: true
-            });
-
-            function fn() {
-                scope.get('notdefined');
-            }
-            expect(fn).to.throw(/undefined variable: notdefined/);
-        });
-
-        it('should get all properties when arguments empty', function() {
-            expect(scope.getAll()).deep.equal(ctx);
-        });
-
         it('should access child property via dot syntax', function() {
             expect(scope.get('bar.zoo')).to.equal('coo');
             expect(scope.get('bar.arr')).to.deep.equal(['a', 'b']);
@@ -113,6 +98,34 @@ describe('scope', function() {
                 "diary": ["first"]
             });
             expect(scope.get('posts[category.diary[0]].name'), 'A Nice Day');
+        });
+    });
+
+    describe('strict_variables', function() {
+        var scope;
+        beforeEach(function(){
+            scope = Scope.factory(ctx, {
+                strict_variables: true
+            });
+        });
+        it('should throw undefined in strict mode', function() {
+            function fn() {
+                scope.get('notdefined');
+            }
+            expect(fn).to.throw(/undefined variable: notdefined/);
+        });
+        it('should find variable in parent scope', function() {
+            scope.set('foo', 'foo');
+            scope.push({
+                'bar': 'bar'
+            });
+            expect(scope.get('foo')).to.equal('foo');
+        });
+    });
+
+    describe('.getAll()', function() {
+        it('should get all properties when arguments empty', function() {
+            expect(scope.getAll()).deep.equal(ctx);
         });
     });
 

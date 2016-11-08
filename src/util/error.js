@@ -14,7 +14,11 @@ TokenizationError.prototype.constructor = TokenizationError;
 function ParseError(message, input, line, e) {
     if(Error.captureStackTrace){
         Error.captureStackTrace(this, this.constructor);
+    } else{
+        this.stack = "";
     }
+    this.stack += (this.stack ? "\nFrom " : "From ") + e.stack;
+
     this.name = this.constructor.name;
     this.originalError = e;
 

@@ -29,8 +29,10 @@ describe('tags/include', function() {
         mock({
             '/illegal.html': '{%include%}',
         });
-        return expect(liquid.renderFile('/illegal.html')).to.
-            be.rejectedWith(ParseError, /illegal token {%include%}/);
+        return liquid.renderFile('/illegal.html').catch(function(e){
+            expect(e.name).to.equal('ParseError');
+            expect(e.message).to.match(/illegal token {%include%}/);
+        });
     });
 
     it('should support include with relative path', function() {

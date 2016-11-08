@@ -66,7 +66,8 @@ describe('error', function() {
             return engine.parseAndRender(src).catch(function(err) {
                 expect(err.name).to.equal('ParseError');
                 expect(err.input).to.equal('{% -a %}');
-                expect(err.line).to.equal(3);
+                expect(err.line).to.equal(3)
+                expect(err.stack).to.contain('From AssertionError: tag -a not found');
             });
         });
         it('should throw correct error info for files', function() {
