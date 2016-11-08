@@ -258,7 +258,7 @@ var _engine = {
         }).then(function (tpl) {
             return _this.render(tpl, ctx, opts);
         }).catch(function (e) {
-            if (e instanceof Errors.RenderBreak) {
+            if (e instanceof Errors.RenderBreakError) {
                 return e.html;
             }
             throw e;
@@ -368,7 +368,7 @@ factory.evalValue = Syntax.evalValue;
 factory.Types = {
     ParseError: Errors.ParseError,
     TokenizationEroor: Errors.TokenizationError,
-    RenderBreak: Errors.RenderBreak,
+    RenderBreakError: Errors.RenderBreakError,
     AssertionError: Errors.AssertionError
 };
 
@@ -728,16 +728,19 @@ module.exports = function (Tag, Filter) {
 
     function parseToken(token, tokens) {
         try {
-            switch (token.type) {
-                case 'tag':
-                    return parseTag(token, tokens);
-                case 'output':
-                    return parseOutput(token.value);
-                case 'html':
-                    return token;
+            var tpl = null;
+            if (token.type === 'tag') {
+                tpl = parseTag(token, tokens);
+            } else if (token.type === 'output') {
+                tpl = parseOutput(token.value);
+            } else {
+                // token.type === 'html'
+                tpl = token;
             }
+            tpl.token = token;
+            return tpl;
         } catch (e) {
-            throw new ParseError(e.message, token.input, token.line, e);
+            throw new ParseError(e, token);
         }
     }
 
@@ -773,7 +776,10 @@ module.exports = function (Tag, Filter) {
     }
 
     return {
-        parse: parse, parseTag: parseTag, parseStream: parseStream, parseOutput: parseOutput
+        parse: parse,
+        parseTag: parseTag,
+        parseStream: parseStream,
+        parseOutput: parseOutput
     };
 };
 
@@ -783,9 +789,9 @@ module.exports = function (Tag, Filter) {
 var Syntax = require('./syntax.js');
 var Promise = require('any-promise');
 var mapSeries = require('./util/promise.js').mapSeries;
-var RenderBreak = require('./util/error.js').RenderBreak;
+var RenderBreakError = require('./util/error.js').RenderBreakError;
+var RenderError = require('./util/error.js').RenderError;
 var assert = require('./util/assert.js');
-var _ = require('./util/underscore.js');
 
 var render = {
 
@@ -799,22 +805,27 @@ var render = {
             return renderTemplate.call(_this, tpl).then(function (partial) {
                 return html += partial;
             }).catch(function (e) {
-                if (e instanceof RenderBreak) {
+                if (e instanceof RenderBreakError) {
                     e.resolvedHTML = html;
+                    throw e;
                 }
-                throw e;
+                throw new RenderError(e, tpl);
             });
         }).then(function () {
             return html;
         });
 
         function renderTemplate(template) {
+            var _this2 = this;
+
             if (template.type === 'tag') {
                 return this.renderTag(template, scope).then(function (partial) {
                     return partial === undefined ? '' : partial;
                 });
             } else if (template.type === 'output') {
-                return Promise.resolve(this.evalOutput(template, scope)).then(function (partial) {
+                return Promise.resolve().then(function () {
+                    return _this2.evalOutput(template, scope);
+                }).then(function (partial) {
                     return partial === undefined ? '' : stringify(partial);
                 });
             } else {
@@ -826,10 +837,10 @@ var render = {
 
     renderTag: function renderTag(template, scope) {
         if (template.name === 'continue') {
-            return Promise.reject(new RenderBreak('continue'));
+            return Promise.reject(new RenderBreakError('continue'));
         }
         if (template.name === 'break') {
-            return Promise.reject(new RenderBreak('break'));
+            return Promise.reject(new RenderBreakError('break'));
         }
         return template.render(scope);
     },
@@ -864,13 +875,12 @@ function stringify(val) {
 
 module.exports = factory;
 
-},{"./syntax.js":13,"./util/assert.js":16,"./util/error.js":17,"./util/promise.js":19,"./util/underscore.js":21,"any-promise":3}],12:[function(require,module,exports){
+},{"./syntax.js":13,"./util/assert.js":16,"./util/error.js":17,"./util/promise.js":19,"any-promise":3}],12:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
 var lexical = require('./lexical.js');
 var assert = require('./util/assert.js');
-var referenceError = /undefined variable|Cannot read property .* of undefined/;
 
 var Scope = {
     getAll: function getAll() {
@@ -885,7 +895,17 @@ var Scope = {
             try {
                 return this.getPropertyByPath(this.scopes[i], str);
             } catch (e) {
-                if (!referenceError.test(e.message) || this.opts.strict_variables) {
+                if (/undefined variable/.test(e.message)) {
+                    continue;
+                }
+                if (/Cannot read property/.test(e.message)) {
+                    if (this.opts.strict_variables) {
+                        e.message += ': ' + str;
+                        throw e;
+                    } else {
+                        continue;
+                    }
+                } else {
                     e.message += ': ' + str;
                     throw e;
                 }
@@ -1097,6 +1117,7 @@ module.exports = {
 'use strict';
 
 var lexical = require('./lexical.js');
+var _ = require('./util/underscore.js');
 var Promise = require('any-promise');
 var Syntax = require('./syntax.js');
 var assert = require('./util/assert.js');
@@ -1119,7 +1140,19 @@ module.exports = function () {
     var _tagInstance = {
         render: function render(scope) {
             var obj = hash(this.token.args, scope);
-            return this.tagImpl.render && this.tagImpl.render(scope, obj) || Promise.resolve('');
+            var impl = this.tagImpl;
+            if (typeof impl.render !== 'function') {
+                return Promise.resolve('');
+            }
+            return Promise.resolve().then(function () {
+                return typeof impl.render === 'function' ? impl.render(scope, obj) : '';
+            }).catch(function (e) {
+                if (_.isError(e)) {
+                    throw e;
+                }
+                var msg = 'Please reject with an Error in ' + impl.render + ', got ' + e;
+                throw new Error(msg);
+            });
         },
         parse: function parse(token, tokens) {
             this.type = 'tag';
@@ -1150,11 +1183,13 @@ module.exports = function () {
     }
 
     return {
-        construct: construct, register: register, clear: clear
+        construct: construct,
+        register: register,
+        clear: clear
     };
 };
 
-},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"any-promise":3}],15:[function(require,module,exports){
+},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"./util/underscore.js":21,"any-promise":3}],15:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -1163,9 +1198,9 @@ var _ = require('./util/underscore.js');
 var assert = require('../src/util/assert.js');
 
 function parse(html) {
-    var tokens = [];
-    assert(_.isString(html), new TokenizationError('illegal input type'));
+    assert(_.isString(html), 'illegal input type');
 
+    var tokens = [];
     var syntax = /({%(.*?)%})|({{(.*?)}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0,
@@ -1188,7 +1223,7 @@ function parse(html) {
 
             var match = token.value.match(lexical.tagLine);
             if (!match) {
-                throw new TokenizationError('illegal tag: ' + token.raw, token.input, token.line);
+                throw new TokenizationError('illegal tag syntax', token);
             }
             token.name = match[1];
             token.args = match[2];
@@ -1220,15 +1255,8 @@ function parse(html) {
             raw: match[offset],
             value: match[offset + 1].trim(),
             line: getLineNum(match),
-            input: getLineContent(match)
+            input: html
         };
-    }
-
-    function getLineContent(match) {
-        var idx1 = match.input.lastIndexOf('\n', match.index);
-        var idx2 = match.input.indexOf('\n', match.index);
-        if (idx2 === -1) idx2 = match.input.length;
-        return match.input.slice(idx1 + 1, idx2);
     }
 
     function getLineNum(match) {
@@ -1259,44 +1287,60 @@ function assert(predicate, message) {
 module.exports = assert;
 
 },{"./error.js":17}],17:[function(require,module,exports){
-"use strict";
+'use strict';
 
-function TokenizationError(message, input, line) {
+var _ = require('./underscore.js');
+
+function TokenizationError(message, token) {
     if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
     }
     this.name = this.constructor.name;
 
-    this.message = message;
-    this.input = input;
-    this.line = line;
+    this.input = token.input;
+    this.line = token.line;
+
+    var context = mkContext(token.input, token.line);
+    this.message = message + '\n' + context;
 }
 TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
 
-function ParseError(message, input, line, e) {
-    if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-    }
+function ParseError(e, token) {
     this.name = this.constructor.name;
-    this.originalError = e;
+    this.stack = e.stack;
 
-    this.message = message;
-    this.input = input;
-    this.line = line;
+    this.input = token.input;
+    this.line = token.line;
+
+    var context = mkContext(token.input, token.line);
+    this.message = e.message + '\n' + context;
 }
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
 
-function RenderBreak(message) {
+function RenderError(e, tpl) {
+    this.name = this.constructor.name;
+    this.stack = e.stack;
+
+    this.input = tpl.token.input;
+    this.line = tpl.token.line;
+
+    var context = mkContext(tpl.token.input, tpl.token.line);
+    this.message = e.message + '\n' + context;
+}
+RenderError.prototype = Object.create(Error.prototype);
+RenderError.prototype.constructor = RenderError;
+
+function RenderBreakError(message) {
     if (Error.captureStackTrace) {
         Error.captureStackTrace(this, this.constructor);
     }
     this.name = this.constructor.name;
-    this.message = message;
+    this.message = message || '';
 }
-RenderBreak.prototype = Object.create(Error.prototype);
-RenderBreak.prototype.constructor = RenderBreak;
+RenderBreakError.prototype = Object.create(Error.prototype);
+RenderBreakError.prototype.constructor = RenderBreakError;
 
 function AssertionError(message) {
     if (Error.captureStackTrace) {
@@ -1308,11 +1352,34 @@ function AssertionError(message) {
 AssertionError.prototype = Object.create(Error.prototype);
 AssertionError.prototype.constructor = AssertionError;
 
+function mkContext(input, line) {
+    var lines = input.split('\n');
+    var begin = Math.max(line - 2, 1);
+    var end = Math.min(line + 3, lines.length);
+
+    var context = _.range(begin, end + 1).map(function (l) {
+        return [l === line ? '>> ' : '   ', align(l, end), '| ', lines[l - 1]].join('');
+    }).join('\n');
+
+    return context;
+}
+
+function align(n, max) {
+    var length = (max + '').length;
+    var str = n + '';
+    var blank = Array(length - str.length).join(' ');
+    return blank + str;
+}
+
 module.exports = {
-    TokenizationError: TokenizationError, ParseError: ParseError, RenderBreak: RenderBreak, AssertionError: AssertionError
+    TokenizationError: TokenizationError,
+    ParseError: ParseError,
+    RenderBreakError: RenderBreakError,
+    AssertionError: AssertionError,
+    RenderError: RenderError
 };
 
-},{}],18:[function(require,module,exports){
+},{"./underscore.js":21}],18:[function(require,module,exports){
 'use strict';
 
 var fs = require('fs');
@@ -1592,6 +1659,12 @@ function isString(value) {
     return value instanceof String || typeof value === 'string';
 }
 
+function isError(value) {
+    var signature = Object.prototype.toString.call(value);
+    // [object XXXError]
+    return signature.substr(-6, 5) === 'Error' || typeof value.message == 'string' && typeof value.name == 'string';
+}
+
 /*
  * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property. 
  * The iteratee is invoked with three arguments: (value, key, object). 
@@ -1672,9 +1745,34 @@ function isObject(value) {
     return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object';
 }
 
+/*
+ * A function to create flexibly-numbered lists of integers, 
+ * handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. 
+ * Returns a list of integers from start (inclusive) to stop (exclusive), 
+ * incremented (or decremented) by step, exclusive. 
+ * Note that ranges that stop before they start are considered to be zero-length instead of 
+ * negative — if you'd like a negative range, use a negative step.
+ */
+function range(start, stop, step) {
+    if (arguments.length === 1) {
+        stop = start;
+        start = 0;
+    }
+    step = step || 1;
+
+    var arr = [];
+    for (var i = start; i < stop; i += step) {
+        arr.push(i);
+    }
+    return arr;
+}
+
 exports.isString = isString;
 exports.isArray = isArray;
 exports.isObject = isObject;
+exports.isError = isError;
+
+exports.range = range;
 
 exports.forOwn = forOwn;
 exports.assign = assign;
@@ -1892,10 +1990,9 @@ module.exports = function (liquid) {
 'use strict';
 
 var Liquid = require('..');
-var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var mapSeries = require('../src/util/promise.js').mapSeries;
-var RenderBreak = Liquid.Types.RenderBreak;
+var RenderBreakError = Liquid.Types.RenderBreakError;
 var assert = require('../src/util/assert.js');
 var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*') + '(?:\\s+(reversed))?$');
 
@@ -1915,15 +2012,15 @@ module.exports = function (liquid) {
             this.elseTemplates = [];
 
             var p,
-                stream = liquid.parser.parseStream(remainTokens).on('start', function (x) {
+                stream = liquid.parser.parseStream(remainTokens).on('start', function () {
                 return p = _this.templates;
-            }).on('tag:else', function (token) {
+            }).on('tag:else', function () {
                 return p = _this.elseTemplates;
-            }).on('tag:endfor', function (token) {
+            }).on('tag:endfor', function () {
                 return stream.stop();
             }).on('template', function (tpl) {
                 return p.push(tpl);
-            }).on('end', function (x) {
+            }).on('end', function () {
                 throw new Error('tag ' + tagToken.raw + ' not closed');
             });
 
@@ -1968,7 +2065,7 @@ module.exports = function (liquid) {
                 return liquid.renderer.renderTemplates(_this2.templates, scope).then(function (partial) {
                     return html += partial;
                 }).catch(function (e) {
-                    if (e instanceof RenderBreak) {
+                    if (e instanceof RenderBreakError) {
                         html += e.resolvedHTML;
                         if (e.message === 'continue') return;
                     }
@@ -1977,7 +2074,7 @@ module.exports = function (liquid) {
                     return scope.pop();
                 });
             }).catch(function (e) {
-                if (e instanceof RenderBreak && e.message === 'break') {
+                if (e instanceof RenderBreakError && e.message === 'break') {
                     return;
                 }
                 throw e;
@@ -1988,7 +2085,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19,"any-promise":3}],29:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],29:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
