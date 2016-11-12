@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
-    "prepublish": "npm test && make dist",
-    "dist": "make dist"
+    "dist": "make dist",
+    "preversion": "npm test",
+    "version": "npm run dist && git add -A dist",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
