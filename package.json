@@ -1,7 +1,7 @@
 {
   "name": "shopify-liquid",
   "version": "1.4.1",
-  "description": "Liquid template engine for JavaScript, Node.js and Browser",
+  "description": "A feature-rich Liquid template engine for Node.js and browsers, with compliance with the Ruby version.",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive",
@@ -16,7 +16,8 @@
   },
   "keywords": [
     "liquid",
-    "template",
+    "template engine",
+    "express",
     "jinja",
     "shopify"
   ],

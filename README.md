@@ -5,12 +5,18 @@
 [![Coverage Status](https://img.shields.io/coveralls/harttle/shopify-liquid/master.svg)](https://coveralls.io/github/harttle/shopify-liquid?branch=master)
 [![Dependency manager](https://img.shields.io/david/harttle/shopify-liquid.svg?style=flat)](https://david-dm.org/harttle/shopify-liquid)
 
-A feature-rich [Liquid][shopify-liquid] implementation for Node.js, with compliance with [Jekyll][jekyll] and [Github Pages][gh].
-See:
+A feature-rich Liquid template engine for Node.js and browsers,
+with compliance with [the Ruby version][shopify-liquid].
+New to Liquid? Here's a live demo: <http://harttle.com/shopify-liquid/>
 
-* [supported filter list](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters), and
-* [supported tag list](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
-* any-promise
+> The Liquid template engine is implemented in Ruby originally, 
+> which is used by [Jekyll][jekyll] and [Github Pages][gh].
+
+Features:
+
+* Pretty much [builtin filters](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters) and [builtin tags](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
+* Async rendering, especially for tags
+* [any-promise][any-promise]
 
 Installation:
 
@@ -120,7 +126,8 @@ And `window.Liquid` is what you want. There's also a [demo](demo/browser/).
 </html>
 ```
 
-Note: any-promise browser requires a polyfill or explicit registration. e.g: `require('any-promise/register/bluebird')`
+Note: In [IE and Android UC][caniuse-promises] browser, you need a Promise implementation
+registered to [any-promise][any-promise].
 
 ## Includes
 
@@ -197,10 +204,9 @@ engine.registerTag('upper', {
 
 ## Contribution Guide
 
-1. Make a fork.
-2. Write a test to demonstrate your feature is not supported yet.
-3. Optionaly, change source files to make all test pass.
-4. Create a pull request.
+1. Write a [test][test] to define the feature you want.
+2. Just initiate an issue, or optionally:
+3. Get your test pass and make a pull request.
 
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node
@@ -208,3 +214,6 @@ engine.registerTag('upper', {
 [jekyll]: http://jekyllrb.com/
 [gh]: https://pages.github.com/
 [releases]: https://github.com/harttle/shopify-liquid/releases
+[any-promise]: https://github.com/kevinbeaty/any-promise
+[test]: https://github.com/harttle/shopify-liquid/tree/master/test
+[caniuse-promises]: http://caniuse.com/#feat=promises
