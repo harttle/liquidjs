@@ -217,7 +217,7 @@ var Render = require('./src/render.js');
 var lexical = require('./src/lexical.js');
 var Tag = require('./src/tag.js');
 var Filter = require('./src/filter.js');
-var Template = require('./src/parser');
+var Parser = require('./src/parser');
 var Syntax = require('./src/syntax.js');
 var tags = require('./tags');
 var filters = require('./filters');
@@ -233,7 +233,7 @@ var _engine = {
         this.options = options;
         this.tag = tag;
         this.filter = filter;
-        this.parser = Template(tag, filter);
+        this.parser = Parser(tag, filter);
         this.renderer = Render();
 
         tags(this);
@@ -350,7 +350,7 @@ function factory(options) {
 
     var engine = Object.create(_engine);
 
-    engine.init(Tag(), Filter(), options);
+    engine.init(Tag(), Filter(options), options);
     return engine;
 }
 
@@ -486,10 +486,12 @@ function loadImplementation() {
 var lexical = require('./lexical.js');
 var Syntax = require('./syntax.js');
 var assert = require('./util/assert.js');
+var _ = require('./util/underscore.js');
 
 var valueRE = new RegExp('' + lexical.value.source, 'g');
 
-module.exports = function () {
+module.exports = function (options) {
+    options = _.assign({}, options);
     var filters = {};
 
     var _filterInstance = {
@@ -508,10 +510,19 @@ module.exports = function () {
                 argList = match[2] || '',
                 filter = filters[name];
             if (typeof filter !== 'function') {
-                return {
-                    name: name,
-                    error: new TypeError('undefined filter: ' + name)
+                if (options.strict_filters) {
+                    throw new TypeError('undefined filter: ' + name);
+                }
+                this.name = name;
+                this.filter = function (x) {
+                    return x;
                 };
+                this.args = [];
+                return this;
+                //return {
+                //name: name,
+                //error: new TypeError(`undefined filter: ${name}`)
+                //};
             }
 
             var args = [];
@@ -545,7 +556,7 @@ module.exports = function () {
     };
 };
 
-},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16}],8:[function(require,module,exports){
+},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"./util/underscore.js":21}],8:[function(require,module,exports){
 'use strict';
 
 // quote related
@@ -847,19 +858,9 @@ var render = {
 
     evalOutput: function evalOutput(template, scope) {
         assert(scope, 'unable to evalOutput: scope undefined');
-        var val = Syntax.evalExp(template.initial, scope);
-        template.filters.some(function (filter) {
-            if (filter.error) {
-                if (scope.get('liquid.strict_filters')) {
-                    throw filter.error;
-                } else {
-                    val = '';
-                    return true;
-                }
-            }
-            val = filter.render(val, scope);
-        });
-        return val;
+        return template.filters.reduce(function (prev, filter) {
+            return filter.render(prev, scope);
+        }, Syntax.evalExp(template.initial, scope));
     }
 };
 
