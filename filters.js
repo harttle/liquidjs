@@ -25,7 +25,7 @@ var filters = {
         if (v === 'now') v = new Date();
         return strftime(v, arg);
     },
-    'default': (v, arg) => arg || v,
+    'default': (v, arg) => v || arg,
     'divided_by': (v, arg) => Math.floor(v / arg),
     'downcase': v => v.toLowerCase(),
     'escape': escape,

@@ -53,7 +53,10 @@ describe('filters', function() {
         });
     });
 
-    it('should support default', () => test('{{false |default: "a"}}', 'a'));
+    describe('default', function() {
+        it('should use default when falsy', () => test('{{false |default: "a"}}', 'a'));
+        it('should not use default when truthy', () => test('{{true |default: "a"}}', 'true'));
+    });
 
     describe('divided_by', function() {
         it('should return 2 for 4,2', () => test('{{4 | divided_by: 2}}', '2'));
