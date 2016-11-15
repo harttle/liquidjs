@@ -8,9 +8,10 @@ function TokenizationError(message, token) {
 
     this.input = token.input;
     this.line = token.line;
+    this.file = token.file;
 
     var context = mkContext(token.input, token.line);
-    this.message = message + ', line:' + token.line;
+    this.message = mkMessage(message, token);
     this.stack = context + '\n' + (this.stack || '');
 }
 TokenizationError.prototype = Object.create(Error.prototype);
@@ -22,9 +23,10 @@ function ParseError(e, token) {
 
     this.input = token.input;
     this.line = token.line;
+    this.file = token.file;
 
     var context = mkContext(token.input, token.line);
-    this.message = e.message + ', line:' + token.line;
+    this.message = mkMessage(e.message, token);
     this.stack = context + '\n' + (this.stack || '');
 }
 ParseError.prototype = Object.create(Error.prototype);
@@ -40,9 +42,10 @@ function RenderError(e, tpl) {
 
     this.input = tpl.token.input;
     this.line = tpl.token.line;
+    this.file = tpl.token.file;
 
     var context = mkContext(tpl.token.input, tpl.token.line);
-    this.message = e.message + ', line:' + tpl.token.line;
+    this.message = mkMessage(e.message, tpl.token);
     this.stack = context + '\n' + (e.stack || '');
 }
 RenderError.prototype = Object.create(Error.prototype);
@@ -91,6 +94,17 @@ function align(n, max) {
     var str = n + '';
     var blank = Array(length - str.length).join(' ');
     return blank + str;
+}
+
+function mkMessage(msg, token){
+    msg = msg || '';
+    if(token.file){
+        msg += ', file:' + token.file;
+    }
+    if(token.line){
+        msg += ', line:' + token.line;
+    }
+    return msg;
 }
 
 module.exports = {

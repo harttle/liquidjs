@@ -3,7 +3,7 @@ const TokenizationError = require('./util/error.js').TokenizationError;
 const _ = require('./util/underscore.js');
 const assert = require('../src/util/assert.js');
 
-function parse(html) {
+function parse(html, filepath) {
     assert(_.isString(html), 'illegal input type');
 
     var tokens = [];
@@ -58,7 +58,8 @@ function parse(html) {
             raw: match[offset],
             value: match[offset + 1].trim(),
             line: getLineNum(match),
-            input: html
+            input: html,
+            file: filepath
         };
     }
 

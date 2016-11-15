@@ -33,8 +33,8 @@ var _engine = {
 
         return this;
     },
-    parse: function(html) {
-        var tokens = tokenizer.parse(html);
+    parse: function(html, filepath) {
+        var tokens = tokenizer.parse(html, filepath);
         return this.parser.parse(tokens);
     },
     render: function(tpl, ctx, opts) {
@@ -56,11 +56,7 @@ var _engine = {
     renderFile: function(filepath, ctx, opts) {
         opts = _.assign({}, opts);
         return this.getTemplate(filepath, opts.root)
-            .then(templates => this.render(templates, ctx, opts))
-            .catch(e => {
-                e.file = filepath;
-                throw e;
-            });
+            .then(templates => this.render(templates, ctx, opts));
     },
     evalOutput: function(str, scope) {
         var tpl = this.parser.parseOutput(str.trim());
@@ -100,7 +96,7 @@ var _engine = {
                         .then(str => this.parse(str))
                         .then(tpl => this.cache[filepath] = tpl);
                 } else {
-                    return readFileAsync(filepath).then(str => this.parse(str));
+                    return readFileAsync(filepath).then(str => this.parse(str, filepath));
                 }
             });
     },

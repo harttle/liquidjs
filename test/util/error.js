@@ -155,7 +155,7 @@ describe('error', function() {
                     expect(err.name).to.equal('RenderError');
                 });
         });
-        it.only('should contain original template context in err.stack', function() {
+        it('should contain original template context in err.stack', function() {
             var origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th'];
             mock({
                 '/throwing-tag.html': origin.join('\n')
@@ -173,9 +173,7 @@ describe('error', function() {
             return expect(engine.parseAndRender(html)).to.eventually
                 .be.rejected
                 .then(function(err) {
-                    console.log(err.message);
-                    console.log(err.stack);
-                    expect(err.message).to.equal('intended render error, line:4');
+                    expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4');
                     expect(err.stack).to.contain(message.join('\n'));
                     expect(err.name).to.equal('RenderError');
                 });
