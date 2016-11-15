@@ -11,7 +11,10 @@ describe('tag', function() {
     before(function() {
         scope = Scope.factory({
             foo: 'bar',
-            arr: [2, 1]
+            arr: [2, 1],
+            bar: {
+                coo: 'uoo'
+            }
         });
         tag.clear();
     });
@@ -36,8 +39,7 @@ describe('tag', function() {
     });
 
     it('should call tag.render', function() {
-        var spy = sinon.spy(),
-            tokens = [];
+        var spy = sinon.spy();
         tag.register('foo', {
             render: spy
         });
@@ -51,23 +53,47 @@ describe('tag', function() {
             .then(() => expect(spy).to.have.been.called);
     });
 
-    it('should call tag.render with resolved hash', function() {
-        var spy = sinon.spy(),
-            tokens = [];
-        tag.register('foo', {
-            render: spy
+    describe('hash', function(){
+        var spy, token;
+        beforeEach(function(){
+            spy = sinon.spy();
+            tag.register('foo', {
+                render: spy
+            });
+            token = {
+                type: 'tag',
+                value: 'foo aa:foo bb: arr[0] cc: 2.3 dd:bar.coo',
+                name: 'foo',
+                args: 'aa:foo bb: arr[0] cc: 2.3 dd:bar.coo'
+            };
         });
-        var token = {
-            type: 'tag',
-            value: 'foo aa:foo bb: arr[0] cc: 2.3',
-            name: 'foo',
-            args: 'aa:foo bb: arr[0] cc: 2.3'
-        };
-        return tag.construct(token, []).render(scope, {})
-            .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
-                aa: 'bar',
-                bb: 2,
-                cc: 2.3
-            }));
+        it('should call tag.render with scope', function() {
+            return tag.construct(token, []).render(scope, {})
+                .then(() => expect(spy).to.have.been.calledWithMatch(scope));
+        });
+        it('should resolve identifier hash', function() {
+            return tag.construct(token, []).render(scope, {})
+                .then(() => expect(spy).to.have.been.calledWithMatch({}, {
+                    aa: 'bar'
+                }));
+        });
+        it('should accept space between key/value', function() {
+            return tag.construct(token, []).render(scope, {})
+                .then(() => expect(spy).to.have.been.calledWithMatch({}, {
+                    bb: 2,
+                }));
+        });
+        it('should resolve number value hash', function() {
+            return tag.construct(token, []).render(scope, {})
+                .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
+                    cc: 2.3
+                }));
+        });
+        it('should resolve property access hash', function() {
+            return tag.construct(token, []).render(scope, {})
+                .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
+                    dd: 'uoo'
+                }));
+        });
     });
 });
