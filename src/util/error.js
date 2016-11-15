@@ -31,6 +31,10 @@ ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
 
 function RenderError(e, tpl) {
+    // return the original render error
+    if(e instanceof RenderError){
+        return e;
+    }
     this.name = this.constructor.name;
     this.stack = e.stack;
 
