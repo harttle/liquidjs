@@ -241,8 +241,8 @@ var _engine = {
 
         return this;
     },
-    parse: function parse(html) {
-        var tokens = tokenizer.parse(html);
+    parse: function parse(html, filepath) {
+        var tokens = tokenizer.parse(html, filepath);
         return this.parser.parse(tokens);
     },
     render: function render(tpl, ctx, opts) {
@@ -270,9 +270,6 @@ var _engine = {
         opts = _.assign({}, opts);
         return this.getTemplate(filepath, opts.root).then(function (templates) {
             return _this2.render(templates, ctx, opts);
-        }).catch(function (e) {
-            e.file = filepath;
-            throw e;
         });
     },
     evalOutput: function evalOutput(str, scope) {
@@ -321,7 +318,7 @@ var _engine = {
                 });
             } else {
                 return readFileAsync(filepath).then(function (str) {
-                    return _this3.parse(str);
+                    return _this3.parse(str, filepath);
                 });
             }
         });
@@ -1198,7 +1195,7 @@ var TokenizationError = require('./util/error.js').TokenizationError;
 var _ = require('./util/underscore.js');
 var assert = require('../src/util/assert.js');
 
-function parse(html) {
+function parse(html, filepath) {
     assert(_.isString(html), 'illegal input type');
 
     var tokens = [];
@@ -1256,7 +1253,8 @@ function parse(html) {
             raw: match[offset],
             value: match[offset + 1].trim(),
             line: getLineNum(match),
-            input: html
+            input: html,
+            file: filepath
         };
     }
 
@@ -1300,9 +1298,10 @@ function TokenizationError(message, token) {
 
     this.input = token.input;
     this.line = token.line;
+    this.file = token.file;
 
     var context = mkContext(token.input, token.line);
-    this.message = message + ', line:' + token.line;
+    this.message = mkMessage(message, token);
     this.stack = context + '\n' + (this.stack || '');
 }
 TokenizationError.prototype = Object.create(Error.prototype);
@@ -1314,9 +1313,10 @@ function ParseError(e, token) {
 
     this.input = token.input;
     this.line = token.line;
+    this.file = token.file;
 
     var context = mkContext(token.input, token.line);
-    this.message = e.message + ', line:' + token.line;
+    this.message = mkMessage(e.message, token);
     this.stack = context + '\n' + (this.stack || '');
 }
 ParseError.prototype = Object.create(Error.prototype);
@@ -1332,9 +1332,10 @@ function RenderError(e, tpl) {
 
     this.input = tpl.token.input;
     this.line = tpl.token.line;
+    this.file = tpl.token.file;
 
     var context = mkContext(tpl.token.input, tpl.token.line);
-    this.message = e.message + ', line:' + tpl.token.line;
+    this.message = mkMessage(e.message, tpl.token);
     this.stack = context + '\n' + (e.stack || '');
 }
 RenderError.prototype = Object.create(Error.prototype);
@@ -1377,6 +1378,17 @@ function align(n, max) {
     var str = n + '';
     var blank = Array(length - str.length).join(' ');
     return blank + str;
+}
+
+function mkMessage(msg, token) {
+    msg = msg || '';
+    if (token.file) {
+        msg += ', file:' + token.file;
+    }
+    if (token.line) {
+        msg += ', line:' + token.line;
+    }
+    return msg;
 }
 
 module.exports = {
