@@ -23,16 +23,17 @@ describe('error', function() {
         it('should contain template content in err.message', function() {
             var html = ['1st', '2nd', 'X{% . a %} Y', '4th'];
             var message = [
-                'illegal tag syntax',
                 '   1| 1st',
                 '   2| 2nd',
                 '>> 3| X{% . a %} Y',
-                '   4| 4th'
+                '   4| 4th',
+                'TokenizationError: illegal tag syntax',
             ];
             return expect(engine.parseAndRender(html.join('\n'))).to.eventually
                 .be.rejected
                 .then(function(err) {
-                    expect(err.message).to.equal(message.join('\n'));
+                    expect(err.message).to.equal('illegal tag syntax, line:3');
+                    expect(err.stack).to.contain(message.join('\n'));
                     expect(err.name).to.equal('TokenizationError');
                 });
         });
@@ -133,18 +134,19 @@ describe('error', function() {
         it('should contain template content in err.message', function() {
             var html = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th'];
             var message = [
-                'intended render error',
                 '   2| 2nd',
                 '   3| 3rd',
                 '>> 4| X{%throwingTag%} Y',
                 '   5| 5th',
                 '   6| 6th',
-                '   7| 7th'
+                '   7| 7th',
+                'Error: intended render error',
             ];
             return expect(engine.parseAndRender(html.join('\n'))).to.eventually
                 .be.rejected
                 .then(function(err) {
-                    expect(err.message).to.equal(message.join('\n'));
+                    expect(err.message).to.equal('intended render error, line:4');
+                    expect(err.stack).to.contain(message.join('\n'));
                     expect(err.name).to.equal('RenderError');
                 });
         });
@@ -246,18 +248,19 @@ describe('error', function() {
         it('should contain template content in err.message', function() {
             var html = ['1st', '2nd', '3rd', 'X{% a %} {% enda %} Y', '5th', '6th', '7th'];
             var message = [
-                'tag a not found',
                 '   2| 2nd',
                 '   3| 3rd',
                 '>> 4| X{% a %} {% enda %} Y',
                 '   5| 5th',
                 '   6| 6th',
-                '   7| 7th'
+                '   7| 7th',
+                'AssertionError: tag a not found',
             ];
             return expect(engine.parseAndRender(html.join('\n'))).to.eventually
                 .be.rejected
                 .then(function(err) {
-                    expect(err.message).to.equal(message.join('\n'));
+                    expect(err.message).to.equal('tag a not found, line:4');
+                    expect(err.stack).to.contain(message.join('\n'));
                     expect(err.name).to.equal('ParseError');
                 });
         });
@@ -265,16 +268,17 @@ describe('error', function() {
         it('should handle err.message when context not enough', function() {
             var html = ['1st', 'X{% a %} {% enda %} Y', '3rd', '4th'];
             var message = [
-                'tag a not found',
                 '   1| 1st',
                 '>> 2| X{% a %} {% enda %} Y',
                 '   3| 3rd',
-                '   4| 4th'
+                '   4| 4th',
+                'AssertionError: tag a not found',
             ];
             return expect(engine.parseAndRender(html.join('\n'))).to.eventually
                 .be.rejected
                 .then(function(err) {
-                    expect(err.message).to.equal(message.join('\n'));
+                    expect(err.message).to.equal('tag a not found, line:2');
+                    expect(err.stack).to.contain(message.join('\n'));
                 });
         });
 
