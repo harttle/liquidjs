@@ -1302,7 +1302,8 @@ function TokenizationError(message, token) {
     this.line = token.line;
 
     var context = mkContext(token.input, token.line);
-    this.message = message + '\n' + context;
+    this.message = message + ', line:' + token.line;
+    this.stack = context + '\n' + (this.stack || '');
 }
 TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
@@ -1315,7 +1316,8 @@ function ParseError(e, token) {
     this.line = token.line;
 
     var context = mkContext(token.input, token.line);
-    this.message = e.message + '\n' + context;
+    this.message = e.message + ', line:' + token.line;
+    this.stack = context + '\n' + (this.stack || '');
 }
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
@@ -1328,7 +1330,8 @@ function RenderError(e, tpl) {
     this.line = tpl.token.line;
 
     var context = mkContext(tpl.token.input, tpl.token.line);
-    this.message = e.message + '\n' + context;
+    this.message = e.message + ', line:' + tpl.token.line;
+    this.stack = context + '\n' + (e.stack || '');
 }
 RenderError.prototype = Object.create(Error.prototype);
 RenderError.prototype.constructor = RenderError;
