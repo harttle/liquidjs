@@ -37,7 +37,7 @@ var filters = {
         return strftime(v, arg);
     },
     'default': function _default(v, arg) {
-        return arg || v;
+        return v || arg;
     },
     'divided_by': function divided_by(v, arg) {
         return Math.floor(v / arg);
