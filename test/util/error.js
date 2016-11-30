@@ -10,7 +10,7 @@ var strictEngine = require('../..')({
 });
 
 describe('error', function() {
-    afterEach(function(){
+    afterEach(function() {
         mock.restore();
     });
 
@@ -155,7 +155,39 @@ describe('error', function() {
                     expect(err.name).to.equal('RenderError');
                 });
         });
-        it('should contain original template context in err.stack', function() {
+        it('should contain original error info for {% layout %}', function() {
+            mock({
+                '/throwing-tag.html': [
+                    '1st',
+                    '2nd',
+                    '3rd',
+                    'X{%throwingTag%} Y',
+                    '5th',
+                    '{%block%}{%endblock%}',
+                    '7th'
+                ].join('\n')
+            });
+            var html = '{%layout "throwing-tag.html"%}';
+            var message = [
+                '   2| 2nd',
+                '   3| 3rd',
+                '>> 4| X{%throwingTag%} Y',
+                '   5| 5th',
+                '   6| {%block%}{%endblock%}',
+                '   7| 7th',
+                'Error: intended render error',
+            ];
+            return expect(engine.parseAndRender(html)).to.eventually
+                .be.rejected
+                .then(function(err) {
+                    console.log(err.message);
+                    console.log(err.stack);
+                    expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4');
+                    expect(err.stack).to.contain(message.join('\n'));
+                    expect(err.name).to.equal('RenderError');
+                });
+        });
+        it('should contain original error info for {% include %}', function() {
             var origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th'];
             mock({
                 '/throwing-tag.html': origin.join('\n')
