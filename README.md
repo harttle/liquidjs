@@ -3,7 +3,7 @@
 [![NPM version](https://img.shields.io/npm/v/shopify-liquid.svg?style=flat)](https://www.npmjs.org/package/shopify-liquid)
 [![Build Status](https://travis-ci.org/harttle/shopify-liquid.svg?branch=master)](https://travis-ci.org/harttle/shopify-liquid)
 [![Coverage Status](https://img.shields.io/coveralls/harttle/shopify-liquid/master.svg)](https://coveralls.io/github/harttle/shopify-liquid?branch=master)
-[![Dependency manager](https://img.shields.io/david/harttle/shopify-liquid.svg?style=flat)](https://david-dm.org/harttle/shopify-liquid)
+[![Dependency manager](https://david-dm.org/harttle/shopify-liquid.svg?style=flat)](https://david-dm.org/harttle/shopify-liquid)
 
 A feature-rich Liquid template engine for Node.js and browsers,
 with compliance with [the Ruby version][shopify-liquid].
