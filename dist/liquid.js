@@ -34,7 +34,7 @@ var filters = {
     },
     'date': function date(v, arg) {
         if (v === 'now') v = new Date();
-        return strftime(v, arg);
+        return v instanceof Date ? strftime(v, arg) : '';
     },
     'default': function _default(v, arg) {
         return v || arg;
