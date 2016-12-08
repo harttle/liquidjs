@@ -23,7 +23,7 @@ var filters = {
     'ceil': v => Math.ceil(v),
     'date': (v, arg) => {
         if (v === 'now') v = new Date();
-        return strftime(v, arg);
+        return v instanceof Date ? strftime(v, arg) : '';
     },
     'default': (v, arg) => v || arg,
     'divided_by': (v, arg) => Math.floor(v / arg),

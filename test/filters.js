@@ -51,6 +51,9 @@ describe('filters', function() {
         it('should create a new Date when given "now"', function() {
             return test('{{ "now" | date: "%Y"}}', (new Date).getFullYear().toString());
         });
+        it('should render as empty string when invalid', function() {
+            return test('{{ "" | date: "%Y"}}', "");
+        });
     });
 
     describe('default', function() {
