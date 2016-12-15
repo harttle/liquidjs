@@ -80,7 +80,7 @@ var filters = {
         return v.replace(/\n/g, '<br />');
     },
     'plus': bindFixed(function (v, arg) {
-        return v + arg;
+        return Number(v) + Number(arg);
     }),
     'prepend': function prepend(v, arg) {
         return arg + v;
