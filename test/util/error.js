@@ -365,7 +365,7 @@ describe('error', function() {
                 .be.rejected
                 .then(function(err) {
                     expect(err.stack).to.contain('AssertionError: tag -a not found');
-                    expect(err.stack).to.match(/at .*:\d+:\d+\)$/);
+                    expect(err.stack).to.match(/at .*:\d+:\d+\)/);
                 });
         });
 

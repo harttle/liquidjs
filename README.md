@@ -52,13 +52,8 @@ engine.render(tpl, {name: 'alice'})
 
 ```javascript
 var engine = Liquid({
-root: path.resolve(__dirname, 'views/'),  // for layouts and includes, default: ["."]
-    extname: '.liquid',          // default: '.liquid'
-    cache: false,                // default: false
-    trim_right: false,           // default: false
-    trim_left: false,            // default: false
-    strict_filters: false,       // default: false
-    strict_variables: false      // default: false
+    root: path.resolve(__dirname, 'views/'),  // dirs to lookup layouts/includes
+    extname: '.liquid'          // the default extname used for layouts/includes
 });
 engine.renderFile("hello.liquid", {name: 'alice'})
     .then(function(html){
@@ -71,11 +66,15 @@ engine.renderFile("hello", {name: 'alice'})
     });
 ```
 
+## Options
+
+The full list of options for `Liquid()` is listed as following:
+
 * `root` is a directory or an array of directories to resolve layouts and includes, as well as the filename passed in when calling `.renderFile()`.
 If an array, the files are looked up in the order they occur in the array.
-Defaults to `process.cwd()`
+Defaults to `["."]`
 
-* `extname` is used to lookup the template file when filepath doesn't include an extension name. Defaults to `.liquid`
+* `extname` is used to lookup the template file when filepath doesn't include an extension name. Defaults to `".liquid"`
 
 * `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
 
@@ -85,11 +84,11 @@ Defaults to `process.cwd()`
 If set to `false`, undefined variables will be rendered as empty string.
 Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
-* `trim_right` is used to strip whitespace (including whitespace, tabs, line feeds, etc. which is implemented by ECMA RegExp `\s`) from the right of tags (`{% %}`) and output markups (`{{ }}`).
+* `trim_right` is used to strip whitespace (including whitespace, tabs, line feeds, etc. which is implemented by ECMA RegExp `\s`) from the right of tags (`{% %}`) and output markups (`{{ }}`). Defaults to `false`.
 
-* `trim_left` is the same with `trim_right`, whereas it trims from the left.
 
-> `{%- -%}` or `{{- -}}` markups also works to trim whitespace, see [Whitespace Control][whitespace control].
+* `trim_left` is the same with `trim_right`, whereas it trims from the left. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
+
 
 ## Use with Express.js
 
