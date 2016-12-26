@@ -3,11 +3,13 @@ const TokenizationError = require('./util/error.js').TokenizationError;
 const _ = require('./util/underscore.js');
 const assert = require('../src/util/assert.js');
 
-function parse(html, filepath) {
+function parse(html, filepath, options) {
     assert(_.isString(html), 'illegal input type');
 
+    html = whiteSpaceCtrl(html, options);
+
     var tokens = [];
-    var syntax = /({%(.*?)%})|({{(.*?)}})/g;
+    var syntax = /({%-?(.*?)-?%})|({{-?(.*?)-?}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0, lastMatchBegin = -1, parsedLinesCount = 0;
 
@@ -71,4 +73,12 @@ function parse(html, filepath) {
     }
 }
 
+function whiteSpaceCtrl(html, options){
+    options = options || {};
+    var rLeft = options.trim_left ? /\s+({[{%])/g : /\s+({[{%]-)/g;
+    var rRight = options.trim_right ? /([}%]})\s+/g : /(-[}%]})\s+/g;
+    return html.replace(rLeft, '$1').replace(rRight, '$1');
+}
+
 exports.parse = parse;
+exports.whiteSpaceCtrl = whiteSpaceCtrl;

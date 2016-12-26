@@ -34,7 +34,7 @@ var _engine = {
         return this;
     },
     parse: function(html, filepath) {
-        var tokens = tokenizer.parse(html, filepath);
+        var tokens = tokenizer.parse(html, filepath, this.options);
         return this.parser.parse(tokens);
     },
     render: function(tpl, ctx, opts) {
@@ -115,14 +115,16 @@ var _engine = {
 };
 
 function factory(options) {
-    options = _.assign({}, options);
+    options = _.assign({
+        root: ['.'],
+        cache: false,
+        extname: '.liquid',
+        trim_right: false,
+        trim_left: false
+    }, options);
     options.root = normalizeStringArray(options.root);
-    if (!options.root.length) options.root = ['.'];
-
-    options.extname = options.extname || '.liquid';
 
     var engine = Object.create(_engine);
-
     engine.init(Tag(), Filter(options), options);
     return engine;
 }

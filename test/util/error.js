@@ -233,7 +233,7 @@ describe('error', function() {
                 .be.rejected
                 .then(function(err) {
                     expect(err.stack).to.contain('intended render reject');
-                    expect(err.stack).to.contain('at Object.engine.registerTag.render');
+                    expect(err.stack).to.match(/at .*:\d+:\d+\)/);
                 });
         });
 
@@ -365,7 +365,7 @@ describe('error', function() {
                 .be.rejected
                 .then(function(err) {
                     expect(err.stack).to.contain('AssertionError: tag -a not found');
-                    expect(err.stack).to.contain('at Object._tagInstance.parse');
+                    expect(err.stack).to.match(/at .*:\d+:\d+\)$/);
                 });
         });
 
