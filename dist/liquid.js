@@ -242,7 +242,7 @@ var _engine = {
         return this;
     },
     parse: function parse(html, filepath) {
-        var tokens = tokenizer.parse(html, filepath);
+        var tokens = tokenizer.parse(html, filepath, this.options);
         return this.parser.parse(tokens);
     },
     render: function render(tpl, ctx, opts) {
@@ -339,14 +339,16 @@ var _engine = {
 };
 
 function factory(options) {
-    options = _.assign({}, options);
+    options = _.assign({
+        root: ['.'],
+        cache: false,
+        extname: '.liquid',
+        trim_right: false,
+        trim_left: false
+    }, options);
     options.root = normalizeStringArray(options.root);
-    if (!options.root.length) options.root = ['.'];
-
-    options.extname = options.extname || '.liquid';
 
     var engine = Object.create(_engine);
-
     engine.init(Tag(), Filter(options), options);
     return engine;
 }
@@ -1195,11 +1197,13 @@ var TokenizationError = require('./util/error.js').TokenizationError;
 var _ = require('./util/underscore.js');
 var assert = require('../src/util/assert.js');
 
-function parse(html, filepath) {
+function parse(html, filepath, options) {
     assert(_.isString(html), 'illegal input type');
 
+    html = whiteSpaceCtrl(html, options);
+
     var tokens = [];
-    var syntax = /({%(.*?)%})|({{(.*?)}})/g;
+    var syntax = /({%-?(.*?)-?%})|({{-?(.*?)-?}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0,
         lastMatchBegin = -1,
@@ -1266,7 +1270,15 @@ function parse(html, filepath) {
     }
 }
 
+function whiteSpaceCtrl(html, options) {
+    options = options || {};
+    var rLeft = options.trim_left ? /\s+({[{%])/g : /\s+({[{%]-)/g;
+    var rRight = options.trim_right ? /([}%]})\s+/g : /(-[}%]})\s+/g;
+    return html.replace(rLeft, '$1').replace(rRight, '$1');
+}
+
 exports.parse = parse;
+exports.whiteSpaceCtrl = whiteSpaceCtrl;
 
 },{"../src/util/assert.js":16,"./lexical.js":8,"./util/error.js":17,"./util/underscore.js":21}],16:[function(require,module,exports){
 'use strict';
