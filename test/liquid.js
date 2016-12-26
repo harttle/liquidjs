@@ -174,4 +174,46 @@ describe('liquid', function() {
                 .then(x => expect(x).to.equal('foo'));
         });
     });
+    describe('trim_left, trim_right', function() {
+        it('should trim_left for tags when trim_left=true', function() {
+            engine = Liquid({
+                trim_left: true
+            });
+            return engine.parseAndRender('\n \t{{"foo"}} ')
+                .should.eventually.equal('foo ');
+        });
+        it('should trim_right for tags when trim_right=true', function() {
+            engine = Liquid({
+                trim_right: true
+            });
+            return engine.parseAndRender('\t{{"foo"}} ')
+                .should.eventually.equal('\tfoo');
+        });
+        it('should support trim using markup', function() {
+            engine = Liquid();
+            var src = [
+                '{%- assign username = "John G. Chalmers-Smith" -%}',
+                '{%- if username and username.length > 10 -%}',
+                '  Wow, {{ username }}, you have a long name!',
+                '{%- else -%}',
+                '  Hello there!',
+                '{%- endif -%}\n',
+            ].join('\n');
+            var dst = 'Wow, John G. Chalmers-Smith, you have a long name!';
+            return engine.parseAndRender(src).should.eventually.equal(dst);
+        });
+        it('should not trim when not specified', function() {
+            engine = Liquid();
+            var src = [
+                '{% assign username = "John G. Chalmers-Smith" %}',
+                '{% if username and username.length > 10 %}',
+                '  Wow, {{ username }}, you have a long name!',
+                '{% else %}',
+                '  Hello there!',
+                '{% endif %}\n',
+            ].join('\n');
+            var dst = '\n\n  Wow, John G. Chalmers-Smith, you have a long name!\n\n';
+            return engine.parseAndRender(src).should.eventually.equal(dst);
+        });
+    });
 });
