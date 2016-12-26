@@ -52,9 +52,11 @@ engine.render(tpl, {name: 'alice'})
 
 ```javascript
 var engine = Liquid({
-    root: path.resolve(__dirname, 'views/'),  // for layouts and includes
-    extname: '.liquid',
-    cache: false,
+root: path.resolve(__dirname, 'views/'),  // for layouts and includes, default: ["."]
+    extname: '.liquid',          // default: '.liquid'
+    cache: false,                // default: false
+    trim_right: false,           // default: false
+    trim_left: false,            // default: false
     strict_filters: false,       // default: false
     strict_variables: false      // default: false
 });
@@ -82,6 +84,12 @@ Defaults to `process.cwd()`
 * `strict_variables` is used to enable strict variable derivation. 
 If set to `false`, undefined variables will be rendered as empty string.
 Otherwise, undefined variables will cause an exception. Defaults to `false`.
+
+* `trim_right` is used to strip whitespace (including whitespace, tabs, line feeds, etc. which is implemented by ECMA RegExp `\s`) from the right of tags (`{% %}`) and output markups (`{{ }}`).
+
+* `trim_left` is the same with `trim_right`, whereas it trims from the left.
+
+> `{%- -%}` or `{{- -}}` markups also works to trim whitespace, see [Whitespace Control][whitespace control].
 
 ## Use with Express.js
 
@@ -217,3 +225,4 @@ engine.registerTag('upper', {
 [any-promise]: https://github.com/kevinbeaty/any-promise
 [test]: https://github.com/harttle/shopify-liquid/tree/master/test
 [caniuse-promises]: http://caniuse.com/#feat=promises
+[whitespace control]: https://github.com/harttle/shopify-liquid/wiki/Whitespace-Control
