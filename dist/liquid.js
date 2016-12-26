@@ -344,7 +344,9 @@ function factory(options) {
         cache: false,
         extname: '.liquid',
         trim_right: false,
-        trim_left: false
+        trim_left: false,
+        strict_filters: false,
+        strict_variables: false
     }, options);
     options.root = normalizeStringArray(options.root);
 
