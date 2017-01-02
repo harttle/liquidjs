@@ -94,10 +94,7 @@ Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
 ```javascript
 // register liquid engine
-app.engine('liquid', engine.express({
-    strict_variables: true,         // Default: fasle
-    strict_filters: true            // Default: false
-})); 
+app.engine('liquid', engine.express()); 
 app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 ```
