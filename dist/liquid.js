@@ -1322,16 +1322,17 @@ TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
 
 function ParseError(e, token) {
+    _.assign(this, e);
+    this.originalError = e;
     this.name = this.constructor.name;
-    this.stack = e.stack;
 
     this.input = token.input;
     this.line = token.line;
     this.file = token.file;
 
     var context = mkContext(token.input, token.line);
-    this.message = mkMessage(e.message, token);
-    this.stack = context + '\n' + (this.stack || '');
+    this.message = mkMessage(e.message || 'Unkown Error', token);
+    this.stack = context + '\n' + (e.stack || '');
 }
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
@@ -1341,15 +1342,16 @@ function RenderError(e, tpl) {
     if (e instanceof RenderError) {
         return e;
     }
+    _.assign(this, e);
+    this.originalError = e;
     this.name = this.constructor.name;
-    this.stack = e.stack;
 
     this.input = tpl.token.input;
     this.line = tpl.token.line;
     this.file = tpl.token.file;
 
     var context = mkContext(tpl.token.input, tpl.token.line);
-    this.message = mkMessage(e.message, tpl.token);
+    this.message = mkMessage(e.message || 'Unkown Error', tpl.token);
     this.stack = context + '\n' + (e.stack || '');
 }
 RenderError.prototype = Object.create(Error.prototype);
