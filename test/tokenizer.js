@@ -58,43 +58,48 @@ describe('tokenizer', function() {
         });
     });
     describe('whitespace control', function() {
-        it('should strip left whitespaces', function() {
-            expect(whiteSpaceCtrl('  {{- foo }}')).to.equal('{{- foo }}');
+        it('should not strip by default', function() {
+            expect(whiteSpaceCtrl('\n {%foo%} \n')).to.equal('\n {%foo%} \n');
         });
-        it('should strip right whitespaces', function() {
-            expect(whiteSpaceCtrl('{{ foo -}}  ')).to.equal('{{ foo -}}');
+        it('should strip all blank characters before and after', function() {
+            expect(whiteSpaceCtrl('\n \t\r{{-foo-}} \t\n')).to.equal('{{-foo-}}');
         });
-        it('should not strip left when not specified', function() {
-            expect(whiteSpaceCtrl(' {%foo-%} ')).to.equal(' {%foo-%}');
+        it('should not trim previous/next lines', function() {
+            expect(whiteSpaceCtrl(' \t\n {{-foo-}}')).to.equal(' \t{{-foo-}}');
+            expect(whiteSpaceCtrl('{{-foo-}} \n \tfoo')).to.equal('{{-foo-}} \tfoo');
         });
-        it('should not strip right when not specified', function() {
-            expect(whiteSpaceCtrl(' {{-foo}} ')).to.equal('{{-foo}} ');
+        it("should not trim inter-word blanks", function() {
+            expect(whiteSpaceCtrl('\nhello {{-world-}}')).to.equal('\nhello {{-world-}}');
+            expect(whiteSpaceCtrl('{{-hello-}} world')).to.equal('{{-hello-}} world');
         });
-        it('should strip all blank characters', function() {
-            expect(whiteSpaceCtrl('\t\r{{-foo-}}\n \n')).to.equal('{{-foo-}}');
+        it('should trim exactly one trailing CR', function() {
+            expect(whiteSpaceCtrl('{{-foo-}} \n\n')).to.equal('{{-foo-}}\n');
         });
-        it('should stop stripping when encountered normal chars', () =>
-            expect(whiteSpaceCtrl('\ta\r{{-foo-}} b ')).to.equal('\ta{{-foo-}}b '));
+        it('should trim all leading/trailing blanks when options.greedy set', function() {
+            expect(whiteSpaceCtrl(' \n \n\t\r{{-foo-}}\n \n', {
+                greedy: true
+            })).to.equal('{{-foo-}}');
+        });
         it('should strip whitespaces when set trim_left', function() {
-            expect(whiteSpaceCtrl('  {{foo}} ', {
+            expect(whiteSpaceCtrl('\n  {{foo}} \n', {
                 trim_left: true
-            })).to.equal('{{foo}} ');
+            })).to.equal('{{-foo}} \n');
         });
         it('should strip whitespaces when set trim_right', function() {
-            expect(whiteSpaceCtrl('  {{foo}} ', {
+            expect(whiteSpaceCtrl('\n  {{foo}} \n', {
                 trim_right: true
-            })).to.equal('  {{foo}}');
+            })).to.equal('\n  {{foo-}}');
         });
         it('markup should has priority over options', function() {
-            expect(whiteSpaceCtrl('  {{-foo}} ', {
+            expect(whiteSpaceCtrl('\n  {{-foo}} \n', {
                 trim_left: false
-            })).to.equal('{{-foo}} ');
+            })).to.equal('{{-foo}} \n');
         });
         it('should support a mix of markup and options', function() {
-            expect(whiteSpaceCtrl('  {%-foo%} ', {
+            expect(whiteSpaceCtrl('\n  {%-foo%} \n', {
                 trim_left: true,
                 trim_right: true
-            })).to.equal('{%-foo%}');
+            })).to.equal('{%-foo-%}');
         });
     });
 });

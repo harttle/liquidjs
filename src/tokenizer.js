@@ -73,10 +73,22 @@ function parse(html, filepath, options) {
     }
 }
 
+
+
 function whiteSpaceCtrl(html, options){
     options = options || {};
-    var rLeft = options.trim_left ? /\s+({[{%])/g : /\s+({[{%]-)/g;
-    var rRight = options.trim_right ? /([}%]})\s+/g : /(-[}%]})\s+/g;
+    if(options.trim_left) {
+        html = html
+            .replace(/{{-?/g, '{{-')
+            .replace(/{%-?/g, '{%-');
+    }
+    if(options.trim_right) {
+        html = html
+            .replace(/-?}}/g, '-}}')
+            .replace(/-?%}/g, '-%}');
+    }
+    var rLeft = options.greedy ? /\s+({[{%]-)/g : /\n[\t\r ]*({[{%]-)/g;
+    var rRight = options.greedy  ? /(-[}%]})\s+/g : /(-[}%]})[\t\r ]*\n/g;
     return html.replace(rLeft, '$1').replace(rRight, '$1');
 }
 
