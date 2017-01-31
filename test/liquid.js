@@ -179,21 +179,21 @@ describe('liquid', function() {
             engine = Liquid({
                 trim_left: true
             });
-            return engine.parseAndRender(' \n \t{{"foo"}} ')
-                .should.eventually.equal(' foo ');
+            return engine.parseAndRender(' \n \t{%if true%}foo{%endif%} ')
+                .should.eventually.equal(' \nfoo ');
         });
         it('should trim_right for tags when trim_right=true', function() {
             engine = Liquid({
                 trim_right: true
             });
-            return engine.parseAndRender('\t{{"foo"}} \n')
+            return engine.parseAndRender('\t{%if true%}foo{%endif%} \n')
                 .should.eventually.equal('\tfoo');
         });
         it('should trim all blanks before and after when greedy=true', function() {
             engine = Liquid({
                 greedy: true
             });
-            return engine.parseAndRender('\t{{-"foo"-}} \n \n')
+            return engine.parseAndRender('\t{%-if true%}foo{%endif-%} \n \n')
                 .should.eventually.equal('foo');
         });
         it('should support trim using markup', function() {
@@ -206,7 +206,7 @@ describe('liquid', function() {
                 '  Hello there!',
                 '{%- endif -%}\n',
             ].join('\n');
-            var dst = '  Wow, John G. Chalmers-Smith, you have a long name!';
+            var dst = '  Wow, John G. Chalmers-Smith, you have a long name!\n';
             return engine.parseAndRender(src).should.eventually.equal(dst);
         });
         it('should not trim when not specified', function() {

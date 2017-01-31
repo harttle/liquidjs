@@ -9,7 +9,7 @@ function parse(html, filepath, options) {
     html = whiteSpaceCtrl(html, options);
 
     var tokens = [];
-    var syntax = /({%-?(.*?)-?%})|({{-?(.*?)-?}})/g;
+    var syntax = /({%-?(.*?)-?%})|({{(.*?)}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0, lastMatchBegin = -1, parsedLinesCount = 0;
 
@@ -78,17 +78,13 @@ function parse(html, filepath, options) {
 function whiteSpaceCtrl(html, options){
     options = options || {};
     if(options.trim_left) {
-        html = html
-            .replace(/{{-?/g, '{{-')
-            .replace(/{%-?/g, '{%-');
+        html = html.replace(/{%-?/g, '{%-');
     }
     if(options.trim_right) {
-        html = html
-            .replace(/-?}}/g, '-}}')
-            .replace(/-?%}/g, '-%}');
+        html = html.replace(/-?%}/g, '-%}');
     }
-    var rLeft = options.greedy ? /\s+({[{%]-)/g : /\n[\t\r ]*({[{%]-)/g;
-    var rRight = options.greedy  ? /(-[}%]})\s+/g : /(-[}%]})[\t\r ]*\n/g;
+    var rLeft = options.greedy ? /\s+({%-)/g : /[\t\r ]*({%-)/g;
+    var rRight = options.greedy  ? /(-%})\s+/g : /(-%})[\t\r ]*\n?/g;
     return html.replace(rLeft, '$1').replace(rRight, '$1');
 }
 

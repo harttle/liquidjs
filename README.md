@@ -84,11 +84,11 @@ Defaults to `["."]`
 If set to `false`, undefined variables will be rendered as empty string.
 Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
-* `trim_right` is used to strip blank characters (including whitespace, tabs, NL) from the right of tags (`{% %}`) and output markups (`{{ }}`) until `\n` (mandatory and inclusive). Defaults to `false`.
+* `trim_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`.
 
-* `trim_left` is similiar to `trim_right`, whereas it trims from the left. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
+* `trim_left` is similiar to `trim_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
 
-* `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all blank characters will be trimed before and after, regardless of the occurences of `\n`. Defaults to `false`.
+* `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all successive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `false`.
 
 ## Use with Express.js
 
