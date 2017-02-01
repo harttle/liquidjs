@@ -78,4 +78,12 @@ describe('tags/layout', function() {
         return expect(liquid.renderFile('/main.html')).to.
             eventually.equal('blackA');
     });
+    it('should support multiple hash', function() {
+        mock({
+            '/parent.html': '{{color}}{{bg}}{%block%}{%endblock%}',
+            '/main.html': '{% layout "parent.html" color:"black", bg:"red"%}{%block%}A{%endblock%}'
+        });
+        return expect(liquid.renderFile('/main.html')).to.
+            eventually.equal('blackredA');
+    });
 });
