@@ -5,17 +5,17 @@
 [![Coveralls](https://img.shields.io/coveralls/harttle/shopify-liquid.svg)](https://coveralls.io/github/harttle/shopify-liquid?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues-closed/harttle/shopify-liquid.svg)](https://github.com/harttle/shopify-liquid/issues)
 
-A feature-rich Liquid template engine for Node.js and browsers,
-with compliance with [the Ruby version][shopify-liquid].
-New to Liquid? Here's a live demo: <http://harttle.com/shopify-liquid/>
+A Liquid template engine with a wide range of tags and filters,
+for both Node.js and browsers.
+Here's a live demo: <http://harttle.com/shopify-liquid/>
 
 > The Liquid template engine is implemented in Ruby originally, 
 > which is used by [Jekyll][jekyll] and [Github Pages][gh].
 
 Features:
 
-* Pretty much [builtin filters](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters) and [builtin tags](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
-* Async rendering, especially for tags
+* A wide range of [filters](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters) and [tags](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
+* Easy tag/filter registration, allows async tags
 * [any-promise][any-promise]
 
 Installation:
