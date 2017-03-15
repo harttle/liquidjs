@@ -7,7 +7,7 @@ const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*` +
     `(?:\\s+(reversed))?` +
-    `(?:\\s+${lexical.hash.source})*`);
+    `(?:\\s+${lexical.hash.source})*$`);
 
 module.exports = function(liquid) {
     liquid.registerTag('for', {
