@@ -6,7 +6,8 @@ const assert = require('../src/util/assert.js');
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*` +
-    `(?:\\s+(reversed))?$`);
+    `(?:\\s+(reversed))?` +
+    `(?:\\s+${lexical.hash.source})*$`);
 
 module.exports = function(liquid) {
     liquid.registerTag('for', {

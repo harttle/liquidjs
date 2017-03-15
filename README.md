@@ -209,7 +209,7 @@ engine.registerTag('upper', {
 ## Contribution Guide
 
 1. Write a [test][test] to define the feature you want.
-2. Just initiate an issue, or optionally:
+2. File an issue, or optionally:
 3. Get your test pass and make a pull request.
 
 [nunjucks]: http://mozilla.github.io/nunjucks/

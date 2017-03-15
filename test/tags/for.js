@@ -74,9 +74,21 @@ describe('tags/for', function() {
             .to.eventually.equal('67');
     });
 
-    it('should support for reversed', function() {
+    it('should support for reversed in the last position', function() {
         var src = '{% for i in (1..5) limit:2 reversed %}{{ i }}{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('21');
+    });
+
+    it('should support for reversed in the middle position', function() {
+        var src = '{% for i in (1..5) reversed limit:2 %}{{ i }}{% endfor %}';
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('21');
+    });
+
+    it('should support for reversed in the first position', function() {
+        var src = '{% for i in (1..5) offset:2 reversed limit:4 %}{{ i }}{% endfor %}';
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('543');
     });
 });
