@@ -2036,7 +2036,7 @@ var lexical = Liquid.lexical;
 var mapSeries = require('../src/util/promise.js').mapSeries;
 var RenderBreakError = Liquid.Types.RenderBreakError;
 var assert = require('../src/util/assert.js');
-var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*') + '(?:\\s+(reversed))?$');
+var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*') + '(?:\\s+(reversed))?' + ('(?:\\s+' + lexical.hash.source + ')*$'));
 
 module.exports = function (liquid) {
     liquid.registerTag('for', {
