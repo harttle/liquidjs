@@ -23,13 +23,6 @@ describe('expression', function() {
         expect(evalValue('"foo"')).to.equal("foo");
     });
 
-    it('should throw on illegal expression', function() {
-        expect(function() {
-            evalExp('1 contains "x"', scope);
-            evalExp('y contains "x"', scope);
-        }).to.throw();
-    });
-
     it('should eval variables', function() {
         expect(evalValue('23', scope)).to.equal(23);
         expect(evalValue('one', scope)).to.equal(1);
@@ -50,6 +43,8 @@ describe('expression', function() {
             expect(evalExp('one<=two', scope)).to.equal(true);
             expect(evalExp('x contains "x"', scope)).to.equal(false);
             expect(evalExp('x contains "X"', scope)).to.equal(true);
+            expect(evalExp('1 contains "x"', scope)).to.equal(false);
+            expect(evalExp('y contains "x"', scope)).to.equal(false);
             expect(evalExp('"<=" == "<="', scope)).to.equal(true);
         });
 
