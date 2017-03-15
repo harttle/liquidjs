@@ -13,7 +13,8 @@ describe('expression', function() {
         scope = Scope.factory({
             one: 1,
             two: 2,
-            x: 'XXX'
+            x: 'XXX',
+            y: undefined
         });
     });
 
@@ -25,6 +26,7 @@ describe('expression', function() {
     it('should throw on illegal expression', function() {
         expect(function() {
             evalExp('1 contains "x"', scope);
+            evalExp('y contains "x"', scope);
         }).to.throw();
     });
 
