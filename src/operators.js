@@ -5,12 +5,10 @@ var operators = {
     '<': (l, r) => l < r,
     '>=': (l, r) => l >= r,
     '<=': (l, r) => l <= r,
-	'contains': (l, r) => {
-        return typeof l !== 'undefined' 
-            ? typeof l.indexOf === 'function' 
-                ? l.indexOf(r) > -1 
-                : false 
-            : false;
+    'contains': (l, r) => {
+        if (!l) return false;
+        if (typeof l.indexOf !== 'function') return false;
+        return l.indexOf(r) > -1;
     },
     'and': (l, r) => l && r,
     'or': (l, r) => l || r
