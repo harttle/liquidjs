@@ -671,6 +671,8 @@ var operators = {
         return l <= r;
     },
     'contains': function contains(l, r) {
+        if (!l) return false;
+        if (typeof l.indexOf !== 'function') return false;
         return l.indexOf(r) > -1;
     },
     'and': function and(l, r) {
