@@ -18,6 +18,13 @@ Features:
 * Easy tag/filter registration, allows async tags
 * [any-promise][any-promise]
 
+API Reference:
+
+* Builtin Tags: <https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags>
+* Builtin Filters: <https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters>
+* Operators: <https://github.com/harttle/shopify-liquid/wiki/Operators>
+* Whitespace Control: <https://github.com/harttle/shopify-liquid/wiki/Whitespace-Control>
+
 Installation:
 
 ```bash
