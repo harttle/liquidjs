@@ -327,4 +327,9 @@ describe('filters', function() {
         it('should encode <space>',
             () => test('{{ "Tetsuro Takara" | url_encode }}', 'Tetsuro%20Takara'));
     });
+
+    describe('obj_test', function() {
+        liquid.registerFilter('obj_test', (...v) => v.join(','));
+        it('should support object', () => test('{{ "a" | obj_test: k1: "v1", k2: "v2" }}', 'a,k1,v1,k2,v2'));
+    });
 });

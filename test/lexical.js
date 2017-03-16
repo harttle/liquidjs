@@ -11,7 +11,9 @@ describe('lexical', function() {
         lexical.filterLine.test('foo: a, "b"').should.equal(true);
         lexical.filterLine.test('abs | another').should.equal(false);
         lexical.filterLine.test('join: "," | another').should.equal(false);
+        lexical.filterLine.test('obj_test: k1: "v1", k2: "v2"').should.equal(true);
     });
+
     it('should test boolean literal', function() {
         lexical.isLiteral('true').should.equal(true);
         lexical.isLiteral('TrUE').should.equal(true);

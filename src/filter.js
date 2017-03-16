@@ -36,7 +36,9 @@ module.exports = function(options) {
 
             var args = [];
             while(match = valueRE.exec(argList.trim())){
-                args.push(match[0]);
+                var v = match[0];
+                var re = new RegExp(`${v}\\s*:`, 'g');
+                re.test(match.input) ? args.push(`'${v}'`) : args.push(v);
             }
 
             this.name = name;

@@ -37,7 +37,7 @@ var rangeLine = new RegExp(`^${rangeCapture.source}$`);
 var integerLine = new RegExp(`^${integer.source}$`);
 
 // filter related
-var valueList = new RegExp(`${value.source}(\\s*,\\s*${value.source})*`);
+var valueList = new RegExp(`${value.source}(\\s*,?:?\\s*${value.source})*`);
 var filter = new RegExp(`${identifier.source}(?:\\s*:\\s*${valueList.source})?`, 'g');
 var filterCapture = new RegExp(`(${identifier.source})(?:\\s*:\\s*(${valueList.source}))?`);
 var filterLine = new RegExp(`^${filterCapture.source}$`);
