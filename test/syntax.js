@@ -45,6 +45,8 @@ describe('expression', function() {
             expect(evalExp('x contains "X"', scope)).to.equal(true);
             expect(evalExp('1 contains "x"', scope)).to.equal(false);
             expect(evalExp('y contains "x"', scope)).to.equal(false);
+            expect(evalExp('(1..5) contains 3', scope)).to.equal(true);
+            expect(evalExp('(1..5) contains 6', scope)).to.equal(false);
             expect(evalExp('"<=" == "<="', scope)).to.equal(true);
         });
 
