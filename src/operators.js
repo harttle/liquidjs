@@ -5,7 +5,11 @@ var operators = {
     '<': (l, r) => l < r,
     '>=': (l, r) => l >= r,
     '<=': (l, r) => l <= r,
-    'contains': (l, r) => l.indexOf(r) > -1,
+    'contains': (l, r) => {
+        if (!l) return false;
+        if (typeof l.indexOf !== 'function') return false;
+        return l.indexOf(r) > -1;
+    },
     'and': (l, r) => l && r,
     'or': (l, r) => l || r
 };

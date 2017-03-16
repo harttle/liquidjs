@@ -13,19 +13,15 @@ describe('expression', function() {
         scope = Scope.factory({
             one: 1,
             two: 2,
-            x: 'XXX'
+            x: 'XXX',
+            y: undefined,
+            z: null
         });
     });
 
     it('should eval literals', function() {
         expect(evalValue('2.3')).to.equal(2.3);
         expect(evalValue('"foo"')).to.equal("foo");
-    });
-
-    it('should throw on illegal expression', function() {
-        expect(function() {
-            evalExp('1 contains "x"', scope);
-        }).to.throw();
     });
 
     it('should eval variables', function() {
@@ -48,6 +44,11 @@ describe('expression', function() {
             expect(evalExp('one<=two', scope)).to.equal(true);
             expect(evalExp('x contains "x"', scope)).to.equal(false);
             expect(evalExp('x contains "X"', scope)).to.equal(true);
+            expect(evalExp('1 contains "x"', scope)).to.equal(false);
+            expect(evalExp('y contains "x"', scope)).to.equal(false);
+            expect(evalExp('z contains "x"', scope)).to.equal(false);
+            expect(evalExp('(1..5) contains 3', scope)).to.equal(true);
+            expect(evalExp('(1..5) contains 6', scope)).to.equal(false);
             expect(evalExp('"<=" == "<="', scope)).to.equal(true);
         });
 
