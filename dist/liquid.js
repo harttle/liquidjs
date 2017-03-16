@@ -528,7 +528,9 @@ module.exports = function (options) {
 
             var args = [];
             while (match = valueRE.exec(argList.trim())) {
-                args.push(match[0]);
+                var v = match[0];
+                var re = new RegExp(v + '\\s*:', 'g');
+                re.test(match.input) ? args.push('\'' + v + '\'') : args.push(v);
             }
 
             this.name = name;
@@ -599,7 +601,8 @@ var rangeLine = new RegExp('^' + rangeCapture.source + '$');
 var integerLine = new RegExp('^' + integer.source + '$');
 
 // filter related
-var valueList = new RegExp(value.source + '(\\s*,\\s*' + value.source + ')*');
+var valueDeclaration = new RegExp('(?:' + identifier.source + '\\s*:\\s*)?' + value.source);
+var valueList = new RegExp(valueDeclaration.source + '(\\s*,\\s*' + valueDeclaration.source + ')*');
 var filter = new RegExp(identifier.source + '(?:\\s*:\\s*' + valueList.source + ')?', 'g');
 var filterCapture = new RegExp('(' + identifier.source + ')(?:\\s*:\\s*(' + valueList.source + '))?');
 var filterLine = new RegExp('^' + filterCapture.source + '$');
