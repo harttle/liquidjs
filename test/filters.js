@@ -329,7 +329,9 @@ describe('filters', function() {
     });
 
     describe('obj_test', function() {
-        liquid.registerFilter('obj_test', (...v) => v.join(','));
+        liquid.registerFilter('obj_test', function() {
+            return Array.prototype.slice.call(arguments).join(',');
+        });
         it('should support object', () => test('{{ "a" | obj_test: k1: "v1", k2: "v2" }}', 'a,k1,v1,k2,v2'));
     });
 });
