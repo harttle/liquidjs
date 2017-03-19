@@ -221,8 +221,11 @@ describe('filters', function() {
                 ' | split: ", " %}{{ my_array | size }}',
                 '4');
         });
+        it('should also be used with dot notation - string',
+            () => test('{% assign my_string = "Ground control to Major Tom." %}{{ my_string.size }}', '28'));
+        it('should also be used with dot notation - array',
+            () => test('{% assign my_array = "apples, oranges, peaches, plums" %}{{ my_array.size }}', '4'));
     });
-
     describe('slice', function() {
         it('should slice first char by 0', () => test('{{ "Liquid" | slice: 0 }}', 'L'));
         it('should slice third char by 2', () => test('{{ "Liquid" | slice: 2 }}', 'q'));

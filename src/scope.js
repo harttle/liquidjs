@@ -1,6 +1,7 @@
 const _ = require('./util/underscore.js');
 const lexical = require('./lexical.js');
 const assert = require('./util/assert.js');
+const toStr = Object.prototype.toString;
 
 var Scope = {
     getAll: function() {
@@ -74,9 +75,15 @@ var Scope = {
         if (!obj.hasOwnProperty(varName)) {
             throw new TypeError('undefined variable');
         }
+        var lastName = paths.pop();
         var variable = obj[varName];
         paths.forEach(p => variable = variable[p]);
-        return variable;
+        if (lastName === 'size') {
+            if (toStr.call(variable) === '[object Array]' || toStr.call(variable) === '[object String]') {
+                lastName = 'length';
+            }
+        }
+        return variable[lastName];
     },
 
     /*
