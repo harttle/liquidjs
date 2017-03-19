@@ -75,15 +75,19 @@ var Scope = {
         if (!obj.hasOwnProperty(varName)) {
             throw new TypeError('undefined variable');
         }
-        var lastName = paths.pop();
         var variable = obj[varName];
-        paths.forEach(p => variable = variable[p]);
-        if (lastName === 'size') {
-            if (toStr.call(variable) === '[object Array]' || toStr.call(variable) === '[object String]') {
-                lastName = 'length';
+        var len = paths.length
+        paths.forEach((p, i) => {
+            if (len === i + 1 && p === 'size') {
+                if (toStr.call(variable) === '[object Array]' 
+                    || toStr.call(variable) === '[object String]') {
+                    p = 'length';
+                }
             }
-        }
-        return variable[lastName];
+            variable = variable[p];
+            return variable;
+        });
+        return variable;
     },
 
     /*
