@@ -888,6 +888,7 @@ module.exports = factory;
 var _ = require('./util/underscore.js');
 var lexical = require('./lexical.js');
 var assert = require('./util/assert.js');
+var toStr = Object.prototype.toString;
 
 var Scope = {
     getAll: function getAll() {
@@ -962,9 +963,16 @@ var Scope = {
             throw new TypeError('undefined variable');
         }
         var variable = obj[varName];
+        var lastName = paths.pop();
         paths.forEach(function (p) {
             return variable = variable[p];
         });
+        if (undefined !== lastName) {
+            if (lastName === 'size' && (toStr.call(variable) === '[object Array]' || toStr.call(variable) === '[object String]')) {
+                return variable.length;
+            }
+            variable = variable[lastName];
+        }
         return variable;
     },
 
