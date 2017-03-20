@@ -10,6 +10,7 @@ describe('tags/for', function() {
         ctx = {
             one: 1,
             alpha: ['a', 'b', 'c'],
+            emptyArray: []
         };
     });
     it('should support for', function() {
@@ -22,6 +23,12 @@ describe('tags/for', function() {
         var src = '{%for c in alpha%}{{c}}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.be.rejectedWith(/tag .* not closed/);
+    });
+
+    it('should return else when for in empty array', function() {
+        var src = '{%for c in emptyArray%}a{%else%}b{%endfor%}';
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('b');
     });
 
     it('should support for else', function() {
@@ -80,13 +87,13 @@ describe('tags/for', function() {
             .to.eventually.equal('21');
     });
 
-    it('should support for reversed in the middle position', function() {
+    it('should support for reversed in the first position', function() {
         var src = '{% for i in (1..5) reversed limit:2 %}{{ i }}{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('21');
     });
 
-    it('should support for reversed in the first position', function() {
+    it('should support for reversed in the middle position', function() {
         var src = '{% for i in (1..5) offset:2 reversed limit:4 %}{{ i }}{% endfor %}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('543');
