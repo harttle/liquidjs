@@ -43,12 +43,11 @@ function evalValue(str, scope) {
 }
 
 function isTruthy(val) {
-    if (val instanceof Array) return !!val.length;
-    return !!val;
+    return !isFalsy(val);
 }
 
 function isFalsy(val) {
-    return !isTruthy(val);
+    return false === val || undefined === val || null === val;;
 }
 
 module.exports = {

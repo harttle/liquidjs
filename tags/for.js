@@ -36,7 +36,9 @@ module.exports = function(liquid) {
 
         render: function(scope, hash) {
             var collection = Liquid.evalExp(this.collection, scope);
-            if (Liquid.isFalsy(collection)) {
+
+            if (!Array.isArray(collection) || 
+                (Array.isArray(collection) && collection.length === 0)) {
                 return liquid.renderer.renderTemplates(this.elseTemplates, scope);
             }
 

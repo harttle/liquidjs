@@ -8,6 +8,7 @@ describe('tags/if', function() {
     var ctx = {
         one: 1,
         two: 2,
+        emptyString: '',
         emptyArray: []
     };
 
@@ -19,7 +20,7 @@ describe('tags/if', function() {
     it('should support if 2', function() {
         var src = '{%if emptyArray%}a{%endif%}';
         return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('');
+            .to.eventually.equal('a');
     });
     it('should support if 3', function() {
         var src = '{% if 2==3 %}yes{%else%}no{%endif%}';
@@ -45,5 +46,10 @@ describe('tags/if', function() {
         var src = '{%if false%}{%if true%}{%else%}a{%endif%}{%endif%}';
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('');
+    });
+    it('should return true if empty string', function() {
+        var src = "{%if emptyString%}a{%endif%}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('a');
     });
 });

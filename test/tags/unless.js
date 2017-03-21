@@ -7,12 +7,13 @@ describe('tags/unless', function() {
     var liquid = Liquid();
 
     it('should render else when predicate yields true', function() {
-        var src = '{% unless 1 %}yes{%else%}no{%endunless%}';
+        // 0 is truthy
+        var src = '{% unless 0 %}yes{%else%}no{%endunless%}';
         return expect(liquid.parseAndRender(src))
             .to.eventually.equal('no');
     });
     it('should render unless when predicate yields false', function() {
-        var src = '{% unless 0 %}yes{%else%}no{%endunless%}';
+        var src = '{% unless false %}yes{%else%}no{%endunless%}';
         return expect(liquid.parseAndRender(src))
             .to.eventually.equal('yes');
     });
