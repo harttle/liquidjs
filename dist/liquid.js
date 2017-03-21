@@ -662,16 +662,16 @@ var operators = {
         return l != r;
     },
     '>': function _(l, r) {
-        return l > r;
+        return l !== null && r !== null && l > r;
     },
     '<': function _(l, r) {
-        return l < r;
+        return l !== null && r !== null && l < r;
     },
     '>=': function _(l, r) {
-        return l >= r;
+        return l !== null && r !== null && l >= r;
     },
     '<=': function _(l, r) {
-        return l <= r;
+        return l !== null && r !== null && l <= r;
     },
     'contains': function contains(l, r) {
         if (!l) return false;
@@ -1116,12 +1116,11 @@ function evalValue(str, scope) {
 }
 
 function isTruthy(val) {
-    if (val instanceof Array) return !!val.length;
-    return !!val;
+    return !isFalsy(val);
 }
 
 function isFalsy(val) {
-    return !isTruthy(val);
+    return false === val || undefined === val || null === val;;
 }
 
 module.exports = {
@@ -2086,7 +2085,8 @@ module.exports = function (liquid) {
             var _this2 = this;
 
             var collection = Liquid.evalExp(this.collection, scope);
-            if (Liquid.isFalsy(collection)) {
+
+            if (!Array.isArray(collection) || Array.isArray(collection) && collection.length === 0) {
                 return liquid.renderer.renderTemplates(this.elseTemplates, scope);
             }
 
