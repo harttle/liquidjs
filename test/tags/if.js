@@ -52,4 +52,53 @@ describe('tags/if', function() {
         return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('a');
     });
+
+    it('should return else when comparison on null 1', function() {
+        var src = "{% if null < 10 %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 2', function() {
+        var src = "{% if null <= 10 %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 3', function() {
+        var src = "{% if null >= 10 %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 4', function() {
+        var src = "{% if null > 10 %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 5', function() {
+        var src = "{% if 10 < null %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 6', function() {
+        var src = "{% if 10 <= null %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 7', function() {
+        var src = "{% if 10 >= null %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
+    it('should return else when comparison on null 8', function() {
+        var src = "{% if 10 > null %}yes{% else %}no{% endif %}";
+        return expect(liquid.parseAndRender(src, ctx))
+            .to.eventually.equal('no');
+    });
+
 });
