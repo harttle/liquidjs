@@ -9,7 +9,7 @@ function parse(html, filepath, options) {
     html = whiteSpaceCtrl(html, options);
 
     var tokens = [];
-    var syntax = /({%-?(.*?)-?%})|({{(.*?)}})/g;
+    var syntax = /({%-?([\s\S]*?)-?%})|({{([\s\S]*?)}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0, lastMatchBegin = -1, parsedLinesCount = 0;
 

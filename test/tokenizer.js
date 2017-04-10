@@ -56,6 +56,21 @@ describe('tokenizer', function() {
             expect(tokens[3].type).to.equal('html');
             expect(tokens[3].raw).to.equal('  \n ');
         });
+        it('should handle multiple lines tag', function() {
+            var html = '{%foo\na:a\nb:1.23\n%}';
+            var tokens = parse(html);
+            expect(tokens.length).to.equal(1);
+            expect(tokens[0].type).to.equal('tag');
+            expect(tokens[0].args).to.equal('a:a\nb:1.23');
+            expect(tokens[0].raw).to.equal('{%foo\na:a\nb:1.23\n%}');
+        });
+        it('should handle multiple lines output', function() {
+            var html = '{{foo\n|\date:\n"%Y-%m-%d"\n}}';
+            var tokens = parse(html);
+            expect(tokens.length).to.equal(1);
+            expect(tokens[0].type).to.equal('output');
+            expect(tokens[0].raw).to.equal('{{foo\n|\date:\n"%Y-%m-%d"\n}}');
+        });
     });
     describe('whitespace control', function() {
         it('should not strip by default', function() {
