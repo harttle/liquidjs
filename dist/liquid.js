@@ -591,7 +591,7 @@ var hash = new RegExp('(?:' + identifier.source + ')\\s*:\\s*(?:' + value.source
 var hashCapture = new RegExp('(' + identifier.source + ')\\s*:\\s*(' + value.source + ')', 'g');
 
 // full match
-var tagLine = new RegExp('^\\s*(' + identifier.source + ')\\s*(.*)\\s*$');
+var tagLine = new RegExp('^\\s*(' + identifier.source + ')\\s*([\\s\\S]*)\\s*$');
 var literalLine = new RegExp('^' + literal.source + '$', 'i');
 var variableLine = new RegExp('^' + variable.source + '$');
 var numberLine = new RegExp('^' + number.source + '$');
@@ -1217,7 +1217,7 @@ function parse(html, filepath, options) {
     html = whiteSpaceCtrl(html, options);
 
     var tokens = [];
-    var syntax = /({%-?(.*?)-?%})|({{(.*?)}})/g;
+    var syntax = /({%-?([\s\S]*?)-?%})|({{([\s\S]*?)}})/g;
     var result, htmlFragment, token;
     var lastMatchEnd = 0,
         lastMatchBegin = -1,
