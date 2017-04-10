@@ -62,9 +62,9 @@ describe('tag', function() {
             });
             token = {
                 type: 'tag',
-                value: 'foo aa:foo bb: arr[0] cc: 2.3 dd:bar.coo',
+                value: 'foo aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo',
                 name: 'foo',
-                args: 'aa:foo bb: arr[0] cc: 2.3 dd:bar.coo'
+                args: 'aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo'
             };
         });
         it('should call tag.render with scope', function() {

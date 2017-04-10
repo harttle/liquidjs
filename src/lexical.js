@@ -27,7 +27,7 @@ var hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`);
 var hashCapture = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g');
 
 // full match
-var tagLine = new RegExp(`^\\s*(${identifier.source})\\s*(.*)\\s*$`);
+var tagLine = new RegExp(`^\\s*(${identifier.source})\\s*([\\s\\S]*)\\s*$`);
 var literalLine = new RegExp(`^${literal.source}$`, 'i');
 var variableLine = new RegExp(`^${variable.source}$`);
 var numberLine = new RegExp(`^${number.source}$`);
