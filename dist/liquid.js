@@ -1016,7 +1016,7 @@ var Scope = {
                         name = str.slice(i + 2, j);
                         seq.push(name);
                         name = '';
-                        i = j + 1;
+                        i = j + 2;
                     }
             }
             // foo.bar
