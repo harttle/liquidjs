@@ -1,5 +1,6 @@
 const strftime = require('./src/util/strftime.js');
 const _ = require('./src/util/underscore.js');
+const isTruthy = require('./src/syntax.js').isTruthy;
 
 var escapeMap = {
     '&': '&amp;',
@@ -25,7 +26,7 @@ var filters = {
         if (v === 'now') v = new Date();
         return v instanceof Date ? strftime(v, arg) : '';
     },
-    'default': (v, arg) => v || arg,
+    'default': (v, arg) => isTruthy(v) ? v : arg,
     'divided_by': (v, arg) => Math.floor(v / arg),
     'downcase': v => v.toLowerCase(),
     'escape': escape,
