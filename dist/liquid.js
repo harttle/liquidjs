@@ -3,6 +3,7 @@
 
 var strftime = require('./src/util/strftime.js');
 var _ = require('./src/util/underscore.js');
+var isTruthy = require('./src/syntax.js').isTruthy;
 
 var escapeMap = {
     '&': '&amp;',
@@ -37,7 +38,7 @@ var filters = {
         return v instanceof Date ? strftime(v, arg) : '';
     },
     'default': function _default(v, arg) {
-        return v || arg;
+        return isTruthy(v) ? v : arg;
     },
     'divided_by': function divided_by(v, arg) {
         return Math.floor(v / arg);
@@ -203,7 +204,7 @@ function registerAll(liquid) {
 registerAll.filters = filters;
 module.exports = registerAll;
 
-},{"./src/util/strftime.js":20,"./src/util/underscore.js":21}],2:[function(require,module,exports){
+},{"./src/syntax.js":13,"./src/util/strftime.js":20,"./src/util/underscore.js":21}],2:[function(require,module,exports){
 'use strict';
 
 var Scope = require('./src/scope');
