@@ -5,6 +5,7 @@ var Scope = require('../src/scope.js');
 
 var evalExp = syntax.evalExp;
 var evalValue = syntax.evalValue;
+var isTruthy = syntax.isTruthy;
 
 describe('expression', function() {
     var scope;
@@ -29,6 +30,20 @@ describe('expression', function() {
         expect(evalValue('one', scope)).to.equal(1);
         expect(evalValue('x', scope)).to.equal('XXX');
     });
+
+    describe('.isTruthy()', function() {
+        // Spec: https://shopify.github.io/liquid/basics/truthy-and-falsy/
+        expect(isTruthy(true)).to.be.true;
+        expect(isTruthy(false)).to.be.false;
+        expect(isTruthy(null)).to.be.false;
+        expect(isTruthy('foo')).to.be.true;
+        expect(isTruthy('')).to.be.true;
+        expect(isTruthy(0)).to.be.true;
+        expect(isTruthy(1)).to.be.true;
+        expect(isTruthy(1.1)).to.be.true;
+        expect(isTruthy([1])).to.be.true;
+        expect(isTruthy([])).to.be.true;
+    })
 
     describe('.evalExp()', function() {
 
