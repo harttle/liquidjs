@@ -227,139 +227,139 @@ var anySeries = require('./src/util/promise.js').anySeries;
 var Errors = require('./src/util/error.js');
 
 var _engine = {
-    init: function init(tag, filter, options) {
-        if (options.cache) {
-            this.cache = {};
-        }
-        this.options = options;
-        this.tag = tag;
-        this.filter = filter;
-        this.parser = Parser(tag, filter);
-        this.renderer = Render();
-
-        tags(this);
-        filters(this);
-
-        return this;
-    },
-    parse: function parse(html, filepath) {
-        var tokens = tokenizer.parse(html, filepath, this.options);
-        return this.parser.parse(tokens);
-    },
-    render: function render(tpl, ctx, opts) {
-        opts = _.assign({}, this.options, opts);
-        var scope = Scope.factory(ctx, opts);
-        return this.renderer.renderTemplates(tpl, scope);
-    },
-    parseAndRender: function parseAndRender(html, ctx, opts) {
-        var _this = this;
-
-        return Promise.resolve().then(function () {
-            return _this.parse(html);
-        }).then(function (tpl) {
-            return _this.render(tpl, ctx, opts);
-        }).catch(function (e) {
-            if (e instanceof Errors.RenderBreakError) {
-                return e.html;
-            }
-            throw e;
-        });
-    },
-    renderFile: function renderFile(filepath, ctx, opts) {
-        var _this2 = this;
-
-        opts = _.assign({}, opts);
-        return this.getTemplate(filepath, opts.root).then(function (templates) {
-            return _this2.render(templates, ctx, opts);
-        });
-    },
-    evalOutput: function evalOutput(str, scope) {
-        var tpl = this.parser.parseOutput(str.trim());
-        return this.renderer.evalOutput(tpl, scope);
-    },
-    registerFilter: function registerFilter(name, filter) {
-        return this.filter.register(name, filter);
-    },
-    registerTag: function registerTag(name, tag) {
-        return this.tag.register(name, tag);
-    },
-    lookup: function lookup(filepath, root) {
-        root = this.options.root.concat(root || []);
-        root = _.uniq(root);
-        var paths = root.map(function (root) {
-            return path.resolve(root, filepath);
-        });
-        return anySeries(paths, function (path) {
-            return statFileAsync(path).then(function () {
-                return path;
-            });
-        }).catch(function (e) {
-            if (e.code === 'ENOENT') {
-                e.message = 'Failed to lookup ' + filepath + ' in: ' + root;
-            }
-            throw e;
-        });
-    },
-    getTemplate: function getTemplate(filepath, root) {
-        var _this3 = this;
-
-        if (!path.extname(filepath)) {
-            filepath += this.options.extname;
-        }
-        return this.lookup(filepath, root).then(function (filepath) {
-            if (_this3.options.cache) {
-                var tpl = _this3.cache[filepath];
-                if (tpl) {
-                    return Promise.resolve(tpl);
-                }
-                return readFileAsync(filepath).then(function (str) {
-                    return _this3.parse(str);
-                }).then(function (tpl) {
-                    return _this3.cache[filepath] = tpl;
-                });
-            } else {
-                return readFileAsync(filepath).then(function (str) {
-                    return _this3.parse(str, filepath);
-                });
-            }
-        });
-    },
-    express: function express(opts) {
-        opts = opts || {};
-        var self = this;
-        return function (filePath, ctx, callback) {
-            assert(_.isArray(this.root) || _.isString(this.root), 'illegal views root, are you using express.js?');
-            opts.root = this.root;
-            self.renderFile(filePath, ctx, opts).then(function (html) {
-                return callback(null, html);
-            }).catch(function (e) {
-                return callback(e);
-            });
-        };
+  init: function init(tag, filter, options) {
+    if (options.cache) {
+      this.cache = {};
     }
+    this.options = options;
+    this.tag = tag;
+    this.filter = filter;
+    this.parser = Parser(tag, filter);
+    this.renderer = Render();
+
+    tags(this);
+    filters(this);
+
+    return this;
+  },
+  parse: function parse(html, filepath) {
+    var tokens = tokenizer.parse(html, filepath, this.options);
+    return this.parser.parse(tokens);
+  },
+  render: function render(tpl, ctx, opts) {
+    opts = _.assign({}, this.options, opts);
+    var scope = Scope.factory(ctx, opts);
+    return this.renderer.renderTemplates(tpl, scope);
+  },
+  parseAndRender: function parseAndRender(html, ctx, opts) {
+    var _this = this;
+
+    return Promise.resolve().then(function () {
+      return _this.parse(html);
+    }).then(function (tpl) {
+      return _this.render(tpl, ctx, opts);
+    }).catch(function (e) {
+      if (e instanceof Errors.RenderBreakError) {
+        return e.html;
+      }
+      throw e;
+    });
+  },
+  renderFile: function renderFile(filepath, ctx, opts) {
+    var _this2 = this;
+
+    opts = _.assign({}, opts);
+    return this.getTemplate(filepath, opts.root).then(function (templates) {
+      return _this2.render(templates, ctx, opts);
+    });
+  },
+  evalOutput: function evalOutput(str, scope) {
+    var tpl = this.parser.parseOutput(str.trim());
+    return this.renderer.evalOutput(tpl, scope);
+  },
+  registerFilter: function registerFilter(name, filter) {
+    return this.filter.register(name, filter);
+  },
+  registerTag: function registerTag(name, tag) {
+    return this.tag.register(name, tag);
+  },
+  lookup: function lookup(filepath, root) {
+    root = this.options.root.concat(root || []);
+    root = _.uniq(root);
+    var paths = root.map(function (root) {
+      return path.resolve(root, filepath);
+    });
+    return anySeries(paths, function (path) {
+      return statFileAsync(path).then(function () {
+        return path;
+      });
+    }).catch(function (e) {
+      if (e.code === 'ENOENT') {
+        e.message = 'Failed to lookup ' + filepath + ' in: ' + root;
+      }
+      throw e;
+    });
+  },
+  getTemplate: function getTemplate(filepath, root) {
+    var _this3 = this;
+
+    if (!path.extname(filepath)) {
+      filepath += this.options.extname;
+    }
+    return this.lookup(filepath, root).then(function (filepath) {
+      if (_this3.options.cache) {
+        var tpl = _this3.cache[filepath];
+        if (tpl) {
+          return Promise.resolve(tpl);
+        }
+        return readFileAsync(filepath).then(function (str) {
+          return _this3.parse(str);
+        }).then(function (tpl) {
+          return _this3.cache[filepath] = tpl;
+        });
+      } else {
+        return readFileAsync(filepath).then(function (str) {
+          return _this3.parse(str, filepath);
+        });
+      }
+    });
+  },
+  express: function express(opts) {
+    opts = opts || {};
+    var self = this;
+    return function (filePath, ctx, callback) {
+      assert(_.isArray(this.root) || _.isString(this.root), 'illegal views root, are you using express.js?');
+      opts.root = this.root;
+      self.renderFile(filePath, ctx, opts).then(function (html) {
+        return callback(null, html);
+      }).catch(function (e) {
+        return callback(e);
+      });
+    };
+  }
 };
 
 function factory(options) {
-    options = _.assign({
-        root: ['.'],
-        cache: false,
-        extname: '.liquid',
-        trim_right: false,
-        trim_left: false,
-        strict_filters: false,
-        strict_variables: false
-    }, options);
-    options.root = normalizeStringArray(options.root);
+  options = _.assign({
+    root: ['.'],
+    cache: false,
+    extname: '.liquid',
+    trim_right: false,
+    trim_left: false,
+    strict_filters: false,
+    strict_variables: false
+  }, options);
+  options.root = normalizeStringArray(options.root);
 
-    var engine = Object.create(_engine);
-    engine.init(Tag(), Filter(options), options);
-    return engine;
+  var engine = Object.create(_engine);
+  engine.init(Tag(), Filter(options), options);
+  return engine;
 }
 
 function normalizeStringArray(value) {
-    if (_.isArray(value)) return value;
-    if (_.isString(value)) return [value];
-    return [];
+  if (_.isArray(value)) return value;
+  if (_.isString(value)) return [value];
+  return [];
 }
 
 factory.lexical = lexical;
@@ -368,10 +368,10 @@ factory.isFalsy = Syntax.isFalsy;
 factory.evalExp = Syntax.evalExp;
 factory.evalValue = Syntax.evalValue;
 factory.Types = {
-    ParseError: Errors.ParseError,
-    TokenizationEroor: Errors.TokenizationError,
-    RenderBreakError: Errors.RenderBreakError,
-    AssertionError: Errors.AssertionError
+  ParseError: Errors.ParseError,
+  TokenizationEroor: Errors.TokenizationError,
+  RenderBreakError: Errors.RenderBreakError,
+  AssertionError: Errors.AssertionError
 };
 
 module.exports = factory;
@@ -493,71 +493,67 @@ var _ = require('./util/underscore.js');
 var valueRE = new RegExp('' + lexical.value.source, 'g');
 
 module.exports = function (options) {
-    options = _.assign({}, options);
-    var filters = {};
+  options = _.assign({}, options);
+  var filters = {};
 
-    var _filterInstance = {
-        render: function render(output, scope) {
-            var args = this.args.map(function (arg) {
-                return Syntax.evalValue(arg, scope);
-            });
-            args.unshift(output);
-            return this.filter.apply(null, args);
-        },
-        parse: function parse(str) {
-            var match = lexical.filterLine.exec(str);
-            assert(match, 'illegal filter: ' + str);
+  var _filterInstance = {
+    render: function render(output, scope) {
+      var args = this.args.map(function (arg) {
+        return Syntax.evalValue(arg, scope);
+      });
+      args.unshift(output);
+      return this.filter.apply(null, args);
+    },
+    parse: function parse(str) {
+      var match = lexical.filterLine.exec(str);
+      assert(match, 'illegal filter: ' + str);
 
-            var name = match[1],
-                argList = match[2] || '',
-                filter = filters[name];
-            if (typeof filter !== 'function') {
-                if (options.strict_filters) {
-                    throw new TypeError('undefined filter: ' + name);
-                }
-                this.name = name;
-                this.filter = function (x) {
-                    return x;
-                };
-                this.args = [];
-                return this;
-                //return {
-                //name: name,
-                //error: new TypeError(`undefined filter: ${name}`)
-                //};
-            }
-
-            var args = [];
-            while (match = valueRE.exec(argList.trim())) {
-                var v = match[0];
-                var re = new RegExp(v + '\\s*:', 'g');
-                re.test(match.input) ? args.push('\'' + v + '\'') : args.push(v);
-            }
-
-            this.name = name;
-            this.filter = filter;
-            this.args = args;
-
-            return this;
+      var name = match[1];
+      var argList = match[2] || '';
+      var filter = filters[name];
+      if (typeof filter !== 'function') {
+        if (options.strict_filters) {
+          throw new TypeError('undefined filter: ' + name);
         }
-    };
+        this.name = name;
+        this.filter = function (x) {
+          return x;
+        };
+        this.args = [];
+        return this;
+      }
 
-    function construct(str) {
-        var instance = Object.create(_filterInstance);
-        return instance.parse(str);
+      var args = [];
+      while (match = valueRE.exec(argList.trim())) {
+        var v = match[0];
+        var re = new RegExp(v + '\\s*:', 'g');
+        re.test(match.input) ? args.push('\'' + v + '\'') : args.push(v);
+      }
+
+      this.name = name;
+      this.filter = filter;
+      this.args = args;
+
+      return this;
     }
+  };
 
-    function register(name, filter) {
-        filters[name] = filter;
-    }
+  function construct(str) {
+    var instance = Object.create(_filterInstance);
+    return instance.parse(str);
+  }
 
-    function clear() {
-        filters = {};
-    }
+  function register(name, filter) {
+    filters[name] = filter;
+  }
 
-    return {
-        construct: construct, register: register, clear: clear
-    };
+  function clear() {
+    filters = {};
+  }
+
+  return {
+    construct: construct, register: register, clear: clear
+  };
 };
 
 },{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"./util/underscore.js":21}],8:[function(require,module,exports){
@@ -611,80 +607,103 @@ var filterLine = new RegExp('^' + filterCapture.source + '$');
 var operators = [/\s+or\s+/, /\s+and\s+/, /==|!=|<=|>=|<|>|\s+contains\s+/];
 
 function isInteger(str) {
-    return integerLine.test(str);
+  return integerLine.test(str);
 }
 
 function isLiteral(str) {
-    return literalLine.test(str);
+  return literalLine.test(str);
 }
 
 function isRange(str) {
-    return rangeLine.test(str);
+  return rangeLine.test(str);
 }
 
 function isVariable(str) {
-    return variableLine.test(str);
+  return variableLine.test(str);
 }
 
 function matchValue(str) {
-    return value.exec(str);
+  return value.exec(str);
 }
 
 function parseLiteral(str) {
-    var res;
-    if (res = str.match(numberLine)) {
-        return Number(str);
-    }
-    if (res = str.match(boolLine)) {
-        return str.toLowerCase() === 'true';
-    }
-    if (res = str.match(quotedLine)) {
-        return str.slice(1, -1);
-    }
+  var res = str.match(numberLine);
+  if (res) {
+    return Number(str);
+  }
+  res = str.match(boolLine);
+  if (res) {
+    return str.toLowerCase() === 'true';
+  }
+  res = str.match(quotedLine);
+  if (res) {
+    return str.slice(1, -1);
+  }
 }
 
 module.exports = {
-    quoted: quoted, number: number, bool: bool, literal: literal, filter: filter, integer: integer,
-    hash: hash, hashCapture: hashCapture,
-    range: range, rangeCapture: rangeCapture,
-    identifier: identifier, value: value, quoteBalanced: quoteBalanced, operators: operators,
-    quotedLine: quotedLine, numberLine: numberLine, boolLine: boolLine, rangeLine: rangeLine, literalLine: literalLine, filterLine: filterLine, tagLine: tagLine,
-    isLiteral: isLiteral, isVariable: isVariable, parseLiteral: parseLiteral, isRange: isRange, matchValue: matchValue, isInteger: isInteger
+  quoted: quoted,
+  number: number,
+  bool: bool,
+  literal: literal,
+  filter: filter,
+  integer: integer,
+  hash: hash,
+  hashCapture: hashCapture,
+  range: range,
+  rangeCapture: rangeCapture,
+  identifier: identifier,
+  value: value,
+  quoteBalanced: quoteBalanced,
+  operators: operators,
+  quotedLine: quotedLine,
+  numberLine: numberLine,
+  boolLine: boolLine,
+  rangeLine: rangeLine,
+  literalLine: literalLine,
+  filterLine: filterLine,
+  tagLine: tagLine,
+  isLiteral: isLiteral,
+  isVariable: isVariable,
+  parseLiteral: parseLiteral,
+  isRange: isRange,
+  matchValue: matchValue,
+  isInteger: isInteger
 };
 
 },{}],9:[function(require,module,exports){
 'use strict';
 
 var operators = {
-    '==': function _(l, r) {
-        return l == r;
-    },
-    '!=': function _(l, r) {
-        return l != r;
-    },
-    '>': function _(l, r) {
-        return l !== null && r !== null && l > r;
-    },
-    '<': function _(l, r) {
-        return l !== null && r !== null && l < r;
-    },
-    '>=': function _(l, r) {
-        return l !== null && r !== null && l >= r;
-    },
-    '<=': function _(l, r) {
-        return l !== null && r !== null && l <= r;
-    },
-    'contains': function contains(l, r) {
-        if (!l) return false;
-        if (typeof l.indexOf !== 'function') return false;
-        return l.indexOf(r) > -1;
-    },
-    'and': function and(l, r) {
-        return l && r;
-    },
-    'or': function or(l, r) {
-        return l || r;
-    }
+  '==': function _(l, r) {
+    return l === r;
+  },
+  '!=': function _(l, r) {
+    return l !== r;
+  },
+  '>': function _(l, r) {
+    return l !== null && r !== null && l > r;
+  },
+  '<': function _(l, r) {
+    return l !== null && r !== null && l < r;
+  },
+  '>=': function _(l, r) {
+    return l !== null && r !== null && l >= r;
+  },
+  '<=': function _(l, r) {
+    return l !== null && r !== null && l <= r;
+  },
+  'contains': function contains(l, r) {
+    if (!l) return false;
+    if (typeof l.indexOf !== 'function') return false;
+    return l.indexOf(r) > -1;
+  },
+  'and': function and(l, r) {
+    return l && r;
+  },
+  'or': function or(l, r) {
+    return l || r;
+  }
 };
 
 module.exports = operators;
@@ -697,108 +716,107 @@ var ParseError = require('./util/error.js').ParseError;
 var assert = require('./util/assert.js');
 
 module.exports = function (Tag, Filter) {
-
-    var stream = {
-        init: function init(tokens) {
-            this.tokens = tokens;
-            this.handlers = {};
-            return this;
-        },
-        on: function on(name, cb) {
-            this.handlers[name] = cb;
-            return this;
-        },
-        trigger: function trigger(event, arg) {
-            var h = this.handlers[event];
-            if (typeof h === 'function') {
-                h(arg);
-                return true;
-            }
-        },
-        start: function start() {
-            this.trigger('start');
-            var token;
-            while (!this.stopRequested && (token = this.tokens.shift())) {
-                if (this.trigger('token', token)) continue;
-                if (token.type == 'tag' && this.trigger('tag:' + token.name, token)) {
-                    continue;
-                }
-                var template = parseToken(token, this.tokens);
-                this.trigger('template', template);
-            }
-            if (!this.stopRequested) this.trigger('end');
-            return this;
-        },
-        stop: function stop() {
-            this.stopRequested = true;
-            return this;
+  var stream = {
+    init: function init(tokens) {
+      this.tokens = tokens;
+      this.handlers = {};
+      return this;
+    },
+    on: function on(name, cb) {
+      this.handlers[name] = cb;
+      return this;
+    },
+    trigger: function trigger(event, arg) {
+      var h = this.handlers[event];
+      if (typeof h === 'function') {
+        h(arg);
+        return true;
+      }
+    },
+    start: function start() {
+      this.trigger('start');
+      var token;
+      while (!this.stopRequested && (token = this.tokens.shift())) {
+        if (this.trigger('token', token)) continue;
+        if (token.type === 'tag' && this.trigger('tag:' + token.name, token)) {
+          continue;
         }
-    };
-
-    function parse(tokens) {
-        var token,
-            templates = [];
-        while (token = tokens.shift()) {
-            templates.push(parseToken(token, tokens));
-        }
-        return templates;
+        var template = parseToken(token, this.tokens);
+        this.trigger('template', template);
+      }
+      if (!this.stopRequested) this.trigger('end');
+      return this;
+    },
+    stop: function stop() {
+      this.stopRequested = true;
+      return this;
     }
+  };
 
-    function parseToken(token, tokens) {
-        try {
-            var tpl = null;
-            if (token.type === 'tag') {
-                tpl = parseTag(token, tokens);
-            } else if (token.type === 'output') {
-                tpl = parseOutput(token.value);
-            } else {
-                // token.type === 'html'
-                tpl = token;
-            }
-            tpl.token = token;
-            return tpl;
-        } catch (e) {
-            throw new ParseError(e, token);
-        }
+  function parse(tokens) {
+    var token;
+    var templates = [];
+    while (token = tokens.shift()) {
+      templates.push(parseToken(token, tokens));
     }
+    return templates;
+  }
 
-    function parseTag(token, tokens) {
-        if (token.name === 'continue' || token.name === 'break') return token;
-        return Tag.construct(token, tokens);
+  function parseToken(token, tokens) {
+    try {
+      var tpl = null;
+      if (token.type === 'tag') {
+        tpl = parseTag(token, tokens);
+      } else if (token.type === 'output') {
+        tpl = parseOutput(token.value);
+      } else {
+        // token.type === 'html'
+        tpl = token;
+      }
+      tpl.token = token;
+      return tpl;
+    } catch (e) {
+      throw new ParseError(e, token);
     }
+  }
 
-    function parseOutput(str) {
-        var match = lexical.matchValue(str);
-        assert(match, 'illegal output string: ' + str);
+  function parseTag(token, tokens) {
+    if (token.name === 'continue' || token.name === 'break') return token;
+    return Tag.construct(token, tokens);
+  }
 
-        var initial = match[0];
-        str = str.substr(match.index + match[0].length);
+  function parseOutput(str) {
+    var match = lexical.matchValue(str);
+    assert(match, 'illegal output string: ' + str);
 
-        var filters = [];
-        while (match = lexical.filter.exec(str)) {
-            filters.push([match[0].trim()]);
-        }
+    var initial = match[0];
+    str = str.substr(match.index + match[0].length);
 
-        return {
-            type: 'output',
-            initial: initial,
-            filters: filters.map(function (str) {
-                return Filter.construct(str);
-            })
-        };
-    }
-
-    function parseStream(tokens) {
-        var s = Object.create(stream);
-        return s.init(tokens);
+    var filters = [];
+    while (match = lexical.filter.exec(str)) {
+      filters.push([match[0].trim()]);
     }
 
     return {
-        parse: parse,
-        parseTag: parseTag,
-        parseStream: parseStream,
-        parseOutput: parseOutput
+      type: 'output',
+      initial: initial,
+      filters: filters.map(function (str) {
+        return Filter.construct(str);
+      })
     };
+  }
+
+  function parseStream(tokens) {
+    var s = Object.create(stream);
+    return s.init(tokens);
+  }
+
+  return {
+    parse: parse,
+    parseTag: parseTag,
+    parseStream: parseStream,
+    parseOutput: parseOutput
+  };
 };
 
 },{"./lexical.js":8,"./util/assert.js":16,"./util/error.js":17}],11:[function(require,module,exports){
@@ -813,72 +831,72 @@ var assert = require('./util/assert.js');
 
 var render = {
 
-    renderTemplates: function renderTemplates(templates, scope) {
-        var _this = this;
+  renderTemplates: function renderTemplates(templates, scope) {
+    var _this = this;
 
-        assert(scope, 'unable to evalTemplates: scope undefined');
+    assert(scope, 'unable to evalTemplates: scope undefined');
 
-        var html = '';
-        return mapSeries(templates, function (tpl) {
-            return renderTemplate.call(_this, tpl).then(function (partial) {
-                return html += partial;
-            }).catch(function (e) {
-                if (e instanceof RenderBreakError) {
-                    e.resolvedHTML = html;
-                    throw e;
-                }
-                throw new RenderError(e, tpl);
-            });
-        }).then(function () {
-            return html;
+    var html = '';
+    return mapSeries(templates, function (tpl) {
+      return renderTemplate.call(_this, tpl).then(function (partial) {
+        return html += partial;
+      }).catch(function (e) {
+        if (e instanceof RenderBreakError) {
+          e.resolvedHTML = html;
+          throw e;
+        }
+        throw new RenderError(e, tpl);
+      });
+    }).then(function () {
+      return html;
+    });
+
+    function renderTemplate(template) {
+      var _this2 = this;
+
+      if (template.type === 'tag') {
+        return this.renderTag(template, scope).then(function (partial) {
+          return partial === undefined ? '' : partial;
         });
-
-        function renderTemplate(template) {
-            var _this2 = this;
-
-            if (template.type === 'tag') {
-                return this.renderTag(template, scope).then(function (partial) {
-                    return partial === undefined ? '' : partial;
-                });
-            } else if (template.type === 'output') {
-                return Promise.resolve().then(function () {
-                    return _this2.evalOutput(template, scope);
-                }).then(function (partial) {
-                    return partial === undefined ? '' : stringify(partial);
-                });
-            } else {
-                // template.type === 'html'
-                return Promise.resolve(template.value);
-            }
-        }
-    },
-
-    renderTag: function renderTag(template, scope) {
-        if (template.name === 'continue') {
-            return Promise.reject(new RenderBreakError('continue'));
-        }
-        if (template.name === 'break') {
-            return Promise.reject(new RenderBreakError('break'));
-        }
-        return template.render(scope);
-    },
-
-    evalOutput: function evalOutput(template, scope) {
-        assert(scope, 'unable to evalOutput: scope undefined');
-        return template.filters.reduce(function (prev, filter) {
-            return filter.render(prev, scope);
-        }, Syntax.evalExp(template.initial, scope));
+      } else if (template.type === 'output') {
+        return Promise.resolve().then(function () {
+          return _this2.evalOutput(template, scope);
+        }).then(function (partial) {
+          return partial === undefined ? '' : stringify(partial);
+        });
+      } else {
+        // template.type === 'html'
+        return Promise.resolve(template.value);
+      }
     }
+  },
+
+  renderTag: function renderTag(template, scope) {
+    if (template.name === 'continue') {
+      return Promise.reject(new RenderBreakError('continue'));
+    }
+    if (template.name === 'break') {
+      return Promise.reject(new RenderBreakError('break'));
+    }
+    return template.render(scope);
+  },
+
+  evalOutput: function evalOutput(template, scope) {
+    assert(scope, 'unable to evalOutput: scope undefined');
+    return template.filters.reduce(function (prev, filter) {
+      return filter.render(prev, scope);
+    }, Syntax.evalExp(template.initial, scope));
+  }
 };
 
 function factory() {
-    var instance = Object.create(render);
-    return instance;
+  var instance = Object.create(render);
+  return instance;
 }
 
 function stringify(val) {
-    if (typeof val === 'string') return val;
-    return JSON.stringify(val);
+  if (typeof val === 'string') return val;
+  return JSON.stringify(val);
 }
 
 module.exports = factory;
@@ -892,181 +910,177 @@ var assert = require('./util/assert.js');
 var toStr = Object.prototype.toString;
 
 var Scope = {
-    getAll: function getAll() {
-        var ctx = {};
-        for (var i = this.scopes.length - 1; i >= 0; i--) {
-            _.assign(ctx, this.scopes[i]);
-        }
-        return ctx;
-    },
-    get: function get(str) {
-        for (var i = this.scopes.length - 1; i >= 0; i--) {
-            try {
-                return this.getPropertyByPath(this.scopes[i], str);
-            } catch (e) {
-                if (/undefined variable/.test(e.message)) {
-                    continue;
-                }
-                if (/Cannot read property/.test(e.message)) {
-                    if (this.opts.strict_variables) {
-                        e.message += ': ' + str;
-                        throw e;
-                    } else {
-                        continue;
-                    }
-                } else {
-                    e.message += ': ' + str;
-                    throw e;
-                }
-            }
-        }
-        if (this.opts.strict_variables) {
-            throw new TypeError('undefined variable: ' + str);
-        }
-    },
-    set: function set(k, v) {
-        this.setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
-        return this;
-    },
-    push: function push(ctx) {
-        assert(ctx, 'trying to push ' + ctx + ' into scopes');
-        return this.scopes.push(ctx);
-    },
-    pop: function pop() {
-        return this.scopes.pop();
-    },
-    unshift: function unshift(ctx) {
-        assert(ctx, 'trying to push ' + ctx + ' into scopes');
-        return this.scopes.unshift(ctx);
-    },
-    shift: function shift() {
-        return this.scopes.shift();
-    },
-    setPropertyByPath: function setPropertyByPath(obj, path, val) {
-        if (_.isString(path)) {
-            var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
-            for (var i = 0; i < paths.length; i++) {
-                var key = paths[i];
-                if (i === paths.length - 1) {
-                    return obj[key] = val;
-                }
-                if (undefined === obj[key]) obj[key] = {};
-                // case for readonly objects
-                obj = obj[key] || {};
-            }
-        }
-    },
-
-    getPropertyByPath: function getPropertyByPath(obj, path) {
-        var paths = this.propertyAccessSeq(path + '');
-        var varName = paths.shift();
-        if (!obj.hasOwnProperty(varName)) {
-            throw new TypeError('undefined variable');
-        }
-        var variable = obj[varName];
-        var lastName = paths.pop();
-        paths.forEach(function (p) {
-            return variable = variable[p];
-        });
-        if (undefined !== lastName) {
-            if (lastName === 'size' && (toStr.call(variable) === '[object Array]' || toStr.call(variable) === '[object String]')) {
-                return variable.length;
-            }
-            variable = variable[lastName];
-        }
-        return variable;
-    },
-
-    /*
-     * Parse property access sequence from access string
-     * @example
-     * accessSeq("foo.bar")            // ['foo', 'bar']
-     * accessSeq("foo['bar']")      // ['foo', 'bar']
-     * accessSeq("foo['b]r']")      // ['foo', 'b]r']
-     * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
-     */
-    propertyAccessSeq: function propertyAccessSeq(str) {
-        var seq = [],
-            name = '';
-        for (var i = 0; i < str.length; i++) {
-            if (str[i] === '[') {
-                seq.push(name);
-                name = '';
-
-                var delemiter = str[i + 1];
-                // foo[bar.coo]
-                if (delemiter !== "'" && delemiter !== '"') {
-                    var j = matchRightBracket(str, i + 1);
-                    assert(j !== -1, 'unbalanced []: ' + str);
-                    name = str.slice(i + 1, j);
-                    // foo[1]
-                    if (lexical.isInteger(name)) {
-                        seq.push(name);
-                    }
-                    // foo["bar"]
-                    else {
-                            seq.push(this.get(name));
-                        }
-                    name = '';
-                    i = j;
-                }
-                // foo["bar"]
-                else {
-                        j = str.indexOf(delemiter, i + 2);
-                        assert(j !== -1, 'unbalanced ' + delemiter + ': ' + str);
-                        name = str.slice(i + 2, j);
-                        seq.push(name);
-                        name = '';
-                        i = j + 2;
-                    }
-            }
-            // foo.bar
-            else if (str[i] === ".") {
-                    seq.push(name);
-                    name = '';
-                }
-                //foo.bar
-                else {
-                        name += str[i];
-                    }
-        }
-        if (name.length) seq.push(name);
-        return seq;
+  getAll: function getAll() {
+    var ctx = {};
+    for (var i = this.scopes.length - 1; i >= 0; i--) {
+      _.assign(ctx, this.scopes[i]);
     }
+    return ctx;
+  },
+  get: function get(str) {
+    for (var i = this.scopes.length - 1; i >= 0; i--) {
+      try {
+        return this.getPropertyByPath(this.scopes[i], str);
+      } catch (e) {
+        if (/undefined variable/.test(e.message)) {
+          continue;
+        }
+        if (/Cannot read property/.test(e.message)) {
+          if (this.opts.strict_variables) {
+            e.message += ': ' + str;
+            throw e;
+          } else {
+            continue;
+          }
+        } else {
+          e.message += ': ' + str;
+          throw e;
+        }
+      }
+    }
+    if (this.opts.strict_variables) {
+      throw new TypeError('undefined variable: ' + str);
+    }
+  },
+  set: function set(k, v) {
+    this.setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
+    return this;
+  },
+  push: function push(ctx) {
+    assert(ctx, 'trying to push ' + ctx + ' into scopes');
+    return this.scopes.push(ctx);
+  },
+  pop: function pop() {
+    return this.scopes.pop();
+  },
+  unshift: function unshift(ctx) {
+    assert(ctx, 'trying to push ' + ctx + ' into scopes');
+    return this.scopes.unshift(ctx);
+  },
+  shift: function shift() {
+    return this.scopes.shift();
+  },
+  setPropertyByPath: function setPropertyByPath(obj, path, val) {
+    if (_.isString(path)) {
+      var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
+      for (var i = 0; i < paths.length; i++) {
+        var key = paths[i];
+        if (i === paths.length - 1) {
+          return obj[key] = val;
+        }
+        if (undefined === obj[key]) obj[key] = {};
+        // case for readonly objects
+        obj = obj[key] || {};
+      }
+    }
+  },
+
+  getPropertyByPath: function getPropertyByPath(obj, path) {
+    var paths = this.propertyAccessSeq(path + '');
+    var varName = paths.shift();
+    if (!obj.hasOwnProperty(varName)) {
+      throw new TypeError('undefined variable');
+    }
+    var variable = obj[varName];
+    var lastName = paths.pop();
+    paths.forEach(function (p) {
+      return variable = variable[p];
+    });
+    if (undefined !== lastName) {
+      if (lastName === 'size' && (toStr.call(variable) === '[object Array]' || toStr.call(variable) === '[object String]')) {
+        return variable.length;
+      }
+      variable = variable[lastName];
+    }
+    return variable;
+  },
+
+  /*
+   * Parse property access sequence from access string
+   * @example
+   * accessSeq("foo.bar")            // ['foo', 'bar']
+   * accessSeq("foo['bar']")      // ['foo', 'bar']
+   * accessSeq("foo['b]r']")      // ['foo', 'b]r']
+   * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
+   */
+  propertyAccessSeq: function propertyAccessSeq(str) {
+    var seq = [];
+    var name = '';
+    for (var i = 0; i < str.length; i++) {
+      if (str[i] === '[') {
+        seq.push(name);
+        name = '';
+
+        var delemiter = str[i + 1];
+        if (delemiter !== "'" && delemiter !== '"') {
+          // foo[bar.coo]
+          var j = matchRightBracket(str, i + 1);
+          assert(j !== -1, 'unbalanced []: ' + str);
+          name = str.slice(i + 1, j);
+          if (lexical.isInteger(name)) {
+            // foo[1]
+            seq.push(name);
+          } else {
+            // foo["bar"]
+            seq.push(this.get(name));
+          }
+          name = '';
+          i = j;
+        } else {
+          // foo["bar"]
+          j = str.indexOf(delemiter, i + 2);
+          assert(j !== -1, 'unbalanced ' + delemiter + ': ' + str);
+          name = str.slice(i + 2, j);
+          seq.push(name);
+          name = '';
+          i = j + 2;
+        }
+      } else if (str[i] === '.') {
+        // foo.bar
+        seq.push(name);
+        name = '';
+      } else {
+        // foo.bar
+        name += str[i];
+      }
+    }
+    if (name.length) seq.push(name);
+    return seq;
+  }
 };
 
 function matchRightBracket(str, begin) {
-    var stack = 1; // count of '[' - count of ']'
-    for (var i = begin; i < str.length; i++) {
-        if (str[i] === '[') {
-            stack++;
-        }
-        if (str[i] === ']') {
-            stack--;
-            if (stack === 0) {
-                return i;
-            }
-        }
+  var stack = 1; // count of '[' - count of ']'
+  for (var i = begin; i < str.length; i++) {
+    if (str[i] === '[') {
+      stack++;
     }
-    return -1;
+    if (str[i] === ']') {
+      stack--;
+      if (stack === 0) {
+        return i;
+      }
+    }
+  }
+  return -1;
 }
 
 exports.factory = function (ctx, opts) {
-    opts = _.assign({
-        strict_variables: false,
-        strict_filters: false,
-        blocks: {},
-        root: []
-    }, opts);
+  opts = _.assign({
+    strict_variables: false,
+    strict_filters: false,
+    blocks: {},
+    root: []
+  }, opts);
 
-    ctx = _.assign(ctx, {
-        liquid: opts
-    });
+  ctx = _.assign(ctx, {
+    liquid: opts
+  });
 
-    var scope = Object.create(Scope);
-    scope.opts = opts;
-    scope.scopes = [ctx];
-    return scope;
+  var scope = Object.create(Scope);
+  scope.opts = opts;
+  scope.scopes = [ctx];
+  return scope;
 };
 
 },{"./lexical.js":8,"./util/assert.js":16,"./util/underscore.js":21}],13:[function(require,module,exports){
@@ -1077,55 +1091,55 @@ var lexical = require('./lexical.js');
 var assert = require('../src/util/assert.js');
 
 function evalExp(exp, scope) {
-    assert(scope, 'unable to evalExp: scope undefined');
-    var operatorREs = lexical.operators,
-        match;
-    for (var i = 0; i < operatorREs.length; i++) {
-        var operatorRE = operatorREs[i];
-        var expRE = new RegExp('^(' + lexical.quoteBalanced.source + ')(' + operatorRE.source + ')(' + lexical.quoteBalanced.source + ')$');
-        if (match = exp.match(expRE)) {
-            var l = evalExp(match[1], scope);
-            var op = operators[match[2].trim()];
-            var r = evalExp(match[3], scope);
-            return op(l, r);
-        }
+  assert(scope, 'unable to evalExp: scope undefined');
+  var operatorREs = lexical.operators;
+  var match;
+  for (var i = 0; i < operatorREs.length; i++) {
+    var operatorRE = operatorREs[i];
+    var expRE = new RegExp('^(' + lexical.quoteBalanced.source + ')(' + operatorRE.source + ')(' + lexical.quoteBalanced.source + ')$');
+    if (match = exp.match(expRE)) {
+      var l = evalExp(match[1], scope);
+      var op = operators[match[2].trim()];
+      var r = evalExp(match[3], scope);
+      return op(l, r);
     }
+  }
 
-    if (match = exp.match(lexical.rangeLine)) {
-        var low = evalValue(match[1], scope),
-            high = evalValue(match[2], scope);
-        var range = [];
-        for (var j = low; j <= high; j++) {
-            range.push(j);
-        }
-        return range;
+  if (match = exp.match(lexical.rangeLine)) {
+    var low = evalValue(match[1], scope);
+    var high = evalValue(match[2], scope);
+    var range = [];
+    for (var j = low; j <= high; j++) {
+      range.push(j);
     }
+    return range;
+  }
 
-    return evalValue(exp, scope);
+  return evalValue(exp, scope);
 }
 
 function evalValue(str, scope) {
-    str = str && str.trim();
-    if (!str) return undefined;
+  str = str && str.trim();
+  if (!str) return undefined;
 
-    if (lexical.isLiteral(str)) {
-        return lexical.parseLiteral(str);
-    }
-    if (lexical.isVariable(str)) {
-        return scope.get(str);
-    }
+  if (lexical.isLiteral(str)) {
+    return lexical.parseLiteral(str);
+  }
+  if (lexical.isVariable(str)) {
+    return scope.get(str);
+  }
 }
 
 function isTruthy(val) {
-    return !isFalsy(val);
+  return !isFalsy(val);
 }
 
 function isFalsy(val) {
-    return false === val || undefined === val || null === val;;
+  return val === false || undefined === val || val === null;
 }
 
 module.exports = {
-    evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
+  evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
 };
 
 },{"../src/util/assert.js":16,"./lexical.js":8,"./operators.js":9}],14:[function(require,module,exports){
@@ -1138,70 +1152,70 @@ var Syntax = require('./syntax.js');
 var assert = require('./util/assert.js');
 
 function hash(markup, scope) {
-    var obj = {},
-        match;
-    lexical.hashCapture.lastIndex = 0;
-    while (match = lexical.hashCapture.exec(markup)) {
-        var k = match[1],
-            v = match[2];
-        obj[k] = Syntax.evalValue(v, scope);
-    }
-    return obj;
+  var obj = {};
+  var match;
+  lexical.hashCapture.lastIndex = 0;
+  while (match = lexical.hashCapture.exec(markup)) {
+    var k = match[1];
+    var v = match[2];
+    obj[k] = Syntax.evalValue(v, scope);
+  }
+  return obj;
 }
 
 module.exports = function () {
-    var tagImpls = {};
+  var tagImpls = {};
 
-    var _tagInstance = {
-        render: function render(scope) {
-            var obj = hash(this.token.args, scope);
-            var impl = this.tagImpl;
-            if (typeof impl.render !== 'function') {
-                return Promise.resolve('');
-            }
-            return Promise.resolve().then(function () {
-                return typeof impl.render === 'function' ? impl.render(scope, obj) : '';
-            }).catch(function (e) {
-                if (_.isError(e)) {
-                    throw e;
-                }
-                var msg = 'Please reject with an Error in ' + impl.render + ', got ' + e;
-                throw new Error(msg);
-            });
-        },
-        parse: function parse(token, tokens) {
-            this.type = 'tag';
-            this.token = token;
-            this.name = token.name;
-
-            var tagImpl = tagImpls[this.name];
-            assert(tagImpl, 'tag ' + this.name + ' not found');
-            this.tagImpl = Object.create(tagImpl);
-            if (this.tagImpl.parse) {
-                this.tagImpl.parse(token, tokens);
-            }
+  var _tagInstance = {
+    render: function render(scope) {
+      var obj = hash(this.token.args, scope);
+      var impl = this.tagImpl;
+      if (typeof impl.render !== 'function') {
+        return Promise.resolve('');
+      }
+      return Promise.resolve().then(function () {
+        return typeof impl.render === 'function' ? impl.render(scope, obj) : '';
+      }).catch(function (e) {
+        if (_.isError(e)) {
+          throw e;
         }
-    };
+        var msg = 'Please reject with an Error in ' + impl.render + ', got ' + e;
+        throw new Error(msg);
+      });
+    },
+    parse: function parse(token, tokens) {
+      this.type = 'tag';
+      this.token = token;
+      this.name = token.name;
 
-    function register(name, tag) {
-        tagImpls[name] = tag;
+      var tagImpl = tagImpls[this.name];
+      assert(tagImpl, 'tag ' + this.name + ' not found');
+      this.tagImpl = Object.create(tagImpl);
+      if (this.tagImpl.parse) {
+        this.tagImpl.parse(token, tokens);
+      }
     }
+  };
 
-    function construct(token, tokens) {
-        var instance = Object.create(_tagInstance);
-        instance.parse(token, tokens);
-        return instance;
-    }
+  function register(name, tag) {
+    tagImpls[name] = tag;
+  }
 
-    function clear() {
-        tagImpls = {};
-    }
+  function construct(token, tokens) {
+    var instance = Object.create(_tagInstance);
+    instance.parse(token, tokens);
+    return instance;
+  }
 
-    return {
-        construct: construct,
-        register: register,
-        clear: clear
-    };
+  function clear() {
+    tagImpls = {};
+  }
+
+  return {
+    construct: construct,
+    register: register,
+    clear: clear
+  };
 };
 
 },{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"./util/underscore.js":21,"any-promise":3}],15:[function(require,module,exports){
@@ -1213,89 +1227,88 @@ var _ = require('./util/underscore.js');
 var assert = require('../src/util/assert.js');
 
 function parse(html, filepath, options) {
-    assert(_.isString(html), 'illegal input type');
+  assert(_.isString(html), 'illegal input type');
 
-    html = whiteSpaceCtrl(html, options);
+  html = whiteSpaceCtrl(html, options);
 
-    var tokens = [];
-    var syntax = /({%-?([\s\S]*?)-?%})|({{([\s\S]*?)}})/g;
-    var result, htmlFragment, token;
-    var lastMatchEnd = 0,
-        lastMatchBegin = -1,
-        parsedLinesCount = 0;
+  var tokens = [];
+  var syntax = /({%-?([\s\S]*?)-?%})|({{([\s\S]*?)}})/g;
+  var result, htmlFragment, token;
+  var lastMatchEnd = 0;
+  var lastMatchBegin = -1;
+  var parsedLinesCount = 0;
 
-    while ((result = syntax.exec(html)) !== null) {
-        // passed html fragments
-        if (result.index > lastMatchEnd) {
-            htmlFragment = html.slice(lastMatchEnd, result.index);
-            tokens.push({
-                type: 'html',
-                raw: htmlFragment,
-                value: htmlFragment
-            });
-        }
-        // tag appeared
-        if (result[1]) {
-            token = factory('tag', 1, result);
-
-            var match = token.value.match(lexical.tagLine);
-            if (!match) {
-                throw new TokenizationError('illegal tag syntax', token);
-            }
-            token.name = match[1];
-            token.args = match[2];
-
-            tokens.push(token);
-        }
-        // output
-        else {
-                token = factory('output', 3, result);
-                tokens.push(token);
-            }
-        lastMatchEnd = syntax.lastIndex;
+  while ((result = syntax.exec(html)) !== null) {
+    // passed html fragments
+    if (result.index > lastMatchEnd) {
+      htmlFragment = html.slice(lastMatchEnd, result.index);
+      tokens.push({
+        type: 'html',
+        raw: htmlFragment,
+        value: htmlFragment
+      });
     }
+    if (result[1]) {
+      // tag appeared
+      token = factory('tag', 1, result);
 
-    // remaining html
-    if (html.length > lastMatchEnd) {
-        htmlFragment = html.slice(lastMatchEnd, html.length);
-        tokens.push({
-            type: 'html',
-            raw: htmlFragment,
-            value: htmlFragment
-        });
-    }
-    return tokens;
+      var match = token.value.match(lexical.tagLine);
+      if (!match) {
+        throw new TokenizationError('illegal tag syntax', token);
+      }
+      token.name = match[1];
+      token.args = match[2];
 
-    function factory(type, offset, match) {
-        return {
-            type: type,
-            raw: match[offset],
-            value: match[offset + 1].trim(),
-            line: getLineNum(match),
-            input: html,
-            file: filepath
-        };
+      tokens.push(token);
+    } else {
+      // output
+      token = factory('output', 3, result);
+      tokens.push(token);
     }
+    lastMatchEnd = syntax.lastIndex;
+  }
 
-    function getLineNum(match) {
-        var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n');
-        parsedLinesCount += lines.length - 1;
-        lastMatchBegin = match.index;
-        return parsedLinesCount + 1;
-    }
+  // remaining html
+  if (html.length > lastMatchEnd) {
+    htmlFragment = html.slice(lastMatchEnd, html.length);
+    tokens.push({
+      type: 'html',
+      raw: htmlFragment,
+      value: htmlFragment
+    });
+  }
+  return tokens;
+
+  function factory(type, offset, match) {
+    return {
+      type: type,
+      raw: match[offset],
+      value: match[offset + 1].trim(),
+      line: getLineNum(match),
+      input: html,
+      file: filepath
+    };
+  }
+
+  function getLineNum(match) {
+    var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n');
+    parsedLinesCount += lines.length - 1;
+    lastMatchBegin = match.index;
+    return parsedLinesCount + 1;
+  }
 }
 
 function whiteSpaceCtrl(html, options) {
-    options = options || {};
-    if (options.trim_left) {
-        html = html.replace(/{%-?/g, '{%-');
-    }
-    if (options.trim_right) {
-        html = html.replace(/-?%}/g, '-%}');
-    }
-    var rLeft = options.greedy ? /\s+({%-)/g : /[\t\r ]*({%-)/g;
-    var rRight = options.greedy ? /(-%})\s+/g : /(-%})[\t\r ]*\n?/g;
-    return html.replace(rLeft, '$1').replace(rRight, '$1');
+  options = options || {};
+  if (options.trim_left) {
+    html = html.replace(/{%-?/g, '{%-');
+  }
+  if (options.trim_right) {
+    html = html.replace(/-?%}/g, '-%}');
+  }
+  var rLeft = options.greedy ? /\s+({%-)/g : /[\t\r ]*({%-)/g;
+  var rRight = options.greedy ? /(-%})\s+/g : /(-%})[\t\r ]*\n?/g;
+  return html.replace(rLeft, '$1').replace(rRight, '$1');
 }
 
 exports.parse = parse;
@@ -1307,13 +1320,13 @@ exports.whiteSpaceCtrl = whiteSpaceCtrl;
 var AssertionError = require('./error.js').AssertionError;
 
 function assert(predicate, message) {
-    if (!predicate) {
-        if (message instanceof Error) {
-            throw message;
-        }
-        var message = message || 'expect ' + predicate + ' to be true';
-        throw new AssertionError(message);
+  if (!predicate) {
+    if (message instanceof Error) {
+      throw message;
     }
+    message = message || 'expect ' + predicate + ' to be true';
+    throw new AssertionError(message);
+  }
 }
 
 module.exports = assert;
@@ -1324,114 +1337,114 @@ module.exports = assert;
 var _ = require('./underscore.js');
 
 function TokenizationError(message, token) {
-    if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-    }
-    this.name = this.constructor.name;
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, this.constructor);
+  }
+  this.name = this.constructor.name;
 
-    this.input = token.input;
-    this.line = token.line;
-    this.file = token.file;
+  this.input = token.input;
+  this.line = token.line;
+  this.file = token.file;
 
-    var context = mkContext(token.input, token.line);
-    this.message = mkMessage(message, token);
-    this.stack = context + '\n' + (this.stack || '');
+  var context = mkContext(token.input, token.line);
+  this.message = mkMessage(message, token);
+  this.stack = context + '\n' + (this.stack || '');
 }
 TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
 
 function ParseError(e, token) {
-    _.assign(this, e);
-    this.originalError = e;
-    this.name = this.constructor.name;
+  _.assign(this, e);
+  this.originalError = e;
+  this.name = this.constructor.name;
 
-    this.input = token.input;
-    this.line = token.line;
-    this.file = token.file;
+  this.input = token.input;
+  this.line = token.line;
+  this.file = token.file;
 
-    var context = mkContext(token.input, token.line);
-    this.message = mkMessage(e.message || 'Unkown Error', token);
-    this.stack = context + '\n' + (e.stack || '');
+  var context = mkContext(token.input, token.line);
+  this.message = mkMessage(e.message || 'Unkown Error', token);
+  this.stack = context + '\n' + (e.stack || '');
 }
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
 
 function RenderError(e, tpl) {
-    // return the original render error
-    if (e instanceof RenderError) {
-        return e;
-    }
-    _.assign(this, e);
-    this.originalError = e;
-    this.name = this.constructor.name;
+  // return the original render error
+  if (e instanceof RenderError) {
+    return e;
+  }
+  _.assign(this, e);
+  this.originalError = e;
+  this.name = this.constructor.name;
 
-    this.input = tpl.token.input;
-    this.line = tpl.token.line;
-    this.file = tpl.token.file;
+  this.input = tpl.token.input;
+  this.line = tpl.token.line;
+  this.file = tpl.token.file;
 
-    var context = mkContext(tpl.token.input, tpl.token.line);
-    this.message = mkMessage(e.message || 'Unkown Error', tpl.token);
-    this.stack = context + '\n' + (e.stack || '');
+  var context = mkContext(tpl.token.input, tpl.token.line);
+  this.message = mkMessage(e.message || 'Unkown Error', tpl.token);
+  this.stack = context + '\n' + (e.stack || '');
 }
 RenderError.prototype = Object.create(Error.prototype);
 RenderError.prototype.constructor = RenderError;
 
 function RenderBreakError(message) {
-    if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-    }
-    this.name = this.constructor.name;
-    this.message = message || '';
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, this.constructor);
+  }
+  this.name = this.constructor.name;
+  this.message = message || '';
 }
 RenderBreakError.prototype = Object.create(Error.prototype);
 RenderBreakError.prototype.constructor = RenderBreakError;
 
 function AssertionError(message) {
-    if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-    }
-    this.name = this.constructor.name;
-    this.message = message;
+  if (Error.captureStackTrace) {
+    Error.captureStackTrace(this, this.constructor);
+  }
+  this.name = this.constructor.name;
+  this.message = message;
 }
 AssertionError.prototype = Object.create(Error.prototype);
 AssertionError.prototype.constructor = AssertionError;
 
 function mkContext(input, line) {
-    var lines = input.split('\n');
-    var begin = Math.max(line - 2, 1);
-    var end = Math.min(line + 3, lines.length);
+  var lines = input.split('\n');
+  var begin = Math.max(line - 2, 1);
+  var end = Math.min(line + 3, lines.length);
 
-    var context = _.range(begin, end + 1).map(function (l) {
-        return [l === line ? '>> ' : '   ', align(l, end), '| ', lines[l - 1]].join('');
-    }).join('\n');
+  var context = _.range(begin, end + 1).map(function (l) {
+    return [l === line ? '>> ' : '   ', align(l, end), '| ', lines[l - 1]].join('');
+  }).join('\n');
 
-    return context;
+  return context;
 }
 
 function align(n, max) {
-    var length = (max + '').length;
-    var str = n + '';
-    var blank = Array(length - str.length).join(' ');
-    return blank + str;
+  var length = (max + '').length;
+  var str = n + '';
+  var blank = Array(length - str.length).join(' ');
+  return blank + str;
 }
 
 function mkMessage(msg, token) {
-    msg = msg || '';
-    if (token.file) {
-        msg += ', file:' + token.file;
-    }
-    if (token.line) {
-        msg += ', line:' + token.line;
-    }
-    return msg;
+  msg = msg || '';
+  if (token.file) {
+    msg += ', file:' + token.file;
+  }
+  if (token.line) {
+    msg += ', line:' + token.line;
+  }
+  return msg;
 }
 
 module.exports = {
-    TokenizationError: TokenizationError,
-    ParseError: ParseError,
-    RenderBreakError: RenderBreakError,
-    AssertionError: AssertionError,
-    RenderError: RenderError
+  TokenizationError: TokenizationError,
+  ParseError: ParseError,
+  RenderBreakError: RenderBreakError,
+  AssertionError: AssertionError,
+  RenderError: RenderError
 };
 
 },{"./underscore.js":21}],18:[function(require,module,exports){
@@ -1440,24 +1453,24 @@ module.exports = {
 var fs = require('fs');
 
 function readFileAsync(filepath) {
-    return new Promise(function (resolve, reject) {
-        fs.readFile(filepath, 'utf8', function (err, content) {
-            err ? reject(err) : resolve(content);
-        });
+  return new Promise(function (resolve, reject) {
+    fs.readFile(filepath, 'utf8', function (err, content) {
+      err ? reject(err) : resolve(content);
     });
+  });
 };
 
 function statFileAsync(path) {
-    return new Promise(function (resolve, reject) {
-        fs.stat(path, function (err, stat) {
-            return err ? reject(err) : resolve(stat);
-        });
+  return new Promise(function (resolve, reject) {
+    fs.stat(path, function (err, stat) {
+      return err ? reject(err) : resolve(stat);
     });
+  });
 };
 
 module.exports = {
-    readFileAsync: readFileAsync,
-    statFileAsync: statFileAsync
+  readFileAsync: readFileAsync,
+  statFileAsync: statFileAsync
 };
 
 },{"fs":6}],19:[function(require,module,exports){
@@ -1469,233 +1482,233 @@ var Promise = require('any-promise');
  * Call functions in serial until someone resolved.
  * @param {Array} iterable the array to iterate with.
  * @param {Array} iteratee returns a new promise.
- * The iteratee is invoked with three arguments: (value, index, iterable). 
+ * The iteratee is invoked with three arguments: (value, index, iterable).
  */
 function anySeries(iterable, iteratee) {
-    var ret = Promise.reject(new Error('init'));
-    iterable.forEach(function (item, idx) {
-        ret = ret.catch(function (e) {
-            return iteratee(item, idx, iterable);
-        });
+  var ret = Promise.reject(new Error('init'));
+  iterable.forEach(function (item, idx) {
+    ret = ret.catch(function (e) {
+      return iteratee(item, idx, iterable);
     });
-    return ret;
+  });
+  return ret;
 }
 
 /*
  * Call functions in serial until someone rejected.
  * @param {Array} iterable the array to iterate with.
  * @param {Array} iteratee returns a new promise.
- * The iteratee is invoked with three arguments: (value, index, iterable). 
+ * The iteratee is invoked with three arguments: (value, index, iterable).
  */
 function mapSeries(iterable, iteratee) {
-    var ret = Promise.resolve('init');
-    var result = [];
-    iterable.forEach(function (item, idx) {
-        ret = ret.then(function () {
-            return iteratee(item, idx, iterable);
-        }).then(function (x) {
-            return result.push(x);
-        });
+  var ret = Promise.resolve('init');
+  var result = [];
+  iterable.forEach(function (item, idx) {
+    ret = ret.then(function () {
+      return iteratee(item, idx, iterable);
+    }).then(function (x) {
+      return result.push(x);
     });
-    return ret.then(function () {
-        return result;
-    });
+  });
+  return ret.then(function () {
+    return result;
+  });
 }
 
 exports.anySeries = anySeries;
 exports.mapSeries = mapSeries;
 
 },{"any-promise":3}],20:[function(require,module,exports){
-"use strict";
+'use strict';
 
-var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-var monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-var dayNamesShort = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+var dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var suffixes = {
-    1: 'st',
-    2: 'nd',
-    3: 'rd',
-    'default': 'th'
+  1: 'st',
+  2: 'nd',
+  3: 'rd',
+  'default': 'th'
 };
 
 // prototype extensions
 var _date = {
-    daysInMonth: function daysInMonth(d) {
-        var feb = _date.isLeapYear(d) ? 29 : 28;
-        return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    },
+  daysInMonth: function daysInMonth(d) {
+    var feb = _date.isLeapYear(d) ? 29 : 28;
+    return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  },
 
-    getDayOfYear: function getDayOfYear(d) {
-        var num = 0;
-        for (var i = 0; i < d.getMonth(); ++i) {
-            num += _date.daysInMonth(d)[i];
-        }
-        return num + d.getDate();
-    },
-
-    // Startday is an integer of which day to start the week measuring from
-    // TODO: that comment was retarted. fix it.
-    getWeekOfYear: function getWeekOfYear(d, startDay) {
-        // Skip to startDay of this week
-        var now = this.getDayOfYear(d) + (startDay - d.getDay());
-        // Find the first startDay of the year
-        var jan1 = new Date(d.getFullYear(), 0, 1);
-        var then = 7 - jan1.getDay() + startDay;
-        return _number.pad(Math.floor((now - then) / 7) + 1, 2);
-    },
-
-    isLeapYear: function isLeapYear(d) {
-        var year = d.getFullYear();
-        return !!((year & 3) === 0 && (year % 100 || year % 400 === 0 && year));
-    },
-
-    getSuffix: function getSuffix(d) {
-        var str = d.getDate().toString();
-        var index = parseInt(str.slice(-1));
-        return suffixes[index] || suffixes['default'];
-    },
-
-    century: function century(d) {
-        return parseInt(d.getFullYear().toString().substring(0, 2), 10);
+  getDayOfYear: function getDayOfYear(d) {
+    var num = 0;
+    for (var i = 0; i < d.getMonth(); ++i) {
+      num += _date.daysInMonth(d)[i];
     }
+    return num + d.getDate();
+  },
+
+  // Startday is an integer of which day to start the week measuring from
+  // TODO: that comment was retarted. fix it.
+  getWeekOfYear: function getWeekOfYear(d, startDay) {
+    // Skip to startDay of this week
+    var now = this.getDayOfYear(d) + (startDay - d.getDay());
+    // Find the first startDay of the year
+    var jan1 = new Date(d.getFullYear(), 0, 1);
+    var then = 7 - jan1.getDay() + startDay;
+    return _number.pad(Math.floor((now - then) / 7) + 1, 2);
+  },
+
+  isLeapYear: function isLeapYear(d) {
+    var year = d.getFullYear();
+    return !!((year & 3) === 0 && (year % 100 || year % 400 === 0 && year));
+  },
+
+  getSuffix: function getSuffix(d) {
+    var str = d.getDate().toString();
+    var index = parseInt(str.slice(-1));
+    return suffixes[index] || suffixes['default'];
+  },
+
+  century: function century(d) {
+    return parseInt(d.getFullYear().toString().substring(0, 2), 10);
+  }
 };
 
 var _number = {
-    pad: function pad(value, size, ch) {
-        if (!ch) ch = '0';
-        var result = value.toString();
-        var pad = size - result.length;
+  pad: function pad(value, size, ch) {
+    if (!ch) ch = '0';
+    var result = value.toString();
+    var pad = size - result.length;
 
-        while (pad-- > 0) {
-            result = ch + result;
-        }
-
-        return result;
+    while (pad-- > 0) {
+      result = ch + result;
     }
+
+    return result;
+  }
 };
 
-var format_codes = {
-    a: function a(d) {
-        return dayNamesShort[d.getDay()];
-    },
-    A: function A(d) {
-        return dayNames[d.getDay()];
-    },
-    b: function b(d) {
-        return monthNamesShort[d.getMonth()];
-    },
-    B: function B(d) {
-        return monthNames[d.getMonth()];
-    },
-    c: function c(d) {
-        return d.toLocaleString();
-    },
-    C: function C(d) {
-        return _date.century(d);
-    },
-    d: function d(_d) {
-        return _number.pad(_d.getDate(), 2);
-    },
-    e: function e(d) {
-        return _number.pad(d.getDate(), 2, ' ');
-    },
-    H: function H(d) {
-        return _number.pad(d.getHours(), 2);
-    },
-    I: function I(d) {
-        return _number.pad(d.getHours() % 12 || 12, 2);
-    },
-    j: function j(d) {
-        return _number.pad(_date.getDayOfYear(d), 3);
-    },
-    k: function k(d) {
-        return _number.pad(d.getHours(), 2, ' ');
-    },
-    l: function l(d) {
-        return _number.pad(d.getHours() % 12 || 12, 2, ' ');
-    },
-    L: function L(d) {
-        return _number.pad(d.getMilliseconds(), 3);
-    },
-    m: function m(d) {
-        return _number.pad(d.getMonth() + 1, 2);
-    },
-    M: function M(d) {
-        return _number.pad(d.getMinutes(), 2);
-    },
-    p: function p(d) {
-        return d.getHours() < 12 ? 'AM' : 'PM';
-    },
-    P: function P(d) {
-        return d.getHours() < 12 ? 'am' : 'pm';
-    },
-    q: function q(d) {
-        return _date.getSuffix(d);
-    },
-    s: function s(d) {
-        return Math.round(d.valueOf() / 1000);
-    },
-    S: function S(d) {
-        return _number.pad(d.getSeconds(), 2);
-    },
-    u: function u(d) {
-        return d.getDay() || 7;
-    },
-    U: function U(d) {
-        return _date.getWeekOfYear(d, 0);
-    },
-    w: function w(d) {
-        return d.getDay();
-    },
-    W: function W(d) {
-        return _date.getWeekOfYear(d, 1);
-    },
-    x: function x(d) {
-        return d.toLocaleDateString();
-    },
-    X: function X(d) {
-        return d.toLocaleTimeString();
-    },
-    y: function y(d) {
-        return d.getFullYear().toString().substring(2, 4);
-    },
-    Y: function Y(d) {
-        return d.getFullYear();
-    },
-    z: function z(d) {
-        var tz = d.getTimezoneOffset() / 60 * 100;
-        return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4);
-    },
-    "%": function _() {
-        return '%';
-    }
+var formatCodes = {
+  a: function a(d) {
+    return dayNamesShort[d.getDay()];
+  },
+  A: function A(d) {
+    return dayNames[d.getDay()];
+  },
+  b: function b(d) {
+    return monthNamesShort[d.getMonth()];
+  },
+  B: function B(d) {
+    return monthNames[d.getMonth()];
+  },
+  c: function c(d) {
+    return d.toLocaleString();
+  },
+  C: function C(d) {
+    return _date.century(d);
+  },
+  d: function d(_d) {
+    return _number.pad(_d.getDate(), 2);
+  },
+  e: function e(d) {
+    return _number.pad(d.getDate(), 2, ' ');
+  },
+  H: function H(d) {
+    return _number.pad(d.getHours(), 2);
+  },
+  I: function I(d) {
+    return _number.pad(d.getHours() % 12 || 12, 2);
+  },
+  j: function j(d) {
+    return _number.pad(_date.getDayOfYear(d), 3);
+  },
+  k: function k(d) {
+    return _number.pad(d.getHours(), 2, ' ');
+  },
+  l: function l(d) {
+    return _number.pad(d.getHours() % 12 || 12, 2, ' ');
+  },
+  L: function L(d) {
+    return _number.pad(d.getMilliseconds(), 3);
+  },
+  m: function m(d) {
+    return _number.pad(d.getMonth() + 1, 2);
+  },
+  M: function M(d) {
+    return _number.pad(d.getMinutes(), 2);
+  },
+  p: function p(d) {
+    return d.getHours() < 12 ? 'AM' : 'PM';
+  },
+  P: function P(d) {
+    return d.getHours() < 12 ? 'am' : 'pm';
+  },
+  q: function q(d) {
+    return _date.getSuffix(d);
+  },
+  s: function s(d) {
+    return Math.round(d.valueOf() / 1000);
+  },
+  S: function S(d) {
+    return _number.pad(d.getSeconds(), 2);
+  },
+  u: function u(d) {
+    return d.getDay() || 7;
+  },
+  U: function U(d) {
+    return _date.getWeekOfYear(d, 0);
+  },
+  w: function w(d) {
+    return d.getDay();
+  },
+  W: function W(d) {
+    return _date.getWeekOfYear(d, 1);
+  },
+  x: function x(d) {
+    return d.toLocaleDateString();
+  },
+  X: function X(d) {
+    return d.toLocaleTimeString();
+  },
+  y: function y(d) {
+    return d.getFullYear().toString().substring(2, 4);
+  },
+  Y: function Y(d) {
+    return d.getFullYear();
+  },
+  z: function z(d) {
+    var tz = d.getTimezoneOffset() / 60 * 100;
+    return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4);
+  },
+  '%': function _() {
+    return '%';
+  }
 };
-format_codes.h = format_codes.b;
-format_codes.N = format_codes.L;
+formatCodes.h = formatCodes.b;
+formatCodes.N = formatCodes.L;
 
 var strftime = function strftime(d, format) {
-    var output = '';
-    var remaining = format;
+  var output = '';
+  var remaining = format;
 
-    while (true) {
-        var r = /%./g;
-        var results = r.exec(remaining);
+  while (true) {
+    var r = /%./g;
+    var results = r.exec(remaining);
 
-        // No more format codes. Add the remaining text and return
-        if (!results) {
-            return output + remaining;
-        }
-
-        // Add the preceding text
-        output += remaining.slice(0, r.lastIndex - 2);
-        remaining = remaining.slice(r.lastIndex);
-
-        // Add the format code
-        var ch = results[0].charAt(1);
-        var func = format_codes[ch];
-        output += func ? func.call(this, d) : '%' + ch;
+    // No more format codes. Add the remaining text and return
+    if (!results) {
+      return output + remaining;
     }
+
+    // Add the preceding text
+    output += remaining.slice(0, r.lastIndex - 2);
+    remaining = remaining.slice(r.lastIndex);
+
+    // Add the format code
+    var ch = results[0].charAt(1);
+    var func = formatCodes[ch];
+    output += func ? func.call(this, d) : '%' + ch;
+  }
 };
 
 module.exports = strftime;
@@ -1711,37 +1724,37 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * @return {Boolean} Returns true if value is a string, else false.
  */
 function isString(value) {
-    return value instanceof String || typeof value === 'string';
+  return value instanceof String || typeof value === 'string';
 }
 
 function isError(value) {
-    var signature = Object.prototype.toString.call(value);
-    // [object XXXError]
-    return signature.substr(-6, 5) === 'Error' || typeof value.message == 'string' && typeof value.name == 'string';
+  var signature = Object.prototype.toString.call(value);
+  // [object XXXError]
+  return signature.substr(-6, 5) === 'Error' || typeof value.message === 'string' && typeof value.name === 'string';
 }
 
 /*
- * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property. 
- * The iteratee is invoked with three arguments: (value, key, object). 
+ * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property.
+ * The iteratee is invoked with three arguments: (value, key, object).
  * Iteratee functions may exit iteration early by explicitly returning false.
  * @param {Object} object The object to iterate over.
  * @param {Function} iteratee The function invoked per iteration.
  * @return {Object} Returns object.
  */
 function forOwn(object, iteratee) {
-    object = object || {};
-    for (var k in object) {
-        if (object.hasOwnProperty(k)) {
-            if (iteratee(object[k], k, object) === false) break;
-        }
+  object = object || {};
+  for (var k in object) {
+    if (object.hasOwnProperty(k)) {
+      if (iteratee(object[k], k, object) === false) break;
     }
-    return object;
+  }
+  return object;
 }
 
 /*
- * Assigns own enumerable string keyed properties of source objects to the destination object. 
- * Source objects are applied from left to right. 
- * Subsequent sources overwrite property assignments of previous sources.  
+ * Assigns own enumerable string keyed properties of source objects to the destination object.
+ * Source objects are applied from left to right.
+ * Subsequent sources overwrite property assignments of previous sources.
  *
  * Note: This method mutates object and is loosely based on Object.assign.
  *
@@ -1750,76 +1763,76 @@ function forOwn(object, iteratee) {
  * @return {Object} Returns object.
  */
 function assign(object) {
-    object = isObject(object) ? object : {};
-    var srcs = Array.prototype.slice.call(arguments, 1);
-    srcs.forEach(function (src) {
-        _assignBinary(object, src);
-    });
-    return object;
+  object = isObject(object) ? object : {};
+  var srcs = Array.prototype.slice.call(arguments, 1);
+  srcs.forEach(function (src) {
+    _assignBinary(object, src);
+  });
+  return object;
 }
 
 function _assignBinary(dst, src) {
-    if (!dst) return dst;
-    forOwn(src, function (v, k) {
-        dst[k] = v;
-    });
-    return dst;
+  if (!dst) return dst;
+  forOwn(src, function (v, k) {
+    dst[k] = v;
+  });
+  return dst;
 }
 
 function isArray(value) {
-    return value instanceof Array;
+  return value instanceof Array;
 }
 
 function echo(prefix) {
-    return function (v) {
-        console.log('[' + prefix + ']', v);
-        return v;
-    };
+  return function (v) {
+    console.log('[' + prefix + ']', v);
+    return v;
+  };
 }
 
 function uniq(arr) {
-    var u = {},
-        a = [];
-    for (var i = 0, l = arr.length; i < l; ++i) {
-        if (u.hasOwnProperty(arr[i])) {
-            continue;
-        }
-        a.push(arr[i]);
-        u[arr[i]] = 1;
+  var u = {};
+  var a = [];
+  for (var i = 0, l = arr.length; i < l; ++i) {
+    if (u.hasOwnProperty(arr[i])) {
+      continue;
     }
-    return a;
+    a.push(arr[i]);
+    u[arr[i]] = 1;
+  }
+  return a;
 }
 
 /*
- * Checks if value is the language type of Object. 
+ * Checks if value is the language type of Object.
  * (e.g. arrays, functions, objects, regexes, new Number(0), and new String(''))
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is an object, else false.
  */
 function isObject(value) {
-    return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object';
+  return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object';
 }
 
 /*
- * A function to create flexibly-numbered lists of integers, 
- * handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1. 
- * Returns a list of integers from start (inclusive) to stop (exclusive), 
- * incremented (or decremented) by step, exclusive. 
- * Note that ranges that stop before they start are considered to be zero-length instead of 
+ * A function to create flexibly-numbered lists of integers,
+ * handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1.
+ * Returns a list of integers from start (inclusive) to stop (exclusive),
+ * incremented (or decremented) by step, exclusive.
+ * Note that ranges that stop before they start are considered to be zero-length instead of
  * negative — if you'd like a negative range, use a negative step.
  */
 function range(start, stop, step) {
-    if (arguments.length === 1) {
-        stop = start;
-        start = 0;
-    }
-    step = step || 1;
+  if (arguments.length === 1) {
+    stop = start;
+    start = 0;
+  }
+  step = step || 1;
 
-    var arr = [];
-    for (var i = start; i < stop; i += step) {
-        arr.push(i);
-    }
-    return arr;
+  var arr = [];
+  for (var i = start; i < stop; i += step) {
+    arr.push(i);
+  }
+  return arr;
 }
 
 exports.isString = isString;
@@ -2052,93 +2065,93 @@ var assert = require('../src/util/assert.js');
 var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*') + '(?:\\s+(reversed))?' + ('(?:\\s+' + lexical.hash.source + ')*$'));
 
 module.exports = function (liquid) {
-    liquid.registerTag('for', {
+  liquid.registerTag('for', {
 
-        parse: function parse(tagToken, remainTokens) {
-            var _this = this;
+    parse: function parse(tagToken, remainTokens) {
+      var _this = this;
 
-            var match = re.exec(tagToken.args);
-            assert(match, 'illegal tag: ' + tagToken.raw);
-            this.variable = match[1];
-            this.collection = match[2];
-            this.reversed = !!match[3];
+      var match = re.exec(tagToken.args);
+      assert(match, 'illegal tag: ' + tagToken.raw);
+      this.variable = match[1];
+      this.collection = match[2];
+      this.reversed = !!match[3];
 
-            this.templates = [];
-            this.elseTemplates = [];
+      this.templates = [];
+      this.elseTemplates = [];
 
-            var p,
-                stream = liquid.parser.parseStream(remainTokens).on('start', function () {
-                return p = _this.templates;
-            }).on('tag:else', function () {
-                return p = _this.elseTemplates;
-            }).on('tag:endfor', function () {
-                return stream.stop();
-            }).on('template', function (tpl) {
-                return p.push(tpl);
-            }).on('end', function () {
-                throw new Error('tag ' + tagToken.raw + ' not closed');
-            });
+      var p;
+      var stream = liquid.parser.parseStream(remainTokens).on('start', function () {
+        return p = _this.templates;
+      }).on('tag:else', function () {
+        return p = _this.elseTemplates;
+      }).on('tag:endfor', function () {
+        return stream.stop();
+      }).on('template', function (tpl) {
+        return p.push(tpl);
+      }).on('end', function () {
+        throw new Error('tag ' + tagToken.raw + ' not closed');
+      });
 
-            stream.start();
-        },
+      stream.start();
+    },
 
-        render: function render(scope, hash) {
-            var _this2 = this;
+    render: function render(scope, hash) {
+      var _this2 = this;
 
-            var collection = Liquid.evalExp(this.collection, scope);
+      var collection = Liquid.evalExp(this.collection, scope);
 
-            if (!Array.isArray(collection) || Array.isArray(collection) && collection.length === 0) {
-                return liquid.renderer.renderTemplates(this.elseTemplates, scope);
-            }
+      if (!Array.isArray(collection) || Array.isArray(collection) && collection.length === 0) {
+        return liquid.renderer.renderTemplates(this.elseTemplates, scope);
+      }
 
-            var length = collection.length;
-            var offset = hash.offset || 0;
-            var limit = hash.limit === undefined ? collection.length : hash.limit;
+      var length = collection.length;
+      var offset = hash.offset || 0;
+      var limit = hash.limit === undefined ? collection.length : hash.limit;
 
-            collection = collection.slice(offset, offset + limit);
-            if (this.reversed) collection.reverse();
+      collection = collection.slice(offset, offset + limit);
+      if (this.reversed) collection.reverse();
 
-            var contexts = collection.map(function (item, i) {
-                var ctx = {};
-                ctx[_this2.variable] = item;
-                ctx.forloop = {
-                    first: i === 0,
-                    index: i + 1,
-                    index0: i,
-                    last: i === length - 1,
-                    length: length,
-                    rindex: length - i,
-                    rindex0: length - i - 1,
-                    stop: false,
-                    skip: false
-                };
-                return ctx;
-            });
+      var contexts = collection.map(function (item, i) {
+        var ctx = {};
+        ctx[_this2.variable] = item;
+        ctx.forloop = {
+          first: i === 0,
+          index: i + 1,
+          index0: i,
+          last: i === length - 1,
+          length: length,
+          rindex: length - i,
+          rindex0: length - i - 1,
+          stop: false,
+          skip: false
+        };
+        return ctx;
+      });
 
-            var html = '';
-            return mapSeries(contexts, function (context) {
-                scope.push(context);
-                return liquid.renderer.renderTemplates(_this2.templates, scope).then(function (partial) {
-                    return html += partial;
-                }).catch(function (e) {
-                    if (e instanceof RenderBreakError) {
-                        html += e.resolvedHTML;
-                        if (e.message === 'continue') return;
-                    }
-                    throw e;
-                }).then(function () {
-                    return scope.pop();
-                });
-            }).catch(function (e) {
-                if (e instanceof RenderBreakError && e.message === 'break') {
-                    return;
-                }
-                throw e;
-            }).then(function () {
-                return html;
-            });
+      var html = '';
+      return mapSeries(contexts, function (context) {
+        scope.push(context);
+        return liquid.renderer.renderTemplates(_this2.templates, scope).then(function (partial) {
+          return html += partial;
+        }).catch(function (e) {
+          if (e instanceof RenderBreakError) {
+            html += e.resolvedHTML;
+            if (e.message === 'continue') return;
+          }
+          throw e;
+        }).then(function () {
+          return scope.pop();
+        });
+      }).catch(function (e) {
+        if (e instanceof RenderBreakError && e.message === 'break') {
+          return;
         }
-    });
+        throw e;
+      }).then(function () {
+        return html;
+      });
+    }
+  });
 };
 
 },{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],29:[function(require,module,exports){
@@ -2368,28 +2381,27 @@ module.exports = function (liquid) {
 var Promise = require('any-promise');
 
 module.exports = function (liquid) {
+  liquid.registerTag('raw', {
+    parse: function parse(tagToken, remainTokens) {
+      var _this = this;
 
-    liquid.registerTag('raw', {
-        parse: function parse(tagToken, remainTokens) {
-            var _this = this;
+      this.tokens = [];
 
-            this.tokens = [];
-
-            var stream = liquid.parser.parseStream(remainTokens);
-            stream.on('token', function (token) {
-                if (token.name === 'endraw') stream.stop();else _this.tokens.push(token);
-            }).on('end', function (x) {
-                throw new Error('tag ' + tagToken.raw + ' not closed');
-            });
-            stream.start();
-        },
-        render: function render(scope, hash) {
-            var tokens = this.tokens.map(function (token) {
-                return token.raw;
-            }).join('');
-            return Promise.resolve(tokens);
-        }
-    });
+      var stream = liquid.parser.parseStream(remainTokens);
+      stream.on('token', function (token) {
+        if (token.name === 'endraw') stream.stop();else _this.tokens.push(token);
+      }).on('end', function (x) {
+        throw new Error('tag ' + tagToken.raw + ' not closed');
+      });
+      stream.start();
+    },
+    render: function render(scope, hash) {
+      var tokens = this.tokens.map(function (token) {
+        return token.raw;
+      }).join('');
+      return Promise.resolve(tokens);
+    }
+  });
 };
 
 },{"any-promise":3}],35:[function(require,module,exports){
