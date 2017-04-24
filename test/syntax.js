@@ -1,81 +1,80 @@
-const chai = require("chai");
-const expect = chai.expect;
-var syntax = require('../src/syntax.js');
-var Scope = require('../src/scope.js');
+const chai = require('chai')
+const expect = chai.expect
+var syntax = require('../src/syntax.js')
+var Scope = require('../src/scope.js')
 
-var evalExp = syntax.evalExp;
-var evalValue = syntax.evalValue;
-var isTruthy = syntax.isTruthy;
+var evalExp = syntax.evalExp
+var evalValue = syntax.evalValue
+var isTruthy = syntax.isTruthy
 
-describe('expression', function() {
-    var scope;
+describe('expression', function () {
+  var scope
 
-    beforeEach(function() {
-        scope = Scope.factory({
-            one: 1,
-            two: 2,
-            x: 'XXX',
-            y: undefined,
-            z: null
-        });
-    });
+  beforeEach(function () {
+    scope = Scope.factory({
+      one: 1,
+      two: 2,
+      x: 'XXX',
+      y: undefined,
+      z: null
+    })
+  })
 
-    it('should eval literals', function() {
-        expect(evalValue('2.3')).to.equal(2.3);
-        expect(evalValue('"foo"')).to.equal("foo");
-    });
+  it('should eval literals', function () {
+    expect(evalValue('2.3')).to.equal(2.3)
+    expect(evalValue('"foo"')).to.equal('foo')
+  })
 
-    it('should eval variables', function() {
-        expect(evalValue('23', scope)).to.equal(23);
-        expect(evalValue('one', scope)).to.equal(1);
-        expect(evalValue('x', scope)).to.equal('XXX');
-    });
+  it('should eval variables', function () {
+    expect(evalValue('23', scope)).to.equal(23)
+    expect(evalValue('one', scope)).to.equal(1)
+    expect(evalValue('x', scope)).to.equal('XXX')
+  })
 
-    describe('.isTruthy()', function() {
+  describe('.isTruthy()', function () {
         // Spec: https://shopify.github.io/liquid/basics/truthy-and-falsy/
-        expect(isTruthy(true)).to.be.true;
-        expect(isTruthy(false)).to.be.false;
-        expect(isTruthy(null)).to.be.false;
-        expect(isTruthy('foo')).to.be.true;
-        expect(isTruthy('')).to.be.true;
-        expect(isTruthy(0)).to.be.true;
-        expect(isTruthy(1)).to.be.true;
-        expect(isTruthy(1.1)).to.be.true;
-        expect(isTruthy([1])).to.be.true;
-        expect(isTruthy([])).to.be.true;
+    expect(isTruthy(true)).to.be.true
+    expect(isTruthy(false)).to.be.false
+    expect(isTruthy(null)).to.be.false
+    expect(isTruthy('foo')).to.be.true
+    expect(isTruthy('')).to.be.true
+    expect(isTruthy(0)).to.be.true
+    expect(isTruthy(1)).to.be.true
+    expect(isTruthy(1.1)).to.be.true
+    expect(isTruthy([1])).to.be.true
+    expect(isTruthy([])).to.be.true
+  })
+
+  describe('.evalExp()', function () {
+    it('should throw when scope undefined', function () {
+      expect(function () {
+        evalExp('')
+      }).to.throw(/scope undefined/)
     })
 
-    describe('.evalExp()', function() {
+    it('should eval simple expression', function () {
+      expect(evalExp('1<2', scope)).to.equal(true)
+      expect(evalExp('2<=2', scope)).to.equal(true)
+      expect(evalExp('one<=two', scope)).to.equal(true)
+      expect(evalExp('x contains "x"', scope)).to.equal(false)
+      expect(evalExp('x contains "X"', scope)).to.equal(true)
+      expect(evalExp('1 contains "x"', scope)).to.equal(false)
+      expect(evalExp('y contains "x"', scope)).to.equal(false)
+      expect(evalExp('z contains "x"', scope)).to.equal(false)
+      expect(evalExp('(1..5) contains 3', scope)).to.equal(true)
+      expect(evalExp('(1..5) contains 6', scope)).to.equal(false)
+      expect(evalExp('"<=" == "<="', scope)).to.equal(true)
+    })
 
-        it('should throw when scope undefined', function() {
-            expect(function() {
-                evalExp('');
-            }).to.throw(/scope undefined/);
-        });
+    it('should eval complex expression', function () {
+      expect(evalExp('1<2 and x contains "x"', scope)).to.equal(false)
+      expect(evalExp('1<2 or x contains "x"', scope)).to.equal(true)
+      expect(evalExp('false or true', scope)).to.equal(true)
+    })
 
-        it('should eval simple expression', function() {
-            expect(evalExp('1<2', scope)).to.equal(true);
-            expect(evalExp('2<=2', scope)).to.equal(true);
-            expect(evalExp('one<=two', scope)).to.equal(true);
-            expect(evalExp('x contains "x"', scope)).to.equal(false);
-            expect(evalExp('x contains "X"', scope)).to.equal(true);
-            expect(evalExp('1 contains "x"', scope)).to.equal(false);
-            expect(evalExp('y contains "x"', scope)).to.equal(false);
-            expect(evalExp('z contains "x"', scope)).to.equal(false);
-            expect(evalExp('(1..5) contains 3', scope)).to.equal(true);
-            expect(evalExp('(1..5) contains 6', scope)).to.equal(false);
-            expect(evalExp('"<=" == "<="', scope)).to.equal(true);
-        });
-
-        it('should eval complex expression', function() {
-            expect(evalExp('1<2 and x contains "x"', scope)).to.equal(false);
-            expect(evalExp('1<2 or x contains "x"', scope)).to.equal(true);
-            expect(evalExp('false or true', scope)).to.equal(true);
-        });
-
-        it("should eval range expression", function() {
-            expect(evalExp('(2..4)', scope)).to.deep.equal([2, 3, 4]);
-            expect(evalExp('(two..4)', scope)).to.deep.equal([2, 3, 4]);
-        });
-    });
-});
+    it('should eval range expression', function () {
+      expect(evalExp('(2..4)', scope)).to.deep.equal([2, 3, 4])
+      expect(evalExp('(two..4)', scope)).to.deep.equal([2, 3, 4])
+    })
+  })
+})

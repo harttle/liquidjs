@@ -1,49 +1,47 @@
-const chai = require("chai");
-const sinon = require("sinon");
-const sinonChai = require("sinon-chai");
-const should = chai.should();
-const expect = chai.expect;
+const chai = require('chai')
+const expect = chai.expect
 
-chai.use(sinonChai);
+chai.use(require('sinon-chai'))
 
-var filter = require('../src/filter.js')();
-var tag = require('../src/tag.js')();
-var Template = require('../src/parser.js');
+var filter = require('../src/filter.js')()
+var tag = require('../src/tag.js')()
+var Template = require('../src/parser.js')
 
-describe('template', function() {
-    var scope, template, add = (l, r) => l + r;
+describe('template', function () {
+  var template
+  var add = (l, r) => l + r
 
-    beforeEach(function() {
-        filter.clear();
-        filter.register('add', add);
+  beforeEach(function () {
+    filter.clear()
+    filter.register('add', add)
 
-        tag.clear();
-        template = Template(tag, filter);
-    });
+    tag.clear()
+    template = Template(tag, filter)
+  })
 
-    it('should throw when output string illegal', function() {
-        expect(function() {
-            template.parseOutput('/');
-        }).to.throw(/illegal output string/);
-    });
+  it('should throw when output string illegal', function () {
+    expect(function () {
+      template.parseOutput('/')
+    }).to.throw(/illegal output string/)
+  })
 
-    it('should parse output string', function() {
-        var tpl = template.parseOutput('foo');
-        expect(tpl.type).to.equal('output');
-        expect(tpl.initial).to.equal('foo');
-        expect(tpl.filters).to.deep.equal([]);
-    });
+  it('should parse output string', function () {
+    var tpl = template.parseOutput('foo')
+    expect(tpl.type).to.equal('output')
+    expect(tpl.initial).to.equal('foo')
+    expect(tpl.filters).to.deep.equal([])
+  })
 
-    it('should parse output string with a simple filter', function() {
-        var tpl = template.parseOutput('foo | add: 3, "foo"');
-        expect(tpl.initial).to.equal('foo');
-        expect(tpl.filters.length).to.equal(1);
-        expect(tpl.filters[0].filter).to.equal(add);
-    });
+  it('should parse output string with a simple filter', function () {
+    var tpl = template.parseOutput('foo | add: 3, "foo"')
+    expect(tpl.initial).to.equal('foo')
+    expect(tpl.filters.length).to.equal(1)
+    expect(tpl.filters[0].filter).to.equal(add)
+  })
 
-    it('should parse output string with filters', function() {
-        var tpl = template.parseOutput('foo | add: "|" | add');
-        expect(tpl.initial).to.equal('foo');
-        expect(tpl.filters.length).to.equal(2);
-    });
-});
+  it('should parse output string with filters', function () {
+    var tpl = template.parseOutput('foo | add: "|" | add')
+    expect(tpl.initial).to.equal('foo')
+    expect(tpl.filters.length).to.equal(2)
+  })
+})
