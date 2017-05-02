@@ -297,6 +297,9 @@ describe('filters', function () {
       return test('{{ "Ground control to Major Tom." | truncate: 20, "" }}',
                 'Ground control to Ma')
     })
+    it('should not truncate when short enough', function () {
+      return test('{{ "12345" | truncate: 5 }}', '12345')
+    })
   })
 
   describe('truncatewords', function () {
