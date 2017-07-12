@@ -60,9 +60,7 @@ module.exports = function (liquid) {
           last: i === length - 1,
           length: length,
           rindex: length - i,
-          rindex0: length - i - 1,
-          stop: false,
-          skip: false
+          rindex0: length - i - 1
         }
         return ctx
       })
