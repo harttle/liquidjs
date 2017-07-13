@@ -60,10 +60,6 @@ function _assignBinary (dst, src) {
   return dst
 }
 
-function isArray (value) {
-  return value instanceof Array
-}
-
 function echo (prefix) {
   return v => {
     console.log('[' + prefix + ']', v)
@@ -91,16 +87,8 @@ function uniq (arr) {
  * @return {Boolean} Returns true if value is an object, else false.
  */
 function isObject (value) {
-  return value !== null && typeof value === 'object'
-}
-
-/*
- * Checks if value's prototype is Object or undefined.
- * @param {any} value The value to check.
- * @return {Boolean} Returns true if value is a plain object, else false.
- */
-function isPlainObject(value) {
-  return value && !value.constructor || value.constructor === Object
+  var type = typeof value
+  return value != null && (type === 'object' || type === 'function')
 }
 
 /*
@@ -126,9 +114,7 @@ function range (start, stop, step) {
 }
 
 exports.isString = isString
-exports.isArray = isArray
 exports.isObject = isObject
-exports.isPlainObject = isPlainObject
 exports.isError = isError
 
 exports.range = range

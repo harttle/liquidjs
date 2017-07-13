@@ -9,14 +9,25 @@ describe('tags/for', function () {
     liquid = Liquid()
     ctx = {
       one: 1,
+      // eslint-disable-next-line
+      strObj: new String(''),
+      emptyObj: {},
+      nullProtoObj: Object.create(null),
+      obj: {foo: 'bar', coo: 'haa'},
       alpha: ['a', 'b', 'c'],
       emptyArray: []
     }
   })
-  it('should support for', function () {
+  it('should support array', function () {
     var src = '{%for c in alpha%}{{c}}{%endfor%}'
     return expect(liquid.parseAndRender(src, ctx))
             .to.eventually.equal('abc')
+  })
+
+  it('should support object', function () {
+    var src = '{%for key in obj%}{{key}}-{%else%}b{%endfor%}'
+    return expect(liquid.parseAndRender(src, ctx))
+      .to.eventually.equal('foo-coo-')
   })
 
   it('should throw when for not closed', function () {
@@ -25,16 +36,37 @@ describe('tags/for', function () {
             .to.be.rejectedWith(/tag .* not closed/)
   })
 
-  it('should return else when for in empty array', function () {
-    var src = '{%for c in emptyArray%}a{%else%}b{%endfor%}'
-    return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('b')
-  })
+  describe('else', function () {
+    it('should goto else for empty array', function () {
+      var src = '{%for c in emptyArray%}a{%else%}b{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('b')
+    })
 
-  it('should support for else', function () {
-    var src = '{%for c in ""%}a{%else%}b{%endfor%}'
-    return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('b')
+    it('should goto else for empty string', function () {
+      var src = '{%for c in ""%}a{%else%}b{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('b')
+    })
+
+    it('should goto else for empty string object', function () {
+      // it should be false although `new String` is none-conform
+      var src = '{%for c in strObj%}a{%else%}b{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('b')
+    })
+
+    it('should goto else for empty object', function () {
+      var src = '{%for c in emptyObj%}a{%else%}b{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('b')
+    })
+
+    it('should goto else for null-prototyped object', function () {
+      var src = '{%for c in nullProtoObj%}a{%else%}b{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('b')
+    })
   })
 
   it('should support for with forloop', function () {

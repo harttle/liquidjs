@@ -104,7 +104,7 @@ var _engine = {
     opts = opts || {}
     var self = this
     return function (filePath, ctx, callback) {
-      assert(_.isArray(this.root) || _.isString(this.root),
+      assert(Array.isArray(this.root) || _.isString(this.root),
         'illegal views root, are you using express.js?')
       opts.root = this.root
       self.renderFile(filePath, ctx, opts)
@@ -132,7 +132,7 @@ function factory (options) {
 }
 
 function normalizeStringArray (value) {
-  if (_.isArray(value)) return value
+  if (Array.isArray(value)) return value
   if (_.isString(value)) return [value]
   return []
 }

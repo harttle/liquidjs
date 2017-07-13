@@ -26,11 +26,11 @@ var render = {
     function renderTemplate (template) {
       if (template.type === 'tag') {
         return this.renderTag(template, scope)
-                    .then(partial => partial === undefined ? '' : partial)
+          .then(partial => partial === undefined ? '' : partial)
       } else if (template.type === 'output') {
         return Promise.resolve()
-                    .then(() => this.evalOutput(template, scope))
-                    .then(partial => partial === undefined ? '' : stringify(partial))
+          .then(() => this.evalOutput(template, scope))
+          .then(partial => partial === undefined ? '' : stringify(partial))
       } else { // template.type === 'html'
         return Promise.resolve(template.value)
       }
@@ -50,8 +50,8 @@ var render = {
   evalOutput: function (template, scope) {
     assert(scope, 'unable to evalOutput: scope undefined')
     return template.filters.reduce(
-            (prev, filter) => filter.render(prev, scope),
-            Syntax.evalExp(template.initial, scope))
+      (prev, filter) => filter.render(prev, scope),
+      Syntax.evalExp(template.initial, scope))
   }
 }
 
