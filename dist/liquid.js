@@ -328,7 +328,7 @@ var _engine = {
     opts = opts || {};
     var self = this;
     return function (filePath, ctx, callback) {
-      assert(_.isArray(this.root) || _.isString(this.root), 'illegal views root, are you using express.js?');
+      assert(Array.isArray(this.root) || _.isString(this.root), 'illegal views root, are you using express.js?');
       opts.root = this.root;
       self.renderFile(filePath, ctx, opts).then(function (html) {
         return callback(null, html);
@@ -357,7 +357,7 @@ function factory(options) {
 }
 
 function normalizeStringArray(value) {
-  if (_.isArray(value)) return value;
+  if (Array.isArray(value)) return value;
   if (_.isString(value)) return [value];
   return [];
 }
@@ -1779,10 +1779,6 @@ function _assignBinary(dst, src) {
   return dst;
 }
 
-function isArray(value) {
-  return value instanceof Array;
-}
-
 function echo(prefix) {
   return function (v) {
     console.log('[' + prefix + ']', v);
@@ -1810,7 +1806,8 @@ function uniq(arr) {
  * @return {Boolean} Returns true if value is an object, else false.
  */
 function isObject(value) {
-  return value !== null && (typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object';
+  var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
+  return value != null && (type === 'object' || type === 'function');
 }
 
 /*
@@ -1836,7 +1833,6 @@ function range(start, stop, step) {
 }
 
 exports.isString = isString;
-exports.isArray = isArray;
 exports.isObject = isObject;
 exports.isError = isError;
 
@@ -2060,6 +2056,7 @@ module.exports = function (liquid) {
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var mapSeries = require('../src/util/promise.js').mapSeries;
+var _ = require('../src/util/underscore.js');
 var RenderBreakError = Liquid.Types.RenderBreakError;
 var assert = require('../src/util/assert.js');
 var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*') + '(?:\\s+(reversed))?' + ('(?:\\s+' + lexical.hash.source + ')*$'));
@@ -2100,7 +2097,14 @@ module.exports = function (liquid) {
 
       var collection = Liquid.evalExp(this.collection, scope);
 
-      if (!Array.isArray(collection) || Array.isArray(collection) && collection.length === 0) {
+      if (!Array.isArray(collection)) {
+        if (_.isString(collection) && collection.length > 0) {
+          collection = [collection];
+        } else if (_.isObject(collection)) {
+          collection = Object.keys(collection);
+        }
+      }
+      if (!Array.isArray(collection) || !collection.length) {
         return liquid.renderer.renderTemplates(this.elseTemplates, scope);
       }
 
@@ -2121,9 +2125,7 @@ module.exports = function (liquid) {
           last: i === length - 1,
           length: length,
           rindex: length - i,
-          rindex0: length - i - 1,
-          stop: false,
-          skip: false
+          rindex0: length - i - 1
         };
         return ctx;
       });
@@ -2154,7 +2156,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],29:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19,"../src/util/underscore.js":21}],29:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
