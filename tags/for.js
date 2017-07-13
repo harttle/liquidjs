@@ -1,6 +1,7 @@
 const Liquid = require('..')
 const lexical = Liquid.lexical
 const mapSeries = require('../src/util/promise.js').mapSeries
+const isPlainObject = require('../src/util/underscore.js').isPlainObject
 const RenderBreakError = Liquid.Types.RenderBreakError
 const assert = require('../src/util/assert.js')
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
@@ -38,10 +39,10 @@ module.exports = function (liquid) {
     render: function (scope, hash) {
       var collection = Liquid.evalExp(this.collection, scope)
 
-      if (isObject(collection)) {
+      if (isPlainObject(collection)) {
         collection = Object.keys(collection)
       }
-      if (isEmpty(collection)) {
+      if (!Array.isArray(collection) || !collection.length) {
         return liquid.renderer.renderTemplates(this.elseTemplates, scope)
       }
 
@@ -91,19 +92,4 @@ module.exports = function (liquid) {
       }).then(() => html)
     }
   })
-}
-
-function isObject(collection) {
-  if (collection) {
-    const ctr = collection.constructor
-    return ctr === Object || ctr == null
-  }
-  return false
-}
-
-function isEmpty(collection) {
-  if (Array.isArray(collection)) {
-    return !collection.length
-  }
-  return true
 }

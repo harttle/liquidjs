@@ -95,6 +95,15 @@ function isObject (value) {
 }
 
 /*
+ * Checks if value's prototype is Object or undefined.
+ * @param {any} value The value to check.
+ * @return {Boolean} Returns true if value is a plain object, else false.
+ */
+function isPlainObject(value) {
+  return value && !value.constructor || value.constructor === Object
+}
+
+/*
  * A function to create flexibly-numbered lists of integers,
  * handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1.
  * Returns a list of integers from start (inclusive) to stop (exclusive),
@@ -119,6 +128,7 @@ function range (start, stop, step) {
 exports.isString = isString
 exports.isArray = isArray
 exports.isObject = isObject
+exports.isPlainObject = isPlainObject
 exports.isError = isError
 
 exports.range = range
