@@ -1,34 +1,35 @@
-# shopify-liquid
+# liquidjs
 
-[![npm](https://img.shields.io/npm/v/shopify-liquid.svg)](https://www.npmjs.org/package/shopify-liquid)
-[![Build Status](https://travis-ci.org/harttle/shopify-liquid.svg?branch=master)](https://travis-ci.org/harttle/shopify-liquid)
-[![Coveralls](https://img.shields.io/coveralls/harttle/shopify-liquid.svg)](https://coveralls.io/github/harttle/shopify-liquid?branch=master)
-[![GitHub issues](https://img.shields.io/github/issues-closed/harttle/shopify-liquid.svg)](https://github.com/harttle/shopify-liquid/issues)
+[![npm](https://img.shields.io/npm/v/liquidjs.svg)](https://www.npmjs.org/package/liquidjs)
+[![Build Status](https://travis-ci.org/harttle/liquidjs.svg?branch=master)](https://travis-ci.org/harttle/liquidjs)
+[![Coveralls](https://img.shields.io/coveralls/harttle/liquidjs.svg)](https://coveralls.io/github/harttle/liquidjs?branch=master)
+[![GitHub issues](https://img.shields.io/github/issues-closed/harttle/liquidjs.svg)](https://github.com/harttle/liquidjs/issues)
 
-A Liquid template engine with a wide range of tags and filters,
-for both Node.js and browsers.
-Here's a live demo: <http://harttle.com/shopify-liquid/>
+A Liquid engine implementation for both Node.js and browsers, with all [shopify/liquid][shopify/liquid] features.
+Formerly known as shopify-liquid. 
+
+Live Demo: <http://harttle.com/liquidjs/>
 
 > The Liquid template engine is implemented in Ruby originally, 
 > which is used by [Jekyll][jekyll] and [Github Pages][gh].
 
 Features:
 
-* A wide range of [filters](https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters) and [tags](https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags)
+* A wide range of [filters](https://github.com/harttle/liquidjs/wiki/Builtin-Filters) and [tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
 * Easy tag/filter registration, allows async tags
 * [any-promise][any-promise]
 
 API Reference:
 
-* Builtin Tags: <https://github.com/harttle/shopify-liquid/wiki/Builtin-Tags>
-* Builtin Filters: <https://github.com/harttle/shopify-liquid/wiki/Builtin-Filters>
-* Operators: <https://github.com/harttle/shopify-liquid/wiki/Operators>
-* Whitespace Control: <https://github.com/harttle/shopify-liquid/wiki/Whitespace-Control>
+* Builtin Tags: <https://github.com/harttle/liquidjs/wiki/Builtin-Tags>
+* Builtin Filters: <https://github.com/harttle/liquidjs/wiki/Builtin-Filters>
+* Operators: <https://github.com/harttle/liquidjs/wiki/Operators>
+* Whitespace Control: <https://github.com/harttle/liquidjs/wiki/Whitespace-Control>
 
 Installation:
 
 ```bash
-npm install --save shopify-liquid
+npm install --save liquidjs
 ```
 
 ## Render from String
@@ -36,7 +37,7 @@ npm install --save shopify-liquid
 Parse and Render:
 
 ```javascript
-var Liquid = require('shopify-liquid');
+var Liquid = require('liquidjs');
 var engine = Liquid();
 
 engine.parseAndRender('{{name | capitalize}}', {name: 'alice'})
@@ -126,11 +127,11 @@ And `window.Liquid` is what you want. There's also a [demo](demo/browser/).
     var engine = window.Liquid();
     var src = '{{ name | capitalize}}';
     var ctx = {
-      name: 'welcome to Shopify Liquid'
+      name: 'welcome to liquidjs'
     };
     engine.parseAndRender(src, ctx)
       .then(function(html) {
-        // html === Welcome to Shopify Liquid 
+        // html === Welcome to liquidjs
       });
   </script>
 </body>
@@ -194,7 +195,7 @@ engine.registerFilter('upper', function(v){
 });
 ```
 
-> See existing filter implementations: <https://github.com/harttle/shopify-liquid/blob/master/filters.js>
+> See existing filter implementations: <https://github.com/harttle/liquidjs/blob/master/filters.js>
 
 ## Register Tags
 
@@ -211,7 +212,7 @@ engine.registerTag('upper', {
 });
 ```
 
-> See existing tag implementations: <https://github.com/harttle/shopify-liquid/blob/master/tags/>
+> See existing tag implementations: <https://github.com/harttle/liquidjs/blob/master/tags/>
 
 ## Contribution Guide
 
@@ -221,11 +222,11 @@ engine.registerTag('upper', {
 
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node
-[shopify-liquid]: https://shopify.github.io/liquid/
+[shopify/liquid]: https://shopify.github.io/liquid/
 [jekyll]: http://jekyllrb.com/
 [gh]: https://pages.github.com/
-[releases]: https://github.com/harttle/shopify-liquid/releases
+[releases]: https://github.com/harttle/liquidjs/releases
 [any-promise]: https://github.com/kevinbeaty/any-promise
-[test]: https://github.com/harttle/shopify-liquid/tree/master/test
+[test]: https://github.com/harttle/liquidjs/tree/master/test
 [caniuse-promises]: http://caniuse.com/#feat=promises
-[whitespace control]: https://github.com/harttle/shopify-liquid/wiki/Whitespace-Control
+[whitespace control]: https://github.com/harttle/liquidjs/wiki/Whitespace-Control

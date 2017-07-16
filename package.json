@@ -1,7 +1,7 @@
 {
-  "name": "shopify-liquid",
+  "name": "liquidjs",
   "version": "1.9.0",
-  "description": "A feature-rich Liquid template engine for Node.js and browsers, with compliance with the Ruby version.",
+  "description": "A Liquid template engine for Node.js and browsers, with all shopify/liquid features.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/ test/",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harttle/shopify-liquid.git"
+    "url": "git+https://github.com/harttle/liquidjs.git"
   },
   "keywords": [
     "liquid",
@@ -25,9 +25,9 @@
   "author": "Harttle",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/harttle/shopify-liquid/issues"
+    "url": "https://github.com/harttle/liquidjs/issues"
   },
-  "homepage": "https://github.com/harttle/shopify-liquid#readme",
+  "homepage": "https://github.com/harttle/liquidjs#readme",
   "dependencies": {
     "any-promise": "^1.3.0"
   },
