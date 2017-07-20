@@ -37,7 +37,7 @@ function parse (html, filepath, options) {
       token.args = match[2]
 
       // get last line indentation
-      let lineStart = (htmlFragment || '').split('\n')
+      var lineStart = (htmlFragment || '').split('\n')
       token.indent = lineStart[lineStart.length - 1].length
 
       tokens.push(token)
