@@ -36,6 +36,10 @@ function parse (html, filepath, options) {
       token.name = match[1]
       token.args = match[2]
 
+      // get last line indentation
+      var lineStart = (htmlFragment || '').split('\n')
+      token.indent = lineStart[lineStart.length - 1].length
+
       tokens.push(token)
     } else {
       // output
