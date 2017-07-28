@@ -16,7 +16,7 @@ function parse (html, filepath, options) {
   var parsedLinesCount = 0
 
   while ((result = syntax.exec(html)) !== null) {
-        // passed html fragments
+    // passed html fragments
     if (result.index > lastMatchEnd) {
       htmlFragment = html.slice(lastMatchEnd, result.index)
       tokens.push({
@@ -49,7 +49,7 @@ function parse (html, filepath, options) {
     lastMatchEnd = syntax.lastIndex
   }
 
-    // remaining html
+  // remaining html
   if (html.length > lastMatchEnd) {
     htmlFragment = html.slice(lastMatchEnd, html.length)
     tokens.push({

@@ -83,11 +83,11 @@ describe('liquid', function () {
   describe('#renderFile()', function () {
     it('should render file', function () {
       return expect(engine.renderFile('/root/files/foo.html', ctx))
-                .to.eventually.equal('foo')
+        .to.eventually.equal('foo')
     })
     it('should accept relative path', function () {
       return expect(engine.renderFile('files/foo.html'))
-                .to.eventually.equal('foo')
+        .to.eventually.equal('foo')
     })
     it('should resolve array as root', function () {
       engine = Liquid({
@@ -95,7 +95,7 @@ describe('liquid', function () {
         extname: '.html'
       })
       return expect(engine.renderFile('files/foo.html'))
-                .to.eventually.equal('foo')
+        .to.eventually.equal('foo')
     })
     it('should default root to cwd', function () {
       var files = {}
@@ -106,7 +106,7 @@ describe('liquid', function () {
         extname: '.html'
       })
       return expect(engine.renderFile('foo.html'))
-                .to.eventually.equal('FOO')
+        .to.eventually.equal('FOO')
     })
     it('should render file with context', function () {
       return expect(engine.renderFile('/root/files/name.html', ctx)).to.eventually.equal('My name is harttle.')
@@ -120,17 +120,17 @@ describe('liquid', function () {
         extname: '.html'
       })
       return expect(engine.renderFile('/not/exist.html')).to
-                .be.rejectedWith(/failed to lookup \/not\/exist.html in: \/boo,\/root\//i)
+        .be.rejectedWith(/failed to lookup \/not\/exist.html in: \/boo,\/root\//i)
     })
     it('should throw when file not readable', function () {
       return expect(engine.renderFile('/un-readable.html')).to
-                .be.rejectedWith(/EACCES/)
+        .be.rejectedWith(/EACCES/)
     })
   })
   describe('strict', function () {
     it('should not throw when strict_variables false (default)', function () {
       return expect(engine.parseAndRender('before{{notdefined}}after', ctx)).to
-                .eventually.equal('beforeafter')
+        .eventually.equal('beforeafter')
     })
     it('should throw when strict_variables true', function () {
       var tpl = engine.parse('before{{notdefined}}after')
@@ -138,7 +138,7 @@ describe('liquid', function () {
         strict_variables: true
       }
       return expect(engine.render(tpl, ctx, opts)).to
-                .be.rejectedWith(/undefined variable: notdefined/)
+        .be.rejectedWith(/undefined variable: notdefined/)
     })
     it('should pass strict_variables to render by parseAndRender', function () {
       var html = 'before{{notdefined}}after'

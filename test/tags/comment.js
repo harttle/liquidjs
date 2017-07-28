@@ -8,16 +8,16 @@ describe('tags/comment', function () {
   it('should support comment 1', function () {
     var src = '{% comment %}{% raw%}'
     return expect(liquid.parseAndRender(src))
-            .to.be.rejectedWith(/{% comment %} not closed/)
+      .to.be.rejectedWith(/{% comment %} not closed/)
   })
   it('should support comment 2', function () {
     var src = 'My name is {% comment %}super{% endcomment %} Shopify.'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('My name is  Shopify.')
+      .to.eventually.equal('My name is  Shopify.')
   })
   it('should support comment 3', function () {
     var src = '{% comment %}\n{{ foo}} \n{% endcomment %}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('')
+      .to.eventually.equal('')
   })
 })

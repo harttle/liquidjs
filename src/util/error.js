@@ -34,7 +34,7 @@ ParseError.prototype = Object.create(Error.prototype)
 ParseError.prototype.constructor = ParseError
 
 function RenderError (e, tpl) {
-    // return the original render error
+  // return the original render error
   if (e instanceof RenderError) {
     return e
   }
@@ -79,14 +79,14 @@ function mkContext (input, line) {
   var end = Math.min(line + 3, lines.length)
 
   var context = _
-        .range(begin, end + 1)
-        .map(l => [
-          (l === line) ? '>> ' : '   ',
-          align(l, end),
-          '| ',
-          lines[l - 1]
-        ].join(''))
-        .join('\n')
+    .range(begin, end + 1)
+    .map(l => [
+      (l === line) ? '>> ' : '   ',
+      align(l, end),
+      '| ',
+      lines[l - 1]
+    ].join(''))
+    .join('\n')
 
   return context
 }

@@ -9,12 +9,12 @@ describe('tags/cycle', function () {
   it('should support cycle', function () {
     var src = "{% cycle '1', '2', '3' %}"
     return expect(liquid.parseAndRender(src + src + src + src))
-            .to.eventually.equal('1231')
+      .to.eventually.equal('1231')
   })
 
   it('should throw when cycle candidates empty', function () {
     return expect(liquid.parseAndRender('{%cycle%}'))
-            .to.be.rejectedWith(/empty candidates/)
+      .to.be.rejectedWith(/empty candidates/)
   })
 
   it('should support cycle in for block', function () {
@@ -23,7 +23,7 @@ describe('tags/cycle', function () {
       one: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('1e1e1')
+      .to.eventually.equal('1e1e1')
   })
 
   it('should support cycle group', function () {
@@ -34,6 +34,6 @@ describe('tags/cycle', function () {
       one: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('121')
+      .to.eventually.equal('121')
   })
 })

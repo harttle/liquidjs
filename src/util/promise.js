@@ -25,8 +25,8 @@ function mapSeries (iterable, iteratee) {
   var result = []
   iterable.forEach(function (item, idx) {
     ret = ret
-            .then(() => iteratee(item, idx, iterable))
-            .then(x => result.push(x))
+      .then(() => iteratee(item, idx, iterable))
+      .then(x => result.push(x))
   })
   return ret.then(() => result)
 }

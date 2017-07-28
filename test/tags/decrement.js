@@ -18,13 +18,13 @@ describe('tags/decrement', function () {
       one: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('0')
+      .to.eventually.equal('0')
   })
 
   it('should decrement undefined', function () {
     var src = '{% decrement empty %}{{empty}}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('-1')
+      .to.eventually.equal('-1')
   })
 
   it('should support decrement multiple times', function () {
@@ -33,6 +33,6 @@ describe('tags/decrement', function () {
       foo: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('-1')
+      .to.eventually.equal('-1')
   })
 })

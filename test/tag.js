@@ -43,13 +43,13 @@ describe('tag', function () {
       render: spy
     })
     return tag
-            .construct({
-              type: 'tag',
-              value: 'foo',
-              name: 'foo'
-            }, [])
-            .render(scope, {})
-            .then(() => expect(spy).to.have.been.called)
+      .construct({
+        type: 'tag',
+        value: 'foo',
+        name: 'foo'
+      }, [])
+      .render(scope, {})
+      .then(() => expect(spy).to.have.been.called)
   })
 
   describe('hash', function () {
@@ -68,31 +68,31 @@ describe('tag', function () {
     })
     it('should call tag.render with scope', function () {
       return tag.construct(token, []).render(scope, {})
-                .then(() => expect(spy).to.have.been.calledWithMatch(scope))
+        .then(() => expect(spy).to.have.been.calledWithMatch(scope))
     })
     it('should resolve identifier hash', function () {
       return tag.construct(token, []).render(scope, {})
-                .then(() => expect(spy).to.have.been.calledWithMatch({}, {
-                  aa: 'bar'
-                }))
+        .then(() => expect(spy).to.have.been.calledWithMatch({}, {
+          aa: 'bar'
+        }))
     })
     it('should accept space between key/value', function () {
       return tag.construct(token, []).render(scope, {})
-                .then(() => expect(spy).to.have.been.calledWithMatch({}, {
-                  bb: 2
-                }))
+        .then(() => expect(spy).to.have.been.calledWithMatch({}, {
+          bb: 2
+        }))
     })
     it('should resolve number value hash', function () {
       return tag.construct(token, []).render(scope, {})
-                .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
-                  cc: 2.3
-                }))
+        .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
+          cc: 2.3
+        }))
     })
     it('should resolve property access hash', function () {
       return tag.construct(token, []).render(scope, {})
-                .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
-                  dd: 'uoo'
-                }))
+        .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
+          dd: 'uoo'
+        }))
     })
   })
 })

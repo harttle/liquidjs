@@ -63,7 +63,7 @@ var Scope = {
           return (obj[key] = val)
         }
         if (undefined === obj[key]) obj[key] = {}
-                // case for readonly objects
+        // case for readonly objects
         obj = obj[key] || {}
       }
     }

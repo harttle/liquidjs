@@ -32,7 +32,7 @@ describe('expression', function () {
   })
 
   describe('.isTruthy()', function () {
-        // Spec: https://shopify.github.io/liquid/basics/truthy-and-falsy/
+    // Spec: https://shopify.github.io/liquid/basics/truthy-and-falsy/
     expect(isTruthy(true)).to.be.true
     expect(isTruthy(false)).to.be.false
     expect(isTruthy(null)).to.be.false

@@ -32,8 +32,8 @@ describe('engine#express()', function () {
     mock({ '/views/name.html': 'My name is {{name}}.' })
     app.set('views', ['/views'])
     request(app).get('/name')
-            .expect('My name is harttle.')
-            .expect(200, done)
+      .expect('My name is harttle.')
+      .expect(200, done)
   })
   it('should pass error when file not found', function (done) {
     var view = {
@@ -58,8 +58,8 @@ describe('engine#express()', function () {
     })
     app.set('views', ['/views'])
     request(app).get('/include/foo')
-            .expect('foo')
-            .expect(200, done)
+      .expect('foo')
+      .expect(200, done)
   })
   it('should respect express views (Array) when lookup', function (done) {
     mock({
@@ -68,8 +68,8 @@ describe('engine#express()', function () {
     })
     app.set('views', ['/views', '/partials'])
     request(app).get('/include/bar')
-            .expect('bar')
-            .expect(200, done)
+      .expect('bar')
+      .expect(200, done)
   })
   it('should respect express views (String) when lookup', function (done) {
     mock({
@@ -78,8 +78,8 @@ describe('engine#express()', function () {
     })
     app.set('views', '/views')
     request(app).get('/include/bar')
-            .expect('bar')
-            .expect(200, done)
+      .expect('bar')
+      .expect(200, done)
   })
   it('should respect express views (Undefined) when lookup', function (done) {
     var files = {}
@@ -88,7 +88,7 @@ describe('engine#express()', function () {
     mock(files)
 
     request(app).get('/include/bar')
-            .expect('bar')
-            .expect(200, done)
+      .expect('bar')
+      .expect(200, done)
   })
 })

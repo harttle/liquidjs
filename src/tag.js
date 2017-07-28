@@ -27,15 +27,15 @@ module.exports = function () {
         return Promise.resolve('')
       }
       return Promise.resolve()
-                .then(() => typeof impl.render === 'function'
-                    ? impl.render(scope, obj) : '')
-                .catch(function (e) {
-                  if (_.isError(e)) {
-                    throw e
-                  }
-                  var msg = `Please reject with an Error in ${impl.render}, got ${e}`
-                  throw new Error(msg)
-                })
+        .then(() => typeof impl.render === 'function'
+          ? impl.render(scope, obj) : '')
+        .catch(function (e) {
+          if (_.isError(e)) {
+            throw e
+          }
+          var msg = `Please reject with an Error in ${impl.render}, got ${e}`
+          throw new Error(msg)
+        })
     },
     parse: function (token, tokens) {
       this.type = 'tag'

@@ -12,13 +12,13 @@ describe('tags/increment', function () {
       one: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('2')
+      .to.eventually.equal('2')
   })
 
   it('should increment undefined', function () {
     var src = '{% increment empty %}{{empty}}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('1')
+      .to.eventually.equal('1')
   })
 
   it('should support increment multiple times', function () {
@@ -27,6 +27,6 @@ describe('tags/increment', function () {
       foo: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('3')
+      .to.eventually.equal('3')
   })
 })

@@ -27,7 +27,7 @@ describe('tags/tablerow', function () {
   it('should throw when tablerow not closed', function () {
     var src = '{% tablerow i in (1..0) cols:2 %}{{ i }}'
     return expect(liquid.parseAndRender(src))
-            .to.be.rejectedWith(/tag .* not closed/)
+      .to.be.rejectedWith(/tag .* not closed/)
   })
 
   it('should support tablerow with range', function () {
@@ -43,12 +43,12 @@ describe('tags/tablerow', function () {
   it('tablerow should throw on illegal cols 1', function () {
     var src = '{% tablerow i in (1..5) cols:0 %}{{ i }}{% endtablerow %}'
     return expect(liquid.parseAndRender(src))
-            .to.be.rejectedWith(/illegal cols: 0/)
+      .to.be.rejectedWith(/illegal cols: 0/)
   })
   it('tablerow should throw on illegal cols 2', function () {
     var src = '{% tablerow i in (1..5) %}{{ i }}{% endtablerow %}'
     return expect(liquid.parseAndRender(src))
-            .to.be.rejectedWith(/illegal cols: undefined/)
+      .to.be.rejectedWith(/illegal cols: undefined/)
   })
 
   it('should support tablerow with limit', function () {

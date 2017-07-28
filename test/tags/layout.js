@@ -22,7 +22,7 @@ describe('tags/layout', function () {
     })
     var src = '{% layout "parent" %}{%block%}A'
     return expect(liquid.parseAndRender(src)).to
-            .be.rejectedWith(/tag {%block%} not closed/)
+      .be.rejectedWith(/tag {%block%} not closed/)
   })
   it('should handle anonymous block', function () {
     mock({
@@ -30,7 +30,7 @@ describe('tags/layout', function () {
     })
     var src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
     return expect(liquid.parseAndRender(src)).to
-            .eventually.equal('XAY')
+      .eventually.equal('XAY')
   })
   it('should handle named blocks', function () {
     mock({

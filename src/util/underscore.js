@@ -9,7 +9,7 @@ function isString (value) {
 
 function isError (value) {
   var signature = Object.prototype.toString.call(value)
-    // [object XXXError]
+  // [object XXXError]
   return signature.substr(-6, 5) === 'Error' ||
         (typeof value.message === 'string' && typeof value.name === 'string')
 }

@@ -17,11 +17,11 @@ describe('error', function () {
   describe('TokenizationError', function () {
     it('should throw TokenizationError when tag illegal', function () {
       return expect(engine.parseAndRender('{% . a %}', {})).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('TokenizationError')
-                  expect(err.message).to.contain('illegal tag syntax')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('TokenizationError')
+          expect(err.message).to.contain('illegal tag syntax')
+        })
     })
     it('should contain template content in err.message', function () {
       var html = ['1st', '2nd', 'X{% . a %} Y', '4th']
@@ -33,36 +33,36 @@ describe('error', function () {
         'TokenizationError: illegal tag syntax'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.message).to.equal('illegal tag syntax, line:3')
-                  expect(err.stack).to.contain(message.join('\n'))
-                  expect(err.name).to.equal('TokenizationError')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.message).to.equal('illegal tag syntax, line:3')
+          expect(err.stack).to.contain(message.join('\n'))
+          expect(err.name).to.equal('TokenizationError')
+        })
     })
     it('should contain the whole template content in err.input', function () {
       var html = 'bar\nfoo{% . a %}\nfoo'
       return expect(engine.parseAndRender(html)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.input).to.equal(html)
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.input).to.equal(html)
+        })
     })
     it('should contain line number in err.line', function () {
       return expect(engine.parseAndRender('1\n2\n{% . a %}\n4', {})).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('TokenizationError')
-                  expect(err.line).to.equal(3)
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('TokenizationError')
+          expect(err.line).to.equal(3)
+        })
     })
     it('should contain stack in err.stack', function () {
       return expect(engine.parseAndRender('{% . a %}')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.stack).to.contain('illegal tag syntax')
-                  expect(err.stack).to.contain('at Object.parse')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.stack).to.contain('illegal tag syntax')
+          expect(err.stack).to.contain('at Object.parse')
+        })
     })
     it('should contain file path in err.file', function () {
       var html = '<html>\n<head>\n\n{% . a %}\n\n'
@@ -70,12 +70,12 @@ describe('error', function () {
         '/foo.html': html
       })
       return expect(engine.renderFile('/foo.html')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  mock.restore()
-                  expect(err.name).to.equal('TokenizationError')
-                  expect(err.file).to.equal('/foo.html')
-                })
+        .be.rejected
+        .then(function (err) {
+          mock.restore()
+          expect(err.name).to.equal('TokenizationError')
+          expect(err.file).to.equal('/foo.html')
+        })
     })
   })
 
@@ -101,40 +101,40 @@ describe('error', function () {
     it('should throw RenderError when tag throws', function () {
       var src = '{%throwingTag%}'
       return expect(engine.parseAndRender(src)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('RenderError')
-                  expect(err.message).to.contain('intended render error')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('RenderError')
+          expect(err.message).to.contain('intended render error')
+        })
     })
     it('should throw RenderError when tag rejects', function () {
       var src = '{%rejectingTag%}'
       return expect(engine.parseAndRender(src)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('RenderError')
-                  expect(err.message).to.contain('intended render reject')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('RenderError')
+          expect(err.message).to.contain('intended render reject')
+        })
     })
     it('should throw RenderError when filter throws', function () {
       var src = '{{1|throwingFilter}}'
       return expect(engine.parseAndRender(src)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('RenderError')
-                  expect(err.message).to.contain('throwed by filter')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('RenderError')
+          expect(err.message).to.contain('throwed by filter')
+        })
     })
     it('should not throw when variable undefined by default', function () {
       return expect(engine.parseAndRender('X{{a}}Y')).to.eventually.equal('XY')
     })
     it('should throw RenderError when variable not defined', function () {
       return expect(strictEngine.parseAndRender('{{a}}')).to.eventually
-                .be.rejected
-                .then(function (e) {
-                  expect(e).to.have.property('name', 'RenderError')
-                  expect(e.message).to.contain('undefined variable: a')
-                })
+        .be.rejected
+        .then(function (e) {
+          expect(e).to.have.property('name', 'RenderError')
+          expect(e.message).to.contain('undefined variable: a')
+        })
     })
     it('should contain template context in err.stack', function () {
       var html = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
@@ -148,12 +148,12 @@ describe('error', function () {
         'Error: intended render error'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.message).to.equal('intended render error, line:4')
-                  expect(err.stack).to.contain(message.join('\n'))
-                  expect(err.name).to.equal('RenderError')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.message).to.equal('intended render error, line:4')
+          expect(err.stack).to.contain(message.join('\n'))
+          expect(err.name).to.equal('RenderError')
+        })
     })
     it('should contain original error info for {% layout %}', function () {
       mock({
@@ -178,14 +178,14 @@ describe('error', function () {
         'Error: intended render error'
       ]
       return expect(engine.parseAndRender(html)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  console.log(err.message)
-                  console.log(err.stack)
-                  expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4')
-                  expect(err.stack).to.contain(message.join('\n'))
-                  expect(err.name).to.equal('RenderError')
-                })
+        .be.rejected
+        .then(function (err) {
+          console.log(err.message)
+          console.log(err.stack)
+          expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4')
+          expect(err.stack).to.contain(message.join('\n'))
+          expect(err.name).to.equal('RenderError')
+        })
     })
     it('should contain original error info for {% include %}', function () {
       var origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
@@ -203,38 +203,38 @@ describe('error', function () {
         'Error: intended render error'
       ]
       return expect(engine.parseAndRender(html)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4')
-                  expect(err.stack).to.contain(message.join('\n'))
-                  expect(err.name).to.equal('RenderError')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4')
+          expect(err.stack).to.contain(message.join('\n'))
+          expect(err.name).to.equal('RenderError')
+        })
     })
     it('should contain the whole template content in err.input', function () {
       var html = 'bar\nfoo{%throwingTag%}\nfoo'
       return expect(engine.parseAndRender(html)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.input).to.equal(html)
-                  expect(err.name).to.equal('RenderError')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.input).to.equal(html)
+          expect(err.name).to.equal('RenderError')
+        })
     })
     it('should contain line number in err.line', function () {
       var src = '1\n2\n{{1|throwingFilter}}\n4'
       return expect(engine.parseAndRender(src)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.line).to.equal(3)
-                  expect(err.name).to.equal('RenderError')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.line).to.equal(3)
+          expect(err.name).to.equal('RenderError')
+        })
     })
     it('should contain stack in err.stack', function () {
       return expect(engine.parseAndRender('{%rejectingTag%}')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.stack).to.contain('intended render reject')
-                  expect(err.stack).to.match(/at .*:\d+:\d+\)/)
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.stack).to.contain('intended render reject')
+          expect(err.stack).to.match(/at .*:\d+:\d+\)/)
+        })
     })
 
     it('should contain file path in err.file', function () {
@@ -243,12 +243,12 @@ describe('error', function () {
         '/foo.html': html
       })
       return expect(engine.renderFile('/foo.html')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  mock.restore()
-                  expect(err.name).to.equal('RenderError')
-                  expect(err.file).to.equal('/foo.html')
-                })
+        .be.rejected
+        .then(function (err) {
+          mock.restore()
+          expect(err.name).to.equal('RenderError')
+          expect(err.file).to.equal('/foo.html')
+        })
     })
   })
 
@@ -263,46 +263,46 @@ describe('error', function () {
     })
     it('should throw RenderError when filter not defined', function () {
       return expect(strictEngine.parseAndRender('{{1 | a}}')).to.eventually
-                .be.rejected
-                .then(function (e) {
-                  expect(e).to.have.property('name', 'ParseError')
-                  expect(e.message).to.contain('undefined filter: a')
-                })
+        .be.rejected
+        .then(function (e) {
+          expect(e).to.have.property('name', 'ParseError')
+          expect(e.message).to.contain('undefined filter: a')
+        })
     })
     it('should throw ParseError when tag not closed', function () {
       return expect(engine.parseAndRender('{% if %}')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('ParseError')
-                  expect(err.message).to.contain('tag {% if %} not closed')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('ParseError')
+          expect(err.message).to.contain('tag {% if %} not closed')
+        })
     })
     it('should throw ParseError when tag parse throws', function () {
       var src = '{%throwsOnParse%}'
       return expect(engine.parseAndRender(src)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('ParseError')
-                  expect(err.message).to.contain('intended parse error')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('ParseError')
+          expect(err.message).to.contain('intended parse error')
+        })
     })
     it('should throw ParseError when tag not found', function () {
       var src = '{%if true%}\naaa{%endif%}\n{% -a %}\n3'
       return expect(engine.parseAndRender(src)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('ParseError')
-                  expect(err.message).to.contain('tag -a not found')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('ParseError')
+          expect(err.message).to.contain('tag -a not found')
+        })
     })
 
     it('should throw ParseError when tag not exist', function () {
       return expect(engine.parseAndRender('{% a %}')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.name).to.equal('ParseError')
-                  expect(err.message).to.contain('tag a not found')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.name).to.equal('ParseError')
+          expect(err.message).to.contain('tag a not found')
+        })
     })
 
     it('should contain template context in err.stack', function () {
@@ -317,12 +317,12 @@ describe('error', function () {
         'AssertionError: tag a not found'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.message).to.equal('tag a not found, line:4')
-                  expect(err.stack).to.contain(message.join('\n'))
-                  expect(err.name).to.equal('ParseError')
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.message).to.equal('tag a not found, line:4')
+          expect(err.stack).to.contain(message.join('\n'))
+          expect(err.name).to.equal('ParseError')
+        })
     })
 
     it('should handle err.message when context not enough', function () {
@@ -335,38 +335,38 @@ describe('error', function () {
         'AssertionError: tag a not found'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.message).to.equal('tag a not found, line:2')
-                  expect(err.stack).to.contain(message.join('\n'))
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.message).to.equal('tag a not found, line:2')
+          expect(err.stack).to.contain(message.join('\n'))
+        })
     })
 
     it('should contain the whole template content in err.input', function () {
       var html = 'bar\nfoo{% a %}\nfoo'
       return expect(engine.parseAndRender(html)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.input).to.equal(html)
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.input).to.equal(html)
+        })
     })
 
     it('should contain line number in err.line', function () {
       var html = '<html>\n<head>\n\n{% raw %}\n\n'
       return expect(engine.parseAndRender(html)).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.line).to.equal(4)
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.line).to.equal(4)
+        })
     })
 
     it('should contain stack in err.stack', function () {
       return expect(engine.parseAndRender('{% -a %}')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  expect(err.stack).to.contain('AssertionError: tag -a not found')
-                  expect(err.stack).to.match(/at .*:\d+:\d+\)/)
-                })
+        .be.rejected
+        .then(function (err) {
+          expect(err.stack).to.contain('AssertionError: tag -a not found')
+          expect(err.stack).to.match(/at .*:\d+:\d+\)/)
+        })
     })
 
     it('should contain file path in err.file', function () {
@@ -375,12 +375,12 @@ describe('error', function () {
         '/foo.html': html
       })
       return expect(engine.renderFile('/foo.html')).to.eventually
-                .be.rejected
-                .then(function (err) {
-                  mock.restore()
-                  expect(err.name).to.equal('ParseError')
-                  expect(err.file).to.equal('/foo.html')
-                })
+        .be.rejected
+        .then(function (err) {
+          mock.restore()
+          expect(err.name).to.equal('ParseError')
+          expect(err.file).to.equal('/foo.html')
+        })
     })
   })
 })

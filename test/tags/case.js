@@ -9,14 +9,14 @@ describe('tags/case', function () {
   it('should support case 1', function () {
     var src = '{% case "foo"%}'
     return expect(liquid.parseAndRender(src))
-            .to.be.rejectedWith(/{% case "foo"%} not closed/)
+      .to.be.rejectedWith(/{% case "foo"%} not closed/)
   })
   it('should support case 2', function () {
     var src = '{% case "foo"%}' +
             '{% when "foo" %}foo{% when "bar"%}bar' +
             '{%endcase%}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('foo')
+      .to.eventually.equal('foo')
   })
   it('should support case 3', function () {
     var src = '{% case empty %}' +
@@ -26,20 +26,20 @@ describe('tags/case', function () {
       empty: ''
     }
     return expect(liquid.parseAndRender(src, ctx))
-            .to.eventually.equal('bar')
+      .to.eventually.equal('bar')
   })
   it('should support case 4', function () {
     var src = '{% case false %}' +
             '{% when "foo" %}foo{% when ""%}bar' +
             '{%endcase%}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('')
+      .to.eventually.equal('')
   })
   it('should support case 5', function () {
     var src = '{% case "a" %}' +
             '{% when "b" %}b{% when "c"%}c{%else %}d' +
             '{%endcase%}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('d')
+      .to.eventually.equal('d')
   })
 })

@@ -20,27 +20,27 @@ describe('scope', function () {
   describe('#propertyAccessSeq()', function () {
     it('should handle dot syntax', function () {
       expect(scope.propertyAccessSeq('foo.bar'))
-                .to.deep.equal(['foo', 'bar'])
+        .to.deep.equal(['foo', 'bar'])
     })
     it('should handle [<String>] syntax', function () {
       expect(scope.propertyAccessSeq('foo["bar"]'))
-                .to.deep.equal(['foo', 'bar'])
+        .to.deep.equal(['foo', 'bar'])
     })
     it('should handle [<Identifier>] syntax', function () {
       expect(scope.propertyAccessSeq('foo[foo]'))
-                .to.deep.equal(['foo', 'zoo'])
+        .to.deep.equal(['foo', 'zoo'])
     })
     it('should handle nested access 1', function () {
       expect(scope.propertyAccessSeq('foo[bar.zoo]'))
-                .to.deep.equal(['foo', 'coo'])
+        .to.deep.equal(['foo', 'coo'])
     })
     it('should handle nested access 2', function () {
       expect(scope.propertyAccessSeq('foo[bar["zoo"]]'))
-                .to.deep.equal(['foo', 'coo'])
+        .to.deep.equal(['foo', 'coo'])
     })
     it('should handle nested access 3', function () {
       expect(scope.propertyAccessSeq('bar["foo"].zoo'))
-                .to.deep.equal(['bar', 'foo', 'zoo'])
+        .to.deep.equal(['bar', 'foo', 'zoo'])
     })
   })
 

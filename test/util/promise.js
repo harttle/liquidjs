@@ -13,18 +13,18 @@ describe('util/promise', function () {
       var spy2 = sinon.spy()
       return P
         .anySeries(
-            ['first', 'second'],
-            (item, idx) => new Promise(function (resolve, reject) {
-              if (idx === 0) {
-                setTimeout(function () {
-                  spy1()
-                  reject(new Error('first cb'))
-                }, 10)
-              } else {
-                spy2()
-                resolve('foo')
-              }
-            }))
+          ['first', 'second'],
+          (item, idx) => new Promise(function (resolve, reject) {
+            if (idx === 0) {
+              setTimeout(function () {
+                spy1()
+                reject(new Error('first cb'))
+              }, 10)
+            } else {
+              spy2()
+              resolve('foo')
+            }
+          }))
         .then(() => expect(spy2).to.have.been.calledAfter(spy1))
     })
     it('should reject when all rejected', function () {

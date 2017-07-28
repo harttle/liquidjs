@@ -14,17 +14,17 @@ describe('tags/assign', function () {
   it('should assign as string', function () {
     var src = '{% assign foo="bar" %}{{foo}}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('bar')
+      .to.eventually.equal('bar')
   })
   it('should assign as array', function () {
     var src = '{% assign foo=(1..3) %}{{foo}}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('[1,2,3]')
+      .to.eventually.equal('[1,2,3]')
   })
   it('should assign as filter result', function () {
     var src = '{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}'
     return expect(liquid.parseAndRender(src))
-            .to.eventually.equal('A')
+      .to.eventually.equal('A')
   })
   it('should assign var-1', function () {
     var src = '{% assign var-1 = 5 %}{{ var-1 }}'
