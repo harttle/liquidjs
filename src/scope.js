@@ -131,7 +131,10 @@ var Scope = {
         }
       } else if (str[i] === '.') {
         // foo.bar
-        seq.push(name)
+        // foo.bar[0].foo
+        // In the case of foo.bar[0].foo, must check length because
+        // name will be empty after the closing `]` is handled above.
+        if (name.length) seq.push(name)
         name = ''
       } else {
         // foo.bar
