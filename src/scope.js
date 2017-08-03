@@ -100,49 +100,47 @@ var Scope = {
   propertyAccessSeq: function (str) {
     var seq = []
     var name = ''
-    for (var i = 0; i < str.length; i++) {
-      if (str[i] === '[') {
-        seq.push(name)
-        name = ''
+    var j
+    var i = 0
+    while (i < str.length) {
+      switch (str[i]) {
+        case '[':
+          push()
 
-        var delemiter = str[i + 1]
-        if (delemiter !== "'" && delemiter !== '"') {
-          // foo[bar.coo]
-          var j = matchRightBracket(str, i + 1)
-          assert(j !== -1, `unbalanced []: ${str}`)
-          name = str.slice(i + 1, j)
-          if (lexical.isInteger(name)) {
-            // foo[1]
-            seq.push(name)
-          } else {
-            // foo["bar"]
-            seq.push(this.get(name))
+          var delemiter = str[i + 1]
+          if (/['"]/.test(delemiter)) { // foo["bar"]
+            j = str.indexOf(delemiter, i + 2)
+            assert(j !== -1, `unbalanced ${delemiter}: ${str}`)
+            name = str.slice(i + 2, j)
+            push()
+            i = j + 2
+          } else { // foo[bar.coo]
+            j = matchRightBracket(str, i + 1)
+            assert(j !== -1, `unbalanced []: ${str}`)
+            name = str.slice(i + 1, j)
+            if (!lexical.isInteger(name)) { // foo[bar] vs. foo[1]
+              name = this.get(name)
+            }
+            push()
+            i = j + 1
           }
-          name = ''
-          i = j
-        } else {
-          // foo["bar"]
-          j = str.indexOf(delemiter, i + 2)
-          assert(j !== -1, `unbalanced ${delemiter}: ${str}`)
-          name = str.slice(i + 2, j)
-          seq.push(name)
-          name = ''
-          i = j + 2
-        }
-      } else if (str[i] === '.') {
-        // foo.bar
-        // foo.bar[0].foo
-        // In the case of foo.bar[0].foo, must check length because
-        // name will be empty after the closing `]` is handled above.
-        if (name.length) seq.push(name)
-        name = ''
-      } else {
-        // foo.bar
-        name += str[i]
+          break
+        case '.':// foo.bar, foo[0].bar
+          push()
+          i++
+          break
+        default:// foo.bar
+          name += str[i]
+          i++
       }
     }
-    if (name.length) seq.push(name)
+    push()
     return seq
+
+    function push () {
+      if (name.length) seq.push(name)
+      name = ''
+    }
   }
 }
 

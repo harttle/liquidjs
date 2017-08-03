@@ -42,6 +42,10 @@ describe('scope', function () {
       expect(scope.propertyAccessSeq('bar["foo"].zoo'))
         .to.deep.equal(['bar', 'foo', 'zoo'])
     })
+    it('should handle nested access 4', function () {
+      expect(scope.propertyAccessSeq('foo[0].bar'))
+        .to.deep.equal(['foo', '0', 'bar'])
+    })
   })
 
   describe('#get()', function () {
