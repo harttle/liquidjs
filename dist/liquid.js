@@ -1006,46 +1006,52 @@ var Scope = {
   propertyAccessSeq: function propertyAccessSeq(str) {
     var seq = [];
     var name = '';
-    for (var i = 0; i < str.length; i++) {
-      if (str[i] === '[') {
-        seq.push(name);
-        name = '';
+    var j;
+    var i = 0;
+    while (i < str.length) {
+      switch (str[i]) {
+        case '[':
+          push();
 
-        var delemiter = str[i + 1];
-        if (delemiter !== "'" && delemiter !== '"') {
-          // foo[bar.coo]
-          var j = matchRightBracket(str, i + 1);
-          assert(j !== -1, 'unbalanced []: ' + str);
-          name = str.slice(i + 1, j);
-          if (lexical.isInteger(name)) {
-            // foo[1]
-            seq.push(name);
-          } else {
+          var delemiter = str[i + 1];
+          if (/['"]/.test(delemiter)) {
             // foo["bar"]
-            seq.push(this.get(name));
+            j = str.indexOf(delemiter, i + 2);
+            assert(j !== -1, 'unbalanced ' + delemiter + ': ' + str);
+            name = str.slice(i + 2, j);
+            push();
+            i = j + 2;
+          } else {
+            // foo[bar.coo]
+            j = matchRightBracket(str, i + 1);
+            assert(j !== -1, 'unbalanced []: ' + str);
+            name = str.slice(i + 1, j);
+            if (!lexical.isInteger(name)) {
+              // foo[bar] vs. foo[1]
+              name = this.get(name);
+            }
+            push();
+            i = j + 1;
           }
-          name = '';
-          i = j;
-        } else {
-          // foo["bar"]
-          j = str.indexOf(delemiter, i + 2);
-          assert(j !== -1, 'unbalanced ' + delemiter + ': ' + str);
-          name = str.slice(i + 2, j);
-          seq.push(name);
-          name = '';
-          i = j + 2;
-        }
-      } else if (str[i] === '.') {
-        // foo.bar
-        seq.push(name);
-        name = '';
-      } else {
-        // foo.bar
-        name += str[i];
+          break;
+        case '.':
+          // foo.bar, foo[0].bar
+          push();
+          i++;
+          break;
+        default:
+          // foo.bar
+          name += str[i];
+          i++;
       }
     }
-    if (name.length) seq.push(name);
+    push();
     return seq;
+
+    function push() {
+      if (name.length) seq.push(name);
+      name = '';
+    }
   }
 };
 
@@ -1258,6 +1264,10 @@ function parse(html, filepath, options) {
       }
       token.name = match[1];
       token.args = match[2];
+
+      // get last line indentation
+      var lineStart = (htmlFragment || '').split('\n');
+      token.indent = lineStart[lineStart.length - 1].length;
 
       tokens.push(token);
     } else {
