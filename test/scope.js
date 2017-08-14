@@ -98,7 +98,13 @@ describe('scope', function () {
       expect(scope.get('bar[foo]')).to.equal('coo')
     })
 
-    it('should support nested case', function () {
+    it('should return undefined when not exist', function () {
+      expect(scope.get('foo.foo.foo')).to.be.undefined
+    })
+  })
+
+  describe('#set', function () {
+    it('should set nested value', function () {
       scope.set('posts', {
         'first': {
           'name': 'A Nice Day'
@@ -109,8 +115,12 @@ describe('scope', function () {
       })
       expect(scope.get('posts[category.diary[0]].name'), 'A Nice Day')
     })
-  })
 
+    it('should create parents if needed', function () {
+      scope.set('foo.bar.coo', 'COO')
+      expect(scope.get('foo.bar.coo'), 'COO')
+    })
+  })
   describe('strict_variables', function () {
     var scope
     beforeEach(function () {
@@ -118,11 +128,18 @@ describe('scope', function () {
         strict_variables: true
       })
     })
-    it('should throw undefined in strict mode', function () {
+    it('should throw when variable not defined', function () {
       function fn () {
         scope.get('notdefined')
       }
       expect(fn).to.throw(/undefined variable: notdefined/)
+    })
+    it('should throw when deep variable not exist', function () {
+      scope.set('foo', 'bar')
+      function fn () {
+        scope.get('foo.bar.not.defined')
+      }
+      expect(fn).to.throw(/undefined variable: not/)
     })
     it('should find variable in parent scope', function () {
       scope.set('foo', 'foo')

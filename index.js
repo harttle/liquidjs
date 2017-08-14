@@ -43,15 +43,10 @@ var _engine = {
     return this.renderer.renderTemplates(tpl, scope)
   },
   parseAndRender: function (html, ctx, opts) {
+    console.log('parse and render')
     return Promise.resolve()
       .then(() => this.parse(html))
       .then(tpl => this.render(tpl, ctx, opts))
-      .catch(e => {
-        if (e instanceof Errors.RenderBreakError) {
-          return e.html
-        }
-        throw e
-      })
   },
   renderFile: function (filepath, ctx, opts) {
     opts = _.assign({}, opts)
@@ -93,8 +88,8 @@ var _engine = {
             return Promise.resolve(tpl)
           }
           return readFileAsync(filepath)
-                  .then(str => this.parse(str))
-                  .then(tpl => (this.cache[filepath] = tpl))
+            .then(str => this.parse(str))
+            .then(tpl => (this.cache[filepath] = tpl))
         } else {
           return readFileAsync(filepath).then(str => this.parse(str, filepath))
         }

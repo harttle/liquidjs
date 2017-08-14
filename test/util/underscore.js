@@ -72,6 +72,14 @@ describe('util/underscore', function () {
       expect(log).to.have.been.calledWith('[foo]', 'bar')
     })
   })
+  describe('.range()', function () {
+    it('should return a range of integers', function () {
+      expect(_.range(3, 5)).to.deep.equal([3, 4])
+    })
+    it('should treat start as 0 if omitted', function () {
+      expect(_.range(3)).to.deep.equal([0, 1, 2])
+    })
+  })
   describe('.assign()', function () {
     it('should handle null dst', function () {
       expect(_.assign(null, {

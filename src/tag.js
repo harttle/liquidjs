@@ -1,5 +1,4 @@
 const lexical = require('./lexical.js')
-const _ = require('./util/underscore.js')
 const Promise = require('any-promise')
 const Syntax = require('./syntax.js')
 const assert = require('./util/assert.js')
@@ -28,14 +27,9 @@ module.exports = function () {
       }
       return Promise.resolve()
         .then(() => typeof impl.render === 'function'
-          ? impl.render(scope, obj) : '')
-        .catch(function (e) {
-          if (_.isError(e)) {
-            throw e
-          }
-          var msg = `Please reject with an Error in ${impl.render}, got ${e}`
-          throw new Error(msg)
-        })
+          ? impl.render(scope, obj)
+          : ''
+        )
     },
     parse: function (token, tokens) {
       this.type = 'tag'

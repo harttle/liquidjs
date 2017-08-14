@@ -1,3 +1,5 @@
+const toStr = Object.prototype.toString
+
 /*
  * Checks if value is classified as a String primitive or object.
  * @param {any} value The value to check.
@@ -5,6 +7,15 @@
  */
 function isString (value) {
   return value instanceof String || typeof value === 'string'
+}
+
+function isNil (value) {
+  return value === null || value === undefined
+}
+
+function isArray (value) {
+  // be compatible with IE 8
+  return toStr.call(value) === '[object Array]'
 }
 
 function isError (value) {
@@ -53,7 +64,6 @@ function assign (object) {
 }
 
 function _assignBinary (dst, src) {
-  if (!dst) return dst
   forOwn(src, function (v, k) {
     dst[k] = v
   })
@@ -115,6 +125,8 @@ function range (start, stop, step) {
 
 exports.isString = isString
 exports.isObject = isObject
+exports.isArray = isArray
+exports.isNil = isNil
 exports.isError = isError
 
 exports.range = range

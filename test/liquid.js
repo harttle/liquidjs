@@ -34,6 +34,12 @@ describe('liquid', function () {
   afterEach(function () {
     mock.restore()
   })
+  describe('Liquid', function () {
+    it('should ignore invalid root option', function () {
+      var liquid = Liquid({ root: /regex/ })
+      expect(liquid.options.root).to.deep.equal([])
+    })
+  })
   describe('{{output}}', function () {
     it('should output object', function () {
       return expect(engine.parseAndRender('{{obj}}', ctx)).to.eventually.equal('{"foo":"bar"}')

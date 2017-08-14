@@ -7,6 +7,9 @@ describe('tags/for', function () {
   var liquid, ctx
   before(function () {
     liquid = Liquid()
+    liquid.registerTag('throwingTag', {
+      render: function () { throw new Error('intended render error') }
+    })
     ctx = {
       one: 1,
       // eslint-disable-next-line
@@ -30,10 +33,18 @@ describe('tags/for', function () {
       .to.eventually.equal('foo-coo-')
   })
 
-  it('should throw when for not closed', function () {
-    var src = '{%for c in alpha%}{{c}}'
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.be.rejectedWith(/tag .* not closed/)
+  describe('illegal', function () {
+    it('should reject when for not closed', function () {
+      var src = '{%for c in alpha%}{{c}}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.be.rejectedWith(/tag .* not closed/)
+    })
+
+    it('should reject when inner templates rejected', function () {
+      var src = '{%for c in alpha%}{%throwingTag%}{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.be.rejectedWith(/intended render error/)
+    })
   })
 
   describe('else', function () {
@@ -41,6 +52,12 @@ describe('tags/for', function () {
       var src = '{%for c in emptyArray%}a{%else%}b{%endfor%}'
       return expect(liquid.parseAndRender(src, ctx))
         .to.eventually.equal('b')
+    })
+
+    it('should treat non-empty string as one single element', function () {
+      var src = '{%for c in "abc"%}x{{c}}{%else%}y{%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('xabc')
     })
 
     it('should goto else for empty string', function () {
@@ -92,42 +109,43 @@ describe('tags/for', function () {
   })
   it('should support for with break', function () {
     var src = '{% for i in (one..5) %}' +
-            '{% if i == 4 %}{% break %}{% endif %}' +
-            '{{ i }}' +
-            '{% endfor %}'
-    // return liquid.parseAndRender(src, ctx).catch(e => {
-            // console.log(e.stack);
-    // });
+      '{% if i == 4 %}{% break %}{% endif %}' +
+      '{{ i }}' +
+      '{% endfor %}'
     return expect(liquid.parseAndRender(src, ctx))
       .to.eventually.equal('123')
   })
 
-  it('should support for with limit', function () {
-    var src = '{% for i in (1..5) limit:2 %}{{ i }}{% endfor %}'
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('12')
-  })
-  it('should support for with limit and offset', function () {
-    var src = '{% for i in (1..10) limit:2 offset:5%}{{ i }}{% endfor %}'
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('67')
-  })
-
-  it('should support for reversed in the last position', function () {
-    var src = '{% for i in (1..5) limit:2 reversed %}{{ i }}{% endfor %}'
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('21')
+  describe('limit', function () {
+    it('should support for with limit', function () {
+      var src = '{% for i in (1..5) limit:2 %}{{ i }}{% endfor %}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('12')
+    })
+    it('should support for with limit and offset', function () {
+      var src = '{% for i in (1..10) limit:2 offset:5%}{{ i }}{% endfor %}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('67')
+    })
   })
 
-  it('should support for reversed in the first position', function () {
-    var src = '{% for i in (1..5) reversed limit:2 %}{{ i }}{% endfor %}'
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('21')
-  })
+  describe('reverse', function () {
+    it('should support for reversed in the last position', function () {
+      var src = '{% for i in (1..5) limit:2 reversed %}{{ i }}{% endfor %}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('21')
+    })
 
-  it('should support for reversed in the middle position', function () {
-    var src = '{% for i in (1..5) offset:2 reversed limit:4 %}{{ i }}{% endfor %}'
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('543')
+    it('should support for reversed in the first position', function () {
+      var src = '{% for i in (1..5) reversed limit:2 %}{{ i }}{% endfor %}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('21')
+    })
+
+    it('should support for reversed in the middle position', function () {
+      var src = '{% for i in (1..5) offset:2 reversed limit:4 %}{{ i }}{% endfor %}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('543')
+    })
   })
 })
