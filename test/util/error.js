@@ -1,5 +1,7 @@
 const chai = require('chai')
 const expect = chai.expect
+// const error = require('../../src/util/error.js')
+// const TokenizationError = error.TokenizationError
 const mock = require('mock-fs')
 chai.use(require('chai-as-promised'))
 
@@ -63,6 +65,19 @@ describe('error', function () {
           expect(err.stack).to.contain('illegal tag syntax')
           expect(err.stack).to.contain('at Object.parse')
         })
+    })
+    describe('captureStackTrace compatibility', function () {
+      var captureStackTrace = Error.captureStackTrace
+      before(() => (Error.captureStackTrace = null))
+      after(() => (Error.captureStackTrace = captureStackTrace))
+      it('should use empty string if captureStackTrace not defined', function () {
+        return expect(engine.parseAndRender('{% . a %}')).to.eventually
+          .be.rejected
+          .then(function (err) {
+            expect(err.stack).to.contain('illegal tag syntax')
+            expect(err.stack).to.not.contain('at Object.parse')
+          })
+      })
     })
     it('should contain file path in err.file', function () {
       var html = '<html>\n<head>\n\n{% . a %}\n\n'
@@ -145,7 +160,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
-        'Error: intended render error'
+        'RenderError: intended render error'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
         .be.rejected
@@ -175,7 +190,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| {%block%}{%endblock%}',
         '   7| 7th',
-        'Error: intended render error'
+        'RenderError: intended render error'
       ]
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
@@ -200,7 +215,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
-        'Error: intended render error'
+        'RenderError: intended render error'
       ]
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
@@ -314,7 +329,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
-        'AssertionError: tag a not found'
+        'ParseError: tag a not found'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
         .be.rejected
@@ -332,22 +347,13 @@ describe('error', function () {
         '>> 2| X{% a %} {% enda %} Y',
         '   3| 3rd',
         '   4| 4th',
-        'AssertionError: tag a not found'
+        'ParseError: tag a not found'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
         .be.rejected
         .then(function (err) {
           expect(err.message).to.equal('tag a not found, line:2')
           expect(err.stack).to.contain(message.join('\n'))
-        })
-    })
-
-    it('should contain the whole template content in err.input', function () {
-      var html = 'bar\nfoo{% a %}\nfoo'
-      return expect(engine.parseAndRender(html)).to.eventually
-        .be.rejected
-        .then(function (err) {
-          expect(err.input).to.equal(html)
         })
     })
 
@@ -364,7 +370,7 @@ describe('error', function () {
       return expect(engine.parseAndRender('{% -a %}')).to.eventually
         .be.rejected
         .then(function (err) {
-          expect(err.stack).to.contain('AssertionError: tag -a not found')
+          expect(err.stack).to.contain('ParseError: tag -a not found')
           expect(err.stack).to.match(/at .*:\d+:\d+\)/)
         })
     })

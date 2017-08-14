@@ -1,10 +1,14 @@
 const _ = require('./underscore.js')
 
-function TokenizationError (message, token) {
+function initError () {
+  this.name = this.constructor.name
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, this.constructor)
   }
-  this.name = this.constructor.name
+}
+
+function initLiquidError (message, token) {
+  initError.call(this)
 
   this.input = token.input
   this.line = token.line
@@ -12,7 +16,11 @@ function TokenizationError (message, token) {
 
   var context = mkContext(token.input, token.line)
   this.message = mkMessage(message, token)
-  this.stack = context + '\n' + (this.stack || '')
+  this.stack = context + '\n' + (this.stack || this.message)
+}
+
+function TokenizationError (message, token) {
+  initLiquidError.call(this, message, token)
 }
 TokenizationError.prototype = Object.create(Error.prototype)
 TokenizationError.prototype.constructor = TokenizationError
@@ -20,15 +28,8 @@ TokenizationError.prototype.constructor = TokenizationError
 function ParseError (e, token) {
   _.assign(this, e)
   this.originalError = e
-  this.name = this.constructor.name
 
-  this.input = token.input
-  this.line = token.line
-  this.file = token.file
-
-  var context = mkContext(token.input, token.line)
-  this.message = mkMessage(e.message || 'Unkown Error', token)
-  this.stack = context + '\n' + (e.stack || '')
+  initLiquidError.call(this, e.message, token)
 }
 ParseError.prototype = Object.create(Error.prototype)
 ParseError.prototype.constructor = ParseError
@@ -40,35 +41,22 @@ function RenderError (e, tpl) {
   }
   _.assign(this, e)
   this.originalError = e
-  this.name = this.constructor.name
 
-  this.input = tpl.token.input
-  this.line = tpl.token.line
-  this.file = tpl.token.file
-
-  var context = mkContext(tpl.token.input, tpl.token.line)
-  this.message = mkMessage(e.message || 'Unkown Error', tpl.token)
-  this.stack = context + '\n' + (e.stack || '')
+  initLiquidError.call(this, e.message, tpl.token)
 }
 RenderError.prototype = Object.create(Error.prototype)
 RenderError.prototype.constructor = RenderError
 
 function RenderBreakError (message) {
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, this.constructor)
-  }
-  this.name = this.constructor.name
-  this.message = message || ''
+  initError.call(this)
+  this.message = message + ''
 }
 RenderBreakError.prototype = Object.create(Error.prototype)
 RenderBreakError.prototype.constructor = RenderBreakError
 
 function AssertionError (message) {
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, this.constructor)
-  }
-  this.name = this.constructor.name
-  this.message = message
+  initError.call(this)
+  this.message = message + ''
 }
 AssertionError.prototype = Object.create(Error.prototype)
 AssertionError.prototype.constructor = AssertionError
