@@ -248,7 +248,7 @@ describe('error', function () {
         .be.rejected
         .then(function (err) {
           expect(err.stack).to.contain('intended render reject')
-          expect(err.stack).to.match(/at .*:\d+:\d+\)/)
+          expect(err.stack).to.match(/at .*:\d+:\d+/)
         })
     })
 
