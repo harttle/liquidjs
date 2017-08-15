@@ -300,6 +300,9 @@ describe('filters', function () {
     it('should not truncate when short enough', function () {
       return test('{{ "12345" | truncate: 5 }}', '12345')
     })
+    it('should default to 16', function () {
+      return test('{{ "1234567890abcdefghi" | truncate }}', '1234567890abc...')
+    })
   })
 
   describe('truncatewords', function () {
@@ -321,10 +324,17 @@ describe('filters', function () {
     })
   })
 
-  it('should support uniq', function () {
-    return test('{% assign my_array = "ants, bugs, bees, bugs, ants" | split: ", " %}' +
-            '{{ my_array | uniq | join: ", " }}',
-    'ants, bugs, bees')
+  describe('uniq', function () {
+    it('should uniq string list', function () {
+      return test(
+        '{% assign my_array = "ants, bugs, bees, bugs, ants" | split: ", " %}' +
+        '{{ my_array | uniq | join: ", " }}',
+        'ants, bugs, bees'
+      )
+    })
+    it('should uniq falsy value', function () {
+      return test('{{"" | uniq | join: ","}}', '')
+    })
   })
 
   it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))

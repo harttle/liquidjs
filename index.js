@@ -43,7 +43,6 @@ var _engine = {
     return this.renderer.renderTemplates(tpl, scope)
   },
   parseAndRender: function (html, ctx, opts) {
-    console.log('parse and render')
     return Promise.resolve()
       .then(() => this.parse(html))
       .then(tpl => this.render(tpl, ctx, opts))
@@ -69,9 +68,7 @@ var _engine = {
     var paths = root.map(root => path.resolve(root, filepath))
     return anySeries(paths, path => statFileAsync(path).then(() => path))
       .catch((e) => {
-        if (e.code === 'ENOENT') {
-          e.message = `Failed to lookup ${filepath} in: ${root}`
-        }
+        e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
         throw e
       })
   },

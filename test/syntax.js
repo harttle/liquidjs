@@ -20,15 +20,22 @@ describe('expression', function () {
     })
   })
 
-  it('should eval literals', function () {
-    expect(evalValue('2.3')).to.equal(2.3)
-    expect(evalValue('"foo"')).to.equal('foo')
-  })
+  describe('.evalValue()', function () {
+    it('should eval literals', function () {
+      expect(evalValue('2.3')).to.equal(2.3)
+      expect(evalValue('"foo"')).to.equal('foo')
+    })
 
-  it('should eval variables', function () {
-    expect(evalValue('23', scope)).to.equal(23)
-    expect(evalValue('one', scope)).to.equal(1)
-    expect(evalValue('x', scope)).to.equal('XXX')
+    it('should eval variables', function () {
+      expect(evalValue('23', scope)).to.equal(23)
+      expect(evalValue('one', scope)).to.equal(1)
+      expect(evalValue('x', scope)).to.equal('XXX')
+    })
+
+    it('should throw if not valid', function () {
+      var fn = () => evalValue('===')
+      expect(fn).to.throw("cannot eval '===' as value")
+    })
   })
 
   describe('.isTruthy()', function () {

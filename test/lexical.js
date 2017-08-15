@@ -86,21 +86,28 @@ describe('lexical', function () {
     expect(lexical.isVariable('[0][12].bar[0]')).to.equal(false)
   })
 
-  it('should parse boolean literal', function () {
-    expect(lexical.parseLiteral('true')).to.equal(true)
-    expect(lexical.parseLiteral('TrUE')).to.equal(true)
-    expect(lexical.parseLiteral('false')).to.equal(false)
-  })
+  describe('.parseLiteral()', function () {
+    it('should parse boolean literal', function () {
+      expect(lexical.parseLiteral('true')).to.equal(true)
+      expect(lexical.parseLiteral('TrUE')).to.equal(true)
+      expect(lexical.parseLiteral('false')).to.equal(false)
+    })
 
-  it('should parse number literal', function () {
-    expect(lexical.parseLiteral('2.3')).to.equal(2.3)
-    expect(lexical.parseLiteral('.32')).to.equal(0.32)
-    expect(lexical.parseLiteral('-23.')).to.equal(-23)
-    expect(lexical.parseLiteral('23')).to.equal(23)
-  })
+    it('should parse number literal', function () {
+      expect(lexical.parseLiteral('2.3')).to.equal(2.3)
+      expect(lexical.parseLiteral('.32')).to.equal(0.32)
+      expect(lexical.parseLiteral('-23.')).to.equal(-23)
+      expect(lexical.parseLiteral('23')).to.equal(23)
+    })
 
-  it('should parse string literal', function () {
-    expect(lexical.parseLiteral('"ab\'c"')).to.equal("ab'c")
+    it('should parse string literal', function () {
+      expect(lexical.parseLiteral('"ab\'c"')).to.equal("ab'c")
+    })
+
+    it('should throw if non-literal', function () {
+      var fn = () => lexical.parseLiteral('a')
+      expect(fn).to.throw("cannot parse 'a' as literal")
+    })
   })
 
   describe('.matchValue()', function () {

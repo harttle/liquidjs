@@ -163,6 +163,7 @@ var formatCodes = {
   },
   z: function (d) {
     var tz = d.getTimezoneOffset() / 60 * 100
+    console.log('tz', tz)
     return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4)
   },
   '%': function () {

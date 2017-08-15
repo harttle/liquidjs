@@ -82,6 +82,7 @@ function parseLiteral (str) {
   if (res) {
     return str.slice(1, -1)
   }
+  throw new TypeError(`cannot parse '${str}' as literal`)
 }
 
 module.exports = {

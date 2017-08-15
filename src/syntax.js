@@ -40,6 +40,7 @@ function evalValue (str, scope) {
   if (lexical.isVariable(str)) {
     return scope.get(str)
   }
+  throw new TypeError(`cannot eval '${str}' as value`)
 }
 
 function isTruthy (val) {

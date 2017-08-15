@@ -1,5 +1,5 @@
 const Liquid = require('..')
-const Promise = require('any-promise')
+const mapSeries = require('../src/util/promise.js').mapSeries
 const lexical = Liquid.lexical
 const assert = require('../src/util/assert.js')
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
@@ -50,10 +50,10 @@ module.exports = function (liquid) {
         contexts.push(ctx)
       })
 
-      var lastPromise = contexts.reduce((promise, context, currentIndex) => promise
-        .then((partial) => {
-          row = Math.floor(currentIndex / cols) + 1
-          col = (currentIndex % cols) + 1
+      return mapSeries(contexts,
+        (context, idx) => {
+          row = Math.floor(idx / cols) + 1
+          col = (idx % cols) + 1
           if (col === 1) {
             if (row !== 1) {
               html += '</tr>'
@@ -61,22 +61,17 @@ module.exports = function (liquid) {
             html += `<tr class="row${row}">`
           }
 
-          // ctx[this.variable] = context;
           html += `<td class="col${col}">`
-          return html
-        })
-        .then((partial) => {
           scope.push(context)
-          return liquid.renderer.renderTemplates(this.templates, scope)
+          return liquid.renderer
+            .renderTemplates(this.templates, scope)
+            .then((partial) => {
+              scope.pop(context)
+              html += partial
+              html += '</td>'
+              return html
+            })
         })
-        .then((partial) => {
-          scope.pop(context)
-          html += partial
-          html += '</td>'
-          return html
-        }), Promise.resolve(''))
-
-      return lastPromise
         .then(() => {
           if (row > 0) {
             html += '</tr>'

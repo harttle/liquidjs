@@ -36,14 +36,32 @@ describe('util/strftime', function () {
   it('should format %I as 0 padded hour12', function () {
     expect(t(now, '%I')).to.equal('01')
   })
-  it('should format %j as day of year', function () {
-    expect(t(then, '%j')).to.equal('066')
+  it('should format %I as 12 for 00:00', function () {
+    var date = new Date('2016-01-01T00:00:00')
+    expect(t(date, '%I')).to.equal('12')
+  })
+  describe('%j', function () {
+    it('should format %j as day of year', function () {
+      expect(t(then, '%j')).to.equal('066')
+    })
+    it('should take count of leap years', function () {
+      var date = new Date('2001-03-01')
+      expect(t(date, '%j')).to.equal('060')
+    })
+    it('should take count of leap years', function () {
+      var date = new Date('2000-03-01')
+      expect(t(date, '%j')).to.equal('061')
+    })
   })
   it('should format %k as space padded hour', function () {
     expect(t(then, '%k')).to.equal(' 3')
   })
   it('should format %l as space padded hour12', function () {
     expect(t(now, '%l')).to.equal(' 1')
+  })
+  it('should format %l as 12 for 00:00', function () {
+    var date = new Date('2016-01-01T00:00:00')
+    expect(t(date, '%l')).to.equal('12')
   })
   it('should format %L as 0 padded millisecond', function () {
     expect(t(then, '%L')).to.equal('000')
@@ -94,8 +112,16 @@ describe('util/strftime', function () {
   it('should format %z as time zone', function () {
     expect(t(now, '%z')).to.equal('+0800')
   })
+  it('should format %z as negative time zone', function () {
+    var date = new Date('2016-01-04T13:15:23')
+    date.getTimezoneOffset = () => 480
+    expect(t(date, '%z')).to.equal('-0800')
+  })
   it('should escape %% as %', function () {
     expect(t(now, '%%')).to.equal('%')
+  })
+  it('should retain un-recognized formaters', function () {
+    expect(t(now, '%o')).to.equal('%o')
   })
 })
 

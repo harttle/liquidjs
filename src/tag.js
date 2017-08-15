@@ -25,11 +25,7 @@ module.exports = function () {
       if (typeof impl.render !== 'function') {
         return Promise.resolve('')
       }
-      return Promise.resolve()
-        .then(() => typeof impl.render === 'function'
-          ? impl.render(scope, obj)
-          : ''
-        )
+      return Promise.resolve().then(() => impl.render(scope, obj))
     },
     parse: function (token, tokens) {
       this.type = 'tag'
