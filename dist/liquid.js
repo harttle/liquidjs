@@ -6,199 +6,198 @@ var _ = require('./src/util/underscore.js');
 var isTruthy = require('./src/syntax.js').isTruthy;
 
 var escapeMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&#34;',
-    "'": '&#39;'
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&#34;',
+  "'": '&#39;'
 };
 var unescapeMap = {
-    '&amp;': '&',
-    '&lt;': '<',
-    '&gt;': '>',
-    '&#34;': '"',
-    '&#39;': "'"
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&#34;': '"',
+  '&#39;': "'"
 };
 
 var filters = {
-    'abs': function abs(v) {
-        return Math.abs(v);
-    },
-    'append': function append(v, arg) {
-        return v + arg;
-    },
-    'capitalize': function capitalize(str) {
-        return stringify(str).charAt(0).toUpperCase() + str.slice(1);
-    },
-    'ceil': function ceil(v) {
-        return Math.ceil(v);
-    },
-    'date': function date(v, arg) {
-        if (v === 'now') v = new Date();
-        return v instanceof Date ? strftime(v, arg) : '';
-    },
-    'default': function _default(v, arg) {
-        return isTruthy(v) ? v : arg;
-    },
-    'divided_by': function divided_by(v, arg) {
-        return Math.floor(v / arg);
-    },
-    'downcase': function downcase(v) {
-        return v.toLowerCase();
-    },
-    'escape': escape,
+  'abs': function abs(v) {
+    return Math.abs(v);
+  },
+  'append': function append(v, arg) {
+    return v + arg;
+  },
+  'capitalize': function capitalize(str) {
+    return stringify(str).charAt(0).toUpperCase() + str.slice(1);
+  },
+  'ceil': function ceil(v) {
+    return Math.ceil(v);
+  },
+  'date': function date(v, arg) {
+    if (v === 'now') v = new Date();
+    return v instanceof Date ? strftime(v, arg) : '';
+  },
+  'default': function _default(v, arg) {
+    return isTruthy(v) ? v : arg;
+  },
+  'divided_by': function divided_by(v, arg) {
+    return Math.floor(v / arg);
+  },
+  'downcase': function downcase(v) {
+    return v.toLowerCase();
+  },
+  'escape': escape,
 
-    'escape_once': function escape_once(str) {
-        return escape(unescape(str));
-    },
-    'first': function first(v) {
-        return v[0];
-    },
-    'floor': function floor(v) {
-        return Math.floor(v);
-    },
-    'join': function join(v, arg) {
-        return v.join(arg);
-    },
-    'last': function last(v) {
-        return v[v.length - 1];
-    },
-    'lstrip': function lstrip(v) {
-        return stringify(v).replace(/^\s+/, '');
-    },
-    'map': function map(arr, arg) {
-        return arr.map(function (v) {
-            return v[arg];
-        });
-    },
-    'minus': bindFixed(function (v, arg) {
-        return v - arg;
-    }),
-    'modulo': bindFixed(function (v, arg) {
-        return v % arg;
-    }),
-    'newline_to_br': function newline_to_br(v) {
-        return v.replace(/\n/g, '<br />');
-    },
-    'plus': bindFixed(function (v, arg) {
-        return Number(v) + Number(arg);
-    }),
-    'prepend': function prepend(v, arg) {
-        return arg + v;
-    },
-    'remove': function remove(v, arg) {
-        return v.split(arg).join('');
-    },
-    'remove_first': function remove_first(v, l) {
-        return v.replace(l, '');
-    },
-    'replace': function replace(v, pattern, replacement) {
-        return stringify(v).split(pattern).join(replacement);
-    },
-    'replace_first': function replace_first(v, arg1, arg2) {
-        return stringify(v).replace(arg1, arg2);
-    },
-    'reverse': function reverse(v) {
-        return v.reverse();
-    },
-    'round': function round(v, arg) {
-        var amp = Math.pow(10, arg || 0);
-        return Math.round(v * amp, arg) / amp;
-    },
-    'rstrip': function rstrip(str) {
-        return stringify(str).replace(/\s+$/, '');
-    },
-    'size': function size(v) {
-        return v.length;
-    },
-    'slice': function slice(v, begin, length) {
-        return v.substr(begin, length === undefined ? 1 : length);
-    },
-    'sort': function sort(v, arg) {
-        return v.sort(arg);
-    },
-    'split': function split(v, arg) {
-        return stringify(v).split(arg);
-    },
-    'strip': function strip(v) {
-        return stringify(v).trim();
-    },
-    'strip_html': function strip_html(v) {
-        return stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, '');
-    },
-    'strip_newlines': function strip_newlines(v) {
-        return stringify(v).replace(/\n/g, '');
-    },
-    'times': function times(v, arg) {
-        return v * arg;
-    },
-    'truncate': function truncate(v, l, o) {
-        v = stringify(v);
-        o = o === undefined ? '...' : o;
-        l = l || 16;
-        if (v.length <= l) return v;
-        return v.substr(0, l - o.length) + o;
-    },
-    'truncatewords': function truncatewords(v, l, o) {
-        if (o === undefined) o = '...';
-        var arr = v.split(' ');
-        var ret = arr.slice(0, l).join(' ');
-        if (arr.length > l) ret += o;
-        return ret;
-    },
-    'uniq': function uniq(arr) {
-        var u = {};
-        return (arr || []).filter(function (val) {
-            if (u.hasOwnProperty(val)) {
-                return false;
-            }
-            u[val] = true;
-            return true;
-        });
-    },
-    'upcase': function upcase(str) {
-        return stringify(str).toUpperCase();
-    },
-    'url_encode': encodeURIComponent
+  'escape_once': function escape_once(str) {
+    return escape(unescape(str));
+  },
+  'first': function first(v) {
+    return v[0];
+  },
+  'floor': function floor(v) {
+    return Math.floor(v);
+  },
+  'join': function join(v, arg) {
+    return v.join(arg);
+  },
+  'last': function last(v) {
+    return v[v.length - 1];
+  },
+  'lstrip': function lstrip(v) {
+    return stringify(v).replace(/^\s+/, '');
+  },
+  'map': function map(arr, arg) {
+    return arr.map(function (v) {
+      return v[arg];
+    });
+  },
+  'minus': bindFixed(function (v, arg) {
+    return v - arg;
+  }),
+  'modulo': bindFixed(function (v, arg) {
+    return v % arg;
+  }),
+  'newline_to_br': function newline_to_br(v) {
+    return v.replace(/\n/g, '<br />');
+  },
+  'plus': bindFixed(function (v, arg) {
+    return Number(v) + Number(arg);
+  }),
+  'prepend': function prepend(v, arg) {
+    return arg + v;
+  },
+  'remove': function remove(v, arg) {
+    return v.split(arg).join('');
+  },
+  'remove_first': function remove_first(v, l) {
+    return v.replace(l, '');
+  },
+  'replace': function replace(v, pattern, replacement) {
+    return stringify(v).split(pattern).join(replacement);
+  },
+  'replace_first': function replace_first(v, arg1, arg2) {
+    return stringify(v).replace(arg1, arg2);
+  },
+  'reverse': function reverse(v) {
+    return v.reverse();
+  },
+  'round': function round(v, arg) {
+    var amp = Math.pow(10, arg || 0);
+    return Math.round(v * amp, arg) / amp;
+  },
+  'rstrip': function rstrip(str) {
+    return stringify(str).replace(/\s+$/, '');
+  },
+  'size': function size(v) {
+    return v.length;
+  },
+  'slice': function slice(v, begin, length) {
+    return v.substr(begin, length === undefined ? 1 : length);
+  },
+  'sort': function sort(v, arg) {
+    return v.sort(arg);
+  },
+  'split': function split(v, arg) {
+    return stringify(v).split(arg);
+  },
+  'strip': function strip(v) {
+    return stringify(v).trim();
+  },
+  'strip_html': function strip_html(v) {
+    return stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, '');
+  },
+  'strip_newlines': function strip_newlines(v) {
+    return stringify(v).replace(/\n/g, '');
+  },
+  'times': function times(v, arg) {
+    return v * arg;
+  },
+  'truncate': function truncate(v, l, o) {
+    v = stringify(v);
+    o = o === undefined ? '...' : o;
+    l = l || 16;
+    if (v.length <= l) return v;
+    return v.substr(0, l - o.length) + o;
+  },
+  'truncatewords': function truncatewords(v, l, o) {
+    if (o === undefined) o = '...';
+    var arr = v.split(' ');
+    var ret = arr.slice(0, l).join(' ');
+    if (arr.length > l) ret += o;
+    return ret;
+  },
+  'uniq': function uniq(arr) {
+    var u = {};
+    return (arr || []).filter(function (val) {
+      if (u.hasOwnProperty(val)) {
+        return false;
+      }
+      u[val] = true;
+      return true;
+    });
+  },
+  'upcase': function upcase(str) {
+    return stringify(str).toUpperCase();
+  },
+  'url_encode': encodeURIComponent
 };
 
 function escape(str) {
-    return stringify(str).replace(/&|<|>|"|'/g, function (m) {
-        return escapeMap[m];
-    });
+  return stringify(str).replace(/&|<|>|"|'/g, function (m) {
+    return escapeMap[m];
+  });
 }
 
 function unescape(str) {
-    return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) {
-        return unescapeMap[m];
-    });
+  return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) {
+    return unescapeMap[m];
+  });
 }
 
 function getFixed(v) {
-    var p = (v + "").split(".");
-    return p.length > 1 ? p[1].length : 0;
+  var p = (v + '').split('.');
+  return p.length > 1 ? p[1].length : 0;
 }
 
 function getMaxFixed(l, r) {
-    return Math.max(getFixed(l), getFixed(r));
+  return Math.max(getFixed(l), getFixed(r));
 }
 
 function stringify(obj) {
-    obj = obj || "";
-    return obj + '';
+  return obj + '';
 }
 
 function bindFixed(cb) {
-    return function (l, r) {
-        var f = getMaxFixed(l, r);
-        return cb(l, r).toFixed(f);
-    };
+  return function (l, r) {
+    var f = getMaxFixed(l, r);
+    return cb(l, r).toFixed(f);
+  };
 }
 
 function registerAll(liquid) {
-    return _.forOwn(filters, function (func, name) {
-        return liquid.registerFilter(name, func);
-    });
+  return _.forOwn(filters, function (func, name) {
+    return liquid.registerFilter(name, func);
+  });
 }
 
 registerAll.filters = filters;
@@ -258,11 +257,6 @@ var _engine = {
       return _this.parse(html);
     }).then(function (tpl) {
       return _this.render(tpl, ctx, opts);
-    }).catch(function (e) {
-      if (e instanceof Errors.RenderBreakError) {
-        return e.html;
-      }
-      throw e;
     });
   },
   renderFile: function renderFile(filepath, ctx, opts) {
@@ -294,9 +288,7 @@ var _engine = {
         return path;
       });
     }).catch(function (e) {
-      if (e.code === 'ENOENT') {
-        e.message = 'Failed to lookup ' + filepath + ' in: ' + root;
-      }
+      e.message = e.code + ': Failed to lookup ' + filepath + ' in: ' + root;
       throw e;
     });
   },
@@ -639,6 +631,7 @@ function parseLiteral(str) {
   if (res) {
     return str.slice(1, -1);
   }
+  throw new TypeError('cannot parse \'' + str + '\' as literal');
 }
 
 module.exports = {
@@ -907,7 +900,6 @@ module.exports = factory;
 var _ = require('./util/underscore.js');
 var lexical = require('./lexical.js');
 var assert = require('./util/assert.js');
-var toStr = Object.prototype.toString;
 
 var Scope = {
   getAll: function getAll() {
@@ -918,32 +910,16 @@ var Scope = {
     return ctx;
   },
   get: function get(str) {
-    for (var i = this.scopes.length - 1; i >= 0; i--) {
-      try {
-        return this.getPropertyByPath(this.scopes[i], str);
-      } catch (e) {
-        if (/undefined variable/.test(e.message)) {
-          continue;
-        }
-        if (/Cannot read property/.test(e.message)) {
-          if (this.opts.strict_variables) {
-            e.message += ': ' + str;
-            throw e;
-          } else {
-            continue;
-          }
-        } else {
-          e.message += ': ' + str;
-          throw e;
-        }
+    try {
+      return this.getPropertyByPath(this.scopes, str);
+    } catch (e) {
+      if (!/undefined variable/.test(e.message) || this.opts.strict_variables) {
+        throw e;
       }
-    }
-    if (this.opts.strict_variables) {
-      throw new TypeError('undefined variable: ' + str);
     }
   },
   set: function set(k, v) {
-    this.setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
+    setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
     return this;
   },
   push: function push(ctx) {
@@ -960,39 +936,20 @@ var Scope = {
   shift: function shift() {
     return this.scopes.shift();
   },
-  setPropertyByPath: function setPropertyByPath(obj, path, val) {
-    if (_.isString(path)) {
-      var paths = path.replace(/\[/g, '.').replace(/\]/g, '').split('.');
-      for (var i = 0; i < paths.length; i++) {
-        var key = paths[i];
-        if (i === paths.length - 1) {
-          return obj[key] = val;
-        }
-        if (undefined === obj[key]) obj[key] = {};
-        // case for readonly objects
-        obj = obj[key] || {};
-      }
-    }
-  },
 
-  getPropertyByPath: function getPropertyByPath(obj, path) {
+  getPropertyByPath: function getPropertyByPath(scopes, path) {
     var paths = this.propertyAccessSeq(path + '');
-    var varName = paths.shift();
-    if (!obj.hasOwnProperty(varName)) {
-      throw new TypeError('undefined variable');
+    if (!paths.length) {
+      throw new TypeError('undefined variable: ' + path);
     }
-    var variable = obj[varName];
-    var lastName = paths.pop();
-    paths.forEach(function (p) {
-      return variable = variable[p];
-    });
-    if (undefined !== lastName) {
-      if (lastName === 'size' && (toStr.call(variable) === '[object Array]' || toStr.call(variable) === '[object String]')) {
-        return variable.length;
+    var key = paths.shift();
+    var value = getValueFromScopes(key, scopes);
+    return paths.reduce(function (value, key) {
+      if (_.isNil(value)) {
+        throw new TypeError('undefined variable: ' + key);
       }
-      variable = variable[lastName];
-    }
-    return variable;
+      return getValueFromParent(key, value);
+    }, value);
   },
 
   /*
@@ -1054,6 +1011,33 @@ var Scope = {
     }
   }
 };
+
+function setPropertyByPath(obj, path, val) {
+  var paths = (path + '').replace(/\[/g, '.').replace(/\]/g, '').split('.');
+  for (var i = 0; i < paths.length; i++) {
+    var key = paths[i];
+    if (i === paths.length - 1) {
+      return obj[key] = val;
+    }
+    if (undefined === obj[key]) obj[key] = {};
+    // case for readonly objects
+    obj = obj[key] || {};
+  }
+}
+
+function getValueFromParent(key, value) {
+  return key === 'size' && (_.isArray(value) || _.isString(value)) ? value.length : value[key];
+}
+
+function getValueFromScopes(key, scopes) {
+  for (var i = scopes.length - 1; i > -1; i--) {
+    var scope = scopes[i];
+    if (scope.hasOwnProperty(key)) {
+      return scope[key];
+    }
+  }
+  throw new TypeError('undefined variable: ' + key);
+}
 
 function matchRightBracket(str, begin) {
   var stack = 1; // count of '[' - count of ']'
@@ -1134,6 +1118,7 @@ function evalValue(str, scope) {
   if (lexical.isVariable(str)) {
     return scope.get(str);
   }
+  throw new TypeError('cannot eval \'' + str + '\' as value');
 }
 
 function isTruthy(val) {
@@ -1152,7 +1137,6 @@ module.exports = {
 'use strict';
 
 var lexical = require('./lexical.js');
-var _ = require('./util/underscore.js');
 var Promise = require('any-promise');
 var Syntax = require('./syntax.js');
 var assert = require('./util/assert.js');
@@ -1180,13 +1164,7 @@ module.exports = function () {
         return Promise.resolve('');
       }
       return Promise.resolve().then(function () {
-        return typeof impl.render === 'function' ? impl.render(scope, obj) : '';
-      }).catch(function (e) {
-        if (_.isError(e)) {
-          throw e;
-        }
-        var msg = 'Please reject with an Error in ' + impl.render + ', got ' + e;
-        throw new Error(msg);
+        return impl.render(scope, obj);
       });
     },
     parse: function parse(token, tokens) {
@@ -1224,7 +1202,7 @@ module.exports = function () {
   };
 };
 
-},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"./util/underscore.js":21,"any-promise":3}],15:[function(require,module,exports){
+},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"any-promise":3}],15:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -1331,9 +1309,6 @@ var AssertionError = require('./error.js').AssertionError;
 
 function assert(predicate, message) {
   if (!predicate) {
-    if (message instanceof Error) {
-      throw message;
-    }
     message = message || 'expect ' + predicate + ' to be true';
     throw new AssertionError(message);
   }
@@ -1346,11 +1321,15 @@ module.exports = assert;
 
 var _ = require('./underscore.js');
 
-function TokenizationError(message, token) {
+function initError() {
+  this.name = this.constructor.name;
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, this.constructor);
   }
-  this.name = this.constructor.name;
+}
+
+function initLiquidError(message, token) {
+  initError.call(this);
 
   this.input = token.input;
   this.line = token.line;
@@ -1358,7 +1337,11 @@ function TokenizationError(message, token) {
 
   var context = mkContext(token.input, token.line);
   this.message = mkMessage(message, token);
-  this.stack = context + '\n' + (this.stack || '');
+  this.stack = context + '\n' + (this.stack || this.message);
+}
+
+function TokenizationError(message, token) {
+  initLiquidError.call(this, message, token);
 }
 TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
@@ -1366,15 +1349,8 @@ TokenizationError.prototype.constructor = TokenizationError;
 function ParseError(e, token) {
   _.assign(this, e);
   this.originalError = e;
-  this.name = this.constructor.name;
 
-  this.input = token.input;
-  this.line = token.line;
-  this.file = token.file;
-
-  var context = mkContext(token.input, token.line);
-  this.message = mkMessage(e.message || 'Unkown Error', token);
-  this.stack = context + '\n' + (e.stack || '');
+  initLiquidError.call(this, e.message, token);
 }
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
@@ -1386,35 +1362,22 @@ function RenderError(e, tpl) {
   }
   _.assign(this, e);
   this.originalError = e;
-  this.name = this.constructor.name;
 
-  this.input = tpl.token.input;
-  this.line = tpl.token.line;
-  this.file = tpl.token.file;
-
-  var context = mkContext(tpl.token.input, tpl.token.line);
-  this.message = mkMessage(e.message || 'Unkown Error', tpl.token);
-  this.stack = context + '\n' + (e.stack || '');
+  initLiquidError.call(this, e.message, tpl.token);
 }
 RenderError.prototype = Object.create(Error.prototype);
 RenderError.prototype.constructor = RenderError;
 
 function RenderBreakError(message) {
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, this.constructor);
-  }
-  this.name = this.constructor.name;
-  this.message = message || '';
+  initError.call(this);
+  this.message = message + '';
 }
 RenderBreakError.prototype = Object.create(Error.prototype);
 RenderBreakError.prototype.constructor = RenderBreakError;
 
 function AssertionError(message) {
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, this.constructor);
-  }
-  this.name = this.constructor.name;
-  this.message = message;
+  initError.call(this);
+  this.message = message + '';
 }
 AssertionError.prototype = Object.create(Error.prototype);
 AssertionError.prototype.constructor = AssertionError;
@@ -1688,6 +1651,7 @@ var formatCodes = {
   },
   z: function z(d) {
     var tz = d.getTimezoneOffset() / 60 * 100;
+    console.log('tz', tz);
     return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4);
   },
   '%': function _() {
@@ -1728,6 +1692,8 @@ module.exports = strftime;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+var toStr = Object.prototype.toString;
+
 /*
  * Checks if value is classified as a String primitive or object.
  * @param {any} value The value to check.
@@ -1735,6 +1701,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  */
 function isString(value) {
   return value instanceof String || typeof value === 'string';
+}
+
+function isNil(value) {
+  return value === null || value === undefined;
+}
+
+function isArray(value) {
+  // be compatible with IE 8
+  return toStr.call(value) === '[object Array]';
 }
 
 function isError(value) {
@@ -1782,7 +1757,6 @@ function assign(object) {
 }
 
 function _assignBinary(dst, src) {
-  if (!dst) return dst;
   forOwn(src, function (v, k) {
     dst[k] = v;
   });
@@ -1844,6 +1818,8 @@ function range(start, stop, step) {
 
 exports.isString = isString;
 exports.isObject = isObject;
+exports.isArray = isArray;
+exports.isNil = isNil;
 exports.isError = isError;
 
 exports.range = range;
@@ -1923,55 +1899,51 @@ module.exports = function (liquid) {
 'use strict';
 
 var Liquid = require('..');
-var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
-    liquid.registerTag('case', {
+  liquid.registerTag('case', {
 
-        parse: function parse(tagToken, remainTokens) {
-            var _this = this;
+    parse: function parse(tagToken, remainTokens) {
+      var _this = this;
 
-            this.cond = tagToken.args;
-            this.cases = [];
-            this.elseTemplates = [];
+      this.cond = tagToken.args;
+      this.cases = [];
+      this.elseTemplates = [];
 
-            var p = [],
-                stream = liquid.parser.parseStream(remainTokens).on('tag:when', function (token) {
-                if (!_this.cases[token.args]) {
-                    _this.cases.push({
-                        val: token.args,
-                        templates: p = []
-                    });
-                }
-            }).on('tag:else', function (token) {
-                return p = _this.elseTemplates;
-            }).on('tag:endcase', function (token) {
-                return stream.stop();
-            }).on('template', function (tpl) {
-                return p.push(tpl);
-            }).on('end', function (x) {
-                throw new Error('tag ' + tagToken.raw + ' not closed');
-            });
+      var p = [];
+      var stream = liquid.parser.parseStream(remainTokens).on('tag:when', function (token) {
+        _this.cases.push({
+          val: token.args,
+          templates: p = []
+        });
+      }).on('tag:else', function () {
+        return p = _this.elseTemplates;
+      }).on('tag:endcase', function (token) {
+        return stream.stop();
+      }).on('template', function (tpl) {
+        return p.push(tpl);
+      }).on('end', function (x) {
+        throw new Error('tag ' + tagToken.raw + ' not closed');
+      });
 
-            stream.start();
-        },
+      stream.start();
+    },
 
-        render: function render(scope, hash) {
-            for (var i = 0; i < this.cases.length; i++) {
-                var branch = this.cases[i];
-                var val = Liquid.evalExp(branch.val, scope);
-                var cond = Liquid.evalExp(this.cond, scope);
-                if (val === cond) {
-                    return liquid.renderer.renderTemplates(branch.templates, scope);
-                }
-            }
-            return liquid.renderer.renderTemplates(this.elseTemplates, scope);
+    render: function render(scope, hash) {
+      for (var i = 0; i < this.cases.length; i++) {
+        var branch = this.cases[i];
+        var val = Liquid.evalExp(branch.val, scope);
+        var cond = Liquid.evalExp(this.cond, scope);
+        if (val === cond) {
+          return liquid.renderer.renderTemplates(branch.templates, scope);
         }
-
-    });
+      }
+      return liquid.renderer.renderTemplates(this.elseTemplates, scope);
+    }
+  });
 };
 
-},{"..":2,"../src/util/assert.js":16}],25:[function(require,module,exports){
+},{"..":2}],25:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -2172,52 +2144,49 @@ module.exports = function (liquid) {
 var Liquid = require('..');
 
 module.exports = function (liquid) {
-    liquid.registerTag('if', {
+  liquid.registerTag('if', {
 
-        parse: function parse(tagToken, remainTokens) {
-            var _this = this;
+    parse: function parse(tagToken, remainTokens) {
+      var _this = this;
 
-            this.branches = [];
-            this.elseTemplates = [];
+      this.branches = [];
+      this.elseTemplates = [];
 
-            var p,
-                stream = liquid.parser.parseStream(remainTokens).on('start', function (x) {
-                return _this.branches.push({
-                    cond: tagToken.args,
-                    templates: p = []
-                });
-            }).on('tag:elsif', function (token) {
-                if (!_this.branches[token.args]) {
-                    _this.branches.push({
-                        cond: token.args,
-                        templates: p = []
-                    });
-                }
-            }).on('tag:else', function (token) {
-                return p = _this.elseTemplates;
-            }).on('tag:endif', function (token) {
-                return stream.stop();
-            }).on('template', function (tpl) {
-                return p.push(tpl);
-            }).on('end', function (x) {
-                throw new Error('tag ' + tagToken.raw + ' not closed');
-            });
+      var p;
+      var stream = liquid.parser.parseStream(remainTokens).on('start', function () {
+        return _this.branches.push({
+          cond: tagToken.args,
+          templates: p = []
+        });
+      }).on('tag:elsif', function (token) {
+        _this.branches.push({
+          cond: token.args,
+          templates: p = []
+        });
+      }).on('tag:else', function () {
+        return p = _this.elseTemplates;
+      }).on('tag:endif', function (token) {
+        return stream.stop();
+      }).on('template', function (tpl) {
+        return p.push(tpl);
+      }).on('end', function (x) {
+        throw new Error('tag ' + tagToken.raw + ' not closed');
+      });
 
-            stream.start();
-        },
+      stream.start();
+    },
 
-        render: function render(scope, hash) {
-            for (var i = 0; i < this.branches.length; i++) {
-                var branch = this.branches[i];
-                var cond = Liquid.evalExp(branch.cond, scope);
-                if (Liquid.isTruthy(cond)) {
-                    return liquid.renderer.renderTemplates(branch.templates, scope);
-                }
-            }
-            return liquid.renderer.renderTemplates(this.elseTemplates, scope);
+    render: function render(scope, hash) {
+      for (var i = 0; i < this.branches.length; i++) {
+        var branch = this.branches[i];
+        var cond = Liquid.evalExp(branch.cond, scope);
+        if (Liquid.isTruthy(cond)) {
+          return liquid.renderer.renderTemplates(branch.templates, scope);
         }
-
-    });
+      }
+      return liquid.renderer.renderTemplates(this.elseTemplates, scope);
+    }
+  });
 };
 
 },{"..":2}],30:[function(require,module,exports){
@@ -2420,105 +2389,91 @@ module.exports = function (liquid) {
 'use strict';
 
 var Liquid = require('..');
-var Promise = require('any-promise');
+var mapSeries = require('../src/util/promise.js').mapSeries;
 var lexical = Liquid.lexical;
 var assert = require('../src/util/assert.js');
 var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*$'));
 
 module.exports = function (liquid) {
-    liquid.registerTag('tablerow', {
+  liquid.registerTag('tablerow', {
 
-        parse: function parse(tagToken, remainTokens) {
-            var _this = this;
+    parse: function parse(tagToken, remainTokens) {
+      var _this = this;
 
-            var match = re.exec(tagToken.args);
-            assert(match, 'illegal tag: ' + tagToken.raw);
-            this.variable = match[1];
-            this.collection = match[2];
+      var match = re.exec(tagToken.args);
+      assert(match, 'illegal tag: ' + tagToken.raw);
 
-            this.templates = [];
+      this.variable = match[1];
+      this.collection = match[2];
+      this.templates = [];
 
-            var p,
-                stream = liquid.parser.parseStream(remainTokens).on('start', function (x) {
-                return p = _this.templates;
-            }).on('tag:endtablerow', function (token) {
-                return stream.stop();
-            }).on('template', function (tpl) {
-                return p.push(tpl);
-            }).on('end', function (x) {
-                throw new Error('tag ' + tagToken.raw + ' not closed');
-            });
+      var p;
+      var stream = liquid.parser.parseStream(remainTokens).on('start', function () {
+        return p = _this.templates;
+      }).on('tag:endtablerow', function (token) {
+        return stream.stop();
+      }).on('template', function (tpl) {
+        return p.push(tpl);
+      }).on('end', function () {
+        throw new Error('tag ' + tagToken.raw + ' not closed');
+      });
 
-            stream.start();
-        },
+      stream.start();
+    },
 
-        render: function render(scope, hash) {
-            var _this2 = this;
+    render: function render(scope, hash) {
+      var _this2 = this;
 
-            var collection = Liquid.evalExp(this.collection, scope) || [];
+      var collection = Liquid.evalExp(this.collection, scope) || [];
 
-            var html = '<table>';
-            var offset = hash.offset || 0;
-            var limit = hash.limit === undefined ? collection.length : hash.limit;
+      var html = '<table>';
+      var offset = hash.offset || 0;
+      var limit = hash.limit === undefined ? collection.length : hash.limit;
 
-            var cols = hash.cols,
-                row,
-                col;
-            if (!cols) throw new Error('illegal cols: ' + cols);
+      var cols = hash.cols;
+      var row;
+      var col;
+      if (!cols) throw new Error('illegal cols: ' + cols);
 
-            // build array of arguments to pass to sequential promises...
-            collection = collection.slice(offset, offset + limit);
-            var contexts = [];
-            collection.some(function (item, i) {
-                var ctx = {};
-                ctx[_this2.variable] = item;
-                // We are just putting together an array of the arguments we will be passing to our sequential promises
-                contexts.push(ctx);
-            });
+      // build array of arguments to pass to sequential promises...
+      collection = collection.slice(offset, offset + limit);
+      var contexts = [];
+      collection.some(function (item, i) {
+        var ctx = {};
+        ctx[_this2.variable] = item;
+        contexts.push(ctx);
+      });
 
-            // This executes an array of promises sequentially for every argument in the contexts array - http://webcache.googleusercontent.com/search?q=cache:rNbMUn9TPtkJ:joost.vunderink.net/blog/2014/12/15/processing-an-array-of-promises-sequentially-in-node-js/+&cd=5&hl=en&ct=clnk&gl=us
-            // It's fundamentally equivalent to the following...
-            //  emptyPromise.then(renderTemplates(args0).then(renderTemplates(args1).then(renderTemplates(args2)...
-            var lastPromise = contexts.reduce(function (promise, context, currentIndex) {
-                return promise.then(function (partial) {
-                    row = Math.floor(currentIndex / cols) + 1;
-                    col = currentIndex % cols + 1;
-                    if (col === 1) {
-                        if (row !== 1) {
-                            html += '</tr>';
-                        }
-                        html += '<tr class="row' + row + '">';
-                    }
-
-                    //ctx[this.variable] = context;
-
-                    return html += '<td class="col' + col + '">';
-                }).then(function (partial) {
-                    scope.push(context);
-                    return liquid.renderer.renderTemplates(_this2.templates, scope);
-                }).then(function (partial) {
-                    scope.pop(context);
-                    html += partial;
-                    return html += '</td>';
-                });
-            }, Promise.resolve('')); // start the reduce chain with a resolved Promise. After first run, the "promise" argument
-            //  in our reduce callback will be the returned promise from our "then" above.  In this
-            //  case, the promise returned from liquid.renderer.renderTemplates.
-
-            return lastPromise.then(function () {
-                if (row > 0) {
-                    html += '</tr>';
-                }
-                html += '</table>';
-                return html;
-            }).catch(function (error) {
-                throw error;
-            });
+      return mapSeries(contexts, function (context, idx) {
+        row = Math.floor(idx / cols) + 1;
+        col = idx % cols + 1;
+        if (col === 1) {
+          if (row !== 1) {
+            html += '</tr>';
+          }
+          html += '<tr class="row' + row + '">';
         }
-    });
+
+        html += '<td class="col' + col + '">';
+        scope.push(context);
+        return liquid.renderer.renderTemplates(_this2.templates, scope).then(function (partial) {
+          scope.pop(context);
+          html += partial;
+          html += '</td>';
+          return html;
+        });
+      }).then(function () {
+        if (row > 0) {
+          html += '</tr>';
+        }
+        html += '</table>';
+        return html;
+      });
+    }
+  });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],36:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],36:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
