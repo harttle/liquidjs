@@ -155,7 +155,7 @@ describe('error', function () {
           expect(err.name).to.equal('RenderError')
         })
     })
-    it('should contain original error info for {% layout %}', function () {
+    it('should contain original error info for {% extends %}', function () {
       mock({
         '/throwing-tag.html': [
           '1st',
@@ -167,7 +167,7 @@ describe('error', function () {
           '7th'
         ].join('\n')
       })
-      var html = '{%layout "throwing-tag.html"%}'
+      var html = '{%extends "throwing-tag.html"%}'
       var message = [
         '   2| 2nd',
         '   3| 3rd',

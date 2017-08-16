@@ -5,7 +5,7 @@ const assert = require('../src/util/assert.js');
 
 module.exports = function(liquid) {
 
-    liquid.registerTag('layout', {
+    liquid.registerTag('extends', {
         parse: function(token, remainTokens){
             var match = lexical.value.exec(token.args);
             assert(match, `illegal token ${token.raw}`);

@@ -9,7 +9,7 @@ module.exports = function(engine){
     require("./if.js")(engine);
     require("./include.js")(engine);
     require("./increment.js")(engine);
-    require("./layout.js")(engine);
+    require("./extends.js")(engine);
     require("./raw.js")(engine);
     require("./tablerow.js")(engine);
     require("./unless.js")(engine);

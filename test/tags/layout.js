@@ -4,7 +4,7 @@ const chai = require('chai')
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
-describe('tags/layout', function () {
+describe('tags/extends', function () {
   var liquid
   before(function () {
     liquid = Liquid({
@@ -20,7 +20,7 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'parent'
     })
-    var src = '{% layout "parent" %}{%block%}A'
+    var src = '{% extends "parent" %}{%block%}A'
     return expect(liquid.parseAndRender(src)).to
       .be.rejectedWith(/tag {%block%} not closed/)
   })
@@ -28,7 +28,7 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'X{%block%}{%endblock%}Y'
     })
-    var src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
+    var src = '{% extends "parent.html" %}{%block%}A{%endblock%}'
     return expect(liquid.parseAndRender(src)).to
       .eventually.equal('XAY')
   })
@@ -36,7 +36,7 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'X{% block "a"%}{% endblock %}Y{% block b%}{%endblock%}Z'
     })
-    var src = '{% layout "parent.html" %}' +
+    var src = '{% extends "parent.html" %}' +
       '{%block a%}A{%endblock%}' +
       '{%block b%}B{%endblock%}'
     return expect(liquid.parseAndRender(src)).to
@@ -46,26 +46,26 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'X{% block "a"%}A{% endblock %}Y{% block b%}B{%endblock%}Z'
     })
-    var src = '{% layout "parent.html" %}{%block a%}a{%endblock%}'
+    var src = '{% extends "parent.html" %}{%block a%}a{%endblock%}'
     return expect(liquid.parseAndRender(src)).to
       .eventually.equal('XaYBZ')
   })
   it('should handle nested block', function () {
     mock({
       '/grand.html': 'X{%block a%}G{%endblock%}Y',
-      '/parent.html': '{%layout "grand" %}{%block a%}P{%endblock%}',
-      '/main.html': '{%layout "parent"%}{%block a%}A{%endblock%}'
+      '/parent.html': '{%extends "grand" %}{%block a%}P{%endblock%}',
+      '/main.html': '{%extends "parent"%}{%block a%}A{%endblock%}'
     })
     return expect(liquid.renderFile('/main.html')).to
       .eventually.equal('XAY')
   })
-  it('should not bleed scope into included layout', function () {
+  it('should not bleed scope into included extends', function () {
     mock({
       '/parent.html': 'X{%block a%}{%endblock%}Y{%block b%}{%endblock%}Z',
-      '/main.html': '{%layout "parent"%}' +
+      '/main.html': '{%extends "parent"%}' +
         '{%block a%}A{%endblock%}' +
         '{%block b%}I{%include "included"%}J{%endblock%}',
-      '/included.html': '{%layout "parent"%}{%block a%}a{%endblock%}'
+      '/included.html': '{%extends "parent"%}{%block a%}a{%endblock%}'
     })
     return expect(liquid.renderFile('main')).to
       .eventually.equal('XAYIXaYZJZ')
@@ -73,7 +73,7 @@ describe('tags/layout', function () {
   it('should support hash list', function () {
     mock({
       '/parent.html': '{{color}}{%block%}{%endblock%}',
-      '/main.html': '{% layout "parent.html" color:"black"%}{%block%}A{%endblock%}'
+      '/main.html': '{% extends "parent.html" color:"black"%}{%block%}A{%endblock%}'
     })
     return expect(liquid.renderFile('/main.html')).to
       .eventually.equal('blackA')
@@ -81,7 +81,7 @@ describe('tags/layout', function () {
   it('should support multiple hash', function () {
     mock({
       '/parent.html': '{{color}}{{bg}}{%block%}{%endblock%}',
-      '/main.html': '{% layout "parent.html" color:"black", bg:"red"%}{%block%}A{%endblock%}'
+      '/main.html': '{% extends "parent.html" color:"black", bg:"red"%}{%block%}A{%endblock%}'
     })
     return expect(liquid.renderFile('/main.html')).to
       .eventually.equal('blackredA')
