@@ -20,7 +20,8 @@ var Scope = {
     }
   },
   set: function (k, v) {
-    setPropertyByPath(this.scopes[this.scopes.length - 1], k, v)
+    var scope = this.findScopeFor(k)
+    setPropertyByPath(scope, k, v)
     return this
   },
   push: function (ctx) {
@@ -29,6 +30,16 @@ var Scope = {
   },
   pop: function () {
     return this.scopes.pop()
+  },
+  findScopeFor: function (key) {
+    var i = this.scopes.length - 1
+    while (i >= 0 && !(key in this.scopes[i])) {
+      i--
+    }
+    if (i < 0) {
+      i = this.scopes.length - 1
+    }
+    return this.scopes[i]
   },
   unshift: function (ctx) {
     assert(ctx, `trying to push ${ctx} into scopes`)

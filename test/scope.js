@@ -116,9 +116,16 @@ describe('scope', function () {
       expect(scope.get('posts[category.diary[0]].name'), 'A Nice Day')
     })
 
-    it('should create parents if needed', function () {
-      scope.set('foo.bar.coo', 'COO')
-      expect(scope.get('foo.bar.coo'), 'COO')
+    it('should create in parent scope if needed', function () {
+      scope.push({})
+      scope.set('bar.coo', 'COO')
+      expect(scope.get('bar.coo')).to.equal('COO')
+    })
+    it("should set parents' corresponding value", function () {
+      scope.push({})
+      scope.set('foo', 'bar')
+      scope.pop()
+      expect(scope.get('foo')).to.equal('bar')
     })
   })
   describe('strict_variables', function () {

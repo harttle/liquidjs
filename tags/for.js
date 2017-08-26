@@ -74,9 +74,9 @@ module.exports = function (liquid) {
 
       var html = ''
       return mapSeries(contexts, (context) => {
-        scope.push(context)
-        return liquid.renderer
-          .renderTemplates(this.templates, scope)
+        return Promise.resolve()
+          .then(() => scope.push(context))
+          .then(() => liquid.renderer.renderTemplates(this.templates, scope))
           .then(partial => (html += partial))
           .catch(e => {
             if (e instanceof RenderBreakError) {

@@ -33,6 +33,19 @@ describe('tags/for', function () {
       .to.eventually.equal('foo-coo-')
   })
 
+  describe('scope', function () {
+    it('should read super scope', function () {
+      var src = '{%for a in (1..2)%}{{num}}{%endfor%}'
+      return expect(liquid.parseAndRender(src, {num: 1}))
+        .to.eventually.equal('11')
+    })
+    it('should write super scope', function () {
+      var src = '{%for a in (1..2)%}{{num}}{%assign num = 2%}{%endfor%}'
+      return expect(liquid.parseAndRender(src, {num: 1}))
+        .to.eventually.equal('12')
+    })
+  })
+
   describe('illegal', function () {
     it('should reject when for not closed', function () {
       var src = '{%for c in alpha%}{{c}}'
