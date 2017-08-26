@@ -919,7 +919,8 @@ var Scope = {
     }
   },
   set: function set(k, v) {
-    setPropertyByPath(this.scopes[this.scopes.length - 1], k, v);
+    var scope = this.findScopeFor(k);
+    setPropertyByPath(scope, k, v);
     return this;
   },
   push: function push(ctx) {
@@ -928,6 +929,16 @@ var Scope = {
   },
   pop: function pop() {
     return this.scopes.pop();
+  },
+  findScopeFor: function findScopeFor(key) {
+    var i = this.scopes.length - 1;
+    while (i >= 0 && !(key in this.scopes[i])) {
+      i--;
+    }
+    if (i < 0) {
+      i = this.scopes.length - 1;
+    }
+    return this.scopes[i];
   },
   unshift: function unshift(ctx) {
     assert(ctx, 'trying to push ' + ctx + ' into scopes');
@@ -1840,19 +1851,18 @@ var re = new RegExp('(' + lexical.identifier.source + ')\\s*=(.*)');
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
-
-    liquid.registerTag('assign', {
-        parse: function parse(token) {
-            var match = token.args.match(re);
-            assert(match, 'illegal token ' + token.raw);
-            this.key = match[1];
-            this.value = match[2];
-        },
-        render: function render(scope) {
-            scope.set(this.key, liquid.evalOutput(this.value, scope));
-            return Promise.resolve('');
-        }
-    });
+  liquid.registerTag('assign', {
+    parse: function parse(token) {
+      var match = token.args.match(re);
+      assert(match, 'illegal token ' + token.raw);
+      this.key = match[1];
+      this.value = match[2];
+    },
+    render: function render(scope) {
+      scope.set(this.key, liquid.evalOutput(this.value, scope));
+      return Promise.resolve('');
+    }
+  });
 };
 
 },{"..":2,"../src/util/assert.js":16,"any-promise":3}],23:[function(require,module,exports){
@@ -2114,8 +2124,11 @@ module.exports = function (liquid) {
 
       var html = '';
       return mapSeries(contexts, function (context) {
-        scope.push(context);
-        return liquid.renderer.renderTemplates(_this2.templates, scope).then(function (partial) {
+        return Promise.resolve().then(function () {
+          return scope.push(context);
+        }).then(function () {
+          return liquid.renderer.renderTemplates(_this2.templates, scope);
+        }).then(function (partial) {
           return html += partial;
         }).catch(function (e) {
           if (e instanceof RenderBreakError) {
