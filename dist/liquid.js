@@ -1514,10 +1514,9 @@ var suffixes = {
   2: 'nd',
   3: 'rd',
   'default': 'th'
-};
 
-// prototype extensions
-var _date = {
+  // prototype extensions
+};var _date = {
   daysInMonth: function daysInMonth(d) {
     var feb = _date.isLeapYear(d) ? 29 : 28;
     return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -1701,7 +1700,7 @@ module.exports = strftime;
 },{}],21:[function(require,module,exports){
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var toStr = Object.prototype.toString;
 
