@@ -1,7 +1,5 @@
 const chai = require('chai')
 const expect = chai.expect
-// const error = require('../../src/util/error.js')
-// const TokenizationError = error.TokenizationError
 const mock = require('mock-fs')
 chai.use(require('chai-as-promised'))
 
@@ -32,7 +30,7 @@ describe('error', function () {
         '   2| 2nd',
         '>> 3| X{% . a %} Y',
         '   4| 4th',
-        'TokenizationError: illegal tag syntax'
+        'TokenizationError'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
         .be.rejected
@@ -62,7 +60,7 @@ describe('error', function () {
       return expect(engine.parseAndRender('{% . a %}')).to.eventually
         .be.rejected
         .then(function (err) {
-          expect(err.stack).to.contain('illegal tag syntax')
+          expect(err.message).to.contain('illegal tag syntax')
           expect(err.stack).to.contain('at Object.parse')
         })
     })
@@ -160,7 +158,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
-        'RenderError: intended render error'
+        'RenderError'
       ]
       return expect(engine.parseAndRender(html.join('\n'))).to.eventually
         .be.rejected
@@ -190,7 +188,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| {%block%}{%endblock%}',
         '   7| 7th',
-        'RenderError: intended render error'
+        'RenderError'
       ]
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
@@ -215,7 +213,7 @@ describe('error', function () {
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
-        'RenderError: intended render error'
+        'RenderError'
       ]
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
@@ -247,7 +245,7 @@ describe('error', function () {
       return expect(engine.parseAndRender('{%rejectingTag%}')).to.eventually
         .be.rejected
         .then(function (err) {
-          expect(err.stack).to.contain('intended render reject')
+          expect(err.message).to.contain('intended render reject')
           expect(err.stack).to.match(/at .*:\d+:\d+/)
         })
     })
