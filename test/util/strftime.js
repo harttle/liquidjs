@@ -8,8 +8,8 @@ describe('util/strftime', function () {
   var then
   before(function () {
     mockUTC()
-    now = new Date('2016-01-04T13:15:23')
-    then = new Date('2016-03-06T03:05:03')
+    now = new Date('2016-01-04T13:15:23.000Z')
+    then = new Date('2016-03-06T03:05:03.000Z')
   })
   after(function () {
     restoreUTC()
@@ -37,7 +37,7 @@ describe('util/strftime', function () {
     expect(t(now, '%I')).to.equal('01')
   })
   it('should format %I as 12 for 00:00', function () {
-    var date = new Date('2016-01-01T00:00:00')
+    var date = new Date('2016-01-01T00:00:00.000Z')
     expect(t(date, '%I')).to.equal('12')
   })
   describe('%j', function () {
@@ -60,7 +60,7 @@ describe('util/strftime', function () {
     expect(t(now, '%l')).to.equal(' 1')
   })
   it('should format %l as 12 for 00:00', function () {
-    var date = new Date('2016-01-01T00:00:00')
+    var date = new Date('2016-01-01T00:00:00.000Z')
     expect(t(date, '%l')).to.equal('12')
   })
   it('should format %L as 0 padded millisecond', function () {
@@ -75,9 +75,9 @@ describe('util/strftime', function () {
     expect(t(then, '%P')).to.equal('am')
   })
   it('should format %q as date suffix', function () {
-    var st = new Date('2016-03-01T03:05:03')
-    var nd = new Date('2016-03-02T03:05:03')
-    var rd = new Date('2016-03-03T03:05:03')
+    var st = new Date('2016-03-01T03:05:03.000Z')
+    var nd = new Date('2016-03-02T03:05:03.000Z')
+    var rd = new Date('2016-03-03T03:05:03.000Z')
     expect(t(st, '%q')).to.equal('st')
     expect(t(nd, '%q')).to.equal('nd')
     expect(t(rd, '%q')).to.equal('rd')
@@ -113,7 +113,7 @@ describe('util/strftime', function () {
     expect(t(now, '%z')).to.equal('+0800')
   })
   it('should format %z as negative time zone', function () {
-    var date = new Date('2016-01-04T13:15:23')
+    var date = new Date('2016-01-04T13:15:23.000Z')
     date.getTimezoneOffset = () => 480
     expect(t(date, '%z')).to.equal('-0800')
   })
