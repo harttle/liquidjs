@@ -43,7 +43,7 @@ module.exports = function (liquid) {
         if (_.isString(collection) && collection.length > 0) {
           collection = [collection]
         } else if (_.isObject(collection)) {
-          collection = Object.keys(collection)
+          collection = Object.keys(collection).map((key) => [key, collection[key]])
         }
       }
       if (!Array.isArray(collection) || !collection.length) {

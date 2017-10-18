@@ -28,9 +28,9 @@ describe('tags/for', function () {
   })
 
   it('should support object', function () {
-    var src = '{%for key in obj%}{{key}}-{%else%}b{%endfor%}'
+    var src = '{%for item in obj%}{{item[0]}},{{item[1]}}-{%else%}b{%endfor%}'
     return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('foo-coo-')
+      .to.eventually.equal('foo,bar-coo,haa-')
   })
 
   describe('scope', function () {
