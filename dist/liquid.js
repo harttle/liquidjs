@@ -2092,7 +2092,9 @@ module.exports = function (liquid) {
         if (_.isString(collection) && collection.length > 0) {
           collection = [collection];
         } else if (_.isObject(collection)) {
-          collection = Object.keys(collection);
+          collection = Object.keys(collection).map(function (key) {
+            return [key, collection[key]];
+          });
         }
       }
       if (!Array.isArray(collection) || !collection.length) {
@@ -2210,38 +2212,37 @@ var withRE = new RegExp('with\\s+(' + lexical.value.source + ')');
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
+  liquid.registerTag('include', {
+    parse: function parse(token) {
+      var match = lexical.value.exec(token.args);
+      assert(match, 'illegal token ' + token.raw);
+      this.value = match[0];
 
-    liquid.registerTag('include', {
-        parse: function parse(token) {
-            var match = lexical.value.exec(token.args);
-            assert(match, 'illegal token ' + token.raw);
-            this.value = match[0];
+      match = withRE.exec(token.args);
+      if (match) {
+        this.with = match[1];
+      }
+    },
+    render: function render(scope, hash) {
+      var filepath = Liquid.evalValue(this.value, scope);
 
-            match = withRE.exec(token.args);
-            if (match) {
-                this.with = match[1];
-            }
-        },
-        render: function render(scope, hash) {
-            var filepath = Liquid.evalValue(this.value, scope);
+      var register = scope.get('liquid');
+      var originBlocks = register.blocks;
+      register.blocks = {};
 
-            var register = scope.get('liquid');
-            var originBlocks = register.blocks;
-            register.blocks = {};
-
-            if (this.with) {
-                hash[filepath] = Liquid.evalValue(this.with, scope);
-            }
-            return liquid.getTemplate(filepath, register.root).then(function (templates) {
-                scope.push(hash);
-                return liquid.renderer.renderTemplates(templates, scope);
-            }).then(function (html) {
-                scope.pop();
-                register.blocks = originBlocks;
-                return html;
-            });
-        }
-    });
+      if (this.with) {
+        hash[filepath] = Liquid.evalValue(this.with, scope);
+      }
+      return liquid.getTemplate(filepath, register.root).then(function (templates) {
+        scope.push(hash);
+        return liquid.renderer.renderTemplates(templates, scope);
+      }).then(function (html) {
+        scope.pop();
+        register.blocks = originBlocks;
+        return html;
+      });
+    }
+  });
 };
 
 },{"..":2,"../src/util/assert.js":16}],31:[function(require,module,exports){
@@ -2296,76 +2297,72 @@ var lexical = Liquid.lexical;
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
+  liquid.registerTag('layout', {
+    parse: function parse(token, remainTokens) {
+      var match = lexical.value.exec(token.args);
+      assert(match, 'illegal token ' + token.raw);
 
-    liquid.registerTag('layout', {
-        parse: function parse(token, remainTokens) {
-            var match = lexical.value.exec(token.args);
-            assert(match, 'illegal token ' + token.raw);
+      this.layout = match[0];
+      this.tpls = liquid.parser.parse(remainTokens);
+    },
+    render: function render(scope, hash) {
+      var layout = Liquid.evalValue(this.layout, scope);
+      var register = scope.get('liquid');
 
-            this.layout = match[0];
-            this.tpls = liquid.parser.parse(remainTokens);
-        },
-        render: function render(scope, hash) {
-            var layout = Liquid.evalValue(this.layout, scope);
-            var register = scope.get('liquid');
+      // render the remaining tokens immediately
+      return liquid.renderer.renderTemplates(this.tpls, scope)
+      // now register.blocks contains rendered blocks
+      .then(function () {
+        return liquid.getTemplate(layout, register.root);
+      }).then(function (templates) {
+        // push the hash
+        scope.push(hash);
+        // render the parent
+        return liquid.renderer.renderTemplates(templates, scope);
+      })
+      // pop the hash
+      .then(function (partial) {
+        scope.pop();
+        return partial;
+      });
+    }
+  });
 
-            // render the remaining tokens immediately
-            return liquid.renderer.renderTemplates(this.tpls, scope)
-            // now register.blocks contains rendered blocks
-            .then(function () {
-                return liquid.getTemplate(layout, register.root);
-            })
-            // push the hash
-            .then(function (templates) {
-                return scope.push(hash), templates;
-            })
-            // render the parent
-            .then(function (templates) {
-                return liquid.renderer.renderTemplates(templates, scope);
-            })
-            // pop the hash
-            .then(function (partial) {
-                return scope.pop(), partial;
-            });
-        }
-    });
+  liquid.registerTag('block', {
+    parse: function parse(token, remainTokens) {
+      var _this = this;
 
-    liquid.registerTag('block', {
-        parse: function parse(token, remainTokens) {
-            var _this = this;
+      var match = /\w+/.exec(token.args);
+      this.block = match ? match[0] : 'anonymous';
 
-            var match = /\w+/.exec(token.args);
-            this.block = match ? match[0] : 'anonymous';
+      this.tpls = [];
+      var stream = liquid.parser.parseStream(remainTokens).on('tag:endblock', function () {
+        return stream.stop();
+      }).on('template', function (tpl) {
+        return _this.tpls.push(tpl);
+      }).on('end', function () {
+        throw new Error('tag ' + token.raw + ' not closed');
+      });
+      stream.start();
+    },
+    render: function render(scope) {
+      var _this2 = this;
 
-            this.tpls = [];
-            var stream = liquid.parser.parseStream(remainTokens).on('tag:endblock', function () {
-                return stream.stop();
-            }).on('template', function (tpl) {
-                return _this.tpls.push(tpl);
-            }).on('end', function () {
-                throw new Error('tag ' + token.raw + ' not closed');
-            });
-            stream.start();
-        },
-        render: function render(scope) {
-            var _this2 = this;
-
-            var register = scope.get('liquid');
-            var html = register.blocks[this.block];
-            // if not defined yet
-            if (html === undefined) {
-                return liquid.renderer.renderTemplates(this.tpls, scope).then(function (partial) {
-                    register.blocks[_this2.block] = partial;
-                    return partial;
-                });
-            }
-            // if already defined by desendents
-            else {
-                    register.blocks[this.block] = html;
-                    return Promise.resolve(html);
-                }
-        }
-    });
+      var register = scope.get('liquid');
+      var html = register.blocks[this.block];
+      // if not defined yet
+      if (html === undefined) {
+        return liquid.renderer.renderTemplates(this.tpls, scope).then(function (partial) {
+          register.blocks[_this2.block] = partial;
+          return partial;
+        });
+      } else {
+        // if already defined by desendents
+        register.blocks[this.block] = html;
+        return Promise.resolve(html);
+      }
+    }
+  });
 };
 
 },{"..":2,"../src/util/assert.js":16,"any-promise":3}],34:[function(require,module,exports){
