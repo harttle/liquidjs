@@ -45,6 +45,44 @@ describe('filters', function () {
     it('should return "184" for 183.357', () => test('{{ 183.357 | ceil }}', '184'))
   })
 
+  describe('concat', function () {
+    it('should concat arrays', () => test(`
+      {%- assign fruits = "apples, oranges, peaches" | split: ", " -%}
+      {%- assign vegetables = "carrots, turnips, potatoes" | split: ", " -%}
+
+      {%- assign everything = fruits | concat: vegetables -%}
+
+      {%- for item in everything -%}
+      - {{ item }}
+      {% endfor -%}`,
+      `- apples
+      - oranges
+      - peaches
+      - carrots
+      - turnips
+      - potatoes
+      `))
+    it('should support chained concat', () => test(`
+      {%- assign fruits = "apples, oranges, peaches" | split: ", " -%}
+      {%- assign vegetables = "carrots, turnips, potatoes" | split: ", " -%}
+      {%- assign furniture = "chairs, tables, shelves" | split: ", " -%}
+      {%- assign everything = fruits | concat: vegetables | concat: furniture -%}
+
+      {%- for item in everything -%}
+      - {{ item }}
+      {% endfor -%}`,
+      `- apples
+      - oranges
+      - peaches
+      - carrots
+      - turnips
+      - potatoes
+      - chairs
+      - tables
+      - shelves
+      `))
+  })
+
   describe('date', function () {
     it('should support date: %a %b %d %Y', function () {
       var str = ctx.date.toDateString()

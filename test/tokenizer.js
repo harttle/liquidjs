@@ -33,7 +33,7 @@ describe('tokenizer', function () {
       expect(tokens[1].type).to.equal('value')
       expect(tokens[1].value).to.equal('foo | date: "%Y-%m-%d"')
     })
-    it('should handle successive value and tags', function () {
+    it('should handle consecutive value and tags', function () {
       var html = '{{foo}}{{bar}}{%foo%}{%bar%}'
       var tokens = parse(html)
 

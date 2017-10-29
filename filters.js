@@ -22,6 +22,7 @@ var filters = {
   'append': (v, arg) => v + arg,
   'capitalize': str => stringify(str).charAt(0).toUpperCase() + str.slice(1),
   'ceil': v => Math.ceil(v),
+  'concat': (v, arg) => Array.prototype.concat.call(v, arg),
   'date': (v, arg) => {
     if (v === 'now') v = new Date()
     return v instanceof Date ? strftime(v, arg) : ''
