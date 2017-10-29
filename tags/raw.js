@@ -7,13 +7,13 @@ module.exports = function (liquid) {
 
       var stream = liquid.parser.parseStream(remainTokens)
       stream
-                .on('token', token => {
-                  if (token.name === 'endraw') stream.stop()
-                  else this.tokens.push(token)
-                })
-                .on('end', x => {
-                  throw new Error(`tag ${tagToken.raw} not closed`)
-                })
+        .on('token', token => {
+          if (token.name === 'endraw') stream.stop()
+          else this.tokens.push(token)
+        })
+        .on('end', x => {
+          throw new Error(`tag ${tagToken.raw} not closed`)
+        })
       stream.start()
     },
     render: function (scope, hash) {

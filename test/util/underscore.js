@@ -62,16 +62,6 @@ describe('util/underscore', function () {
       expect(spy).to.have.been.calledOnce
     })
   })
-  describe('.echo()', function () {
-    it('should be transparent', function () {
-      expect(_.echo('foo')('bar')).to.equal('bar')
-    })
-    it('should log the arguments', function () {
-      var log = sinon.spy(console, 'log')
-      _.echo('foo')('bar')
-      expect(log).to.have.been.calledWith('[foo]', 'bar')
-    })
-  })
   describe('.range()', function () {
     it('should return a range of integers', function () {
       expect(_.range(3, 5)).to.deep.equal([3, 4])

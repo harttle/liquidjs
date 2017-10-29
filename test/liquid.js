@@ -186,7 +186,7 @@ describe('liquid', function () {
         trim_left: true
       })
       return expect(engine.parseAndRender(' \n \t{%if true%}foo{%endif%} '))
-        .to.eventually.equal(' \nfoo ')
+        .to.eventually.equal('foo ')
     })
     it('should trim_right for tags when trim_right=true', function () {
       engine = Liquid({
@@ -210,9 +210,9 @@ describe('liquid', function () {
         '  Wow, {{ username }}, you have a long name!',
         '{%- else -%}',
         '  Hello there!',
-        '{%- endif -%}\n'
+        '{%- endif -%}'
       ].join('\n')
-      var dst = '  Wow, John G. Chalmers-Smith, you have a long name!\n'
+      var dst = 'Wow, John G. Chalmers-Smith, you have a long name!'
       return expect(engine.parseAndRender(src)).to.eventually.equal(dst)
     })
     it('should not trim when not specified', function () {
@@ -223,9 +223,9 @@ describe('liquid', function () {
         '  Wow, {{ username }}, you have a long name!',
         '{% else %}',
         '  Hello there!',
-        '{% endif %}\n'
+        '{% endif %}'
       ].join('\n')
-      var dst = '\n\n  Wow, John G. Chalmers-Smith, you have a long name!\n\n'
+      var dst = '\n\n  Wow, John G. Chalmers-Smith, you have a long name!\n'
       return expect(engine.parseAndRender(src)).to.eventually.equal(dst)
     })
   })

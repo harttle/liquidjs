@@ -70,11 +70,8 @@ function _assignBinary (dst, src) {
   return dst
 }
 
-function echo (prefix) {
-  return v => {
-    console.log('[' + prefix + ']', v)
-    return v
-  }
+function last (arr) {
+  return arr[arr.length - 1]
 }
 
 function uniq (arr) {
@@ -123,16 +120,18 @@ function range (start, stop, step) {
   return arr
 }
 
+// lang
 exports.isString = isString
 exports.isObject = isObject
 exports.isArray = isArray
 exports.isNil = isNil
 exports.isError = isError
 
+// array
 exports.range = range
+exports.last = last
 
+// object
 exports.forOwn = forOwn
 exports.assign = assign
 exports.uniq = uniq
-
-exports.echo = echo

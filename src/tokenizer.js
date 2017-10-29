@@ -4,92 +4,116 @@ const _ = require('./util/underscore.js')
 const assert = require('../src/util/assert.js')
 
 function parse (html, filepath, options) {
-  assert(_.isString(html), 'illegal input type')
+  assert(_.isString(html), 'illegal input')
 
-  html = whiteSpaceCtrl(html, options)
-
-  var tokens = []
-  var syntax = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g
-  var result, htmlFragment, token
+  var rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g
+  var currIndent = 0
+  var lineNumber = LineNumber()
   var lastMatchEnd = 0
-  var lastMatchBegin = -1
-  var parsedLinesCount = 0
+  var tokens = []
 
-  while ((result = syntax.exec(html)) !== null) {
-    // passed html fragments
-    if (result.index > lastMatchEnd) {
-      htmlFragment = html.slice(lastMatchEnd, result.index)
-      tokens.push({
-        type: 'html',
-        raw: htmlFragment,
-        value: htmlFragment
-      })
+  for (var match; (match = rLiquid.exec(html)); lastMatchEnd = rLiquid.lastIndex) {
+    if (match.index > lastMatchEnd) {
+      tokens.push(parseHTMLToken(lastMatchEnd, match.index))
     }
-    if (result[1]) {
-      // tag appeared
-      token = factory('tag', 1, result)
+    tokens.push(match[1] ? parseTagToken(match) : parseOutputToken(match))
+  }
+  if (html.length > lastMatchEnd) {
+    tokens.push(parseHTMLToken(lastMatchEnd, html.length))
+  }
+  whiteSpaceCtrl(tokens, options)
+  return tokens
 
-      var match = token.value.match(lexical.tagLine)
-      if (!match) {
-        throw new TokenizationError(`illegal tag syntax`, token)
-      }
-      token.name = match[1]
-      token.args = match[2]
-
-      // get last line indentation
-      var lineStart = (htmlFragment || '').split('\n')
-      token.indent = lineStart[lineStart.length - 1].length
-
-      tokens.push(token)
-    } else {
-      // output
-      token = factory('output', 3, result)
-      tokens.push(token)
-    }
-    lastMatchEnd = syntax.lastIndex
+  function parseOutputToken (match) {
+    var token = factory('output', 3, match)
+    token.trim_left = (match[3].slice(0, 3) === '{{-')
+    token.trim_right = (match[3].slice(-3) === '-}}')
+    return token
   }
 
-  // remaining html
-  if (html.length > lastMatchEnd) {
-    htmlFragment = html.slice(lastMatchEnd, html.length)
-    tokens.push({
+  function parseTagToken (result) {
+    var token = factory('tag', 1, result)
+    var match = token.value.match(lexical.tagLine)
+    if (!match) {
+      throw new TokenizationError(`illegal tag syntax`, token)
+    }
+
+    return _.assign(token, {
+      name: match[1],
+      args: match[2],
+      trim_left: (result[1].slice(0, 3) === '{%-'),
+      trim_right: (result[1].slice(-3) === '-%}'),
+      indent: currIndent
+    })
+  }
+
+  function parseHTMLToken (begin, end) {
+    var htmlFragment = html.slice(begin, end)
+    currIndent = _.last((htmlFragment || '').split('\n')).length
+
+    return {
       type: 'html',
       raw: htmlFragment,
       value: htmlFragment
-    })
+    }
   }
-  return tokens
 
   function factory (type, offset, match) {
     return {
       type: type,
       raw: match[offset],
       value: match[offset + 1].trim(),
-      line: getLineNum(match),
+      line: lineNumber.get(match),
       input: html,
       file: filepath
     }
   }
+}
 
-  function getLineNum (match) {
-    var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n')
-    parsedLinesCount += lines.length - 1
-    lastMatchBegin = match.index
-    return parsedLinesCount + 1
+function LineNumber () {
+  var parsedLinesCount = 0
+  var lastMatchBegin = -1
+
+  return {
+    get: function (match) {
+      var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n')
+      parsedLinesCount += lines.length - 1
+      lastMatchBegin = match.index
+      return parsedLinesCount + 1
+    }
   }
 }
 
-function whiteSpaceCtrl (html, options) {
-  options = options || {}
-  if (options.trim_left) {
-    html = html.replace(/({[{%])-?/g, '$1-')
-  }
-  if (options.trim_right) {
-    html = html.replace(/-?([%}]})/g, '-$1')
-  }
-  var rLeft = options.greedy ? /\s+({[{%]-)/g : /[\t\r ]*({[{%]-)/g
-  var rRight = options.greedy ? /(-[%}]})\s+/g : /(-[%}]})[\t\r ]*\n?/g
-  return html.replace(rLeft, '$1').replace(rRight, '$1')
+function whiteSpaceCtrl (tokens, options) {
+  options = _.assign({ greedy: true }, options)
+  var inRaw = false
+
+  tokens.forEach((token, i) => {
+    if (!inRaw && (token.trim_left || options.trim_left)) {
+      trimLeft(tokens[i - 1], options.greedy)
+    }
+
+    if (token.type === 'tag' && token.name === 'raw') inRaw = true
+    if (token.type === 'tag' && token.name === 'endraw') inRaw = false
+
+    if (!inRaw && (token.trim_right || options.trim_right)) {
+      trimRight(tokens[i + 1], options.greedy)
+    }
+  })
+}
+
+function trimLeft (token, greedy) {
+  if (!token || token.type !== 'html') return
+
+  var rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
+  token.value = token.value.replace(rLeft, '')
+}
+
+function trimRight (token, greedy) {
+  if (!token || token.type !== 'html') return
+
+  var rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g
+  token.value = token.value.replace(rRight, '')
 }
 
 exports.parse = parse
