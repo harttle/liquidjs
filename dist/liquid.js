@@ -33,6 +33,9 @@ var filters = {
   'ceil': function ceil(v) {
     return Math.ceil(v);
   },
+  'concat': function concat(v, arg) {
+    return Array.prototype.concat.call(v, arg);
+  },
   'date': function date(v, arg) {
     if (v === 'now') v = new Date();
     return v instanceof Date ? strftime(v, arg) : '';
@@ -268,8 +271,12 @@ var _engine = {
     });
   },
   evalOutput: function evalOutput(str, scope) {
-    var tpl = this.parser.parseOutput(str.trim());
-    return this.renderer.evalOutput(tpl, scope);
+    console.warn('[liquidjs:deprecated] use .evalValue() instead of .evalOutput');
+    return this.evalValue(str, scope);
+  },
+  evalValue: function evalValue(str, scope) {
+    var tpl = this.parser.parseValue(str.trim());
+    return this.renderer.evalValue(tpl, scope);
   },
   registerFilter: function registerFilter(name, filter) {
     return this.filter.register(name, filter);
@@ -336,8 +343,11 @@ function factory(options) {
     root: ['.'],
     cache: false,
     extname: '.liquid',
-    trim_right: false,
-    trim_left: false,
+    trim_tag_right: false,
+    trim_tag_left: false,
+    trim_value_right: false,
+    trim_value_left: false,
+    greedy: true,
     strict_filters: false,
     strict_variables: false
   }, options);
@@ -368,7 +378,7 @@ factory.Types = {
 
 module.exports = factory;
 
-},{"./filters":1,"./src/filter.js":7,"./src/lexical.js":8,"./src/parser":10,"./src/render.js":11,"./src/scope":12,"./src/syntax.js":13,"./src/tag.js":14,"./src/tokenizer.js":15,"./src/util/assert.js":16,"./src/util/error.js":17,"./src/util/fs.js":18,"./src/util/promise.js":19,"./src/util/underscore.js":21,"./tags":32,"any-promise":3,"path":6}],3:[function(require,module,exports){
+},{"./filters":1,"./src/filter.js":7,"./src/lexical.js":8,"./src/parser":10,"./src/render.js":11,"./src/scope":12,"./src/syntax.js":13,"./src/tag.js":14,"./src/tokenizer.js":15,"./src/util/assert.js":16,"./src/util/error.js":17,"./src/util/fs.js":18,"./src/util/promise.js":19,"./src/util/underscore.js":21,"./tags":33,"any-promise":3,"path":6}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./register')().Promise;
@@ -760,8 +770,8 @@ module.exports = function (Tag, Filter) {
       var tpl = null;
       if (token.type === 'tag') {
         tpl = parseTag(token, tokens);
-      } else if (token.type === 'output') {
-        tpl = parseOutput(token.value);
+      } else if (token.type === 'value') {
+        tpl = parseValue(token.value);
       } else {
         // token.type === 'html'
         tpl = token;
@@ -778,9 +788,9 @@ module.exports = function (Tag, Filter) {
     return Tag.construct(token, tokens);
   }
 
-  function parseOutput(str) {
+  function parseValue(str) {
     var match = lexical.matchValue(str);
-    assert(match, 'illegal output string: ' + str);
+    assert(match, 'illegal value string: ' + str);
 
     var initial = match[0];
     str = str.substr(match.index + match[0].length);
@@ -791,7 +801,7 @@ module.exports = function (Tag, Filter) {
     }
 
     return {
-      type: 'output',
+      type: 'value',
       initial: initial,
       filters: filters.map(function (str) {
         return Filter.construct(str);
@@ -808,7 +818,7 @@ module.exports = function (Tag, Filter) {
     parse: parse,
     parseTag: parseTag,
     parseStream: parseStream,
-    parseOutput: parseOutput
+    parseValue: parseValue
   };
 };
 
@@ -851,9 +861,9 @@ var render = {
         return this.renderTag(template, scope).then(function (partial) {
           return partial === undefined ? '' : partial;
         });
-      } else if (template.type === 'output') {
+      } else if (template.type === 'value') {
         return Promise.resolve().then(function () {
-          return _this2.evalOutput(template, scope);
+          return _this2.evalValue(template, scope);
         }).then(function (partial) {
           return partial === undefined ? '' : stringify(partial);
         });
@@ -874,8 +884,8 @@ var render = {
     return template.render(scope);
   },
 
-  evalOutput: function evalOutput(template, scope) {
-    assert(scope, 'unable to evalOutput: scope undefined');
+  evalValue: function evalValue(template, scope) {
+    assert(scope, 'unable to evalValue: scope undefined');
     return template.filters.reduce(function (prev, filter) {
       return filter.render(prev, scope);
     }, Syntax.evalExp(template.initial, scope));
@@ -1219,101 +1229,94 @@ module.exports = function () {
 var lexical = require('./lexical.js');
 var TokenizationError = require('./util/error.js').TokenizationError;
 var _ = require('./util/underscore.js');
-var assert = require('../src/util/assert.js');
+var whiteSpaceCtrl = require('./whitespace-ctrl.js');
+var assert = require('./util/assert.js');
 
-function parse(html, filepath, options) {
-  assert(_.isString(html), 'illegal input type');
+function parse(input, file, options) {
+  assert(_.isString(input), 'illegal input');
 
-  html = whiteSpaceCtrl(html, options);
-
-  var tokens = [];
-  var syntax = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g;
-  var result, htmlFragment, token;
+  var rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g;
+  var currIndent = 0;
+  var lineNumber = LineNumber(input);
   var lastMatchEnd = 0;
-  var lastMatchBegin = -1;
-  var parsedLinesCount = 0;
+  var tokens = [];
 
-  while ((result = syntax.exec(html)) !== null) {
-    // passed html fragments
-    if (result.index > lastMatchEnd) {
-      htmlFragment = html.slice(lastMatchEnd, result.index);
-      tokens.push({
-        type: 'html',
-        raw: htmlFragment,
-        value: htmlFragment
-      });
+  for (var match; match = rLiquid.exec(input); lastMatchEnd = rLiquid.lastIndex) {
+    if (match.index > lastMatchEnd) {
+      tokens.push(parseHTMLToken(lastMatchEnd, match.index));
     }
-    if (result[1]) {
-      // tag appeared
-      token = factory('tag', 1, result);
-
-      var match = token.value.match(lexical.tagLine);
-      if (!match) {
-        throw new TokenizationError('illegal tag syntax', token);
-      }
-      token.name = match[1];
-      token.args = match[2];
-
-      // get last line indentation
-      var lineStart = (htmlFragment || '').split('\n');
-      token.indent = lineStart[lineStart.length - 1].length;
-
-      tokens.push(token);
-    } else {
-      // output
-      token = factory('output', 3, result);
-      tokens.push(token);
-    }
-    lastMatchEnd = syntax.lastIndex;
+    tokens.push(match[1] ? parseTagToken(match[1], match[2].trim(), match.index) : parseValueToken(match[3], match[4].trim(), match.index));
   }
-
-  // remaining html
-  if (html.length > lastMatchEnd) {
-    htmlFragment = html.slice(lastMatchEnd, html.length);
-    tokens.push({
-      type: 'html',
-      raw: htmlFragment,
-      value: htmlFragment
-    });
+  if (input.length > lastMatchEnd) {
+    tokens.push(parseHTMLToken(lastMatchEnd, input.length));
   }
+  whiteSpaceCtrl(tokens, options);
   return tokens;
 
-  function factory(type, offset, match) {
+  function parseTagToken(raw, value, pos) {
+    var match = value.match(lexical.tagLine);
+    var token = {
+      type: 'tag',
+      indent: currIndent,
+      line: lineNumber.get(pos),
+      trim_left: raw.slice(0, 3) === '{%-',
+      trim_right: raw.slice(-3) === '-%}',
+      raw: raw,
+      value: value,
+      input: input,
+      file: file
+    };
+    if (!match) {
+      throw new TokenizationError('illegal tag syntax', token);
+    }
+    token.name = match[1];
+    token.args = match[2];
+    return token;
+  }
+
+  function parseValueToken(raw, value, pos) {
     return {
-      type: type,
-      raw: match[offset],
-      value: match[offset + 1].trim(),
-      line: getLineNum(match),
-      input: html,
-      file: filepath
+      type: 'value',
+      line: lineNumber.get(pos),
+      trim_left: raw.slice(0, 3) === '{{-',
+      trim_right: raw.slice(-3) === '-}}',
+      raw: raw,
+      value: value,
+      input: input,
+      file: file
     };
   }
 
-  function getLineNum(match) {
-    var lines = match.input.slice(lastMatchBegin + 1, match.index).split('\n');
-    parsedLinesCount += lines.length - 1;
-    lastMatchBegin = match.index;
-    return parsedLinesCount + 1;
+  function parseHTMLToken(begin, end) {
+    var htmlFragment = input.slice(begin, end);
+    currIndent = _.last((htmlFragment || '').split('\n')).length;
+
+    return {
+      type: 'html',
+      raw: htmlFragment,
+      value: htmlFragment
+    };
   }
 }
 
-function whiteSpaceCtrl(html, options) {
-  options = options || {};
-  if (options.trim_left) {
-    html = html.replace(/({[{%])-?/g, '$1-');
-  }
-  if (options.trim_right) {
-    html = html.replace(/-?([%}]})/g, '-$1');
-  }
-  var rLeft = options.greedy ? /\s+({[{%]-)/g : /[\t\r ]*({[{%]-)/g;
-  var rRight = options.greedy ? /(-[%}]})\s+/g : /(-[%}]})[\t\r ]*\n?/g;
-  return html.replace(rLeft, '$1').replace(rRight, '$1');
+function LineNumber(html) {
+  var parsedLinesCount = 0;
+  var lastMatchBegin = -1;
+
+  return {
+    get: function get(pos) {
+      var lines = html.slice(lastMatchBegin + 1, pos).split('\n');
+      parsedLinesCount += lines.length - 1;
+      lastMatchBegin = pos;
+      return parsedLinesCount + 1;
+    }
+  };
 }
 
 exports.parse = parse;
 exports.whiteSpaceCtrl = whiteSpaceCtrl;
 
-},{"../src/util/assert.js":16,"./lexical.js":8,"./util/error.js":17,"./util/underscore.js":21}],16:[function(require,module,exports){
+},{"./lexical.js":8,"./util/assert.js":16,"./util/error.js":17,"./util/underscore.js":21,"./whitespace-ctrl.js":22}],16:[function(require,module,exports){
 'use strict';
 
 var AssertionError = require('./error.js').AssertionError;
@@ -1773,11 +1776,8 @@ function _assignBinary(dst, src) {
   return dst;
 }
 
-function echo(prefix) {
-  return function (v) {
-    console.log('[' + prefix + ']', v);
-    return v;
-  };
+function last(arr) {
+  return arr[arr.length - 1];
 }
 
 function uniq(arr) {
@@ -1826,21 +1826,75 @@ function range(start, stop, step) {
   return arr;
 }
 
+// lang
 exports.isString = isString;
 exports.isObject = isObject;
 exports.isArray = isArray;
 exports.isNil = isNil;
 exports.isError = isError;
 
+// array
 exports.range = range;
+exports.last = last;
 
+// object
 exports.forOwn = forOwn;
 exports.assign = assign;
 exports.uniq = uniq;
 
-exports.echo = echo;
-
 },{}],22:[function(require,module,exports){
+'use strict';
+
+var _ = require('./util/underscore.js');
+
+function whiteSpaceCtrl(tokens, options) {
+  options = _.assign({ greedy: true }, options);
+  var inRaw = false;
+
+  tokens.forEach(function (token, i) {
+    if (shouldTrimLeft(token, inRaw, options)) {
+      trimLeft(tokens[i - 1], options.greedy);
+    }
+
+    if (token.type === 'tag' && token.name === 'raw') inRaw = true;
+    if (token.type === 'tag' && token.name === 'endraw') inRaw = false;
+
+    if (shouldTrimRight(token, inRaw, options)) {
+      trimRight(tokens[i + 1], options.greedy);
+    }
+  });
+}
+
+function shouldTrimLeft(token, inRaw, options) {
+  if (inRaw) return false;
+  if (token.type === 'tag') return token.trim_left || options.trim_tag_left;
+  if (token.type === 'value') return token.trim_left || options.trim_value_left;
+}
+
+function shouldTrimRight(token, inRaw, options) {
+  if (inRaw) return false;
+  if (token.type === 'tag') return token.trim_right || options.trim_tag_right;
+  if (token.type === 'value') return token.trim_right || options.trim_value_right;
+}
+
+function trimLeft(token, greedy) {
+  if (!token || token.type !== 'html') return;
+
+  console.log('trimming', token.value);
+  var rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g;
+  token.value = token.value.replace(rLeft, '');
+}
+
+function trimRight(token, greedy) {
+  if (!token || token.type !== 'html') return;
+
+  var rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g;
+  token.value = token.value.replace(rRight, '');
+}
+
+module.exports = whiteSpaceCtrl;
+
+},{"./util/underscore.js":21}],23:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1858,13 +1912,13 @@ module.exports = function (liquid) {
       this.value = match[2];
     },
     render: function render(scope) {
-      scope.set(this.key, liquid.evalOutput(this.value, scope));
+      scope.set(this.key, liquid.evalValue(this.value, scope));
       return Promise.resolve('');
     }
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],23:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"any-promise":3}],24:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1904,7 +1958,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16}],24:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16}],25:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1952,7 +2006,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2}],25:[function(require,module,exports){
+},{"..":2}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -1970,7 +2024,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2018,7 +2072,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],27:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"any-promise":3}],28:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2041,7 +2095,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16}],28:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16}],29:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2152,7 +2206,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19,"../src/util/underscore.js":21}],29:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19,"../src/util/underscore.js":21}],30:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2203,7 +2257,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2}],30:[function(require,module,exports){
+},{"..":2}],31:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2245,7 +2299,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16}],31:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16}],32:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2268,27 +2322,27 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16}],32:[function(require,module,exports){
-"use strict";
+},{"..":2,"../src/util/assert.js":16}],33:[function(require,module,exports){
+'use strict';
 
 module.exports = function (engine) {
-    require("./assign.js")(engine);
-    require("./capture.js")(engine);
-    require("./case.js")(engine);
-    require("./comment.js")(engine);
-    require("./cycle.js")(engine);
-    require("./decrement.js")(engine);
-    require("./for.js")(engine);
-    require("./if.js")(engine);
-    require("./include.js")(engine);
-    require("./increment.js")(engine);
-    require("./layout.js")(engine);
-    require("./raw.js")(engine);
-    require("./tablerow.js")(engine);
-    require("./unless.js")(engine);
+  require('./assign.js')(engine);
+  require('./capture.js')(engine);
+  require('./case.js')(engine);
+  require('./comment.js')(engine);
+  require('./cycle.js')(engine);
+  require('./decrement.js')(engine);
+  require('./for.js')(engine);
+  require('./if.js')(engine);
+  require('./include.js')(engine);
+  require('./increment.js')(engine);
+  require('./layout.js')(engine);
+  require('./raw.js')(engine);
+  require('./tablerow.js')(engine);
+  require('./unless.js')(engine);
 };
 
-},{"./assign.js":22,"./capture.js":23,"./case.js":24,"./comment.js":25,"./cycle.js":26,"./decrement.js":27,"./for.js":28,"./if.js":29,"./include.js":30,"./increment.js":31,"./layout.js":33,"./raw.js":34,"./tablerow.js":35,"./unless.js":36}],33:[function(require,module,exports){
+},{"./assign.js":23,"./capture.js":24,"./case.js":25,"./comment.js":26,"./cycle.js":27,"./decrement.js":28,"./for.js":29,"./if.js":30,"./include.js":31,"./increment.js":32,"./layout.js":34,"./raw.js":35,"./tablerow.js":36,"./unless.js":37}],34:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2365,7 +2419,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],34:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"any-promise":3}],35:[function(require,module,exports){
 'use strict';
 
 var Promise = require('any-promise');
@@ -2394,7 +2448,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"any-promise":3}],35:[function(require,module,exports){
+},{"any-promise":3}],36:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2482,7 +2536,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],36:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],37:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
