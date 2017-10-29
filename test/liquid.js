@@ -24,6 +24,7 @@ describe('liquid', function () {
       strict_filters: true
     })
     mock({
+      '/root/files/bar': 'bar',
       '/root/files/foo.html': 'foo',
       '/root/files/name.html': 'My name is {{name}}.',
       '/un-readable.html': mock.file({
@@ -90,6 +91,11 @@ describe('liquid', function () {
     it('should render file', function () {
       return expect(engine.renderFile('/root/files/foo.html', ctx))
         .to.eventually.equal('foo')
+    })
+    it('should find files without extname', function () {
+      var engine = Liquid({root: '/root', extname: ''})
+      return expect(engine.renderFile('/root/files/bar', ctx))
+        .to.eventually.equal('bar')
     })
     it('should accept relative path', function () {
       return expect(engine.renderFile('files/foo.html'))

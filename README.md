@@ -82,7 +82,7 @@ The full list of options for `Liquid()` is listed as following:
 If an array, the files are looked up in the order they occur in the array.
 Defaults to `["."]`
 
-* `extname` is used to lookup the template file when filepath doesn't include an extension name. Defaults to `".liquid"`
+* `extname` is used to lookup the template file when filepath doesn't include an extension name. Set to `""` if you do **NOT** want liquidjs to append default extname. Defaults to `".liquid"`.
 
 * `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
 
