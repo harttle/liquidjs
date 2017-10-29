@@ -11,7 +11,7 @@
     "dist": "make dist",
     "preversion": "npm run lint && npm test",
     "version": "npm run dist && git add -A dist",
-    "postversion": "git push && git push --tags && npm publish"
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
