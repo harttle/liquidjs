@@ -5,22 +5,35 @@ function whiteSpaceCtrl (tokens, options) {
   var inRaw = false
 
   tokens.forEach((token, i) => {
-    if (!inRaw && (token.trim_left || options.trim_left)) {
+    if (shouldTrimLeft(token, inRaw, options)) {
       trimLeft(tokens[i - 1], options.greedy)
     }
 
     if (token.type === 'tag' && token.name === 'raw') inRaw = true
     if (token.type === 'tag' && token.name === 'endraw') inRaw = false
 
-    if (!inRaw && (token.trim_right || options.trim_right)) {
+    if (shouldTrimRight(token, inRaw, options)) {
       trimRight(tokens[i + 1], options.greedy)
     }
   })
 }
 
+function shouldTrimLeft (token, inRaw, options) {
+  if (inRaw) return false
+  if (token.type === 'tag') return token.trim_left || options.trim_tag_left
+  if (token.type === 'value') return token.trim_left || options.trim_value_left
+}
+
+function shouldTrimRight (token, inRaw, options) {
+  if (inRaw) return false
+  if (token.type === 'tag') return token.trim_right || options.trim_tag_right
+  if (token.type === 'value') return token.trim_right || options.trim_value_right
+}
+
 function trimLeft (token, greedy) {
   if (!token || token.type !== 'html') return
 
+  console.log('trimming', token.value)
   var rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
   token.value = token.value.replace(rLeft, '')
 }

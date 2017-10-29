@@ -55,8 +55,8 @@ module.exports = function (Tag, Filter) {
       var tpl = null
       if (token.type === 'tag') {
         tpl = parseTag(token, tokens)
-      } else if (token.type === 'output') {
-        tpl = parseOutput(token.value)
+      } else if (token.type === 'value') {
+        tpl = parseValue(token.value)
       } else { // token.type === 'html'
         tpl = token
       }
@@ -72,9 +72,9 @@ module.exports = function (Tag, Filter) {
     return Tag.construct(token, tokens)
   }
 
-  function parseOutput (str) {
+  function parseValue (str) {
     var match = lexical.matchValue(str)
-    assert(match, `illegal output string: ${str}`)
+    assert(match, `illegal value string: ${str}`)
 
     var initial = match[0]
     str = str.substr(match.index + match[0].length)
@@ -85,7 +85,7 @@ module.exports = function (Tag, Filter) {
     }
 
     return {
-      type: 'output',
+      type: 'value',
       initial: initial,
       filters: filters.map(str => Filter.construct(str))
     }
@@ -100,6 +100,6 @@ module.exports = function (Tag, Filter) {
     parse,
     parseTag,
     parseStream,
-    parseOutput
+    parseValue
   }
 }

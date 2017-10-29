@@ -27,9 +27,9 @@ var render = {
       if (template.type === 'tag') {
         return this.renderTag(template, scope)
           .then(partial => partial === undefined ? '' : partial)
-      } else if (template.type === 'output') {
+      } else if (template.type === 'value') {
         return Promise.resolve()
-          .then(() => this.evalOutput(template, scope))
+          .then(() => this.evalValue(template, scope))
           .then(partial => partial === undefined ? '' : stringify(partial))
       } else { // template.type === 'html'
         return Promise.resolve(template.value)
@@ -47,8 +47,8 @@ var render = {
     return template.render(scope)
   },
 
-  evalOutput: function (template, scope) {
-    assert(scope, 'unable to evalOutput: scope undefined')
+  evalValue: function (template, scope) {
+    assert(scope, 'unable to evalValue: scope undefined')
     return template.filters.reduce(
       (prev, filter) => filter.render(prev, scope),
       Syntax.evalExp(template.initial, scope))

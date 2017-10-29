@@ -44,23 +44,23 @@ describe('render', function () {
     var time = sinon.spy()
     filter.register('date', date)
     filter.register('time', time)
-    var tpl = Template.parseOutput('foo.bar[0] | date: "b" | time:2')
-    render.evalOutput(tpl, scope)
+    var tpl = Template.parseValue('foo.bar[0] | date: "b" | time:2')
+    render.evalValue(tpl, scope)
     expect(date).to.have.been.calledWith('a', 'b')
     expect(time).to.have.been.calledWith('y', 2)
   })
 
-  describe('.evalOutput()', function () {
+  describe('.evalValue()', function () {
     it('should throw when scope undefined', function () {
       expect(function () {
-        render.evalOutput()
+        render.evalValue()
       }).to.throw(/scope undefined/)
     })
-    it('should eval output', function () {
+    it('should eval value', function () {
       filter.register('date', (l, r) => l + r)
       filter.register('time', (l, r) => l + 3 * r)
-      var tpl = Template.parseOutput('foo.bar[0] | date: "b" | time:2')
-      expect(render.evalOutput(tpl, scope)).to.equal('ab6')
+      var tpl = Template.parseValue('foo.bar[0] | date: "b" | time:2')
+      expect(render.evalValue(tpl, scope)).to.equal('ab6')
     })
   })
 })

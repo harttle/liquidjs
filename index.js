@@ -53,8 +53,12 @@ var _engine = {
       .then(templates => this.render(templates, ctx, opts))
   },
   evalOutput: function (str, scope) {
-    var tpl = this.parser.parseOutput(str.trim())
-    return this.renderer.evalOutput(tpl, scope)
+    console.warn('[liquidjs:deprecated] use .evalValue() instead of .evalOutput')
+    return this.evalValue(str, scope)
+  },
+  evalValue: function (str, scope) {
+    var tpl = this.parser.parseValue(str.trim())
+    return this.renderer.evalValue(tpl, scope)
   },
   registerFilter: function (name, filter) {
     return this.filter.register(name, filter)
@@ -111,8 +115,11 @@ function factory (options) {
     root: ['.'],
     cache: false,
     extname: '.liquid',
-    trim_right: false,
-    trim_left: false,
+    trim_tag_right: false,
+    trim_tag_left: false,
+    trim_value_right: false,
+    trim_value_left: false,
+    greedy: true,
     strict_filters: false,
     strict_variables: false
   }, options)

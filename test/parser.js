@@ -19,28 +19,28 @@ describe('template', function () {
     template = Template(tag, filter)
   })
 
-  it('should throw when output string illegal', function () {
+  it('should throw when value string illegal', function () {
     expect(function () {
-      template.parseOutput('/')
-    }).to.throw(/illegal output string/)
+      template.parseValue('/')
+    }).to.throw(/illegal value string/)
   })
 
-  it('should parse output string', function () {
-    var tpl = template.parseOutput('foo')
-    expect(tpl.type).to.equal('output')
+  it('should parse value string', function () {
+    var tpl = template.parseValue('foo')
+    expect(tpl.type).to.equal('value')
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters).to.deep.equal([])
   })
 
-  it('should parse output string with a simple filter', function () {
-    var tpl = template.parseOutput('foo | add: 3, "foo"')
+  it('should parse value string with a simple filter', function () {
+    var tpl = template.parseValue('foo | add: 3, "foo"')
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters.length).to.equal(1)
     expect(tpl.filters[0].filter).to.equal(add)
   })
 
-  it('should parse output string with filters', function () {
-    var tpl = template.parseOutput('foo | add: "|" | add')
+  it('should parse value string with filters', function () {
+    var tpl = template.parseValue('foo | add: "|" | add')
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters.length).to.equal(2)
   })

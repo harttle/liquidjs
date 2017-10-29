@@ -40,14 +40,14 @@ describe('liquid', function () {
       expect(liquid.options.root).to.deep.equal([])
     })
   })
-  describe('{{output}}', function () {
-    it('should output object', function () {
+  describe('{{value}}', function () {
+    it('should value object', function () {
       return expect(engine.parseAndRender('{{obj}}', ctx)).to.eventually.equal('{"foo":"bar"}')
     })
-    it('should output array', function () {
+    it('should value array', function () {
       return expect(engine.parseAndRender('{{arr}}', ctx)).to.eventually.equal('[-2,"a"]')
     })
-    it('should output undefined to empty', function () {
+    it('should value undefined to empty', function () {
       return expect(engine.parseAndRender('foo{{zzz}}bar', ctx)).to.eventually.equal('foobar')
     })
     it('should render as null when filter undefined', function () {
@@ -131,102 +131,6 @@ describe('liquid', function () {
     it('should throw when file not readable', function () {
       return expect(engine.renderFile('/un-readable.html')).to
         .be.rejectedWith(/EACCES/)
-    })
-  })
-  describe('strict', function () {
-    it('should not throw when strict_variables false (default)', function () {
-      return expect(engine.parseAndRender('before{{notdefined}}after', ctx)).to
-        .eventually.equal('beforeafter')
-    })
-    it('should throw when strict_variables true', function () {
-      var tpl = engine.parse('before{{notdefined}}after')
-      var opts = {
-        strict_variables: true
-      }
-      return expect(engine.render(tpl, ctx, opts)).to
-        .be.rejectedWith(/undefined variable: notdefined/)
-    })
-    it('should pass strict_variables to render by parseAndRender', function () {
-      var html = 'before{{notdefined}}after'
-      var opts = {
-        strict_variables: true
-      }
-      return expect(engine.parseAndRender(html, ctx, opts)).to
-        .be.rejectedWith(/undefined variable: notdefined/)
-    })
-  })
-  describe('cache', function () {
-    it('should be disabled by default', function () {
-      return engine.renderFile('files/foo')
-        .then(x => expect(x).to.equal('foo'))
-        .then(() => mock({
-          '/root/files/foo.html': 'bar'
-        }))
-        .then(() => engine.renderFile('files/foo'))
-        .then(x => expect(x).to.equal('bar'))
-    })
-    it('should respect cache=true option', function () {
-      engine = Liquid({
-        root: '/root/',
-        extname: '.html',
-        cache: true
-      })
-      return engine.renderFile('files/foo')
-        .then(x => expect(x).to.equal('foo'))
-        .then(() => mock({
-          '/root/files/foo.html': 'bar'
-        }))
-        .then(() => engine.renderFile('files/foo'))
-        .then(x => expect(x).to.equal('foo'))
-    })
-  })
-  describe('trim_left, trim_right', function () {
-    it('should trim_left for tags when trim_left=true', function () {
-      engine = Liquid({
-        trim_left: true
-      })
-      return expect(engine.parseAndRender(' \n \t{%if true%}foo{%endif%} '))
-        .to.eventually.equal('foo ')
-    })
-    it('should trim_right for tags when trim_right=true', function () {
-      engine = Liquid({
-        trim_right: true
-      })
-      return expect(engine.parseAndRender('\t{%if true%}foo{%endif%} \n'))
-        .to.eventually.equal('\tfoo')
-    })
-    it('should trim all blanks before and after when greedy=true', function () {
-      engine = Liquid({
-        greedy: true
-      })
-      return expect(engine.parseAndRender('\t{%-if true%}foo{%endif-%} \n \n'))
-        .to.eventually.equal('foo')
-    })
-    it('should support trim using markup', function () {
-      engine = Liquid()
-      var src = [
-        '{%- assign username = "John G. Chalmers-Smith" -%}',
-        '{%- if username and username.length > 10 -%}',
-        '  Wow, {{ username }}, you have a long name!',
-        '{%- else -%}',
-        '  Hello there!',
-        '{%- endif -%}'
-      ].join('\n')
-      var dst = 'Wow, John G. Chalmers-Smith, you have a long name!'
-      return expect(engine.parseAndRender(src)).to.eventually.equal(dst)
-    })
-    it('should not trim when not specified', function () {
-      engine = Liquid()
-      var src = [
-        '{% assign username = "John G. Chalmers-Smith" %}',
-        '{% if username and username.length > 10 %}',
-        '  Wow, {{ username }}, you have a long name!',
-        '{% else %}',
-        '  Hello there!',
-        '{% endif %}'
-      ].join('\n')
-      var dst = '\n\n  Wow, John G. Chalmers-Smith, you have a long name!\n'
-      return expect(engine.parseAndRender(src)).to.eventually.equal(dst)
     })
   })
 })

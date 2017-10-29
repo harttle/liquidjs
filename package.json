@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/ test/",
-    "test": "npm run lint && mocha --recursive",
+    "test": "mocha --recursive",
     "coverage": "NODE_ENV=test istanbul cover --report html ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "lcov": "NODE_ENV=test istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "dist": "make dist",
-    "preversion": "npm test",
+    "preversion": "npm run lint && npm test",
     "version": "npm run dist && git add -A dist",
     "postversion": "git push && git push --tags && npm publish"
   },

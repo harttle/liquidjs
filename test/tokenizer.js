@@ -25,20 +25,20 @@ describe('tokenizer', function () {
       expect(tokens[1].type).to.equal('tag')
       expect(tokens[1].value).to.equal('for p in a[1]')
     })
-    it('should handle output syntax', function () {
+    it('should handle value syntax', function () {
       var html = '<p>{{foo | date: "%Y-%m-%d"}}</p>'
       var tokens = parse(html)
 
       expect(tokens.length).to.equal(3)
-      expect(tokens[1].type).to.equal('output')
+      expect(tokens[1].type).to.equal('value')
       expect(tokens[1].value).to.equal('foo | date: "%Y-%m-%d"')
     })
-    it('should handle successive outputs and tags', function () {
+    it('should handle successive value and tags', function () {
       var html = '{{foo}}{{bar}}{%foo%}{%bar%}'
       var tokens = parse(html)
 
       expect(tokens.length).to.equal(4)
-      expect(tokens[0].type).to.equal('output')
+      expect(tokens[0].type).to.equal('value')
       expect(tokens[3].type).to.equal('tag')
 
       expect(tokens[1].value).to.equal('bar')
@@ -61,11 +61,11 @@ describe('tokenizer', function () {
       expect(tokens[0].args).to.equal('a:a\nb:1.23')
       expect(tokens[0].raw).to.equal('{%foo\na:a\nb:1.23\n%}')
     })
-    it('should handle multiple lines output', function () {
+    it('should handle multiple lines value', function () {
       var html = '{{foo\n|date:\n"%Y-%m-%d"\n}}'
       var tokens = parse(html)
       expect(tokens.length).to.equal(1)
-      expect(tokens[0].type).to.equal('output')
+      expect(tokens[0].type).to.equal('value')
       expect(tokens[0].raw).to.equal('{{foo\n|date:\n"%Y-%m-%d"\n}}')
     })
   })

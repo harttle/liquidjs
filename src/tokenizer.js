@@ -19,7 +19,7 @@ function parse (input, file, options) {
     }
     tokens.push(match[1]
       ? parseTagToken(match[1], match[2].trim(), match.index)
-      : parseOutputToken(match[3], match[4].trim(), match.index))
+      : parseValueToken(match[3], match[4].trim(), match.index))
   }
   if (input.length > lastMatchEnd) {
     tokens.push(parseHTMLToken(lastMatchEnd, input.length))
@@ -48,9 +48,9 @@ function parse (input, file, options) {
     return token
   }
 
-  function parseOutputToken (raw, value, pos) {
+  function parseValueToken (raw, value, pos) {
     return {
-      type: 'output',
+      type: 'value',
       line: lineNumber.get(pos),
       trim_left: raw.slice(0, 3) === '{{-',
       trim_right: raw.slice(-3) === '-}}',
