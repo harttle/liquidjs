@@ -342,7 +342,7 @@ function factory(options) {
   options = _.assign({
     root: ['.'],
     cache: false,
-    extname: '.liquid',
+    extname: '',
     trim_tag_right: false,
     trim_tag_left: false,
     trim_value_right: false,
