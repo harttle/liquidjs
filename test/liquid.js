@@ -93,7 +93,7 @@ describe('liquid', function () {
         .to.eventually.equal('foo')
     })
     it('should find files without extname', function () {
-      var engine = Liquid({root: '/root', extname: ''})
+      var engine = Liquid({root: '/root'})
       return expect(engine.renderFile('/root/files/bar', ctx))
         .to.eventually.equal('bar')
     })
