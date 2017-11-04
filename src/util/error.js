@@ -7,7 +7,7 @@ function initError () {
   }
 }
 
-function initLiquidError (message, token) {
+function initLiquidError (err, token) {
   initError.call(this)
 
   this.input = token.input
@@ -15,12 +15,14 @@ function initLiquidError (message, token) {
   this.file = token.file
 
   var context = mkContext(token.input, token.line)
-  this.message = mkMessage(message, token)
-  this.stack = context + '\n' + (this.stack || this.message)
+  this.message = mkMessage(err.message, token)
+  this.stack = context +
+    '\n' + (this.stack || this.message) +
+      (err.stack ? '\nFrom ' + err.stack : '')
 }
 
 function TokenizationError (message, token) {
-  initLiquidError.call(this, message, token)
+  initLiquidError.call(this, {message: message}, token)
 }
 TokenizationError.prototype = Object.create(Error.prototype)
 TokenizationError.prototype.constructor = TokenizationError
@@ -29,7 +31,7 @@ function ParseError (e, token) {
   _.assign(this, e)
   this.originalError = e
 
-  initLiquidError.call(this, e.message, token)
+  initLiquidError.call(this, e, token)
 }
 ParseError.prototype = Object.create(Error.prototype)
 ParseError.prototype.constructor = ParseError
@@ -42,7 +44,7 @@ function RenderError (e, tpl) {
   _.assign(this, e)
   this.originalError = e
 
-  initLiquidError.call(this, e.message, tpl.token)
+  initLiquidError.call(this, e, tpl.token)
 }
 RenderError.prototype = Object.create(Error.prototype)
 RenderError.prototype.constructor = RenderError

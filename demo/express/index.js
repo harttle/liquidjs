@@ -1,6 +1,5 @@
-const app = require('./app.js');
+const app = require('./app.js')
 
 app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
-
+  console.log('Example app listening on port 3000!')
+})

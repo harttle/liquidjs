@@ -11,6 +11,9 @@ var Scope = {
     return ctx
   },
   get: function (str) {
+    if (str === 'liquid') {
+      throw new Error('NO LONGER SUPPORTED: use scope.opts instread of scope.get("liquid")')
+    }
     try {
       return this.getPropertyByPath(this.scopes, str)
     } catch (e) {
@@ -168,19 +171,14 @@ function matchRightBracket (str, begin) {
 }
 
 exports.factory = function (ctx, opts) {
-  opts = _.assign({
+  var defaultOptions = {
     strict_variables: false,
     strict_filters: false,
     blocks: {},
     root: []
-  }, opts)
-
-  ctx = _.assign(ctx, {
-    liquid: opts
-  })
-
+  }
   var scope = Object.create(Scope)
-  scope.opts = opts
-  scope.scopes = [ctx]
+  scope.opts = _.assign(defaultOptions, opts)
+  scope.scopes = [ctx || {}]
   return scope
 }

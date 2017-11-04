@@ -24,13 +24,23 @@ describe('tags/layout', function () {
     return expect(liquid.parseAndRender(src)).to
       .be.rejectedWith(/tag {%block%} not closed/)
   })
-  it('should handle anonymous block', function () {
-    mock({
-      '/parent.html': 'X{%block%}{%endblock%}Y'
+  describe('anonymous block', function () {
+    it('should handle anonymous block', function () {
+      mock({
+        '/parent.html': 'X{%block%}{%endblock%}Y'
+      })
+      var src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
+      return expect(liquid.parseAndRender(src)).to
+        .eventually.equal('XAY')
     })
-    var src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
-    return expect(liquid.parseAndRender(src)).to
-      .eventually.equal('XAY')
+    it('should handle top level contents as anonymous block', function () {
+      mock({
+        '/parent.html': 'X{%block%}{%endblock%}Y'
+      })
+      var src = '{% layout "parent.html" %}A'
+      return expect(liquid.parseAndRender(src)).to
+        .eventually.equal('XAY')
+    })
   })
   it('should handle named blocks', function () {
     mock({

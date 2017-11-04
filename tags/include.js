@@ -18,21 +18,20 @@ module.exports = function (liquid) {
     render: function (scope, hash) {
       var filepath = Liquid.evalValue(this.value, scope)
 
-      var register = scope.get('liquid')
-      var originBlocks = register.blocks
-      register.blocks = {}
+      var originBlocks = scope.opts.blocks
+      scope.opts.blocks = {}
 
       if (this.with) {
         hash[filepath] = Liquid.evalValue(this.with, scope)
       }
-      return liquid.getTemplate(filepath, register.root)
+      return liquid.getTemplate(filepath, scope.opts.root)
         .then((templates) => {
           scope.push(hash)
           return liquid.renderer.renderTemplates(templates, scope)
         })
         .then((html) => {
           scope.pop()
-          register.blocks = originBlocks
+          scope.opts.blocks = originBlocks
           return html
         })
     }

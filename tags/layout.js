@@ -14,12 +14,11 @@ module.exports = function (liquid) {
     },
     render: function (scope, hash) {
       var layout = Liquid.evalValue(this.layout, scope)
-      var register = scope.get('liquid')
 
       // render the remaining tokens immediately
       return liquid.renderer.renderTemplates(this.tpls, scope)
         // now register.blocks contains rendered blocks
-        .then(() => liquid.getTemplate(layout, register.root))
+        .then(() => liquid.getTemplate(layout, scope.opts.root))
         .then(templates => {
           // push the hash
           scope.push(hash)
@@ -49,18 +48,17 @@ module.exports = function (liquid) {
       stream.start()
     },
     render: function (scope) {
-      var register = scope.get('liquid')
-      var html = register.blocks[this.block]
+      var html = scope.opts.blocks[this.block]
       // if not defined yet
       if (html === undefined) {
         return liquid.renderer.renderTemplates(this.tpls, scope)
           .then((partial) => {
-            register.blocks[this.block] = partial
+            scope.opts.blocks[this.block] = partial
             return partial
           })
       } else {
         // if already defined by desendents
-        register.blocks[this.block] = html
+        scope.opts.blocks[this.block] = html
         return Promise.resolve(html)
       }
     }
