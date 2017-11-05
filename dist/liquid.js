@@ -920,6 +920,9 @@ var Scope = {
     return ctx;
   },
   get: function get(str) {
+    if (str === 'liquid') {
+      throw new Error('NO LONGER SUPPORTED: use scope.opts instread of scope.get("liquid")');
+    }
     try {
       return this.getPropertyByPath(this.scopes, str);
     } catch (e) {
@@ -1077,20 +1080,15 @@ function matchRightBracket(str, begin) {
 }
 
 exports.factory = function (ctx, opts) {
-  opts = _.assign({
+  var defaultOptions = {
     strict_variables: false,
     strict_filters: false,
     blocks: {},
     root: []
-  }, opts);
-
-  ctx = _.assign(ctx, {
-    liquid: opts
-  });
-
+  };
   var scope = Object.create(Scope);
-  scope.opts = opts;
-  scope.scopes = [ctx];
+  scope.opts = _.assign(defaultOptions, opts);
+  scope.scopes = [ctx || {}];
   return scope;
 };
 
@@ -1342,7 +1340,7 @@ function initError() {
   }
 }
 
-function initLiquidError(message, token) {
+function initLiquidError(err, token) {
   initError.call(this);
 
   this.input = token.input;
@@ -1350,12 +1348,12 @@ function initLiquidError(message, token) {
   this.file = token.file;
 
   var context = mkContext(token.input, token.line);
-  this.message = mkMessage(message, token);
-  this.stack = context + '\n' + (this.stack || this.message);
+  this.message = mkMessage(err.message, token);
+  this.stack = context + '\n' + (this.stack || this.message) + (err.stack ? '\nFrom ' + err.stack : '');
 }
 
 function TokenizationError(message, token) {
-  initLiquidError.call(this, message, token);
+  initLiquidError.call(this, { message: message }, token);
 }
 TokenizationError.prototype = Object.create(Error.prototype);
 TokenizationError.prototype.constructor = TokenizationError;
@@ -1364,7 +1362,7 @@ function ParseError(e, token) {
   _.assign(this, e);
   this.originalError = e;
 
-  initLiquidError.call(this, e.message, token);
+  initLiquidError.call(this, e, token);
 }
 ParseError.prototype = Object.create(Error.prototype);
 ParseError.prototype.constructor = ParseError;
@@ -1377,7 +1375,7 @@ function RenderError(e, tpl) {
   _.assign(this, e);
   this.originalError = e;
 
-  initLiquidError.call(this, e.message, tpl.token);
+  initLiquidError.call(this, e, tpl.token);
 }
 RenderError.prototype = Object.create(Error.prototype);
 RenderError.prototype.constructor = RenderError;
@@ -2035,41 +2033,41 @@ var candidatesRE = new RegExp(lexical.value.source, 'g');
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
-    liquid.registerTag('cycle', {
+  liquid.registerTag('cycle', {
 
-        parse: function parse(tagToken, remainTokens) {
-            var match = groupRE.exec(tagToken.args);
-            assert(match, 'illegal tag: ' + tagToken.raw);
+    parse: function parse(tagToken, remainTokens) {
+      var match = groupRE.exec(tagToken.args);
+      assert(match, 'illegal tag: ' + tagToken.raw);
 
-            this.group = match[1] || '';
-            var candidates = match[2];
+      this.group = match[1] || '';
+      var candidates = match[2];
 
-            this.candidates = [];
+      this.candidates = [];
 
-            while (match = candidatesRE.exec(candidates)) {
-                this.candidates.push(match[0]);
-            }
+      while (match = candidatesRE.exec(candidates)) {
+        this.candidates.push(match[0]);
+      }
+      assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
+    },
 
-            assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
-        },
+    render: function render(scope, hash) {
+      var group = Liquid.evalValue(this.group, scope);
+      var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
 
-        render: function render(scope, hash) {
-            var group = Liquid.evalValue(this.group, scope);
-            var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
-            var register = scope.get('liquid');
-            var idx = register[fingerprint];
+      var groups = scope.opts.groups = scope.opts.groups || {};
+      var idx = groups[fingerprint];
 
-            if (idx === undefined) {
-                idx = register[fingerprint] = 0;
-            }
+      if (idx === undefined) {
+        idx = groups[fingerprint] = 0;
+      }
 
-            var candidate = this.candidates[idx];
-            idx = (idx + 1) % this.candidates.length;
-            register[fingerprint] = idx;
+      var candidate = this.candidates[idx];
+      idx = (idx + 1) % this.candidates.length;
+      groups[fingerprint] = idx;
 
-            return Promise.resolve(Liquid.evalValue(candidate, scope));
-        }
-    });
+      return Promise.resolve(Liquid.evalValue(candidate, scope));
+    }
+  });
 };
 
 },{"..":2,"../src/util/assert.js":16,"any-promise":3}],28:[function(require,module,exports){
@@ -2280,19 +2278,21 @@ module.exports = function (liquid) {
     render: function render(scope, hash) {
       var filepath = Liquid.evalValue(this.value, scope);
 
-      var register = scope.get('liquid');
-      var originBlocks = register.blocks;
-      register.blocks = {};
+      var originBlocks = scope.opts.blocks;
+      var originBlockMode = scope.opts.blockMode;
+      scope.opts.blocks = {};
+      scope.opts.blockMode = 'output';
 
       if (this.with) {
         hash[filepath] = Liquid.evalValue(this.with, scope);
       }
-      return liquid.getTemplate(filepath, register.root).then(function (templates) {
+      return liquid.getTemplate(filepath, scope.opts.root).then(function (templates) {
         scope.push(hash);
         return liquid.renderer.renderTemplates(templates, scope);
       }).then(function (html) {
         scope.pop();
-        register.blocks = originBlocks;
+        scope.opts.blocks = originBlocks;
+        scope.opts.blockMode = originBlockMode;
         return html;
       });
     }
@@ -2350,6 +2350,12 @@ var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var assert = require('../src/util/assert.js');
 
+/*
+ * blockMode:
+ * * "store": store rendered html into blocks
+ * * "output": output rendered html
+ */
+
 module.exports = function (liquid) {
   liquid.registerTag('layout', {
     parse: function parse(token, remainTokens) {
@@ -2361,17 +2367,18 @@ module.exports = function (liquid) {
     },
     render: function render(scope, hash) {
       var layout = Liquid.evalValue(this.layout, scope);
-      var register = scope.get('liquid');
 
       // render the remaining tokens immediately
-      return liquid.renderer.renderTemplates(this.tpls, scope)
-      // now register.blocks contains rendered blocks
-      .then(function () {
-        return liquid.getTemplate(layout, register.root);
+      scope.opts.blockMode = 'store';
+      return liquid.renderer.renderTemplates(this.tpls, scope).then(function (html) {
+        if (scope.opts.blocks[''] === undefined) {
+          scope.opts.blocks[''] = html;
+        }
+        return liquid.getTemplate(layout, scope.opts.root);
       }).then(function (templates) {
         // push the hash
         scope.push(hash);
-        // render the parent
+        scope.opts.blockMode = 'output';
         return liquid.renderer.renderTemplates(templates, scope);
       })
       // pop the hash
@@ -2387,7 +2394,7 @@ module.exports = function (liquid) {
       var _this = this;
 
       var match = /\w+/.exec(token.args);
-      this.block = match ? match[0] : 'anonymous';
+      this.block = match ? match[0] : '';
 
       this.tpls = [];
       var stream = liquid.parser.parseStream(remainTokens).on('tag:endblock', function () {
@@ -2402,19 +2409,19 @@ module.exports = function (liquid) {
     render: function render(scope) {
       var _this2 = this;
 
-      var register = scope.get('liquid');
-      var html = register.blocks[this.block];
-      // if not defined yet
-      if (html === undefined) {
-        return liquid.renderer.renderTemplates(this.tpls, scope).then(function (partial) {
-          register.blocks[_this2.block] = partial;
-          return partial;
-        });
-      } else {
-        // if already defined by desendents
-        register.blocks[this.block] = html;
-        return Promise.resolve(html);
-      }
+      return Promise.resolve(scope.opts.blocks[this.block]).then(function (html) {
+        return html === undefined
+        // render default block
+        ? liquid.renderer.renderTemplates(_this2.tpls, scope)
+        // use child-defined block
+        : html;
+      }).then(function (html) {
+        if (scope.opts.blockMode === 'store') {
+          scope.opts.blocks[_this2.block] = html;
+          return '';
+        }
+        return html;
+      });
     }
   });
 };
