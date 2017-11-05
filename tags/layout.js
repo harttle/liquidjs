@@ -3,6 +3,12 @@ const Promise = require('any-promise')
 const lexical = Liquid.lexical
 const assert = require('../src/util/assert.js')
 
+/*
+ * blockMode:
+ * * "store": store rendered html into blocks
+ * * "output": output rendered html
+ */
+
 module.exports = function (liquid) {
   liquid.registerTag('layout', {
     parse: function (token, remainTokens) {
@@ -16,13 +22,18 @@ module.exports = function (liquid) {
       var layout = Liquid.evalValue(this.layout, scope)
 
       // render the remaining tokens immediately
+      scope.opts.blockMode = 'store'
       return liquid.renderer.renderTemplates(this.tpls, scope)
-        // now register.blocks contains rendered blocks
-        .then(() => liquid.getTemplate(layout, scope.opts.root))
+        .then(html => {
+          if (scope.opts.blocks[''] === undefined) {
+            scope.opts.blocks[''] = html
+          }
+          return liquid.getTemplate(layout, scope.opts.root)
+        })
         .then(templates => {
           // push the hash
           scope.push(hash)
-          // render the parent
+          scope.opts.blockMode = 'output'
           return liquid.renderer.renderTemplates(templates, scope)
         })
         // pop the hash
@@ -36,7 +47,7 @@ module.exports = function (liquid) {
   liquid.registerTag('block', {
     parse: function (token, remainTokens) {
       var match = /\w+/.exec(token.args)
-      this.block = match ? match[0] : 'anonymous'
+      this.block = match ? match[0] : ''
 
       this.tpls = []
       var stream = liquid.parser.parseStream(remainTokens)
@@ -48,19 +59,19 @@ module.exports = function (liquid) {
       stream.start()
     },
     render: function (scope) {
-      var html = scope.opts.blocks[this.block]
-      // if not defined yet
-      if (html === undefined) {
-        return liquid.renderer.renderTemplates(this.tpls, scope)
-          .then((partial) => {
-            scope.opts.blocks[this.block] = partial
-            return partial
-          })
-      } else {
-        // if already defined by desendents
-        scope.opts.blocks[this.block] = html
-        return Promise.resolve(html)
-      }
+      return Promise.resolve(scope.opts.blocks[this.block])
+        .then(html => html === undefined
+          // render default block
+          ? liquid.renderer.renderTemplates(this.tpls, scope)
+          // use child-defined block
+          : html)
+        .then(html => {
+          if (scope.opts.blockMode === 'store') {
+            scope.opts.blocks[this.block] = html
+            return ''
+          }
+          return html
+        })
     }
   })
 }

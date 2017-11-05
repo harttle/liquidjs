@@ -19,7 +19,9 @@ module.exports = function (liquid) {
       var filepath = Liquid.evalValue(this.value, scope)
 
       var originBlocks = scope.opts.blocks
+      var originBlockMode = scope.opts.blockMode
       scope.opts.blocks = {}
+      scope.opts.blockMode = 'output'
 
       if (this.with) {
         hash[filepath] = Liquid.evalValue(this.with, scope)
@@ -32,6 +34,7 @@ module.exports = function (liquid) {
         .then((html) => {
           scope.pop()
           scope.opts.blocks = originBlocks
+          scope.opts.blockMode = originBlockMode
           return html
         })
     }

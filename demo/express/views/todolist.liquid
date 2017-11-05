@@ -1,7 +1,7 @@
 {% layout 'layout' %}
 
 <ul>
-  {% for todo in todolist %}
+  {% for todo in todos %}
     <li>{% include 'todo' id=forloop.index %}</li>
   {% endfor %}
 </ul>
