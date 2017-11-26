@@ -70,13 +70,9 @@ describe('liquid', function () {
   it('should render template multiple times', function () {
     var template = engine.parse('{{obj}}')
     return engine.render(template, ctx)
-      .then((result) => {
-        expect(result).to.equal('{"foo":"bar"}')
-        return engine.render(template, ctx)
-      })
-      .then((result) => {
-        return expect(result).to.equal('{"foo":"bar"}')
-      })
+      .then(result => expect(result).to.equal('{"foo":"bar"}'))
+      .then(() => engine.render(template, ctx))
+      .then((result) => expect(result).to.equal('{"foo":"bar"}'))
   })
   it('should render filters', function () {
     var template = engine.parse('<p>{{arr | join: "_"}}</p>')

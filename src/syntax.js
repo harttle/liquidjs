@@ -1,4 +1,4 @@
-const operators = require('./operators.js')
+const operators = require('./operators.js')(isTruthy)
 const lexical = require('./lexical.js')
 const assert = require('../src/util/assert.js')
 

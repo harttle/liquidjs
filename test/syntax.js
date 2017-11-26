@@ -14,6 +14,7 @@ describe('expression', function () {
     scope = Scope.factory({
       one: 1,
       two: 2,
+      empty: '',
       x: 'XXX',
       y: undefined,
       z: null
@@ -73,10 +74,19 @@ describe('expression', function () {
       expect(evalExp('"<=" == "<="', scope)).to.equal(true)
     })
 
-    it('should eval complex expression', function () {
-      expect(evalExp('1<2 and x contains "x"', scope)).to.equal(false)
-      expect(evalExp('1<2 or x contains "x"', scope)).to.equal(true)
-      expect(evalExp('false or true', scope)).to.equal(true)
+    describe('complex expression', function () {
+      it('should support value or value', function () {
+        expect(evalExp('false or true', scope)).to.equal(true)
+      })
+      it('should support < and contains', function () {
+        expect(evalExp('1<2 and x contains "x"', scope)).to.equal(false)
+      })
+      it('should support < or contains', function () {
+        expect(evalExp('1<2 or x contains "x"', scope)).to.equal(true)
+      })
+      it('should support value and !=', function () {
+        expect(evalExp('empty and empty != ""', scope)).to.equal(false)
+      })
     })
 
     it('should eval range expression', function () {
