@@ -677,39 +677,39 @@ module.exports = {
 },{}],9:[function(require,module,exports){
 'use strict';
 
-var operators = {
-  '==': function _(l, r) {
-    return l === r;
-  },
-  '!=': function _(l, r) {
-    return l !== r;
-  },
-  '>': function _(l, r) {
-    return l !== null && r !== null && l > r;
-  },
-  '<': function _(l, r) {
-    return l !== null && r !== null && l < r;
-  },
-  '>=': function _(l, r) {
-    return l !== null && r !== null && l >= r;
-  },
-  '<=': function _(l, r) {
-    return l !== null && r !== null && l <= r;
-  },
-  'contains': function contains(l, r) {
-    if (!l) return false;
-    if (typeof l.indexOf !== 'function') return false;
-    return l.indexOf(r) > -1;
-  },
-  'and': function and(l, r) {
-    return l && r;
-  },
-  'or': function or(l, r) {
-    return l || r;
-  }
+module.exports = function (isTruthy) {
+  return {
+    '==': function _(l, r) {
+      return l === r;
+    },
+    '!=': function _(l, r) {
+      return l !== r;
+    },
+    '>': function _(l, r) {
+      return l !== null && r !== null && l > r;
+    },
+    '<': function _(l, r) {
+      return l !== null && r !== null && l < r;
+    },
+    '>=': function _(l, r) {
+      return l !== null && r !== null && l >= r;
+    },
+    '<=': function _(l, r) {
+      return l !== null && r !== null && l <= r;
+    },
+    'contains': function contains(l, r) {
+      if (!l) return false;
+      if (typeof l.indexOf !== 'function') return false;
+      return l.indexOf(r) > -1;
+    },
+    'and': function and(l, r) {
+      return isTruthy(l) && isTruthy(r);
+    },
+    'or': function or(l, r) {
+      return isTruthy(l) || isTruthy(r);
+    }
+  };
 };
-
-module.exports = operators;
 
 },{}],10:[function(require,module,exports){
 'use strict';
@@ -1095,7 +1095,7 @@ exports.factory = function (ctx, opts) {
 },{"./lexical.js":8,"./util/assert.js":16,"./util/underscore.js":21}],13:[function(require,module,exports){
 'use strict';
 
-var operators = require('./operators.js');
+var operators = require('./operators.js')(isTruthy);
 var lexical = require('./lexical.js');
 var assert = require('../src/util/assert.js');
 
