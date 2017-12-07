@@ -24,8 +24,13 @@ var filters = {
   'ceil': v => Math.ceil(v),
   'concat': (v, arg) => Array.prototype.concat.call(v, arg),
   'date': (v, arg) => {
-    if (v === 'now') v = new Date()
-    return v instanceof Date ? strftime(v, arg) : ''
+    let date = v
+    if (v === 'now') {
+      date = new Date()
+    } else if (_.isString(v)) {
+      date = new Date(v)
+    }
+    return isValidDate(date) ? strftime(date, arg) : v
   },
   'default': (v, arg) => isTruthy(v) ? v : arg,
   'divided_by': (v, arg) => Math.floor(v / arg),
@@ -122,6 +127,10 @@ function bindFixed (cb) {
 
 function registerAll (liquid) {
   return _.forOwn(filters, (func, name) => liquid.registerFilter(name, func))
+}
+
+function isValidDate (date) {
+  return date instanceof Date && !isNaN(date.getTime())
 }
 
 registerAll.filters = filters

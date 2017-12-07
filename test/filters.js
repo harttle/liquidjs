@@ -2,24 +2,24 @@ const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const expect = chai.expect
 var liquid = require('..')()
-var ctx
 chai.use(chaiAsPromised)
 
+var ctx = {
+  date: new Date(),
+  foo: 'bar',
+  arr: [-2, 'a'],
+  obj: {
+    foo: 'bar'
+  },
+  func: function () {},
+  posts: [{
+    category: 'foo'
+  }, {
+    category: 'bar'
+  }]
+}
+
 function test (src, dst) {
-  ctx = {
-    date: new Date(),
-    foo: 'bar',
-    arr: [-2, 'a'],
-    obj: {
-      foo: 'bar'
-    },
-    func: function () {},
-    posts: [{
-      category: 'foo'
-    }, {
-      category: 'bar'
-    }]
-  }
   return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(dst)
 }
 
@@ -91,8 +91,14 @@ describe('filters', function () {
     it('should create a new Date when given "now"', function () {
       return test('{{ "now" | date: "%Y"}}', (new Date()).getFullYear().toString())
     })
-    it('should render as empty string when invalid', function () {
-      return test('{{ "" | date: "%Y"}}', '')
+    it('should parse as Date when given UTC string', function () {
+      return test('{{ "1991-02-22T00:00:00" | date: "%Y"}}', '1991')
+    })
+    it('should render string as string if not valid', function () {
+      return test('{{ "foo" | date: "%Y"}}', 'foo')
+    })
+    it('should render object as string if not valid', function () {
+      return test('{{ obj | date: "%Y"}}', '{"foo":"bar"}')
     })
   })
 
