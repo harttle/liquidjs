@@ -12,7 +12,7 @@ var Scope = {
   },
   get: function (str) {
     if (str === 'liquid') {
-      throw new Error('NO LONGER SUPPORTED: use scope.opts instread of scope.get("liquid")')
+      throw new Error('NO LONGER SUPPORTED: use scope.opts instead of scope.get("liquid")')
     }
     try {
       return this.getPropertyByPath(this.scopes, str)
