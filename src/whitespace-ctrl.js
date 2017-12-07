@@ -33,7 +33,6 @@ function shouldTrimRight (token, inRaw, options) {
 function trimLeft (token, greedy) {
   if (!token || token.type !== 'html') return
 
-  console.log('trimming', token.value)
   var rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
   token.value = token.value.replace(rLeft, '')
 }
