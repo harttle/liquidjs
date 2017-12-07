@@ -1,6 +1,6 @@
 {
   "name": "liquidjs",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A Liquid template engine for Node.js and browsers, with all shopify/liquid features.",
   "main": "index.js",
   "scripts": {

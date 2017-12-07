@@ -1671,7 +1671,6 @@ var formatCodes = {
   },
   z: function z(d) {
     var tz = d.getTimezoneOffset() / 60 * 100;
-    console.log('tz', tz);
     return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4);
   },
   '%': function _() {
@@ -1887,7 +1886,6 @@ function shouldTrimRight(token, inRaw, options) {
 function trimLeft(token, greedy) {
   if (!token || token.type !== 'html') return;
 
-  console.log('trimming', token.value);
   var rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g;
   token.value = token.value.replace(rLeft, '');
 }
