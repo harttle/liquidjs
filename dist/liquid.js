@@ -37,8 +37,13 @@ var filters = {
     return Array.prototype.concat.call(v, arg);
   },
   'date': function date(v, arg) {
-    if (v === 'now') v = new Date();
-    return v instanceof Date ? strftime(v, arg) : '';
+    var date = v;
+    if (v === 'now') {
+      date = new Date();
+    } else if (_.isString(v)) {
+      date = new Date(v);
+    }
+    return isValidDate(date) ? strftime(date, arg) : v;
   },
   'default': function _default(v, arg) {
     return isTruthy(v) ? v : arg;
@@ -201,6 +206,10 @@ function registerAll(liquid) {
   return _.forOwn(filters, function (func, name) {
     return liquid.registerFilter(name, func);
   });
+}
+
+function isValidDate(date) {
+  return date instanceof Date && !isNaN(date.getTime());
 }
 
 registerAll.filters = filters;
@@ -921,7 +930,7 @@ var Scope = {
   },
   get: function get(str) {
     if (str === 'liquid') {
-      throw new Error('NO LONGER SUPPORTED: use scope.opts instread of scope.get("liquid")');
+      throw new Error('NO LONGER SUPPORTED: use scope.opts instead of scope.get("liquid")');
     }
     try {
       return this.getPropertyByPath(this.scopes, str);
