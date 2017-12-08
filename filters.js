@@ -24,7 +24,7 @@ var filters = {
   'ceil': v => Math.ceil(v),
   'concat': (v, arg) => Array.prototype.concat.call(v, arg),
   'date': (v, arg) => {
-    let date = v
+    var date = v
     if (v === 'now') {
       date = new Date()
     } else if (_.isString(v)) {
