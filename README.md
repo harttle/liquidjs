@@ -1,23 +1,22 @@
 # liquidjs
 
 [![npm](https://img.shields.io/npm/v/liquidjs.svg)](https://www.npmjs.org/package/liquidjs)
+[![npm](https://img.shields.io/npm/dm/localeval.svg)]()
 [![Build Status](https://travis-ci.org/harttle/liquidjs.svg?branch=master)](https://travis-ci.org/harttle/liquidjs)
 [![Coveralls](https://img.shields.io/coveralls/harttle/liquidjs.svg)](https://coveralls.io/github/harttle/liquidjs?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues-closed/harttle/liquidjs.svg)](https://github.com/harttle/liquidjs/issues)
+[![GitHub contributors](https://img.shields.io/github/contributors/harttle/liquidjs.svg)](https://github.com/harttle/liquidjs/graphs/contributors)
+[![David](https://img.shields.io/david/harttle/liquidjs.svg)](https://david-dm.org/harttle/liquidjs)
+[![David Dev](https://img.shields.io/david/dev/harttle/liquidjs.svg)](https://david-dm.org/harttle/liquidjs?type=dev)
+[![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
 
-A Liquid engine implementation for both Node.js and browsers, with all [shopify/liquid][shopify/liquid] features.
-Formerly known as shopify-liquid. 
+Visit our website: <http://harttle.com/liquidjs/>
 
-Live Demo: <http://harttle.com/liquidjs/>
+## Features
 
-> The Liquid template engine is implemented in Ruby originally, 
-> which is used by [Jekyll][jekyll] and [Github Pages][gh].
-
-Features:
-
-* A wide range of [filters](https://github.com/harttle/liquidjs/wiki/Builtin-Filters) and [tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
-* Easy tag/filter registration, allows async tags
-* [any-promise][any-promise]
+* Support both Node.js and browsers. Here's a demo: <https://jsfiddle.net/6u40xbzs/> 
+* Fully compatible to [shopify][shopify/liquid], with all [tags][tags] and [filters][filters] implemented
+* In pure JavaScript with [any-promise][any-promise] as the only one dependency
 
 API Reference:
 
@@ -26,13 +25,13 @@ API Reference:
 * Operators: <https://github.com/harttle/liquidjs/wiki/Operators>
 * Whitespace Control: <https://github.com/harttle/liquidjs/wiki/Whitespace-Control>
 
-Installation:
+## Render from String
+
+Install as Node.js dependency:
 
 ```bash
 npm install --save liquidjs
 ```
-
-## Render from String
 
 Parse and Render:
 
@@ -40,20 +39,22 @@ Parse and Render:
 var Liquid = require('liquidjs');
 var engine = Liquid();
 
-engine.parseAndRender('{{name | capitalize}}', {name: 'alice'})
-    .then(function(html){
-        // html === 'Alice'
-    });
+engine
+    .parseAndRender('{{name | capitalize}}', {name: 'alice'})
+    .then(console.log);
+
+// outputs 'Alice'
 ```
 
 Caching templates:
 
 ```javascript
 var tpl = engine.parse('{{name | capitalize}}');
-engine.render(tpl, {name: 'alice'})
-    .then(function(html){   
-        // html === 'Alice'
-    });
+engine
+    .render(tpl, {name: 'alice'})
+    .then(console.log);
+
+// outputs 'Alice'
 ```
 
 ## Render from File
@@ -61,17 +62,15 @@ engine.render(tpl, {name: 'alice'})
 ```javascript
 var engine = Liquid({
     root: path.resolve(__dirname, 'views/'),  // dirs to lookup layouts/includes
-    extname: '.liquid'          // the default extname used for layouts/includes
+    extname: '.liquid'          // the extname used for layouts/includes, defaults ""
 });
 engine.renderFile("hello.liquid", {name: 'alice'})
-    .then(function(html){
-       // html === 'Alice'
-    });
-// equivalent to: 
-engine.renderFile("hello", {name: 'alice'})
-    .then(function(html){
-       // html === 'Alice'
-    });
+    .then(console.log)  // outputs "Alice"
+
+// which is equivalent to: 
+engine
+    .renderFile("hello", {name: 'alice'})
+    .then(console.log)  // outputs "Alice"
 ```
 
 ## Options
@@ -111,41 +110,25 @@ app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 ```
 
-> There's an Express demo [here](demo/express/).
-
-When using with Express.js, partials(includes and layouts) will be looked up in
-both Liquid `root` and Express `views` directories.
+[Here](demo/express/)'s an Express demo. When used with Express.js,
+Express [`views`][express-views] will be included when looking up
+partials(includes and layouts).
 
 ## Use in Browser
 
-[Download][releases] the dist files and import into your HTML.
-And `window.Liquid` is what you want. There's also a [demo](demo/browser/).
+You can get a dist file for browsers from
 
-```html
-<html lang="en">
-<head>
-  <script src="dist/liquid.min.js"></script>
-</head>
-<body>
-  <script>
-    var engine = window.Liquid();
-    var src = '{{ name | capitalize}}';
-    var ctx = {
-      name: 'welcome to liquidjs'
-    };
-    engine.parseAndRender(src, ctx)
-      .then(function(html) {
-        // html === Welcome to liquidjs
-      });
-  </script>
-</body>
-</html>
-```
+* [Releases][releases] page for liquidjs, or
+* unpkg.com: <https://unpkg.com/liquidjs/dist/liquid.min.js> 
 
-Note: In [IE and Android UC][caniuse-promises] browser, you need a Promise implementation
-registered to [any-promise][any-promise].
+Here's the demo:
 
-## Includes
+* JSFiddle: <https://jsfiddle.net/6u40xbzs/> 
+* Demo directory: [/demo/browser/](demo/browser/).
+
+Note: For [IE and Android UC][caniuse-promises] browser, you will need a [Promise polyfill][pp].
+
+## Include Partials
 
 ```
 // file: color.liquid
@@ -166,7 +149,7 @@ color: 'red' shape: 'circle'
 color: 'yellow' shape: 'square'
 ```
 
-## Layouts
+## Layout Templates (Extends)
 
 ```
 // file: default-layout.liquid
@@ -194,12 +177,17 @@ Footer
 
 ```javascript
 // Usage: {{ name | uppper }}
-engine.registerFilter('upper', function(v){
-    return v.toUpperCase();
-});
+engine.registerFilter('upper', v => v.toUpperCase())
 ```
 
-> See existing filter implementations: <https://github.com/harttle/liquidjs/blob/master/filters.js>
+Filter arguments will be passed to the registered filter function, for example:
+
+```javascript
+// Usage: {{ 1 | add: 2, 3 }}
+engine.registerFilter('add', (initial, arg1, arg2) => initial + arg1 + arg2)
+```
+
+See existing filter implementations here: <https://github.com/harttle/liquidjs/blob/master/filters.js>
 
 ## Register Tags
 
@@ -216,13 +204,10 @@ engine.registerTag('upper', {
 });
 ```
 
-> See existing tag implementations: <https://github.com/harttle/liquidjs/blob/master/tags/>
+* `parse`: Read tokens from `remainTokens` until your end token.
+* `render`: Combine scope data with your parsed tokens into HTML string.
 
-## Contribution Guide
-
-1. Write a [test][test] to define the feature you want.
-2. File an issue, or optionally:
-3. Get your test pass and make a pull request.
+See existing tag implementations here: <https://github.com/harttle/liquidjs/blob/master/tags/>
 
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node
@@ -234,3 +219,7 @@ engine.registerTag('upper', {
 [test]: https://github.com/harttle/liquidjs/tree/master/test
 [caniuse-promises]: http://caniuse.com/#feat=promises
 [whitespace control]: https://github.com/harttle/liquidjs/wiki/Whitespace-Control
+[tags]: https://github.com/harttle/liquidjs/wiki/Builtin-Tags
+[filters]: https://github.com/harttle/liquidjs/wiki/Builtin-Filters
+[express-views]: http://expressjs.com/en/guide/using-template-engines.html
+[pp]: https://github.com/taylorhakes/promise-polyfill

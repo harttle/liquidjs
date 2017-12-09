@@ -1,7 +1,7 @@
 {
   "name": "liquidjs",
   "version": "2.1.2",
-  "description": "A Liquid template engine for Node.js and browsers, with all shopify/liquid features.",
+  "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/ test/",
