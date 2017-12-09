@@ -1,7 +1,7 @@
 # liquidjs
 
 [![npm](https://img.shields.io/npm/v/liquidjs.svg)](https://www.npmjs.org/package/liquidjs)
-[![npm](https://img.shields.io/npm/dm/localeval.svg)]()
+[![npm](https://img.shields.io/npm/dm/liquidjs.svg)](https://www.npmjs.org/package/liquidjs)
 [![Build Status](https://travis-ci.org/harttle/liquidjs.svg?branch=master)](https://travis-ci.org/harttle/liquidjs)
 [![Coveralls](https://img.shields.io/coveralls/harttle/liquidjs.svg)](https://coveralls.io/github/harttle/liquidjs?branch=master)
 [![GitHub issues](https://img.shields.io/github/issues-closed/harttle/liquidjs.svg)](https://github.com/harttle/liquidjs/issues)
@@ -10,12 +10,13 @@
 [![David Dev](https://img.shields.io/david/dev/harttle/liquidjs.svg)](https://david-dm.org/harttle/liquidjs?type=dev)
 [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
 
-Visit our website: <http://harttle.com/liquidjs/>
+Visit our website: <http://harttle.github.io/liquidjs/>
 
 ## Features
 
 * Support both Node.js and browsers. Here's a demo: <https://jsfiddle.net/6u40xbzs/> 
 * Fully compatible to [shopify][shopify/liquid], with all [tags][tags] and [filters][filters] implemented
+* Support layout(extend) and include syntax
 * In pure JavaScript with [any-promise][any-promise] as the only one dependency
 
 API Reference:
