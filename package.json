@@ -33,6 +33,9 @@
   "dependencies": {
     "any-promise": "^1.3.0"
   },
+  "browser": {
+    "fs": false
+  },
   "devDependencies": {
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
