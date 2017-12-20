@@ -96,4 +96,13 @@ describe('tags/layout', function () {
     return expect(liquid.renderFile('/main.html')).to
       .eventually.equal('blackredA')
   })
+  it('should support static filename', function () {
+    mock({
+      '/parent.html': '{{color}}{%block%}{%endblock%}',
+      '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
+    })
+    var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+    return expect(staticLiquid.renderFile('/main.html')).to
+      .eventually.equal('blackA')
+  })
 })

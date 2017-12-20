@@ -88,4 +88,14 @@ describe('tags/include', function () {
     return expect(liquid.renderFile('personInfo.html', ctx)).to
       .eventually.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
   })
+
+  it('should support static filename', function () {
+    var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+    mock({
+      '/with.html': 'X{% include color.html shape: "rect" %}Y',
+      '/color.html': 'shape:{{shape}}'
+    })
+    return expect(staticLiquid.renderFile('with.html')).to
+      .eventually.equal('Xshape:rectY')
+  })
 })

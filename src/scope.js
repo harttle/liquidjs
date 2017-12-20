@@ -172,6 +172,7 @@ function matchRightBracket (str, begin) {
 
 exports.factory = function (ctx, opts) {
   var defaultOptions = {
+    dynamicPartials: true,
     strict_variables: false,
     strict_filters: false,
     blocks: {},

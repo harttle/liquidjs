@@ -115,6 +115,7 @@ function factory (options) {
     root: ['.'],
     cache: false,
     extname: '',
+    dynamicPartials: true,
     trim_tag_right: false,
     trim_tag_left: false,
     trim_value_right: false,

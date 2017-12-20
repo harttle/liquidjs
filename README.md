@@ -86,6 +86,8 @@ Defaults to `["."]`
 
 * `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
 
+* `dynamicPartials`: if set, treat `<filepath>` parameter in `{%include filepath %}`, `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`.
+
 * `strict_filters` is used to enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`.
 
 * `strict_variables` is used to enable strict variable derivation. 

@@ -16,7 +16,10 @@ module.exports = function (liquid) {
       }
     },
     render: function (scope, hash) {
-      var filepath = Liquid.evalValue(this.value, scope)
+      var filepath = this.value
+      if (scope.opts.dynamicPartials) {
+        filepath = Liquid.evalValue(this.value, scope)
+      }
 
       var originBlocks = scope.opts.blocks
       var originBlockMode = scope.opts.blockMode

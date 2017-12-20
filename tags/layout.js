@@ -19,7 +19,7 @@ module.exports = function (liquid) {
       this.tpls = liquid.parser.parse(remainTokens)
     },
     render: function (scope, hash) {
-      var layout = Liquid.evalValue(this.layout, scope)
+      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.layout
 
       // render the remaining tokens immediately
       scope.opts.blockMode = 'store'
