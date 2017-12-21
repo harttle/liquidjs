@@ -215,7 +215,7 @@ function isValidDate(date) {
 registerAll.filters = filters;
 module.exports = registerAll;
 
-},{"./src/syntax.js":13,"./src/util/strftime.js":20,"./src/util/underscore.js":21}],2:[function(require,module,exports){
+},{"./src/syntax.js":14,"./src/util/strftime.js":21,"./src/util/underscore.js":22}],2:[function(require,module,exports){
 'use strict';
 
 var Scope = require('./src/scope');
@@ -352,6 +352,7 @@ function factory(options) {
     root: ['.'],
     cache: false,
     extname: '',
+    dynamicPartials: true,
     trim_tag_right: false,
     trim_tag_left: false,
     trim_value_right: false,
@@ -387,7 +388,7 @@ factory.Types = {
 
 module.exports = factory;
 
-},{"./filters":1,"./src/filter.js":7,"./src/lexical.js":8,"./src/parser":10,"./src/render.js":11,"./src/scope":12,"./src/syntax.js":13,"./src/tag.js":14,"./src/tokenizer.js":15,"./src/util/assert.js":16,"./src/util/error.js":17,"./src/util/fs.js":18,"./src/util/promise.js":19,"./src/util/underscore.js":21,"./tags":33,"any-promise":3,"path":6}],3:[function(require,module,exports){
+},{"./filters":1,"./src/filter.js":8,"./src/lexical.js":9,"./src/parser":11,"./src/render.js":12,"./src/scope":13,"./src/syntax.js":14,"./src/tag.js":15,"./src/tokenizer.js":16,"./src/util/assert.js":17,"./src/util/error.js":18,"./src/util/fs.js":19,"./src/util/promise.js":20,"./src/util/underscore.js":22,"./tags":34,"any-promise":3,"path":7}],3:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./register')().Promise;
@@ -494,6 +495,9 @@ function loadImplementation() {
 "use strict";
 
 },{}],7:[function(require,module,exports){
+"use strict";
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -567,7 +571,7 @@ module.exports = function (options) {
   };
 };
 
-},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"./util/underscore.js":21}],8:[function(require,module,exports){
+},{"./lexical.js":9,"./syntax.js":14,"./util/assert.js":17,"./util/underscore.js":22}],9:[function(require,module,exports){
 'use strict';
 
 // quote related
@@ -683,7 +687,7 @@ module.exports = {
   isInteger: isInteger
 };
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 module.exports = function (isTruthy) {
@@ -720,7 +724,7 @@ module.exports = function (isTruthy) {
   };
 };
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -831,7 +835,7 @@ module.exports = function (Tag, Filter) {
   };
 };
 
-},{"./lexical.js":8,"./util/assert.js":16,"./util/error.js":17}],11:[function(require,module,exports){
+},{"./lexical.js":9,"./util/assert.js":17,"./util/error.js":18}],12:[function(require,module,exports){
 'use strict';
 
 var Syntax = require('./syntax.js');
@@ -913,7 +917,7 @@ function stringify(val) {
 
 module.exports = factory;
 
-},{"./syntax.js":13,"./util/assert.js":16,"./util/error.js":17,"./util/promise.js":19,"any-promise":3}],12:[function(require,module,exports){
+},{"./syntax.js":14,"./util/assert.js":17,"./util/error.js":18,"./util/promise.js":20,"any-promise":3}],13:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -1090,6 +1094,7 @@ function matchRightBracket(str, begin) {
 
 exports.factory = function (ctx, opts) {
   var defaultOptions = {
+    dynamicPartials: true,
     strict_variables: false,
     strict_filters: false,
     blocks: {},
@@ -1101,7 +1106,7 @@ exports.factory = function (ctx, opts) {
   return scope;
 };
 
-},{"./lexical.js":8,"./util/assert.js":16,"./util/underscore.js":21}],13:[function(require,module,exports){
+},{"./lexical.js":9,"./util/assert.js":17,"./util/underscore.js":22}],14:[function(require,module,exports){
 'use strict';
 
 var operators = require('./operators.js')(isTruthy);
@@ -1161,7 +1166,7 @@ module.exports = {
   evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
 };
 
-},{"../src/util/assert.js":16,"./lexical.js":8,"./operators.js":9}],14:[function(require,module,exports){
+},{"../src/util/assert.js":17,"./lexical.js":9,"./operators.js":10}],15:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -1230,7 +1235,7 @@ module.exports = function () {
   };
 };
 
-},{"./lexical.js":8,"./syntax.js":13,"./util/assert.js":16,"any-promise":3}],15:[function(require,module,exports){
+},{"./lexical.js":9,"./syntax.js":14,"./util/assert.js":17,"any-promise":3}],16:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -1323,7 +1328,7 @@ function LineNumber(html) {
 exports.parse = parse;
 exports.whiteSpaceCtrl = whiteSpaceCtrl;
 
-},{"./lexical.js":8,"./util/assert.js":16,"./util/error.js":17,"./util/underscore.js":21,"./whitespace-ctrl.js":22}],16:[function(require,module,exports){
+},{"./lexical.js":9,"./util/assert.js":17,"./util/error.js":18,"./util/underscore.js":22,"./whitespace-ctrl.js":23}],17:[function(require,module,exports){
 'use strict';
 
 var AssertionError = require('./error.js').AssertionError;
@@ -1337,7 +1342,7 @@ function assert(predicate, message) {
 
 module.exports = assert;
 
-},{"./error.js":17}],17:[function(require,module,exports){
+},{"./error.js":18}],18:[function(require,module,exports){
 'use strict';
 
 var _ = require('./underscore.js');
@@ -1441,7 +1446,7 @@ module.exports = {
   RenderError: RenderError
 };
 
-},{"./underscore.js":21}],18:[function(require,module,exports){
+},{"./underscore.js":22}],19:[function(require,module,exports){
 'use strict';
 
 var fs = require('fs');
@@ -1467,7 +1472,7 @@ module.exports = {
   statFileAsync: statFileAsync
 };
 
-},{"fs":6}],19:[function(require,module,exports){
+},{"fs":6}],20:[function(require,module,exports){
 'use strict';
 
 var Promise = require('any-promise');
@@ -1512,7 +1517,7 @@ function mapSeries(iterable, iteratee) {
 exports.anySeries = anySeries;
 exports.mapSeries = mapSeries;
 
-},{"any-promise":3}],20:[function(require,module,exports){
+},{"any-promise":3}],21:[function(require,module,exports){
 'use strict';
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1706,7 +1711,7 @@ var strftime = function strftime(d, format) {
 
 module.exports = strftime;
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -1848,7 +1853,7 @@ exports.forOwn = forOwn;
 exports.assign = assign;
 exports.uniq = uniq;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -1899,7 +1904,7 @@ function trimRight(token, greedy) {
 
 module.exports = whiteSpaceCtrl;
 
-},{"./util/underscore.js":21}],23:[function(require,module,exports){
+},{"./util/underscore.js":22}],24:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1923,7 +1928,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],24:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17,"any-promise":3}],25:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1963,7 +1968,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16}],25:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17}],26:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2011,7 +2016,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2}],26:[function(require,module,exports){
+},{"..":2}],27:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -2029,7 +2034,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2077,7 +2082,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],28:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17,"any-promise":3}],29:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2100,7 +2105,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16}],29:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17}],30:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2211,7 +2216,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19,"../src/util/underscore.js":21}],30:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17,"../src/util/promise.js":20,"../src/util/underscore.js":22}],31:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2262,7 +2267,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2}],31:[function(require,module,exports){
+},{"..":2}],32:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2283,7 +2288,10 @@ module.exports = function (liquid) {
       }
     },
     render: function render(scope, hash) {
-      var filepath = Liquid.evalValue(this.value, scope);
+      var filepath = this.value;
+      if (scope.opts.dynamicPartials) {
+        filepath = Liquid.evalValue(this.value, scope);
+      }
 
       var originBlocks = scope.opts.blocks;
       var originBlockMode = scope.opts.blockMode;
@@ -2306,7 +2314,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16}],32:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17}],33:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2329,7 +2337,7 @@ module.exports = function (liquid) {
     });
 };
 
-},{"..":2,"../src/util/assert.js":16}],33:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17}],34:[function(require,module,exports){
 'use strict';
 
 module.exports = function (engine) {
@@ -2349,7 +2357,7 @@ module.exports = function (engine) {
   require('./unless.js')(engine);
 };
 
-},{"./assign.js":23,"./capture.js":24,"./case.js":25,"./comment.js":26,"./cycle.js":27,"./decrement.js":28,"./for.js":29,"./if.js":30,"./include.js":31,"./increment.js":32,"./layout.js":34,"./raw.js":35,"./tablerow.js":36,"./unless.js":37}],34:[function(require,module,exports){
+},{"./assign.js":24,"./capture.js":25,"./case.js":26,"./comment.js":27,"./cycle.js":28,"./decrement.js":29,"./for.js":30,"./if.js":31,"./include.js":32,"./increment.js":33,"./layout.js":35,"./raw.js":36,"./tablerow.js":37,"./unless.js":38}],35:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2373,7 +2381,7 @@ module.exports = function (liquid) {
       this.tpls = liquid.parser.parse(remainTokens);
     },
     render: function render(scope, hash) {
-      var layout = Liquid.evalValue(this.layout, scope);
+      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.layout;
 
       // render the remaining tokens immediately
       scope.opts.blockMode = 'store';
@@ -2433,7 +2441,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"any-promise":3}],35:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17,"any-promise":3}],36:[function(require,module,exports){
 'use strict';
 
 var Promise = require('any-promise');
@@ -2462,7 +2470,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"any-promise":3}],36:[function(require,module,exports){
+},{"any-promise":3}],37:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2550,7 +2558,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":16,"../src/util/promise.js":19}],37:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":17,"../src/util/promise.js":20}],38:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
