@@ -279,10 +279,6 @@ var _engine = {
       return _this2.render(templates, ctx, opts);
     });
   },
-  evalOutput: function evalOutput(str, scope) {
-    console.warn('[liquidjs:deprecated] use .evalValue() instead of .evalOutput');
-    return this.evalValue(str, scope);
-  },
   evalValue: function evalValue(str, scope) {
     var tpl = this.parser.parseValue(str.trim());
     return this.renderer.evalValue(tpl, scope);
@@ -933,9 +929,6 @@ var Scope = {
     return ctx;
   },
   get: function get(str) {
-    if (str === 'liquid') {
-      throw new Error('NO LONGER SUPPORTED: use scope.opts instead of scope.get("liquid")');
-    }
     try {
       return this.getPropertyByPath(this.scopes, str);
     } catch (e) {
@@ -1053,12 +1046,19 @@ function setPropertyByPath(obj, path, val) {
   var paths = (path + '').replace(/\[/g, '.').replace(/\]/g, '').split('.');
   for (var i = 0; i < paths.length; i++) {
     var key = paths[i];
+    if (!_.isObject(obj)) {
+      // cannot set property of non-object
+      return;
+    }
+    // for end point
     if (i === paths.length - 1) {
       return obj[key] = val;
     }
-    if (undefined === obj[key]) obj[key] = {};
-    // case for readonly objects
-    obj = obj[key] || {};
+    // if path not exist
+    if (undefined === obj[key]) {
+      obj[key] = {};
+    }
+    obj = obj[key];
   }
 }
 
@@ -1301,7 +1301,7 @@ function parse(input, file, options) {
 
   function parseHTMLToken(begin, end) {
     var htmlFragment = input.slice(begin, end);
-    currIndent = _.last((htmlFragment || '').split('\n')).length;
+    currIndent = _.last(htmlFragment.split('\n')).length;
 
     return {
       type: 'html',
