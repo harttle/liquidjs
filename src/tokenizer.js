@@ -63,7 +63,7 @@ function parse (input, file, options) {
 
   function parseHTMLToken (begin, end) {
     var htmlFragment = input.slice(begin, end)
-    currIndent = _.last((htmlFragment || '').split('\n')).length
+    currIndent = _.last((htmlFragment).split('\n')).length
 
     return {
       type: 'html',

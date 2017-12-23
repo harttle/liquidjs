@@ -52,10 +52,6 @@ var _engine = {
     return this.getTemplate(filepath, opts.root)
       .then(templates => this.render(templates, ctx, opts))
   },
-  evalOutput: function (str, scope) {
-    console.warn('[liquidjs:deprecated] use .evalValue() instead of .evalOutput')
-    return this.evalValue(str, scope)
-  },
   evalValue: function (str, scope) {
     var tpl = this.parser.parseValue(str.trim())
     return this.renderer.evalValue(tpl, scope)

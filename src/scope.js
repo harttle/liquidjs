@@ -11,9 +11,6 @@ var Scope = {
     return ctx
   },
   get: function (str) {
-    if (str === 'liquid') {
-      throw new Error('NO LONGER SUPPORTED: use scope.opts instead of scope.get("liquid")')
-    }
     try {
       return this.getPropertyByPath(this.scopes, str)
     } catch (e) {
@@ -129,12 +126,19 @@ function setPropertyByPath (obj, path, val) {
   var paths = (path + '').replace(/\[/g, '.').replace(/\]/g, '').split('.')
   for (var i = 0; i < paths.length; i++) {
     var key = paths[i]
+    if (!_.isObject(obj)) {
+      // cannot set property of non-object
+      return
+    }
+    // for end point
     if (i === paths.length - 1) {
       return (obj[key] = val)
     }
-    if (undefined === obj[key]) obj[key] = {}
-    // case for readonly objects
-    obj = obj[key] || {}
+    // if path not exist
+    if (undefined === obj[key]) {
+      obj[key] = {}
+    }
+    obj = obj[key]
   }
 }
 

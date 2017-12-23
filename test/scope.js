@@ -121,6 +121,16 @@ describe('scope', function () {
       scope.set('bar.coo', 'COO')
       expect(scope.get('bar.coo')).to.equal('COO')
     })
+    it('should keep other properties of parent', function () {
+      scope.push({obj: {foo: 'FOO'}})
+      scope.set('obj.bar', 'BAR')
+      expect(scope.get('obj.foo')).to.equal('FOO')
+    })
+    it('should abort if property cannot be set', function () {
+      scope.push({obj: {foo: 'FOO'}})
+      scope.set('obj.foo.bar', 'BAR')
+      expect(scope.get('obj.foo')).to.equal('FOO')
+    })
     it("should set parents' corresponding value", function () {
       scope.push({})
       scope.set('foo', 'bar')
