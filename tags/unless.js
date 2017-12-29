@@ -5,8 +5,8 @@ module.exports = function (liquid) {
     parse: function (tagToken, remainTokens) {
       this.templates = []
       this.elseTemplates = []
-      let p
-      let stream = liquid.parser.parseStream(remainTokens)
+      var p
+      var stream = liquid.parser.parseStream(remainTokens)
         .on('start', x => {
           p = this.templates
           this.cond = tagToken.args
@@ -22,7 +22,7 @@ module.exports = function (liquid) {
     },
 
     render: function (scope, hash) {
-      let cond = Liquid.evalExp(this.cond, scope)
+      var cond = Liquid.evalExp(this.cond, scope)
       return Liquid.isFalsy(cond)
         ? liquid.renderer.renderTemplates(this.templates, scope)
         : liquid.renderer.renderTemplates(this.elseTemplates, scope)
