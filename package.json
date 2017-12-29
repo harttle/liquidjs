@@ -4,7 +4,7 @@
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src/ test/",
+    "lint": "eslint .",
     "test": "mocha --recursive",
     "coverage": "NODE_ENV=test istanbul cover --report html ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "lcov": "NODE_ENV=test istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha -- -R spec --recursive",

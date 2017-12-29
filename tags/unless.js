@@ -1,30 +1,31 @@
-const Liquid = require('..');
+const Liquid = require('..')
 
-module.exports = function(liquid) {
-    liquid.registerTag('unless', {
-        parse: function(tagToken, remainTokens) {
-            this.templates = [];
-            this.elseTemplates = [];
-            var p, stream = liquid.parser.parseStream(remainTokens)
-                .on('start', x => {
-                    p = this.templates;
-                    this.cond = tagToken.args;
-                })
-                .on('tag:else', token => p = this.elseTemplates)
-                .on('tag:endunless', token => stream.stop())
-                .on('template', tpl => p.push(tpl))
-                .on('end', x => {
-                    throw new Error(`tag ${tagToken.raw} not closed`);
-                });
+module.exports = function (liquid) {
+  liquid.registerTag('unless', {
+    parse: function (tagToken, remainTokens) {
+      this.templates = []
+      this.elseTemplates = []
+      let p
+      let stream = liquid.parser.parseStream(remainTokens)
+        .on('start', x => {
+          p = this.templates
+          this.cond = tagToken.args
+        })
+        .on('tag:else', () => (p = this.elseTemplates))
+        .on('tag:endunless', token => stream.stop())
+        .on('template', tpl => p.push(tpl))
+        .on('end', x => {
+          throw new Error(`tag ${tagToken.raw} not closed`)
+        })
 
-            stream.start();
-        },
+      stream.start()
+    },
 
-        render: function(scope, hash) {
-            var cond = Liquid.evalExp(this.cond, scope);
-            return Liquid.isFalsy(cond) ?
-                liquid.renderer.renderTemplates(this.templates, scope) :
-                liquid.renderer.renderTemplates(this.elseTemplates, scope);
-        }
-    });
-};
+    render: function (scope, hash) {
+      let cond = Liquid.evalExp(this.cond, scope)
+      return Liquid.isFalsy(cond)
+        ? liquid.renderer.renderTemplates(this.templates, scope)
+        : liquid.renderer.renderTemplates(this.elseTemplates, scope)
+    }
+  })
+}
