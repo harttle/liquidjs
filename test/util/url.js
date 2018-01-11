@@ -1,9 +1,12 @@
 const chai = require('chai')
 const expect = chai.expect
 const url = require('../../src/util/url.js')
-const { JSDOM } = require('jsdom')
 
 describe('util/url', function () {
+  if (process.version.match(/^v(\d+)/)[1] < 8) {
+    return;
+  }
+  const JSDOM = require('jsdom').JSDOM
   var dom
   beforeEach(function () {
     dom = new JSDOM(``, {
