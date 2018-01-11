@@ -8,19 +8,25 @@
 </head>
 
 <body>
-  <h2 id="header"></h2>
   <script>
-    var engine = window.Liquid();
-
-    var src = 'Welcome to {{ name | capitalize}}, ' +
-      'access time: {{date|date: "%Y-%m-%d %H:%M:%S"}}';
+    var engine = window.Liquid({
+      // root: './',
+      extname: '.html',
+      cache: true
+    });
+    var src = '<h2>Welcome to {{ name | capitalize}}, ' +
+      'access time: {{date|date: "%Y-%m-%d %H:%M:%S"}}</h2>';
     var ctx = {
       name: 'Liquid',
       date: new Date()
     };
     engine.parseAndRender(src, ctx)
       .then(function(html) {
-        document.getElementById('header').innerHTML = html;
+        document.body.innerHTML += html
+        return engine.renderFile('hello', ctx);
+      })
+      .then(function(html) {
+        document.body.innerHTML += html
       });
   </script>
 </body>
