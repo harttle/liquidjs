@@ -5,6 +5,7 @@ const tokenizer = require('./src/tokenizer.js')
 const statFileAsync = require('./src/util/fs.js').statFileAsync
 const readFileAsync = require('./src/util/fs.js').readFileAsync
 const path = require('path')
+const url = require('./src/util/url.js')
 const Render = require('./src/render.js')
 const lexical = require('./src/lexical.js')
 const Tag = require('./src/tag.js')
@@ -73,6 +74,11 @@ var _engine = {
       })
   },
   getTemplate: function (filepath, root) {
+    return typeof XMLHttpRequest === 'undefined'
+      ? this.getTemplateFromFile(filepath, root)
+      : this.getTemplateFromUrl(filepath, root)
+  },
+  getTemplateFromFile: function (filepath, root) {
     if (!path.extname(filepath)) {
       filepath += this.options.extname
     }
@@ -91,6 +97,42 @@ var _engine = {
           return readFileAsync(filepath).then(str => this.parse(str, filepath))
         }
       })
+  },
+  getTemplateFromUrl: function (filepath, root) {
+    var fullUrl
+    if (url.valid(filepath)) {
+      fullUrl = filepath
+    } else {
+      if (!url.extname(filepath)) {
+        filepath += this.options.extname
+      }
+      fullUrl = url.resolve(root || this.options.root, filepath)
+    }
+    if (this.options.cache) {
+      var tpl = this.cache[filepath]
+      if (tpl) {
+        return Promise.resolve(tpl)
+      }
+    }
+    return new Promise((resolve, reject) => {
+      var xhr = new XMLHttpRequest()
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          var tpl = this.parse(xhr.responseText)
+          if (this.options.cache) {
+            this.cache[filepath] = tpl
+          }
+          resolve(tpl)
+        } else {
+          reject(new Error(xhr.statusText))
+        }
+      }
+      xhr.onerror = () => {
+        reject(new Error(xhr.statusText))
+      }
+      xhr.open('GET', fullUrl)
+      xhr.send()
+    })
   },
   express: function (opts) {
     opts = opts || {}
