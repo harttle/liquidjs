@@ -1,12 +1,14 @@
 const Liquid = require('..')
 const sinon = require('sinon')
-const { JSDOM } = require('jsdom')
 const chai = require('chai')
 const expect = chai.expect
 
 describe('xhr', () => {
+  if (process.version.match(/^v(\d+)/)[1] < 8) {
+    return;
+  }
+  const JSDOM = require('jsdom').JSDOM
   var server, engine, dom
-
   beforeEach(() => {
     server = sinon.fakeServer.create()
     server.autoRespond = true
