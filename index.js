@@ -128,7 +128,7 @@ var _engine = {
         }
       }
       xhr.onerror = () => {
-        reject(new Error(xhr.statusText))
+        reject(new Error('An error occurred whilst sending the response.'))
       }
       xhr.open('GET', fullUrl)
       xhr.send()
