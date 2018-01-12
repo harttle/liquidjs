@@ -5,35 +5,32 @@ const expect = chai.expect
 
 describe('xhr', () => {
   if (process.version.match(/^v(\d+)/)[1] < 8) {
-    return;
+    return
   }
   const JSDOM = require('jsdom').JSDOM
   var server, engine, dom
   beforeEach(() => {
-    server = sinon.fakeServer.create()
+    server = sinon.createFakeServer()
     server.autoRespond = true
     server.respondWith('GET', 'https://example.com/views/hello.html',
       [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-    global.XMLHttpRequest = sinon.useFakeXMLHttpRequest()
-    dom = new JSDOM(``, {
-      url: 'https://example.com/',
-      referrer: 'https://example.com/',
+    dom = new JSDOM('', {
+      url: 'https://example.com/foo/bar.html',
       contentType: 'text/html',
       includeNodeLocations: true
     })
+    global.XMLHttpRequest = sinon.useFakeXMLHttpRequest()
     global.document = dom.window.document
     engine = Liquid({
-      root: 'https://example.com/views',
+      root: 'https://example.com/views/',
       extname: '.html'
     })
   })
-
   afterEach(() => {
     server.restore()
     delete global.XMLHttpRequest
     delete global.document
   })
-
   describe('#renderFile()', () => {
     it('should support without extname', () => {
       return expect(engine.renderFile('hello', {name: 'alice1'}))
@@ -65,32 +62,26 @@ describe('xhr', () => {
       return expect(engine.renderFile('/not/exist.html'))
         .to.be.rejectedWith('Not Found')
     })
+    it('should throw error', function (done) {
+      engine.renderFile('hello.html')
+        .catch(function (e) {
+          expect(e.message).to.equal('An error occurred whilst sending the response.')
+          done()
+        })
+      server.requests[0].error()
+    })
   })
   describe('root', () => {
     it('should support with null', () => {
-      dom = new JSDOM(``, {
-        url: 'https://example.com/bar/',
-        referrer: 'https://example.com/bar/',
-        contentType: 'text/html',
-        includeNodeLocations: true
-      })
-      global.document = dom.window.document
       engine = Liquid({
         extname: '.html'
       })
-      server.respondWith('GET', 'https://example.com/bar/hello.html',
+      server.respondWith('GET', 'https://example.com/foo/hello.html',
         [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
       return expect(engine.renderFile('hello.html', {name: 'alice5'}))
         .to.eventually.equal('hello alice5')
     })
     it('should support with empty', () => {
-      dom = new JSDOM(``, {
-        url: 'https://example.com/foo/',
-        referrer: 'https://example.com/foo/',
-        contentType: 'text/html',
-        includeNodeLocations: true
-      })
-      global.document = dom.window.document
       engine = Liquid({
         root: '',
         extname: '.html'
@@ -101,13 +92,6 @@ describe('xhr', () => {
         .to.eventually.equal('hello alice5')
     })
     it('should support with relative path', () => {
-      dom = new JSDOM(``, {
-        url: 'https://example.com/foo/',
-        referrer: 'https://example.com/foo/',
-        contentType: 'text/html',
-        includeNodeLocations: true
-      })
-      global.document = dom.window.document
       engine = Liquid({
         root: './views/',
         extname: '.html'
@@ -118,13 +102,6 @@ describe('xhr', () => {
         .to.eventually.equal('hello alice5')
     })
     it('should support with absolute path', () => {
-      dom = new JSDOM(``, {
-        url: 'https://example.com/foo/',
-        referrer: 'https://example.com/foo/',
-        contentType: 'text/html',
-        includeNodeLocations: true
-      })
-      global.document = dom.window.document
       engine = Liquid({
         root: '/views/',
         extname: '.html'
@@ -143,6 +120,37 @@ describe('xhr', () => {
         [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
       return expect(engine.renderFile('hello.html', {name: 'alice5'}))
         .to.eventually.equal('hello alice5')
+    })
+  })
+  describe('cache options', () => {
+    it('should be disabled by default', () => {
+      server.respondWith('GET', 'https://example.com/views/foo.html',
+        [200, {'Content-Type': 'text/plain'}, 'foo1'])
+      return engine.renderFile('foo.html')
+        .then((html) => {
+          expect(html).to.equal('foo1')
+          server.respondWith('GET', 'https://example.com/views/foo.html',
+            [200, {'Content-Type': 'text/plain'}, 'foo2'])
+          return engine.renderFile('foo.html')
+        })
+        .then(html => expect(html).to.equal('foo2'))
+    })
+    it('should respect cache=true option', () => {
+      engine = Liquid({
+        root: '/views/',
+        extname: '.html',
+        cache: true
+      })
+      server.respondWith('GET', 'https://example.com/views/foo.html',
+        [200, {'Content-Type': 'text/plain'}, 'foo1'])
+      return engine.renderFile('foo.html')
+        .then((html) => {
+          expect(html).to.equal('foo1')
+          server.respondWith('GET', 'https://example.com/views/foo.html',
+            [200, {'Content-Type': 'text/plain'}, 'foo2'])
+          return engine.renderFile('foo.html')
+        })
+        .then(html => expect(html).to.equal('foo1'))
     })
   })
 })

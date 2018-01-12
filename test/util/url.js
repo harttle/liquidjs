@@ -4,7 +4,7 @@ const url = require('../../src/util/url.js')
 
 describe('util/url', function () {
   if (process.version.match(/^v(\d+)/)[1] < 8) {
-    return;
+    return
   }
   const JSDOM = require('jsdom').JSDOM
   var dom
