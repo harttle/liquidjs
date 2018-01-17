@@ -37,10 +37,8 @@ Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is
     * [Layout Templates (Extends)](#layout-templates-extends)
 * API Spec
     * [Constructor Options](#options)
-    * [Register Filters](#register-filters)
-    * [Register Tags](#register-tags)
-    * [Builtin Tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
-    * [Builtin Filters](https://github.com/harttle/liquidjs/wiki/Builtin-Filters)
+    * [Register Filters](#register-filters), [Builtin Filters](https://github.com/harttle/liquidjs/wiki/Builtin-Filters)
+    * [Register Tags](#register-tags), [Builtin Tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
     * [Operators](https://github.com/harttle/liquidjs/wiki/Operators)
     * [Whitespace Control](https://github.com/harttle/liquidjs/wiki/Whitespace-Control)
 
