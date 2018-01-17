@@ -20,11 +20,11 @@ This is a liquid implementation for both Node.js and browsers. Website: <http://
 
 **Differences with Shopify Liquid**
 
-Shopify Liquid is the original implementation in Ruby, as used by Jekyll (Github Pages). Though being compatible with Ruby Liquid is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
+Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
 
-* Dynamic file locating (enabled by default), which means layout/partial name can be an variable in liquidjs. See #51.
-* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See #26.
-* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding their type. See #59.
+* Dynamic file locating (enabled by default), which means layout/partial name can be an variable in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
+* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
+* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
 
 ## TOC
 
@@ -39,10 +39,10 @@ Shopify Liquid is the original implementation in Ruby, as used by Jekyll (Github
     * [Constructor Options](#options)
     * [Register Filters](#register-filters)
     * [Register Tags](#register-tags)
-    * Builtin Tags: <https://github.com/harttle/liquidjs/wiki/Builtin-Tags>
-    * Builtin Filters: <https://github.com/harttle/liquidjs/wiki/Builtin-Filters>
-    * Operators: <https://github.com/harttle/liquidjs/wiki/Operators>
-    * Whitespace Control: <https://github.com/harttle/liquidjs/wiki/Whitespace-Control>
+    * [Builtin Tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
+    * [Builtin Filters](https://github.com/harttle/liquidjs/wiki/Builtin-Filters)
+    * [Operators](https://github.com/harttle/liquidjs/wiki/Operators)
+    * [Whitespace Control](https://github.com/harttle/liquidjs/wiki/Whitespace-Control)
 
 ## Render from String
 
