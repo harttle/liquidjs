@@ -10,21 +10,39 @@
 [![David Dev](https://img.shields.io/david/dev/harttle/liquidjs.svg)](https://david-dm.org/harttle/liquidjs?type=dev)
 [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
 
-Visit our website: <http://harttle.github.io/liquidjs/>
+This is a liquid implementation for both Node.js and browsers. Website: <http://harttle.github.io/liquidjs/>, Live Demo: <https://jsfiddle.net/6u40xbzs/> 
 
-## Features
+**Features**
 
-* Support both Node.js and browsers. Here's a demo: <https://jsfiddle.net/6u40xbzs/> 
 * Fully compatible to [shopify][shopify/liquid], with all [tags][tags] and [filters][filters] implemented
 * Support layout(extend) and include syntax
 * In pure JavaScript with [any-promise][any-promise] as the only one dependency
 
-API Reference:
+**Differences with Shopify Liquid**
 
-* Builtin Tags: <https://github.com/harttle/liquidjs/wiki/Builtin-Tags>
-* Builtin Filters: <https://github.com/harttle/liquidjs/wiki/Builtin-Filters>
-* Operators: <https://github.com/harttle/liquidjs/wiki/Operators>
-* Whitespace Control: <https://github.com/harttle/liquidjs/wiki/Whitespace-Control>
+Shopify Liquid is the original implementation in Ruby, as used by Jekyll (Github Pages). Though being compatible with Ruby Liquid is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
+
+* Dynamic file locating (enabled by default), which means layout/partial name can be an variable in liquidjs. See #51.
+* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See #26.
+* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding their type. See #59.
+
+## TOC
+
+* Usage
+    * [Render from String](#render-from-string)
+    * [Render from File](#render-from-file)
+    * [Use with Express.js](#use-with-expressjs)
+    * [Use in Browser](#use-in-browser)
+    * [Include Partials](#include-partials)
+    * [Layout Templates (Extends)](#layout-templates-extends)
+* API Spec
+    * [Constructor Options](#options)
+    * [Register Filters](#register-filters)
+    * [Register Tags](#register-tags)
+    * Builtin Tags: <https://github.com/harttle/liquidjs/wiki/Builtin-Tags>
+    * Builtin Filters: <https://github.com/harttle/liquidjs/wiki/Builtin-Filters>
+    * Operators: <https://github.com/harttle/liquidjs/wiki/Operators>
+    * Whitespace Control: <https://github.com/harttle/liquidjs/wiki/Whitespace-Control>
 
 ## Render from String
 
@@ -73,36 +91,6 @@ engine
     .renderFile("hello", {name: 'alice'})
     .then(console.log)  // outputs "Alice"
 ```
-
-## Options
-
-The full list of options for `Liquid()` is listed as following:
-
-* `root` is a directory or an array of directories to resolve layouts and includes, as well as the filename passed in when calling `.renderFile()`.
-If an array, the files are looked up in the order they occur in the array.
-Defaults to `["."]`
-
-* `extname` is used to lookup the template file when filepath doesn't include an extension name. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`.
-
-* `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
-
-* `dynamicPartials`: if set, treat `<filepath>` parameter in `{%include filepath %}`, `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`.
-
-* `strict_filters` is used to enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`.
-
-* `strict_variables` is used to enable strict variable derivation. 
-If set to `false`, undefined variables will be rendered as empty string.
-Otherwise, undefined variables will cause an exception. Defaults to `false`.
-
-* `trim_tag_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`.
-
-* `trim_tag_left` is similiar to `trim_tag_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
-
-* `trim_value_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of values (`{{ }}`) until `\n` (inclusive). Defaults to `false`.
-
-* `trim_value_left` is similiar to `trim_value_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
-
-* `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`.
 
 ## Use with Express.js
 
@@ -175,6 +163,36 @@ Footer
 
 * It's possible to define multiple blocks.
 * block name is optional when there's only one block.
+
+## Options
+
+The full list of options for `Liquid()` is listed as following:
+
+* `root` is a directory or an array of directories to resolve layouts and includes, as well as the filename passed in when calling `.renderFile()`.
+If an array, the files are looked up in the order they occur in the array.
+Defaults to `["."]`
+
+* `extname` is used to lookup the template file when filepath doesn't include an extension name. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`.
+
+* `cache` indicates whether or not to cache resolved templates. Defaults to `false`.
+
+* `dynamicPartials`: if set, treat `<filepath>` parameter in `{%include filepath %}`, `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`.
+
+* `strict_filters` is used to enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`.
+
+* `strict_variables` is used to enable strict variable derivation. 
+If set to `false`, undefined variables will be rendered as empty string.
+Otherwise, undefined variables will cause an exception. Defaults to `false`.
+
+* `trim_tag_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`.
+
+* `trim_tag_left` is similiar to `trim_tag_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
+
+* `trim_value_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of values (`{{ }}`) until `\n` (inclusive). Defaults to `false`.
+
+* `trim_value_left` is similiar to `trim_value_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
+
+* `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`.
 
 ## Register Filters
 
