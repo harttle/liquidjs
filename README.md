@@ -18,7 +18,7 @@ This is a liquid implementation for both Node.js and browsers. Website: <http://
 * Support layout(extend) and include syntax
 * In pure JavaScript with [any-promise][any-promise] as the only one dependency
 
-**Differences with Shopify Liquid**
+**Differences**
 
 Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
 
