@@ -1,6 +1,7 @@
 const chai = require('chai')
 const expect = chai.expect
 const mock = require('mock-fs')
+const path = require('path')
 chai.use(require('chai-as-promised'))
 
 var engine = require('../..')()
@@ -87,7 +88,7 @@ describe('error', function () {
         .then(function (err) {
           mock.restore()
           expect(err.name).to.equal('TokenizationError')
-          expect(err.file).to.equal('/foo.html')
+          expect(err.file).to.equal(path.resolve('/foo.html'))
         })
     })
   })
@@ -195,7 +196,7 @@ describe('error', function () {
         .then(function (err) {
           console.log(err.message)
           console.log(err.stack)
-          expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4')
+          expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4`)
           expect(err.stack).to.contain(message.join('\n'))
           expect(err.name).to.equal('RenderError')
         })
@@ -218,7 +219,7 @@ describe('error', function () {
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
         .then(function (err) {
-          expect(err.message).to.equal('intended render error, file:/throwing-tag.html, line:4')
+          expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4`)
           expect(err.stack).to.contain(message.join('\n'))
           expect(err.name).to.equal('RenderError')
         })
@@ -260,7 +261,7 @@ describe('error', function () {
         .then(function (err) {
           mock.restore()
           expect(err.name).to.equal('RenderError')
-          expect(err.file).to.equal('/foo.html')
+          expect(err.file).to.equal(path.resolve('/foo.html'))
         })
     })
   })
@@ -383,7 +384,7 @@ describe('error', function () {
         .then(function (err) {
           mock.restore()
           expect(err.name).to.equal('ParseError')
-          expect(err.file).to.equal('/foo.html')
+          expect(err.file).to.equal(path.resolve('/foo.html'))
         })
     })
   })
