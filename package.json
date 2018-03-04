@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "eslint .",
     "test": "mocha --recursive",
-    "coverage": "NODE_ENV=test istanbul cover --report html ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
-    "lcov": "NODE_ENV=test istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
+    "coverage": "cross-env NODE_ENV=test istanbul cover --report html ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
+    "lcov": "cross-env NODE_ENV=test istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
     "dist": "make dist",
     "preversion": "npm run lint && npm test",
     "version": "npm run dist && git add -A dist",
@@ -48,6 +48,7 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
+    "cross-env": "^5.1.3",
     "eslint": "^4.8.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",

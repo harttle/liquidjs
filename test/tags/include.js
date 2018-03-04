@@ -24,6 +24,16 @@ describe('tags/include', function () {
       .eventually.equal('barfoobar')
   })
 
+  it('should throw when not specified', function () {
+    mock({
+      '/parent.html': '{%include%}'
+    })
+    return liquid.renderFile('/parent.html').catch(function (e) {
+      expect(e.name).to.equal('RenderError')
+      expect(e.message).to.match(/cannot include with empty filename/)
+    })
+  })
+
   it('should throw when not exist', function () {
     mock({
       '/parent.html': '{%include not-exist%}'

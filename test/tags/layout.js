@@ -24,6 +24,15 @@ describe('tags/layout', function () {
     return expect(liquid.parseAndRender(src)).to
       .be.rejectedWith(/tag {%block%} not closed/)
   })
+  it('should throw when filename not specified', function () {
+    mock({
+      '/parent.html': '{%layout%}'
+    })
+    return liquid.renderFile('/parent.html').catch(function (e) {
+      expect(e.name).to.equal('RenderError')
+      expect(e.message).to.match(/cannot apply layout with empty filename/)
+    })
+  })
   describe('anonymous block', function () {
     it('should handle anonymous block', function () {
       mock({
