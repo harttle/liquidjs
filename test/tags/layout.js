@@ -96,13 +96,36 @@ describe('tags/layout', function () {
     return expect(liquid.renderFile('/main.html')).to
       .eventually.equal('blackredA')
   })
-  it('should support static filename', function () {
-    mock({
-      '/parent.html': '{{color}}{%block%}{%endblock%}',
-      '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
+
+  describe('static partial', function () {
+    it('should support filename with extention', function () {
+      mock({
+        '/parent.html': '{{color}}{%block%}{%endblock%}',
+        '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
+      })
+      var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      return expect(staticLiquid.renderFile('/main.html')).to
+        .eventually.equal('blackA')
     })
-    var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
-    return expect(staticLiquid.renderFile('/main.html')).to
-      .eventually.equal('blackA')
+
+    it('should support parent paths', function () {
+      mock({
+        '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
+        '/main.html': '{% layout bar/../foo/parent.html color:"black"%}{%block%}A{%endblock%}'
+      })
+      var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      return expect(staticLiquid.renderFile('/main.html')).to
+        .eventually.equal('blackA')
+    })
+
+    it('should support subpaths', function () {
+      mock({
+        '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
+        '/main.html': '{% layout foo/parent.html color:"black"%}{%block%}A{%endblock%}'
+      })
+      var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      return expect(staticLiquid.renderFile('/main.html')).to
+        .eventually.equal('blackA')
+    })
   })
 })

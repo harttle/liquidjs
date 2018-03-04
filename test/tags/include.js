@@ -24,13 +24,13 @@ describe('tags/include', function () {
       .eventually.equal('barfoobar')
   })
 
-  it('should throw when illegal', function () {
+  it('should throw when not exist', function () {
     mock({
-      '/illegal.html': '{%include%}'
+      '/parent.html': '{%include not-exist%}'
     })
-    return liquid.renderFile('/illegal.html').catch(function (e) {
-      expect(e.name).to.equal('ParseError')
-      expect(e.message).to.match(/illegal token {%include%}/)
+    return liquid.renderFile('/parent.html').catch(function (e) {
+      expect(e.name).to.equal('RenderError')
+      expect(e.message).to.match(/cannot include with empty filename/)
     })
   })
 
@@ -89,13 +89,35 @@ describe('tags/include', function () {
       .eventually.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
   })
 
-  it('should support static filename', function () {
-    var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
-    mock({
-      '/with.html': 'X{% include color.html shape: "rect" %}Y',
-      '/color.html': 'shape:{{shape}}'
+  describe('static partial', function () {
+    it('should support filename with extention', function () {
+      mock({
+        '/parent.html': 'X{% include child.html color:"red" %}Y',
+        '/child.html': 'child with {{color}}'
+      })
+      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      return expect(staticLiquid.renderFile('parent.html')).to
+        .eventually.equal('Xchild with redY')
     })
-    return expect(staticLiquid.renderFile('with.html')).to
-      .eventually.equal('Xshape:rectY')
+
+    it('should support parent paths', function () {
+      mock({
+        '/parent.html': 'X{% include bar/./../foo/child.html %}Y',
+        '/foo/child.html': 'child'
+      })
+      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      return expect(staticLiquid.renderFile('parent.html')).to
+        .eventually.equal('XchildY')
+    })
+
+    it('should support subpaths', function () {
+      mock({
+        '/parent.html': 'X{% include foo/child.html %}Y',
+        '/foo/child.html': 'child'
+      })
+      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      return expect(staticLiquid.renderFile('parent.html')).to
+        .eventually.equal('XchildY')
+    })
   })
 })

@@ -2,6 +2,7 @@ const Liquid = require('..')
 const Promise = require('any-promise')
 const lexical = Liquid.lexical
 const assert = require('../src/util/assert.js')
+const staticFileRE = /\S+/
 
 /*
  * blockMode:
@@ -12,14 +13,21 @@ const assert = require('../src/util/assert.js')
 module.exports = function (liquid) {
   liquid.registerTag('layout', {
     parse: function (token, remainTokens) {
-      var match = lexical.value.exec(token.args)
-      assert(match, `illegal token ${token.raw}`)
+      var match = staticFileRE.exec(token.args)
+      if (match) {
+        this.staticLayout = match[0]
+      }
 
-      this.layout = match[0]
+      match = lexical.value.exec(token.args)
+      if (match) {
+        this.layout = match[0]
+      }
+
       this.tpls = liquid.parser.parse(remainTokens)
     },
     render: function (scope, hash) {
-      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.layout
+      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.staticLayout
+      assert(layout, `cannot apply layout with empty filename`)
 
       // render the remaining tokens immediately
       scope.opts.blockMode = 'store'
