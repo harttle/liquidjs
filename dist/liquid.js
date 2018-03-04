@@ -2164,41 +2164,41 @@ var candidatesRE = new RegExp(lexical.value.source, 'g');
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
-  liquid.registerTag('cycle', {
+      liquid.registerTag('cycle', {
 
-    parse: function parse(tagToken, remainTokens) {
-      var match = groupRE.exec(tagToken.args);
-      assert(match, 'illegal tag: ' + tagToken.raw);
+            parse: function parse(tagToken, remainTokens) {
+                  var match = groupRE.exec(tagToken.args);
+                  assert(match, 'illegal tag: ' + tagToken.raw);
 
-      this.group = match[1] || '';
-      var candidates = match[2];
+                  this.group = match[1] || '';
+                  var candidates = match[2];
 
-      this.candidates = [];
+                  this.candidates = [];
 
-      while (match = candidatesRE.exec(candidates)) {
-        this.candidates.push(match[0]);
-      }
-      assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
-    },
+                  while (match = candidatesRE.exec(candidates)) {
+                        this.candidates.push(match[0]);
+                  }
+                  assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
+            },
 
-    render: function render(scope, hash) {
-      var group = Liquid.evalValue(this.group, scope);
-      var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
+            render: function render(scope, hash) {
+                  var group = Liquid.evalValue(this.group, scope);
+                  var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
 
-      var groups = scope.opts.groups = scope.opts.groups || {};
-      var idx = groups[fingerprint];
+                  var groups = scope.opts.groups = scope.opts.groups || {};
+                  var idx = groups[fingerprint];
 
-      if (idx === undefined) {
-        idx = groups[fingerprint] = 0;
-      }
+                  if (idx === undefined) {
+                        idx = groups[fingerprint] = 0;
+                  }
 
-      var candidate = this.candidates[idx];
-      idx = (idx + 1) % this.candidates.length;
-      groups[fingerprint] = idx;
+                  var candidate = this.candidates[idx];
+                  idx = (idx + 1) % this.candidates.length;
+                  groups[fingerprint] = idx;
 
-      return Promise.resolve(Liquid.evalValue(candidate, scope));
-    }
-  });
+                  return Promise.resolve(Liquid.evalValue(candidate, scope));
+            }
+      });
 };
 
 },{"..":2,"../src/util/assert.js":18,"any-promise":3}],31:[function(require,module,exports){
@@ -2391,14 +2391,21 @@ module.exports = function (liquid) {
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var withRE = new RegExp('with\\s+(' + lexical.value.source + ')');
+var staticFileRE = /\S+/;
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
   liquid.registerTag('include', {
     parse: function parse(token) {
-      var match = lexical.value.exec(token.args);
-      assert(match, 'illegal token ' + token.raw);
-      this.value = match[0];
+      var match = staticFileRE.exec(token.args);
+      if (match) {
+        this.staticValue = match[0];
+      }
+
+      match = lexical.value.exec(token.args);
+      if (match) {
+        this.value = match[0];
+      }
 
       match = withRE.exec(token.args);
       if (match) {
@@ -2406,10 +2413,8 @@ module.exports = function (liquid) {
       }
     },
     render: function render(scope, hash) {
-      var filepath = this.value;
-      if (scope.opts.dynamicPartials) {
-        filepath = Liquid.evalValue(this.value, scope);
-      }
+      var filepath = scope.opts.dynamicPartials ? Liquid.evalValue(this.value, scope) : this.staticValue;
+      assert(filepath, 'cannot include with empty filename');
 
       var originBlocks = scope.opts.blocks;
       var originBlockMode = scope.opts.blockMode;
@@ -2481,6 +2486,7 @@ var Liquid = require('..');
 var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var assert = require('../src/util/assert.js');
+var staticFileRE = /\S+/;
 
 /*
  * blockMode:
@@ -2491,14 +2497,21 @@ var assert = require('../src/util/assert.js');
 module.exports = function (liquid) {
   liquid.registerTag('layout', {
     parse: function parse(token, remainTokens) {
-      var match = lexical.value.exec(token.args);
-      assert(match, 'illegal token ' + token.raw);
+      var match = staticFileRE.exec(token.args);
+      if (match) {
+        this.staticLayout = match[0];
+      }
 
-      this.layout = match[0];
+      match = lexical.value.exec(token.args);
+      if (match) {
+        this.layout = match[0];
+      }
+
       this.tpls = liquid.parser.parse(remainTokens);
     },
     render: function render(scope, hash) {
-      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.layout;
+      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.staticLayout;
+      assert(layout, 'cannot apply layout with empty filename');
 
       // render the remaining tokens immediately
       scope.opts.blockMode = 'store';
