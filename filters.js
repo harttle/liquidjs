@@ -68,7 +68,7 @@ var filters = {
   'strip': (v) => stringify(v).trim(),
   'strip_html': v => stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, ''),
   'strip_newlines': v => stringify(v).replace(/\n/g, ''),
-  'times': (v, arg) => v * arg,
+  'times': (v, arg) => { return multiply(v, arg) },
   'truncate': (v, l, o) => {
     v = stringify(v)
     o = (o === undefined) ? '...' : o
@@ -131,6 +131,27 @@ function registerAll (liquid) {
 
 function isValidDate (date) {
   return date instanceof Date && !isNaN(date.getTime())
+}
+
+function multiply(v, arg) {
+  if (typeof(v) === "object" && typeof(arg) === "object") {
+    const numberKeys = filterNumericKeysFromObject(arg);
+    numberKeys.forEach(key => {
+      arg[key] = v[key]*arg[key];
+    })
+  } else if (typeof(v) === "number" && typeof(arg) === "object") {
+    const numberKeys = filterNumericKeysFromObject(arg);
+    numberKeys.forEach(key => {
+      arg[key] = v*arg[key];
+    })
+    return arg
+  } else {
+    return v*arg;
+  }
+}
+
+function filterNumericKeysFromObject(obj) {
+  return Object.keys(obj).filter(key => typeof(key) === "number");
 }
 
 registerAll.filters = filters
