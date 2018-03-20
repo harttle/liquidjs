@@ -394,6 +394,7 @@ describe('filters', function () {
     liquid.registerFilter('obj_test', function () {
       return Array.prototype.slice.call(arguments).join(',')
     })
-    it('should support object', () => test('{{ "a" | obj_test: k1: "v1", k2: "v2" }}', 'a,k1,v1,k2,v2'))
+    it('should support object', () => test(`{{ "a" | obj_test: k1: "v1", k2: foo }}`, 'a,k1,v1,k2,bar'))
+    it('should support mixed object', () => test(`{{ "a" | obj_test: "something", k1: "v1", k2: foo }}`, 'a,something,k1,v1,k2,bar'))
   })
 })
