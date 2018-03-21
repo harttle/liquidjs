@@ -141,6 +141,7 @@ function multiply(v, arg) {
       numberKeysOfArg.forEach(key => {
         arg[key] = v[key]*arg[key];
       })
+      return arg;
     } else {
       console.warn("The objects don't have same numeric attributes")
     }
