@@ -142,7 +142,7 @@ function multiply(v, arg) {
         arg[key] = v[key]*arg[key];
       })
     } else {
-      throw new Error("The objects don't have same attributes")
+      console.warn("The objects don't have same numeric attributes")
     }
   } else if (typeof(v) === "number" && typeof(arg) === "object") {
     const numberKeys = filterNumericKeysFromObject(arg);
