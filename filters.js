@@ -135,16 +135,27 @@ function isValidDate (date) {
 
 function multiply(v, arg) {
   if (typeof(v) === "object" && typeof(arg) === "object") {
-    const numberKeys = filterNumericKeysFromObject(arg);
-    numberKeys.forEach(key => {
-      arg[key] = v[key]*arg[key];
-    })
+    const numberKeysOfArg = filterNumericKeysFromObject(arg);
+    const numberKeysOfV = filterNumericKeysFromObject(v);
+    if(JSON.stringify(numberKeysOfArg) === JSON.stringify(numberKeysOfV)) {
+      numberKeysOfArg.forEach(key => {
+        arg[key] = v[key]*arg[key];
+      })
+    } else {
+      throw new Error("The objects don't have same attributes")
+    }
   } else if (typeof(v) === "number" && typeof(arg) === "object") {
     const numberKeys = filterNumericKeysFromObject(arg);
     numberKeys.forEach(key => {
       arg[key] = v*arg[key];
     })
     return arg
+  } else if (typeof(v) === "object" && typeof(arg) === "number") {
+    const numberKeys = filterNumericKeysFromObject(v);
+    numberKeys.forEach(key => {
+      v[key] = arg*v[key];
+    })
+    return v
   } else {
     return v*arg;
   }
