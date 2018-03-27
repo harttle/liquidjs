@@ -139,7 +139,8 @@ function multiply(v, arg) {
     result = Object.assign(getObjectValues(arg),getObjectValues(v))
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
     const numberKeysOfV = filterNumericKeysFromObject(v);
-    if(JSON.stringify(numberKeysOfArg) === JSON.stringify(numberKeysOfV)) {
+    const commonNumericKeys = numberKeysOfV.filter(elem => numberKeysOfArg.indexOf(elem) !== -1)
+    if(commonNumericKeys.length > 0) {
       numberKeysOfArg.forEach(key => {
         result[key] = v[key]*arg[key];
       })
