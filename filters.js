@@ -146,7 +146,7 @@ function multiply(v, arg) {
       })
       return result;
     } else {
-      console.warn("The objects don't have same numeric attributes")
+      console.warn("The objects don't have any common numeric attributes")
     }
   } else if (typeof(v) === "number" && typeof(arg) === "object") {
     result = getObjectValues(arg)
