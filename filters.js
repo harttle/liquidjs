@@ -134,36 +134,53 @@ function isValidDate (date) {
 }
 
 function multiply(v, arg) {
+  let result = {}
   if (typeof(v) === "object" && typeof(arg) === "object") {
+    result = Object.assign(getObjectValues(arg),getObjectValues(v))
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
     const numberKeysOfV = filterNumericKeysFromObject(v);
     if(JSON.stringify(numberKeysOfArg) === JSON.stringify(numberKeysOfV)) {
       numberKeysOfArg.forEach(key => {
-        arg[key] = v[key]*arg[key];
+        result[key] = v[key]*arg[key];
       })
-      return arg;
+      return result;
     } else {
       console.warn("The objects don't have same numeric attributes")
     }
   } else if (typeof(v) === "number" && typeof(arg) === "object") {
+    result = getObjectValues(arg)
     const numberKeys = filterNumericKeysFromObject(arg);
     numberKeys.forEach(key => {
-      arg[key] = v*arg[key];
+      result[key] = v*arg[key];
     })
-    return arg
+    return result
   } else if (typeof(v) === "object" && typeof(arg) === "number") {
+    result = getObjectValues(v)
     const numberKeys = filterNumericKeysFromObject(v);
     numberKeys.forEach(key => {
-      v[key] = arg*v[key];
+      result[key] = arg*v[key];
     })
-    return v
+    return result
   } else {
     return v*arg;
   }
 }
 
 function filterNumericKeysFromObject(obj) {
-  return Object.keys(obj).filter(key => typeof(key) === "number");
+  return getAllKeys(obj).filter(key => !Number.isNaN(parseInt(obj[key])))
+}
+
+function getAllKeys(obj) {
+  return Object.keys(obj)
+}
+
+function getObjectValues(obj) {
+  let resultObj = {}
+  keys = getAllKeys(obj)
+  keys.forEach(key => {
+    resultObj[key] = obj[key]
+  })
+  return resultObj
 }
 
 registerAll.filters = filters
