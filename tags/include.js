@@ -1,7 +1,7 @@
 const Liquid = require('..')
 const lexical = Liquid.lexical
 const withRE = new RegExp(`with\\s+(${lexical.value.source})`)
-const staticFileRE = /\S+/
+const staticFileRE = /[^\s,]+/
 const assert = require('../src/util/assert.js')
 
 module.exports = function (liquid) {

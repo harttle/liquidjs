@@ -129,5 +129,15 @@ describe('tags/include', function () {
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('XchildY')
     })
+
+    it('should support comma separated arguments', function () {
+      mock({
+        '/parent.html': 'X{% include child.html, color:"red" %}Y',
+        '/child.html': 'child with {{color}}'
+      })
+      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      return expect(staticLiquid.renderFile('parent.html')).to
+        .eventually.equal('Xchild with redY')
+    })
   })
 })
