@@ -632,7 +632,9 @@ module.exports = function (options) {
       while (match = valueRE.exec(argList.trim())) {
         var v = match[0];
         var re = new RegExp(v + '\\s*:', 'g');
-        re.test(match.input) ? args.push('\'' + v + '\'') : args.push(v);
+        var keyMatch = re.exec(match.input);
+        var currentMatchIsKey = keyMatch && keyMatch.index === match.index;
+        currentMatchIsKey ? args.push('\'' + v + '\'') : args.push(v);
       }
 
       this.name = name;
@@ -2391,7 +2393,7 @@ module.exports = function (liquid) {
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var withRE = new RegExp('with\\s+(' + lexical.value.source + ')');
-var staticFileRE = /\S+/;
+var staticFileRE = /[^\s,]+/;
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
