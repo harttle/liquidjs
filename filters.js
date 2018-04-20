@@ -203,7 +203,7 @@ function operationOnItem(v, arg, operation) {
   switch(operation) {
     case "ADD": return v+arg;
     case "SUBTRACT": return v-arg;
-    case "DIVIDE": return parseFloat(v/arg).toPrecision(2);
+    case "DIVIDE": return parseFloat(arg/v).toPrecision(2);
     case "MULTIPLY": return v*arg;
   }
 }
