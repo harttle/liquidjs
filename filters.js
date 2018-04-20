@@ -33,7 +33,7 @@ var filters = {
     return isValidDate(date) ? strftime(date, arg) : v
   },
   'default': (v, arg) => isTruthy(v) ? v : arg,
-  'divided_by': (v, arg) => Math.floor(v / arg),
+  'divided_by': (v, arg) => divide(v, arg),
   'downcase': v => v.toLowerCase(),
   'escape': escape,
 
@@ -44,10 +44,10 @@ var filters = {
   'last': v => v[v.length - 1],
   'lstrip': v => stringify(v).replace(/^\s+/, ''),
   'map': (arr, arg) => arr.map(v => v[arg]),
-  'minus': bindFixed((v, arg) => v - arg),
+  'minus': bindFixed((v, arg) => {return subtract(v,arg)}),
   'modulo': bindFixed((v, arg) => v % arg),
   'newline_to_br': v => v.replace(/\n/g, '<br />'),
-  'plus': bindFixed((v, arg) => Number(v) + Number(arg)),
+  'plus': bindFixed((v, arg) =>{return add(v,arg)}),
   'prepend': (v, arg) => arg + v,
   'remove': (v, arg) => v.split(arg).join(''),
   'remove_first': (v, l) => v.replace(l, ''),
@@ -134,37 +134,7 @@ function isValidDate (date) {
 }
 
 function multiply(v, arg) {
-  let result = {}
-  if (typeof(v) === "object" && typeof(arg) === "object") {
-    result = Object.assign(getObjectValues(arg),getObjectValues(v))
-    const numberKeysOfArg = filterNumericKeysFromObject(arg);
-    const numberKeysOfV = filterNumericKeysFromObject(v);
-    const commonNumericKeys = numberKeysOfV.filter(elem => numberKeysOfArg.indexOf(elem) !== -1)
-    if(commonNumericKeys.length > 0) {
-      numberKeysOfArg.forEach(key => {
-        result[key] = v[key]*arg[key];
-      })
-      return result;
-    } else {
-      console.warn("The objects don't have any common numeric attributes")
-    }
-  } else if (typeof(v) === "number" && typeof(arg) === "object") {
-    result = getObjectValues(arg)
-    const numberKeys = filterNumericKeysFromObject(arg);
-    numberKeys.forEach(key => {
-      result[key] = v*arg[key];
-    })
-    return result
-  } else if (typeof(v) === "object" && typeof(arg) === "number") {
-    result = getObjectValues(v)
-    const numberKeys = filterNumericKeysFromObject(v);
-    numberKeys.forEach(key => {
-      result[key] = arg*v[key];
-    })
-    return result
-  } else {
-    return v*arg;
-  }
+  return performOperations(v, arg, "MULTIPLY")
 }
 
 function filterNumericKeysFromObject(obj) {
@@ -182,6 +152,60 @@ function getObjectValues(obj) {
     resultObj[key] = obj[key]
   })
   return resultObj
+}
+
+function subtract(v, arg) {
+  return performOperations(v, arg, "SUBTRACT")
+}
+
+function divide(v, arg) {
+  return performOperations(v, arg, "DIVIDE")
+}
+
+function add(v, arg) {
+  return performOperations(v, arg, "ADD")
+}
+
+function performOperations(v, arg, operation) {
+  if (typeof(v) === "object" && typeof(arg) === "object") {
+    result = Object.assign(getObjectValues(arg),getObjectValues(v))
+    const numberKeysOfArg = filterNumericKeysFromObject(arg);
+    const numberKeysOfV = filterNumericKeysFromObject(v);
+    const commonNumericKeys = numberKeysOfV.filter(elem => numberKeysOfArg.indexOf(elem) !== -1)
+    if(commonNumericKeys.length > 0) {
+      numberKeysOfArg.forEach(key => {
+        result[key] = operationOnItem(v[key],arg[key], operation);
+      })
+      return result;
+    } else {
+      console.warn("The objects don't have any common numeric attributes")
+    }
+  } else if (typeof(v) === "number" && typeof(arg) === "object") {
+    result = getObjectValues(arg)
+    const numberKeys = filterNumericKeysFromObject(arg);
+    numberKeys.forEach(key => {
+      result[key] = operationOnItem(v, arg[key], operation);
+    })
+    return result
+  } else if (typeof(v) === "object" && typeof(arg) === "number") {
+    result = getObjectValues(v)
+    const numberKeys = filterNumericKeysFromObject(v);
+    numberKeys.forEach(key => {
+      result[key] = operationOnItem(arg,v[key], operation)
+    })
+    return result
+  } else {
+    return operationOnItem(arg,v, operation);
+  }
+}
+
+function operationOnItem(v, arg, operation) {
+  switch(operation) {
+    case "ADD": return v+arg;
+    case "SUBTRACT": return v-arg;
+    case "DIVIDE": return Math.floor(v/arg);
+    case "MULTIPLY": return v*arg;
+  }
 }
 
 registerAll.filters = filters
