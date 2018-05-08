@@ -301,8 +301,20 @@ describe('filters', function () {
 
   describe('strip_html', function () {
     it('should strip all tags', function () {
-      return test('{{ "Have <em>you</em> read <strong>Ulysses</strong>?" | strip_html }}',
+      return test('{{ "Have <em>you</em> read <cite><a href=&quot;https://en.wikipedia.org/wiki/Ulysses_(novel)&quot;>Ulysses</a></cite>?" | strip_html }}',
         'Have you read Ulysses?')
+    })
+    it('should strip all comment tags', function () {
+      return test('{{ "<!--Have you read-->Ulysses?" | strip_html }}',
+        'Ulysses?')
+    })
+    it('should strip all style tags and their contents', function () {
+      return test('{{ "<style>cite { font-style: italic; }</style><cite>Ulysses<cite>?" | strip_html }}',
+        'Ulysses?')
+    })
+    it('should strip all scripts tags and their contents', function () {
+      return test('{{ "<script async>console.log(\'hello world\')</script><cite>Ulysses<cite>?" | strip_html }}',
+        'Ulysses?')
     })
     it('should strip until empty', function () {
       return test('{{"<br/><br />< p ></p></ p >" | strip_html }}', '')
