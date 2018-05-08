@@ -4,7 +4,6 @@ const assert = require('./src/util/assert.js')
 const tokenizer = require('./src/tokenizer.js')
 const statFileAsync = require('./src/util/fs.js').statFileAsync
 const readFileAsync = require('./src/util/fs.js').readFileAsync
-const path = require('path')
 const url = require('./src/util/url.js')
 const Render = require('./src/render.js')
 const lexical = require('./src/lexical.js')
@@ -64,6 +63,7 @@ var _engine = {
     return this.tag.register(name, tag)
   },
   lookup: function (filepath, root) {
+    const path = require('path');
     root = this.options.root.concat(root || [])
     root = _.uniq(root)
     var paths = root.map(root => path.resolve(root, filepath))
@@ -79,6 +79,7 @@ var _engine = {
       : this.getTemplateFromUrl(filepath, root)
   },
   getTemplateFromFile: function (filepath, root) {
+    const path = require('path');
     if (!path.extname(filepath)) {
       filepath += this.options.extname
     }

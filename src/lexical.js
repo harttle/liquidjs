@@ -10,7 +10,7 @@ var number = /-?\d+\.?\d*|\.?\d+/
 var bool = /true|false/
 
 // peoperty access
-var identifier = /[\w-]+/
+var identifier = /[_\$\w-]+/
 var subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`)
 var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`)
 var variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subscript.source})*`)
