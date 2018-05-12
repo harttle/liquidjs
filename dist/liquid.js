@@ -49,7 +49,7 @@ var filters = {
     return isTruthy(v) ? v : arg;
   },
   'divided_by': function divided_by(v, arg) {
-    return Math.floor(v / arg);
+    return v / arg;
   },
   'downcase': function downcase(v) {
     return v.toLowerCase();
