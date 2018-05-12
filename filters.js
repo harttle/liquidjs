@@ -33,7 +33,7 @@ var filters = {
     return isValidDate(date) ? strftime(date, arg) : v
   },
   'default': (v, arg) => isTruthy(v) ? v : arg,
-  'divided_by': (v, arg) => Math.floor(v / arg),
+  'divided_by': (v, arg) => v / arg,
   'downcase': v => v.toLowerCase(),
   'escape': escape,
 

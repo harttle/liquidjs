@@ -110,8 +110,8 @@ describe('filters', function () {
   describe('divided_by', function () {
     it('should return 2 for 4,2', () => test('{{4 | divided_by: 2}}', '2'))
     it('should return 4 for 16,4', () => test('{{16 | divided_by: 4}}', '4'))
-    it('should return 1 for 5,3', () => test('{{5 | divided_by: 3}}', '1'))
-    it('should convert string to number', () => test('{{"5" | divided_by: "3"}}', '1'))
+    it('should return 1 for 5,3', () => test('{{5 | divided_by: 3}}', (5 / 3).toString()))
+    it('should convert string to number', () => test('{{"6" | divided_by: "3"}}', '2'))
   })
 
   describe('downcase', function () {
