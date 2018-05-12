@@ -50,7 +50,6 @@ module.exports = function (liquid) {
         return liquid.renderer.renderTemplates(this.elseTemplates, scope)
       }
 
-      var length = collection.length
       var offset = hash.offset || 0
       var limit = (hash.limit === undefined) ? collection.length : hash.limit
 
@@ -64,10 +63,10 @@ module.exports = function (liquid) {
           first: i === 0,
           index: i + 1,
           index0: i,
-          last: i === length - 1,
-          length: length,
-          rindex: length - i,
-          rindex0: length - i - 1
+          last: i === collection.length - 1,
+          length: collection.length,
+          rindex: collection.length - i,
+          rindex0: collection.length - i - 1
         }
         return ctx
       })

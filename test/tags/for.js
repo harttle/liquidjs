@@ -135,10 +135,48 @@ describe('tags/for', function () {
       return expect(liquid.parseAndRender(src, ctx))
         .to.eventually.equal('12')
     })
-    it('should support for with limit and offset', function () {
+    it('should set forloop.last properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.last}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('false true ')
+    })
+    it('should set forloop.first properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.first}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('true false ')
+    })
+    it('should set forloop.length properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.length}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('2 2 ')
+    })
+  })
+
+  describe('offset', function () {
+    it('should support offset with limit', function () {
       var src = '{% for i in (1..10) limit:2 offset:5%}{{ i }}{% endfor %}'
       return expect(liquid.parseAndRender(src, ctx))
         .to.eventually.equal('67')
+    })
+    it('should set index properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.index}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('1 2 ')
+    })
+    it('should set index0 properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.index0}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('0 1 ')
+    })
+    it('should set rindex properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.rindex}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('2 1 ')
+    })
+    it('should set rindex0 properly', function () {
+      var src = '{%for i in (1..10) limit:2 offset:3%}{{forloop.rindex0}} {%endfor%}'
+      return expect(liquid.parseAndRender(src, ctx))
+        .to.eventually.equal('1 0 ')
     })
   })
 
