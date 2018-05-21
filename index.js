@@ -63,16 +63,16 @@ var _engine = {
   registerTag: function (name, tag) {
     return this.tag.register(name, tag)
   },
-  lookup: function (filepath, root) {
-    root = this.options.root.concat(root || [])
-    root = _.uniq(root)
-    var paths = root.map(root => path.resolve(root, filepath))
-    return anySeries(paths, path => statFileAsync(path).then(() => path))
-      .catch((e) => {
-        e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
-        throw e
-      })
-  },
+  // lookup: function (filepath, root) {
+  //   root = this.options.root.concat(root || [])
+  //   root = _.uniq(root)
+  //   var paths = root.map(root => path.resolve(root, filepath))
+  //   return anySeries(paths, path => statFileAsync(path).then(() => path))
+  //     .catch((e) => {
+  //       e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
+  //       throw e
+  //     })
+  // },
   getTemplate: function (filepath, root) {
     return typeof XMLHttpRequest === 'undefined'
       ? this.getTemplateFromFile(filepath, root)
@@ -98,42 +98,42 @@ var _engine = {
         }
       })
   },
-  getTemplateFromUrl: function (filepath, root) {
-    var fullUrl
-    if (url.valid(filepath)) {
-      fullUrl = filepath
-    } else {
-      if (!url.extname(filepath)) {
-        filepath += this.options.extname
-      }
-      fullUrl = url.resolve(root || this.options.root, filepath)
-    }
-    if (this.options.cache) {
-      var tpl = this.cache[filepath]
-      if (tpl) {
-        return Promise.resolve(tpl)
-      }
-    }
-    return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest()
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          var tpl = this.parse(xhr.responseText)
-          if (this.options.cache) {
-            this.cache[filepath] = tpl
-          }
-          resolve(tpl)
-        } else {
-          reject(new Error(xhr.statusText))
-        }
-      }
-      xhr.onerror = () => {
-        reject(new Error('An error occurred whilst sending the response.'))
-      }
-      xhr.open('GET', fullUrl)
-      xhr.send()
-    })
-  },
+  // getTemplateFromUrl: function (filepath, root) {
+  //   var fullUrl
+  //   if (url.valid(filepath)) {
+  //     fullUrl = filepath
+  //   } else {
+  //     if (!url.extname(filepath)) {
+  //       filepath += this.options.extname
+  //     }
+  //     fullUrl = url.resolve(root || this.options.root, filepath)
+  //   }
+  //   if (this.options.cache) {
+  //     var tpl = this.cache[filepath]
+  //     if (tpl) {
+  //       return Promise.resolve(tpl)
+  //     }
+  //   }
+  //   return new Promise((resolve, reject) => {
+  //     var xhr = new XMLHttpRequest()
+  //     xhr.onload = () => {
+  //       if (xhr.status >= 200 && xhr.status < 300) {
+  //         var tpl = this.parse(xhr.responseText)
+  //         if (this.options.cache) {
+  //           this.cache[filepath] = tpl
+  //         }
+  //         resolve(tpl)
+  //       } else {
+  //         reject(new Error(xhr.statusText))
+  //       }
+  //     }
+  //     xhr.onerror = () => {
+  //       reject(new Error('An error occurred whilst sending the response.'))
+  //     }
+  //     xhr.open('GET', fullUrl)
+  //     xhr.send()
+  //   })
+  // },
   express: function (opts) {
     opts = opts || {}
     var self = this
