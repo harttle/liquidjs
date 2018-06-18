@@ -195,7 +195,7 @@ function performOperations(v, arg, operation) {
     })
     return result
   } else {
-    return operationOnItem(arg,v, operation);
+    return operationOnItem(v, arg, operation);
   }
 }
 
@@ -203,7 +203,7 @@ function operationOnItem(v, arg, operation) {
   switch(operation) {
     case "ADD": return v+arg;
     case "SUBTRACT": return v-arg;
-    case "DIVIDE": return parseFloat((arg/v).toFixed(3));
+    case "DIVIDE": return parseFloat((v/arg).toFixed(3));
     case "MULTIPLY": return v*arg;
   }
 }
