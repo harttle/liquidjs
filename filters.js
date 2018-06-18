@@ -44,10 +44,10 @@ var filters = {
   'last': v => v[v.length - 1],
   'lstrip': v => stringify(v).replace(/^\s+/, ''),
   'map': (arr, arg) => arr.map(v => v[arg]),
-  'minus': (v, arg) => { return subtract(v,arg) },
+  'minus': (v, arg) =>  subtract(v,arg),
   'modulo': bindFixed((v, arg) => v % arg),
   'newline_to_br': v => v.replace(/\n/g, '<br />'),
-  'plus': (v, arg) =>{return add(v,arg)},
+  'plus': (v, arg) => add(v,arg),
   'prepend': (v, arg) => arg + v,
   'remove': (v, arg) => v.split(arg).join(''),
   'remove_first': (v, l) => v.replace(l, ''),
@@ -68,7 +68,7 @@ var filters = {
   'strip': (v) => stringify(v).trim(),
   'strip_html': v => stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, ''),
   'strip_newlines': v => stringify(v).replace(/\n/g, ''),
-  'times': (v, arg) => { return multiply(v, arg) },
+  'times': (v, arg) => multiply(v, arg),
   'truncate': (v, l, o) => {
     v = stringify(v)
     o = (o === undefined) ? '...' : o
@@ -138,16 +138,12 @@ function multiply(v, arg) {
 }
 
 function filterNumericKeysFromObject(obj) {
-  return getAllKeys(obj).filter(key => !Number.isNaN(parseInt(obj[key])))
-}
-
-function getAllKeys(obj) {
-  return Object.keys(obj)
+  return Object.keys(obj).filter(key => !Number.isNaN(parseInt(obj[key])))
 }
 
 function getObjectValues(obj) {
   let resultObj = {}
-  keys = getAllKeys(obj)
+  keys = Object.keys(obj)
   keys.forEach(key => {
     resultObj[key] = obj[key]
   })
