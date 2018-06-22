@@ -194,7 +194,7 @@ function performOperations(v, arg, operation) {
     result = getObjectValues(v);
     const numberKeys = filterNumericKeysFromObject(v);
     numberKeys.forEach(key => {
-      result[key] = operationOnItem(arg, v[key], operation);
+      result[key] = operationOnItem(v[key], arg, operation);
     });
     return result;
   } else {
