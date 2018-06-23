@@ -14,7 +14,6 @@ const Parser = require('./src/parser')
 const Syntax = require('./src/syntax.js')
 const tags = require('./tags')
 const filters = require('./filters')
-const Promise = require('any-promise')
 const anySeries = require('./src/util/promise.js').anySeries
 const Errors = require('./src/util/error.js')
 

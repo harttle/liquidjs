@@ -1,5 +1,4 @@
 const lexical = require('./lexical.js')
-const Promise = require('any-promise')
 const Syntax = require('./syntax.js')
 const assert = require('./util/assert.js')
 

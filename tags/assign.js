@@ -1,6 +1,5 @@
 const Liquid = require('..')
 const lexical = Liquid.lexical
-const Promise = require('any-promise')
 const re = new RegExp(`(${lexical.identifier.source})\\s*=(.*)`)
 const assert = require('../src/util/assert.js')
 

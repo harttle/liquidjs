@@ -1,5 +1,4 @@
 const Liquid = require('..')
-const Promise = require('any-promise')
 const lexical = Liquid.lexical
 const groupRE = new RegExp(`^(?:(${lexical.value.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(lexical.value.source, 'g')

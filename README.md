@@ -16,7 +16,7 @@ This is a liquid implementation for both Node.js and browsers. Website: <http://
 
 * Fully compatible to [shopify][shopify/liquid], with all [tags][tags] and [filters][filters] implemented
 * Support layout(extend) and include syntax
-* In pure JavaScript with [any-promise][any-promise] as the only one dependency
+* In pure JavaScript with Promise-based API
 
 **Differences**
 
@@ -47,6 +47,7 @@ Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is
 Install as Node.js dependency:
 
 ```bash
+# You'll need a promise-polyfill for Node.js < 4
 npm install --save liquidjs
 ```
 

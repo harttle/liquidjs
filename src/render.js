@@ -1,5 +1,4 @@
 const Syntax = require('./syntax.js')
-const Promise = require('any-promise')
 const mapSeries = require('./util/promise.js').mapSeries
 const RenderBreakError = require('./util/error.js').RenderBreakError
 const RenderError = require('./util/error.js').RenderError
