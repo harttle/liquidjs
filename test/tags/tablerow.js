@@ -5,7 +5,7 @@ chai.use(require('chai-as-promised'))
 
 describe('tags/tablerow', function () {
   var liquid = Liquid()
-  
+
   it('should support tablerow', function () {
     var src = '{% tablerow i in (1..3)%}{{ i }}{% endtablerow %}'
     var dst = '<tr class="row1"><td class="col1">1</td><td class="col2">2</td><td class="col3">3</td></tr>'
