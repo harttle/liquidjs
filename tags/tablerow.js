@@ -32,17 +32,17 @@ module.exports = function (liquid) {
     render: function (scope, hash) {
       var collection = Liquid.evalExp(this.collection, scope) || []
 
-      var html = '<table>'
+      var html = ''
       var offset = hash.offset || 0
       var limit = (hash.limit === undefined) ? collection.length : hash.limit
 
       var cols = hash.cols
       var row
       var col
-      if (!cols) throw new Error(`illegal cols: ${cols}`)
 
       // build array of arguments to pass to sequential promises...
       collection = collection.slice(offset, offset + limit)
+      if (!cols) cols = collection.length
       var contexts = []
       collection.some((item, i) => {
         var ctx = {}
@@ -76,7 +76,6 @@ module.exports = function (liquid) {
           if (row > 0) {
             html += '</tr>'
           }
-          html += '</table>'
           return html
         })
     }
