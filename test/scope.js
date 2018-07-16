@@ -151,12 +151,18 @@ describe('scope', function () {
       }
       expect(fn).to.throw(/undefined variable: notdefined/)
     })
-    it('should throw when deep variable not exist', function () {
-      scope.set('foo', 'bar')
+    it('should throw when parent not defined', function () {
       function fn () {
         scope.get('foo.bar.not.defined')
       }
-      expect(fn).to.throw(/undefined variable: not/)
+      expect(fn).to.throw(/undefined variable: bar/)
+    })
+    it('should throw when itself not defined', function () {
+      scope.set('foo', 'bar')
+      function fn () {
+        scope.get('foo.BAR')
+      }
+      expect(fn).to.throw(/undefined variable: BAR/)
     })
     it('should find variable in parent scope', function () {
       scope.set('foo', 'foo')
