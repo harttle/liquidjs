@@ -215,7 +215,7 @@ function isValidDate(date) {
 registerAll.filters = filters;
 module.exports = registerAll;
 
-},{"./src/syntax.js":15,"./src/util/strftime.js":22,"./src/util/underscore.js":23}],2:[function(require,module,exports){
+},{"./src/syntax.js":12,"./src/util/strftime.js":19,"./src/util/underscore.js":20}],2:[function(require,module,exports){
 'use strict';
 
 var Scope = require('./src/scope');
@@ -234,7 +234,6 @@ var Parser = require('./src/parser');
 var Syntax = require('./src/syntax.js');
 var tags = require('./tags');
 var filters = require('./filters');
-var Promise = require('any-promise');
 var anySeries = require('./src/util/promise.js').anySeries;
 var Errors = require('./src/util/error.js');
 
@@ -426,116 +425,13 @@ factory.Types = {
 
 module.exports = factory;
 
-},{"./filters":1,"./src/filter.js":9,"./src/lexical.js":10,"./src/parser":12,"./src/render.js":13,"./src/scope":14,"./src/syntax.js":15,"./src/tag.js":16,"./src/tokenizer.js":17,"./src/util/assert.js":18,"./src/util/error.js":19,"./src/util/fs.js":20,"./src/util/promise.js":21,"./src/util/underscore.js":23,"./src/util/url.js":24,"./tags":36,"any-promise":3,"path":7}],3:[function(require,module,exports){
-'use strict';
-
-module.exports = require('./register')().Promise;
-
-},{"./register":5}],4:[function(require,module,exports){
+},{"./filters":1,"./src/filter.js":6,"./src/lexical.js":7,"./src/parser":9,"./src/render.js":10,"./src/scope":11,"./src/syntax.js":12,"./src/tag.js":13,"./src/tokenizer.js":14,"./src/util/assert.js":15,"./src/util/error.js":16,"./src/util/fs.js":17,"./src/util/promise.js":18,"./src/util/underscore.js":20,"./src/util/url.js":21,"./tags":33,"path":4}],3:[function(require,module,exports){
 "use strict";
-// global key for user preferred registration
 
-var REGISTRATION_KEY = '@@any-promise/REGISTRATION',
-
-// Prior registration (preferred or detected)
-registered = null;
-
-/**
- * Registers the given implementation.  An implementation must
- * be registered prior to any call to `require("any-promise")`,
- * typically on application load.
- *
- * If called with no arguments, will return registration in
- * following priority:
- *
- * For Node.js:
- *
- * 1. Previous registration
- * 2. global.Promise if node.js version >= 0.12
- * 3. Auto detected promise based on first sucessful require of
- *    known promise libraries. Note this is a last resort, as the
- *    loaded library is non-deterministic. node.js >= 0.12 will
- *    always use global.Promise over this priority list.
- * 4. Throws error.
- *
- * For Browser:
- *
- * 1. Previous registration
- * 2. window.Promise
- * 3. Throws error.
- *
- * Options:
- *
- * Promise: Desired Promise constructor
- * global: Boolean - Should the registration be cached in a global variable to
- * allow cross dependency/bundle registration?  (default true)
- */
-module.exports = function (root, loadImplementation) {
-  return function register(implementation, opts) {
-    implementation = implementation || null;
-    opts = opts || {};
-    // global registration unless explicitly  {global: false} in options (default true)
-    var registerGlobal = opts.global !== false;
-
-    // load any previous global registration
-    if (registered === null && registerGlobal) {
-      registered = root[REGISTRATION_KEY] || null;
-    }
-
-    if (registered !== null && implementation !== null && registered.implementation !== implementation) {
-      // Throw error if attempting to redefine implementation
-      throw new Error('any-promise already defined as "' + registered.implementation + '".  You can only register an implementation before the first ' + ' call to require("any-promise") and an implementation cannot be changed');
-    }
-
-    if (registered === null) {
-      // use provided implementation
-      if (implementation !== null && typeof opts.Promise !== 'undefined') {
-        registered = {
-          Promise: opts.Promise,
-          implementation: implementation
-        };
-      } else {
-        // require implementation if implementation is specified but not provided
-        registered = loadImplementation(implementation);
-      }
-
-      if (registerGlobal) {
-        // register preference globally in case multiple installations
-        root[REGISTRATION_KEY] = registered;
-      }
-    }
-
-    return registered;
-  };
-};
+},{}],4:[function(require,module,exports){
+"use strict";
 
 },{}],5:[function(require,module,exports){
-"use strict";
-
-module.exports = require('./loader')(window, loadImplementation);
-
-/**
- * Browser specific loadImplementation.  Always uses `window.Promise`
- *
- * To register a custom implementation, must register with `Promise` option.
- */
-function loadImplementation() {
-  if (typeof window.Promise === 'undefined') {
-    throw new Error("any-promise browser requires a polyfill or explicit registration" + " e.g: require('any-promise/register/bluebird')");
-  }
-  return {
-    Promise: window.Promise,
-    implementation: 'window.Promise'
-  };
-}
-
-},{"./loader":4}],6:[function(require,module,exports){
-"use strict";
-
-},{}],7:[function(require,module,exports){
-"use strict";
-
-},{}],8:[function(require,module,exports){
 "use strict";
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -587,7 +483,7 @@ void function (root, factory) {
   return resolveUrl;
 });
 
-},{}],9:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -663,7 +559,7 @@ module.exports = function (options) {
   };
 };
 
-},{"./lexical.js":10,"./syntax.js":15,"./util/assert.js":18,"./util/underscore.js":23}],10:[function(require,module,exports){
+},{"./lexical.js":7,"./syntax.js":12,"./util/assert.js":15,"./util/underscore.js":20}],7:[function(require,module,exports){
 'use strict';
 
 // quote related
@@ -779,7 +675,7 @@ module.exports = {
   isInteger: isInteger
 };
 
-},{}],11:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function (isTruthy) {
@@ -816,7 +712,7 @@ module.exports = function (isTruthy) {
   };
 };
 
-},{}],12:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -927,11 +823,10 @@ module.exports = function (Tag, Filter) {
   };
 };
 
-},{"./lexical.js":10,"./util/assert.js":18,"./util/error.js":19}],13:[function(require,module,exports){
+},{"./lexical.js":7,"./util/assert.js":15,"./util/error.js":16}],10:[function(require,module,exports){
 'use strict';
 
 var Syntax = require('./syntax.js');
-var Promise = require('any-promise');
 var mapSeries = require('./util/promise.js').mapSeries;
 var RenderBreakError = require('./util/error.js').RenderBreakError;
 var RenderError = require('./util/error.js').RenderError;
@@ -1009,7 +904,7 @@ function stringify(val) {
 
 module.exports = factory;
 
-},{"./syntax.js":15,"./util/assert.js":18,"./util/error.js":19,"./util/promise.js":21,"any-promise":3}],14:[function(require,module,exports){
+},{"./syntax.js":12,"./util/assert.js":15,"./util/error.js":16,"./util/promise.js":18}],11:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -1202,7 +1097,7 @@ exports.factory = function (ctx, opts) {
   return scope;
 };
 
-},{"./lexical.js":10,"./util/assert.js":18,"./util/underscore.js":23}],15:[function(require,module,exports){
+},{"./lexical.js":7,"./util/assert.js":15,"./util/underscore.js":20}],12:[function(require,module,exports){
 'use strict';
 
 var operators = require('./operators.js')(isTruthy);
@@ -1262,11 +1157,10 @@ module.exports = {
   evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
 };
 
-},{"../src/util/assert.js":18,"./lexical.js":10,"./operators.js":11}],16:[function(require,module,exports){
+},{"../src/util/assert.js":15,"./lexical.js":7,"./operators.js":8}],13:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
-var Promise = require('any-promise');
 var Syntax = require('./syntax.js');
 var assert = require('./util/assert.js');
 
@@ -1331,7 +1225,7 @@ module.exports = function () {
   };
 };
 
-},{"./lexical.js":10,"./syntax.js":15,"./util/assert.js":18,"any-promise":3}],17:[function(require,module,exports){
+},{"./lexical.js":7,"./syntax.js":12,"./util/assert.js":15}],14:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -1424,7 +1318,7 @@ function LineNumber(html) {
 exports.parse = parse;
 exports.whiteSpaceCtrl = whiteSpaceCtrl;
 
-},{"./lexical.js":10,"./util/assert.js":18,"./util/error.js":19,"./util/underscore.js":23,"./whitespace-ctrl.js":25}],18:[function(require,module,exports){
+},{"./lexical.js":7,"./util/assert.js":15,"./util/error.js":16,"./util/underscore.js":20,"./whitespace-ctrl.js":22}],15:[function(require,module,exports){
 'use strict';
 
 var AssertionError = require('./error.js').AssertionError;
@@ -1438,7 +1332,7 @@ function assert(predicate, message) {
 
 module.exports = assert;
 
-},{"./error.js":19}],19:[function(require,module,exports){
+},{"./error.js":16}],16:[function(require,module,exports){
 'use strict';
 
 var _ = require('./underscore.js');
@@ -1542,7 +1436,7 @@ module.exports = {
   RenderError: RenderError
 };
 
-},{"./underscore.js":23}],20:[function(require,module,exports){
+},{"./underscore.js":20}],17:[function(require,module,exports){
 'use strict';
 
 var fs = require('fs');
@@ -1568,10 +1462,8 @@ module.exports = {
   statFileAsync: statFileAsync
 };
 
-},{"fs":6}],21:[function(require,module,exports){
+},{"fs":3}],18:[function(require,module,exports){
 'use strict';
-
-var Promise = require('any-promise');
 
 /*
  * Call functions in serial until someone resolved.
@@ -1613,7 +1505,7 @@ function mapSeries(iterable, iteratee) {
 exports.anySeries = anySeries;
 exports.mapSeries = mapSeries;
 
-},{"any-promise":3}],22:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -1807,7 +1699,7 @@ var strftime = function strftime(d, format) {
 
 module.exports = strftime;
 
-},{}],23:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -1949,7 +1841,7 @@ exports.forOwn = forOwn;
 exports.assign = assign;
 exports.uniq = uniq;
 
-},{}],24:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var resolve = require('resolve-url');
@@ -1976,7 +1868,7 @@ exports.resolve = function (root, path) {
   return resolve(root, path);
 };
 
-},{"resolve-url":8}],25:[function(require,module,exports){
+},{"resolve-url":5}],22:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -2027,12 +1919,11 @@ function trimRight(token, greedy) {
 
 module.exports = whiteSpaceCtrl;
 
-},{"./util/underscore.js":23}],26:[function(require,module,exports){
+},{"./util/underscore.js":20}],23:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
 var lexical = Liquid.lexical;
-var Promise = require('any-promise');
 var re = new RegExp('(' + lexical.identifier.source + ')\\s*=(.*)');
 var assert = require('../src/util/assert.js');
 
@@ -2051,7 +1942,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18,"any-promise":3}],27:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],24:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2090,7 +1981,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18}],28:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],25:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2138,7 +2029,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2}],29:[function(require,module,exports){
+},{"..":2}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -2155,55 +2046,54 @@ module.exports = function (liquid) {
   });
 };
 
-},{}],30:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
-var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var groupRE = new RegExp('^(?:(' + lexical.value.source + ')\\s*:\\s*)?(.*)$');
 var candidatesRE = new RegExp(lexical.value.source, 'g');
 var assert = require('../src/util/assert.js');
 
 module.exports = function (liquid) {
-      liquid.registerTag('cycle', {
+  liquid.registerTag('cycle', {
 
-            parse: function parse(tagToken, remainTokens) {
-                  var match = groupRE.exec(tagToken.args);
-                  assert(match, 'illegal tag: ' + tagToken.raw);
+    parse: function parse(tagToken, remainTokens) {
+      var match = groupRE.exec(tagToken.args);
+      assert(match, 'illegal tag: ' + tagToken.raw);
 
-                  this.group = match[1] || '';
-                  var candidates = match[2];
+      this.group = match[1] || '';
+      var candidates = match[2];
 
-                  this.candidates = [];
+      this.candidates = [];
 
-                  while (match = candidatesRE.exec(candidates)) {
-                        this.candidates.push(match[0]);
-                  }
-                  assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
-            },
+      while (match = candidatesRE.exec(candidates)) {
+        this.candidates.push(match[0]);
+      }
+      assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
+    },
 
-            render: function render(scope, hash) {
-                  var group = Liquid.evalValue(this.group, scope);
-                  var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
+    render: function render(scope, hash) {
+      var group = Liquid.evalValue(this.group, scope);
+      var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
 
-                  var groups = scope.opts.groups = scope.opts.groups || {};
-                  var idx = groups[fingerprint];
+      var groups = scope.opts.groups = scope.opts.groups || {};
+      var idx = groups[fingerprint];
 
-                  if (idx === undefined) {
-                        idx = groups[fingerprint] = 0;
-                  }
+      if (idx === undefined) {
+        idx = groups[fingerprint] = 0;
+      }
 
-                  var candidate = this.candidates[idx];
-                  idx = (idx + 1) % this.candidates.length;
-                  groups[fingerprint] = idx;
+      var candidate = this.candidates[idx];
+      idx = (idx + 1) % this.candidates.length;
+      groups[fingerprint] = idx;
 
-                  return Promise.resolve(Liquid.evalValue(candidate, scope));
-            }
-      });
+      return Promise.resolve(Liquid.evalValue(candidate, scope));
+    }
+  });
 };
 
-},{"..":2,"../src/util/assert.js":18,"any-promise":3}],31:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],28:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2225,7 +2115,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18}],32:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],29:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2335,7 +2225,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18,"../src/util/promise.js":21,"../src/util/underscore.js":23}],33:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15,"../src/util/promise.js":18,"../src/util/underscore.js":20}],30:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2386,7 +2276,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2}],34:[function(require,module,exports){
+},{"..":2}],31:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2438,7 +2328,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18}],35:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],32:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2460,7 +2350,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18}],36:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],33:[function(require,module,exports){
 'use strict';
 
 module.exports = function (engine) {
@@ -2480,11 +2370,10 @@ module.exports = function (engine) {
   require('./unless.js')(engine);
 };
 
-},{"./assign.js":26,"./capture.js":27,"./case.js":28,"./comment.js":29,"./cycle.js":30,"./decrement.js":31,"./for.js":32,"./if.js":33,"./include.js":34,"./increment.js":35,"./layout.js":37,"./raw.js":38,"./tablerow.js":39,"./unless.js":40}],37:[function(require,module,exports){
+},{"./assign.js":23,"./capture.js":24,"./case.js":25,"./comment.js":26,"./cycle.js":27,"./decrement.js":28,"./for.js":29,"./if.js":30,"./include.js":31,"./increment.js":32,"./layout.js":34,"./raw.js":35,"./tablerow.js":36,"./unless.js":37}],34:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
-var Promise = require('any-promise');
 var lexical = Liquid.lexical;
 var assert = require('../src/util/assert.js');
 var staticFileRE = /\S+/;
@@ -2572,10 +2461,8 @@ module.exports = function (liquid) {
   });
 };
 
-},{"..":2,"../src/util/assert.js":18,"any-promise":3}],38:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15}],35:[function(require,module,exports){
 'use strict';
-
-var Promise = require('any-promise');
 
 module.exports = function (liquid) {
   liquid.registerTag('raw', {
@@ -2601,7 +2488,7 @@ module.exports = function (liquid) {
   });
 };
 
-},{"any-promise":3}],39:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2642,17 +2529,17 @@ module.exports = function (liquid) {
 
       var collection = Liquid.evalExp(this.collection, scope) || [];
 
-      var html = '<table>';
+      var html = '';
       var offset = hash.offset || 0;
       var limit = hash.limit === undefined ? collection.length : hash.limit;
 
       var cols = hash.cols;
       var row;
       var col;
-      if (!cols) throw new Error('illegal cols: ' + cols);
 
       // build array of arguments to pass to sequential promises...
       collection = collection.slice(offset, offset + limit);
+      if (!cols) cols = collection.length;
       var contexts = [];
       collection.some(function (item, i) {
         var ctx = {};
@@ -2682,14 +2569,13 @@ module.exports = function (liquid) {
         if (row > 0) {
           html += '</tr>';
         }
-        html += '</table>';
         return html;
       });
     }
   });
 };
 
-},{"..":2,"../src/util/assert.js":18,"../src/util/promise.js":21}],40:[function(require,module,exports){
+},{"..":2,"../src/util/assert.js":15,"../src/util/promise.js":18}],37:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
