@@ -965,12 +965,17 @@ var Scope = {
     }
     var key = paths.shift();
     var value = getValueFromScopes(key, scopes);
-    return paths.reduce(function (value, key) {
+    if (_.isNil(value)) {
+      throw new TypeError('undefined variable: ' + key);
+    }
+    while (paths.length) {
+      key = paths.shift();
+      value = getValueFromParent(key, value);
       if (_.isNil(value)) {
         throw new TypeError('undefined variable: ' + key);
       }
-      return getValueFromParent(key, value);
-    }, value);
+    }
+    return value;
   },
 
   /*
