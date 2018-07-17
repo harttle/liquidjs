@@ -17,7 +17,8 @@ describe('expression', function () {
       empty: '',
       x: 'XXX',
       y: undefined,
-      z: null
+      z: null,
+      'has_value?': true
     })
   })
 
@@ -30,6 +31,7 @@ describe('expression', function () {
     it('should eval variables', function () {
       expect(evalValue('23', scope)).to.equal(23)
       expect(evalValue('one', scope)).to.equal(1)
+      expect(evalValue('has_value?', scope)).to.equal(true)
       expect(evalValue('x', scope)).to.equal('XXX')
     })
 
