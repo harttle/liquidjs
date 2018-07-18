@@ -111,7 +111,9 @@ describe('filters', function () {
     it('should return 2 for 4,2', () => test('{{4 | divided_by: 2}}', '2'))
     it('should return 4 for 16,4', () => test('{{16 | divided_by: 4}}', '4'))
     it('should return 1 for 5,3', () => test('{{5 | divided_by: 3}}', '1'))
-    it('should convert string to number', () => test('{{"5" | divided_by: "3"}}', '1'))
+    it('should return 2160 for 216000,100', () => test('{{216000 | divided_by: 100.0}}', '2160'))
+    it('should support object divide by number Currency', () => test('{{ {value: 1000, type: "INR"} | divided_by: 100.0}}', '10'))
+    it('should convert string to number', () => test('{{"5" | divided_by: "3"}}', '1.667'))
   })
 
   describe('downcase', function () {

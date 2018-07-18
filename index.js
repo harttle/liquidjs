@@ -4,7 +4,7 @@ const assert = require('./src/util/assert.js')
 const tokenizer = require('./src/tokenizer.js')
 const statFileAsync = require('./src/util/fs.js').statFileAsync
 const readFileAsync = require('./src/util/fs.js').readFileAsync
-const path = require('path')
+// const path = require('path')
 const url = require('./src/util/url.js')
 const Render = require('./src/render.js')
 const lexical = require('./src/lexical.js')
@@ -63,41 +63,41 @@ var _engine = {
   registerTag: function (name, tag) {
     return this.tag.register(name, tag)
   },
-  lookup: function (filepath, root) {
-    root = this.options.root.concat(root || [])
-    root = _.uniq(root)
-    var paths = root.map(root => path.resolve(root, filepath))
-    return anySeries(paths, path => statFileAsync(path).then(() => path))
-      .catch((e) => {
-        e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
-        throw e
-      })
-  },
+  // lookup: function (filepath, root) {
+  //   root = this.options.root.concat(root || [])
+  //   root = _.uniq(root)
+  //   var paths = root.map(root => path.resolve(root, filepath))
+  //   return anySeries(paths, path => statFileAsync(path).then(() => path))
+  //     .catch((e) => {
+  //       e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
+  //       throw e
+  //     })
+  // },
   getTemplate: function (filepath, root) {
     return typeof XMLHttpRequest === 'undefined'
       ? this.getTemplateFromFile(filepath, root)
       : this.getTemplateFromUrl(filepath, root)
   },
-  getTemplateFromFile: function (filepath, root) {
-    if (!path.extname(filepath)) {
-      filepath += this.options.extname
-    }
-    return this
-      .lookup(filepath, root)
-      .then(filepath => {
-        if (this.options.cache) {
-          var tpl = this.cache[filepath]
-          if (tpl) {
-            return Promise.resolve(tpl)
-          }
-          return readFileAsync(filepath)
-            .then(str => this.parse(str))
-            .then(tpl => (this.cache[filepath] = tpl))
-        } else {
-          return readFileAsync(filepath).then(str => this.parse(str, filepath))
-        }
-      })
-  },
+  // getTemplateFromFile: function (filepath, root) {
+  //   if (!path.extname(filepath)) {
+  //     filepath += this.options.extname
+  //   }
+  //   return this
+  //     .lookup(filepath, root)
+  //     .then(filepath => {
+  //       if (this.options.cache) {
+  //         var tpl = this.cache[filepath]
+  //         if (tpl) {
+  //           return Promise.resolve(tpl)
+  //         }
+  //         return readFileAsync(filepath)
+  //           .then(str => this.parse(str))
+  //           .then(tpl => (this.cache[filepath] = tpl))
+  //       } else {
+  //         return readFileAsync(filepath).then(str => this.parse(str, filepath))
+  //       }
+  //     })
+  // },
   getTemplateFromUrl: function (filepath, root) {
     var fullUrl
     if (url.valid(filepath)) {
