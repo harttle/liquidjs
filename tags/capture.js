@@ -1,7 +1,9 @@
+'use strict'
 const Liquid = require('..')
 const lexical = Liquid.lexical
 const re = new RegExp(`(${lexical.identifier.source})`)
 const assert = require('../src/util/assert.js')
+const types = require('../src/scope.js').types
 
 module.exports = function (liquid) {
   liquid.registerTag('capture', {
@@ -23,7 +25,9 @@ module.exports = function (liquid) {
     render: function (scope, hash) {
       return liquid.renderer.renderTemplates(this.templates, scope)
         .then((html) => {
-          scope.set(this.variable, html)
+          let ctx = Object.create(types.CaptureScope)
+          ctx[this.variable] = html
+          scope.push(ctx)
         })
     }
   })

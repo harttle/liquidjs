@@ -29,8 +29,20 @@ describe('tags/increment', function () {
       .to.eventually.equal('012')
   })
 
+  it('should be independent from capture', function () {
+    let src = '{% capture var %}10{% endcapture %}{% increment var %}{% increment var %}{% increment var %}'
+    return expect(liquid.parseAndRender(src))
+      .to.eventually.equal('012')
+  })
+
   it('should not shading assign', function () {
     let src = '{% assign var=10 %}{% increment var %}{% increment var %}{% increment var %} {{var}}'
+    return expect(liquid.parseAndRender(src))
+      .to.eventually.equal('012 10')
+  })
+
+  it('should not shading capture', function () {
+    let src = '{% capture var %}10{% endcapture %}{% increment var %}{% increment var %}{% increment var %} {{var}}'
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('012 10')
   })

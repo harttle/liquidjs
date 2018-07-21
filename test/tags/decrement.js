@@ -34,9 +34,27 @@ describe('tags/decrement', function () {
       .to.eventually.equal('-1-2-3')
   })
 
+  it('should be independent from capture', function () {
+    let src = '{% capture var %}10{% endcapture %}{% decrement var %}{% decrement var %}{% decrement var %}'
+    return expect(liquid.parseAndRender(src))
+      .to.eventually.equal('-1-2-3')
+  })
+
   it('should not shading assign', function () {
     let src = '{% assign var=10 %}{% decrement var %}{% decrement var %}{% decrement var %} {{var}}'
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('-1-2-3 10')
+  })
+
+  it('should not shading capture', function () {
+    let src = '{% capture var %}10{% endcapture %}{% decrement var %}{% decrement var %}{% decrement var %} {{var}}'
+    return expect(liquid.parseAndRender(src))
+      .to.eventually.equal('-1-2-3 10')
+  })
+
+  it('should share the same variable with increment', function () {
+    let src = '{%increment var%}{%increment var%}{%decrement var%}{%decrement var%}{%increment var%}'
+    return expect(liquid.parseAndRender(src))
+      .to.eventually.equal('01100')
   })
 })
