@@ -54,8 +54,7 @@ describe('filters', function () {
 
       {%- for item in everything -%}
       - {{ item }}
-      {% endfor -%}`,
-      `- apples
+      {% endfor -%}`, `- apples
       - oranges
       - peaches
       - carrots
@@ -70,8 +69,7 @@ describe('filters', function () {
 
       {%- for item in everything -%}
       - {{ item }}
-      {% endfor -%}`,
-      `- apples
+      {% endfor -%}`, `- apples
       - oranges
       - peaches
       - carrots
@@ -156,7 +154,7 @@ describe('filters', function () {
 
   it('should support join', function () {
     var src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
-            '{{ beatles | join: " and " }}'
+      '{{ beatles | join: " and " }}'
     return test(src, 'John and Paul and George and Ringo')
   })
 

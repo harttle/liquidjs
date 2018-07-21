@@ -187,11 +187,6 @@ describe('scope', function () {
   })
 
   describe('.push()', function () {
-    it('should throw when trying to push non-object', function () {
-      expect(function () {
-        scope.push(false)
-      }).to.throw()
-    })
     it('should push scope', function () {
       scope.set('bar', 'bar')
       scope.push({

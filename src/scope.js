@@ -30,7 +30,6 @@ var Scope = {
     })
   },
   push: function (ctx) {
-    assert(ctx, `trying to push ${ctx} into scopes`)
     this.scopes.push(ctx)
   },
   pop: function (ctx) {
