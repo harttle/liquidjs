@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Liquid = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Liquid = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict';
 
 var strftime = require('./src/util/strftime.js');
@@ -69,7 +69,7 @@ var filters = {
     return v.join(arg);
   },
   'last': function last(v) {
-    return v[v.length - 1];
+    return _.last(v);
   },
   'lstrip': function lstrip(v) {
     return stringify(v).replace(/^\s+/, '');
@@ -574,7 +574,7 @@ var number = /-?\d+\.?\d*|\.?\d+/;
 var bool = /true|false/;
 
 // peoperty access
-var identifier = /[\w-]+/;
+var identifier = /[\w-]+[?]?/;
 var subscript = new RegExp('\\[(?:' + quoted.source + '|[\\w-\\.]+)\\]');
 var literal = new RegExp('(?:' + quoted.source + '|' + bool.source + '|' + number.source + ')');
 var variable = new RegExp(identifier.source + '(?:\\.' + identifier.source + '|' + subscript.source + ')*');
@@ -913,69 +913,80 @@ var assert = require('./util/assert.js');
 
 var Scope = {
   getAll: function getAll() {
-    var ctx = {};
-    for (var i = this.scopes.length - 1; i >= 0; i--) {
-      _.assign(ctx, this.scopes[i]);
-    }
-    return ctx;
+    return this.contexts.reduce(function (ctx, val) {
+      return Object.assign(ctx, val);
+    }, Object.create(null));
   },
-  get: function get(str) {
-    try {
-      return this.getPropertyByPath(this.scopes, str);
-    } catch (e) {
-      if (!/undefined variable/.test(e.message) || this.opts.strict_variables) {
-        throw e;
+  get: function get(path) {
+    var _this = this;
+
+    var paths = this.propertyAccessSeq(path);
+    var scope = this.findContextFor(paths[0]) || _.last(this.contexts);
+    return paths.reduce(function (value, key) {
+      return _this.readProperty(value, key);
+    }, scope);
+  },
+  set: function set(path, v) {
+    var paths = this.propertyAccessSeq(path);
+    var scope = this.findContextFor(paths[0]) || _.last(this.contexts);
+    paths.some(function (key, i) {
+      if (!_.isObject(scope)) {
+        return true;
       }
-    }
-  },
-  set: function set(k, v) {
-    var scope = this.findScopeFor(k);
-    setPropertyByPath(scope, k, v);
-    return this;
-  },
-  push: function push(ctx) {
-    assert(ctx, 'trying to push ' + ctx + ' into scopes');
-    return this.scopes.push(ctx);
-  },
-  pop: function pop() {
-    return this.scopes.pop();
-  },
-  findScopeFor: function findScopeFor(key) {
-    var i = this.scopes.length - 1;
-    while (i >= 0 && !(key in this.scopes[i])) {
-      i--;
-    }
-    if (i < 0) {
-      i = this.scopes.length - 1;
-    }
-    return this.scopes[i];
+      if (i === paths.length - 1) {
+        scope[key] = v;
+        return true;
+      }
+      if (undefined === scope[key]) {
+        scope[key] = {};
+      }
+      scope = scope[key];
+    });
   },
   unshift: function unshift(ctx) {
-    assert(ctx, 'trying to push ' + ctx + ' into scopes');
-    return this.scopes.unshift(ctx);
+    return this.contexts.unshift(ctx);
   },
-  shift: function shift() {
-    return this.scopes.shift();
+  push: function push(ctx) {
+    return this.contexts.push(ctx);
   },
-
-  getPropertyByPath: function getPropertyByPath(scopes, path) {
-    var paths = this.propertyAccessSeq(path + '');
-    if (!paths.length) {
-      throw new TypeError('undefined variable: ' + path);
+  pop: function pop(ctx) {
+    if (!arguments.length) {
+      return this.contexts.pop();
     }
-    var key = paths.shift();
-    var value = getValueFromScopes(key, scopes);
-    if (_.isNil(value)) {
-      throw new TypeError('undefined variable: ' + key);
+    var i = this.contexts.findIndex(function (scope) {
+      return scope === ctx;
+    });
+    if (i === -1) {
+      throw new TypeError('scope not found, cannot pop');
     }
-    while (paths.length) {
-      key = paths.shift();
-      value = getValueFromParent(key, value);
-      if (_.isNil(value)) {
-        throw new TypeError('undefined variable: ' + key);
+    return this.contexts.splice(i, 1)[0];
+  },
+  findContextFor: function findContextFor(key, filter) {
+    filter = filter || function () {
+      return true;
+    };
+    for (var i = this.contexts.length - 1; i >= 0; i--) {
+      var candidate = this.contexts[i];
+      if (!filter(candidate)) continue;
+      if (key in candidate) {
+        return candidate;
       }
     }
-    return value;
+    return null;
+  },
+  readProperty: function readProperty(obj, key) {
+    var val = void 0;
+    if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
+      val = obj.length;
+    } else if (_.isNil(obj)) {
+      val = undefined;
+    } else {
+      val = obj[key];
+    }
+    if (_.isNil(val) && this.opts.strict_variables) {
+      throw new TypeError('undefined variable: ' + key);
+    }
+    return val;
   },
 
   /*
@@ -987,9 +998,10 @@ var Scope = {
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
   propertyAccessSeq: function propertyAccessSeq(str) {
+    str = String(str);
     var seq = [];
     var name = '';
-    var j;
+    var j = void 0;
     var i = 0;
     while (i < str.length) {
       switch (str[i]) {
@@ -1029,6 +1041,10 @@ var Scope = {
       }
     }
     push();
+
+    if (!seq.length) {
+      throw new TypeError('invalid path:"' + str + '"');
+    }
     return seq;
 
     function push() {
@@ -1037,40 +1053,6 @@ var Scope = {
     }
   }
 };
-
-function setPropertyByPath(obj, path, val) {
-  var paths = (path + '').replace(/\[/g, '.').replace(/\]/g, '').split('.');
-  for (var i = 0; i < paths.length; i++) {
-    var key = paths[i];
-    if (!_.isObject(obj)) {
-      // cannot set property of non-object
-      return;
-    }
-    // for end point
-    if (i === paths.length - 1) {
-      return obj[key] = val;
-    }
-    // if path not exist
-    if (undefined === obj[key]) {
-      obj[key] = {};
-    }
-    obj = obj[key];
-  }
-}
-
-function getValueFromParent(key, value) {
-  return key === 'size' && (_.isArray(value) || _.isString(value)) ? value.length : value[key];
-}
-
-function getValueFromScopes(key, scopes) {
-  for (var i = scopes.length - 1; i > -1; i--) {
-    var scope = scopes[i];
-    if (scope.hasOwnProperty(key)) {
-      return scope[key];
-    }
-  }
-  throw new TypeError('undefined variable: ' + key);
-}
 
 function matchRightBracket(str, begin) {
   var stack = 1; // count of '[' - count of ']'
@@ -1098,8 +1080,15 @@ exports.factory = function (ctx, opts) {
   };
   var scope = Object.create(Scope);
   scope.opts = _.assign(defaultOptions, opts);
-  scope.scopes = [ctx || {}];
+  scope.contexts = [ctx || {}];
   return scope;
+};
+
+exports.types = {
+  AssignScope: Object.create(null),
+  CaptureScope: Object.create(null),
+  IncrementScope: Object.create(null),
+  DecrementScope: Object.create(null)
 };
 
 },{"./lexical.js":7,"./util/assert.js":15,"./util/underscore.js":20}],12:[function(require,module,exports){
@@ -1171,7 +1160,7 @@ var assert = require('./util/assert.js');
 
 function hash(markup, scope) {
   var obj = {};
-  var match;
+  var match = void 0;
   lexical.hashCapture.lastIndex = 0;
   while (match = lexical.hashCapture.exec(markup)) {
     var k = match[1];
@@ -1768,16 +1757,9 @@ function assign(object) {
   object = isObject(object) ? object : {};
   var srcs = Array.prototype.slice.call(arguments, 1);
   srcs.forEach(function (src) {
-    _assignBinary(object, src);
+    return Object.assign(object, src);
   });
   return object;
-}
-
-function _assignBinary(dst, src) {
-  forOwn(src, function (v, k) {
-    dst[k] = v;
-  });
-  return dst;
 }
 
 function last(arr) {
@@ -1852,6 +1834,7 @@ exports.uniq = uniq;
 var resolve = require('resolve-url');
 var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^/]+?|)(\.[^./]*|))(?:[/]*)$/;
 var urlRe = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/;
+var _ = require('./underscore');
 
 // https://github.com/jinder/path/blob/master/path.js#L567
 exports.extname = function (path) {
@@ -1867,13 +1850,13 @@ exports.resolve = function (root, path) {
   if (Object.prototype.toString.call(root) === '[object Array]') {
     root = root[0];
   }
-  if (root && root.charAt(root.length - 1) !== '/') {
+  if (root && _.last(root) !== '/') {
     root += '/';
   }
   return resolve(root, path);
 };
 
-},{"resolve-url":5}],22:[function(require,module,exports){
+},{"./underscore":20,"resolve-url":5}],22:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -1931,6 +1914,7 @@ var Liquid = require('..');
 var lexical = Liquid.lexical;
 var re = new RegExp('(' + lexical.identifier.source + ')\\s*=(.*)');
 var assert = require('../src/util/assert.js');
+var types = require('../src/scope').types;
 
 module.exports = function (liquid) {
   liquid.registerTag('assign', {
@@ -1941,19 +1925,22 @@ module.exports = function (liquid) {
       this.value = match[2];
     },
     render: function render(scope) {
-      scope.set(this.key, liquid.evalValue(this.value, scope));
+      var ctx = Object.create(types.AssignScope);
+      ctx[this.key] = liquid.evalValue(this.value, scope);
+      scope.push(ctx);
       return Promise.resolve('');
     }
   });
 };
 
-},{"..":2,"../src/util/assert.js":15}],24:[function(require,module,exports){
+},{"..":2,"../src/scope":11,"../src/util/assert.js":15}],24:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var re = new RegExp('(' + lexical.identifier.source + ')');
 var assert = require('../src/util/assert.js');
+var types = require('../src/scope.js').types;
 
 module.exports = function (liquid) {
   liquid.registerTag('capture', {
@@ -1980,13 +1967,15 @@ module.exports = function (liquid) {
       var _this2 = this;
 
       return liquid.renderer.renderTemplates(this.templates, scope).then(function (html) {
-        scope.set(_this2.variable, html);
+        var ctx = Object.create(types.CaptureScope);
+        ctx[_this2.variable] = html;
+        scope.push(ctx);
       });
     }
   });
 };
 
-},{"..":2,"../src/util/assert.js":15}],25:[function(require,module,exports){
+},{"..":2,"../src/scope.js":11,"../src/util/assert.js":15}],25:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2104,6 +2093,7 @@ module.exports = function (liquid) {
 var Liquid = require('..');
 var lexical = Liquid.lexical;
 var assert = require('../src/util/assert.js');
+var types = require('../src/scope').types;
 
 module.exports = function (liquid) {
   liquid.registerTag('decrement', {
@@ -2113,14 +2103,22 @@ module.exports = function (liquid) {
       this.variable = match[0];
     },
     render: function render(scope, hash) {
-      var v = scope.get(this.variable);
-      if (typeof v !== 'number') v = 0;
-      scope.set(this.variable, v - 1);
+      var context = scope.findContextFor(this.variable, function (ctx) {
+        return Object.getPrototypeOf(ctx) !== types.CaptureScope && Object.getPrototypeOf(ctx) !== types.AssignScope;
+      });
+      if (!context) {
+        context = Object.create(types.DecrementScope);
+        scope.unshift(context);
+      }
+      if (typeof context[this.variable] !== 'number') {
+        context[this.variable] = 0;
+      }
+      return --context[this.variable];
     }
   });
 };
 
-},{"..":2,"../src/util/assert.js":15}],29:[function(require,module,exports){
+},{"..":2,"../src/scope":11,"../src/util/assert.js":15}],29:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -2216,7 +2214,7 @@ module.exports = function (liquid) {
           }
           throw e;
         }).then(function () {
-          return scope.pop();
+          return scope.pop(context);
         });
       }).catch(function (e) {
         if (e instanceof RenderBreakError && e.message === 'break') {
@@ -2324,7 +2322,7 @@ module.exports = function (liquid) {
         scope.push(hash);
         return liquid.renderer.renderTemplates(templates, scope);
       }).then(function (html) {
-        scope.pop();
+        scope.pop(hash);
         scope.opts.blocks = originBlocks;
         scope.opts.blockMode = originBlockMode;
         return html;
@@ -2339,6 +2337,7 @@ module.exports = function (liquid) {
 var Liquid = require('..');
 var assert = require('../src/util/assert.js');
 var lexical = Liquid.lexical;
+var types = require('../src/scope').types;
 
 module.exports = function (liquid) {
   liquid.registerTag('increment', {
@@ -2348,14 +2347,24 @@ module.exports = function (liquid) {
       this.variable = match[0];
     },
     render: function render(scope, hash) {
-      var v = scope.get(this.variable);
-      if (typeof v !== 'number') v = 0;
-      scope.set(this.variable, v + 1);
+      var context = scope.findContextFor(this.variable, function (ctx) {
+        return Object.getPrototypeOf(ctx) !== types.CaptureScope && Object.getPrototypeOf(ctx) !== types.AssignScope;
+      });
+      if (!context) {
+        context = Object.create(types.IncrementScope);
+        scope.unshift(context);
+      }
+      if (typeof context[this.variable] !== 'number') {
+        context[this.variable] = 0;
+      }
+      var val = context[this.variable];
+      context[this.variable]++;
+      return val;
     }
   });
 };
 
-},{"..":2,"../src/util/assert.js":15}],33:[function(require,module,exports){
+},{"..":2,"../src/scope":11,"../src/util/assert.js":15}],33:[function(require,module,exports){
 'use strict';
 
 module.exports = function (engine) {
@@ -2416,14 +2425,11 @@ module.exports = function (liquid) {
         }
         return liquid.getTemplate(layout, scope.opts.root);
       }).then(function (templates) {
-        // push the hash
         scope.push(hash);
         scope.opts.blockMode = 'output';
         return liquid.renderer.renderTemplates(templates, scope);
-      })
-      // pop the hash
-      .then(function (partial) {
-        scope.pop();
+      }).then(function (partial) {
+        scope.pop(hash);
         return partial;
       });
     }
@@ -2479,16 +2485,15 @@ module.exports = function (liquid) {
       var stream = liquid.parser.parseStream(remainTokens);
       stream.on('token', function (token) {
         if (token.name === 'endraw') stream.stop();else _this.tokens.push(token);
-      }).on('end', function (x) {
+      }).on('end', function () {
         throw new Error('tag ' + tagToken.raw + ' not closed');
       });
       stream.start();
     },
     render: function render(scope, hash) {
-      var tokens = this.tokens.map(function (token) {
+      return this.tokens.map(function (token) {
         return token.raw;
       }).join('');
-      return Promise.resolve(tokens);
     }
   });
 };
@@ -2545,11 +2550,10 @@ module.exports = function (liquid) {
       // build array of arguments to pass to sequential promises...
       collection = collection.slice(offset, offset + limit);
       if (!cols) cols = collection.length;
-      var contexts = [];
-      collection.some(function (item, i) {
+      var contexts = collection.map(function (item, i) {
         var ctx = {};
         ctx[_this2.variable] = item;
-        contexts.push(ctx);
+        return ctx;
       });
 
       return mapSeries(contexts, function (context, idx) {
