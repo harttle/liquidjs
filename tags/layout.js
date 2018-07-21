@@ -38,14 +38,12 @@ module.exports = function (liquid) {
           return liquid.getTemplate(layout, scope.opts.root)
         })
         .then(templates => {
-          // push the hash
           scope.push(hash)
           scope.opts.blockMode = 'output'
           return liquid.renderer.renderTemplates(templates, scope)
         })
-        // pop the hash
         .then(partial => {
-          scope.pop()
+          scope.pop(hash)
           return partial
         })
     }

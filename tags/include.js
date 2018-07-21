@@ -42,7 +42,7 @@ module.exports = function (liquid) {
           return liquid.renderer.renderTemplates(templates, scope)
         })
         .then((html) => {
-          scope.pop()
+          scope.pop(hash)
           scope.opts.blocks = originBlocks
           scope.opts.blockMode = originBlockMode
           return html

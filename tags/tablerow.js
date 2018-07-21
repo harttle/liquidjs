@@ -43,11 +43,10 @@ module.exports = function (liquid) {
       // build array of arguments to pass to sequential promises...
       collection = collection.slice(offset, offset + limit)
       if (!cols) cols = collection.length
-      var contexts = []
-      collection.some((item, i) => {
+      var contexts = collection.map((item, i) => {
         var ctx = {}
         ctx[this.variable] = item
-        contexts.push(ctx)
+        return ctx
       })
 
       return mapSeries(contexts,
