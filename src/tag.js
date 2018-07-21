@@ -1,26 +1,27 @@
+'use strict'
 const lexical = require('./lexical.js')
 const Syntax = require('./syntax.js')
 const assert = require('./util/assert.js')
 
 function hash (markup, scope) {
-  var obj = {}
-  var match
+  let obj = {}
+  let match
   lexical.hashCapture.lastIndex = 0
   while ((match = lexical.hashCapture.exec(markup))) {
-    var k = match[1]
-    var v = match[2]
+    let k = match[1]
+    let v = match[2]
     obj[k] = Syntax.evalValue(v, scope)
   }
   return obj
 }
 
 module.exports = function () {
-  var tagImpls = {}
+  let tagImpls = {}
 
-  var _tagInstance = {
+  let _tagInstance = {
     render: function (scope) {
-      var obj = hash(this.token.args, scope)
-      var impl = this.tagImpl
+      let obj = hash(this.token.args, scope)
+      let impl = this.tagImpl
       if (typeof impl.render !== 'function') {
         return Promise.resolve('')
       }
@@ -31,7 +32,7 @@ module.exports = function () {
       this.token = token
       this.name = token.name
 
-      var tagImpl = tagImpls[this.name]
+      let tagImpl = tagImpls[this.name]
       assert(tagImpl, `tag ${this.name} not found`)
       this.tagImpl = Object.create(tagImpl)
       if (this.tagImpl.parse) {
@@ -45,7 +46,7 @@ module.exports = function () {
   }
 
   function construct (token, tokens) {
-    var instance = Object.create(_tagInstance)
+    let instance = Object.create(_tagInstance)
     instance.parse(token, tokens)
     return instance
   }

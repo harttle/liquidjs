@@ -260,6 +260,7 @@ describe('error', function () {
         .be.rejected
         .then(function (err) {
           mock.restore()
+          console.log(err, err.name)
           expect(err.name).to.equal('RenderError')
           expect(err.file).to.equal(path.resolve('/foo.html'))
         })

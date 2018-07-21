@@ -141,7 +141,7 @@ describe('filters', function () {
 
   it('should support split/first', function () {
     var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
-            '{{ my_array | first }}'
+      '{{ my_array | first }}'
     return test(src, 'apples')
   })
 
@@ -160,7 +160,7 @@ describe('filters', function () {
 
   it('should support split/last', function () {
     var src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
-            '{{ my_array|last }}'
+      '{{ my_array|last }}'
     return test(src, 'tiger')
   })
 

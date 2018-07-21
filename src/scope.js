@@ -5,16 +5,16 @@ const assert = require('./util/assert.js')
 
 var Scope = {
   getAll: function () {
-    return this.scopes.reduce((ctx, val) => Object.assign(ctx, val), Object.create(null))
+    return this.contexts.reduce((ctx, val) => Object.assign(ctx, val), Object.create(null))
   },
   get: function (path) {
     let paths = this.propertyAccessSeq(path)
-    let scope = this.findScopeFor(paths[0])
+    let scope = this.findContextFor(paths[0]) || _.last(this.contexts)
     return paths.reduce((value, key) => this.readProperty(value, key), scope)
   },
   set: function (path, v) {
     let paths = this.propertyAccessSeq(path)
-    let scope = this.findScopeFor(paths[0])
+    let scope = this.findContextFor(paths[0]) || _.last(this.contexts)
     paths.some((key, i) => {
       if (!_.isObject(scope)) {
         return true
@@ -29,28 +29,32 @@ var Scope = {
       scope = scope[key]
     })
   },
+  unshift: function (ctx) {
+    return this.contexts.unshift(ctx)
+  },
   push: function (ctx) {
-    this.scopes.push(ctx)
+    return this.contexts.push(ctx)
   },
   pop: function (ctx) {
     if (!arguments.length) {
-      return this.scopes.pop()
+      return this.contexts.pop()
     }
-    let i = this.scopes.findIndex(scope => scope === ctx)
+    let i = this.contexts.findIndex(scope => scope === ctx)
     if (i === -1) {
       throw new TypeError('scope not found, cannot pop')
     }
-    return this.scopes.splice(i, 1)[0]
+    return this.contexts.splice(i, 1)[0]
   },
-  findScopeFor: function (key) {
-    let i = this.scopes.length - 1
-    while (i >= 0 && !(key in this.scopes[i])) {
-      i--
+  findContextFor: function (key, filter) {
+    filter = filter || (() => true)
+    for (let i = this.contexts.length - 1; i >= 0; i--) {
+      let candidate = this.contexts[i]
+      if (!filter(candidate)) continue
+      if (key in candidate) {
+        return candidate
+      }
     }
-    if (i < 0) {
-      i = this.scopes.length - 1
-    }
-    return this.scopes[i]
+    return null
   },
   readProperty: function (obj, key) {
     let val
@@ -153,6 +157,13 @@ exports.factory = function (ctx, opts) {
   }
   var scope = Object.create(Scope)
   scope.opts = _.assign(defaultOptions, opts)
-  scope.scopes = [ctx || {}]
+  scope.contexts = [ctx || {}]
   return scope
+}
+
+exports.types = {
+  AssignScope: Object.create(null),
+  CaptureScope: Object.create(null),
+  IncrementScope: Object.create(null),
+  DecrementScope: Object.create(null)
 }

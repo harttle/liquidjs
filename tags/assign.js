@@ -3,6 +3,7 @@ const Liquid = require('..')
 const lexical = Liquid.lexical
 const re = new RegExp(`(${lexical.identifier.source})\\s*=(.*)`)
 const assert = require('../src/util/assert.js')
+const types = require('../src/scope').types
 
 module.exports = function (liquid) {
   liquid.registerTag('assign', {
@@ -13,7 +14,7 @@ module.exports = function (liquid) {
       this.value = match[2]
     },
     render: function (scope) {
-      let ctx = Object.create(null)
+      let ctx = Object.create(types.AssignScope)
       ctx[this.key] = liquid.evalValue(this.value, scope)
       scope.push(ctx)
       return Promise.resolve('')

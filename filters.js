@@ -1,15 +1,16 @@
+'use strict'
 const strftime = require('./src/util/strftime.js')
 const _ = require('./src/util/underscore.js')
 const isTruthy = require('./src/syntax.js').isTruthy
 
-var escapeMap = {
+let escapeMap = {
   '&': '&amp;',
   '<': '&lt;',
   '>': '&gt;',
   '"': '&#34;',
   "'": '&#39;'
 }
-var unescapeMap = {
+let unescapeMap = {
   '&amp;': '&',
   '&lt;': '<',
   '&gt;': '>',
@@ -17,14 +18,14 @@ var unescapeMap = {
   '&#39;': "'"
 }
 
-var filters = {
+let filters = {
   'abs': v => Math.abs(v),
   'append': (v, arg) => v + arg,
   'capitalize': str => stringify(str).charAt(0).toUpperCase() + str.slice(1),
   'ceil': v => Math.ceil(v),
   'concat': (v, arg) => Array.prototype.concat.call(v, arg),
   'date': (v, arg) => {
-    var date = v
+    let date = v
     if (v === 'now') {
       date = new Date()
     } else if (_.isString(v)) {
@@ -41,7 +42,7 @@ var filters = {
   'first': v => v[0],
   'floor': v => Math.floor(v),
   'join': (v, arg) => v.join(arg),
-  'last': v => v[v.length - 1],
+  'last': v => _.last(v),
   'lstrip': v => stringify(v).replace(/^\s+/, ''),
   'map': (arr, arg) => arr.map(v => v[arg]),
   'minus': bindFixed((v, arg) => v - arg),
@@ -56,7 +57,7 @@ var filters = {
   'replace_first': (v, arg1, arg2) => stringify(v).replace(arg1, arg2),
   'reverse': v => v.reverse(),
   'round': (v, arg) => {
-    var amp = Math.pow(10, arg || 0)
+    let amp = Math.pow(10, arg || 0)
     return Math.round(v * amp, arg) / amp
   },
   'rstrip': str => stringify(str).replace(/\s+$/, ''),
@@ -78,13 +79,13 @@ var filters = {
   },
   'truncatewords': (v, l, o) => {
     if (o === undefined) o = '...'
-    var arr = v.split(' ')
-    var ret = arr.slice(0, l).join(' ')
+    let arr = v.split(' ')
+    let ret = arr.slice(0, l).join(' ')
     if (arr.length > l) ret += o
     return ret
   },
   'uniq': function (arr) {
-    var u = {}
+    let u = {}
     return (arr || []).filter(val => {
       if (u.hasOwnProperty(val)) {
         return false
@@ -106,7 +107,7 @@ function unescape (str) {
 }
 
 function getFixed (v) {
-  var p = (v + '').split('.')
+  let p = (v + '').split('.')
   return (p.length > 1) ? p[1].length : 0
 }
 
@@ -120,7 +121,7 @@ function stringify (obj) {
 
 function bindFixed (cb) {
   return (l, r) => {
-    var f = getMaxFixed(l, r)
+    let f = getMaxFixed(l, r)
     return cb(l, r).toFixed(f)
   }
 }

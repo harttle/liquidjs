@@ -9,14 +9,13 @@ module.exports = function (liquid) {
           if (token.name === 'endraw') stream.stop()
           else this.tokens.push(token)
         })
-        .on('end', x => {
+        .on('end', () => {
           throw new Error(`tag ${tagToken.raw} not closed`)
         })
       stream.start()
     },
     render: function (scope, hash) {
-      var tokens = this.tokens.map(token => token.raw).join('')
-      return Promise.resolve(tokens)
+      return this.tokens.map(token => token.raw).join('')
     }
   })
 }
