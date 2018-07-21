@@ -59,8 +59,14 @@ describe('scope', function () {
       }
       expect(fn).to.not.throw()
       expect(scope.get('notdefined')).to.equal(undefined)
-      expect(scope.get('')).to.equal(undefined)
       expect(scope.get(false)).to.equal(undefined)
+    })
+
+    it('should throw for invalid path', function () {
+      function fn () {
+        scope.get('')
+      }
+      expect(fn).to.throw('invalid path:""')
     })
 
     it('should throw when [] unbalanced', function () {
@@ -116,10 +122,9 @@ describe('scope', function () {
       expect(scope.get('posts[category.diary[0]].name'), 'A Nice Day')
     })
 
-    it('should create in parent scope if needed', function () {
-      scope.push({})
-      scope.set('bar.coo', 'COO')
-      expect(scope.get('bar.coo')).to.equal('COO')
+    it('should create parent if needed', function () {
+      scope.set('a.b.c.d', 'COO')
+      expect(scope.get('a.b.c.d')).to.equal('COO')
     })
     it('should keep other properties of parent', function () {
       scope.push({obj: {foo: 'FOO'}})
@@ -151,7 +156,8 @@ describe('scope', function () {
       }
       expect(fn).to.throw(/undefined variable: notdefined/)
     })
-    it('should throw when parent not defined', function () {
+    it('should throw when deep variable not exist', function () {
+      scope.set('foo', 'FOO')
       function fn () {
         scope.get('foo.bar.not.defined')
       }
@@ -209,31 +215,25 @@ describe('scope', function () {
       expect(scope.get('foo')).to.equal('zoo')
     })
   })
-
-  describe('.unshift()', function () {
-    it('should throw when trying to unshift non-object', function () {
-      expect(function () {
-        scope.unshift(false)
-      }).to.throw()
-    })
-    it('should unshift scope', function () {
-      scope.unshift({
-        foo: 'blue',
-        foo1: 'foo1'
-      })
-      expect(scope.get('foo')).to.equal('zoo')
-      expect(scope.get('foo1')).to.equal('foo1')
-    })
+  it('should pop specified scope', function () {
+    let scope1 = {
+      foo: 'foo'
+    }
+    let scope2 = {
+      bar: 'bar'
+    }
+    scope.push(scope1)
+    scope.push(scope2)
+    expect(scope.get('foo')).to.equal('foo')
+    expect(scope.get('bar')).to.equal('bar')
+    scope.pop(scope1)
+    expect(scope.get('foo')).to.equal('zoo')
+    expect(scope.get('bar')).to.equal('bar')
   })
-  describe('.shift()', function () {
-    it('should shift scope', function () {
-      scope.unshift({
-        foo: 'blue',
-        foo1: 'foo1'
-      })
-      scope.shift()
-      expect(scope.get('foo')).to.equal('zoo')
-      expect(scope.get('foo1')).to.equal(undefined)
-    })
+  it('should throw when specified scope not found', function () {
+    let scope1 = {
+      foo: 'foo'
+    }
+    expect(() => scope.pop(scope1)).to.throw('scope not found, cannot pop')
   })
 })

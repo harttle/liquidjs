@@ -57,17 +57,8 @@ function forOwn (object, iteratee) {
 function assign (object) {
   object = isObject(object) ? object : {}
   var srcs = Array.prototype.slice.call(arguments, 1)
-  srcs.forEach(function (src) {
-    _assignBinary(object, src)
-  })
+  srcs.forEach((src) => Object.assign(object, src))
   return object
-}
-
-function _assignBinary (dst, src) {
-  forOwn(src, function (v, k) {
-    dst[k] = v
-  })
-  return dst
 }
 
 function last (arr) {

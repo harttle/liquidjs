@@ -2,6 +2,7 @@ const Liquid = require('..')
 const sinon = require('sinon')
 const chai = require('chai')
 const expect = chai.expect
+chai.use(require('chai-as-promised'))
 
 describe('xhr', () => {
   if (process.version.match(/^v(\d+)/)[1] < 8) {

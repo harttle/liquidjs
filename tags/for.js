@@ -84,7 +84,7 @@ module.exports = function (liquid) {
             }
             throw e
           })
-          .then(() => scope.pop())
+          .then(() => scope.pop(context))
       }).catch((e) => {
         if (e instanceof RenderBreakError && e.message === 'break') {
           return

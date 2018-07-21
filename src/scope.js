@@ -1,38 +1,50 @@
+'use strict'
 const _ = require('./util/underscore.js')
 const lexical = require('./lexical.js')
 const assert = require('./util/assert.js')
 
 var Scope = {
   getAll: function () {
-    var ctx = {}
-    for (var i = this.scopes.length - 1; i >= 0; i--) {
-      _.assign(ctx, this.scopes[i])
-    }
-    return ctx
+    return this.scopes.reduce((ctx, val) => Object.assign(ctx, val), Object.create(null))
   },
-  get: function (str) {
-    try {
-      return this.getPropertyByPath(this.scopes, str)
-    } catch (e) {
-      if (!/undefined variable/.test(e.message) || this.opts.strict_variables) {
-        throw e
+  get: function (path) {
+    let paths = this.propertyAccessSeq(path)
+    let scope = this.findScopeFor(paths[0])
+    return paths.reduce((value, key) => this.readProperty(value, key), scope)
+  },
+  set: function (path, v) {
+    let paths = this.propertyAccessSeq(path)
+    let scope = this.findScopeFor(paths[0])
+    paths.some((key, i) => {
+      if (!_.isObject(scope)) {
+        return true
       }
-    }
-  },
-  set: function (k, v) {
-    var scope = this.findScopeFor(k)
-    setPropertyByPath(scope, k, v)
-    return this
+      if (i === paths.length - 1) {
+        scope[key] = v
+        return true
+      }
+      if (undefined === scope[key]) {
+        scope[key] = {}
+      }
+      scope = scope[key]
+    })
   },
   push: function (ctx) {
     assert(ctx, `trying to push ${ctx} into scopes`)
-    return this.scopes.push(ctx)
+    this.scopes.push(ctx)
   },
-  pop: function () {
-    return this.scopes.pop()
+  pop: function (ctx) {
+    if (!arguments.length) {
+      return this.scopes.pop()
+    }
+    let i = this.scopes.findIndex(scope => scope === ctx)
+    if (i === -1) {
+      throw new TypeError('scope not found, cannot pop')
+    }
+    return this.scopes.splice(i, 1)[0]
   },
   findScopeFor: function (key) {
-    var i = this.scopes.length - 1
+    let i = this.scopes.length - 1
     while (i >= 0 && !(key in this.scopes[i])) {
       i--
     }
@@ -41,32 +53,19 @@ var Scope = {
     }
     return this.scopes[i]
   },
-  unshift: function (ctx) {
-    assert(ctx, `trying to push ${ctx} into scopes`)
-    return this.scopes.unshift(ctx)
-  },
-  shift: function () {
-    return this.scopes.shift()
-  },
-
-  getPropertyByPath: function (scopes, path) {
-    var paths = this.propertyAccessSeq(path + '')
-    if (!paths.length) {
-      throw new TypeError('undefined variable: ' + path)
+  readProperty: function (obj, key) {
+    let val
+    if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
+      val = obj.length
+    } else if (_.isNil(obj)) {
+      val = undefined
+    } else {
+      val = obj[key]
     }
-    var key = paths.shift()
-    var value = getValueFromScopes(key, scopes)
-    if (_.isNil(value)) {
-      throw new TypeError('undefined variable: ' + key)
+    if (_.isNil(val) && this.opts.strict_variables) {
+      throw new TypeError(`undefined variable: ${key}`)
     }
-    while (paths.length) {
-      key = paths.shift()
-      value = getValueFromParent(key, value)
-      if (_.isNil(value)) {
-        throw new TypeError('undefined variable: ' + key)
-      }
-    }
-    return value
+    return val
   },
 
   /*
@@ -78,16 +77,17 @@ var Scope = {
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
   propertyAccessSeq: function (str) {
-    var seq = []
-    var name = ''
-    var j
-    var i = 0
+    str = String(str)
+    let seq = []
+    let name = ''
+    let j
+    let i = 0
     while (i < str.length) {
       switch (str[i]) {
         case '[':
           push()
 
-          var delemiter = str[i + 1]
+          let delemiter = str[i + 1]
           if (/['"]/.test(delemiter)) { // foo["bar"]
             j = str.indexOf(delemiter, i + 2)
             assert(j !== -1, `unbalanced ${delemiter}: ${str}`)
@@ -115,6 +115,10 @@ var Scope = {
       }
     }
     push()
+
+    if (!seq.length) {
+      throw new TypeError(`invalid path:"${str}"`)
+    }
     return seq
 
     function push () {
@@ -122,42 +126,6 @@ var Scope = {
       name = ''
     }
   }
-}
-
-function setPropertyByPath (obj, path, val) {
-  var paths = (path + '').replace(/\[/g, '.').replace(/\]/g, '').split('.')
-  for (var i = 0; i < paths.length; i++) {
-    var key = paths[i]
-    if (!_.isObject(obj)) {
-      // cannot set property of non-object
-      return
-    }
-    // for end point
-    if (i === paths.length - 1) {
-      return (obj[key] = val)
-    }
-    // if path not exist
-    if (undefined === obj[key]) {
-      obj[key] = {}
-    }
-    obj = obj[key]
-  }
-}
-
-function getValueFromParent (key, value) {
-  return (key === 'size' && (_.isArray(value) || _.isString(value)))
-    ? value.length
-    : value[key]
-}
-
-function getValueFromScopes (key, scopes) {
-  for (var i = scopes.length - 1; i > -1; i--) {
-    var scope = scopes[i]
-    if (scope.hasOwnProperty(key)) {
-      return scope[key]
-    }
-  }
-  throw new TypeError('undefined variable: ' + key)
 }
 
 function matchRightBracket (str, begin) {
