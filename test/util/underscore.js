@@ -43,6 +43,11 @@ describe('util/underscore', function () {
       _.forOwn(obj, spy)
       expect(spy).to.have.been.calledWith('bar', 'foo', obj)
     })
+    it('should default to empty object', function () {
+      var spy = sinon.spy()
+      _.forOwn(undefined, spy)
+      expect(spy).to.have.not.been.called
+    })
     it('should not iterate over properties on prototype', function () {
       var spy = sinon.spy()
       var obj = Object.create({
