@@ -23,6 +23,14 @@ describe('tags/include', function () {
     return expect(liquid.renderFile('/current.html')).to
       .eventually.equal('barfoobar')
   })
+  it('should support template string', function () {
+    mock({
+      '/current.html': 'bar{% include "bar/{{name}}" %}bar',
+      '/bar/foo.html': 'foo'
+    })
+    return expect(liquid.renderFile('/current.html', {name: 'foo.html'})).to
+      .eventually.equal('barfoobar')
+  })
 
   it('should throw when not specified', function () {
     mock({
