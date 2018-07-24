@@ -134,7 +134,7 @@ function mockUTC () {
   p._getDays = p.getDays
   p.getDays = p.getUTCDays
 
-  p._getTimezoneOffset = p._getTimezoneOffset
+  p._getTimezoneOffset = p.getTimezoneOffset
   p.getTimezoneOffset = () => -480
 }
 
