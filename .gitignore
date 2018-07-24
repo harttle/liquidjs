@@ -38,4 +38,3 @@ jspm_packages
 
 # vim
 .*.swp
-package-lock.json
