@@ -2307,18 +2307,32 @@ module.exports = function (liquid) {
       }
     },
     render: function render(scope, hash) {
-      var filepath = scope.opts.dynamicPartials ? Liquid.evalValue(this.value, scope) : this.staticValue;
-      assert(filepath, 'cannot include with empty filename');
+      var _this = this;
+
+      var pFilepath = void 0;
+      if (scope.opts.dynamicPartials) {
+        if (lexical.quotedLine.exec(this.value)) {
+          var template = this.value.slice(1, -1);
+          pFilepath = liquid.parseAndRender(template, scope.getAll(), scope.opts);
+        } else {
+          pFilepath = Promise.resolve(Liquid.evalValue(this.value, scope));
+        }
+      } else {
+        pFilepath = Promise.resolve(this.staticValue);
+      }
 
       var originBlocks = scope.opts.blocks;
       var originBlockMode = scope.opts.blockMode;
-      scope.opts.blocks = {};
-      scope.opts.blockMode = 'output';
 
-      if (this.with) {
-        hash[filepath] = Liquid.evalValue(this.with, scope);
-      }
-      return liquid.getTemplate(filepath, scope.opts.root).then(function (templates) {
+      return pFilepath.then(function (filepath) {
+        assert(filepath, 'cannot include with empty filename');
+        scope.opts.blocks = {};
+        scope.opts.blockMode = 'output';
+        if (_this.with) {
+          hash[filepath] = Liquid.evalValue(_this.with, scope);
+        }
+        return liquid.getTemplate(filepath, scope.opts.root);
+      }).then(function (templates) {
         scope.push(hash);
         return liquid.renderer.renderTemplates(templates, scope);
       }).then(function (html) {
