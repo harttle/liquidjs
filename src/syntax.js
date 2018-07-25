@@ -51,6 +51,41 @@ function isFalsy (val) {
   return val === false || undefined === val || val === null
 }
 
+function validateExpression(exp, scope, errors = []) {
+  assert(scope, 'unable to evalExp: scope undefined')
+  var operatorREs = lexical.operators
+  var match;
+  for (var i = 0; i < operatorREs.length; i++) {
+    var operatorRE = operatorREs[i]
+    var expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`)
+    if ((match = exp.match(expRE))) {
+      errors.concat(validateExpression(match[1], scope, errors), validateExpression(match[3], scope, errors));
+      return errors;
+    }
+  }
+  if((error = validateValue(exp, scope))) {
+    errors.push(error);
+  }
+  return errors;
+}
+
+function validateValue (str, scope) {
+  str = str && str.trim()
+  if (!str) return `Invalid Operator Usage`;
+
+  if (lexical.isLiteral(str)) {
+    return;
+  }
+  if (lexical.isVariable(str)) {
+    if(scope.get(str) !== undefined && scope.get(str) !== null) {
+      return;
+    } else {
+      return `${str} variable not present`
+    }
+  }
+  return `cannot eval '${str}' as value`
+}
+
 module.exports = {
-  evalExp, evalValue, isTruthy, isFalsy
+  evalExp, evalValue, isTruthy, isFalsy, validateExpression, validateValue
 }
