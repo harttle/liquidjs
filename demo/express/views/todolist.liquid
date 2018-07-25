@@ -2,7 +2,7 @@
 
 <ul>
   {% for todo in todos %}
-    <li>{% include 'todo' id=forloop.index %}</li>
+    <li>{% include 'todo', id:forloop.index %}</li>
   {% endfor %}
 </ul>
 
