@@ -1,6 +1,7 @@
 const Syntax = require('./syntax.js')
 const mapSeries = require('./util/promise.js').mapSeries
 const RenderBreakError = require('./util/error.js').RenderBreakError
+const _ = require('./util/underscore.js')
 const RenderError = require('./util/error.js').RenderError
 const assert = require('./util/assert.js')
 
@@ -27,9 +28,7 @@ var render = {
         return this.renderTag(template, scope)
           .then(partial => partial === undefined ? '' : partial)
       } else if (template.type === 'value') {
-        return Promise.resolve()
-          .then(() => this.evalValue(template, scope))
-          .then(partial => partial === undefined ? '' : stringify(partial))
+        return this.renderValue(template, scope)
       } else { // template.type === 'html'
         return Promise.resolve(template.value)
       }
@@ -46,6 +45,12 @@ var render = {
     return template.render(scope)
   },
 
+  renderValue: function (template, scope) {
+    return Promise.resolve()
+      .then(() => this.evalValue(template, scope))
+      .then(partial => partial === undefined ? '' : _.stringify(partial))
+  },
+
   evalValue: function (template, scope) {
     assert(scope, 'unable to evalValue: scope undefined')
     return template.filters.reduce(
@@ -57,11 +62,6 @@ var render = {
 function factory () {
   var instance = Object.create(render)
   return instance
-}
-
-function stringify (val) {
-  if (typeof val === 'string') return val
-  return JSON.stringify(val)
 }
 
 module.exports = factory
