@@ -6,7 +6,27 @@ const toStr = Object.prototype.toString
  * @return {Boolean} Returns true if value is a string, else false.
  */
 function isString (value) {
-  return value instanceof String || typeof value === 'string'
+  return toStr.call(value) === '[object String]'
+}
+
+function stringify (value) {
+  if (isString(value)) {
+    return value
+  }
+  if (value && typeof value.to_liquid === 'function') {
+    return value.to_liquid()
+  }
+
+  let cache = []
+  return JSON.stringify(value, (key, value) => {
+    if (isObject(value)) {
+      if (cache.indexOf(value) !== -1) {
+        return
+      }
+      cache.push(value)
+    }
+    return value
+  })
 }
 
 function isNil (value) {
@@ -126,3 +146,4 @@ exports.last = last
 exports.forOwn = forOwn
 exports.assign = assign
 exports.uniq = uniq
+exports.stringify = stringify
