@@ -829,6 +829,7 @@ module.exports = function (Tag, Filter) {
 var Syntax = require('./syntax.js');
 var mapSeries = require('./util/promise.js').mapSeries;
 var RenderBreakError = require('./util/error.js').RenderBreakError;
+var _ = require('./util/underscore.js');
 var RenderError = require('./util/error.js').RenderError;
 var assert = require('./util/assert.js');
 
@@ -855,18 +856,12 @@ var render = {
     });
 
     function renderTemplate(template) {
-      var _this2 = this;
-
       if (template.type === 'tag') {
         return this.renderTag(template, scope).then(function (partial) {
           return partial === undefined ? '' : partial;
         });
       } else if (template.type === 'value') {
-        return Promise.resolve().then(function () {
-          return _this2.evalValue(template, scope);
-        }).then(function (partial) {
-          return partial === undefined ? '' : stringify(partial);
-        });
+        return this.renderValue(template, scope);
       } else {
         // template.type === 'html'
         return Promise.resolve(template.value);
@@ -884,6 +879,16 @@ var render = {
     return template.render(scope);
   },
 
+  renderValue: function renderValue(template, scope) {
+    var _this2 = this;
+
+    return Promise.resolve().then(function () {
+      return _this2.evalValue(template, scope);
+    }).then(function (partial) {
+      return partial === undefined ? '' : _.stringify(partial);
+    });
+  },
+
   evalValue: function evalValue(template, scope) {
     assert(scope, 'unable to evalValue: scope undefined');
     return template.filters.reduce(function (prev, filter) {
@@ -897,14 +902,9 @@ function factory() {
   return instance;
 }
 
-function stringify(val) {
-  if (typeof val === 'string') return val;
-  return JSON.stringify(val);
-}
-
 module.exports = factory;
 
-},{"./syntax.js":12,"./util/assert.js":15,"./util/error.js":16,"./util/promise.js":18}],11:[function(require,module,exports){
+},{"./syntax.js":12,"./util/assert.js":15,"./util/error.js":16,"./util/promise.js":18,"./util/underscore.js":20}],11:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -976,12 +976,20 @@ var Scope = {
   },
   readProperty: function readProperty(obj, key) {
     var val = void 0;
-    if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
-      val = obj.length;
-    } else if (_.isNil(obj)) {
+    if (_.isNil(obj)) {
       val = undefined;
     } else {
-      val = obj[key];
+      if (typeof obj.to_liquid === 'function') {
+        obj = obj.to_liquid();
+      } else if (typeof obj.toLiquid === 'function') {
+        obj = obj.toLiquid();
+      }
+
+      if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
+        val = obj.length;
+      } else {
+        val = obj[key];
+      }
     }
     if (_.isNil(val) && this.opts.strict_variables) {
       throw new TypeError('undefined variable: ' + key);
@@ -1706,7 +1714,33 @@ var toStr = Object.prototype.toString;
  * @return {Boolean} Returns true if value is a string, else false.
  */
 function isString(value) {
-  return value instanceof String || typeof value === 'string';
+  return toStr.call(value) === '[object String]';
+}
+
+function stringify(value) {
+  if (isNil(value)) {
+    return String(value);
+  }
+  if (typeof value.to_liquid === 'function') {
+    return stringify(value.to_liquid());
+  }
+  if (typeof value.toLiquid === 'function') {
+    return stringify(value.toLiquid());
+  }
+  if (isString(value)) {
+    return value;
+  }
+
+  var cache = [];
+  return JSON.stringify(value, function (key, value) {
+    if (isObject(value)) {
+      if (cache.indexOf(value) !== -1) {
+        return;
+      }
+      cache.push(value);
+    }
+    return value;
+  });
 }
 
 function isNil(value) {
@@ -1827,6 +1861,7 @@ exports.last = last;
 exports.forOwn = forOwn;
 exports.assign = assign;
 exports.uniq = uniq;
+exports.stringify = stringify;
 
 },{}],21:[function(require,module,exports){
 'use strict';
