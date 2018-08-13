@@ -11,12 +11,14 @@ function isString (value) {
 }
 
 function stringify (value) {
-  if (!isNil(value)) {
-    if (typeof value.to_liquid === 'function') {
-      return stringify(value.to_liquid())
-    } else if (typeof value.toLiquid === 'function') {
-      return stringify(value.toLiquid())
-    }
+  if (isNil(value)) {
+    return String(value)
+  }
+  if (typeof value.to_liquid === 'function') {
+    return stringify(value.to_liquid())
+  }
+  if (typeof value.toLiquid === 'function') {
+    return stringify(value.toLiquid())
   }
   if (isString(value)) {
     return value

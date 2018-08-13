@@ -44,6 +44,12 @@ describe('util/underscore', function () {
     it('should recursively call toLiquid()', function () {
       expect(_.stringify({toLiquid: () => ({toLiquid: () => 'foo'})})).to.equal('foo')
     })
+    it('should return "null" for null', function () {
+      expect(_.stringify(null)).to.equal('null')
+    })
+    it('should return "undefined" for undefined', function () {
+      expect(_.stringify(undefined)).to.equal('undefined')
+    })
   })
   describe('.forOwn()', function () {
     it('should iterate all properties', function () {
