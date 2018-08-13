@@ -96,6 +96,14 @@ describe('scope', function () {
       expect(scope.get('foo.bar')).to.equal('BAR')
     })
 
+    it('should respect to toLiquid', function () {
+      let scope = Scope.factory({foo: {
+        toLiquid: () => ({bar: 'BAR'}),
+        bar: 'bar'
+      }})
+      expect(scope.get('foo.bar')).to.equal('BAR')
+    })
+
     it('should access child property via dot syntax', function () {
       expect(scope.get('bar.zoo')).to.equal('coo')
       expect(scope.get('bar.arr')).to.deep.equal(['a', 'b'])

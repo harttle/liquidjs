@@ -63,7 +63,10 @@ var Scope = {
     } else {
       if (typeof obj.to_liquid === 'function') {
         obj = obj.to_liquid()
+      } else if (typeof obj.toLiquid === 'function') {
+        obj = obj.toLiquid()
       }
+
       if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
         val = obj.length
       } else {

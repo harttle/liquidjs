@@ -25,6 +25,7 @@ Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is
 * Dynamic file locating (enabled by default), which means layout/partial name can be an variable in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
 * Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
 * Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
+* Along with [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops), we provide an alias `.toLiquid()` to align with your code styles.
 
 ## TOC
 
