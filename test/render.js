@@ -1,3 +1,4 @@
+'use strict'
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const expect = chai.expect
@@ -42,7 +43,6 @@ describe('render', function () {
       let tpl = Template.parseValue('bar')
       return expect(render.renderValue(tpl, scope)).to.eventually.equal('custom')
     })
-
     it('should stringify objects', function () {
       let scope = Scope.factory({
         foo: { obj: { arr: ['a', 2] } }
@@ -65,20 +65,6 @@ describe('render', function () {
     })
   })
 
-  it('should eval filter with correct arguments', function () {
-    let date = sinon.stub().returns('y')
-    let time = sinon.spy()
-    filter.register('date', date)
-    filter.register('time', time)
-    let tpl = Template.parseValue('foo.bar | date: "b" | time:2')
-    let scope = Scope.factory({
-      foo: {bar: 'bar'}
-    })
-    render.evalValue(tpl, scope)
-    expect(date).to.have.been.calledWith('bar', 'b')
-    expect(time).to.have.been.calledWith('y', 2)
-  })
-
   describe('.evalValue()', function () {
     it('should throw when scope undefined', function () {
       expect(function () {
@@ -98,6 +84,19 @@ describe('render', function () {
       filter.register('arr', () => [1])
       let tpl = Template.parseValue('"x" | arr')
       expect(render.evalValue(tpl, Scope.factory())).to.deep.equal([1])
+    })
+    it('should eval filter with correct arguments', function () {
+      let date = sinon.stub().returns('y')
+      let time = sinon.spy()
+      filter.register('date', date)
+      filter.register('time', time)
+      let tpl = Template.parseValue('foo.bar | date: "b" | time:2')
+      let scope = Scope.factory({
+        foo: {bar: 'bar'}
+      })
+      render.evalValue(tpl, scope)
+      expect(date).to.have.been.calledWith('bar', 'b')
+      expect(time).to.have.been.calledWith('y', 2)
     })
   })
 })
