@@ -1,3 +1,4 @@
+'use strict'
 const toStr = Object.prototype.toString
 
 /*
@@ -10,11 +11,11 @@ function isString (value) {
 }
 
 function stringify (value) {
+  if (value && typeof value.to_liquid === 'function') {
+    return stringify(value.to_liquid())
+  }
   if (isString(value)) {
     return value
-  }
-  if (value && typeof value.to_liquid === 'function') {
-    return value.to_liquid()
   }
 
   let cache = []

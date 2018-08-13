@@ -58,12 +58,17 @@ var Scope = {
   },
   readProperty: function (obj, key) {
     let val
-    if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
-      val = obj.length
-    } else if (_.isNil(obj)) {
+    if (_.isNil(obj)) {
       val = undefined
     } else {
-      val = obj[key]
+      if (typeof obj.to_liquid === 'function') {
+        obj = obj.to_liquid()
+      }
+      if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
+        val = obj.length
+      } else {
+        val = obj[key]
+      }
     }
     if (_.isNil(val) && this.opts.strict_variables) {
       throw new TypeError(`undefined variable: ${key}`)
