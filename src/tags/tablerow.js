@@ -1,7 +1,7 @@
 const Liquid = require('..')
-const mapSeries = require('../src/util/promise.js').mapSeries
+const mapSeries = require('../util/promise.js').mapSeries
 const lexical = Liquid.lexical
-const assert = require('../src/util/assert.js')
+const assert = require('../util/assert.js')
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
   `(${lexical.value.source})` +
   `(?:\\s+${lexical.hash.source})*$`)

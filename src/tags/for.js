@@ -1,9 +1,9 @@
 const Liquid = require('..')
 const lexical = Liquid.lexical
-const mapSeries = require('../src/util/promise.js').mapSeries
-const _ = require('../src/util/underscore.js')
+const mapSeries = require('../util/promise.js').mapSeries
+const _ = require('../util/underscore.js')
 const RenderBreakError = Liquid.Types.RenderBreakError
-const assert = require('../src/util/assert.js')
+const assert = require('../util/assert.js')
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*` +

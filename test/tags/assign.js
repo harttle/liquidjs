@@ -1,5 +1,5 @@
 'use strict'
-const Liquid = require('../..')
+const Liquid = require('../../src')
 const chai = require('chai')
 const expect = chai.expect
 chai.use(require('chai-as-promised'))

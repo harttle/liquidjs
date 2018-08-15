@@ -1,7 +1,7 @@
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised')
 const expect = chai.expect
-var liquid = require('..')()
+var liquid = require('../src')()
 chai.use(chaiAsPromised)
 
 var ctx = {

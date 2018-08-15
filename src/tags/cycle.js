@@ -2,7 +2,7 @@ const Liquid = require('..')
 const lexical = Liquid.lexical
 const groupRE = new RegExp(`^(?:(${lexical.value.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(lexical.value.source, 'g')
-const assert = require('../src/util/assert.js')
+const assert = require('../util/assert.js')
 
 module.exports = function (liquid) {
   liquid.registerTag('cycle', {

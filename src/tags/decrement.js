@@ -1,8 +1,8 @@
 'use strict'
 const Liquid = require('..')
 const lexical = Liquid.lexical
-const assert = require('../src/util/assert.js')
-const types = require('../src/scope').types
+const assert = require('../util/assert.js')
+const types = require('../scope').types
 
 module.exports = function (liquid) {
   liquid.registerTag('decrement', {

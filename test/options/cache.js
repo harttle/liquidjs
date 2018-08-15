@@ -1,7 +1,7 @@
 const chai = require('chai')
 const expect = chai.expect
 const mock = require('mock-fs')
-const Liquid = require('../..')
+const Liquid = require('../../src')
 chai.use(require('chai-as-promised'))
 
 describe('cache options', function () {

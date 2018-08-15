@@ -1,7 +1,7 @@
 'use strict'
-const strftime = require('./src/util/strftime.js')
-const _ = require('./src/util/underscore.js')
-const isTruthy = require('./src/syntax.js').isTruthy
+const strftime = require('./util/strftime.js')
+const _ = require('./util/underscore.js')
+const isTruthy = require('./syntax.js').isTruthy
 
 let escapeMap = {
   '&': '&amp;',
