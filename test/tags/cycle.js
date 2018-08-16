@@ -4,10 +4,10 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/cycle', function () {
-  var liquid = Liquid()
+  let liquid = Liquid()
 
   it('should support cycle', function () {
-    var src = "{% cycle '1', '2', '3' %}"
+    let src = "{% cycle '1', '2', '3' %}"
     return expect(liquid.parseAndRender(src + src + src + src))
       .to.eventually.equal('1231')
   })
@@ -18,8 +18,8 @@ describe('tags/cycle', function () {
   })
 
   it('should support cycle in for block', function () {
-    var src = '{% for i in (1..5) %}{% cycle one, "e"%}{% endfor %}'
-    var ctx = {
+    let src = '{% for i in (1..5) %}{% cycle one, "e"%}{% endfor %}'
+    let ctx = {
       one: 1
     }
     return expect(liquid.parseAndRender(src, ctx))
@@ -27,10 +27,10 @@ describe('tags/cycle', function () {
   })
 
   it('should support cycle group', function () {
-    var src = "{% cycle one: '1', '2', '3'%}" +
+    let src = "{% cycle one: '1', '2', '3'%}" +
             "{% cycle 1: '1', '2', '3'%}" +
             "{% cycle 2: '1', '2', '3'%}"
-    var ctx = {
+    let ctx = {
       one: 1
     }
     return expect(liquid.parseAndRender(src, ctx))

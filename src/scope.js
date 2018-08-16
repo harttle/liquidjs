@@ -3,7 +3,7 @@ const _ = require('./util/underscore.js')
 const lexical = require('./lexical.js')
 const assert = require('./util/assert.js')
 
-var Scope = {
+let Scope = {
   getAll: function () {
     return this.contexts.reduce((ctx, val) => Object.assign(ctx, val), Object.create(null))
   },
@@ -140,8 +140,8 @@ var Scope = {
 }
 
 function matchRightBracket (str, begin) {
-  var stack = 1 // count of '[' - count of ']'
-  for (var i = begin; i < str.length; i++) {
+  let stack = 1 // count of '[' - count of ']'
+  for (let i = begin; i < str.length; i++) {
     if (str[i] === '[') {
       stack++
     }
@@ -156,14 +156,14 @@ function matchRightBracket (str, begin) {
 }
 
 exports.factory = function (ctx, opts) {
-  var defaultOptions = {
+  let defaultOptions = {
     dynamicPartials: true,
     strict_variables: false,
     strict_filters: false,
     blocks: {},
     root: []
   }
-  var scope = Object.create(Scope)
+  let scope = Object.create(Scope)
   scope.opts = _.assign(defaultOptions, opts)
   scope.contexts = [ctx || {}]
   return scope

@@ -7,13 +7,13 @@ const assert = require('./util/assert.js')
 function parse (input, file, options) {
   assert(_.isString(input), 'illegal input')
 
-  var rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g
-  var currIndent = 0
-  var lineNumber = LineNumber(input)
-  var lastMatchEnd = 0
-  var tokens = []
+  let rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g
+  let currIndent = 0
+  let lineNumber = LineNumber(input)
+  let lastMatchEnd = 0
+  let tokens = []
 
-  for (var match; (match = rLiquid.exec(input)); lastMatchEnd = rLiquid.lastIndex) {
+  for (let match; (match = rLiquid.exec(input)); lastMatchEnd = rLiquid.lastIndex) {
     if (match.index > lastMatchEnd) {
       tokens.push(parseHTMLToken(lastMatchEnd, match.index))
     }
@@ -28,8 +28,8 @@ function parse (input, file, options) {
   return tokens
 
   function parseTagToken (raw, value, pos) {
-    var match = value.match(lexical.tagLine)
-    var token = {
+    let match = value.match(lexical.tagLine)
+    let token = {
       type: 'tag',
       indent: currIndent,
       line: lineNumber.get(pos),
@@ -62,7 +62,7 @@ function parse (input, file, options) {
   }
 
   function parseHTMLToken (begin, end) {
-    var htmlFragment = input.slice(begin, end)
+    let htmlFragment = input.slice(begin, end)
     currIndent = _.last((htmlFragment).split('\n')).length
 
     return {
@@ -74,12 +74,12 @@ function parse (input, file, options) {
 }
 
 function LineNumber (html) {
-  var parsedLinesCount = 0
-  var lastMatchBegin = -1
+  let parsedLinesCount = 0
+  let lastMatchBegin = -1
 
   return {
     get: function (pos) {
-      var lines = html.slice(lastMatchBegin + 1, pos).split('\n')
+      let lines = html.slice(lastMatchBegin + 1, pos).split('\n')
       parsedLinesCount += lines.length - 1
       lastMatchBegin = pos
       return parsedLinesCount + 1

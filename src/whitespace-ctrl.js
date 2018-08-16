@@ -2,7 +2,7 @@ const _ = require('./util/underscore.js')
 
 function whiteSpaceCtrl (tokens, options) {
   options = _.assign({ greedy: true }, options)
-  var inRaw = false
+  let inRaw = false
 
   tokens.forEach((token, i) => {
     if (shouldTrimLeft(token, inRaw, options)) {
@@ -33,14 +33,14 @@ function shouldTrimRight (token, inRaw, options) {
 function trimLeft (token, greedy) {
   if (!token || token.type !== 'html') return
 
-  var rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
+  let rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
   token.value = token.value.replace(rLeft, '')
 }
 
 function trimRight (token, greedy) {
   if (!token || token.type !== 'html') return
 
-  var rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g
+  let rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g
   token.value = token.value.replace(rRight, '')
 }
 

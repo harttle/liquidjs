@@ -1,4 +1,3 @@
-'use strict'
 const toStr = Object.prototype.toString
 
 /*
@@ -46,7 +45,7 @@ function isArray (value) {
 }
 
 function isError (value) {
-  var signature = Object.prototype.toString.call(value)
+  let signature = Object.prototype.toString.call(value)
   // [object XXXError]
   return signature.substr(-6, 5) === 'Error' ||
         (typeof value.message === 'string' && typeof value.name === 'string')
@@ -62,7 +61,7 @@ function isError (value) {
  */
 function forOwn (object, iteratee) {
   object = object || {}
-  for (var k in object) {
+  for (let k in object) {
     if (object.hasOwnProperty(k)) {
       if (iteratee(object[k], k, object) === false) break
     }
@@ -83,7 +82,7 @@ function forOwn (object, iteratee) {
  */
 function assign (object) {
   object = isObject(object) ? object : {}
-  var srcs = Array.prototype.slice.call(arguments, 1)
+  let srcs = Array.prototype.slice.call(arguments, 1)
   srcs.forEach((src) => Object.assign(object, src))
   return object
 }
@@ -93,9 +92,9 @@ function last (arr) {
 }
 
 function uniq (arr) {
-  var u = {}
-  var a = []
-  for (var i = 0, l = arr.length; i < l; ++i) {
+  let u = {}
+  let a = []
+  for (let i = 0, l = arr.length; i < l; ++i) {
     if (u.hasOwnProperty(arr[i])) {
       continue
     }
@@ -112,7 +111,7 @@ function uniq (arr) {
  * @return {Boolean} Returns true if value is an object, else false.
  */
 function isObject (value) {
-  var type = typeof value
+  let type = typeof value
   return value != null && (type === 'object' || type === 'function')
 }
 
@@ -131,8 +130,8 @@ function range (start, stop, step) {
   }
   step = step || 1
 
-  var arr = []
-  for (var i = start; i < stop; i += step) {
+  let arr = []
+  for (let i = start; i < stop; i += step) {
     arr.push(i)
   }
   return arr

@@ -3,11 +3,11 @@ const sinon = require('sinon')
 const expect = chai.expect
 chai.use(require('sinon-chai'))
 
-var tag = require('../src/tag.js')()
-var Scope = require('../src/scope.js')
+let tag = require('../src/tag.js')()
+let Scope = require('../src/scope.js')
 
 describe('tag', function () {
-  var scope
+  let scope
   before(function () {
     scope = Scope.factory({
       foo: 'bar',
@@ -38,7 +38,7 @@ describe('tag', function () {
   })
 
   it('should call tag.render', function () {
-    var spy = sinon.spy()
+    let spy = sinon.spy()
     tag.register('foo', {
       render: spy
     })
@@ -53,7 +53,7 @@ describe('tag', function () {
   })
 
   describe('hash', function () {
-    var spy, token
+    let spy, token
     beforeEach(function () {
       spy = sinon.spy()
       tag.register('foo', {

@@ -1,16 +1,16 @@
-var monthNames = [
+let monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
   'September', 'October', 'November', 'December'
 ]
-var monthNamesShort = [
+let monthNamesShort = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
   'Nov', 'Dec'
 ]
-var dayNames = [
+let dayNames = [
   'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 ]
-var dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-var suffixes = {
+let dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+let suffixes = {
   1: 'st',
   2: 'nd',
   3: 'rd',
@@ -18,15 +18,15 @@ var suffixes = {
 }
 
 // prototype extensions
-var _date = {
+let _date = {
   daysInMonth: function (d) {
-    var feb = _date.isLeapYear(d) ? 29 : 28
+    let feb = _date.isLeapYear(d) ? 29 : 28
     return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   },
 
   getDayOfYear: function (d) {
-    var num = 0
-    for (var i = 0; i < d.getMonth(); ++i) {
+    let num = 0
+    for (let i = 0; i < d.getMonth(); ++i) {
       num += _date.daysInMonth(d)[i]
     }
     return num + d.getDate()
@@ -36,21 +36,21 @@ var _date = {
   // TODO: that comment was retarted. fix it.
   getWeekOfYear: function (d, startDay) {
     // Skip to startDay of this week
-    var now = this.getDayOfYear(d) + (startDay - d.getDay())
+    let now = this.getDayOfYear(d) + (startDay - d.getDay())
     // Find the first startDay of the year
-    var jan1 = new Date(d.getFullYear(), 0, 1)
-    var then = (7 - jan1.getDay() + startDay)
+    let jan1 = new Date(d.getFullYear(), 0, 1)
+    let then = (7 - jan1.getDay() + startDay)
     return _number.pad(Math.floor((now - then) / 7) + 1, 2)
   },
 
   isLeapYear: function (d) {
-    var year = d.getFullYear()
+    let year = d.getFullYear()
     return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)))
   },
 
   getSuffix: function (d) {
-    var str = d.getDate().toString()
-    var index = parseInt(str.slice(-1))
+    let str = d.getDate().toString()
+    let index = parseInt(str.slice(-1))
     return suffixes[index] || suffixes['default']
   },
 
@@ -59,11 +59,11 @@ var _date = {
   }
 }
 
-var _number = {
+let _number = {
   pad: function (value, size, ch) {
     if (!ch) ch = '0'
-    var result = value.toString()
-    var pad = size - result.length
+    let result = value.toString()
+    let pad = size - result.length
 
     while (pad-- > 0) {
       result = ch + result
@@ -73,7 +73,7 @@ var _number = {
   }
 }
 
-var formatCodes = {
+let formatCodes = {
   a: function (d) {
     return dayNamesShort[d.getDay()]
   },
@@ -162,7 +162,7 @@ var formatCodes = {
     return d.getFullYear()
   },
   z: function (d) {
-    var tz = d.getTimezoneOffset() / 60 * 100
+    let tz = d.getTimezoneOffset() / 60 * 100
     return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4)
   },
   '%': function () {
@@ -172,13 +172,13 @@ var formatCodes = {
 formatCodes.h = formatCodes.b
 formatCodes.N = formatCodes.L
 
-var strftime = function (d, format) {
-  var output = ''
-  var remaining = format
+let strftime = function (d, format) {
+  let output = ''
+  let remaining = format
 
   while (true) {
-    var r = /%./g
-    var results = r.exec(remaining)
+    let r = /%./g
+    let results = r.exec(remaining)
 
     // No more format codes. Add the remaining text and return
     if (!results) {
@@ -190,8 +190,8 @@ var strftime = function (d, format) {
     remaining = remaining.slice(r.lastIndex)
 
     // Add the format code
-    var ch = results[0].charAt(1)
-    var func = formatCodes[ch]
+    let ch = results[0].charAt(1)
+    let func = formatCodes[ch]
     output += func ? func.call(this, d) : '%' + ch
   }
 }

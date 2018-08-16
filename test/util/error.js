@@ -4,8 +4,8 @@ const mock = require('mock-fs')
 const path = require('path')
 chai.use(require('chai-as-promised'))
 
-var engine = require('../..')()
-var strictEngine = require('../..')({
+let engine = require('../..')()
+let strictEngine = require('../..')({
   strict_variables: true,
   strict_filters: true
 })
@@ -25,8 +25,8 @@ describe('error', function () {
         })
     })
     it('should contain template content in err.message', function () {
-      var html = ['1st', '2nd', 'X{% . a %} Y', '4th']
-      var message = [
+      let html = ['1st', '2nd', 'X{% . a %} Y', '4th']
+      let message = [
         '   1| 1st',
         '   2| 2nd',
         '>> 3| X{% . a %} Y',
@@ -42,7 +42,7 @@ describe('error', function () {
         })
     })
     it('should contain the whole template content in err.input', function () {
-      var html = 'bar\nfoo{% . a %}\nfoo'
+      let html = 'bar\nfoo{% . a %}\nfoo'
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -66,7 +66,7 @@ describe('error', function () {
         })
     })
     describe('captureStackTrace compatibility', function () {
-      var captureStackTrace = Error.captureStackTrace
+      let captureStackTrace = Error.captureStackTrace
       before(() => (Error.captureStackTrace = null))
       after(() => (Error.captureStackTrace = captureStackTrace))
       it('should use empty string if captureStackTrace not defined', function () {
@@ -79,7 +79,7 @@ describe('error', function () {
       })
     })
     it('should contain file path in err.file', function () {
-      var html = '<html>\n<head>\n\n{% . a %}\n\n'
+      let html = '<html>\n<head>\n\n{% . a %}\n\n'
       mock({
         '/foo.html': html
       })
@@ -113,7 +113,7 @@ describe('error', function () {
       })
     })
     it('should throw RenderError when tag throws', function () {
-      var src = '{%throwingTag%}'
+      let src = '{%throwingTag%}'
       return expect(engine.parseAndRender(src)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -122,7 +122,7 @@ describe('error', function () {
         })
     })
     it('should throw RenderError when tag rejects', function () {
-      var src = '{%rejectingTag%}'
+      let src = '{%rejectingTag%}'
       return expect(engine.parseAndRender(src)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -131,7 +131,7 @@ describe('error', function () {
         })
     })
     it('should throw RenderError when filter throws', function () {
-      var src = '{{1|throwingFilter}}'
+      let src = '{{1|throwingFilter}}'
       return expect(engine.parseAndRender(src)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -151,8 +151,8 @@ describe('error', function () {
         })
     })
     it('should contain template context in err.stack', function () {
-      var html = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
-      var message = [
+      let html = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
+      let message = [
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
@@ -181,8 +181,8 @@ describe('error', function () {
           '7th'
         ].join('\n')
       })
-      var html = '{%layout "throwing-tag.html"%}'
-      var message = [
+      let html = '{%layout "throwing-tag.html"%}'
+      let message = [
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
@@ -202,12 +202,12 @@ describe('error', function () {
         })
     })
     it('should contain original error info for {% include %}', function () {
-      var origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
+      let origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
       mock({
         '/throwing-tag.html': origin.join('\n')
       })
-      var html = '{%include "throwing-tag.html"%}'
-      var message = [
+      let html = '{%include "throwing-tag.html"%}'
+      let message = [
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
@@ -225,7 +225,7 @@ describe('error', function () {
         })
     })
     it('should contain the whole template content in err.input', function () {
-      var html = 'bar\nfoo{%throwingTag%}\nfoo'
+      let html = 'bar\nfoo{%throwingTag%}\nfoo'
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -234,7 +234,7 @@ describe('error', function () {
         })
     })
     it('should contain line number in err.line', function () {
-      var src = '1\n2\n{{1|throwingFilter}}\n4'
+      let src = '1\n2\n{{1|throwingFilter}}\n4'
       return expect(engine.parseAndRender(src)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -252,7 +252,7 @@ describe('error', function () {
     })
 
     it('should contain file path in err.file', function () {
-      var html = '<html>\n<head>\n\n{% throwingTag %}\n\n'
+      let html = '<html>\n<head>\n\n{% throwingTag %}\n\n'
       mock({
         '/foo.html': html
       })
@@ -293,7 +293,7 @@ describe('error', function () {
         })
     })
     it('should throw ParseError when tag parse throws', function () {
-      var src = '{%throwsOnParse%}'
+      let src = '{%throwsOnParse%}'
       return expect(engine.parseAndRender(src)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -302,7 +302,7 @@ describe('error', function () {
         })
     })
     it('should throw ParseError when tag not found', function () {
-      var src = '{%if true%}\naaa{%endif%}\n{% -a %}\n3'
+      let src = '{%if true%}\naaa{%endif%}\n{% -a %}\n3'
       return expect(engine.parseAndRender(src)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -321,8 +321,8 @@ describe('error', function () {
     })
 
     it('should contain template context in err.stack', function () {
-      var html = ['1st', '2nd', '3rd', 'X{% a %} {% enda %} Y', '5th', '6th', '7th']
-      var message = [
+      let html = ['1st', '2nd', '3rd', 'X{% a %} {% enda %} Y', '5th', '6th', '7th']
+      let message = [
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{% a %} {% enda %} Y',
@@ -341,8 +341,8 @@ describe('error', function () {
     })
 
     it('should handle err.message when context not enough', function () {
-      var html = ['1st', 'X{% a %} {% enda %} Y', '3rd', '4th']
-      var message = [
+      let html = ['1st', 'X{% a %} {% enda %} Y', '3rd', '4th']
+      let message = [
         '   1| 1st',
         '>> 2| X{% a %} {% enda %} Y',
         '   3| 3rd',
@@ -358,7 +358,7 @@ describe('error', function () {
     })
 
     it('should contain line number in err.line', function () {
-      var html = '<html>\n<head>\n\n{% raw %}\n\n'
+      let html = '<html>\n<head>\n\n{% raw %}\n\n'
       return expect(engine.parseAndRender(html)).to.eventually
         .be.rejected
         .then(function (err) {
@@ -376,7 +376,7 @@ describe('error', function () {
     })
 
     it('should contain file path in err.file', function () {
-      var html = '<html>\n<head>\n\n{% raw %}\n\n'
+      let html = '<html>\n<head>\n\n{% raw %}\n\n'
       mock({
         '/foo.html': html
       })

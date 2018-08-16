@@ -5,7 +5,7 @@ const mock = require('mock-fs')
 chai.use(require('chai-as-promised'))
 
 describe('liquid', function () {
-  var engine, strictEngine, ctx
+  let engine, strictEngine, ctx
   beforeEach(function () {
     ctx = {
       name: 'harttle',
@@ -37,7 +37,7 @@ describe('liquid', function () {
   })
   describe('Liquid', function () {
     it('should ignore invalid root option', function () {
-      var liquid = Liquid({ root: /regex/ })
+      let liquid = Liquid({ root: /regex/ })
       expect(liquid.options.root).to.deep.equal([])
     })
   })
@@ -68,18 +68,18 @@ describe('liquid', function () {
     }).to.not.throw()
   })
   it('should render template multiple times', function () {
-    var template = engine.parse('{{obj}}')
+    let template = engine.parse('{{obj}}')
     return engine.render(template, ctx)
       .then(result => expect(result).to.equal('{"foo":"bar"}'))
       .then(() => engine.render(template, ctx))
       .then((result) => expect(result).to.equal('{"foo":"bar"}'))
   })
   it('should render filters', function () {
-    var template = engine.parse('<p>{{arr | join: "_"}}</p>')
+    let template = engine.parse('<p>{{arr | join: "_"}}</p>')
     return expect(engine.render(template, ctx)).to.eventually.equal('<p>-2_a</p>')
   })
   it('should render accessive filters', function () {
-    var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
+    let src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
       '{{ my_array | first }}'
     return expect(engine.parseAndRender(src)).to.eventually.equal('apples')
   })
@@ -89,7 +89,7 @@ describe('liquid', function () {
         .to.eventually.equal('foo')
     })
     it('should find files without extname', function () {
-      var engine = Liquid({root: '/root'})
+      let engine = Liquid({root: '/root'})
       return expect(engine.renderFile('/root/files/bar', ctx))
         .to.eventually.equal('bar')
     })
@@ -106,7 +106,7 @@ describe('liquid', function () {
         .to.eventually.equal('foo')
     })
     it('should default root to cwd', function () {
-      var files = {}
+      let files = {}
       files[process.cwd() + '/foo.html'] = 'FOO'
       mock(files)
 

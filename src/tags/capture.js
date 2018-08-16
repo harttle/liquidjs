@@ -8,13 +8,13 @@ const types = require('../scope.js').types
 module.exports = function (liquid) {
   liquid.registerTag('capture', {
     parse: function (tagToken, remainTokens) {
-      var match = tagToken.args.match(re)
+      let match = tagToken.args.match(re)
       assert(match, `${tagToken.args} not valid identifier`)
 
       this.variable = match[1]
       this.templates = []
 
-      var stream = liquid.parser.parseStream(remainTokens)
+      let stream = liquid.parser.parseStream(remainTokens)
       stream.on('tag:endcapture', token => stream.stop())
         .on('template', tpl => this.templates.push(tpl))
         .on('end', x => {

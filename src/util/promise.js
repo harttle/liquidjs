@@ -5,7 +5,7 @@
  * The iteratee is invoked with three arguments: (value, index, iterable).
  */
 function anySeries (iterable, iteratee) {
-  var ret = Promise.reject(new Error('init'))
+  let ret = Promise.reject(new Error('init'))
   iterable.forEach(function (item, idx) {
     ret = ret.catch(e => iteratee(item, idx, iterable))
   })
@@ -19,8 +19,8 @@ function anySeries (iterable, iteratee) {
  * The iteratee is invoked with three arguments: (value, index, iterable).
  */
 function mapSeries (iterable, iteratee) {
-  var ret = Promise.resolve('init')
-  var result = []
+  let ret = Promise.resolve('init')
+  let result = []
   iterable.forEach(function (item, idx) {
     ret = ret
       .then(() => iteratee(item, idx, iterable))

@@ -1,9 +1,9 @@
-const Liquid = require('..')
-const lexical = Liquid.lexical
-const mapSeries = require('../util/promise.js').mapSeries
-const _ = require('../util/underscore.js')
+import {default as Liquid, lexical} from '../index'
+import {mapSeries} from '../util/promise.js'
+import _ from '../util/underscore.js'
+import assert from '../util/assert.js'
+
 const RenderBreakError = Liquid.Types.RenderBreakError
-const assert = require('../util/assert.js')
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
     `(${lexical.value.source})` +
     `(?:\\s+${lexical.hash.source})*` +
@@ -14,7 +14,7 @@ module.exports = function (liquid) {
   liquid.registerTag('for', {
 
     parse: function (tagToken, remainTokens) {
-      var match = re.exec(tagToken.args)
+      let match = re.exec(tagToken.args)
       assert(match, `illegal tag: ${tagToken.raw}`)
       this.variable = match[1]
       this.collection = match[2]
@@ -23,8 +23,8 @@ module.exports = function (liquid) {
       this.templates = []
       this.elseTemplates = []
 
-      var p
-      var stream = liquid.parser.parseStream(remainTokens)
+      let p
+      let stream = liquid.parser.parseStream(remainTokens)
         .on('start', () => (p = this.templates))
         .on('tag:else', () => (p = this.elseTemplates))
         .on('tag:endfor', () => stream.stop())
@@ -37,7 +37,7 @@ module.exports = function (liquid) {
     },
 
     render: function (scope, hash) {
-      var collection = Liquid.evalExp(this.collection, scope)
+      let collection = Liquid.evalExp(this.collection, scope)
 
       if (!Array.isArray(collection)) {
         if (_.isString(collection) && collection.length > 0) {
@@ -50,14 +50,14 @@ module.exports = function (liquid) {
         return liquid.renderer.renderTemplates(this.elseTemplates, scope)
       }
 
-      var offset = hash.offset || 0
-      var limit = (hash.limit === undefined) ? collection.length : hash.limit
+      let offset = hash.offset || 0
+      let limit = (hash.limit === undefined) ? collection.length : hash.limit
 
       collection = collection.slice(offset, offset + limit)
       if (this.reversed) collection.reverse()
 
-      var contexts = collection.map((item, i) => {
-        var ctx = {}
+      let contexts = collection.map((item, i) => {
+        let ctx = {}
         ctx[this.variable] = item
         ctx.forloop = {
           first: i === 0,
@@ -71,7 +71,7 @@ module.exports = function (liquid) {
         return ctx
       })
 
-      var html = ''
+      let html = ''
       return mapSeries(contexts, (context) => {
         return Promise.resolve()
           .then(() => scope.push(context))

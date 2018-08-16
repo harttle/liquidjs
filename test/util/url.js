@@ -7,7 +7,7 @@ describe('util/url', function () {
     return
   }
   const JSDOM = require('jsdom').JSDOM
-  var dom
+  let dom
   beforeEach(function () {
     dom = new JSDOM(``, {
       url: 'https://example.com/foo/bar/',

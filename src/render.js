@@ -5,12 +5,12 @@ const _ = require('./util/underscore.js')
 const RenderError = require('./util/error.js').RenderError
 const assert = require('./util/assert.js')
 
-var render = {
+let render = {
 
   renderTemplates: function (templates, scope) {
     assert(scope, 'unable to evalTemplates: scope undefined')
 
-    var html = ''
+    let html = ''
     return mapSeries(templates, (tpl) => {
       return renderTemplate.call(this, tpl)
         .then(partial => (html += partial))
@@ -60,7 +60,7 @@ var render = {
 }
 
 function factory () {
-  var instance = Object.create(render)
+  let instance = Object.create(render)
   return instance
 }
 

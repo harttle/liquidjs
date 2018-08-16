@@ -1,7 +1,8 @@
-const Liquid = require('..')
-const mapSeries = require('../util/promise.js').mapSeries
+import Liquid from '..'
+import {mapSeries} from '../util/promise.js'
+import assert from '../util/assert.js'
+
 const lexical = Liquid.lexical
-const assert = require('../util/assert.js')
 const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
   `(${lexical.value.source})` +
   `(?:\\s+${lexical.hash.source})*$`)
@@ -10,15 +11,15 @@ module.exports = function (liquid) {
   liquid.registerTag('tablerow', {
 
     parse: function (tagToken, remainTokens) {
-      var match = re.exec(tagToken.args)
+      let match = re.exec(tagToken.args)
       assert(match, `illegal tag: ${tagToken.raw}`)
 
       this.variable = match[1]
       this.collection = match[2]
       this.templates = []
 
-      var p
-      var stream = liquid.parser.parseStream(remainTokens)
+      let p
+      let stream = liquid.parser.parseStream(remainTokens)
         .on('start', () => (p = this.templates))
         .on('tag:endtablerow', token => stream.stop())
         .on('template', tpl => p.push(tpl))
@@ -30,21 +31,21 @@ module.exports = function (liquid) {
     },
 
     render: function (scope, hash) {
-      var collection = Liquid.evalExp(this.collection, scope) || []
+      let collection = Liquid.evalExp(this.collection, scope) || []
 
-      var html = ''
-      var offset = hash.offset || 0
-      var limit = (hash.limit === undefined) ? collection.length : hash.limit
+      let html = ''
+      let offset = hash.offset || 0
+      let limit = (hash.limit === undefined) ? collection.length : hash.limit
 
-      var cols = hash.cols
-      var row
-      var col
+      let cols = hash.cols
+      let row
+      let col
 
       // build array of arguments to pass to sequential promises...
       collection = collection.slice(offset, offset + limit)
       if (!cols) cols = collection.length
-      var contexts = collection.map((item, i) => {
-        var ctx = {}
+      let contexts = collection.map((item, i) => {
+        let ctx = {}
         ctx[this.variable] = item
         return ctx
       })

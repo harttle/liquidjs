@@ -3,25 +3,25 @@ const Syntax = require('./syntax.js')
 const assert = require('./util/assert.js')
 const _ = require('./util/underscore.js')
 
-var valueRE = new RegExp(`${lexical.value.source}`, 'g')
+let valueRE = new RegExp(`${lexical.value.source}`, 'g')
 
 module.exports = function (options) {
   options = _.assign({}, options)
-  var filters = {}
+  let filters = {}
 
-  var _filterInstance = {
+  let _filterInstance = {
     render: function (output, scope) {
-      var args = this.args.map(arg => Syntax.evalValue(arg, scope))
+      let args = this.args.map(arg => Syntax.evalValue(arg, scope))
       args.unshift(output)
       return this.filter.apply(null, args)
     },
     parse: function (str) {
-      var match = lexical.filterLine.exec(str)
+      let match = lexical.filterLine.exec(str)
       assert(match, 'illegal filter: ' + str)
 
-      var name = match[1]
-      var argList = match[2] || ''
-      var filter = filters[name]
+      let name = match[1]
+      let argList = match[2] || ''
+      let filter = filters[name]
       if (typeof filter !== 'function') {
         if (options.strict_filters) {
           throw new TypeError(`undefined filter: ${name}`)
@@ -32,12 +32,12 @@ module.exports = function (options) {
         return this
       }
 
-      var args = []
+      let args = []
       while ((match = valueRE.exec(argList.trim()))) {
-        var v = match[0]
-        var re = new RegExp(`${v}\\s*:`, 'g')
-        var keyMatch = re.exec(match.input)
-        var currentMatchIsKey = keyMatch && keyMatch.index === match.index
+        let v = match[0]
+        let re = new RegExp(`${v}\\s*:`, 'g')
+        let keyMatch = re.exec(match.input)
+        let currentMatchIsKey = keyMatch && keyMatch.index === match.index
         currentMatchIsKey ? args.push(`'${v}'`) : args.push(v)
       }
 
@@ -50,7 +50,7 @@ module.exports = function (options) {
   }
 
   function construct (str) {
-    var instance = Object.create(_filterInstance)
+    let instance = Object.create(_filterInstance)
     return instance.parse(str)
   }
 

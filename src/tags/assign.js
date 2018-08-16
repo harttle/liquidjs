@@ -1,9 +1,8 @@
-'use strict'
-const Liquid = require('..')
-const lexical = Liquid.lexical
+import {lexical} from '../index'
+import assert from '../util/assert.js'
+import {types} from '../scope'
+
 const re = new RegExp(`(${lexical.identifier.source})\\s*=(.*)`)
-const assert = require('../util/assert.js')
-const types = require('../scope').types
 
 module.exports = function (liquid) {
   liquid.registerTag('assign', {

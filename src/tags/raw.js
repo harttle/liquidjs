@@ -3,7 +3,7 @@ module.exports = function (liquid) {
     parse: function (tagToken, remainTokens) {
       this.tokens = []
 
-      var stream = liquid.parser.parseStream(remainTokens)
+      let stream = liquid.parser.parseStream(remainTokens)
       stream
         .on('token', token => {
           if (token.name === 'endraw') stream.stop()

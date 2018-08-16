@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/include', function () {
-  var liquid
+  let liquid
   before(function () {
     liquid = Liquid({
       root: '/',
@@ -94,7 +94,7 @@ describe('tags/include', function () {
       '/card.html': '<p>{{person.firstName}} {{person.lastName}}<br/>{% include "address" %}</p>',
       '/address.html': 'City: {{person.address.city}}'
     })
-    var ctx = {
+    let ctx = {
       person: {
         firstName: 'Joe',
         lastName: 'Shmoe',
@@ -113,7 +113,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include child.html color:"red" %}Y',
         '/child.html': 'child with {{color}}'
       })
-      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('Xchild with redY')
     })
@@ -123,7 +123,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include bar/./../foo/child.html %}Y',
         '/foo/child.html': 'child'
       })
-      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('XchildY')
     })
@@ -133,7 +133,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include foo/child.html %}Y',
         '/foo/child.html': 'child'
       })
-      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('XchildY')
     })
@@ -143,7 +143,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include child.html, color:"red" %}Y',
         '/child.html': 'child with {{color}}'
       })
-      var staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('Xchild with redY')
     })

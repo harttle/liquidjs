@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/layout', function () {
-  var liquid
+  let liquid
   before(function () {
     liquid = Liquid({
       root: '/',
@@ -20,7 +20,7 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'parent'
     })
-    var src = '{% layout "parent" %}{%block%}A'
+    let src = '{% layout "parent" %}{%block%}A'
     return expect(liquid.parseAndRender(src)).to
       .be.rejectedWith(/tag {%block%} not closed/)
   })
@@ -38,7 +38,7 @@ describe('tags/layout', function () {
       mock({
         '/parent.html': 'X{%block%}{%endblock%}Y'
       })
-      var src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
+      let src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
       return expect(liquid.parseAndRender(src)).to
         .eventually.equal('XAY')
     })
@@ -46,7 +46,7 @@ describe('tags/layout', function () {
       mock({
         '/parent.html': 'X{%block%}{%endblock%}Y'
       })
-      var src = '{% layout "parent.html" %}A'
+      let src = '{% layout "parent.html" %}A'
       return expect(liquid.parseAndRender(src)).to
         .eventually.equal('XAY')
     })
@@ -55,7 +55,7 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'X{% block "a"%}{% endblock %}Y{% block b%}{%endblock%}Z'
     })
-    var src = '{% layout "parent.html" %}' +
+    let src = '{% layout "parent.html" %}' +
       '{%block a%}A{%endblock%}' +
       '{%block b%}B{%endblock%}'
     return expect(liquid.parseAndRender(src)).to
@@ -65,7 +65,7 @@ describe('tags/layout', function () {
     mock({
       '/parent.html': 'X{% block "a"%}A{% endblock %}Y{% block b%}B{%endblock%}Z'
     })
-    var src = '{% layout "parent.html" %}{%block a%}a{%endblock%}'
+    let src = '{% layout "parent.html" %}{%block a%}a{%endblock%}'
     return expect(liquid.parseAndRender(src)).to
       .eventually.equal('XaYBZ')
   })
@@ -112,7 +112,7 @@ describe('tags/layout', function () {
         '/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
       })
-      var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      let staticLiquid = Liquid({ root: '/', dynamicPartials: false })
       return expect(staticLiquid.renderFile('/main.html')).to
         .eventually.equal('blackA')
     })
@@ -122,7 +122,7 @@ describe('tags/layout', function () {
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout bar/../foo/parent.html color:"black"%}{%block%}A{%endblock%}'
       })
-      var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      let staticLiquid = Liquid({ root: '/', dynamicPartials: false })
       return expect(staticLiquid.renderFile('/main.html')).to
         .eventually.equal('blackA')
     })
@@ -132,7 +132,7 @@ describe('tags/layout', function () {
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout foo/parent.html color:"black"%}{%block%}A{%endblock%}'
       })
-      var staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      let staticLiquid = Liquid({ root: '/', dynamicPartials: false })
       return expect(staticLiquid.renderFile('/main.html')).to
         .eventually.equal('blackA')
     })

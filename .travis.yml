@@ -6,4 +6,4 @@ node_js:
 before_script:
   - npm install -g mocha
 after_script: 
-  - npm run lcov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+  - npm run coveralls

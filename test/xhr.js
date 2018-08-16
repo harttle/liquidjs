@@ -1,6 +1,6 @@
-const Liquid = require('..')
-const sinon = require('sinon')
-const chai = require('chai')
+import Liquid from '..'
+import sinon from 'sinon'
+import chai from 'chai'
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
@@ -9,7 +9,7 @@ describe('xhr', () => {
     return
   }
   const JSDOM = require('jsdom').JSDOM
-  var server, engine, dom
+  let server, engine, dom
   beforeEach(() => {
     server = sinon.createFakeServer()
     server.autoRespond = true

@@ -1,11 +1,10 @@
-'use strict'
-const chai = require('chai')
+import chai from 'chai'
+import Scope from '../src/scope.js'
+
 const expect = chai.expect
 
-var Scope = require('../src/scope.js')
-
 describe('scope', function () {
-  var scope, ctx
+  let scope, ctx
   beforeEach(function () {
     ctx = {
       foo: 'zoo',
@@ -161,7 +160,7 @@ describe('scope', function () {
     })
   })
   describe('strict_variables', function () {
-    var scope
+    let scope
     beforeEach(function () {
       scope = Scope.factory(ctx, {
         strict_variables: true

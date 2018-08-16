@@ -1,49 +1,49 @@
 // quote related
-var singleQuoted = /'[^']*'/
-var doubleQuoted = /"[^"]*"/
-var quoted = new RegExp(`${singleQuoted.source}|${doubleQuoted.source}`)
-var quoteBalanced = new RegExp(`(?:${quoted.source}|[^'"])*`)
+let singleQuoted = /'[^']*'/
+let doubleQuoted = /"[^"]*"/
+let quoted = new RegExp(`${singleQuoted.source}|${doubleQuoted.source}`)
+let quoteBalanced = new RegExp(`(?:${quoted.source}|[^'"])*`)
 
 // basic types
-var integer = /-?\d+/
-var number = /-?\d+\.?\d*|\.?\d+/
-var bool = /true|false/
+let integer = /-?\d+/
+let number = /-?\d+\.?\d*|\.?\d+/
+let bool = /true|false/
 
 // peoperty access
-var identifier = /[\w-]+[?]?/
-var subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`)
-var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`)
-var variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subscript.source})*`)
+let identifier = /[\w-]+[?]?/
+let subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`)
+let literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`)
+let variable = new RegExp(`${identifier.source}(?:\\.${identifier.source}|${subscript.source})*`)
 
 // range related
-var rangeLimit = new RegExp(`(?:${variable.source}|${number.source})`)
-var range = new RegExp(`\\(${rangeLimit.source}\\.\\.${rangeLimit.source}\\)`)
-var rangeCapture = new RegExp(`\\((${rangeLimit.source})\\.\\.(${rangeLimit.source})\\)`)
+let rangeLimit = new RegExp(`(?:${variable.source}|${number.source})`)
+let range = new RegExp(`\\(${rangeLimit.source}\\.\\.${rangeLimit.source}\\)`)
+let rangeCapture = new RegExp(`\\((${rangeLimit.source})\\.\\.(${rangeLimit.source})\\)`)
 
-var value = new RegExp(`(?:${variable.source}|${literal.source}|${range.source})`)
+let value = new RegExp(`(?:${variable.source}|${literal.source}|${range.source})`)
 
 // hash related
-var hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`)
-var hashCapture = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g')
+let hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`)
+let hashCapture = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g')
 
 // full match
-var tagLine = new RegExp(`^\\s*(${identifier.source})\\s*([\\s\\S]*)\\s*$`)
-var literalLine = new RegExp(`^${literal.source}$`, 'i')
-var variableLine = new RegExp(`^${variable.source}$`)
-var numberLine = new RegExp(`^${number.source}$`)
-var boolLine = new RegExp(`^${bool.source}$`, 'i')
-var quotedLine = new RegExp(`^${quoted.source}$`)
-var rangeLine = new RegExp(`^${rangeCapture.source}$`)
-var integerLine = new RegExp(`^${integer.source}$`)
+let tagLine = new RegExp(`^\\s*(${identifier.source})\\s*([\\s\\S]*)\\s*$`)
+let literalLine = new RegExp(`^${literal.source}$`, 'i')
+let variableLine = new RegExp(`^${variable.source}$`)
+let numberLine = new RegExp(`^${number.source}$`)
+let boolLine = new RegExp(`^${bool.source}$`, 'i')
+let quotedLine = new RegExp(`^${quoted.source}$`)
+let rangeLine = new RegExp(`^${rangeCapture.source}$`)
+let integerLine = new RegExp(`^${integer.source}$`)
 
 // filter related
-var valueDeclaration = new RegExp(`(?:${identifier.source}\\s*:\\s*)?${value.source}`)
-var valueList = new RegExp(`${valueDeclaration.source}(\\s*,\\s*${valueDeclaration.source})*`)
-var filter = new RegExp(`${identifier.source}(?:\\s*:\\s*${valueList.source})?`, 'g')
-var filterCapture = new RegExp(`(${identifier.source})(?:\\s*:\\s*(${valueList.source}))?`)
-var filterLine = new RegExp(`^${filterCapture.source}$`)
+let valueDeclaration = new RegExp(`(?:${identifier.source}\\s*:\\s*)?${value.source}`)
+let valueList = new RegExp(`${valueDeclaration.source}(\\s*,\\s*${valueDeclaration.source})*`)
+let filter = new RegExp(`${identifier.source}(?:\\s*:\\s*${valueList.source})?`, 'g')
+let filterCapture = new RegExp(`(${identifier.source})(?:\\s*:\\s*(${valueList.source}))?`)
+let filterLine = new RegExp(`^${filterCapture.source}$`)
 
-var operators = [
+let operators = [
   /\s+or\s+/,
   /\s+and\s+/,
   /==|!=|<=|>=|<|>|\s+contains\s+/
@@ -70,7 +70,7 @@ function matchValue (str) {
 }
 
 function parseLiteral (str) {
-  var res = str.match(numberLine)
+  let res = str.match(numberLine)
   if (res) {
     return Number(str)
   }

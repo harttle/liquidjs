@@ -1,10 +1,12 @@
-const chai = require('chai')
-const chaiAsPromised = require('chai-as-promised')
-const expect = chai.expect
-var liquid = require('../src')()
-chai.use(chaiAsPromised)
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
+import Liquid from '../src/index'
 
-var ctx = {
+chai.use(chaiAsPromised)
+const liquid = new Liquid()
+const expect = chai.expect
+
+let ctx = {
   date: new Date(),
   foo: 'bar',
   arr: [-2, 'a'],
@@ -83,7 +85,7 @@ describe('filters', function () {
 
   describe('date', function () {
     it('should support date: %a %b %d %Y', function () {
-      var str = ctx.date.toDateString()
+      let str = ctx.date.toDateString()
       return test('{{ date | date:"%a %b %d %Y"}}', str)
     })
     it('should create a new Date when given "now"', function () {
@@ -128,7 +130,7 @@ describe('filters', function () {
       return test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara')
     })
     it('should escape function', function () {
-      return test('{{ func | escape }}', 'function () {}')
+      return test('{{ func | escape }}', 'function func() {}')
     })
   })
 
@@ -140,7 +142,7 @@ describe('filters', function () {
   })
 
   it('should support split/first', function () {
-    var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
+    let src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
       '{{ my_array | first }}'
     return test(src, 'apples')
   })
@@ -153,19 +155,19 @@ describe('filters', function () {
   })
 
   it('should support join', function () {
-    var src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
+    let src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
       '{{ beatles | join: " and " }}'
     return test(src, 'John and Paul and George and Ringo')
   })
 
   it('should support split/last', function () {
-    var src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
+    let src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
       '{{ my_array|last }}'
     return test(src, 'tiger')
   })
 
   it('should support lstrip', function () {
-    var src = '{{ "          So much room for activities!          " | lstrip }}'
+    let src = '{{ "          So much room for activities!          " | lstrip }}'
     return test(src, 'So much room for activities!          ')
   })
 
@@ -191,12 +193,12 @@ describe('filters', function () {
   })
 
   it('should support string_with_newlines', function () {
-    var src = '{% capture string_with_newlines %}\n' +
+    let src = '{% capture string_with_newlines %}\n' +
             'Hello\n' +
             'there\n' +
             '{% endcapture %}' +
             '{{ string_with_newlines | newline_to_br }}'
-    var dst = '<br />' +
+    let dst = '<br />' +
             'Hello<br />' +
             'there<br />'
     return test(src, dst)

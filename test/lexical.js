@@ -1,7 +1,7 @@
 const chai = require('chai')
 const expect = chai.expect
 
-var lexical = require('../src/lexical.js')
+let lexical = require('../src/lexical.js')
 
 describe('lexical', function () {
   it('should test filter syntax', function () {
@@ -105,26 +105,26 @@ describe('lexical', function () {
     })
 
     it('should throw if non-literal', function () {
-      var fn = () => lexical.parseLiteral('a')
+      let fn = () => lexical.parseLiteral('a')
       expect(fn).to.throw("cannot parse 'a' as literal")
     })
   })
 
   describe('.matchValue()', function () {
     it('should match -5-5', function () {
-      var match = lexical.matchValue('-5-5')
+      let match = lexical.matchValue('-5-5')
       expect(match && match[0]).to.equal('-5-5')
     })
     it('should match 4-3', function () {
-      var match = lexical.matchValue('4-3')
+      let match = lexical.matchValue('4-3')
       expect(match && match[0]).to.equal('4-3')
     })
     it('should match 4-3', function () {
-      var match = lexical.matchValue('4-3')
+      let match = lexical.matchValue('4-3')
       expect(match && match[0]).to.equal('4-3')
     })
     it('should match var-1', function () {
-      var match = lexical.matchValue('var-1')
+      let match = lexical.matchValue('var-1')
       expect(match && match[0]).to.equal('var-1')
     })
   })

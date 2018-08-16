@@ -1,10 +1,10 @@
-const chai = require('chai')
-const sinon = require('sinon')
-const expect = chai.expect
-const Errors = require('../../src/util/error.js')
-chai.use(require('sinon-chai'))
+import chai from 'chai'
+import sinon from 'sinon'
+import Errors from '../../src/util/error.js'
+import _ from '../../src/util/underscore.js'
 
-var _ = require('../../src/util/underscore.js')
+const expect = chai.expect
+chai.use(require('sinon-chai'))
 
 describe('util/underscore', function () {
   describe('.isError()', function () {
@@ -12,7 +12,7 @@ describe('util/underscore', function () {
       expect(_.isError(new Error())).to.be.true
     })
     it('should return true for RenderError', function () {
-      var tpl = {
+      let tpl = {
         token: {
           input: 'xx'
         }
@@ -53,21 +53,21 @@ describe('util/underscore', function () {
   })
   describe('.forOwn()', function () {
     it('should iterate all properties', function () {
-      var spy = sinon.spy()
-      var obj = {
+      let spy = sinon.spy()
+      let obj = {
         foo: 'bar'
       }
       _.forOwn(obj, spy)
       expect(spy).to.have.been.calledWith('bar', 'foo', obj)
     })
     it('should default to empty object', function () {
-      var spy = sinon.spy()
+      let spy = sinon.spy()
       _.forOwn(undefined, spy)
       expect(spy).to.have.not.been.called
     })
     it('should not iterate over properties on prototype', function () {
-      var spy = sinon.spy()
-      var obj = Object.create({
+      let spy = sinon.spy()
+      let obj = Object.create({
         bar: 'foo'
       })
       obj.foo = 'bar'
@@ -76,7 +76,7 @@ describe('util/underscore', function () {
       expect(spy).to.have.been.calledWith('bar', 'foo', obj)
     })
     it('should break when returned false', function () {
-      var spy = sinon.stub().returns(false)
+      let spy = sinon.stub().returns(false)
       _.forOwn({
         'foo': 'foo',
         'bar': 'foo'
@@ -101,11 +101,11 @@ describe('util/underscore', function () {
       })
     })
     it('should assign 2 objects', function () {
-      var src = {
+      let src = {
         foo: 'foo',
         bar: 'bar'
       }
-      var dst = {
+      let dst = {
         foo: 'bar',
         kaa: 'kaa'
       }

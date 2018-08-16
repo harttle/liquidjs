@@ -1,23 +1,22 @@
-const Scope = require('./scope')
-const _ = require('./util/underscore.js')
-const assert = require('./util/assert.js')
-const tokenizer = require('./tokenizer.js')
-const statFileAsync = require('./util/fs.js').statFileAsync
-const readFileAsync = require('./util/fs.js').readFileAsync
-const path = require('path')
-const url = require('./util/url.js')
-const Render = require('./render.js')
-const lexical = require('./lexical.js')
-const Tag = require('./tag.js')
-const Filter = require('./filter.js')
-const Parser = require('./parser')
-const Syntax = require('./syntax.js')
-const tags = require('./tags')
-const filters = require('./filters')
-const anySeries = require('./util/promise.js').anySeries
-const Errors = require('./util/error.js')
+import Scope from './scope'
+import _ from './util/underscore.js'
+import assert from './util/assert.js'
+import tokenizer from './tokenizer.js'
+import {statFileAsync, readFileAsync} from './util/fs.js'
+import path from 'path'
+import {valid as isValidUrl, extname, resolve} from './util/url.js'
+import lexical from './lexical.js'
+import Render from './render.js'
+import Tag from './tag.js'
+import Filter from './filter.js'
+import Parser from './parser'
+import {isTruthy, isFalsy, evalExp, evalValue} from './syntax.js'
+import tags from './tags'
+import filters from './filters'
+import {anySeries} from './util/promise.js'
+import Errors from './util/error.js'
 
-var _engine = {
+let _engine = {
   init: function (tag, filter, options) {
     if (options.cache) {
       this.cache = {}
@@ -34,12 +33,12 @@ var _engine = {
     return this
   },
   parse: function (html, filepath) {
-    var tokens = tokenizer.parse(html, filepath, this.options)
+    let tokens = tokenizer.parse(html, filepath, this.options)
     return this.parser.parse(tokens)
   },
   render: function (tpl, ctx, opts) {
     opts = _.assign({}, this.options, opts)
-    var scope = Scope.factory(ctx, opts)
+    let scope = Scope.factory(ctx, opts)
     return this.renderer.renderTemplates(tpl, scope)
   },
   parseAndRender: function (html, ctx, opts) {
@@ -53,7 +52,7 @@ var _engine = {
       .then(templates => this.render(templates, ctx, opts))
   },
   evalValue: function (str, scope) {
-    var tpl = this.parser.parseValue(str.trim())
+    let tpl = this.parser.parseValue(str.trim())
     return this.renderer.evalValue(tpl, scope)
   },
   registerFilter: function (name, filter) {
@@ -65,7 +64,7 @@ var _engine = {
   lookup: function (filepath, root) {
     root = this.options.root.concat(root || [])
     root = _.uniq(root)
-    var paths = root.map(root => path.resolve(root, filepath))
+    let paths = root.map(root => path.resolve(root, filepath))
     return anySeries(paths, path => statFileAsync(path).then(() => path))
       .catch((e) => {
         e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
@@ -85,7 +84,7 @@ var _engine = {
       .lookup(filepath, root)
       .then(filepath => {
         if (this.options.cache) {
-          var tpl = this.cache[filepath]
+          let tpl = this.cache[filepath]
           if (tpl) {
             return Promise.resolve(tpl)
           }
@@ -98,26 +97,26 @@ var _engine = {
       })
   },
   getTemplateFromUrl: function (filepath, root) {
-    var fullUrl
-    if (url.valid(filepath)) {
+    let fullUrl
+    if (isValidUrl(filepath)) {
       fullUrl = filepath
     } else {
-      if (!url.extname(filepath)) {
+      if (!extname(filepath)) {
         filepath += this.options.extname
       }
-      fullUrl = url.resolve(root || this.options.root, filepath)
+      fullUrl = resolve(root || this.options.root, filepath)
     }
     if (this.options.cache) {
-      var tpl = this.cache[filepath]
+      let tpl = this.cache[filepath]
       if (tpl) {
         return Promise.resolve(tpl)
       }
     }
     return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest()
+      let xhr = new XMLHttpRequest()
       xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
-          var tpl = this.parse(xhr.responseText)
+          let tpl = this.parse(xhr.responseText)
           if (this.options.cache) {
             this.cache[filepath] = tpl
           }
@@ -135,7 +134,7 @@ var _engine = {
   },
   express: function (opts) {
     opts = opts || {}
-    var self = this
+    let self = this
     return function (filePath, ctx, callback) {
       assert(Array.isArray(this.root) || _.isString(this.root),
         'illegal views root, are you using express.js?')
@@ -163,7 +162,7 @@ function factory (options) {
   }, options)
   options.root = normalizeStringArray(options.root)
 
-  var engine = Object.create(_engine)
+  let engine = Object.create(_engine)
   engine.init(Tag(), Filter(options), options)
   return engine
 }
@@ -174,16 +173,18 @@ function normalizeStringArray (value) {
   return []
 }
 
-factory.lexical = lexical
-factory.isTruthy = Syntax.isTruthy
-factory.isFalsy = Syntax.isFalsy
-factory.evalExp = Syntax.evalExp
-factory.evalValue = Syntax.evalValue
-factory.Types = {
+const Types = {
   ParseError: Errors.ParseError,
   TokenizationEroor: Errors.TokenizationError,
   RenderBreakError: Errors.RenderBreakError,
   AssertionError: Errors.AssertionError
 }
+
+factory.isTruthy = isTruthy
+factory.isFalsy = isFalsy
+factory.evalExp = evalExp
+factory.evalValue = evalValue
+factory.Types = Types
+factory.lexical = lexical
 
 module.exports = factory

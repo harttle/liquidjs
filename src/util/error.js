@@ -1,4 +1,4 @@
-const _ = require('./underscore.js')
+import _ from './underscore.js'
 
 function initError () {
   this.name = this.constructor.name
@@ -14,7 +14,7 @@ function initLiquidError (err, token) {
   this.line = token.line
   this.file = token.file
 
-  var context = mkContext(token.input, token.line)
+  let context = mkContext(token.input, token.line)
   this.message = mkMessage(err.message, token)
   this.stack = context +
     '\n' + (this.stack || this.message) +
@@ -64,11 +64,11 @@ AssertionError.prototype = Object.create(Error.prototype)
 AssertionError.prototype.constructor = AssertionError
 
 function mkContext (input, line) {
-  var lines = input.split('\n')
-  var begin = Math.max(line - 2, 1)
-  var end = Math.min(line + 3, lines.length)
+  let lines = input.split('\n')
+  let begin = Math.max(line - 2, 1)
+  let end = Math.min(line + 3, lines.length)
 
-  var context = _
+  let context = _
     .range(begin, end + 1)
     .map(l => [
       (l === line) ? '>> ' : '   ',
@@ -82,9 +82,9 @@ function mkContext (input, line) {
 }
 
 function align (n, max) {
-  var length = (max + '').length
-  var str = n + ''
-  var blank = Array(length - str.length).join(' ')
+  let length = (max + '').length
+  let str = n + ''
+  let blank = Array(length - str.length).join(' ')
   return blank + str
 }
 

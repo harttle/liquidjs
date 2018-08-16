@@ -3,7 +3,7 @@ const ParseError = require('./util/error.js').ParseError
 const assert = require('./util/assert.js')
 
 module.exports = function (Tag, Filter) {
-  var stream = {
+  let stream = {
     init: function (tokens) {
       this.tokens = tokens
       this.handlers = {}
@@ -14,7 +14,7 @@ module.exports = function (Tag, Filter) {
       return this
     },
     trigger: function (event, arg) {
-      var h = this.handlers[event]
+      let h = this.handlers[event]
       if (typeof h === 'function') {
         h(arg)
         return true
@@ -22,14 +22,14 @@ module.exports = function (Tag, Filter) {
     },
     start: function () {
       this.trigger('start')
-      var token
+      let token
       while (!this.stopRequested && (token = this.tokens.shift())) {
         if (this.trigger('token', token)) continue
         if (token.type === 'tag' &&
             this.trigger(`tag:${token.name}`, token)) {
           continue
         }
-        var template = parseToken(token, this.tokens)
+        let template = parseToken(token, this.tokens)
         this.trigger('template', template)
       }
       if (!this.stopRequested) this.trigger('end')
@@ -42,8 +42,8 @@ module.exports = function (Tag, Filter) {
   }
 
   function parse (tokens) {
-    var token
-    var templates = []
+    let token
+    let templates = []
     while ((token = tokens.shift())) {
       templates.push(parseToken(token, tokens))
     }
@@ -52,7 +52,7 @@ module.exports = function (Tag, Filter) {
 
   function parseToken (token, tokens) {
     try {
-      var tpl = null
+      let tpl = null
       if (token.type === 'tag') {
         tpl = parseTag(token, tokens)
       } else if (token.type === 'value') {
@@ -73,13 +73,13 @@ module.exports = function (Tag, Filter) {
   }
 
   function parseValue (str) {
-    var match = lexical.matchValue(str)
+    let match = lexical.matchValue(str)
     assert(match, `illegal value string: ${str}`)
 
-    var initial = match[0]
+    let initial = match[0]
     str = str.substr(match.index + match[0].length)
 
-    var filters = []
+    let filters = []
     while ((match = lexical.filter.exec(str))) {
       filters.push([match[0].trim()])
     }
@@ -92,7 +92,7 @@ module.exports = function (Tag, Filter) {
   }
 
   function parseStream (tokens) {
-    var s = Object.create(stream)
+    let s = Object.create(stream)
     return s.init(tokens)
   }
 

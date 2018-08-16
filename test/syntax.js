@@ -1,14 +1,14 @@
 const chai = require('chai')
 const expect = chai.expect
-var syntax = require('../src/syntax.js')
-var Scope = require('../src/scope.js')
+let syntax = require('../src/syntax.js')
+let Scope = require('../src/scope.js')
 
-var evalExp = syntax.evalExp
-var evalValue = syntax.evalValue
-var isTruthy = syntax.isTruthy
+let evalExp = syntax.evalExp
+let evalValue = syntax.evalValue
+let isTruthy = syntax.isTruthy
 
 describe('expression', function () {
-  var scope
+  let scope
 
   beforeEach(function () {
     scope = Scope.factory({
@@ -36,7 +36,7 @@ describe('expression', function () {
     })
 
     it('should throw if not valid', function () {
-      var fn = () => evalValue('===')
+      let fn = () => evalValue('===')
       expect(fn).to.throw("cannot eval '===' as value")
     })
   })

@@ -12,7 +12,7 @@ const staticFileRE = /\S+/
 module.exports = function (liquid) {
   liquid.registerTag('layout', {
     parse: function (token, remainTokens) {
-      var match = staticFileRE.exec(token.args)
+      let match = staticFileRE.exec(token.args)
       if (match) {
         this.staticLayout = match[0]
       }
@@ -25,7 +25,7 @@ module.exports = function (liquid) {
       this.tpls = liquid.parser.parse(remainTokens)
     },
     render: function (scope, hash) {
-      var layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.staticLayout
+      let layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.staticLayout
       assert(layout, `cannot apply layout with empty filename`)
 
       // render the remaining tokens immediately
@@ -51,11 +51,11 @@ module.exports = function (liquid) {
 
   liquid.registerTag('block', {
     parse: function (token, remainTokens) {
-      var match = /\w+/.exec(token.args)
+      let match = /\w+/.exec(token.args)
       this.block = match ? match[0] : ''
 
       this.tpls = []
-      var stream = liquid.parser.parseStream(remainTokens)
+      let stream = liquid.parser.parseStream(remainTokens)
         .on('tag:endblock', () => stream.stop())
         .on('template', tpl => this.tpls.push(tpl))
         .on('end', () => {

@@ -5,7 +5,7 @@ const Liquid = require('../../src')
 chai.use(require('chai-as-promised'))
 
 describe('cache options', function () {
-  var engine
+  let engine
   beforeEach(function () {
     engine = Liquid({
       root: '/root/',

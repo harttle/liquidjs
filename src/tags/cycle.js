@@ -8,11 +8,11 @@ module.exports = function (liquid) {
   liquid.registerTag('cycle', {
 
     parse: function (tagToken, remainTokens) {
-      var match = groupRE.exec(tagToken.args)
+      let match = groupRE.exec(tagToken.args)
       assert(match, `illegal tag: ${tagToken.raw}`)
 
       this.group = match[1] || ''
-      var candidates = match[2]
+      let candidates = match[2]
 
       this.candidates = []
 
@@ -23,17 +23,17 @@ module.exports = function (liquid) {
     },
 
     render: function (scope, hash) {
-      var group = Liquid.evalValue(this.group, scope)
-      var fingerprint = `cycle:${group}:` + this.candidates.join(',')
+      let group = Liquid.evalValue(this.group, scope)
+      let fingerprint = `cycle:${group}:` + this.candidates.join(',')
 
-      var groups = scope.opts.groups = scope.opts.groups || {}
-      var idx = groups[fingerprint]
+      let groups = scope.opts.groups = scope.opts.groups || {}
+      let idx = groups[fingerprint]
 
       if (idx === undefined) {
         idx = groups[fingerprint] = 0
       }
 
-      var candidate = this.candidates[idx]
+      let candidate = this.candidates[idx]
       idx = (idx + 1) % this.candidates.length
       groups[fingerprint] = idx
 

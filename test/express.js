@@ -6,7 +6,7 @@ const express = require('express')
 const Liquid = require('../src')
 
 describe('engine#express()', function () {
-  var app, engine
+  let app, engine
 
   beforeEach(function () {
     app = express()
@@ -36,11 +36,11 @@ describe('engine#express()', function () {
       .expect(200, done)
   })
   it('should pass error when file not found', function (done) {
-    var view = {
+    let view = {
       root: []
     }
-    var file = '/not-exist.html'
-    var ctx = {}
+    let file = '/not-exist.html'
+    let ctx = {}
     engine.express().call(view, file, ctx, function (err) {
       try {
         expect(err.code).to.equal('ENOENT')
@@ -82,7 +82,7 @@ describe('engine#express()', function () {
       .expect(200, done)
   })
   it('should respect express views (Undefined) when lookup', function (done) {
-    var files = {}
+    let files = {}
     files[process.cwd() + '/views/include.html'] = '{% include file %}'
     files[process.cwd() + '/views/bar.html'] = 'bar'
     mock(files)
