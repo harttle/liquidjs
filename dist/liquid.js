@@ -1,4 +1,57 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Liquid = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+
+},{}],2:[function(require,module,exports){
+arguments[4][1][0].apply(exports,arguments)
+},{"dup":1}],3:[function(require,module,exports){
+// Copyright 2014 Simon Lydell
+// X11 (“MIT”) Licensed. (See LICENSE.)
+
+void (function(root, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(factory)
+  } else if (typeof exports === "object") {
+    module.exports = factory()
+  } else {
+    root.resolveUrl = factory()
+  }
+}(this, function() {
+
+  function resolveUrl(/* ...urls */) {
+    var numUrls = arguments.length
+
+    if (numUrls === 0) {
+      throw new Error("resolveUrl requires at least one argument; got none.")
+    }
+
+    var base = document.createElement("base")
+    base.href = arguments[0]
+
+    if (numUrls === 1) {
+      return base.href
+    }
+
+    var head = document.getElementsByTagName("head")[0]
+    head.insertBefore(base, head.firstChild)
+
+    var a = document.createElement("a")
+    var resolved
+
+    for (var index = 1; index < numUrls; index++) {
+      a.href = arguments[index]
+      resolved = a.href
+      base.href = resolved
+    }
+
+    head.removeChild(base)
+
+    return resolved
+  }
+
+  return resolveUrl
+
+}));
+
+},{}],4:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -73,7 +126,8 @@ module.exports = function (options) {
     construct: construct, register: register, clear: clear
   };
 };
-},{"./lexical.js":4,"./syntax.js":9,"./util/assert.js":27,"./util/underscore.js":32}],2:[function(require,module,exports){
+
+},{"./lexical.js":7,"./syntax.js":12,"./util/assert.js":30,"./util/underscore.js":35}],5:[function(require,module,exports){
 'use strict';
 
 var strftime = require('./util/strftime.js');
@@ -289,7 +343,8 @@ function isValidDate(date) {
 
 registerAll.filters = filters;
 module.exports = registerAll;
-},{"./syntax.js":9,"./util/strftime.js":31,"./util/underscore.js":32}],3:[function(require,module,exports){
+
+},{"./syntax.js":12,"./util/strftime.js":34,"./util/underscore.js":35}],6:[function(require,module,exports){
 'use strict';
 
 var _scope = require('./scope');
@@ -349,8 +404,6 @@ var _filters2 = _interopRequireDefault(_filters);
 var _promise = require('./util/promise.js');
 
 var _error = require('./util/error.js');
-
-var _error2 = _interopRequireDefault(_error);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -529,10 +582,10 @@ function normalizeStringArray(value) {
 }
 
 var Types = {
-  ParseError: _error2.default.ParseError,
-  TokenizationEroor: _error2.default.TokenizationError,
-  RenderBreakError: _error2.default.RenderBreakError,
-  AssertionError: _error2.default.AssertionError
+  ParseError: _error.ParseError,
+  TokenizationEroor: _error.TokenizationEroor,
+  RenderBreakError: _error.RenderBreakError,
+  AssertionError: _error.AssertionError
 };
 
 factory.isTruthy = _syntax.isTruthy;
@@ -543,7 +596,8 @@ factory.Types = Types;
 factory.lexical = _lexical2.default;
 
 module.exports = factory;
-},{"./filter.js":1,"./filters":2,"./lexical.js":4,"./parser":6,"./render.js":7,"./scope":8,"./syntax.js":9,"./tag.js":10,"./tags":21,"./tokenizer.js":26,"./util/assert.js":27,"./util/error.js":28,"./util/fs.js":29,"./util/promise.js":30,"./util/underscore.js":32,"./util/url.js":33,"path":36}],4:[function(require,module,exports){
+
+},{"./filter.js":4,"./filters":5,"./lexical.js":7,"./parser":9,"./render.js":10,"./scope":11,"./syntax.js":12,"./tag.js":13,"./tags":24,"./tokenizer.js":29,"./util/assert.js":30,"./util/error.js":31,"./util/fs.js":32,"./util/promise.js":33,"./util/underscore.js":35,"./util/url.js":36,"path":2}],7:[function(require,module,exports){
 'use strict';
 
 // quote related
@@ -658,7 +712,8 @@ module.exports = {
   matchValue: matchValue,
   isInteger: isInteger
 };
-},{}],5:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function (isTruthy) {
@@ -694,7 +749,8 @@ module.exports = function (isTruthy) {
     }
   };
 };
-},{}],6:[function(require,module,exports){
+
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -804,7 +860,8 @@ module.exports = function (Tag, Filter) {
     parseValue: parseValue
   };
 };
-},{"./lexical.js":4,"./util/assert.js":27,"./util/error.js":28}],7:[function(require,module,exports){
+
+},{"./lexical.js":7,"./util/assert.js":30,"./util/error.js":31}],10:[function(require,module,exports){
 'use strict';
 
 var Syntax = require('./syntax.js');
@@ -884,7 +941,8 @@ function factory() {
 }
 
 module.exports = factory;
-},{"./syntax.js":9,"./util/assert.js":27,"./util/error.js":28,"./util/promise.js":30,"./util/underscore.js":32}],8:[function(require,module,exports){
+
+},{"./syntax.js":12,"./util/assert.js":30,"./util/error.js":31,"./util/promise.js":33,"./util/underscore.js":35}],11:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -1078,7 +1136,8 @@ exports.types = {
   IncrementScope: Object.create(null),
   DecrementScope: Object.create(null)
 };
-},{"./lexical.js":4,"./util/assert.js":27,"./util/underscore.js":32}],9:[function(require,module,exports){
+
+},{"./lexical.js":7,"./util/assert.js":30,"./util/underscore.js":35}],12:[function(require,module,exports){
 'use strict';
 
 var operators = require('./operators.js')(isTruthy);
@@ -1137,7 +1196,8 @@ function isFalsy(val) {
 module.exports = {
   evalExp: evalExp, evalValue: evalValue, isTruthy: isTruthy, isFalsy: isFalsy
 };
-},{"./lexical.js":4,"./operators.js":5,"./util/assert.js":27}],10:[function(require,module,exports){
+
+},{"./lexical.js":7,"./operators.js":8,"./util/assert.js":30}],13:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -1204,7 +1264,8 @@ module.exports = function () {
     clear: clear
   };
 };
-},{"./lexical.js":4,"./syntax.js":9,"./util/assert.js":27}],11:[function(require,module,exports){
+
+},{"./lexical.js":7,"./syntax.js":12,"./util/assert.js":30}],14:[function(require,module,exports){
 'use strict';
 
 var _index = require('../index');
@@ -1235,7 +1296,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"../index":3,"../scope":8,"../util/assert.js":27}],12:[function(require,module,exports){
+
+},{"../index":6,"../scope":11,"../util/assert.js":30}],15:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1276,7 +1338,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../scope.js":8,"../util/assert.js":27}],13:[function(require,module,exports){
+
+},{"..":6,"../scope.js":11,"../util/assert.js":30}],16:[function(require,module,exports){
 'use strict';
 
 var _ = require('..');
@@ -1327,7 +1390,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3}],14:[function(require,module,exports){
+
+},{"..":6}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -1343,7 +1407,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{}],15:[function(require,module,exports){
+
+},{}],18:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1389,7 +1454,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../util/assert.js":27}],16:[function(require,module,exports){
+
+},{"..":6,"../util/assert.js":30}],19:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1419,7 +1485,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../scope":8,"../util/assert.js":27}],17:[function(require,module,exports){
+
+},{"..":6,"../scope":11,"../util/assert.js":30}],20:[function(require,module,exports){
 'use strict';
 
 var _index = require('../index');
@@ -1539,7 +1606,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"../index":3,"../util/assert.js":27,"../util/promise.js":30,"../util/underscore.js":32}],18:[function(require,module,exports){
+
+},{"../index":6,"../util/assert.js":30,"../util/promise.js":33,"../util/underscore.js":35}],21:[function(require,module,exports){
 'use strict';
 
 var _ = require('..');
@@ -1593,7 +1661,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3}],19:[function(require,module,exports){
+
+},{"..":6}],22:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1658,10 +1727,11 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../util/assert.js":27}],20:[function(require,module,exports){
+
+},{"..":6,"../util/assert.js":30}],23:[function(require,module,exports){
 'use strict';
 
-var Liquid = require('..');
+var Liquid = require('../index');
 var assert = require('../util/assert.js');
 var lexical = Liquid.lexical;
 var types = require('../scope').types;
@@ -1690,7 +1760,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../scope":8,"../util/assert.js":27}],21:[function(require,module,exports){
+
+},{"../index":6,"../scope":11,"../util/assert.js":30}],24:[function(require,module,exports){
 'use strict';
 
 module.exports = function (engine) {
@@ -1709,7 +1780,8 @@ module.exports = function (engine) {
   require('./tablerow.js')(engine);
   require('./unless.js')(engine);
 };
-},{"./assign.js":11,"./capture.js":12,"./case.js":13,"./comment.js":14,"./cycle.js":15,"./decrement.js":16,"./for.js":17,"./if.js":18,"./include.js":19,"./increment.js":20,"./layout.js":22,"./raw.js":23,"./tablerow.js":24,"./unless.js":25}],22:[function(require,module,exports){
+
+},{"./assign.js":14,"./capture.js":15,"./case.js":16,"./comment.js":17,"./cycle.js":18,"./decrement.js":19,"./for.js":20,"./if.js":21,"./include.js":22,"./increment.js":23,"./layout.js":25,"./raw.js":26,"./tablerow.js":27,"./unless.js":28}],25:[function(require,module,exports){
 'use strict';
 
 var Liquid = require('..');
@@ -1796,7 +1868,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../util/assert.js":27}],23:[function(require,module,exports){
+
+},{"..":6,"../util/assert.js":30}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = function (liquid) {
@@ -1821,7 +1894,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{}],24:[function(require,module,exports){
+
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var _ = require('..');
@@ -1915,7 +1989,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"..":3,"../util/assert.js":27,"../util/promise.js":30}],25:[function(require,module,exports){
+
+},{"..":6,"../util/assert.js":30,"../util/promise.js":33}],28:[function(require,module,exports){
 'use strict';
 
 var _index = require('../index');
@@ -1954,7 +2029,8 @@ module.exports = function (liquid) {
     }
   });
 };
-},{"../index":3}],26:[function(require,module,exports){
+
+},{"../index":6}],29:[function(require,module,exports){
 'use strict';
 
 var lexical = require('./lexical.js');
@@ -2046,7 +2122,8 @@ function LineNumber(html) {
 
 exports.parse = parse;
 exports.whiteSpaceCtrl = whiteSpaceCtrl;
-},{"./lexical.js":4,"./util/assert.js":27,"./util/error.js":28,"./util/underscore.js":32,"./whitespace-ctrl.js":34}],27:[function(require,module,exports){
+
+},{"./lexical.js":7,"./util/assert.js":30,"./util/error.js":31,"./util/underscore.js":35,"./whitespace-ctrl.js":37}],30:[function(require,module,exports){
 'use strict';
 
 var AssertionError = require('./error.js').AssertionError;
@@ -2059,8 +2136,18 @@ function assert(predicate, message) {
 }
 
 module.exports = assert;
-},{"./error.js":28}],28:[function(require,module,exports){
+
+},{"./error.js":31}],31:[function(require,module,exports){
 'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TokenizationError = TokenizationError;
+exports.ParseError = ParseError;
+exports.RenderError = RenderError;
+exports.RenderBreakError = RenderBreakError;
+exports.AssertionError = AssertionError;
 
 var _underscore = require('./underscore.js');
 
@@ -2159,14 +2246,7 @@ function mkMessage(msg, token) {
   return msg;
 }
 
-module.exports = {
-  TokenizationError: TokenizationError,
-  ParseError: ParseError,
-  RenderBreakError: RenderBreakError,
-  AssertionError: AssertionError,
-  RenderError: RenderError
-};
-},{"./underscore.js":32}],29:[function(require,module,exports){
+},{"./underscore.js":35}],32:[function(require,module,exports){
 'use strict';
 
 var fs = require('fs');
@@ -2191,7 +2271,8 @@ module.exports = {
   readFileAsync: readFileAsync,
   statFileAsync: statFileAsync
 };
-},{"fs":35}],30:[function(require,module,exports){
+
+},{"fs":1}],33:[function(require,module,exports){
 'use strict';
 
 /*
@@ -2233,7 +2314,8 @@ function mapSeries(iterable, iteratee) {
 
 exports.anySeries = anySeries;
 exports.mapSeries = mapSeries;
-},{}],31:[function(require,module,exports){
+
+},{}],34:[function(require,module,exports){
 'use strict';
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -2245,10 +2327,9 @@ var suffixes = {
   2: 'nd',
   3: 'rd',
   'default': 'th'
-};
 
-// prototype extensions
-var _date = {
+  // prototype extensions
+};var _date = {
   daysInMonth: function daysInMonth(d) {
     var feb = _date.isLeapYear(d) ? 29 : 28;
     return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -2427,7 +2508,8 @@ var strftime = function strftime(d, format) {
 };
 
 module.exports = strftime;
-},{}],32:[function(require,module,exports){
+
+},{}],35:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -2588,7 +2670,8 @@ exports.forOwn = forOwn;
 exports.assign = assign;
 exports.uniq = uniq;
 exports.stringify = stringify;
-},{}],33:[function(require,module,exports){
+
+},{}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2630,7 +2713,8 @@ function resolve(root, path) {
   }
   return (0, _resolveUrl2.default)(root, path);
 }
-},{"./underscore":32,"resolve-url":37}],34:[function(require,module,exports){
+
+},{"./underscore":35,"resolve-url":3}],37:[function(require,module,exports){
 'use strict';
 
 var _ = require('./util/underscore.js');
@@ -2680,58 +2764,6 @@ function trimRight(token, greedy) {
 }
 
 module.exports = whiteSpaceCtrl;
-},{"./util/underscore.js":32}],35:[function(require,module,exports){
 
-},{}],36:[function(require,module,exports){
-arguments[4][35][0].apply(exports,arguments)
-},{"dup":35}],37:[function(require,module,exports){
-// Copyright 2014 Simon Lydell
-// X11 (“MIT”) Licensed. (See LICENSE.)
-
-void (function(root, factory) {
-  if (typeof define === "function" && define.amd) {
-    define(factory)
-  } else if (typeof exports === "object") {
-    module.exports = factory()
-  } else {
-    root.resolveUrl = factory()
-  }
-}(this, function() {
-
-  function resolveUrl(/* ...urls */) {
-    var numUrls = arguments.length
-
-    if (numUrls === 0) {
-      throw new Error("resolveUrl requires at least one argument; got none.")
-    }
-
-    var base = document.createElement("base")
-    base.href = arguments[0]
-
-    if (numUrls === 1) {
-      return base.href
-    }
-
-    var head = document.getElementsByTagName("head")[0]
-    head.insertBefore(base, head.firstChild)
-
-    var a = document.createElement("a")
-    var resolved
-
-    for (var index = 1; index < numUrls; index++) {
-      a.href = arguments[index]
-      resolved = a.href
-      base.href = resolved
-    }
-
-    head.removeChild(base)
-
-    return resolved
-  }
-
-  return resolveUrl
-
-}));
-
-},{}]},{},[3])(3)
+},{"./util/underscore.js":35}]},{},[6])(6)
 });
