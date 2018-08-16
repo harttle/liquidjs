@@ -14,7 +14,7 @@ import {isTruthy, isFalsy, evalExp, evalValue} from './syntax.js'
 import tags from './tags'
 import filters from './filters'
 import {anySeries} from './util/promise.js'
-import Errors from './util/error.js'
+import {ParseError, TokenizationEroor, RenderBreakError, AssertionError} from './util/error.js'
 
 let _engine = {
   init: function (tag, filter, options) {
@@ -174,10 +174,10 @@ function normalizeStringArray (value) {
 }
 
 const Types = {
-  ParseError: Errors.ParseError,
-  TokenizationEroor: Errors.TokenizationError,
-  RenderBreakError: Errors.RenderBreakError,
-  AssertionError: Errors.AssertionError
+  ParseError,
+  TokenizationEroor,
+  RenderBreakError,
+  AssertionError
 }
 
 factory.isTruthy = isTruthy

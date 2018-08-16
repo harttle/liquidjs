@@ -1,7 +1,8 @@
-const chai = require('chai')
-const expect = chai.expect
-const Liquid = require('..')
+import chai from 'chai'
+import Liquid from '../src'
+
 const liquid = new Liquid()
+const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 const cases = [

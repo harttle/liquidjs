@@ -1,6 +1,6 @@
-'use strict'
-const Liquid = require('../..')
-const chai = require('chai')
+import Liquid from '../../src'
+import chai from 'chai'
+
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
 

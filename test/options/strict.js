@@ -1,6 +1,7 @@
-const chai = require('chai')
+import Liquid from '../../src'
+import chai from 'chai'
+
 const expect = chai.expect
-const Liquid = require('../../src')
 chai.use(require('chai-as-promised'))
 
 describe('strict options', function () {

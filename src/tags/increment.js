@@ -1,5 +1,4 @@
-'use strict'
-const Liquid = require('..')
+const Liquid = require('../index')
 const assert = require('../util/assert.js')
 const lexical = Liquid.lexical
 const types = require('../scope').types

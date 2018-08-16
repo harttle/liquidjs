@@ -1,11 +1,13 @@
-const chai = require('chai')
+import Liquid from '../../src'
+import mock from 'mock-fs'
+import chai from 'chai'
+import path from 'path'
+
 const expect = chai.expect
-const mock = require('mock-fs')
-const path = require('path')
 chai.use(require('chai-as-promised'))
 
-let engine = require('../..')()
-let strictEngine = require('../..')({
+let engine = Liquid()
+let strictEngine = Liquid({
   strict_variables: true,
   strict_filters: true
 })
@@ -95,7 +97,7 @@ describe('error', function () {
 
   describe('RenderError', function () {
     beforeEach(function () {
-      engine = require('../..')({
+      engine = Liquid({
         root: '/'
       })
       engine.registerTag('throwingTag', {
@@ -269,7 +271,7 @@ describe('error', function () {
 
   describe('ParseError', function () {
     beforeEach(function () {
-      engine = require('../..')()
+      engine = Liquid()
       engine.registerTag('throwsOnParse', {
         parse: function () {
           throw new Error('intended parse error')

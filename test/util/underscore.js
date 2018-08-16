@@ -1,6 +1,6 @@
 import chai from 'chai'
 import sinon from 'sinon'
-import Errors from '../../src/util/error.js'
+import {RenderError, RenderBreakError} from '../../src/util/error.js'
 import _ from '../../src/util/underscore.js'
 
 const expect = chai.expect
@@ -17,10 +17,10 @@ describe('util/underscore', function () {
           input: 'xx'
         }
       }
-      expect(_.isError(new Errors.RenderError(new Error(), tpl))).to.be.true
+      expect(_.isError(new RenderError(new Error(), tpl))).to.be.true
     })
     it('should return true for RenderBreakError', function () {
-      expect(_.isError(new Errors.RenderBreakError())).to.be.true
+      expect(_.isError(new RenderBreakError())).to.be.true
     })
   })
   describe('.isString()', function () {

@@ -10,14 +10,14 @@
     "coveralls": "nyc report --reporter=text-lcov --require babel-core/register mocha test/ --recursive | coveralls",
     "dist": "npm run babelify && npm run browserify && npm run uglify",
     "babelify": "babel src -d build",
-    "browserify": "browserify build/index.js -s Liquid --ignore path --global true > dist/liquid.js",
-    "uglify": "uglifyjs dist/liquid.js --compress warnings=false --mangle --output dist/liquid.min.js",
-    "demo:browser": "echo open http://localhost:8080/demo/browser && http-server",
+    "browserify": "browserify src/index.js -s Liquid --ignore path -t [ babelify --presets [ es2015 ] ] > dist/liquid.js",
+    "uglify": "uglifyjs dist/liquid.js --compress warnings=false --mangle toplevel --output dist/liquid.min.js",
+    "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
     "demo:nodejs": "node ./demo/nodejs/index.js",
     "demo:express": "cd ./demo/express/ && npm start",
     "preversion": "npm run lint && npm test",
     "version": "npm run dist && git add -A dist",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push --tags"
   },
   "repository": {
     "type": "git",

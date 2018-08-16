@@ -1,10 +1,12 @@
 const Liquid = require('../..')
 
-let engine = new Liquid()
-let src = 'Welcome to {{ name | capitalize}}, access time: {{date|date: "%H:%M:%S"}}'
+let engine = new Liquid({
+  root: __dirname,
+  extname: '.liquid'
+})
 let ctx = {
-  name: 'Liquid',
-  date: new Date()
+  todos: ['fork and clone', 'make it better', 'make a pull request'],
+  title: 'Welcome to liquidjs!'
 }
 
-engine.parseAndRender(src, ctx).then(console.log)
+engine.renderFile('todolist', ctx).then(console.log)

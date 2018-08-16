@@ -1,4 +1,4 @@
-import Liquid from '..'
+import Liquid from '../src'
 import sinon from 'sinon'
 import chai from 'chai'
 const expect = chai.expect

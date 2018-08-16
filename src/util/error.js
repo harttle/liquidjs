@@ -21,13 +21,13 @@ function initLiquidError (err, token) {
       (err.stack ? '\nFrom ' + err.stack : '')
 }
 
-function TokenizationError (message, token) {
+export function TokenizationError (message, token) {
   initLiquidError.call(this, {message: message}, token)
 }
 TokenizationError.prototype = Object.create(Error.prototype)
 TokenizationError.prototype.constructor = TokenizationError
 
-function ParseError (e, token) {
+export function ParseError (e, token) {
   _.assign(this, e)
   this.originalError = e
 
@@ -36,7 +36,7 @@ function ParseError (e, token) {
 ParseError.prototype = Object.create(Error.prototype)
 ParseError.prototype.constructor = ParseError
 
-function RenderError (e, tpl) {
+export function RenderError (e, tpl) {
   // return the original render error
   if (e instanceof RenderError) {
     return e
@@ -49,14 +49,14 @@ function RenderError (e, tpl) {
 RenderError.prototype = Object.create(Error.prototype)
 RenderError.prototype.constructor = RenderError
 
-function RenderBreakError (message) {
+export function RenderBreakError (message) {
   initError.call(this)
   this.message = message + ''
 }
 RenderBreakError.prototype = Object.create(Error.prototype)
 RenderBreakError.prototype.constructor = RenderBreakError
 
-function AssertionError (message) {
+export function AssertionError (message) {
   initError.call(this)
   this.message = message + ''
 }
@@ -97,12 +97,4 @@ function mkMessage (msg, token) {
     msg += ', line:' + token.line
   }
   return msg
-}
-
-module.exports = {
-  TokenizationError,
-  ParseError,
-  RenderBreakError,
-  AssertionError,
-  RenderError
 }
