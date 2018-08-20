@@ -1,4 +1,5 @@
 import assert from '../util/assert.js'
+import {value as rValue} from '../lexical.js'
 
 /*
  * blockMode:
@@ -7,7 +8,6 @@ import assert from '../util/assert.js'
  */
 
 export default function (liquid, Liquid) {
-  const rValue = Liquid.lexical.value
   const staticFileRE = /\S+/
 
   liquid.registerTag('layout', {

@@ -1,6 +1,6 @@
 import {evalExp} from './syntax.js'
 import {RenderBreakError, RenderError} from './util/error.js'
-import {stringify} from './util/underscore.js'
+import {stringify, create} from './util/underscore.js'
 import assert from './util/assert.js'
 
 const render = {
@@ -57,6 +57,6 @@ const render = {
 }
 
 export default function () {
-  const instance = Object.create(render)
+  const instance = create(render)
   return instance
 }

@@ -1,10 +1,10 @@
 import assert from '../util/assert.js'
+import {value, quotedLine} from '../lexical.js'
 
 const staticFileRE = /[^\s,]+/
 
 export default function (liquid, Liquid) {
-  const lexical = Liquid.lexical
-  const withRE = new RegExp(`with\\s+(${lexical.value.source})`)
+  const withRE = new RegExp(`with\\s+(${value.source})`)
 
   liquid.registerTag('include', {
     parse: function (token) {
@@ -13,7 +13,7 @@ export default function (liquid, Liquid) {
         this.staticValue = match[0]
       }
 
-      match = lexical.value.exec(token.args)
+      match = value.exec(token.args)
       if (match) {
         this.value = match[0]
       }
@@ -26,7 +26,7 @@ export default function (liquid, Liquid) {
     render: async function (scope, hash) {
       let filepath
       if (scope.opts.dynamicPartials) {
-        if (lexical.quotedLine.exec(this.value)) {
+        if (quotedLine.exec(this.value)) {
           const template = this.value.slice(1, -1)
           filepath = await liquid.parseAndRender(template, scope.getAll(), scope.opts)
         } else {

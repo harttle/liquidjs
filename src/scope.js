@@ -4,7 +4,7 @@ import assert from './util/assert.js'
 
 const Scope = {
   getAll: function () {
-    return this.contexts.reduce((ctx, val) => Object.assign(ctx, val), Object.create(null))
+    return this.contexts.reduce((ctx, val) => _.assign(ctx, val), _.create(null))
   },
   get: function (path) {
     const paths = this.propertyAccessSeq(path)
@@ -162,7 +162,7 @@ export function factory (ctx, opts) {
     blocks: {},
     root: []
   }
-  const scope = Object.create(Scope)
+  const scope = _.create(Scope)
   scope.opts = _.assign(defaultOptions, opts)
   scope.contexts = [ctx || {}]
   return scope

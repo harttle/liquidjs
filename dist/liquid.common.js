@@ -45,6 +45,36 @@ var asyncToGenerator = function (fn) {
   };
 };
 
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -771,6 +801,10 @@ function stringify(value) {
   });
 }
 
+function create(proto) {
+  return Object.create(proto);
+}
+
 function isNil(value) {
   return value === null || value === undefined;
 }
@@ -923,10 +957,6 @@ function isLiteral(str) {
   return literalLine.test(str);
 }
 
-function isRange(str) {
-  return rangeLine.test(str);
-}
-
 function isVariable(str) {
   return variableLine.test(str);
 }
@@ -951,104 +981,117 @@ function parseLiteral(str) {
   throw new TypeError('cannot parse \'' + str + '\' as literal');
 }
 
-var lexical = /*#__PURE__*/Object.freeze({
-  quoted: quoted,
-  quoteBalanced: quoteBalanced,
-  integer: integer,
-  number: number,
-  bool: bool,
-  identifier: identifier,
-  subscript: subscript,
-  literal: literal,
-  variable: variable,
-  rangeLimit: rangeLimit,
-  range: range$1,
-  rangeCapture: rangeCapture,
-  value: value,
-  hash: hash,
-  hashCapture: hashCapture,
-  tagLine: tagLine,
-  literalLine: literalLine,
-  variableLine: variableLine,
-  numberLine: numberLine,
-  boolLine: boolLine,
-  quotedLine: quotedLine,
-  rangeLine: rangeLine,
-  integerLine: integerLine,
-  valueDeclaration: valueDeclaration,
-  valueList: valueList,
-  filter: filter,
-  filterCapture: filterCapture,
-  filterLine: filterLine,
-  operators: operators,
-  isInteger: isInteger,
-  isLiteral: isLiteral,
-  isRange: isRange,
-  isVariable: isVariable,
-  matchValue: matchValue,
-  parseLiteral: parseLiteral
-});
+var LiquidError = function (_Error) {
+  inherits(LiquidError, _Error);
 
-function initError() {
-  this.name = this.constructor.name;
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, this.constructor);
+  function LiquidError(message) {
+    classCallCheck(this, LiquidError);
+
+    var _this = possibleConstructorReturn(this, (LiquidError.__proto__ || Object.getPrototypeOf(LiquidError)).call(this, message));
+
+    _this.name = _this.constructor.name;
+    if (typeof Error.captureStackTrace === 'function') {
+      Error.captureStackTrace(_this, _this.constructor);
+    } else {
+      _this.stack = new Error(message).stack;
+    }
+    return _this;
   }
-}
 
-function initLiquidError(err, token) {
-  initError.call(this);
+  return LiquidError;
+}(Error);
 
-  this.input = token.input;
-  this.line = token.line;
-  this.file = token.file;
+var TemplateError = function (_LiquidError) {
+  inherits(TemplateError, _LiquidError);
 
-  var context = mkContext(token.input, token.line);
-  this.message = mkMessage(err.message, token);
-  this.stack = context + '\n' + (this.stack || this.message) + (err.stack ? '\nFrom ' + err.stack : '');
-}
+  function TemplateError(err, token) {
+    classCallCheck(this, TemplateError);
 
-function TokenizationError(message, token) {
-  initLiquidError.call(this, { message: message }, token);
-}
-TokenizationError.prototype = Object.create(Error.prototype);
-TokenizationError.prototype.constructor = TokenizationError;
+    var _this2 = possibleConstructorReturn(this, (TemplateError.__proto__ || Object.getPrototypeOf(TemplateError)).call(this));
 
-function ParseError(e, token) {
-  assign(this, e);
-  this.originalError = e;
-
-  initLiquidError.call(this, e, token);
-}
-ParseError.prototype = Object.create(Error.prototype);
-ParseError.prototype.constructor = ParseError;
-
-function RenderError(e, tpl) {
-  // return the original render error
-  if (e instanceof RenderError) {
-    return e;
+    _this2.input = token.input;
+    _this2.line = token.line;
+    _this2.file = token.file;
+    _this2.message = mkMessage(err.message, token);
+    var context = mkContext(token.input, token.line);
+    _this2.stack = context + '\n' + (_this2.stack || _this2.message) + (err.stack ? '\nFrom ' + err.stack : '');
+    return _this2;
   }
-  assign(this, e);
-  this.originalError = e;
 
-  initLiquidError.call(this, e, tpl.token);
-}
-RenderError.prototype = Object.create(Error.prototype);
-RenderError.prototype.constructor = RenderError;
+  return TemplateError;
+}(LiquidError);
 
-function RenderBreakError(message) {
-  initError.call(this);
-  this.message = message + '';
-}
-RenderBreakError.prototype = Object.create(Error.prototype);
-RenderBreakError.prototype.constructor = RenderBreakError;
+var TokenizationError = function (_TemplateError) {
+  inherits(TokenizationError, _TemplateError);
 
-function AssertionError(message) {
-  initError.call(this);
-  this.message = message + '';
-}
-AssertionError.prototype = Object.create(Error.prototype);
-AssertionError.prototype.constructor = AssertionError;
+  function TokenizationError(message, token) {
+    classCallCheck(this, TokenizationError);
+    return possibleConstructorReturn(this, (TokenizationError.__proto__ || Object.getPrototypeOf(TokenizationError)).call(this, { message: message }, token));
+  }
+
+  return TokenizationError;
+}(TemplateError);
+
+var ParseError = function (_TemplateError2) {
+  inherits(ParseError, _TemplateError2);
+
+  function ParseError(e, token) {
+    classCallCheck(this, ParseError);
+
+    var _this4 = possibleConstructorReturn(this, (ParseError.__proto__ || Object.getPrototypeOf(ParseError)).call(this, e, token));
+
+    assign(_this4, e);
+    _this4.originalError = e;
+    return _this4;
+  }
+
+  return ParseError;
+}(TemplateError);
+
+var RenderError = function (_TemplateError3) {
+  inherits(RenderError, _TemplateError3);
+
+  function RenderError(e, tpl) {
+    classCallCheck(this, RenderError);
+
+    // return the original render error
+    if (e instanceof RenderError) {
+      var _ret;
+
+      return _ret = e, possibleConstructorReturn(_this5, _ret);
+    }
+
+    var _this5 = possibleConstructorReturn(this, (RenderError.__proto__ || Object.getPrototypeOf(RenderError)).call(this, e, tpl.token));
+
+    assign(_this5, e);
+    _this5.originalError = e;
+    return _this5;
+  }
+
+  return RenderError;
+}(TemplateError);
+
+var RenderBreakError = function (_LiquidError2) {
+  inherits(RenderBreakError, _LiquidError2);
+
+  function RenderBreakError(message) {
+    classCallCheck(this, RenderBreakError);
+    return possibleConstructorReturn(this, (RenderBreakError.__proto__ || Object.getPrototypeOf(RenderBreakError)).call(this, message + ''));
+  }
+
+  return RenderBreakError;
+}(LiquidError);
+
+var AssertionError = function (_LiquidError3) {
+  inherits(AssertionError, _LiquidError3);
+
+  function AssertionError(message) {
+    classCallCheck(this, AssertionError);
+    return possibleConstructorReturn(this, (AssertionError.__proto__ || Object.getPrototypeOf(AssertionError)).call(this, message + ''));
+  }
+
+  return AssertionError;
+}(LiquidError);
 
 function mkContext(input, line) {
   var lines = input.split('\n');
@@ -1090,8 +1133,8 @@ function assert (predicate, message) {
 var Scope = {
   getAll: function getAll() {
     return this.contexts.reduce(function (ctx, val) {
-      return Object.assign(ctx, val);
-    }, Object.create(null));
+      return assign(ctx, val);
+    }, create(null));
   },
   get: function get(path$$1) {
     var _this = this;
@@ -1262,7 +1305,7 @@ function factory(ctx, opts) {
     blocks: {},
     root: []
   };
-  var scope = Object.create(Scope);
+  var scope = create(Scope);
   scope.opts = assign(defaultOptions, opts);
   scope.contexts = [ctx || {}];
   return scope;
@@ -1773,7 +1816,7 @@ var render = {
 };
 
 function Render () {
-  var instance = Object.create(render);
+  var instance = create(render);
   return instance;
 }
 
@@ -1834,7 +1877,7 @@ function Tag () {
 
       var tagImpl = tagImpls[this.name];
       assert(tagImpl, 'tag ' + this.name + ' not found');
-      this.tagImpl = Object.create(tagImpl);
+      this.tagImpl = create(tagImpl);
       if (this.tagImpl.parse) {
         this.tagImpl.parse(token, tokens);
       }
@@ -1846,7 +1889,7 @@ function Tag () {
   }
 
   function construct(token, tokens) {
-    var instance = Object.create(_tagInstance);
+    var instance = create(_tagInstance);
     instance.parse(token, tokens);
     return instance;
   }
@@ -1913,7 +1956,7 @@ function Filter (options) {
   };
 
   function construct(str) {
-    var instance = Object.create(_filterInstance);
+    var instance = create(_filterInstance);
     return instance.parse(str);
   }
 
@@ -2022,7 +2065,7 @@ function Parser (Tag, Filter) {
   }
 
   function parseStream(tokens) {
-    var s = Object.create(stream);
+    var s = create(stream);
     return s.init(tokens);
   }
 
@@ -2073,7 +2116,7 @@ function mapSeries(iterable, iteratee) {
 
 function For (liquid, Liquid) {
   var render = function () {
-    var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(scope, hash) {
+    var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(scope, hash$$1) {
       var _this2 = this;
 
       var collection, offset, limit, contexts, html, finished;
@@ -2102,8 +2145,8 @@ function For (liquid, Liquid) {
               return _context2.abrupt('return', liquid.renderer.renderTemplates(this.elseTemplates, scope));
 
             case 4:
-              offset = hash.offset || 0;
-              limit = hash.limit === undefined ? collection.length : hash.limit;
+              offset = hash$$1.offset || 0;
+              limit = hash$$1.limit === undefined ? collection.length : hash$$1.limit;
 
 
               collection = collection.slice(offset, offset + limit);
@@ -2203,8 +2246,7 @@ function For (liquid, Liquid) {
   }();
 
   var RenderBreakError = Liquid.Types.RenderBreakError;
-  var lexical = Liquid.lexical;
-  var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*') + '(?:\\s+(reversed))?' + ('(?:\\s+' + lexical.hash.source + ')*$'));
+  var re = new RegExp('^(' + identifier.source + ')\\s+in\\s+' + ('(' + value.source + ')') + ('(?:\\s+' + hash.source + ')*') + '(?:\\s+(reversed))?' + ('(?:\\s+' + hash.source + ')*$'));
 
   liquid.registerTag('for', { parse: parse, render: render });
 
@@ -2238,8 +2280,7 @@ function For (liquid, Liquid) {
 }
 
 function Assign (liquid, Liquid) {
-  var rIdentifier = Liquid.lexical.identifier;
-  var re = new RegExp('(' + rIdentifier.source + ')\\s*=(.*)');
+  var re = new RegExp('(' + identifier.source + ')\\s*=(.*)');
   var AssignScope = Liquid.Types.AssignScope;
 
 
@@ -2251,7 +2292,7 @@ function Assign (liquid, Liquid) {
       this.value = match[2];
     },
     render: function render(scope) {
-      var ctx = Object.create(AssignScope);
+      var ctx = create(AssignScope);
       ctx[this.key] = liquid.evalValue(this.value, scope);
       scope.push(ctx);
       return Promise.resolve('');
@@ -2260,8 +2301,7 @@ function Assign (liquid, Liquid) {
 }
 
 function Capture (liquid, Liquid) {
-  var rIdentifier = Liquid.lexical.identifier;
-  var re = new RegExp('(' + rIdentifier.source + ')');
+  var re = new RegExp('(' + identifier.source + ')');
   var CaptureScope = Liquid.Types.CaptureScope;
 
 
@@ -2286,7 +2326,7 @@ function Capture (liquid, Liquid) {
       stream.start();
     },
     render: function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(scope, hash) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(scope, hash$$1) {
         var html, ctx;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -2297,7 +2337,7 @@ function Capture (liquid, Liquid) {
 
               case 2:
                 html = _context.sent;
-                ctx = Object.create(CaptureScope);
+                ctx = create(CaptureScope);
 
                 ctx[this.variable] = html;
                 scope.push(ctx);
@@ -2379,8 +2419,7 @@ function Comment (liquid) {
 var staticFileRE = /[^\s,]+/;
 
 function Include (liquid, Liquid) {
-  var lexical = Liquid.lexical;
-  var withRE = new RegExp('with\\s+(' + lexical.value.source + ')');
+  var withRE = new RegExp('with\\s+(' + value.source + ')');
 
   liquid.registerTag('include', {
     parse: function parse(token) {
@@ -2389,7 +2428,7 @@ function Include (liquid, Liquid) {
         this.staticValue = match[0];
       }
 
-      match = lexical.value.exec(token.args);
+      match = value.exec(token.args);
       if (match) {
         this.value = match[0];
       }
@@ -2400,7 +2439,7 @@ function Include (liquid, Liquid) {
       }
     },
     render: function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(scope, hash) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(scope, hash$$1) {
         var filepath, template, originBlocks, originBlockMode, templates, html;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -2413,7 +2452,7 @@ function Include (liquid, Liquid) {
                   break;
                 }
 
-                if (!lexical.quotedLine.exec(this.value)) {
+                if (!quotedLine.exec(this.value)) {
                   _context.next = 9;
                   break;
                 }
@@ -2447,7 +2486,7 @@ function Include (liquid, Liquid) {
                 scope.opts.blocks = {};
                 scope.opts.blockMode = 'output';
                 if (this.with) {
-                  hash[filepath] = Liquid.evalValue(this.with, scope);
+                  hash$$1[filepath] = Liquid.evalValue(this.with, scope);
                 }
                 _context.next = 21;
                 return liquid.getTemplate(filepath, scope.opts.root);
@@ -2455,14 +2494,14 @@ function Include (liquid, Liquid) {
               case 21:
                 templates = _context.sent;
 
-                scope.push(hash);
+                scope.push(hash$$1);
                 _context.next = 25;
                 return liquid.renderer.renderTemplates(templates, scope);
 
               case 25:
                 html = _context.sent;
 
-                scope.pop(hash);
+                scope.pop(hash$$1);
                 scope.opts.blocks = originBlocks;
                 scope.opts.blockMode = originBlockMode;
                 return _context.abrupt('return', html);
@@ -2485,7 +2524,6 @@ function Include (liquid, Liquid) {
 }
 
 function Decrement (liquid, Liquid) {
-  var lexical = Liquid.lexical;
   var _Liquid$Types = Liquid.Types,
       CaptureScope = _Liquid$Types.CaptureScope,
       AssignScope = _Liquid$Types.AssignScope,
@@ -2494,16 +2532,17 @@ function Decrement (liquid, Liquid) {
 
   liquid.registerTag('decrement', {
     parse: function parse(token) {
-      var match = token.args.match(lexical.identifier);
+      var match = token.args.match(identifier);
       assert(match, 'illegal identifier ' + token.args);
       this.variable = match[0];
     },
-    render: function render(scope, hash) {
+    render: function render(scope, hash$$1) {
       var context = scope.findContextFor(this.variable, function (ctx) {
-        return Object.getPrototypeOf(ctx) !== CaptureScope && Object.getPrototypeOf(ctx) !== AssignScope;
+        var proto = Object.getPrototypeOf(ctx);
+        return proto !== CaptureScope && proto !== AssignScope;
       });
       if (!context) {
-        context = Object.create(DecrementScope);
+        context = create(DecrementScope);
         scope.unshift(context);
       }
       if (typeof context[this.variable] !== 'number') {
@@ -2515,9 +2554,8 @@ function Decrement (liquid, Liquid) {
 }
 
 function Cycle (liquid, Liquid) {
-  var rValue = Liquid.lexical.value;
-  var groupRE = new RegExp('^(?:(' + rValue.source + ')\\s*:\\s*)?(.*)$');
-  var candidatesRE = new RegExp(rValue.source, 'g');
+  var groupRE = new RegExp('^(?:(' + value.source + ')\\s*:\\s*)?(.*)$');
+  var candidatesRE = new RegExp(value.source, 'g');
 
   liquid.registerTag('cycle', {
 
@@ -2536,7 +2574,7 @@ function Cycle (liquid, Liquid) {
       assert(this.candidates.length, 'empty candidates: ' + tagToken.raw);
     },
 
-    render: function render(scope, hash) {
+    render: function render(scope, hash$$1) {
       var group = Liquid.evalValue(this.group, scope);
       var fingerprint = 'cycle:' + group + ':' + this.candidates.join(',');
 
@@ -2624,7 +2662,6 @@ function If (liquid, Liquid) {
 }
 
 function Increment (liquid, Liquid) {
-  var lexical = Liquid.lexical;
   var _Liquid$Types = Liquid.Types,
       CaptureScope = _Liquid$Types.CaptureScope,
       AssignScope = _Liquid$Types.AssignScope,
@@ -2633,16 +2670,17 @@ function Increment (liquid, Liquid) {
 
   liquid.registerTag('increment', {
     parse: function parse(token) {
-      var match = token.args.match(lexical.identifier);
+      var match = token.args.match(identifier);
       assert(match, 'illegal identifier ' + token.args);
       this.variable = match[0];
     },
-    render: function render(scope, hash) {
+    render: function render(scope, hash$$1) {
       var context = scope.findContextFor(this.variable, function (ctx) {
-        return Object.getPrototypeOf(ctx) !== CaptureScope && Object.getPrototypeOf(ctx) !== AssignScope;
+        var proto = Object.getPrototypeOf(ctx);
+        return proto !== CaptureScope && proto !== AssignScope;
       });
       if (!context) {
-        context = Object.create(IncrementScope);
+        context = create(IncrementScope);
         scope.unshift(context);
       }
       if (typeof context[this.variable] !== 'number') {
@@ -2662,7 +2700,6 @@ function Increment (liquid, Liquid) {
  */
 
 function Layout (liquid, Liquid) {
-  var rValue = Liquid.lexical.value;
   var staticFileRE = /\S+/;
 
   liquid.registerTag('layout', {
@@ -2672,7 +2709,7 @@ function Layout (liquid, Liquid) {
         this.staticLayout = match[0];
       }
 
-      match = rValue.exec(token.args);
+      match = value.exec(token.args);
       if (match) {
         this.layout = match[0];
       }
@@ -2680,7 +2717,7 @@ function Layout (liquid, Liquid) {
       this.tpls = liquid.parser.parse(remainTokens);
     },
     render: function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(scope, hash) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(scope, hash$$1) {
         var layout, html, templates, partial;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -2707,7 +2744,7 @@ function Layout (liquid, Liquid) {
               case 9:
                 templates = _context.sent;
 
-                scope.push(hash);
+                scope.push(hash$$1);
                 scope.opts.blockMode = 'output';
                 _context.next = 14;
                 return liquid.renderer.renderTemplates(templates, scope);
@@ -2715,7 +2752,7 @@ function Layout (liquid, Liquid) {
               case 14:
                 partial = _context.sent;
 
-                scope.pop(hash);
+                scope.pop(hash$$1);
                 return _context.abrupt('return', partial);
 
               case 17:
@@ -2831,8 +2868,7 @@ function Raw (liquid) {
 }
 
 function Tablerow (liquid, Liquid) {
-  var lexical = Liquid.lexical;
-  var re = new RegExp('^(' + lexical.identifier.source + ')\\s+in\\s+' + ('(' + lexical.value.source + ')') + ('(?:\\s+' + lexical.hash.source + ')*$'));
+  var re = new RegExp('^(' + identifier.source + ')\\s+in\\s+' + ('(' + value.source + ')') + ('(?:\\s+' + hash.source + ')*$'));
 
   liquid.registerTag('tablerow', {
 
@@ -2861,7 +2897,7 @@ function Tablerow (liquid, Liquid) {
     },
 
     render: function () {
-      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(scope, hash) {
+      var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(scope, hash$$1) {
         var _this2 = this;
 
         var collection, offset, limit, cols, contexts, row, html;
@@ -2870,12 +2906,12 @@ function Tablerow (liquid, Liquid) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 collection = Liquid.evalExp(this.collection, scope) || [];
-                offset = hash.offset || 0;
-                limit = hash.limit === undefined ? collection.length : hash.limit;
+                offset = hash$$1.offset || 0;
+                limit = hash$$1.limit === undefined ? collection.length : hash$$1.limit;
 
 
                 collection = collection.slice(offset, offset + limit);
-                cols = hash.cols || collection.length;
+                cols = hash$$1.cols || collection.length;
                 contexts = collection.map(function (item, i) {
                   var ctx = {};
                   ctx[_this2.variable] = item;
@@ -2998,17 +3034,22 @@ function tags (engine, Liquid) {
 }
 
 var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-var monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-var dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var monthNamesShort = monthNames.map(abbr);
+var dayNamesShort = dayNames.map(abbr);
 var suffixes = {
   1: 'st',
   2: 'nd',
   3: 'rd',
   'default': 'th'
+};
 
-  // prototype extensions
-};var _date = {
+function abbr(str) {
+  return str.slice(0, 3);
+}
+
+// prototype extensions
+var _date = {
   daysInMonth: function daysInMonth(d) {
     var feb = _date.isLeapYear(d) ? 29 : 28;
     return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -3396,14 +3437,14 @@ function registerAll(liquid) {
 registerAll.filters = filters;
 
 var _engine = {
-  init: function init(tag, filter$$1, options) {
+  init: function init(tag, filter, options) {
     if (options.cache) {
       this.cache = {};
     }
     this.options = options;
     this.tag = tag;
-    this.filter = filter$$1;
-    this.parser = Parser(tag, filter$$1);
+    this.filter = filter;
+    this.parser = Parser(tag, filter);
     this.renderer = Render();
 
     tags(this, Liquid);
@@ -3481,8 +3522,8 @@ var _engine = {
     var tpl = this.parser.parseValue(str.trim());
     return this.renderer.evalValue(tpl, scope);
   },
-  registerFilter: function registerFilter(name, filter$$1) {
-    return this.filter.register(name, filter$$1);
+  registerFilter: function registerFilter(name, filter) {
+    return this.filter.register(name, filter);
   },
   registerTag: function registerTag(name, tag) {
     return this.tag.register(name, tag);
@@ -3638,7 +3679,7 @@ var _engine = {
   }(),
   respectCache: function () {
     var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(key, getter) {
-      var cacheEnabled, value$$1;
+      var cacheEnabled, value;
       return regeneratorRuntime.wrap(function _callee8$(_context8) {
         while (1) {
           switch (_context8.prev = _context8.next) {
@@ -3657,12 +3698,12 @@ var _engine = {
               return getter();
 
             case 5:
-              value$$1 = _context8.sent;
+              value = _context8.sent;
 
               if (cacheEnabled) {
-                this.cache[key] = value$$1;
+                this.cache[key] = value;
               }
-              return _context8.abrupt('return', value$$1);
+              return _context8.abrupt('return', value);
 
             case 8:
             case 'end':
@@ -3691,9 +3732,9 @@ var _engine = {
   }
 };
 
-function normalizeStringArray(value$$1) {
-  if (Array.isArray(value$$1)) return value$$1;
-  if (isString(value$$1)) return [value$$1];
+function normalizeStringArray(value) {
+  if (Array.isArray(value)) return value;
+  if (isString(value)) return [value];
   return [];
 }
 
@@ -3713,7 +3754,7 @@ function Liquid(options) {
   }, options);
   options.root = normalizeStringArray(options.root);
 
-  var engine = Object.create(_engine);
+  var engine = create(_engine);
   engine.init(Tag(), Filter(options), options);
   return engine;
 }
@@ -3727,12 +3768,11 @@ Liquid.Types = {
   TokenizationError: TokenizationError,
   RenderBreakError: RenderBreakError,
   AssertionError: AssertionError,
-  AssignScope: Object.create(null),
-  CaptureScope: Object.create(null),
-  IncrementScope: Object.create(null),
-  DecrementScope: Object.create(null)
+  AssignScope: {},
+  CaptureScope: {},
+  IncrementScope: {},
+  DecrementScope: {}
 };
-Liquid.lexical = lexical;
 
 module.exports = Liquid;
 //# sourceMappingURL=liquid.common.js.map

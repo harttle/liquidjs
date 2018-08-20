@@ -35,6 +35,10 @@ export function stringify (value) {
   })
 }
 
+export function create (proto) {
+  return Object.create(proto)
+}
+
 export function isNil (value) {
   return value === null || value === undefined
 }
@@ -45,7 +49,7 @@ export function isArray (value) {
 }
 
 export function isError (value) {
-  const signature = Object.prototype.toString.call(value)
+  const signature = toStr.call(value)
   // [object XXXError]
   return signature.substr(-6, 5) === 'Error' ||
         (typeof value.message === 'string' && typeof value.name === 'string')

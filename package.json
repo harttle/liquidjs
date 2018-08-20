@@ -4,8 +4,9 @@
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "dist/liquid.common.js",
   "module": "src/index.js",
+  "browser": "dist/liquid.js",
   "scripts": {
-    "lint": "eslint src/ test/",
+    "lint": "eslint src/ test/ *.js",
     "test": "mocha --require babel-core/register --recursive",
     "coverage": "nyc report --require babel-core/register mocha test/ --recursive ",
     "coveralls": "nyc report --reporter=text-lcov --require babel-core/register mocha test/ --recursive | coveralls",

@@ -1,8 +1,9 @@
 import assert from '../util/assert.js'
+import {create} from '../util/underscore.js'
+import {identifier} from '../lexical.js'
 
 export default function (liquid, Liquid) {
-  const rIdentifier = Liquid.lexical.identifier
-  const re = new RegExp(`(${rIdentifier.source})`)
+  const re = new RegExp(`(${identifier.source})`)
   const {CaptureScope} = Liquid.Types
 
   liquid.registerTag('capture', {
@@ -23,7 +24,7 @@ export default function (liquid, Liquid) {
     },
     render: async function (scope, hash) {
       const html = await liquid.renderer.renderTemplates(this.templates, scope)
-      const ctx = Object.create(CaptureScope)
+      const ctx = create(CaptureScope)
       ctx[this.variable] = html
       scope.push(ctx)
     }

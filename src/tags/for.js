@@ -1,15 +1,15 @@
 import {mapSeries} from '../util/promise.js'
 import {isString, isObject} from '../util/underscore.js'
 import assert from '../util/assert.js'
+import {identifier, value, hash} from '../lexical.js'
 
 export default function (liquid, Liquid) {
   const RenderBreakError = Liquid.Types.RenderBreakError
-  const lexical = Liquid.lexical
-  const re = new RegExp(`^(${lexical.identifier.source})\\s+in\\s+` +
-      `(${lexical.value.source})` +
-      `(?:\\s+${lexical.hash.source})*` +
+  const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
+      `(${value.source})` +
+      `(?:\\s+${hash.source})*` +
       `(?:\\s+(reversed))?` +
-      `(?:\\s+${lexical.hash.source})*$`)
+      `(?:\\s+${hash.source})*$`)
 
   liquid.registerTag('for', {parse, render})
 

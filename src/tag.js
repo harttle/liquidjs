@@ -1,4 +1,5 @@
 import {hashCapture} from './lexical.js'
+import {create} from './util/underscore.js'
 import {evalValue} from './syntax.js'
 import assert from './util/assert.js'
 
@@ -33,7 +34,7 @@ export default function () {
 
       const tagImpl = tagImpls[this.name]
       assert(tagImpl, `tag ${this.name} not found`)
-      this.tagImpl = Object.create(tagImpl)
+      this.tagImpl = create(tagImpl)
       if (this.tagImpl.parse) {
         this.tagImpl.parse(token, tokens)
       }
@@ -45,7 +46,7 @@ export default function () {
   }
 
   function construct (token, tokens) {
-    const instance = Object.create(_tagInstance)
+    const instance = create(_tagInstance)
     instance.parse(token, tokens)
     return instance
   }

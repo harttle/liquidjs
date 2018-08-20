@@ -1,8 +1,9 @@
 import assert from '../util/assert.js'
+import {identifier} from '../lexical.js'
+import {create} from '../util/underscore.js'
 
 export default function (liquid, Liquid) {
-  const rIdentifier = Liquid.lexical.identifier
-  const re = new RegExp(`(${rIdentifier.source})\\s*=(.*)`)
+  const re = new RegExp(`(${identifier.source})\\s*=(.*)`)
   const {AssignScope} = Liquid.Types
 
   liquid.registerTag('assign', {
@@ -13,7 +14,7 @@ export default function (liquid, Liquid) {
       this.value = match[2]
     },
     render: function (scope) {
-      const ctx = Object.create(AssignScope)
+      const ctx = create(AssignScope)
       ctx[this.key] = liquid.evalValue(this.value, scope)
       scope.push(ctx)
       return Promise.resolve('')

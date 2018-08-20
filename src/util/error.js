@@ -24,7 +24,7 @@ function initLiquidError (err, token) {
 export function TokenizationError (message, token) {
   initLiquidError.call(this, {message: message}, token)
 }
-TokenizationError.prototype = Object.create(Error.prototype)
+TokenizationError.prototype = _.create(Error.prototype)
 TokenizationError.prototype.constructor = TokenizationError
 
 export function ParseError (e, token) {
@@ -33,7 +33,7 @@ export function ParseError (e, token) {
 
   initLiquidError.call(this, e, token)
 }
-ParseError.prototype = Object.create(Error.prototype)
+ParseError.prototype = _.create(Error.prototype)
 ParseError.prototype.constructor = ParseError
 
 export function RenderError (e, tpl) {
@@ -46,21 +46,21 @@ export function RenderError (e, tpl) {
 
   initLiquidError.call(this, e, tpl.token)
 }
-RenderError.prototype = Object.create(Error.prototype)
+RenderError.prototype = _.create(Error.prototype)
 RenderError.prototype.constructor = RenderError
 
 export function RenderBreakError (message) {
   initError.call(this)
   this.message = message + ''
 }
-RenderBreakError.prototype = Object.create(Error.prototype)
+RenderBreakError.prototype = _.create(Error.prototype)
 RenderBreakError.prototype.constructor = RenderBreakError
 
 export function AssertionError (message) {
   initError.call(this)
   this.message = message + ''
 }
-AssertionError.prototype = Object.create(Error.prototype)
+AssertionError.prototype = _.create(Error.prototype)
 AssertionError.prototype.constructor = AssertionError
 
 function mkContext (input, line) {

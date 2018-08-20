@@ -2,19 +2,20 @@ const monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
   'September', 'October', 'November', 'December'
 ]
-const monthNamesShort = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
-  'Nov', 'Dec'
-]
 const dayNames = [
   'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 ]
-const dayNamesShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const monthNamesShort = monthNames.map(abbr)
+const dayNamesShort = dayNames.map(abbr)
 const suffixes = {
   1: 'st',
   2: 'nd',
   3: 'rd',
   'default': 'th'
+}
+
+function abbr (str) {
+  return str.slice(0, 3)
 }
 
 // prototype extensions

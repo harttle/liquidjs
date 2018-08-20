@@ -7,7 +7,6 @@ import * as tokenizer from './tokenizer.js'
 import {statFileAsync, readFileAsync} from './util/fs.js'
 import path from 'path'
 import {valid as isValidUrl, extname, resolve} from './util/url.js'
-import * as lexical from './lexical.js'
 import Render from './render.js'
 import Tag from './tag.js'
 import Filter from './filter.js'
@@ -151,7 +150,7 @@ export default function Liquid (options) {
   }, options)
   options.root = normalizeStringArray(options.root)
 
-  const engine = Object.create(_engine)
+  const engine = _.create(_engine)
   engine.init(Tag(), Filter(options), options)
   return engine
 }
@@ -165,9 +164,8 @@ Liquid.Types = {
   TokenizationError,
   RenderBreakError,
   AssertionError,
-  AssignScope: Object.create(null),
-  CaptureScope: Object.create(null),
-  IncrementScope: Object.create(null),
-  DecrementScope: Object.create(null)
+  AssignScope: {},
+  CaptureScope: {},
+  IncrementScope: {},
+  DecrementScope: {}
 }
-Liquid.lexical = lexical

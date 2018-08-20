@@ -1,12 +1,13 @@
 import assert from '../util/assert.js'
+import {create} from '../util/underscore.js'
+import {identifier} from '../lexical.js'
 
 export default function (liquid, Liquid) {
-  const lexical = Liquid.lexical
   const {CaptureScope, AssignScope, IncrementScope} = Liquid.Types
 
   liquid.registerTag('increment', {
     parse: function (token) {
-      const match = token.args.match(lexical.identifier)
+      const match = token.args.match(identifier)
       assert(match, `illegal identifier ${token.args}`)
       this.variable = match[0]
     },
@@ -14,12 +15,12 @@ export default function (liquid, Liquid) {
       let context = scope.findContextFor(
         this.variable,
         ctx => {
-          return Object.getPrototypeOf(ctx) !== CaptureScope &&
-          Object.getPrototypeOf(ctx) !== AssignScope
+          const proto = Object.getPrototypeOf(ctx)
+          return proto !== CaptureScope && proto !== AssignScope
         }
       )
       if (!context) {
-        context = Object.create(IncrementScope)
+        context = create(IncrementScope)
         scope.unshift(context)
       }
       if (typeof context[this.variable] !== 'number') {
