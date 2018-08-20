@@ -1,18 +1,19 @@
-const chai = require('chai')
+import chai from 'chai'
+import assert from '../../src/util/assert.js'
+
 const expect = chai.expect
-const assert = require('../../src/util/assert.js')
 
 describe('assert', function () {
   it('should not throw if predicate is truthy', function () {
-    let fn = () => assert('foo', 'bar')
+    const fn = () => assert('foo', 'bar')
     expect(fn).to.not.throw()
   })
   it('should not throw if predicate is truthy', function () {
-    let fn = () => assert('', 'bar')
+    const fn = () => assert('', 'bar')
     expect(fn).to.throw(/bar/)
   })
   it('should populate default message', function () {
-    let fn = () => assert(false)
+    const fn = () => assert(false)
     expect(fn).to.throw(/expect false to be true/)
   })
 })

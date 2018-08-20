@@ -95,7 +95,7 @@ describe('tags/include', function () {
       '/card.html': '<p>{{person.firstName}} {{person.lastName}}<br/>{% include "address" %}</p>',
       '/address.html': 'City: {{person.address.city}}'
     })
-    let ctx = {
+    const ctx = {
       person: {
         firstName: 'Joe',
         lastName: 'Shmoe',
@@ -114,7 +114,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include child.html color:"red" %}Y',
         '/child.html': 'child with {{color}}'
       })
-      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      const staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('Xchild with redY')
     })
@@ -124,7 +124,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include bar/./../foo/child.html %}Y',
         '/foo/child.html': 'child'
       })
-      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      const staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('XchildY')
     })
@@ -134,7 +134,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include foo/child.html %}Y',
         '/foo/child.html': 'child'
       })
-      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      const staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('XchildY')
     })
@@ -144,7 +144,7 @@ describe('tags/include', function () {
         '/parent.html': 'X{% include child.html, color:"red" %}Y',
         '/child.html': 'child with {{color}}'
       })
-      let staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
+      const staticLiquid = new Liquid({dynamicPartials: false, root: '/'})
       return expect(staticLiquid.renderFile('parent.html')).to
         .eventually.equal('Xchild with redY')
     })

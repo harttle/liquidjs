@@ -1,10 +1,11 @@
 import chai from 'chai'
+import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
 import {RenderError, RenderBreakError} from '../../src/util/error.js'
-import _ from '../../src/util/underscore.js'
+import * as _ from '../../src/util/underscore.js'
 
 const expect = chai.expect
-chai.use(require('sinon-chai'))
+chai.use(sinonChai)
 
 describe('util/underscore', function () {
   describe('.isError()', function () {
@@ -12,7 +13,7 @@ describe('util/underscore', function () {
       expect(_.isError(new Error())).to.be.true
     })
     it('should return true for RenderError', function () {
-      let tpl = {
+      const tpl = {
         token: {
           input: 'xx'
         }
@@ -53,21 +54,21 @@ describe('util/underscore', function () {
   })
   describe('.forOwn()', function () {
     it('should iterate all properties', function () {
-      let spy = sinon.spy()
-      let obj = {
+      const spy = sinon.spy()
+      const obj = {
         foo: 'bar'
       }
       _.forOwn(obj, spy)
       expect(spy).to.have.been.calledWith('bar', 'foo', obj)
     })
     it('should default to empty object', function () {
-      let spy = sinon.spy()
+      const spy = sinon.spy()
       _.forOwn(undefined, spy)
       expect(spy).to.have.not.been.called
     })
     it('should not iterate over properties on prototype', function () {
-      let spy = sinon.spy()
-      let obj = Object.create({
+      const spy = sinon.spy()
+      const obj = Object.create({
         bar: 'foo'
       })
       obj.foo = 'bar'
@@ -76,7 +77,7 @@ describe('util/underscore', function () {
       expect(spy).to.have.been.calledWith('bar', 'foo', obj)
     })
     it('should break when returned false', function () {
-      let spy = sinon.stub().returns(false)
+      const spy = sinon.stub().returns(false)
       _.forOwn({
         'foo': 'foo',
         'bar': 'foo'
@@ -101,11 +102,11 @@ describe('util/underscore', function () {
       })
     })
     it('should assign 2 objects', function () {
-      let src = {
+      const src = {
         foo: 'foo',
         bar: 'bar'
       }
-      let dst = {
+      const dst = {
         foo: 'bar',
         kaa: 'kaa'
       }

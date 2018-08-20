@@ -1,15 +1,17 @@
-const chai = require('chai')
+import chai from 'chai'
+import sinonChai from 'sinon-chai'
+import Filter from '../src/filter.js'
+import Tag from '../src/tag.js'
+import Template from '../src/parser.js'
+
 const expect = chai.expect
-
-chai.use(require('sinon-chai'))
-
-let filter = require('../src/filter.js')()
-let tag = require('../src/tag.js')()
-let Template = require('../src/parser.js')
+const filter = Filter()
+const tag = Tag()
+chai.use(sinonChai)
 
 describe('template', function () {
   let template
-  let add = (l, r) => l + r
+  const add = (l, r) => l + r
 
   beforeEach(function () {
     filter.clear()
@@ -26,21 +28,21 @@ describe('template', function () {
   })
 
   it('should parse value string', function () {
-    let tpl = template.parseValue('foo')
+    const tpl = template.parseValue('foo')
     expect(tpl.type).to.equal('value')
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters).to.deep.equal([])
   })
 
   it('should parse value string with a simple filter', function () {
-    let tpl = template.parseValue('foo | add: 3, "foo"')
+    const tpl = template.parseValue('foo | add: 3, "foo"')
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters.length).to.equal(1)
     expect(tpl.filters[0].filter).to.equal(add)
   })
 
   it('should parse value string with filters', function () {
-    let tpl = template.parseValue('foo | add: "|" | add')
+    const tpl = template.parseValue('foo | add: "|" | add')
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters.length).to.equal(2)
   })

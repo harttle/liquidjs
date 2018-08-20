@@ -1,8 +1,10 @@
-const chai = require('chai')
+import chai from 'chai'
+import mock from 'mock-fs'
+import Liquid from '../../src'
+import chaiAsPromised from 'chai-as-promised'
+
 const expect = chai.expect
-const mock = require('mock-fs')
-const Liquid = require('../../src')
-chai.use(require('chai-as-promised'))
+chai.use(chaiAsPromised)
 
 describe('cache options', function () {
   let engine

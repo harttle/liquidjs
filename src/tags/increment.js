@@ -1,12 +1,12 @@
-const Liquid = require('../index')
-const assert = require('../util/assert.js')
-const lexical = Liquid.lexical
-const types = require('../scope').types
+import assert from '../util/assert.js'
 
-module.exports = function (liquid) {
+export default function (liquid, Liquid) {
+  const lexical = Liquid.lexical
+  const {CaptureScope, AssignScope, IncrementScope} = Liquid.Types
+
   liquid.registerTag('increment', {
     parse: function (token) {
-      let match = token.args.match(lexical.identifier)
+      const match = token.args.match(lexical.identifier)
       assert(match, `illegal identifier ${token.args}`)
       this.variable = match[0]
     },
@@ -14,18 +14,18 @@ module.exports = function (liquid) {
       let context = scope.findContextFor(
         this.variable,
         ctx => {
-          return Object.getPrototypeOf(ctx) !== types.CaptureScope &&
-          Object.getPrototypeOf(ctx) !== types.AssignScope
+          return Object.getPrototypeOf(ctx) !== CaptureScope &&
+          Object.getPrototypeOf(ctx) !== AssignScope
         }
       )
       if (!context) {
-        context = Object.create(types.IncrementScope)
+        context = Object.create(IncrementScope)
         scope.unshift(context)
       }
       if (typeof context[this.variable] !== 'number') {
         context[this.variable] = 0
       }
-      let val = context[this.variable]
+      const val = context[this.variable]
       context[this.variable]++
       return val
     }

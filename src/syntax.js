@@ -1,26 +1,28 @@
-const operators = require('./operators.js')(isTruthy)
-const lexical = require('./lexical.js')
-const assert = require('./util/assert.js')
+import Operators from './operators.js'
+import * as lexical from './lexical.js'
+import assert from './util/assert.js'
 
-function evalExp (exp, scope) {
+const operators = Operators(isTruthy)
+
+export function evalExp (exp, scope) {
   assert(scope, 'unable to evalExp: scope undefined')
-  let operatorREs = lexical.operators
+  const operatorREs = lexical.operators
   let match
   for (let i = 0; i < operatorREs.length; i++) {
-    let operatorRE = operatorREs[i]
-    let expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`)
+    const operatorRE = operatorREs[i]
+    const expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`)
     if ((match = exp.match(expRE))) {
-      let l = evalExp(match[1], scope)
-      let op = operators[match[2].trim()]
-      let r = evalExp(match[3], scope)
+      const l = evalExp(match[1], scope)
+      const op = operators[match[2].trim()]
+      const r = evalExp(match[3], scope)
       return op(l, r)
     }
   }
 
   if ((match = exp.match(lexical.rangeLine))) {
-    let low = evalValue(match[1], scope)
-    let high = evalValue(match[2], scope)
-    let range = []
+    const low = evalValue(match[1], scope)
+    const high = evalValue(match[2], scope)
+    const range = []
     for (let j = low; j <= high; j++) {
       range.push(j)
     }
@@ -30,7 +32,7 @@ function evalExp (exp, scope) {
   return evalValue(exp, scope)
 }
 
-function evalValue (str, scope) {
+export function evalValue (str, scope) {
   str = str && str.trim()
   if (!str) return undefined
 
@@ -43,14 +45,10 @@ function evalValue (str, scope) {
   throw new TypeError(`cannot eval '${str}' as value`)
 }
 
-function isTruthy (val) {
+export function isTruthy (val) {
   return !isFalsy(val)
 }
 
-function isFalsy (val) {
+export function isFalsy (val) {
   return val === false || undefined === val || val === null
-}
-
-module.exports = {
-  evalExp, evalValue, isTruthy, isFalsy
 }

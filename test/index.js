@@ -1,8 +1,10 @@
-const chai = require('chai')
+import chai from 'chai'
+import mock from 'mock-fs'
+import Liquid from '../src'
+import chaiAsPromised from 'chai-as-promised'
+
 const expect = chai.expect
-const Liquid = require('../src')
-const mock = require('mock-fs')
-chai.use(require('chai-as-promised'))
+chai.use(chaiAsPromised)
 
 describe('liquid', function () {
   let engine, strictEngine, ctx
@@ -37,7 +39,7 @@ describe('liquid', function () {
   })
   describe('Liquid', function () {
     it('should ignore invalid root option', function () {
-      let liquid = Liquid({ root: /regex/ })
+      const liquid = Liquid({ root: /regex/ })
       expect(liquid.options.root).to.deep.equal([])
     })
   })
@@ -68,18 +70,18 @@ describe('liquid', function () {
     }).to.not.throw()
   })
   it('should render template multiple times', function () {
-    let template = engine.parse('{{obj}}')
+    const template = engine.parse('{{obj}}')
     return engine.render(template, ctx)
       .then(result => expect(result).to.equal('{"foo":"bar"}'))
       .then(() => engine.render(template, ctx))
       .then((result) => expect(result).to.equal('{"foo":"bar"}'))
   })
   it('should render filters', function () {
-    let template = engine.parse('<p>{{arr | join: "_"}}</p>')
+    const template = engine.parse('<p>{{arr | join: "_"}}</p>')
     return expect(engine.render(template, ctx)).to.eventually.equal('<p>-2_a</p>')
   })
   it('should render accessive filters', function () {
-    let src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
+    const src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
       '{{ my_array | first }}'
     return expect(engine.parseAndRender(src)).to.eventually.equal('apples')
   })
@@ -89,7 +91,7 @@ describe('liquid', function () {
         .to.eventually.equal('foo')
     })
     it('should find files without extname', function () {
-      let engine = Liquid({root: '/root'})
+      const engine = Liquid({root: '/root'})
       return expect(engine.renderFile('/root/files/bar', ctx))
         .to.eventually.equal('bar')
     })
@@ -106,7 +108,7 @@ describe('liquid', function () {
         .to.eventually.equal('foo')
     })
     it('should default root to cwd', function () {
-      let files = {}
+      const files = {}
       files[process.cwd() + '/foo.html'] = 'FOO'
       mock(files)
 

@@ -1,20 +1,19 @@
-'use strict'
-const Liquid = require('..')
-const lexical = Liquid.lexical
-const re = new RegExp(`(${lexical.identifier.source})`)
-const assert = require('../util/assert.js')
-const types = require('../scope.js').types
+import assert from '../util/assert.js'
 
-module.exports = function (liquid) {
+export default function (liquid, Liquid) {
+  const rIdentifier = Liquid.lexical.identifier
+  const re = new RegExp(`(${rIdentifier.source})`)
+  const {CaptureScope} = Liquid.Types
+
   liquid.registerTag('capture', {
     parse: function (tagToken, remainTokens) {
-      let match = tagToken.args.match(re)
+      const match = tagToken.args.match(re)
       assert(match, `${tagToken.args} not valid identifier`)
 
       this.variable = match[1]
       this.templates = []
 
-      let stream = liquid.parser.parseStream(remainTokens)
+      const stream = liquid.parser.parseStream(remainTokens)
       stream.on('tag:endcapture', token => stream.stop())
         .on('template', tpl => this.templates.push(tpl))
         .on('end', x => {
@@ -22,13 +21,11 @@ module.exports = function (liquid) {
         })
       stream.start()
     },
-    render: function (scope, hash) {
-      return liquid.renderer.renderTemplates(this.templates, scope)
-        .then((html) => {
-          let ctx = Object.create(types.CaptureScope)
-          ctx[this.variable] = html
-          scope.push(ctx)
-        })
+    render: async function (scope, hash) {
+      const html = await liquid.renderer.renderTemplates(this.templates, scope)
+      const ctx = Object.create(CaptureScope)
+      ctx[this.variable] = html
+      scope.push(ctx)
     }
   })
 }

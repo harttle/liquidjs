@@ -4,7 +4,7 @@
  * @param {Array} iteratee returns a new promise.
  * The iteratee is invoked with three arguments: (value, index, iterable).
  */
-function anySeries (iterable, iteratee) {
+export function anySeries (iterable, iteratee) {
   let ret = Promise.reject(new Error('init'))
   iterable.forEach(function (item, idx) {
     ret = ret.catch(e => iteratee(item, idx, iterable))
@@ -18,9 +18,9 @@ function anySeries (iterable, iteratee) {
  * @param {Array} iteratee returns a new promise.
  * The iteratee is invoked with three arguments: (value, index, iterable).
  */
-function mapSeries (iterable, iteratee) {
+export function mapSeries (iterable, iteratee) {
   let ret = Promise.resolve('init')
-  let result = []
+  const result = []
   iterable.forEach(function (item, idx) {
     ret = ret
       .then(() => iteratee(item, idx, iterable))
@@ -28,6 +28,3 @@ function mapSeries (iterable, iteratee) {
   })
   return ret.then(() => result)
 }
-
-exports.anySeries = anySeries
-exports.mapSeries = mapSeries

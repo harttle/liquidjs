@@ -1,21 +1,21 @@
-const chai = require('chai')
-const sinon = require('sinon')
-const sinonChai = require('sinon-chai')
-const expect = chai.expect
+import chai from 'chai'
+import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
+import Filter from '../src/filter.js'
+import {factory as scopeFactory} from '../src/scope.js'
 
 chai.use(sinonChai)
-
-let filter = require('../src/filter.js')()
-let Scope = require('../src/scope.js')
+const expect = chai.expect
+const filter = Filter()
 
 describe('filter', function () {
   let scope
   beforeEach(function () {
     filter.clear()
-    scope = Scope.factory()
+    scope = scopeFactory()
   })
   it('should return default filter when not registered', function () {
-    let result = filter.construct('foo')
+    const result = filter.construct('foo')
     expect(result.name).to.equal('foo')
   })
 
@@ -27,7 +27,7 @@ describe('filter', function () {
 
   it('should parse argument syntax', function () {
     filter.register('foo', x => x)
-    let f = filter.construct('foo: a, "b"')
+    const f = filter.construct('foo: a, "b"')
 
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal(['a', '"b"'])
@@ -49,7 +49,7 @@ describe('filter', function () {
   })
 
   it('should call filter with corrct arguments', function () {
-    let spy = sinon.spy()
+    const spy = sinon.spy()
     filter.register('foo', spy)
     filter.construct('foo: 33').render('foo', scope)
     expect(spy).to.have.been.calledWith('foo', 33)
@@ -57,35 +57,35 @@ describe('filter', function () {
 
   it('should support arguments as named key/values', function () {
     filter.register('foo', x => x)
-    let f = filter.construct('foo: key1: "literal1", key2: value2')
+    const f = filter.construct('foo: key1: "literal1", key2: value2')
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal([ '\'key1\'', '"literal1"', '\'key2\'', 'value2' ])
   })
 
   it('should support arguments as named key/values with inline literals', function () {
     filter.register('foo', x => x)
-    let f = filter.construct('foo: "test0", key1: "literal1", key2: value2')
+    const f = filter.construct('foo: "test0", key1: "literal1", key2: value2')
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal([ '"test0"', '\'key1\'', '"literal1"', '\'key2\'', 'value2' ])
   })
 
   it('should support arguments as named key/values with inline values', function () {
     filter.register('foo', x => x)
-    let f = filter.construct('foo: test0, key1: "literal1", key2: value2')
+    const f = filter.construct('foo: test0, key1: "literal1", key2: value2')
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal([ 'test0', '\'key1\'', '"literal1"', '\'key2\'', 'value2' ])
   })
 
   it('should support argument values named same as keys', function () {
     filter.register('foo', x => x)
-    let f = filter.construct('foo: a: a')
+    const f = filter.construct('foo: a: a')
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal(['\'a\'', 'a'])
   })
 
   it('should support argument literals named same as keys', function () {
     filter.register('foo', x => x)
-    let f = filter.construct('foo: a: "a"')
+    const f = filter.construct('foo: a: "a"')
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal(['\'a\'', '"a"'])
   })

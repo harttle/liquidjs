@@ -1,9 +1,12 @@
-const chai = require('chai')
+import chai from 'chai'
+import request from 'supertest'
+import express from 'express'
+import mock from 'mock-fs'
+import Liquid from '../src'
+import chaiAsPromised from 'chai-as-promised'
+
 const expect = chai.expect
-const mock = require('mock-fs')
-const request = require('supertest')
-const express = require('express')
-const Liquid = require('../src')
+chai.use(chaiAsPromised)
 
 describe('engine#express()', function () {
   let app, engine
@@ -36,11 +39,11 @@ describe('engine#express()', function () {
       .expect(200, done)
   })
   it('should pass error when file not found', function (done) {
-    let view = {
+    const view = {
       root: []
     }
-    let file = '/not-exist.html'
-    let ctx = {}
+    const file = '/not-exist.html'
+    const ctx = {}
     engine.express().call(view, file, ctx, function (err) {
       try {
         expect(err.code).to.equal('ENOENT')
@@ -82,7 +85,7 @@ describe('engine#express()', function () {
       .expect(200, done)
   })
   it('should respect express views (Undefined) when lookup', function (done) {
-    let files = {}
+    const files = {}
     files[process.cwd() + '/views/include.html'] = '{% include file %}'
     files[process.cwd() + '/views/bar.html'] = 'bar'
     mock(files)

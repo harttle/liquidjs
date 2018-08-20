@@ -1,12 +1,10 @@
-import Liquid from '../index'
-
-module.exports = function (liquid) {
+export default function (liquid, Liquid) {
   liquid.registerTag('unless', {
     parse: function (tagToken, remainTokens) {
       this.templates = []
       this.elseTemplates = []
       let p
-      let stream = liquid.parser.parseStream(remainTokens)
+      const stream = liquid.parser.parseStream(remainTokens)
         .on('start', x => {
           p = this.templates
           this.cond = tagToken.args
@@ -22,7 +20,7 @@ module.exports = function (liquid) {
     },
 
     render: function (scope, hash) {
-      let cond = Liquid.evalExp(this.cond, scope)
+      const cond = Liquid.evalExp(this.cond, scope)
       return Liquid.isFalsy(cond)
         ? liquid.renderer.renderTemplates(this.templates, scope)
         : liquid.renderer.renderTemplates(this.elseTemplates, scope)

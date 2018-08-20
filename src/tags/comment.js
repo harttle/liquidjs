@@ -1,7 +1,7 @@
-module.exports = function (liquid) {
+export default function (liquid) {
   liquid.registerTag('comment', {
     parse: function (tagToken, remainTokens) {
-      let stream = liquid.parser.parseStream(remainTokens)
+      const stream = liquid.parser.parseStream(remainTokens)
       stream
         .on('token', token => {
           if (token.name === 'endcomment') stream.stop()

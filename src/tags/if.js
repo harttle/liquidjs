@@ -1,6 +1,4 @@
-import Liquid from '..'
-
-module.exports = function (liquid) {
+export default function (liquid, Liquid) {
   liquid.registerTag('if', {
 
     parse: function (tagToken, remainTokens) {
@@ -8,7 +6,7 @@ module.exports = function (liquid) {
       this.elseTemplates = []
 
       let p
-      let stream = liquid.parser.parseStream(remainTokens)
+      const stream = liquid.parser.parseStream(remainTokens)
         .on('start', () => this.branches.push({
           cond: tagToken.args,
           templates: (p = [])
@@ -30,9 +28,8 @@ module.exports = function (liquid) {
     },
 
     render: function (scope, hash) {
-      for (let i = 0; i < this.branches.length; i++) {
-        let branch = this.branches[i]
-        let cond = Liquid.evalExp(branch.cond, scope)
+      for (const branch of this.branches) {
+        const cond = Liquid.evalExp(branch.cond, scope)
         if (Liquid.isTruthy(cond)) {
           return liquid.renderer.renderTemplates(branch.templates, scope)
         }

@@ -1,4 +1,4 @@
-module.exports = function (isTruthy) {
+export default function (isTruthy) {
   return {
     '==': (l, r) => l === r,
     '!=': (l, r) => l !== r,

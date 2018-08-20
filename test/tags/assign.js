@@ -1,29 +1,30 @@
-'use strict'
-const Liquid = require('../../src')
-const chai = require('chai')
+import Liquid from '../../src'
+import chai from 'chai'
+import sinonChai from 'chai-as-promised'
+
+chai.use(sinonChai)
 const expect = chai.expect
-chai.use(require('chai-as-promised'))
 
 describe('tags/assign', function () {
-  let liquid = Liquid()
+  const liquid = Liquid()
   it('should throw when variable expression illegal', function () {
-    let src = '{% assign / %}'
-    let ctx = {}
+    const src = '{% assign / %}'
+    const ctx = {}
     return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(/illegal/)
   })
   it('should support assign to a string', function () {
-    let src = '{% assign foo="bar" %}{{foo}}'
+    const src = '{% assign foo="bar" %}{{foo}}'
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('bar')
   })
   it('should support assign to a number', function () {
-    let src = '{% assign foo=10086 %}{{foo}}'
+    const src = '{% assign foo=10086 %}{{foo}}'
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('10086')
   })
   it('should shading rather than overwriting', function () {
-    let ctx = {foo: 'foo'}
-    let src = '{% assign foo="FOO" %}{{foo}}'
+    const ctx = {foo: 'foo'}
+    const src = '{% assign foo="FOO" %}{{foo}}'
     return liquid.parseAndRender(src, ctx)
       .then(x => {
         expect(x).to.equal('FOO')
@@ -31,37 +32,37 @@ describe('tags/assign', function () {
       })
   })
   it('should assign as array', function () {
-    let src = '{% assign foo=(1..3) %}{{foo}}'
+    const src = '{% assign foo=(1..3) %}{{foo}}'
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('[1,2,3]')
   })
   it('should assign as filter result', function () {
-    let src = '{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}'
+    const src = '{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}'
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('A')
   })
   it('should assign var-1', function () {
-    let src = '{% assign var-1 = 5 %}{{ var-1 }}'
+    const src = '{% assign var-1 = 5 %}{{ var-1 }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('5')
   })
   it('should assign var-', function () {
-    let src = '{% assign var- = 5 %}{{ var- }}'
+    const src = '{% assign var- = 5 %}{{ var- }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('5')
   })
   it('should assign -var', function () {
-    let src = '{% assign -let = 5 %}{{ -let }}'
+    const src = '{% assign -let = 5 %}{{ -let }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('5')
   })
   it('should assign -5-5', function () {
-    let src = '{% assign -5-5 = 5 %}{{ -5-5 }}'
+    const src = '{% assign -5-5 = 5 %}{{ -5-5 }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('5')
   })
   it('should assign 4-3', function () {
-    let src = '{% assign 4-3 = 5 %}{{ 4-3 }}'
+    const src = '{% assign 4-3 = 5 %}{{ 4-3 }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('5')
   })
   it('should not assign -6', function () {
-    let src = '{% assign -6 = 5 %}{{ -6 }}'
+    const src = '{% assign -6 = 5 %}{{ -6 }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('-6')
   })
 })

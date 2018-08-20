@@ -1,67 +1,62 @@
-const Syntax = require('./syntax.js')
-const mapSeries = require('./util/promise.js').mapSeries
-const RenderBreakError = require('./util/error.js').RenderBreakError
-const _ = require('./util/underscore.js')
-const RenderError = require('./util/error.js').RenderError
-const assert = require('./util/assert.js')
+import {evalExp} from './syntax.js'
+import {RenderBreakError, RenderError} from './util/error.js'
+import {stringify} from './util/underscore.js'
+import assert from './util/assert.js'
 
-let render = {
-
-  renderTemplates: function (templates, scope) {
+const render = {
+  renderTemplates: async function (templates, scope) {
     assert(scope, 'unable to evalTemplates: scope undefined')
 
     let html = ''
-    return mapSeries(templates, (tpl) => {
-      return renderTemplate.call(this, tpl)
-        .then(partial => (html += partial))
-        .catch(e => {
-          if (e instanceof RenderBreakError) {
-            e.resolvedHTML = html
-            throw e
-          }
-          throw new RenderError(e, tpl)
-        })
-    }).then(() => html)
-
-    function renderTemplate (template) {
-      if (template.type === 'tag') {
-        return this.renderTag(template, scope)
-          .then(partial => partial === undefined ? '' : partial)
-      } else if (template.type === 'value') {
-        return this.renderValue(template, scope)
-      } else { // template.type === 'html'
-        return Promise.resolve(template.value)
+    for (const tpl of templates) {
+      try {
+        html += await renderTemplate.call(this, tpl)
+      } catch (e) {
+        if (e instanceof RenderBreakError) {
+          e.resolvedHTML = html
+          throw e
+        }
+        throw new RenderError(e, tpl)
       }
+    }
+    return html
+
+    async function renderTemplate (template) {
+      if (template.type === 'tag') {
+        const partial = await this.renderTag(template, scope)
+        return partial === undefined ? '' : partial
+      }
+      if (template.type === 'value') {
+        return this.renderValue(template, scope)
+      }
+      return template.value
     }
   },
 
-  renderTag: function (template, scope) {
+  renderTag: async function (template, scope) {
     if (template.name === 'continue') {
-      return Promise.reject(new RenderBreakError('continue'))
+      throw new RenderBreakError('continue')
     }
     if (template.name === 'break') {
-      return Promise.reject(new RenderBreakError('break'))
+      throw new RenderBreakError('break')
     }
     return template.render(scope)
   },
 
-  renderValue: function (template, scope) {
-    return Promise.resolve()
-      .then(() => this.evalValue(template, scope))
-      .then(partial => partial === undefined ? '' : _.stringify(partial))
+  renderValue: async function (template, scope) {
+    const partial = this.evalValue(template, scope)
+    return partial === undefined ? '' : stringify(partial)
   },
 
   evalValue: function (template, scope) {
     assert(scope, 'unable to evalValue: scope undefined')
     return template.filters.reduce(
       (prev, filter) => filter.render(prev, scope),
-      Syntax.evalExp(template.initial, scope))
+      evalExp(template.initial, scope))
   }
 }
 
-function factory () {
-  let instance = Object.create(render)
+export default function () {
+  const instance = Object.create(render)
   return instance
 }
-
-module.exports = factory

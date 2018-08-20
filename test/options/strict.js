@@ -6,7 +6,7 @@ chai.use(require('chai-as-promised'))
 
 describe('strict options', function () {
   let engine
-  let ctx = {}
+  const ctx = {}
   beforeEach(function () {
     engine = Liquid({
       root: '/root/',
@@ -18,16 +18,16 @@ describe('strict options', function () {
       .eventually.equal('beforeafter')
   })
   it('should throw when strict_variables true', function () {
-    let tpl = engine.parse('before{{notdefined}}after')
-    let opts = {
+    const tpl = engine.parse('before{{notdefined}}after')
+    const opts = {
       strict_variables: true
     }
     return expect(engine.render(tpl, ctx, opts)).to
       .be.rejectedWith(/undefined variable: notdefined/)
   })
   it('should pass strict_variables to render by parseAndRender', function () {
-    let html = 'before{{notdefined}}after'
-    let opts = {
+    const html = 'before{{notdefined}}after'
+    const opts = {
       strict_variables: true
     }
     return expect(engine.parseAndRender(html, ctx, opts)).to

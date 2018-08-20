@@ -1,6 +1,4 @@
-import Liquid from '..'
-
-module.exports = function (liquid) {
+export default function (liquid, Liquid) {
   liquid.registerTag('case', {
 
     parse: function (tagToken, remainTokens) {
@@ -9,7 +7,7 @@ module.exports = function (liquid) {
       this.elseTemplates = []
 
       let p = []
-      let stream = liquid.parser.parseStream(remainTokens)
+      const stream = liquid.parser.parseStream(remainTokens)
         .on('tag:when', token => {
           this.cases.push({
             val: token.args,
@@ -28,9 +26,9 @@ module.exports = function (liquid) {
 
     render: function (scope, hash) {
       for (let i = 0; i < this.cases.length; i++) {
-        let branch = this.cases[i]
-        let val = Liquid.evalExp(branch.val, scope)
-        let cond = Liquid.evalExp(this.cond, scope)
+        const branch = this.cases[i]
+        const val = Liquid.evalExp(branch.val, scope)
+        const cond = Liquid.evalExp(this.cond, scope)
         if (val === cond) {
           return liquid.renderer.renderTemplates(branch.templates, scope)
         }

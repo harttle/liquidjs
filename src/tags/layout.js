@@ -1,7 +1,4 @@
-const Liquid = require('..')
-const lexical = Liquid.lexical
-const assert = require('../util/assert.js')
-const staticFileRE = /\S+/
+import assert from '../util/assert.js'
 
 /*
  * blockMode:
@@ -9,7 +6,10 @@ const staticFileRE = /\S+/
  * * "output": output rendered html
  */
 
-module.exports = function (liquid) {
+export default function (liquid, Liquid) {
+  const rValue = Liquid.lexical.value
+  const staticFileRE = /\S+/
+
   liquid.registerTag('layout', {
     parse: function (token, remainTokens) {
       let match = staticFileRE.exec(token.args)
@@ -17,45 +17,41 @@ module.exports = function (liquid) {
         this.staticLayout = match[0]
       }
 
-      match = lexical.value.exec(token.args)
+      match = rValue.exec(token.args)
       if (match) {
         this.layout = match[0]
       }
 
       this.tpls = liquid.parser.parse(remainTokens)
     },
-    render: function (scope, hash) {
-      let layout = scope.opts.dynamicPartials ? Liquid.evalValue(this.layout, scope) : this.staticLayout
+    render: async function (scope, hash) {
+      const layout = scope.opts.dynamicPartials
+        ? Liquid.evalValue(this.layout, scope)
+        : this.staticLayout
       assert(layout, `cannot apply layout with empty filename`)
 
       // render the remaining tokens immediately
       scope.opts.blockMode = 'store'
-      return liquid.renderer.renderTemplates(this.tpls, scope)
-        .then(html => {
-          if (scope.opts.blocks[''] === undefined) {
-            scope.opts.blocks[''] = html
-          }
-          return liquid.getTemplate(layout, scope.opts.root)
-        })
-        .then(templates => {
-          scope.push(hash)
-          scope.opts.blockMode = 'output'
-          return liquid.renderer.renderTemplates(templates, scope)
-        })
-        .then(partial => {
-          scope.pop(hash)
-          return partial
-        })
+      const html = await liquid.renderer.renderTemplates(this.tpls, scope)
+      if (scope.opts.blocks[''] === undefined) {
+        scope.opts.blocks[''] = html
+      }
+      const templates = await liquid.getTemplate(layout, scope.opts.root)
+      scope.push(hash)
+      scope.opts.blockMode = 'output'
+      const partial = await liquid.renderer.renderTemplates(templates, scope)
+      scope.pop(hash)
+      return partial
     }
   })
 
   liquid.registerTag('block', {
     parse: function (token, remainTokens) {
-      let match = /\w+/.exec(token.args)
+      const match = /\w+/.exec(token.args)
       this.block = match ? match[0] : ''
 
       this.tpls = []
-      let stream = liquid.parser.parseStream(remainTokens)
+      const stream = liquid.parser.parseStream(remainTokens)
         .on('tag:endblock', () => stream.stop())
         .on('template', tpl => this.tpls.push(tpl))
         .on('end', () => {
@@ -63,20 +59,17 @@ module.exports = function (liquid) {
         })
       stream.start()
     },
-    render: function (scope) {
-      return Promise.resolve(scope.opts.blocks[this.block])
-        .then(html => html === undefined
-          // render default block
-          ? liquid.renderer.renderTemplates(this.tpls, scope)
-          // use child-defined block
-          : html)
-        .then(html => {
-          if (scope.opts.blockMode === 'store') {
-            scope.opts.blocks[this.block] = html
-            return ''
-          }
-          return html
-        })
+    render: async function (scope) {
+      const childDefined = scope.opts.blocks[this.block]
+      const html = childDefined !== undefined
+        ? childDefined
+        : await liquid.renderer.renderTemplates(this.tpls, scope)
+
+      if (scope.opts.blockMode === 'store') {
+        scope.opts.blocks[this.block] = html
+        return ''
+      }
+      return html
     }
   })
 }

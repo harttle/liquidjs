@@ -1,17 +1,17 @@
-const lexical = require('./lexical.js')
-const Syntax = require('./syntax.js')
-const assert = require('./util/assert.js')
-const _ = require('./util/underscore.js')
+import * as lexical from './lexical.js'
+import {evalValue} from './syntax.js'
+import assert from './util/assert.js'
+import {assign} from './util/underscore.js'
 
-let valueRE = new RegExp(`${lexical.value.source}`, 'g')
+const valueRE = new RegExp(`${lexical.value.source}`, 'g')
 
-module.exports = function (options) {
-  options = _.assign({}, options)
+export default function (options) {
+  options = assign({}, options)
   let filters = {}
 
-  let _filterInstance = {
+  const _filterInstance = {
     render: function (output, scope) {
-      let args = this.args.map(arg => Syntax.evalValue(arg, scope))
+      const args = this.args.map(arg => evalValue(arg, scope))
       args.unshift(output)
       return this.filter.apply(null, args)
     },
@@ -19,9 +19,9 @@ module.exports = function (options) {
       let match = lexical.filterLine.exec(str)
       assert(match, 'illegal filter: ' + str)
 
-      let name = match[1]
-      let argList = match[2] || ''
-      let filter = filters[name]
+      const name = match[1]
+      const argList = match[2] || ''
+      const filter = filters[name]
       if (typeof filter !== 'function') {
         if (options.strict_filters) {
           throw new TypeError(`undefined filter: ${name}`)
@@ -32,12 +32,12 @@ module.exports = function (options) {
         return this
       }
 
-      let args = []
+      const args = []
       while ((match = valueRE.exec(argList.trim()))) {
-        let v = match[0]
-        let re = new RegExp(`${v}\\s*:`, 'g')
-        let keyMatch = re.exec(match.input)
-        let currentMatchIsKey = keyMatch && keyMatch.index === match.index
+        const v = match[0]
+        const re = new RegExp(`${v}\\s*:`, 'g')
+        const keyMatch = re.exec(match.input)
+        const currentMatchIsKey = keyMatch && keyMatch.index === match.index
         currentMatchIsKey ? args.push(`'${v}'`) : args.push(v)
       }
 
@@ -50,7 +50,7 @@ module.exports = function (options) {
   }
 
   function construct (str) {
-    let instance = Object.create(_filterInstance)
+    const instance = Object.create(_filterInstance)
     return instance.parse(str)
   }
 

@@ -1,5 +1,5 @@
 import chai from 'chai'
-import Scope from '../src/scope.js'
+import {factory as scopeFactory} from '../src/scope.js'
 
 const expect = chai.expect
 
@@ -14,7 +14,7 @@ describe('scope', function () {
         arr: ['a', 'b']
       }
     }
-    scope = Scope.factory(ctx)
+    scope = scopeFactory(ctx)
   })
 
   describe('#propertyAccessSeq()', function () {
@@ -88,7 +88,7 @@ describe('scope', function () {
     })
 
     it('should respect to to_liquid', function () {
-      let scope = Scope.factory({foo: {
+      const scope = scopeFactory({foo: {
         to_liquid: () => ({bar: 'BAR'}),
         bar: 'bar'
       }})
@@ -96,7 +96,7 @@ describe('scope', function () {
     })
 
     it('should respect to toLiquid', function () {
-      let scope = Scope.factory({foo: {
+      const scope = scopeFactory({foo: {
         toLiquid: () => ({bar: 'BAR'}),
         bar: 'bar'
       }})
@@ -162,7 +162,7 @@ describe('scope', function () {
   describe('strict_variables', function () {
     let scope
     beforeEach(function () {
-      scope = Scope.factory(ctx, {
+      scope = scopeFactory(ctx, {
         strict_variables: true
       })
     })
@@ -227,10 +227,10 @@ describe('scope', function () {
     })
   })
   it('should pop specified scope', function () {
-    let scope1 = {
+    const scope1 = {
       foo: 'foo'
     }
-    let scope2 = {
+    const scope2 = {
       bar: 'bar'
     }
     scope.push(scope1)
@@ -242,7 +242,7 @@ describe('scope', function () {
     expect(scope.get('bar')).to.equal('bar')
   })
   it('should throw when specified scope not found', function () {
-    let scope1 = {
+    const scope1 = {
       foo: 'foo'
     }
     expect(() => scope.pop(scope1)).to.throw('scope not found, cannot pop')

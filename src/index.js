@@ -1,22 +1,24 @@
-import Scope from './scope'
-import _ from './util/underscore.js'
+import 'regenerator-runtime/runtime'
+import * as Scope from './scope'
+import {get as httpGet} from './util/http.js'
+import * as _ from './util/underscore.js'
 import assert from './util/assert.js'
-import tokenizer from './tokenizer.js'
+import * as tokenizer from './tokenizer.js'
 import {statFileAsync, readFileAsync} from './util/fs.js'
 import path from 'path'
 import {valid as isValidUrl, extname, resolve} from './util/url.js'
-import lexical from './lexical.js'
+import * as lexical from './lexical.js'
 import Render from './render.js'
 import Tag from './tag.js'
 import Filter from './filter.js'
 import Parser from './parser'
 import {isTruthy, isFalsy, evalExp, evalValue} from './syntax.js'
-import tags from './tags'
-import filters from './filters'
 import {anySeries} from './util/promise.js'
-import {ParseError, TokenizationEroor, RenderBreakError, AssertionError} from './util/error.js'
+import {ParseError, TokenizationError, RenderBreakError, AssertionError} from './util/error.js'
+import tags from './tags/index.js'
+import filters from './filters.js'
 
-let _engine = {
+const _engine = {
   init: function (tag, filter, options) {
     if (options.cache) {
       this.cache = {}
@@ -27,32 +29,31 @@ let _engine = {
     this.parser = Parser(tag, filter)
     this.renderer = Render()
 
-    tags(this)
-    filters(this)
+    tags(this, Liquid)
+    filters(this, Liquid)
 
     return this
   },
   parse: function (html, filepath) {
-    let tokens = tokenizer.parse(html, filepath, this.options)
+    const tokens = tokenizer.parse(html, filepath, this.options)
     return this.parser.parse(tokens)
   },
   render: function (tpl, ctx, opts) {
     opts = _.assign({}, this.options, opts)
-    let scope = Scope.factory(ctx, opts)
+    const scope = Scope.factory(ctx, opts)
     return this.renderer.renderTemplates(tpl, scope)
   },
-  parseAndRender: function (html, ctx, opts) {
-    return Promise.resolve()
-      .then(() => this.parse(html))
-      .then(tpl => this.render(tpl, ctx, opts))
+  parseAndRender: async function (html, ctx, opts) {
+    const tpl = await this.parse(html)
+    return this.render(tpl, ctx, opts)
   },
-  renderFile: function (filepath, ctx, opts) {
+  renderFile: async function (filepath, ctx, opts) {
     opts = _.assign({}, opts)
-    return this.getTemplate(filepath, opts.root)
-      .then(templates => this.render(templates, ctx, opts))
+    const templates = await this.getTemplate(filepath, opts.root)
+    return this.render(templates, ctx, opts)
   },
   evalValue: function (str, scope) {
-    let tpl = this.parser.parseValue(str.trim())
+    const tpl = this.parser.parseValue(str.trim())
     return this.renderer.evalValue(tpl, scope)
   },
   registerFilter: function (name, filter) {
@@ -64,39 +65,33 @@ let _engine = {
   lookup: function (filepath, root) {
     root = this.options.root.concat(root || [])
     root = _.uniq(root)
-    let paths = root.map(root => path.resolve(root, filepath))
-    return anySeries(paths, path => statFileAsync(path).then(() => path))
-      .catch((e) => {
+    const paths = root.map(root => path.resolve(root, filepath))
+    return anySeries(paths, async path => {
+      try {
+        await statFileAsync(path)
+        return path
+      } catch (e) {
         e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
         throw e
-      })
+      }
+    })
   },
   getTemplate: function (filepath, root) {
     return typeof XMLHttpRequest === 'undefined'
       ? this.getTemplateFromFile(filepath, root)
       : this.getTemplateFromUrl(filepath, root)
   },
-  getTemplateFromFile: function (filepath, root) {
+  getTemplateFromFile: async function (filepath, root) {
     if (!path.extname(filepath)) {
       filepath += this.options.extname
     }
-    return this
-      .lookup(filepath, root)
-      .then(filepath => {
-        if (this.options.cache) {
-          let tpl = this.cache[filepath]
-          if (tpl) {
-            return Promise.resolve(tpl)
-          }
-          return readFileAsync(filepath)
-            .then(str => this.parse(str))
-            .then(tpl => (this.cache[filepath] = tpl))
-        } else {
-          return readFileAsync(filepath).then(str => this.parse(str, filepath))
-        }
-      })
+    filepath = await this.lookup(filepath, root)
+    return this.respectCache(filepath, async () => {
+      const str = await readFileAsync(filepath)
+      return this.parse(str, filepath)
+    })
   },
-  getTemplateFromUrl: function (filepath, root) {
+  getTemplateFromUrl: async function (filepath, root) {
     let fullUrl
     if (isValidUrl(filepath)) {
       fullUrl = filepath
@@ -106,47 +101,41 @@ let _engine = {
       }
       fullUrl = resolve(root || this.options.root, filepath)
     }
-    if (this.options.cache) {
-      let tpl = this.cache[filepath]
-      if (tpl) {
-        return Promise.resolve(tpl)
-      }
+    return this.respectCache(
+      filepath,
+      async () => this.parse(await httpGet(fullUrl))
+    )
+  },
+  respectCache: async function (key, getter) {
+    const cacheEnabled = this.options.cache
+    if (cacheEnabled && this.cache[key]) {
+      return this.cache[key]
     }
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest()
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          let tpl = this.parse(xhr.responseText)
-          if (this.options.cache) {
-            this.cache[filepath] = tpl
-          }
-          resolve(tpl)
-        } else {
-          reject(new Error(xhr.statusText))
-        }
-      }
-      xhr.onerror = () => {
-        reject(new Error('An error occurred whilst sending the response.'))
-      }
-      xhr.open('GET', fullUrl)
-      xhr.send()
-    })
+    const value = await getter()
+    if (cacheEnabled) {
+      this.cache[key] = value
+    }
+    return value
   },
   express: function (opts) {
     opts = opts || {}
-    let self = this
-    return function (filePath, ctx, callback) {
+    const self = this
+    return function (filePath, ctx, cb) {
       assert(Array.isArray(this.root) || _.isString(this.root),
         'illegal views root, are you using express.js?')
       opts.root = this.root
-      self.renderFile(filePath, ctx, opts)
-        .then(html => callback(null, html))
-        .catch(e => callback(e))
+      self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
     }
   }
 }
 
-function factory (options) {
+function normalizeStringArray (value) {
+  if (Array.isArray(value)) return value
+  if (_.isString(value)) return [value]
+  return []
+}
+
+export default function Liquid (options) {
   options = _.assign({
     root: ['.'],
     cache: false,
@@ -162,29 +151,23 @@ function factory (options) {
   }, options)
   options.root = normalizeStringArray(options.root)
 
-  let engine = Object.create(_engine)
+  const engine = Object.create(_engine)
   engine.init(Tag(), Filter(options), options)
   return engine
 }
 
-function normalizeStringArray (value) {
-  if (Array.isArray(value)) return value
-  if (_.isString(value)) return [value]
-  return []
-}
-
-const Types = {
+Liquid.isTruthy = isTruthy
+Liquid.isFalsy = isFalsy
+Liquid.evalExp = evalExp
+Liquid.evalValue = evalValue
+Liquid.Types = {
   ParseError,
-  TokenizationEroor,
+  TokenizationError,
   RenderBreakError,
-  AssertionError
+  AssertionError,
+  AssignScope: Object.create(null),
+  CaptureScope: Object.create(null),
+  IncrementScope: Object.create(null),
+  DecrementScope: Object.create(null)
 }
-
-factory.isTruthy = isTruthy
-factory.isFalsy = isFalsy
-factory.evalExp = evalExp
-factory.evalValue = evalValue
-factory.Types = Types
-factory.lexical = lexical
-
-module.exports = factory
+Liquid.lexical = lexical

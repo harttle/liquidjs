@@ -1,4 +1,4 @@
-import {resolve} from '../../src/util/url.js'
+import {extname, resolve} from '../../src/util/url.js'
 import chai from 'chai'
 
 const expect = chai.expect
@@ -22,23 +22,23 @@ describe('util/url', function () {
   })
   describe('resolve', function () {
     describe('root', function () {
-      it('should support width relative path', function () {
+      it('should support relative root', function () {
         expect(resolve('./views', 'foo'))
           .to.equal('https://example.com/foo/bar/views/foo')
         expect(resolve('./views/', 'foo'))
           .to.equal('https://example.com/foo/bar/views/foo')
       })
-      it('should support width absolute path', function () {
+      it('should support absolute root', function () {
         expect(resolve('/views', 'foo'))
           .to.equal('https://example.com/views/foo')
         expect(resolve('/views/', 'foo'))
           .to.equal('https://example.com/views/foo')
       })
-      it('should support with empty', function () {
+      it('should support empty root', function () {
         expect(resolve('', 'page.html'))
           .to.equal('https://example.com/foo/bar/page.html')
       })
-      it('should support with url', function () {
+      it('should support full url as root', function () {
         expect(resolve('https://example.com/views', 'page.html'))
           .to.equal('https://example.com/views/page.html')
         expect(resolve('https://example.com/views/', 'page.html'))
@@ -51,14 +51,12 @@ describe('util/url', function () {
           .to.equal('https://example.com/views/page.html')
       })
     })
-    describe('path', function () {
-      it('should support width relative path', function () {
-        expect(resolve('./views/', 'page.html'))
-          .to.equal('https://example.com/foo/bar/views/page.html')
+    describe('extname', function () {
+      it('should support relative path', function () {
+        expect(extname('./views/page.html')).to.equal('.html')
       })
-      it('should support with absolute path', function () {
-        expect(resolve('/views/', '/page.html'))
-          .to.equal('https://example.com/page.html')
+      it('should support absolute path', function () {
+        expect(extname('/views/page.xml')).to.equal('.xml')
       })
     })
   })

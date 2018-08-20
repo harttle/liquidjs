@@ -1,16 +1,15 @@
-'use strict'
-const strftime = require('./util/strftime.js')
-const _ = require('./util/underscore.js')
-const isTruthy = require('./syntax.js').isTruthy
+import strftime from './util/strftime.js'
+import * as _ from './util/underscore.js'
+import {isTruthy} from './syntax.js'
 
-let escapeMap = {
+const escapeMap = {
   '&': '&amp;',
   '<': '&lt;',
   '>': '&gt;',
   '"': '&#34;',
   "'": '&#39;'
 }
-let unescapeMap = {
+const unescapeMap = {
   '&amp;': '&',
   '&lt;': '<',
   '&gt;': '>',
@@ -18,7 +17,7 @@ let unescapeMap = {
   '&#39;': "'"
 }
 
-let filters = {
+const filters = {
   'abs': v => Math.abs(v),
   'append': (v, arg) => v + arg,
   'capitalize': str => stringify(str).charAt(0).toUpperCase() + str.slice(1),
@@ -57,7 +56,7 @@ let filters = {
   'replace_first': (v, arg1, arg2) => stringify(v).replace(arg1, arg2),
   'reverse': v => v.reverse(),
   'round': (v, arg) => {
-    let amp = Math.pow(10, arg || 0)
+    const amp = Math.pow(10, arg || 0)
     return Math.round(v * amp, arg) / amp
   },
   'rstrip': str => stringify(str).replace(/\s+$/, ''),
@@ -79,13 +78,13 @@ let filters = {
   },
   'truncatewords': (v, l, o) => {
     if (o === undefined) o = '...'
-    let arr = v.split(' ')
+    const arr = v.split(' ')
     let ret = arr.slice(0, l).join(' ')
     if (arr.length > l) ret += o
     return ret
   },
   'uniq': function (arr) {
-    let u = {}
+    const u = {}
     return (arr || []).filter(val => {
       if (u.hasOwnProperty(val)) {
         return false
@@ -107,7 +106,7 @@ function unescape (str) {
 }
 
 function getFixed (v) {
-  let p = (v + '').split('.')
+  const p = (v + '').split('.')
   return (p.length > 1) ? p[1].length : 0
 }
 
@@ -121,18 +120,17 @@ function stringify (obj) {
 
 function bindFixed (cb) {
   return (l, r) => {
-    let f = getMaxFixed(l, r)
+    const f = getMaxFixed(l, r)
     return cb(l, r).toFixed(f)
   }
-}
-
-function registerAll (liquid) {
-  return _.forOwn(filters, (func, name) => liquid.registerFilter(name, func))
 }
 
 function isValidDate (date) {
   return date instanceof Date && !isNaN(date.getTime())
 }
 
+export default function registerAll (liquid) {
+  return _.forOwn(filters, (func, name) => liquid.registerFilter(name, func))
+}
+
 registerAll.filters = filters
-module.exports = registerAll

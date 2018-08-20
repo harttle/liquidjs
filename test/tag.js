@@ -1,15 +1,17 @@
-const chai = require('chai')
-const sinon = require('sinon')
-const expect = chai.expect
-chai.use(require('sinon-chai'))
+import chai from 'chai'
+import Tag from '../src/tag.js'
+import {factory as scopeFactory} from '../src/scope.js'
+import sinon from 'sinon'
+import sinonChai from 'sinon-chai'
 
-let tag = require('../src/tag.js')()
-let Scope = require('../src/scope.js')
+chai.use(sinonChai)
+const expect = chai.expect
+const tag = Tag()
 
 describe('tag', function () {
   let scope
   before(function () {
-    scope = Scope.factory({
+    scope = scopeFactory({
       foo: 'bar',
       arr: [2, 1],
       bar: {
@@ -37,19 +39,18 @@ describe('tag', function () {
     }).not.throw()
   })
 
-  it('should call tag.render', function () {
-    let spy = sinon.spy()
+  it('should call tag.render', async function () {
+    const spy = sinon.spy()
     tag.register('foo', {
       render: spy
     })
-    return tag
-      .construct({
-        type: 'tag',
-        value: 'foo',
-        name: 'foo'
-      }, [])
-      .render(scope, {})
-      .then(() => expect(spy).to.have.been.called)
+    const token = {
+      type: 'tag',
+      value: 'foo',
+      name: 'foo'
+    }
+    await tag.construct(token, []).render(scope, {})
+    expect(spy).to.have.been.called
   })
 
   describe('hash', function () {
@@ -66,33 +67,33 @@ describe('tag', function () {
         args: 'aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo'
       }
     })
-    it('should call tag.render with scope', function () {
-      return tag.construct(token, []).render(scope, {})
-        .then(() => expect(spy).to.have.been.calledWithMatch(scope))
+    it('should call tag.render with scope', async function () {
+      await tag.construct(token, []).render(scope, {})
+      expect(spy).to.have.been.calledWithMatch(scope)
     })
-    it('should resolve identifier hash', function () {
-      return tag.construct(token, []).render(scope, {})
-        .then(() => expect(spy).to.have.been.calledWithMatch({}, {
-          aa: 'bar'
-        }))
+    it('should resolve identifier hash', async function () {
+      await tag.construct(token, []).render(scope, {})
+      expect(spy).to.have.been.calledWithMatch({}, {
+        aa: 'bar'
+      })
     })
-    it('should accept space between key/value', function () {
-      return tag.construct(token, []).render(scope, {})
-        .then(() => expect(spy).to.have.been.calledWithMatch({}, {
-          bb: 2
-        }))
+    it('should accept space between key/value', async function () {
+      await tag.construct(token, []).render(scope, {})
+      expect(spy).to.have.been.calledWithMatch({}, {
+        bb: 2
+      })
     })
-    it('should resolve number value hash', function () {
-      return tag.construct(token, []).render(scope, {})
-        .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
-          cc: 2.3
-        }))
+    it('should resolve number value hash', async function () {
+      await tag.construct(token, []).render(scope, {})
+      expect(spy).to.have.been.calledWithMatch(scope, {
+        cc: 2.3
+      })
     })
-    it('should resolve property access hash', function () {
-      return tag.construct(token, []).render(scope, {})
-        .then(() => expect(spy).to.have.been.calledWithMatch(scope, {
-          dd: 'uoo'
-        }))
+    it('should resolve property access hash', async function () {
+      await tag.construct(token, []).render(scope, {})
+      expect(spy).to.have.been.calledWithMatch(scope, {
+        dd: 'uoo'
+      })
     })
   })
 })
