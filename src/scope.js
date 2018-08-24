@@ -110,7 +110,7 @@ var Scope = {
             assert(j !== -1, `unbalanced []: ${str}`)
             name = str.slice(i + 1, j)
             if (!lexical.isInteger(name)) { // foo[bar] vs. foo[1]
-              name = this.get(name).toString()
+              name = (this.get(name) ? this.get(name) : '').toString()
             }
             push()
             i = j + 1
