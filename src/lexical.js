@@ -9,7 +9,7 @@ var integer = /-?\d+/
 var number = /-?\d+\.?\d*|\.?\d+/
 var bool = /true|false/
 
-// peoperty access
+// property access
 var identifier = /[\w-]+[?]?/
 var subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`)
 var literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`)
