@@ -7,9 +7,11 @@
   "browser": "dist/liquid.js",
   "scripts": {
     "lint": "eslint src/ test/ *.js",
-    "test": "mocha --require babel-core/register --recursive",
-    "coverage": "nyc report --require babel-core/register mocha test/ --recursive ",
-    "coveralls": "nyc report --reporter=text-lcov --require babel-core/register mocha test/ --recursive | coveralls",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "mocha test/unit",
+    "test:e2e": "mocha test/e2e",
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=html mocha test/unit",
+    "coveralls": "cross-env NODE_ENV=test nyc report --reporter=text-lcov mocha | coveralls",
     "dist": "rollup -c && ls -lh dist",
     "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
     "demo:nodejs": "node ./demo/nodejs/index.js",
@@ -41,11 +43,14 @@
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-istanbul": "^4.1.6",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
+    "babel-runtime": "^6.26.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
+    "cross-env": "^5.2.0",
     "eslint": "^5.2.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.7.0",
@@ -68,5 +73,31 @@
     "sinon": "^6.1.4",
     "sinon-chai": "^3.2.0",
     "supertest": "^3.0.0"
+  },
+  "nyc": {
+    "require": [
+      "babel-core/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
+  "babel": {
+    "presets": ["env"],
+    "plugins": [
+      [
+        "transform-runtime",
+        {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true,
+          "moduleName": "babel-runtime"
+        }
+      ]
+    ],
+    "env": {
+      "test": {
+        "plugins": ["istanbul"]
+      }
+    }
   }
 }

@@ -44,36 +44,6 @@
     };
   };
 
-  var classCallCheck = function (instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  };
-
-  var inherits = function (subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
-    }
-
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-  };
-
-  var possibleConstructorReturn = function (self, call) {
-    if (!self) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
-  };
-
   /**
    * Copyright (c) 2014-present, Facebook, Inc.
    *
@@ -876,7 +846,7 @@
    */
   function isObject(value) {
     var type = typeof value === 'undefined' ? 'undefined' : _typeof(value);
-    return value != null && (type === 'object' || type === 'function');
+    return value !== null && (type === 'object' || type === 'function');
   }
 
   /*
@@ -980,117 +950,66 @@
     throw new TypeError('cannot parse \'' + str + '\' as literal');
   }
 
-  var LiquidError = function (_Error) {
-    inherits(LiquidError, _Error);
-
-    function LiquidError(message) {
-      classCallCheck(this, LiquidError);
-
-      var _this = possibleConstructorReturn(this, (LiquidError.__proto__ || Object.getPrototypeOf(LiquidError)).call(this, message));
-
-      _this.name = _this.constructor.name;
-      if (typeof Error.captureStackTrace === 'function') {
-        Error.captureStackTrace(_this, _this.constructor);
-      } else {
-        _this.stack = new Error(message).stack;
-      }
-      return _this;
+  function initError() {
+    this.name = this.constructor.name;
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
     }
+  }
 
-    return LiquidError;
-  }(Error);
+  function initLiquidError(err, token) {
+    initError.call(this);
 
-  var TemplateError = function (_LiquidError) {
-    inherits(TemplateError, _LiquidError);
+    this.input = token.input;
+    this.line = token.line;
+    this.file = token.file;
 
-    function TemplateError(err, token) {
-      classCallCheck(this, TemplateError);
+    var context = mkContext(token.input, token.line);
+    this.message = mkMessage(err.message, token);
+    this.stack = context + '\n' + (this.stack || this.message) + (err.stack ? '\nFrom ' + err.stack : '');
+  }
 
-      var _this2 = possibleConstructorReturn(this, (TemplateError.__proto__ || Object.getPrototypeOf(TemplateError)).call(this));
+  function TokenizationError(message, token) {
+    initLiquidError.call(this, { message: message }, token);
+  }
+  TokenizationError.prototype = create(Error.prototype);
+  TokenizationError.prototype.constructor = TokenizationError;
 
-      _this2.input = token.input;
-      _this2.line = token.line;
-      _this2.file = token.file;
-      _this2.message = mkMessage(err.message, token);
-      var context = mkContext(token.input, token.line);
-      _this2.stack = context + '\n' + (_this2.stack || _this2.message) + (err.stack ? '\nFrom ' + err.stack : '');
-      return _this2;
+  function ParseError(e, token) {
+    assign(this, e);
+    this.originalError = e;
+
+    initLiquidError.call(this, e, token);
+  }
+  ParseError.prototype = create(Error.prototype);
+  ParseError.prototype.constructor = ParseError;
+
+  function RenderError(e, tpl) {
+    // return the original render error
+    if (e instanceof RenderError) {
+      return e;
     }
+    assign(this, e);
+    this.originalError = e;
 
-    return TemplateError;
-  }(LiquidError);
+    initLiquidError.call(this, e, tpl.token);
+  }
+  RenderError.prototype = create(Error.prototype);
+  RenderError.prototype.constructor = RenderError;
 
-  var TokenizationError = function (_TemplateError) {
-    inherits(TokenizationError, _TemplateError);
+  function RenderBreakError(message) {
+    initError.call(this);
+    this.message = message + '';
+  }
+  RenderBreakError.prototype = create(Error.prototype);
+  RenderBreakError.prototype.constructor = RenderBreakError;
 
-    function TokenizationError(message, token) {
-      classCallCheck(this, TokenizationError);
-      return possibleConstructorReturn(this, (TokenizationError.__proto__ || Object.getPrototypeOf(TokenizationError)).call(this, { message: message }, token));
-    }
-
-    return TokenizationError;
-  }(TemplateError);
-
-  var ParseError = function (_TemplateError2) {
-    inherits(ParseError, _TemplateError2);
-
-    function ParseError(e, token) {
-      classCallCheck(this, ParseError);
-
-      var _this4 = possibleConstructorReturn(this, (ParseError.__proto__ || Object.getPrototypeOf(ParseError)).call(this, e, token));
-
-      assign(_this4, e);
-      _this4.originalError = e;
-      return _this4;
-    }
-
-    return ParseError;
-  }(TemplateError);
-
-  var RenderError = function (_TemplateError3) {
-    inherits(RenderError, _TemplateError3);
-
-    function RenderError(e, tpl) {
-      classCallCheck(this, RenderError);
-
-      // return the original render error
-      if (e instanceof RenderError) {
-        var _ret;
-
-        return _ret = e, possibleConstructorReturn(_this5, _ret);
-      }
-
-      var _this5 = possibleConstructorReturn(this, (RenderError.__proto__ || Object.getPrototypeOf(RenderError)).call(this, e, tpl.token));
-
-      assign(_this5, e);
-      _this5.originalError = e;
-      return _this5;
-    }
-
-    return RenderError;
-  }(TemplateError);
-
-  var RenderBreakError = function (_LiquidError2) {
-    inherits(RenderBreakError, _LiquidError2);
-
-    function RenderBreakError(message) {
-      classCallCheck(this, RenderBreakError);
-      return possibleConstructorReturn(this, (RenderBreakError.__proto__ || Object.getPrototypeOf(RenderBreakError)).call(this, message + ''));
-    }
-
-    return RenderBreakError;
-  }(LiquidError);
-
-  var AssertionError = function (_LiquidError3) {
-    inherits(AssertionError, _LiquidError3);
-
-    function AssertionError(message) {
-      classCallCheck(this, AssertionError);
-      return possibleConstructorReturn(this, (AssertionError.__proto__ || Object.getPrototypeOf(AssertionError)).call(this, message + ''));
-    }
-
-    return AssertionError;
-  }(LiquidError);
+  function AssertionError(message) {
+    initError.call(this);
+    this.message = message + '';
+  }
+  AssertionError.prototype = create(Error.prototype);
+  AssertionError.prototype.constructor = AssertionError;
 
   function mkContext(input, line) {
     var lines = input.split('\n');
