@@ -7,11 +7,10 @@
   "browser": "dist/liquid.js",
   "scripts": {
     "lint": "eslint src/ test/ *.js",
-    "test": "npm run test:unit && npm run test:e2e",
-    "test:unit": "mocha test/unit",
-    "test:e2e": "mocha test/e2e",
+    "test": "mocha test/unit",
+    "e2e": "mocha test/e2e",
     "coverage": "cross-env NODE_ENV=test nyc report --reporter=html mocha test/unit",
-    "coveralls": "cross-env NODE_ENV=test nyc report --reporter=text-lcov mocha | coveralls",
+    "coveralls": "cross-env NODE_ENV=test nyc report --reporter=text-lcov mocha test/unit | coveralls",
     "dist": "rollup -c && ls -lh dist",
     "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
     "demo:nodejs": "node ./demo/nodejs/index.js",
@@ -66,6 +65,7 @@
     "nyc": "^12.0.2",
     "regenerator-runtime": "^0.12.1",
     "rollup": "^0.64.1",
+    "rollup-plugin-alias": "^1.4.0",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-shim": "^1.0.0",
@@ -82,7 +82,9 @@
     "instrument": false
   },
   "babel": {
-    "presets": ["env"],
+    "presets": [
+      "env"
+    ],
     "plugins": [
       [
         "transform-runtime",
@@ -96,7 +98,9 @@
     ],
     "env": {
       "test": {
-        "plugins": ["istanbul"]
+        "plugins": [
+          "istanbul"
+        ]
       }
     }
   }

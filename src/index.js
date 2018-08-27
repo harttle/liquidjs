@@ -1,18 +1,14 @@
 import 'regenerator-runtime/runtime'
 import * as Scope from './scope'
-import {get as httpGet} from './util/http.js'
+import * as template from './template'
 import * as _ from './util/underscore.js'
 import assert from './util/assert.js'
 import * as tokenizer from './tokenizer.js'
-import {statFileAsync, readFileAsync} from './util/fs.js'
-import path from 'path'
-import {valid as isValidUrl, extname, resolve} from './util/url.js'
 import Render from './render.js'
 import Tag from './tag.js'
 import Filter from './filter.js'
 import Parser from './parser'
 import {isTruthy, isFalsy, evalExp, evalValue} from './syntax.js'
-import {anySeries} from './util/promise.js'
 import {ParseError, TokenizationError, RenderBreakError, AssertionError} from './util/error.js'
 import tags from './tags/index.js'
 import filters from './filters.js'
@@ -46,64 +42,17 @@ const _engine = {
     const tpl = await this.parse(html)
     return this.render(tpl, ctx, opts)
   },
-  renderFile: async function (filepath, ctx, opts) {
-    opts = _.assign({}, opts)
-    const templates = await this.getTemplate(filepath, opts.root)
-    return this.render(templates, ctx, opts)
-  },
-  evalValue: function (str, scope) {
-    const tpl = this.parser.parseValue(str.trim())
-    return this.renderer.evalValue(tpl, scope)
-  },
-  registerFilter: function (name, filter) {
-    return this.filter.register(name, filter)
-  },
-  registerTag: function (name, tag) {
-    return this.tag.register(name, tag)
-  },
-  lookup: function (filepath, root) {
-    root = this.options.root.concat(root || [])
-    root = _.uniq(root)
-    const paths = root.map(root => path.resolve(root, filepath))
-    return anySeries(paths, async path => {
-      try {
-        await statFileAsync(path)
-        return path
-      } catch (e) {
-        e.message = `${e.code}: Failed to lookup ${filepath} in: ${root}`
-        throw e
-      }
-    })
-  },
-  getTemplate: function (filepath, root) {
-    return typeof XMLHttpRequest === 'undefined'
-      ? this.getTemplateFromFile(filepath, root)
-      : this.getTemplateFromUrl(filepath, root)
-  },
-  getTemplateFromFile: async function (filepath, root) {
-    if (!path.extname(filepath)) {
-      filepath += this.options.extname
-    }
-    filepath = await this.lookup(filepath, root)
+  getTemplate: async function (file, root) {
+    const filepath = await template.resolve(file, root, this.options)
     return this.respectCache(filepath, async () => {
-      const str = await readFileAsync(filepath)
+      const str = await template.read(filepath)
       return this.parse(str, filepath)
     })
   },
-  getTemplateFromUrl: async function (filepath, root) {
-    let fullUrl
-    if (isValidUrl(filepath)) {
-      fullUrl = filepath
-    } else {
-      if (!extname(filepath)) {
-        filepath += this.options.extname
-      }
-      fullUrl = resolve(root || this.options.root, filepath)
-    }
-    return this.respectCache(
-      filepath,
-      async () => this.parse(await httpGet(fullUrl))
-    )
+  renderFile: async function (file, ctx, opts) {
+    opts = _.assign({}, opts)
+    const templates = await this.getTemplate(file, opts.root)
+    return this.render(templates, ctx, opts)
   },
   respectCache: async function (key, getter) {
     const cacheEnabled = this.options.cache
@@ -116,11 +65,21 @@ const _engine = {
     }
     return value
   },
+  evalValue: function (str, scope) {
+    const tpl = this.parser.parseValue(str.trim())
+    return this.renderer.evalValue(tpl, scope)
+  },
+  registerFilter: function (name, filter) {
+    return this.filter.register(name, filter)
+  },
+  registerTag: function (name, tag) {
+    return this.tag.register(name, tag)
+  },
   express: function (opts) {
     opts = opts || {}
     const self = this
     return function (filePath, ctx, cb) {
-      assert(Array.isArray(this.root) || _.isString(this.root),
+      assert(_.isArray(this.root) || _.isString(this.root),
         'illegal views root, are you using express.js?')
       opts.root = this.root
       self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
@@ -129,7 +88,7 @@ const _engine = {
 }
 
 function normalizeStringArray (value) {
-  if (Array.isArray(value)) return value
+  if (_.isArray(value)) return value
   if (_.isString(value)) return [value]
   return []
 }

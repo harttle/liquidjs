@@ -1,5 +1,5 @@
 import {mapSeries} from '../util/promise.js'
-import {isString, isObject} from '../util/underscore.js'
+import {isString, isObject, isArray} from '../util/underscore.js'
 import assert from '../util/assert.js'
 import {identifier, value, hash} from '../lexical.js'
 
@@ -38,14 +38,14 @@ export default function (liquid, Liquid) {
   async function render (scope, hash) {
     let collection = Liquid.evalExp(this.collection, scope)
 
-    if (!Array.isArray(collection)) {
+    if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {
         collection = [collection]
       } else if (isObject(collection)) {
         collection = Object.keys(collection).map((key) => [key, collection[key]])
       }
     }
-    if (!Array.isArray(collection) || !collection.length) {
+    if (!isArray(collection) || !collection.length) {
       return liquid.renderer.renderTemplates(this.elseTemplates, scope)
     }
 

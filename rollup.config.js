@@ -1,4 +1,5 @@
 import shim from 'rollup-plugin-shim'
+import alias from 'rollup-plugin-alias'
 import babel from 'rollup-plugin-babel'
 import {uglify} from 'rollup-plugin-uglify'
 import pkg from './package.json'
@@ -48,6 +49,9 @@ export default [{
   }],
   plugins: [
     shim(fake),
+    alias({
+      './template': './template-browser'
+    }),
     nodeResolve(),
     babel(babelConf)
   ],

@@ -2,7 +2,7 @@ const chai = require('chai')
 const request = require('supertest')
 const express = require('express')
 const mock = require('mock-fs')
-const Liquid = require('../..')
+const Liquid = require('../../dist/liquid.common.js')
 const chaiAsPromised = require('chai-as-promised')
 
 const expect = chai.expect

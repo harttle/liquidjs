@@ -825,19 +825,6 @@
     return arr[arr.length - 1];
   }
 
-  function uniq(arr) {
-    var u = {};
-    var a = [];
-    for (var i = 0, l = arr.length; i < l; ++i) {
-      if (u.hasOwnProperty(arr[i])) {
-        continue;
-      }
-      a.push(arr[i]);
-      u[arr[i]] = 1;
-    }
-    return a;
-  }
-
   /*
    * Checks if value is the language type of Object.
    * (e.g. arrays, functions, objects, regexes, new Number(0), and new String(''))
@@ -1229,23 +1216,73 @@
     return scope;
   }
 
-  function get$1(url) {
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          resolve(xhr.responseText);
-        } else {
-          reject(new Error(xhr.statusText));
-        }
-      };
-      xhr.onerror = function () {
-        reject(new Error('An error occurred whilst sending the response.'));
-      };
-      xhr.open('GET', url);
-      xhr.send();
+  function domResolve(root, path) {
+    var base = document.createElement('base');
+    base.href = root;
+
+    var head = document.getElementsByTagName('head')[0];
+    head.insertBefore(base, head.firstChild);
+
+    var a = document.createElement('a');
+    a.href = path;
+    var resolved = a.href;
+    head.removeChild(base);
+
+    return resolved;
+  }
+
+  function resolve(filepath, root, options) {
+    root = root || options.root;
+    if (isArray(root)) {
+      root = root[0];
+    }
+    if (root.length && last(root) !== '/') {
+      root += '/';
+    }
+    var url = domResolve(root, filepath);
+    return url.replace(/^(\w+:\/\/[^/]+)(\/[^?]+)/, function (str, origin, path) {
+      var last$$1 = path.split('/').pop();
+      if (/\.\w+$/.test(last$$1)) {
+        return str;
+      }
+      return origin + path + options.extname;
     });
   }
+
+  var read = function () {
+    var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url) {
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              return _context.abrupt('return', new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function () {
+                  if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve(xhr.responseText);
+                  } else {
+                    reject(new Error(xhr.statusText));
+                  }
+                };
+                xhr.onerror = function () {
+                  reject(new Error('An error occurred whilst receiving the response.'));
+                };
+                xhr.open('GET', url);
+                xhr.send();
+              }));
+
+            case 1:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, this);
+    }));
+
+    return function read(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 
   function whiteSpaceCtrl(tokens, options) {
     options = assign({ greedy: true }, options);
@@ -1370,65 +1407,6 @@
         return parsedLinesCount + 1;
       }
     };
-  }
-
-  var fs = {};
-
-  function readFileAsync(filepath) {
-    return new Promise(function (resolve, reject) {
-      fs.readFile(filepath, 'utf8', function (err, content) {
-        err ? reject(err) : resolve(content);
-      });
-    });
-  }
-  function statFileAsync(path) {
-    return new Promise(function (resolve, reject) {
-      fs.stat(path, function (err, stat) {
-        return err ? reject(err) : resolve(stat);
-      });
-    });
-  }
-
-  var path = {};
-
-  var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^/]+?|)(\.[^./]*|))(?:[/]*)$/;
-  var urlRe = /^(?:\w+:)?\/\/([^\s.]+\.\S{2}|localhost[:?\d]*)\S*$/;
-
-  // https://github.com/jinder/path/blob/master/path.js#L567
-  function extname(path) {
-    return splitPathRe.exec(path).slice(1)[3];
-  }
-
-  // https://www.npmjs.com/package/is-url
-  function valid(path) {
-    return urlRe.test(path);
-  }
-
-  function resolve(root, path) {
-    if (isArray(root)) {
-      root = root[0];
-    }
-    if (root && last(root) !== '/') {
-      root += '/';
-    }
-    return resolveUrl(root, path);
-  }
-
-  function resolveUrl(root, path) {
-    var base = document.createElement('base');
-    base.href = arguments[0];
-
-    var head = document.getElementsByTagName('head')[0];
-    head.insertBefore(base, head.firstChild);
-
-    var a = document.createElement('a');
-    a.href = path;
-    var resolved = a.href;
-    base.href = resolved;
-
-    head.removeChild(base);
-
-    return resolved;
   }
 
   function Operators (isTruthy) {
@@ -2005,15 +1983,6 @@
    * @param {Array} iteratee returns a new promise.
    * The iteratee is invoked with three arguments: (value, index, iterable).
    */
-  function anySeries(iterable, iteratee) {
-    var ret = Promise.reject(new Error('init'));
-    iterable.forEach(function (item, idx) {
-      ret = ret.catch(function (e) {
-        return iteratee(item, idx, iterable);
-      });
-    });
-    return ret;
-  }
 
   /*
    * Call functions in serial until someone rejected.
@@ -2049,7 +2018,7 @@
                 collection = Liquid.evalExp(this.collection, scope);
 
 
-                if (!Array.isArray(collection)) {
+                if (!isArray(collection)) {
                   if (isString(collection) && collection.length > 0) {
                     collection = [collection];
                   } else if (isObject(collection)) {
@@ -2059,7 +2028,7 @@
                   }
                 }
 
-                if (!(!Array.isArray(collection) || !collection.length)) {
+                if (!(!isArray(collection) || !collection.length)) {
                   _context2.next = 4;
                   break;
                 }
@@ -3411,34 +3380,125 @@
 
       return parseAndRender;
     }(),
-    renderFile: function () {
-      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(filepath, ctx, opts) {
-        var templates;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    getTemplate: function () {
+      var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(file, root) {
+        var _this = this;
+
+        var filepath;
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                opts = assign({}, opts);
-                _context2.next = 3;
-                return this.getTemplate(filepath, opts.root);
+                _context3.next = 2;
+                return resolve(file, root, this.options);
 
-              case 3:
-                templates = _context2.sent;
-                return _context2.abrupt('return', this.render(templates, ctx, opts));
+              case 2:
+                filepath = _context3.sent;
+                return _context3.abrupt('return', this.respectCache(filepath, asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+                  var str;
+                  return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          _context2.next = 2;
+                          return read(filepath);
 
-              case 5:
+                        case 2:
+                          str = _context2.sent;
+                          return _context2.abrupt('return', _this.parse(str, filepath));
+
+                        case 4:
+                        case 'end':
+                          return _context2.stop();
+                      }
+                    }
+                  }, _callee2, _this);
+                }))));
+
+              case 4:
               case 'end':
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
-      function renderFile(_x4, _x5, _x6) {
+      function getTemplate(_x4, _x5) {
         return _ref2.apply(this, arguments);
       }
 
+      return getTemplate;
+    }(),
+    renderFile: function () {
+      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(file, ctx, opts) {
+        var templates;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                opts = assign({}, opts);
+                _context4.next = 3;
+                return this.getTemplate(file, opts.root);
+
+              case 3:
+                templates = _context4.sent;
+                return _context4.abrupt('return', this.render(templates, ctx, opts));
+
+              case 5:
+              case 'end':
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function renderFile(_x6, _x7, _x8) {
+        return _ref4.apply(this, arguments);
+      }
+
       return renderFile;
+    }(),
+    respectCache: function () {
+      var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(key, getter) {
+        var cacheEnabled, value;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                cacheEnabled = this.options.cache;
+
+                if (!(cacheEnabled && this.cache[key])) {
+                  _context5.next = 3;
+                  break;
+                }
+
+                return _context5.abrupt('return', this.cache[key]);
+
+              case 3:
+                _context5.next = 5;
+                return getter();
+
+              case 5:
+                value = _context5.sent;
+
+                if (cacheEnabled) {
+                  this.cache[key] = value;
+                }
+                return _context5.abrupt('return', value);
+
+              case 8:
+              case 'end':
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      function respectCache(_x9, _x10) {
+        return _ref5.apply(this, arguments);
+      }
+
+      return respectCache;
     }(),
     evalValue: function evalValue$$1(str, scope) {
       var tpl = this.parser.parseValue(str.trim());
@@ -3450,202 +3510,11 @@
     registerTag: function registerTag(name, tag) {
       return this.tag.register(name, tag);
     },
-    lookup: function lookup(filepath, root) {
-      var _this = this;
-
-      root = this.options.root.concat(root || []);
-      root = uniq(root);
-      var paths = root.map(function (root) {
-        return path.resolve(root, filepath);
-      });
-      return anySeries(paths, function () {
-        var _ref3 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(path$$1) {
-          return regeneratorRuntime.wrap(function _callee3$(_context3) {
-            while (1) {
-              switch (_context3.prev = _context3.next) {
-                case 0:
-                  _context3.prev = 0;
-                  _context3.next = 3;
-                  return statFileAsync(path$$1);
-
-                case 3:
-                  return _context3.abrupt('return', path$$1);
-
-                case 6:
-                  _context3.prev = 6;
-                  _context3.t0 = _context3['catch'](0);
-
-                  _context3.t0.message = _context3.t0.code + ': Failed to lookup ' + filepath + ' in: ' + root;
-                  throw _context3.t0;
-
-                case 10:
-                case 'end':
-                  return _context3.stop();
-              }
-            }
-          }, _callee3, _this, [[0, 6]]);
-        }));
-
-        return function (_x7) {
-          return _ref3.apply(this, arguments);
-        };
-      }());
-    },
-    getTemplate: function getTemplate(filepath, root) {
-      return typeof XMLHttpRequest === 'undefined' ? this.getTemplateFromFile(filepath, root) : this.getTemplateFromUrl(filepath, root);
-    },
-    getTemplateFromFile: function () {
-      var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(filepath, root) {
-        var _this2 = this;
-
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                if (!path.extname(filepath)) {
-                  filepath += this.options.extname;
-                }
-                _context5.next = 3;
-                return this.lookup(filepath, root);
-
-              case 3:
-                filepath = _context5.sent;
-                return _context5.abrupt('return', this.respectCache(filepath, asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-                  var str;
-                  return regeneratorRuntime.wrap(function _callee4$(_context4) {
-                    while (1) {
-                      switch (_context4.prev = _context4.next) {
-                        case 0:
-                          _context4.next = 2;
-                          return readFileAsync(filepath);
-
-                        case 2:
-                          str = _context4.sent;
-                          return _context4.abrupt('return', _this2.parse(str, filepath));
-
-                        case 4:
-                        case 'end':
-                          return _context4.stop();
-                      }
-                    }
-                  }, _callee4, _this2);
-                }))));
-
-              case 5:
-              case 'end':
-                return _context5.stop();
-            }
-          }
-        }, _callee5, this);
-      }));
-
-      function getTemplateFromFile(_x8, _x9) {
-        return _ref4.apply(this, arguments);
-      }
-
-      return getTemplateFromFile;
-    }(),
-    getTemplateFromUrl: function () {
-      var _ref6 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(filepath, root) {
-        var _this3 = this;
-
-        var fullUrl;
-        return regeneratorRuntime.wrap(function _callee7$(_context7) {
-          while (1) {
-            switch (_context7.prev = _context7.next) {
-              case 0:
-                fullUrl = void 0;
-
-                if (valid(filepath)) {
-                  fullUrl = filepath;
-                } else {
-                  if (!extname(filepath)) {
-                    filepath += this.options.extname;
-                  }
-                  fullUrl = resolve(root || this.options.root, filepath);
-                }
-                return _context7.abrupt('return', this.respectCache(filepath, asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
-                  return regeneratorRuntime.wrap(function _callee6$(_context6) {
-                    while (1) {
-                      switch (_context6.prev = _context6.next) {
-                        case 0:
-                          _context6.t0 = _this3;
-                          _context6.next = 3;
-                          return get$1(fullUrl);
-
-                        case 3:
-                          _context6.t1 = _context6.sent;
-                          return _context6.abrupt('return', _context6.t0.parse.call(_context6.t0, _context6.t1));
-
-                        case 5:
-                        case 'end':
-                          return _context6.stop();
-                      }
-                    }
-                  }, _callee6, _this3);
-                }))));
-
-              case 3:
-              case 'end':
-                return _context7.stop();
-            }
-          }
-        }, _callee7, this);
-      }));
-
-      function getTemplateFromUrl(_x10, _x11) {
-        return _ref6.apply(this, arguments);
-      }
-
-      return getTemplateFromUrl;
-    }(),
-    respectCache: function () {
-      var _ref8 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(key, getter) {
-        var cacheEnabled, value;
-        return regeneratorRuntime.wrap(function _callee8$(_context8) {
-          while (1) {
-            switch (_context8.prev = _context8.next) {
-              case 0:
-                cacheEnabled = this.options.cache;
-
-                if (!(cacheEnabled && this.cache[key])) {
-                  _context8.next = 3;
-                  break;
-                }
-
-                return _context8.abrupt('return', this.cache[key]);
-
-              case 3:
-                _context8.next = 5;
-                return getter();
-
-              case 5:
-                value = _context8.sent;
-
-                if (cacheEnabled) {
-                  this.cache[key] = value;
-                }
-                return _context8.abrupt('return', value);
-
-              case 8:
-              case 'end':
-                return _context8.stop();
-            }
-          }
-        }, _callee8, this);
-      }));
-
-      function respectCache(_x12, _x13) {
-        return _ref8.apply(this, arguments);
-      }
-
-      return respectCache;
-    }(),
     express: function express(opts) {
       opts = opts || {};
       var self = this;
       return function (filePath, ctx, cb) {
-        assert(Array.isArray(this.root) || isString(this.root), 'illegal views root, are you using express.js?');
+        assert(isArray(this.root) || isString(this.root), 'illegal views root, are you using express.js?');
         opts.root = this.root;
         self.renderFile(filePath, ctx, opts).then(function (html) {
           return cb(null, html);
@@ -3655,7 +3524,7 @@
   };
 
   function normalizeStringArray(value) {
-    if (Array.isArray(value)) return value;
+    if (isArray(value)) return value;
     if (isString(value)) return [value];
     return [];
   }

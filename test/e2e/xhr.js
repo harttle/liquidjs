@@ -1,4 +1,4 @@
-var Liquid = require('../..')
+var Liquid = require('../../dist/liquid.js')
 var sinon = require('sinon')
 var chai = require('chai')
 var expect = chai.expect
@@ -6,16 +6,17 @@ chai.use(require('chai-as-promised'))
 
 describe('xhr', () => {
   if (process.version.match(/^v(\d+)/)[1] < 8) {
+    console.info('jsdom not supported, skipping xhr...')
     return
   }
   var JSDOM = require('jsdom').JSDOM
-  var server, engine, dom
+  var server, engine
   beforeEach(() => {
     server = sinon.createFakeServer()
     server.autoRespond = true
     server.respondWith('GET', 'https://example.com/views/hello.html',
       [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-    dom = new JSDOM('', {
+    var dom = new JSDOM('', {
       url: 'https://example.com/foo/bar.html',
       contentType: 'text/html',
       includeNodeLocations: true
@@ -65,15 +66,18 @@ describe('xhr', () => {
     })
     it('should throw error', function (done) {
       engine.renderFile('hello.html')
+        .then(() => done('should not be resolved'))
         .catch(function (e) {
-          expect(e.message).to.equal('An error occurred whilst sending the response.')
+          expect(e.message).to.equal('An error occurred whilst receiving the response.')
           done()
         })
-      server.requests[0].error()
+      global.XMLHttpRequest.onCreate = function (request) {
+        setTimeout(() => request.error())
+      }
     })
   })
-  describe('root', () => {
-    it('should support with null', () => {
+  describe('#renderFile() with root specified', () => {
+    it('should support undefined root', () => {
       engine = Liquid({
         extname: '.html'
       })
@@ -82,12 +86,12 @@ describe('xhr', () => {
       return expect(engine.renderFile('hello.html', {name: 'alice5'}))
         .to.eventually.equal('hello alice5')
     })
-    it('should support with empty', () => {
+    it('should support empty root', () => {
       engine = Liquid({
         root: '',
         extname: '.html'
       })
-      server.respondWith('GET', 'https://example.com/foo/hello.html',
+      server.respondWith('https://example.com/foo/hello.html',
         [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
       return expect(engine.renderFile('hello.html', {name: 'alice5'}))
         .to.eventually.equal('hello alice5')
