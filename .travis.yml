@@ -6,7 +6,7 @@ node_js:
   - "0.12"
 before_script:
   - npm install -g mocha
-after_script: 
+script: 
   - if [[ $(echo "$TRAVIS_NODE_VERSION >= 6" | bc -l) ]]; then npm run test; fi
   - npm run e2e
 after_success:
