@@ -5,4 +5,7 @@ node_js:
 before_script:
   - npm install -g mocha
 after_script: 
+  - npm run test
+  - npm run e2e
+after_success:
   - npm run coveralls

@@ -89,4 +89,8 @@ describe('filter', function () {
     expect(f.name).to.equal('foo')
     expect(f.args).to.deep.equal(['\'a\'', '"a"'])
   })
+
+  it('should not throw undefined filter by default', function () {
+    expect(filter.construct('undefined').render('foo', scope)).to.equal('foo')
+  })
 })

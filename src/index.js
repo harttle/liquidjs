@@ -90,7 +90,7 @@ const _engine = {
 function normalizeStringArray (value) {
   if (_.isArray(value)) return value
   if (_.isString(value)) return [value]
-  return []
+  throw new TypeError('illegal root: ' + value)
 }
 
 export default function Liquid (options) {
