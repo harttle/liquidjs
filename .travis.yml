@@ -7,8 +7,7 @@ node_js:
 before_script:
   - npm install -g mocha
 script: 
-  - echo $TRAVIS_NODE_VERSION
-  - if [[ $(echo "$TRAVIS_NODE_VERSION >= 6" | bc -l) ]]; then npm run test; fi
+  - if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run test; fi
   - npm run e2e
 after_success:
-  - if [[ $(echo "$TRAVIS_NODE_VERSION >= 6" | bc -l) ]]; then npm run coveralls; fi
+  - if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run coveralls; fi
