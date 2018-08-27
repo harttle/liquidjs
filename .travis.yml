@@ -3,7 +3,6 @@ node_js:
   - "8"
   - "6"
   - "4"
-  - "0.12"
 before_script:
   - npm install -g mocha
 script: 
