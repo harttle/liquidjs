@@ -1,6 +1,6 @@
 {
   "name": "liquidjs",
-  "version": "5.3.0-0",
+  "version": "6.0.0",
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "dist/liquid.common.js",
   "module": "src/index.js",
