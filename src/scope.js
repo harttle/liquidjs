@@ -1,19 +1,18 @@
-'use strict'
-const _ = require('./util/underscore.js')
-const lexical = require('./lexical.js')
-const assert = require('./util/assert.js')
+import * as _ from './util/underscore.js'
+import * as lexical from './lexical.js'
+import assert from './util/assert.js'
 
-var Scope = {
+const Scope = {
   getAll: function () {
-    return this.contexts.reduce((ctx, val) => Object.assign(ctx, val), Object.create(null))
+    return this.contexts.reduce((ctx, val) => _.assign(ctx, val), _.create(null))
   },
   get: function (path) {
-    let paths = this.propertyAccessSeq(path)
-    let scope = this.findContextFor(paths[0]) || _.last(this.contexts)
+    const paths = this.propertyAccessSeq(path)
+    const scope = this.findContextFor(paths[0]) || _.last(this.contexts)
     return paths.reduce((value, key) => this.readProperty(value, key), scope)
   },
   set: function (path, v) {
-    let paths = this.propertyAccessSeq(path)
+    const paths = this.propertyAccessSeq(path)
     let scope = this.findContextFor(paths[0]) || _.last(this.contexts)
     paths.some((key, i) => {
       if (!_.isObject(scope)) {
@@ -39,7 +38,7 @@ var Scope = {
     if (!arguments.length) {
       return this.contexts.pop()
     }
-    let i = this.contexts.findIndex(scope => scope === ctx)
+    const i = this.contexts.findIndex(scope => scope === ctx)
     if (i === -1) {
       throw new TypeError('scope not found, cannot pop')
     }
@@ -48,7 +47,7 @@ var Scope = {
   findContextFor: function (key, filter) {
     filter = filter || (() => true)
     for (let i = this.contexts.length - 1; i >= 0; i--) {
-      let candidate = this.contexts[i]
+      const candidate = this.contexts[i]
       if (!filter(candidate)) continue
       if (key in candidate) {
         return candidate
@@ -89,7 +88,7 @@ var Scope = {
    */
   propertyAccessSeq: function (str) {
     str = String(str)
-    let seq = []
+    const seq = []
     let name = ''
     let j
     let i = 0
@@ -98,7 +97,7 @@ var Scope = {
         case '[':
           push()
 
-          let delemiter = str[i + 1]
+          const delemiter = str[i + 1]
           if (/['"]/.test(delemiter)) { // foo["bar"]
             j = str.indexOf(delemiter, i + 2)
             assert(j !== -1, `unbalanced ${delemiter}: ${str}`)
@@ -140,8 +139,8 @@ var Scope = {
 }
 
 function matchRightBracket (str, begin) {
-  var stack = 1 // count of '[' - count of ']'
-  for (var i = begin; i < str.length; i++) {
+  let stack = 1 // count of '[' - count of ']'
+  for (let i = begin; i < str.length; i++) {
     if (str[i] === '[') {
       stack++
     }
@@ -155,23 +154,16 @@ function matchRightBracket (str, begin) {
   return -1
 }
 
-exports.factory = function (ctx, opts) {
-  var defaultOptions = {
+export function factory (ctx, opts) {
+  const defaultOptions = {
     dynamicPartials: true,
     strict_variables: false,
     strict_filters: false,
     blocks: {},
     root: []
   }
-  var scope = Object.create(Scope)
+  const scope = _.create(Scope)
   scope.opts = _.assign(defaultOptions, opts)
   scope.contexts = [ctx || {}]
   return scope
-}
-
-exports.types = {
-  AssignScope: Object.create(null),
-  CaptureScope: Object.create(null),
-  IncrementScope: Object.create(null),
-  DecrementScope: Object.create(null)
 }

@@ -1,4 +1,3 @@
-'use strict'
 const toStr = Object.prototype.toString
 
 /*
@@ -6,11 +5,11 @@ const toStr = Object.prototype.toString
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is a string, else false.
  */
-function isString (value) {
+export function isString (value) {
   return toStr.call(value) === '[object String]'
 }
 
-function stringify (value) {
+export function stringify (value) {
   if (isNil(value)) {
     return String(value)
   }
@@ -24,7 +23,7 @@ function stringify (value) {
     return value
   }
 
-  let cache = []
+  const cache = []
   return JSON.stringify(value, (key, value) => {
     if (isObject(value)) {
       if (cache.indexOf(value) !== -1) {
@@ -36,17 +35,21 @@ function stringify (value) {
   })
 }
 
-function isNil (value) {
+export function create (proto) {
+  return Object.create(proto)
+}
+
+export function isNil (value) {
   return value === null || value === undefined
 }
 
-function isArray (value) {
+export function isArray (value) {
   // be compatible with IE 8
   return toStr.call(value) === '[object Array]'
 }
 
-function isError (value) {
-  var signature = Object.prototype.toString.call(value)
+export function isError (value) {
+  const signature = toStr.call(value)
   // [object XXXError]
   return signature.substr(-6, 5) === 'Error' ||
         (typeof value.message === 'string' && typeof value.name === 'string')
@@ -60,9 +63,9 @@ function isError (value) {
  * @param {Function} iteratee The function invoked per iteration.
  * @return {Object} Returns object.
  */
-function forOwn (object, iteratee) {
+export function forOwn (object, iteratee) {
   object = object || {}
-  for (var k in object) {
+  for (const k in object) {
     if (object.hasOwnProperty(k)) {
       if (iteratee(object[k], k, object) === false) break
     }
@@ -81,21 +84,21 @@ function forOwn (object, iteratee) {
  * @param {...Object} sources The source objects.
  * @return {Object} Returns object.
  */
-function assign (object) {
+export function assign (object) {
   object = isObject(object) ? object : {}
-  var srcs = Array.prototype.slice.call(arguments, 1)
+  const srcs = Array.prototype.slice.call(arguments, 1)
   srcs.forEach((src) => Object.assign(object, src))
   return object
 }
 
-function last (arr) {
+export function last (arr) {
   return arr[arr.length - 1]
 }
 
-function uniq (arr) {
-  var u = {}
-  var a = []
-  for (var i = 0, l = arr.length; i < l; ++i) {
+export function uniq (arr) {
+  const u = {}
+  const a = []
+  for (let i = 0, l = arr.length; i < l; ++i) {
     if (u.hasOwnProperty(arr[i])) {
       continue
     }
@@ -111,9 +114,9 @@ function uniq (arr) {
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is an object, else false.
  */
-function isObject (value) {
-  var type = typeof value
-  return value != null && (type === 'object' || type === 'function')
+export function isObject (value) {
+  const type = typeof value
+  return value !== null && (type === 'object' || type === 'function')
 }
 
 /*
@@ -124,33 +127,16 @@ function isObject (value) {
  * Note that ranges that stop before they start are considered to be zero-length instead of
  * negative — if you'd like a negative range, use a negative step.
  */
-function range (start, stop, step) {
+export function range (start, stop, step) {
   if (arguments.length === 1) {
     stop = start
     start = 0
   }
   step = step || 1
 
-  var arr = []
-  for (var i = start; i < stop; i += step) {
+  const arr = []
+  for (let i = start; i < stop; i += step) {
     arr.push(i)
   }
   return arr
 }
-
-// lang
-exports.isString = isString
-exports.isObject = isObject
-exports.isArray = isArray
-exports.isNil = isNil
-exports.isError = isError
-
-// array
-exports.range = range
-exports.last = last
-
-// object
-exports.forOwn = forOwn
-exports.assign = assign
-exports.uniq = uniq
-exports.stringify = stringify

@@ -1,9 +1,10 @@
-const lexical = require('./lexical.js')
-const ParseError = require('./util/error.js').ParseError
-const assert = require('./util/assert.js')
+import * as lexical from './lexical.js'
+import {create} from './util/underscore.js'
+import {ParseError} from './util/error.js'
+import assert from './util/assert.js'
 
-module.exports = function (Tag, Filter) {
-  var stream = {
+export default function (Tag, Filter) {
+  const stream = {
     init: function (tokens) {
       this.tokens = tokens
       this.handlers = {}
@@ -14,7 +15,7 @@ module.exports = function (Tag, Filter) {
       return this
     },
     trigger: function (event, arg) {
-      var h = this.handlers[event]
+      const h = this.handlers[event]
       if (typeof h === 'function') {
         h(arg)
         return true
@@ -22,14 +23,14 @@ module.exports = function (Tag, Filter) {
     },
     start: function () {
       this.trigger('start')
-      var token
+      let token
       while (!this.stopRequested && (token = this.tokens.shift())) {
         if (this.trigger('token', token)) continue
         if (token.type === 'tag' &&
             this.trigger(`tag:${token.name}`, token)) {
           continue
         }
-        var template = parseToken(token, this.tokens)
+        const template = parseToken(token, this.tokens)
         this.trigger('template', template)
       }
       if (!this.stopRequested) this.trigger('end')
@@ -42,8 +43,8 @@ module.exports = function (Tag, Filter) {
   }
 
   function parse (tokens) {
-    var token
-    var templates = []
+    let token
+    const templates = []
     while ((token = tokens.shift())) {
       templates.push(parseToken(token, tokens))
     }
@@ -52,7 +53,7 @@ module.exports = function (Tag, Filter) {
 
   function parseToken (token, tokens) {
     try {
-      var tpl = null
+      let tpl = null
       if (token.type === 'tag') {
         tpl = parseTag(token, tokens)
       } else if (token.type === 'value') {
@@ -73,13 +74,13 @@ module.exports = function (Tag, Filter) {
   }
 
   function parseValue (str) {
-    var match = lexical.matchValue(str)
+    let match = lexical.matchValue(str)
     assert(match, `illegal value string: ${str}`)
 
-    var initial = match[0]
+    const initial = match[0]
     str = str.substr(match.index + match[0].length)
 
-    var filters = []
+    const filters = []
     while ((match = lexical.filter.exec(str))) {
       filters.push([match[0].trim()])
     }
@@ -92,7 +93,7 @@ module.exports = function (Tag, Filter) {
   }
 
   function parseStream (tokens) {
-    var s = Object.create(stream)
+    const s = create(stream)
     return s.init(tokens)
   }
 

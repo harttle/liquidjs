@@ -1,19 +1,21 @@
-const lexical = require('./lexical.js')
-const TokenizationError = require('./util/error.js').TokenizationError
-const _ = require('./util/underscore.js')
-const whiteSpaceCtrl = require('./whitespace-ctrl.js')
-const assert = require('./util/assert.js')
+import * as lexical from './lexical.js'
+import {TokenizationError} from './util/error.js'
+import * as _ from './util/underscore.js'
+import assert from './util/assert.js'
+import whiteSpaceCtrl from './whitespace-ctrl.js'
 
-function parse (input, file, options) {
+export {default as whiteSpaceCtrl} from './whitespace-ctrl.js'
+
+export function parse (input, file, options) {
   assert(_.isString(input), 'illegal input')
 
-  var rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g
-  var currIndent = 0
-  var lineNumber = LineNumber(input)
-  var lastMatchEnd = 0
-  var tokens = []
+  const rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g
+  let currIndent = 0
+  const lineNumber = LineNumber(input)
+  let lastMatchEnd = 0
+  const tokens = []
 
-  for (var match; (match = rLiquid.exec(input)); lastMatchEnd = rLiquid.lastIndex) {
+  for (let match; (match = rLiquid.exec(input)); lastMatchEnd = rLiquid.lastIndex) {
     if (match.index > lastMatchEnd) {
       tokens.push(parseHTMLToken(lastMatchEnd, match.index))
     }
@@ -28,8 +30,8 @@ function parse (input, file, options) {
   return tokens
 
   function parseTagToken (raw, value, pos) {
-    var match = value.match(lexical.tagLine)
-    var token = {
+    const match = value.match(lexical.tagLine)
+    const token = {
       type: 'tag',
       indent: currIndent,
       line: lineNumber.get(pos),
@@ -62,7 +64,7 @@ function parse (input, file, options) {
   }
 
   function parseHTMLToken (begin, end) {
-    var htmlFragment = input.slice(begin, end)
+    const htmlFragment = input.slice(begin, end)
     currIndent = _.last((htmlFragment).split('\n')).length
 
     return {
@@ -74,18 +76,15 @@ function parse (input, file, options) {
 }
 
 function LineNumber (html) {
-  var parsedLinesCount = 0
-  var lastMatchBegin = -1
+  let parsedLinesCount = 0
+  let lastMatchBegin = -1
 
   return {
     get: function (pos) {
-      var lines = html.slice(lastMatchBegin + 1, pos).split('\n')
+      const lines = html.slice(lastMatchBegin + 1, pos).split('\n')
       parsedLinesCount += lines.length - 1
       lastMatchBegin = pos
       return parsedLinesCount + 1
     }
   }
 }
-
-exports.parse = parse
-exports.whiteSpaceCtrl = whiteSpaceCtrl

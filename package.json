@@ -1,19 +1,23 @@
 {
   "name": "liquidjs",
-  "version": "5.2.0",
+  "version": "5.3.0-0",
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
-  "main": "index.js",
+  "main": "dist/liquid.common.js",
+  "module": "src/index.js",
+  "browser": "dist/liquid.js",
   "scripts": {
-    "lint": "eslint .",
-    "test": "mocha --recursive",
-    "coverage": "cross-env NODE_ENV=test istanbul cover --report html ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
-    "lcov": "cross-env NODE_ENV=test istanbul cover --report lcovonly ./node_modules/mocha/bin/_mocha -- -R spec --recursive",
-    "dist": "npm run browserify && npm run uglify",
-    "browserify": "browserify index.js -s Liquid --ignore path -t [ babelify --global true --presets [ es2015 ] ] > dist/liquid.js",
-    "uglify": "uglifyjs dist/liquid.js --compress warnings=false --mangle --output dist/liquid.min.js",
+    "lint": "eslint src/ test/ *.js",
+    "dev": "mocha test/unit",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha test/unit",
+    "e2e": "mocha test/e2e",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "dist": "rollup -c && ls -lh dist",
+    "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
+    "demo:nodejs": "node ./demo/nodejs/index.js",
+    "demo:express": "cd ./demo/express/ && npm start",
     "preversion": "npm run lint && npm test",
     "version": "npm run dist && git add -A dist",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push --tags"
   },
   "repository": {
     "type": "git",
@@ -35,21 +39,17 @@
     "url": "https://github.com/harttle/liquidjs/issues"
   },
   "homepage": "https://github.com/harttle/liquidjs#readme",
-  "dependencies": {
-    "resolve-url": "^0.2.1"
-  },
-  "browser": {
-    "fs": false
-  },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babelify": "^8.0.0",
-    "browserify": "^16.2.2",
+    "babel-core": "^6.26.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-istanbul": "^4.1.6",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-runtime": "^6.26.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.0",
-    "cross-env": "^5.1.3",
+    "cross-env": "^5.2.0",
     "eslint": "^5.2.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.7.0",
@@ -58,13 +58,50 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
     "express": "^4.16.1",
-    "istanbul": "^0.4.5",
+    "http-server": "^0.11.1",
     "jsdom": "^11.5.1",
     "mocha": "^5.2.0",
     "mock-fs": "^4.4.1",
+    "nyc": "^13.0.1",
+    "regenerator-runtime": "^0.12.1",
+    "rollup": "^0.64.1",
+    "rollup-plugin-alias": "^1.4.0",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-shim": "^1.0.0",
+    "rollup-plugin-uglify": "^4.0.0",
     "sinon": "^6.1.4",
     "sinon-chai": "^3.2.0",
-    "supertest": "^3.0.0",
-    "uglify-js": "^3.4.5"
+    "supertest": "^3.0.0"
+  },
+  "nyc": {
+    "require": [
+      "babel-core/register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "plugins": [
+      [
+        "transform-runtime",
+        {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true,
+          "moduleName": "babel-runtime"
+        }
+      ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
   }
 }

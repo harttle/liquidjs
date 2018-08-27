@@ -1,40 +1,40 @@
-'use strict'
-const lexical = require('./lexical.js')
-const Syntax = require('./syntax.js')
-const assert = require('./util/assert.js')
+import {hashCapture} from './lexical.js'
+import {create} from './util/underscore.js'
+import {evalValue} from './syntax.js'
+import assert from './util/assert.js'
 
 function hash (markup, scope) {
-  let obj = {}
+  const obj = {}
   let match
-  lexical.hashCapture.lastIndex = 0
-  while ((match = lexical.hashCapture.exec(markup))) {
-    let k = match[1]
-    let v = match[2]
-    obj[k] = Syntax.evalValue(v, scope)
+  hashCapture.lastIndex = 0
+  while ((match = hashCapture.exec(markup))) {
+    const k = match[1]
+    const v = match[2]
+    obj[k] = evalValue(v, scope)
   }
   return obj
 }
 
-module.exports = function () {
+export default function () {
   let tagImpls = {}
 
-  let _tagInstance = {
-    render: function (scope) {
-      let obj = hash(this.token.args, scope)
-      let impl = this.tagImpl
+  const _tagInstance = {
+    render: async function (scope) {
+      const obj = hash(this.token.args, scope)
+      const impl = this.tagImpl
       if (typeof impl.render !== 'function') {
-        return Promise.resolve('')
+        return ''
       }
-      return Promise.resolve().then(() => impl.render(scope, obj))
+      return impl.render(scope, obj)
     },
     parse: function (token, tokens) {
       this.type = 'tag'
       this.token = token
       this.name = token.name
 
-      let tagImpl = tagImpls[this.name]
+      const tagImpl = tagImpls[this.name]
       assert(tagImpl, `tag ${this.name} not found`)
-      this.tagImpl = Object.create(tagImpl)
+      this.tagImpl = create(tagImpl)
       if (this.tagImpl.parse) {
         this.tagImpl.parse(token, tokens)
       }
@@ -46,7 +46,7 @@ module.exports = function () {
   }
 
   function construct (token, tokens) {
-    let instance = Object.create(_tagInstance)
+    const instance = create(_tagInstance)
     instance.parse(token, tokens)
     return instance
   }

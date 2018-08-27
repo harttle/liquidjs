@@ -1,27 +1,27 @@
-const lexical = require('./lexical.js')
-const Syntax = require('./syntax.js')
-const assert = require('./util/assert.js')
-const _ = require('./util/underscore.js')
+import * as lexical from './lexical.js'
+import {evalValue} from './syntax.js'
+import assert from './util/assert.js'
+import {assign, create} from './util/underscore.js'
 
-var valueRE = new RegExp(`${lexical.value.source}`, 'g')
+const valueRE = new RegExp(`${lexical.value.source}`, 'g')
 
-module.exports = function (options) {
-  options = _.assign({}, options)
-  var filters = {}
+export default function (options) {
+  options = assign({}, options)
+  let filters = {}
 
-  var _filterInstance = {
+  const _filterInstance = {
     render: function (output, scope) {
-      var args = this.args.map(arg => Syntax.evalValue(arg, scope))
+      const args = this.args.map(arg => evalValue(arg, scope))
       args.unshift(output)
       return this.filter.apply(null, args)
     },
     parse: function (str) {
-      var match = lexical.filterLine.exec(str)
+      let match = lexical.filterLine.exec(str)
       assert(match, 'illegal filter: ' + str)
 
-      var name = match[1]
-      var argList = match[2] || ''
-      var filter = filters[name]
+      const name = match[1]
+      const argList = match[2] || ''
+      const filter = filters[name]
       if (typeof filter !== 'function') {
         if (options.strict_filters) {
           throw new TypeError(`undefined filter: ${name}`)
@@ -32,12 +32,12 @@ module.exports = function (options) {
         return this
       }
 
-      var args = []
+      const args = []
       while ((match = valueRE.exec(argList.trim()))) {
-        var v = match[0]
-        var re = new RegExp(`${v}\\s*:`, 'g')
-        var keyMatch = re.exec(match.input)
-        var currentMatchIsKey = keyMatch && keyMatch.index === match.index
+        const v = match[0]
+        const re = new RegExp(`${v}\\s*:`, 'g')
+        const keyMatch = re.exec(match.input)
+        const currentMatchIsKey = keyMatch && keyMatch.index === match.index
         currentMatchIsKey ? args.push(`'${v}'`) : args.push(v)
       }
 
@@ -50,7 +50,7 @@ module.exports = function (options) {
   }
 
   function construct (str) {
-    var instance = Object.create(_filterInstance)
+    const instance = create(_filterInstance)
     return instance.parse(str)
   }
 

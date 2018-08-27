@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "no-var": 0,
+    "prefer-const": 0
+  }
+}

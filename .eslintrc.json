@@ -1,11 +1,16 @@
 {
   "extends": "standard",
   "env": {
+    "es6": true,
     "browser": true,
     "node": true
   },
   "plugins": [
     "standard",
     "promise"
-  ]
+  ],
+  "rules": {
+    "no-var": 2,
+    "prefer-const": 2
+  }
 }

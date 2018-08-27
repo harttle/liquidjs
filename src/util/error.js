@@ -1,4 +1,4 @@
-const _ = require('./underscore.js')
+import * as _ from './underscore.js'
 
 function initError () {
   this.name = this.constructor.name
@@ -14,29 +14,29 @@ function initLiquidError (err, token) {
   this.line = token.line
   this.file = token.file
 
-  var context = mkContext(token.input, token.line)
+  const context = mkContext(token.input, token.line)
   this.message = mkMessage(err.message, token)
   this.stack = context +
     '\n' + (this.stack || this.message) +
       (err.stack ? '\nFrom ' + err.stack : '')
 }
 
-function TokenizationError (message, token) {
+export function TokenizationError (message, token) {
   initLiquidError.call(this, {message: message}, token)
 }
-TokenizationError.prototype = Object.create(Error.prototype)
+TokenizationError.prototype = _.create(Error.prototype)
 TokenizationError.prototype.constructor = TokenizationError
 
-function ParseError (e, token) {
+export function ParseError (e, token) {
   _.assign(this, e)
   this.originalError = e
 
   initLiquidError.call(this, e, token)
 }
-ParseError.prototype = Object.create(Error.prototype)
+ParseError.prototype = _.create(Error.prototype)
 ParseError.prototype.constructor = ParseError
 
-function RenderError (e, tpl) {
+export function RenderError (e, tpl) {
   // return the original render error
   if (e instanceof RenderError) {
     return e
@@ -46,29 +46,29 @@ function RenderError (e, tpl) {
 
   initLiquidError.call(this, e, tpl.token)
 }
-RenderError.prototype = Object.create(Error.prototype)
+RenderError.prototype = _.create(Error.prototype)
 RenderError.prototype.constructor = RenderError
 
-function RenderBreakError (message) {
+export function RenderBreakError (message) {
   initError.call(this)
   this.message = message + ''
 }
-RenderBreakError.prototype = Object.create(Error.prototype)
+RenderBreakError.prototype = _.create(Error.prototype)
 RenderBreakError.prototype.constructor = RenderBreakError
 
-function AssertionError (message) {
+export function AssertionError (message) {
   initError.call(this)
   this.message = message + ''
 }
-AssertionError.prototype = Object.create(Error.prototype)
+AssertionError.prototype = _.create(Error.prototype)
 AssertionError.prototype.constructor = AssertionError
 
 function mkContext (input, line) {
-  var lines = input.split('\n')
-  var begin = Math.max(line - 2, 1)
-  var end = Math.min(line + 3, lines.length)
+  const lines = input.split('\n')
+  const begin = Math.max(line - 2, 1)
+  const end = Math.min(line + 3, lines.length)
 
-  var context = _
+  const context = _
     .range(begin, end + 1)
     .map(l => [
       (l === line) ? '>> ' : '   ',
@@ -82,9 +82,9 @@ function mkContext (input, line) {
 }
 
 function align (n, max) {
-  var length = (max + '').length
-  var str = n + ''
-  var blank = Array(length - str.length).join(' ')
+  const length = (max + '').length
+  const str = n + ''
+  const blank = Array(length - str.length).join(' ')
   return blank + str
 }
 
@@ -97,12 +97,4 @@ function mkMessage (msg, token) {
     msg += ', line:' + token.line
   }
   return msg
-}
-
-module.exports = {
-  TokenizationError,
-  ParseError,
-  RenderBreakError,
-  AssertionError,
-  RenderError
 }

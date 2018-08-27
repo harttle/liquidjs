@@ -5,5 +5,8 @@ node_js:
   - "4"
 before_script:
   - npm install -g mocha
-after_script: 
-  - npm run lcov && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+script: 
+  - if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run test; fi
+  - npm run e2e
+after_success:
+  - if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run coveralls; fi
