@@ -9,7 +9,7 @@
     "lint": "eslint src/ test/ *.js",
     "dev": "mocha test/unit",
     "test": "cross-env NODE_ENV=test nyc --reporter=html mocha test/unit",
-    "e2e": "npm run dist && mocha test/e2e",
+    "e2e": "mocha test/e2e",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "dist": "rollup -c && ls -lh dist",
     "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",

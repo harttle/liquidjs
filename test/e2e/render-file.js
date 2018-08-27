@@ -24,10 +24,6 @@ describe('#renderFile()', function () {
   afterEach(function () {
     mock.restore()
   })
-  it('should ignore invalid root option', function () {
-    var liquid = Liquid({ root: /regex/ })
-    expect(liquid.options.root).to.deep.equal([])
-  })
   it('should render file', function () {
     return expect(engine.renderFile('/root/files/foo.html', {}))
       .to.eventually.equal('foo')

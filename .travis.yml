@@ -2,10 +2,12 @@ language: node_js
 node_js:
   - "8"
   - "6"
+  - "4"
+  - "0.12"
 before_script:
   - npm install -g mocha
 after_script: 
-  - npm run test
+  - if [[ $(echo "$TRAVIS_NODE_VERSION >= 6" | bc -l) ]]; then npm run test; fi
   - npm run e2e
 after_success:
-  - npm run coveralls
+  - if [[ $(echo "$TRAVIS_NODE_VERSION >= 6" | bc -l) ]]; then npm run coveralls; fi

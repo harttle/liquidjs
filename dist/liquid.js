@@ -3526,7 +3526,7 @@
   function normalizeStringArray(value) {
     if (isArray(value)) return value;
     if (isString(value)) return [value];
-    return [];
+    throw new TypeError('illegal root: ' + value);
   }
 
   function Liquid(options) {

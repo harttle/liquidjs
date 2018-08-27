@@ -1282,50 +1282,11 @@ function statFileAsync(path$$1) {
   });
 }
 
-function lookup(filepath, root, options) {
-  var _this = this;
-
-  root = options.root.concat(root || []);
-  root = uniq(root);
-  var paths = root.map(function (root) {
-    return path.resolve(root || location.href, filepath);
-  });
-  return anySeries(paths, function () {
-    var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(path$$1) {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.prev = 0;
-              _context.next = 3;
-              return statFileAsync(path$$1);
-
-            case 3:
-              return _context.abrupt('return', path$$1);
-
-            case 6:
-              _context.prev = 6;
-              _context.t0 = _context['catch'](0);
-
-              _context.t0.message = _context.t0.code + ': Failed to lookup ' + filepath + ' in: ' + root;
-              throw _context.t0;
-
-            case 10:
-            case 'end':
-              return _context.stop();
-          }
-        }
-      }, _callee, _this, [[0, 6]]);
-    }));
-
-    return function (_x) {
-      return _ref.apply(this, arguments);
-    };
-  }());
-}
-
 var resolve = function () {
-  var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(filepath, root, options) {
+  var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(filepath, root, options) {
+    var _this = this;
+
+    var paths;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -1333,9 +1294,45 @@ var resolve = function () {
             if (!path.extname(filepath)) {
               filepath += options.extname;
             }
-            return _context2.abrupt('return', lookup(filepath, root, options));
+            root = options.root.concat(root || []);
+            root = uniq(root);
+            paths = root.map(function (root) {
+              return path.resolve(root, filepath);
+            });
+            return _context2.abrupt('return', anySeries(paths, function () {
+              var _ref2 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(path$$1) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.prev = 0;
+                        _context.next = 3;
+                        return statFileAsync(path$$1);
 
-          case 2:
+                      case 3:
+                        return _context.abrupt('return', path$$1);
+
+                      case 6:
+                        _context.prev = 6;
+                        _context.t0 = _context['catch'](0);
+
+                        _context.t0.message = _context.t0.code + ': Failed to lookup ' + filepath + ' in: ' + root;
+                        throw _context.t0;
+
+                      case 10:
+                      case 'end':
+                        return _context.stop();
+                    }
+                  }
+                }, _callee, _this, [[0, 6]]);
+              }));
+
+              return function (_x4) {
+                return _ref2.apply(this, arguments);
+              };
+            }()));
+
+          case 5:
           case 'end':
             return _context2.stop();
         }
@@ -1343,8 +1340,8 @@ var resolve = function () {
     }, _callee2, this);
   }));
 
-  return function resolve(_x2, _x3, _x4) {
-    return _ref2.apply(this, arguments);
+  return function resolve(_x, _x2, _x3) {
+    return _ref.apply(this, arguments);
   };
 }();
 
@@ -3583,7 +3580,7 @@ var _engine = {
 function normalizeStringArray(value) {
   if (isArray(value)) return value;
   if (isString(value)) return [value];
-  return [];
+  throw new TypeError('illegal root: ' + value);
 }
 
 function Liquid(options) {
