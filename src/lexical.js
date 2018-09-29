@@ -9,7 +9,7 @@ export const integer = /-?\d+/
 export const number = /-?\d+\.?\d*|\.?\d+/
 export const bool = /true|false/
 
-// peoperty access
+// property access
 export const identifier = /[\w-]+[?]?/
 export const subscript = new RegExp(`\\[(?:${quoted.source}|[\\w-\\.]+)\\]`)
 export const literal = new RegExp(`(?:${quoted.source}|${bool.source}|${number.source})`)

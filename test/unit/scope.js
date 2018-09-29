@@ -8,6 +8,7 @@ describe('scope', function () {
   beforeEach(function () {
     ctx = {
       foo: 'zoo',
+      one: 1,
       bar: {
         zoo: 'coo',
         'Mr.Smith': 'John',
@@ -45,6 +46,14 @@ describe('scope', function () {
     it('should handle nested access 4', function () {
       expect(scope.propertyAccessSeq('foo[0].bar'))
         .to.deep.equal(['foo', '0', 'bar'])
+    })
+    it('should handle nested access 5', function () {
+      expect(scope.propertyAccessSeq('foo[one].bar'))
+        .to.deep.equal(['foo', '1', 'bar'])
+    })
+    it('should handle nested access 6', function () {
+      expect(scope.propertyAccessSeq('foo[two].bar'))
+        .to.deep.equal(['foo', 'undefined', 'bar'])
     })
   })
 
