@@ -1,6 +1,7 @@
 import {resolve} from '../../src/template.js'
 import mock from 'mock-fs'
 import chai from 'chai'
+import path from 'path'
 import chaiAsPromised from 'chai-as-promised'
 
 const expect = chai.expect
@@ -15,7 +16,8 @@ describe('template', function () {
   describe('#resolve()', function () {
     it('should resolve based on root', function () {
       const filepath = resolve('bar.html', '/foo', {root: []})
-      return expect(filepath).to.eventually.equal('/foo/bar.html')
+      const expected = path.resolve('/foo/bar.html')
+      return expect(filepath).to.eventually.equal(expected)
     })
     it('should resolve based on root', function () {
       return expect(resolve('foo.html', '/foo', {root: []}))

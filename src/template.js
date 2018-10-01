@@ -1,7 +1,11 @@
 import * as _ from './util/underscore.js'
 import path from 'path'
 import {anySeries} from './util/promise.js'
-import {statFileAsync, readFileAsync} from './util/fs.js'
+import fs from 'fs'
+import {promisify} from 'util'
+
+const statFileAsync = promisify(fs.stat)
+const readFileAsync = promisify(fs.readFile)
 
 export async function resolve (filepath, root, options) {
   if (!path.extname(filepath)) {
@@ -22,5 +26,5 @@ export async function resolve (filepath, root, options) {
 }
 
 export async function read (filepath) {
-  return readFileAsync(filepath)
+  return readFileAsync(filepath, 'utf8')
 }
