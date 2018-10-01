@@ -19,8 +19,8 @@ export function stringify (value) {
   if (typeof value.toLiquid === 'function') {
     return stringify(value.toLiquid())
   }
-  if (isString(value)) {
-    return value
+  if (isString(value) || value instanceof RegExp || value instanceof Date) {
+    return value.toString()
   }
 
   const cache = []

@@ -51,6 +51,11 @@ describe('util/underscore', function () {
     it('should return "undefined" for undefined', function () {
       expect(_.stringify(undefined)).to.equal('undefined')
     })
+    it('should return locale string for date', function () {
+      const date = new Date('2018-10-01T14:51:00.000Z')
+      // Mon Oct 01 2018 22:51:00 GMT+0800 (CST)
+      expect(_.stringify(date)).to.equal(date.toString())
+    })
   })
   describe('.forOwn()', function () {
     it('should iterate all properties', function () {
