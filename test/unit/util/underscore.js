@@ -51,6 +51,10 @@ describe('util/underscore', function () {
     it('should return "undefined" for undefined', function () {
       expect(_.stringify(undefined)).to.equal('undefined')
     })
+    it('should return regex string for RegExp', function () {
+      const reg = /foo/g
+      expect(_.stringify(reg)).to.equal('/foo/g')
+    })
     it('should return locale string for date', function () {
       const date = new Date('2018-10-01T14:51:00.000Z')
       // Mon Oct 01 2018 22:51:00 GMT+0800 (CST)
