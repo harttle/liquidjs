@@ -9,6 +9,16 @@ export function isString (value) {
   return toStr.call(value) === '[object String]'
 }
 
+export function promisify (fn) {
+  return function () {
+    return new Promise((resolve, reject) => {
+      fn(...arguments, (err, result) => {
+        err ? reject(err) : resolve(result)
+      })
+    })
+  }
+}
+
 export function stringify (value) {
   if (isNil(value)) {
     return String(value)
