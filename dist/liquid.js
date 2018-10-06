@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.0.0, https://github.com/liquidjs
+ * liquidjs@6.0.1, https://github.com/liquidjs
  * (c) 2016-2018 harttle
  * Released under the MIT License.
  */
@@ -754,8 +754,8 @@
     if (typeof value.toLiquid === 'function') {
       return stringify(value.toLiquid());
     }
-    if (isString(value)) {
-      return value;
+    if (isString(value) || value instanceof RegExp || value instanceof Date) {
+      return value.toString();
     }
 
     var cache = [];
@@ -869,7 +869,7 @@
   var number = /-?\d+\.?\d*|\.?\d+/;
   var bool = /true|false/;
 
-  // peoperty access
+  // property access
   var identifier = /[\w-]+[?]?/;
   var subscript = new RegExp('\\[(?:' + quoted.source + '|[\\w-\\.]+)\\]');
   var literal = new RegExp('(?:' + quoted.source + '|' + bool.source + '|' + number.source + ')');
@@ -1155,7 +1155,7 @@
               name = str.slice(i + 1, j);
               if (!isInteger(name)) {
                 // foo[bar] vs. foo[1]
-                name = this.get(name);
+                name = String(this.get(name));
               }
               push();
               i = j + 1;

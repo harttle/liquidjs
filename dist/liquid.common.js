@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.0.0, https://github.com/liquidjs
+ * liquidjs@6.0.1, https://github.com/liquidjs
  * (c) 2016-2018 harttle
  * Released under the MIT License.
  */
@@ -7,8 +7,8 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var fs = _interopDefault(require('fs'));
 var path = _interopDefault(require('path'));
+var fs = _interopDefault(require('fs'));
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -745,6 +745,18 @@ function isString(value) {
   return toStr.call(value) === '[object String]';
 }
 
+function promisify(fn) {
+  return function () {
+    var _arguments = arguments;
+
+    return new Promise(function (resolve, reject) {
+      fn.apply(undefined, Array.prototype.slice.call(_arguments).concat([function (err, result) {
+        err ? reject(err) : resolve(result);
+      }]));
+    });
+  };
+}
+
 function stringify(value) {
   if (isNil(value)) {
     return String(value);
@@ -755,8 +767,8 @@ function stringify(value) {
   if (typeof value.toLiquid === 'function') {
     return stringify(value.toLiquid());
   }
-  if (isString(value)) {
-    return value;
+  if (isString(value) || value instanceof RegExp || value instanceof Date) {
+    return value.toString();
   }
 
   var cache = [];
@@ -883,7 +895,7 @@ var integer = /-?\d+/;
 var number = /-?\d+\.?\d*|\.?\d+/;
 var bool = /true|false/;
 
-// peoperty access
+// property access
 var identifier = /[\w-]+[?]?/;
 var subscript = new RegExp('\\[(?:' + quoted.source + '|[\\w-\\.]+)\\]');
 var literal = new RegExp('(?:' + quoted.source + '|' + bool.source + '|' + number.source + ')');
@@ -1169,7 +1181,7 @@ var Scope = {
             name = str.slice(i + 1, j);
             if (!isInteger(name)) {
               // foo[bar] vs. foo[1]
-              name = this.get(name);
+              name = String(this.get(name));
             }
             push();
             i = j + 1;
@@ -1267,20 +1279,8 @@ function mapSeries(iterable, iteratee) {
   });
 }
 
-function readFileAsync(filepath) {
-  return new Promise(function (resolve, reject) {
-    fs.readFile(filepath, 'utf8', function (err, content) {
-      err ? reject(err) : resolve(content);
-    });
-  });
-}
-function statFileAsync(path$$1) {
-  return new Promise(function (resolve, reject) {
-    fs.stat(path$$1, function (err, stat) {
-      return err ? reject(err) : resolve(stat);
-    });
-  });
-}
+var statFileAsync = promisify(fs.stat);
+var readFileAsync = promisify(fs.readFile);
 
 var resolve = function () {
   var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(filepath, root, options) {
@@ -1351,7 +1351,7 @@ var read = function () {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            return _context3.abrupt('return', readFileAsync(filepath));
+            return _context3.abrupt('return', readFileAsync(filepath, 'utf8'));
 
           case 1:
           case 'end':
