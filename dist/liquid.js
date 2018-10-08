@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.0.1, https://github.com/liquidjs
+ * liquidjs@6.1.0, https://github.com/liquidjs
  * (c) 2016-2018 harttle
  * Released under the MIT License.
  */
@@ -3280,7 +3280,12 @@
     'upcase': function upcase(str) {
       return stringify$1(str).toUpperCase();
     },
-    'url_encode': encodeURIComponent
+    'url_decode': function url_decode(x) {
+      return x.split('+').map(decodeURIComponent).join(' ');
+    },
+    'url_encode': function url_encode(x) {
+      return x.split(' ').map(encodeURIComponent).join('+');
+    }
   };
 
   function escape(str) {
