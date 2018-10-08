@@ -395,11 +395,16 @@ describe('filters', function () {
 
   it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
 
+  describe('url_decode', function () {
+    it('should decode %xx and +',
+      () => test('{{ "%27Stop%21%27+said+Fred" | url_decode }}', "'Stop!' said Fred"))
+  })
+
   describe('url_encode', function () {
     it('should encode @',
       () => test('{{ "john@liquid.com" | url_encode }}', 'john%40liquid.com'))
     it('should encode <space>',
-      () => test('{{ "Tetsuro Takara" | url_encode }}', 'Tetsuro%20Takara'))
+      () => test('{{ "Tetsuro Takara" | url_encode }}', 'Tetsuro+Takara'))
   })
 
   describe('obj_test', function () {
