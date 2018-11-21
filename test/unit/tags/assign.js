@@ -41,6 +41,14 @@ describe('tags/assign', function () {
     return expect(liquid.parseAndRender(src))
       .to.eventually.equal('A')
   })
+  it('should assign as filter across multiple lines as result', function () {
+    const src = `{% assign foo="a b"
+    | capitalize
+    | split: " "
+    | first %}{{foo}}`
+    return expect(liquid.parseAndRender(src))
+      .to.eventually.equal('A')
+  })
   it('should assign var-1', function () {
     const src = '{% assign var-1 = 5 %}{{ var-1 }}'
     return expect(liquid.parseAndRender(src)).to.eventually.equal('5')
