@@ -2225,7 +2225,7 @@ function For (liquid, Liquid) {
 }
 
 function Assign (liquid, Liquid) {
-  var re = new RegExp('(' + identifier.source + ')\\s*=(.*)');
+  var re = new RegExp('(' + identifier.source + ')\\s*=([^]*)');
   var AssignScope = Liquid.Types.AssignScope;
 
 
