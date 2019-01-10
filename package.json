@@ -5,6 +5,7 @@
   "main": "dist/liquid.common.js",
   "module": "src/index.js",
   "browser": "dist/liquid.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src/ test/ *.js",
     "dev": "mocha test/unit",
