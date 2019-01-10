@@ -47,11 +47,11 @@ declare namespace Liquid {
   }
   export type Filter = (...args?: any) => string
 
-
   export function isTruthy(val: any): boolean;
   export function isFalsy(val: any): boolean;
   export function evalExp(exp: string, scope: any): any;
   export function evalValue(str: string, scope: any): any;
+  export const Types: Types;
 
   declare class LiquidError extends Error {
     public input: string
