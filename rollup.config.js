@@ -9,7 +9,7 @@ const fake = {fs: `export default {}`, path: `export default {}`}
 const version = process.env.VERSION || pkg.version
 const sourcemap = true
 const banner = `/*
- * liquidjs@${version}, https://github.com/liquidjs
+ * liquidjs@${version}, https://github.com/harttle/liquidjs
  * (c) 2016-${new Date().getFullYear()} harttle
  * Released under the MIT License.
  */`
