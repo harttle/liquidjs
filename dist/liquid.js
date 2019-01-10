@@ -1,6 +1,6 @@
 /*
- * liquidjs@6.1.1, https://github.com/liquidjs
- * (c) 2016-2018 harttle
+ * liquidjs@6.2.0, https://github.com/harttle/liquidjs
+ * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
 (function (global, factory) {
