@@ -40,7 +40,7 @@ const filters = {
   'escape_once': str => escape(unescape(str)),
   'first': v => v[0],
   'floor': v => Math.floor(v),
-  'join': (v, arg) => v.join(arg),
+  'join': (v, arg) => v.join(arg === undefined ? ' ' : arg),
   'last': v => _.last(v),
   'lstrip': v => stringify(v).replace(/^\s+/, ''),
   'map': (arr, arg) => arr.map(v => v[arg]),
@@ -61,8 +61,10 @@ const filters = {
   },
   'rstrip': str => stringify(str).replace(/\s+$/, ''),
   'size': v => v.length,
-  'slice': (v, begin, length) =>
-    v.substr(begin, length === undefined ? 1 : length),
+  'slice': (v, begin, length) => {
+    if (length === undefined) length = 1
+    return v.slice(begin, begin + length)
+  },
   'sort': (v, arg) => v.sort(arg),
   'split': (v, arg) => stringify(v).split(arg),
   'strip': (v) => stringify(v).trim(),

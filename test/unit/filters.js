@@ -154,10 +154,17 @@ describe('filters', function () {
     it('should return "3" for 3.5', () => test('{{ "3.5" | floor }}', '3'))
   })
 
-  it('should support join', function () {
-    const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
-      '{{ beatles | join: " and " }}'
-    return test(src, 'John and Paul and George and Ringo')
+  describe('join', function () {
+    it('should support join', function () {
+      const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
+        '{{ beatles | join: " and " }}'
+      return test(src, 'John and Paul and George and Ringo')
+    })
+    it('should default separator to space', function () {
+      const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
+        '{{ beatles | join }}'
+      return test(src, 'John Paul George Ringo')
+    })
   })
 
   it('should support split/last', function () {
@@ -277,6 +284,7 @@ describe('filters', function () {
     it('should slice third char by 2', () => test('{{ "Liquid" | slice: 2 }}', 'q'))
     it('should slice substr by 2,5', () => test('{{ "Liquid" | slice: 2, 5 }}', 'quid'))
     it('should slice substr by -3,2', () => test('{{ "Liquid" | slice: -3, 2 }}', 'ui'))
+    it('should support array', () => test('{{ "1,2,3,4" | split: "," | slice: 1,2 | join }}', '2 3'))
   })
 
   it('should support sort', function () {
