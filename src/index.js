@@ -75,6 +75,9 @@ const _engine = {
   registerTag: function (name, tag) {
     return this.tag.register(name, tag)
   },
+  plugin: function (plugin) {
+    return plugin.call(this, Liquid)
+  },
   express: function (opts) {
     opts = opts || {}
     const self = this

@@ -230,6 +230,25 @@ engine.registerTag('upper', {
 
 See existing tag implementations here: <https://github.com/harttle/liquidjs/blob/master/tags/>
 
+## Plugin API
+
+A pack of tags or filters can be encapsulated into a **plugin**, which will be typically installed via npm.
+
+```javascript
+engine.plugin(require('./some-plugin'));
+
+// some-plugin.js
+module.exports = function (Liquid) {
+    // here `this` refers to the engine instance
+    // `Liquid` provides facilities to implement tags and filters
+    this.registerFilter('foo', x => x);
+}
+```
+
+Plugin List:
+
+* To add your plugin, contact me or simply send a PR.
+
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node
 [shopify/liquid]: https://shopify.github.io/liquid/
