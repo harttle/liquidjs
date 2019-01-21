@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.2.1, https://github.com/harttle/liquidjs
+ * liquidjs@6.3.0, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -3569,6 +3569,9 @@ var _engine = {
   },
   registerTag: function registerTag(name, tag) {
     return this.tag.register(name, tag);
+  },
+  plugin: function plugin(_plugin) {
+    return _plugin.call(this, Liquid);
   },
   express: function express(opts) {
     opts = opts || {};
