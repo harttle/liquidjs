@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.2.0, https://github.com/harttle/liquidjs
+ * liquidjs@6.2.1, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -3179,7 +3179,7 @@
       return Math.floor(v);
     },
     'join': function join(v, arg) {
-      return v.join(arg);
+      return v.join(arg === undefined ? ' ' : arg);
     },
     'last': function last$$1(v) {
       return last(v);
@@ -3233,7 +3233,8 @@
       return v.length;
     },
     'slice': function slice(v, begin, length) {
-      return v.substr(begin, length === undefined ? 1 : length);
+      if (length === undefined) length = 1;
+      return v.slice(begin, begin + length);
     },
     'sort': function sort(v, arg) {
       return v.sort(arg);
