@@ -9,15 +9,16 @@
   "scripts": {
     "lint": "eslint src/ test/ *.js",
     "dev": "mocha test/unit",
-    "test": "cross-env NODE_ENV=test nyc --reporter=html mocha test/unit",
+    "unit": "cross-env NODE_ENV=test nyc --reporter=html mocha test/unit",
     "e2e": "mocha test/e2e",
+    "test": "npm run lint && npm run unit && npm run e2e",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "dist": "rollup -c && ls -lh dist",
+    "build": "rollup -c && ls -lh dist",
     "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
     "demo:nodejs": "node ./demo/nodejs/index.js",
     "demo:express": "cd ./demo/express/ && npm start",
-    "preversion": "npm run lint && npm test",
-    "version": "npm run dist && git add -A dist",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist",
     "postversion": "git push --tags"
   },
   "repository": {
@@ -71,9 +72,13 @@
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-shim": "^1.0.0",
     "rollup-plugin-uglify": "^4.0.0",
+    "semantic-release": "^15.13.3",
     "sinon": "^6.1.4",
     "sinon-chai": "^3.2.0",
     "supertest": "^3.0.0"
+  },
+  "release": {
+    "branch": "master"
   },
   "nyc": {
     "require": [

@@ -9,6 +9,8 @@
 [![David](https://img.shields.io/david/harttle/liquidjs.svg)](https://david-dm.org/harttle/liquidjs)
 [![David Dev](https://img.shields.io/david/dev/harttle/liquidjs.svg)](https://david-dm.org/harttle/liquidjs?type=dev)
 [![DUB](https://img.shields.io/dub/l/vibe-d.svg)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://github.com/harttle/liquidjs)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/harttle/liquidjs)
 
 This is a liquid implementation for both Node.js and browsers. Website: <http://harttle.github.io/liquidjs/>, Live Demo: <https://jsfiddle.net/6u40xbzs/> 
 
@@ -42,6 +44,7 @@ Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is
     * [Register Tags](#register-tags), [Builtin Tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
     * [Operators](https://github.com/harttle/liquidjs/wiki/Operators)
     * [Whitespace Control](https://github.com/harttle/liquidjs/wiki/Whitespace-Control)
+* [Contribute Guidelines](#contribute-guidelines)
 
 ## Render from String
 
@@ -248,6 +251,13 @@ module.exports = function (Liquid) {
 Plugin List:
 
 * To add your plugin, contact me or simply send a PR.
+
+## Contribute Guidelines
+
+This repo uses [eslint](https://eslint.org/) to check code style, [semantic-release](https://github.com/semantic-release/semantic-release) to generate changelog and publish to npm and Github Releases.
+
+* Code Style: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
+* Commit Message: <https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits>
 
 [nunjucks]: http://mozilla.github.io/nunjucks/
 [liquid-node]: https://github.com/sirlantis/liquid-node

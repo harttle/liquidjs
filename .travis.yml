@@ -3,10 +3,26 @@ node_js:
   - "8"
   - "6"
   - "4"
-before_script:
-  - npm install -g mocha
-script: 
-  - if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run test; fi
-  - npm run e2e
-after_success:
-  - if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run coveralls; fi
+jobs:
+  include:
+    - stage: test
+    - name: 'Linting'
+      script: npm run lint
+    - name: 'Unit Test'
+      script: if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run unit; fi
+    - name: 'E2E Test'
+      script: npm run e2e
+    - name: 'Test Coverage'
+      script: if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run coveralls; fi
+
+    - stage: build
+      script: npm run build
+
+    - stage: release
+      if: branch = master
+      node_js: "8"
+      script: skip
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: npx semantic-release
