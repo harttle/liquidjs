@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.4.1, https://github.com/harttle/liquidjs
+ * liquidjs@6.4.2, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -51,7 +51,7 @@
    * LICENSE file in the root directory of this source tree.
    */
 
-  var regeneratorRuntime$1 = function (exports) {
+  !function (global) {
 
     var Op = Object.prototype;
     var hasOwn = Op.hasOwnProperty;
@@ -60,6 +60,23 @@
     var iteratorSymbol = $Symbol.iterator || "@@iterator";
     var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
     var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+    var inModule = (typeof module === "undefined" ? "undefined" : _typeof(module)) === "object";
+    var runtime = global.regeneratorRuntime;
+    if (runtime) {
+      if (inModule) {
+        // If regeneratorRuntime is defined globally and we're in a module,
+        // make the exports object identical to regeneratorRuntime.
+        module.exports = runtime;
+      }
+      // Don't bother evaluating the rest of this file if the runtime was
+      // already defined globally.
+      return;
+    }
+
+    // Define the runtime globally (as expected by generated code) as either
+    // module.exports (if we're in a module) or a new, empty object.
+    runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
     function wrap(innerFn, outerFn, self, tryLocsList) {
       // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
@@ -73,7 +90,7 @@
 
       return generator;
     }
-    exports.wrap = wrap;
+    runtime.wrap = wrap;
 
     // Try/catch helper to minimize deoptimizations. Returns a completion
     // record like context.tryEntries[i].completion. This interface could
@@ -140,7 +157,7 @@
       });
     }
 
-    exports.isGeneratorFunction = function (genFun) {
+    runtime.isGeneratorFunction = function (genFun) {
       var ctor = typeof genFun === "function" && genFun.constructor;
       return ctor ? ctor === GeneratorFunction ||
       // For the native GeneratorFunction constructor, the best we can
@@ -148,7 +165,7 @@
       (ctor.displayName || ctor.name) === "GeneratorFunction" : false;
     };
 
-    exports.mark = function (genFun) {
+    runtime.mark = function (genFun) {
       if (Object.setPrototypeOf) {
         Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
       } else {
@@ -165,7 +182,7 @@
     // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
     // `hasOwn.call(value, "__await")` to determine if the yielded value is
     // meant to be awaited.
-    exports.awrap = function (arg) {
+    runtime.awrap = function (arg) {
       return { __await: arg };
     };
 
@@ -236,15 +253,15 @@
     AsyncIterator.prototype[asyncIteratorSymbol] = function () {
       return this;
     };
-    exports.AsyncIterator = AsyncIterator;
+    runtime.AsyncIterator = AsyncIterator;
 
     // Note that simple async functions are implemented on top of
     // AsyncIterator objects; they just return a Promise for the value of
     // the final result produced by the iterator.
-    exports.async = function (innerFn, outerFn, self, tryLocsList) {
+    runtime.async = function (innerFn, outerFn, self, tryLocsList) {
       var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList));
 
-      return exports.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
+      return runtime.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
       : iter.next().then(function (result) {
         return result.done ? result.value : iter.next();
       });
@@ -335,8 +352,7 @@
         context.delegate = null;
 
         if (context.method === "throw") {
-          // Note: ["return"] must be used for ES3 parsing compatibility.
-          if (delegate.iterator["return"]) {
+          if (delegate.iterator.return) {
             // If the delegate iterator has a return method, give it a
             // chance to clean up.
             context.method = "return";
@@ -454,7 +470,7 @@
       this.reset(true);
     }
 
-    exports.keys = function (object) {
+    runtime.keys = function (object) {
       var keys = [];
       for (var key in object) {
         keys.push(key);
@@ -516,7 +532,7 @@
       // Return an iterator with no values.
       return { next: doneResult };
     }
-    exports.values = values;
+    runtime.values = values;
 
     function doneResult() {
       return { value: undefined, done: true };
@@ -709,18 +725,13 @@
         return ContinueSentinel;
       }
     };
-
-    // Regardless of whether this script is executing as a CommonJS module
-    // or not, return the runtime object so that we can declare the variable
-    // regeneratorRuntime in the outer scope, which allows this module to be
-    // injected easily by `bin/regenerator --include-runtime script.js`.
-    return exports;
   }(
-  // If this script is executing as a CommonJS module, use module.exports
-  // as the regeneratorRuntime namespace. Otherwise create a new empty
-  // object. Either way, the resulting object will be used to initialize
-  // the regeneratorRuntime variable at the top of this file.
-  (typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" ? module.exports : {});
+  // In sloppy mode, unbound `this` refers to the global object, fallback to
+  // Function constructor if we're in global strict mode. That is sadly a form
+  // of indirect eval which violates Content Security Policy.
+  function () {
+    return this || (typeof self === "undefined" ? "undefined" : _typeof(self)) === "object" && self;
+  }() || Function("return this")());
 
   var toStr = Object.prototype.toString;
   var arrToStr = Array.prototype.toString;
