@@ -1,13 +1,13 @@
 /*
- * liquidjs@6.3.0, https://github.com/harttle/liquidjs
+ * liquidjs@6.4.1, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.Liquid = factory());
-}(this, (function () { 'use strict';
+  (global = global || self, global.Liquid = factory());
+}(this, function () { 'use strict';
 
   var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
     return typeof obj;
@@ -51,7 +51,7 @@
    * LICENSE file in the root directory of this source tree.
    */
 
-  !function (global) {
+  var regeneratorRuntime$1 = function (exports) {
 
     var Op = Object.prototype;
     var hasOwn = Op.hasOwnProperty;
@@ -60,23 +60,6 @@
     var iteratorSymbol = $Symbol.iterator || "@@iterator";
     var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
     var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-    var inModule = (typeof module === "undefined" ? "undefined" : _typeof(module)) === "object";
-    var runtime = global.regeneratorRuntime;
-    if (runtime) {
-      if (inModule) {
-        // If regeneratorRuntime is defined globally and we're in a module,
-        // make the exports object identical to regeneratorRuntime.
-        module.exports = runtime;
-      }
-      // Don't bother evaluating the rest of this file if the runtime was
-      // already defined globally.
-      return;
-    }
-
-    // Define the runtime globally (as expected by generated code) as either
-    // module.exports (if we're in a module) or a new, empty object.
-    runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
     function wrap(innerFn, outerFn, self, tryLocsList) {
       // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
@@ -90,7 +73,7 @@
 
       return generator;
     }
-    runtime.wrap = wrap;
+    exports.wrap = wrap;
 
     // Try/catch helper to minimize deoptimizations. Returns a completion
     // record like context.tryEntries[i].completion. This interface could
@@ -157,7 +140,7 @@
       });
     }
 
-    runtime.isGeneratorFunction = function (genFun) {
+    exports.isGeneratorFunction = function (genFun) {
       var ctor = typeof genFun === "function" && genFun.constructor;
       return ctor ? ctor === GeneratorFunction ||
       // For the native GeneratorFunction constructor, the best we can
@@ -165,7 +148,7 @@
       (ctor.displayName || ctor.name) === "GeneratorFunction" : false;
     };
 
-    runtime.mark = function (genFun) {
+    exports.mark = function (genFun) {
       if (Object.setPrototypeOf) {
         Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
       } else {
@@ -182,7 +165,7 @@
     // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
     // `hasOwn.call(value, "__await")` to determine if the yielded value is
     // meant to be awaited.
-    runtime.awrap = function (arg) {
+    exports.awrap = function (arg) {
       return { __await: arg };
     };
 
@@ -253,15 +236,15 @@
     AsyncIterator.prototype[asyncIteratorSymbol] = function () {
       return this;
     };
-    runtime.AsyncIterator = AsyncIterator;
+    exports.AsyncIterator = AsyncIterator;
 
     // Note that simple async functions are implemented on top of
     // AsyncIterator objects; they just return a Promise for the value of
     // the final result produced by the iterator.
-    runtime.async = function (innerFn, outerFn, self, tryLocsList) {
+    exports.async = function (innerFn, outerFn, self, tryLocsList) {
       var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList));
 
-      return runtime.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
+      return exports.isGeneratorFunction(outerFn) ? iter // If outerFn is a generator, return the full iterator.
       : iter.next().then(function (result) {
         return result.done ? result.value : iter.next();
       });
@@ -352,7 +335,8 @@
         context.delegate = null;
 
         if (context.method === "throw") {
-          if (delegate.iterator.return) {
+          // Note: ["return"] must be used for ES3 parsing compatibility.
+          if (delegate.iterator["return"]) {
             // If the delegate iterator has a return method, give it a
             // chance to clean up.
             context.method = "return";
@@ -470,7 +454,7 @@
       this.reset(true);
     }
 
-    runtime.keys = function (object) {
+    exports.keys = function (object) {
       var keys = [];
       for (var key in object) {
         keys.push(key);
@@ -532,7 +516,7 @@
       // Return an iterator with no values.
       return { next: doneResult };
     }
-    runtime.values = values;
+    exports.values = values;
 
     function doneResult() {
       return { value: undefined, done: true };
@@ -725,15 +709,21 @@
         return ContinueSentinel;
       }
     };
+
+    // Regardless of whether this script is executing as a CommonJS module
+    // or not, return the runtime object so that we can declare the variable
+    // regeneratorRuntime in the outer scope, which allows this module to be
+    // injected easily by `bin/regenerator --include-runtime script.js`.
+    return exports;
   }(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  function () {
-    return this || (typeof self === "undefined" ? "undefined" : _typeof(self)) === "object" && self;
-  }() || Function("return this")());
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+  (typeof module === "undefined" ? "undefined" : _typeof(module)) === "object" ? module.exports : {});
 
   var toStr = Object.prototype.toString;
+  var arrToStr = Array.prototype.toString;
 
   /*
    * Checks if value is classified as a String primitive or object.
@@ -744,20 +734,21 @@
     return toStr.call(value) === '[object String]';
   }
 
-  function stringify(value) {
-    if (isNil(value)) {
-      return String(value);
-    }
-    if (typeof value.to_liquid === 'function') {
-      return stringify(value.to_liquid());
-    }
-    if (typeof value.toLiquid === 'function') {
-      return stringify(value.toLiquid());
-    }
-    if (isString(value) || value instanceof RegExp || value instanceof Date) {
-      return value.toString();
-    }
+  function isFunction(value) {
+    return typeof value === 'function';
+  }
 
+  function stringify(value) {
+    if (isNil(value)) return String(value);
+    if (isFunction(value.to_liquid)) return stringify(value.to_liquid());
+    if (isFunction(value.toLiquid)) return stringify(value.toLiquid());
+    if (isFunction(value.to_s)) return value.to_s();
+    if ([toStr, arrToStr].indexOf(value.toString) > -1) return defaultToString(value);
+    if (isFunction(value.toString)) return value.toString();
+    return toStr.call(value);
+  }
+
+  function defaultToString(value) {
     var cache = [];
     return JSON.stringify(value, function (key, value) {
       if (isObject(value)) {
@@ -1103,16 +1094,10 @@
       if (isNil(obj)) {
         val = undefined;
       } else {
-        if (typeof obj.to_liquid === 'function') {
-          obj = obj.to_liquid();
-        } else if (typeof obj.toLiquid === 'function') {
-          obj = obj.toLiquid();
-        }
-
-        if (key === 'size' && (isArray(obj) || isString(obj))) {
-          val = obj.length;
-        } else {
-          val = obj[key];
+        obj = toLiquid(obj);
+        val = key === 'size' ? readSize(obj) : obj[key];
+        if (isFunction(obj.liquid_method_missing)) {
+          val = obj.liquid_method_missing(key);
         }
       }
       if (isNil(val) && this.opts.strict_variables) {
@@ -1185,6 +1170,22 @@
       }
     }
   };
+
+  function toLiquid(obj) {
+    if (isFunction(obj.to_liquid)) {
+      return obj.to_liquid();
+    }
+    if (isFunction(obj.toLiquid)) {
+      return obj.toLiquid();
+    }
+    return obj;
+  }
+
+  function readSize(obj) {
+    if (!isNil(obj.size)) return obj.size;
+    if (isArray(obj) || isString(obj)) return obj.length;
+    return obj.size;
+  }
 
   function matchRightBracket(str, begin) {
     var stack = 1; // count of '[' - count of ']'
@@ -3576,5 +3577,5 @@
 
   return Liquid;
 
-})));
+}));
 //# sourceMappingURL=liquid.js.map
