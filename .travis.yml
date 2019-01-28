@@ -3,9 +3,10 @@ node_js:
   - "8"
   - "6"
   - "4"
-script: npm run lint && npm test
 jobs:
   include:
+    - stage: lint
+      script: npm run lint
     - stage: coverage
       script: npm run coverage && npm run coveralls
     - stage: release
