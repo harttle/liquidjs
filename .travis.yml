@@ -1,24 +1,27 @@
 language: node_js
-node_js: "8"
+node_js:
+  - "8"
+  - "6"
+  - "4"
 jobs:
   include:
     - stage: test
       name: 'Linting'
+      node_js: "8"
       script: npm run lint
     - name: 'Unit Test'
+      node_js: "8"
       script: npm run unit && npm run coveralls
     - name: 'E2E Test'
       script: npm run e2e
-      node_js:
-        - "8"
-        - "6"
-        - "4"
 
     - stage: build
+      node_js: "8"
       script: npm run build
 
     - stage: release
       if: branch = master
+      node_js: "8"
       script: skip
       deploy:
         provider: script

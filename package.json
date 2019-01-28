@@ -17,9 +17,7 @@
     "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
     "demo:nodejs": "node ./demo/nodejs/index.js",
     "demo:express": "cd ./demo/express/ && npm start",
-    "preversion": "npm test",
-    "version": "npm run build && git add -A dist",
-    "postversion": "git push --tags"
+    "version": "npm run build && git add -A dist"
   },
   "repository": {
     "type": "git",
