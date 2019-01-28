@@ -1,7 +1,7 @@
 import chai from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
-import {RenderError, RenderBreakError} from '../../../src/util/error.js'
+import { RenderError, RenderBreakError } from '../../../src/util/error.js'
 import * as _ from '../../../src/util/underscore.js'
 
 const expect = chai.expect
@@ -37,13 +37,13 @@ describe('util/underscore', function () {
   })
   describe('.stringify()', function () {
     it('should respect to to_liquid() method', function () {
-      expect(_.stringify({to_liquid: () => 'foo'})).to.equal('foo')
+      expect(_.stringify({ to_liquid: () => 'foo' })).to.equal('foo')
     })
     it('should respect to toLiquid() method', function () {
-      expect(_.stringify({toLiquid: () => 'foo'})).to.equal('foo')
+      expect(_.stringify({ toLiquid: () => 'foo' })).to.equal('foo')
     })
     it('should recursively call toLiquid()', function () {
-      expect(_.stringify({toLiquid: () => ({toLiquid: () => 'foo'})})).to.equal('foo')
+      expect(_.stringify({ toLiquid: () => ({ toLiquid: () => 'foo' }) })).to.equal('foo')
     })
     it('should return "null" for null', function () {
       expect(_.stringify(null)).to.equal('null')

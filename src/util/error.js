@@ -22,7 +22,7 @@ function initLiquidError (err, token) {
 }
 
 export function TokenizationError (message, token) {
-  initLiquidError.call(this, {message: message}, token)
+  initLiquidError.call(this, { message: message }, token)
 }
 TokenizationError.prototype = _.create(Error.prototype)
 TokenizationError.prototype.constructor = TokenizationError

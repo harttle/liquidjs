@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
 import Tag from '../../src/tag.js'
-import {factory as scopeFactory} from '../../src/scope.js'
+import { factory as scopeFactory } from '../../src/scope.js'
 import Filter from '../../src/filter'
 import Render from '../../src/render.js'
 import parser from '../../src/parser.js'
@@ -31,7 +31,7 @@ describe('render', function () {
 
     it('should render html', function () {
       const scope = scopeFactory({})
-      return expect(render.renderTemplates([{type: 'html', value: '<p>'}], scope)).to.eventually.equal('<p>')
+      return expect(render.renderTemplates([{ type: 'html', value: '<p>' }], scope)).to.eventually.equal('<p>')
     })
   })
 
@@ -59,7 +59,7 @@ describe('render', function () {
       return expect(render.renderValue(tpl, scope)).to.eventually.equal('{"num":2,"circular":{"bar":"bar"}}')
     })
     it('should skip function property', function () {
-      const scope = scopeFactory({obj: {foo: 'foo', bar: x => x}})
+      const scope = scopeFactory({ obj: { foo: 'foo', bar: x => x } })
       const tpl = Template.parseValue('obj')
       return expect(render.renderValue(tpl, scope)).to.eventually.equal('{"foo":"foo"}')
     })
@@ -92,7 +92,7 @@ describe('render', function () {
       filter.register('time', time)
       const tpl = Template.parseValue('foo.bar | date: "b" | time:2')
       const scope = scopeFactory({
-        foo: {bar: 'bar'}
+        foo: { bar: 'bar' }
       })
       render.evalValue(tpl, scope)
       expect(date).to.have.been.calledWith('bar', 'b')

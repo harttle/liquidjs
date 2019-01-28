@@ -1,4 +1,4 @@
-import {read} from '../../src/template-browser.js'
+import { read } from '../../src/template-browser.js'
 import sinon from 'sinon'
 import chai from 'chai'
 
@@ -16,7 +16,7 @@ describe('template-browser', () => {
     server = sinon.createFakeServer()
     server.autoRespond = true
     server.respondWith('GET', 'https://example.com/views/hello.html',
-      [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
+      [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
     global.XMLHttpRequest = sinon.useFakeXMLHttpRequest()
   })
   afterEach(() => {

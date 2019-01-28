@@ -15,7 +15,7 @@ describe('tags/capture', function () {
 
   it('should shading rather than overwriting', function () {
     const src = '{% capture var %}10{% endcapture %}{{var}}'
-    const ctx = {'var': 20}
+    const ctx = { 'var': 20 }
     return liquid.parseAndRender(src, ctx)
       .then(x => {
         expect(x).to.equal('10')

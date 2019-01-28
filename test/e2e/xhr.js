@@ -15,7 +15,7 @@ describe('xhr', () => {
     server = sinon.createFakeServer()
     server.autoRespond = true
     server.respondWith('GET', 'https://example.com/views/hello.html',
-      [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
+      [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
     var dom = new JSDOM('', {
       url: 'https://example.com/foo/bar.html',
       contentType: 'text/html',
@@ -35,29 +35,29 @@ describe('xhr', () => {
   })
   describe('#renderFile()', () => {
     it('should support without extname', () => {
-      return expect(engine.renderFile('hello', {name: 'alice1'}))
+      return expect(engine.renderFile('hello', { name: 'alice1' }))
         .to.eventually.equal('hello alice1')
     })
     it('should support with extname', () => {
-      return expect(engine.renderFile('hello.html', {name: 'alice2'}))
+      return expect(engine.renderFile('hello.html', { name: 'alice2' }))
         .to.eventually.equal('hello alice2')
     })
     it('should support with absolute path', () => {
       server.respondWith('GET', 'https://example.com/foo.html',
-        [200, {'Content-Type': 'text/plain'}, 'foo'])
+        [200, { 'Content-Type': 'text/plain' }, 'foo'])
       return expect(engine.renderFile('/foo.html'))
         .to.eventually.equal('foo')
     })
     it('should support with url', () => {
-      return expect(engine.renderFile('https://example.com/views/hello.html', {name: 'alice4'}))
+      return expect(engine.renderFile('https://example.com/views/hello.html', { name: 'alice4' }))
         .to.eventually.equal('hello alice4')
     })
     it('should support include', () => {
       server.respondWith('GET', 'https://example.com/views/hello.html',
-        [200, {'Content-Type': 'text/plain'}, "hello {% include 'name.html' %}"])
+        [200, { 'Content-Type': 'text/plain' }, "hello {% include 'name.html' %}"])
       server.respondWith('GET', 'https://example.com/views/name.html',
-        [200, {'Content-Type': 'text/plain'}, '{{name}}'])
-      return expect(engine.renderFile('hello.html', {name: 'alice5'}))
+        [200, { 'Content-Type': 'text/plain' }, '{{name}}'])
+      return expect(engine.renderFile('hello.html', { name: 'alice5' }))
         .to.eventually.equal('hello alice5')
     })
     it('should throw 404', () => {
@@ -82,8 +82,8 @@ describe('xhr', () => {
         extname: '.html'
       })
       server.respondWith('GET', 'https://example.com/foo/hello.html',
-        [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-      return expect(engine.renderFile('hello.html', {name: 'alice5'}))
+        [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
+      return expect(engine.renderFile('hello.html', { name: 'alice5' }))
         .to.eventually.equal('hello alice5')
     })
     it('should support empty root', () => {
@@ -92,8 +92,8 @@ describe('xhr', () => {
         extname: '.html'
       })
       server.respondWith('https://example.com/foo/hello.html',
-        [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-      return expect(engine.renderFile('hello.html', {name: 'alice5'}))
+        [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
+      return expect(engine.renderFile('hello.html', { name: 'alice5' }))
         .to.eventually.equal('hello alice5')
     })
     it('should support with relative path', () => {
@@ -102,8 +102,8 @@ describe('xhr', () => {
         extname: '.html'
       })
       server.respondWith('GET', 'https://example.com/foo/views/hello.html',
-        [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-      return expect(engine.renderFile('hello.html', {name: 'alice5'}))
+        [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
+      return expect(engine.renderFile('hello.html', { name: 'alice5' }))
         .to.eventually.equal('hello alice5')
     })
     it('should support with absolute path', () => {
@@ -112,8 +112,8 @@ describe('xhr', () => {
         extname: '.html'
       })
       server.respondWith('GET', 'https://example.com/views/hello.html',
-        [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-      return expect(engine.renderFile('hello.html', {name: 'alice5'}))
+        [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
+      return expect(engine.renderFile('hello.html', { name: 'alice5' }))
         .to.eventually.equal('hello alice5')
     })
     it('should support with url', () => {
@@ -122,20 +122,20 @@ describe('xhr', () => {
         extname: '.html'
       })
       server.respondWith('GET', 'https://foo.com/bar/hello.html',
-        [200, {'Content-Type': 'text/plain'}, 'hello {{name}}'])
-      return expect(engine.renderFile('hello.html', {name: 'alice5'}))
+        [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
+      return expect(engine.renderFile('hello.html', { name: 'alice5' }))
         .to.eventually.equal('hello alice5')
     })
   })
   describe('cache options', () => {
     it('should be disabled by default', () => {
       server.respondWith('GET', 'https://example.com/views/foo.html',
-        [200, {'Content-Type': 'text/plain'}, 'foo1'])
+        [200, { 'Content-Type': 'text/plain' }, 'foo1'])
       return engine.renderFile('foo.html')
         .then((html) => {
           expect(html).to.equal('foo1')
           server.respondWith('GET', 'https://example.com/views/foo.html',
-            [200, {'Content-Type': 'text/plain'}, 'foo2'])
+            [200, { 'Content-Type': 'text/plain' }, 'foo2'])
           return engine.renderFile('foo.html')
         })
         .then(html => expect(html).to.equal('foo2'))
@@ -147,12 +147,12 @@ describe('xhr', () => {
         cache: true
       })
       server.respondWith('GET', 'https://example.com/views/foo.html',
-        [200, {'Content-Type': 'text/plain'}, 'foo1'])
+        [200, { 'Content-Type': 'text/plain' }, 'foo1'])
       return engine.renderFile('foo.html')
         .then((html) => {
           expect(html).to.equal('foo1')
           server.respondWith('GET', 'https://example.com/views/foo.html',
-            [200, {'Content-Type': 'text/plain'}, 'foo2'])
+            [200, { 'Content-Type': 'text/plain' }, 'foo2'])
           return engine.renderFile('foo.html')
         })
         .then(html => expect(html).to.equal('foo1'))

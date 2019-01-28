@@ -17,7 +17,7 @@ describe('tags/for', function () {
       strObj: new String(''),
       emptyObj: {},
       nullProtoObj: Object.create(null),
-      obj: {foo: 'bar', coo: 'haa'},
+      obj: { foo: 'bar', coo: 'haa' },
       alpha: ['a', 'b', 'c'],
       emptyArray: []
     }
@@ -37,12 +37,12 @@ describe('tags/for', function () {
   describe('scope', function () {
     it('should read super scope', function () {
       const src = '{%for a in (1..2)%}{{num}}{%endfor%}'
-      return expect(liquid.parseAndRender(src, {num: 1}))
+      return expect(liquid.parseAndRender(src, { num: 1 }))
         .to.eventually.equal('11')
     })
     it('should write super scope', function () {
       const src = '{%for a in (1..2)%}{{num}}{%assign num = 2%}{%endfor%}'
-      return expect(liquid.parseAndRender(src, {num: 1}))
+      return expect(liquid.parseAndRender(src, { num: 1 }))
         .to.eventually.equal('12')
     })
   })

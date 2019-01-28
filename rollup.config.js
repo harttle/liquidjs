@@ -1,11 +1,11 @@
 import shim from 'rollup-plugin-shim'
 import alias from 'rollup-plugin-alias'
 import babel from 'rollup-plugin-babel'
-import {uglify} from 'rollup-plugin-uglify'
+import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
 import nodeResolve from 'rollup-plugin-node-resolve'
 
-const fake = {fs: `export default {}`, path: `export default {}`}
+const fake = { fs: `export default {}`, path: `export default {}` }
 const version = process.env.VERSION || pkg.version
 const sourcemap = true
 const banner = `/*
@@ -20,7 +20,7 @@ const input = 'src/index.js'
 
 const babelConf = {
   babelrc: false,
-  'presets': [['env', {'modules': false}]],
+  'presets': [['env', { 'modules': false }]],
   'plugins': ['external-helpers']
 }
 

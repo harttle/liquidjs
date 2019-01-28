@@ -2,7 +2,7 @@ import chai from 'chai'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 import Filter from '../../src/filter.js'
-import {factory as scopeFactory} from '../../src/scope.js'
+import { factory as scopeFactory } from '../../src/scope.js'
 
 chai.use(sinonChai)
 const expect = chai.expect

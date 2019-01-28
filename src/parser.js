@@ -1,6 +1,6 @@
 import * as lexical from './lexical.js'
-import {create} from './util/underscore.js'
-import {ParseError} from './util/error.js'
+import { create } from './util/underscore.js'
+import { ParseError } from './util/error.js'
 import assert from './util/assert.js'
 
 export default function (Tag, Filter) {

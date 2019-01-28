@@ -1,5 +1,5 @@
 import assert from '../util/assert.js'
-import {value as rValue} from '../lexical.js'
+import { value as rValue } from '../lexical.js'
 
 export default function (liquid, Liquid) {
   const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)

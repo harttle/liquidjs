@@ -29,7 +29,7 @@ describe('#renderFile()', function () {
       .to.eventually.equal('foo')
   })
   it('should find files without extname', function () {
-    var engine = Liquid({root: '/root'})
+    var engine = Liquid({ root: '/root' })
     return expect(engine.renderFile('/root/files/bar', {}))
       .to.eventually.equal('bar')
   })
@@ -57,11 +57,11 @@ describe('#renderFile()', function () {
       .to.eventually.equal('FOO')
   })
   it('should render file with context', function () {
-    return expect(engine.renderFile('/root/files/name.html', {name: 'harttle'}))
+    return expect(engine.renderFile('/root/files/name.html', { name: 'harttle' }))
       .to.eventually.equal('My name is harttle.')
   })
   it('should use default extname', function () {
-    return expect(engine.renderFile('files/name', {name: 'harttle'})).to.eventually.equal('My name is harttle.')
+    return expect(engine.renderFile('files/name', { name: 'harttle' })).to.eventually.equal('My name is harttle.')
   })
   it('should throw with lookup list when file not exist', function () {
     engine = Liquid({

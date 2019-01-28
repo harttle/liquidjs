@@ -1,10 +1,10 @@
 import assert from '../util/assert.js'
-import {identifier} from '../lexical.js'
-import {create} from '../util/underscore.js'
+import { identifier } from '../lexical.js'
+import { create } from '../util/underscore.js'
 
 export default function (liquid, Liquid) {
   const re = new RegExp(`(${identifier.source})\\s*=([^]*)`)
-  const {AssignScope} = Liquid.Types
+  const { AssignScope } = Liquid.Types
 
   liquid.registerTag('assign', {
     parse: function (token) {

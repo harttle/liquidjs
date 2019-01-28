@@ -1,4 +1,4 @@
-import {AssertionError} from './error.js'
+import { AssertionError } from './error.js'
 
 export default function (predicate, message) {
   if (!predicate) {

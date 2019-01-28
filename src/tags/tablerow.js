@@ -1,6 +1,6 @@
-import {mapSeries} from '../util/promise.js'
+import { mapSeries } from '../util/promise.js'
 import assert from '../util/assert.js'
-import {identifier, value, hash} from '../lexical.js'
+import { identifier, value, hash } from '../lexical.js'
 
 export default function (liquid, Liquid) {
   const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +

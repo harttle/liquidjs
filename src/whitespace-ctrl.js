@@ -1,4 +1,4 @@
-import {assign} from './util/underscore.js'
+import { assign } from './util/underscore.js'
 
 export default function whiteSpaceCtrl (tokens, options) {
   options = assign({ greedy: true }, options)

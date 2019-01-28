@@ -1,6 +1,6 @@
 import strftime from './util/strftime.js'
 import * as _ from './util/underscore.js'
-import {isTruthy} from './syntax.js'
+import { isTruthy } from './syntax.js'
 
 const escapeMap = {
   '&': '&amp;',

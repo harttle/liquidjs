@@ -6,7 +6,7 @@ const expect = chai.expect
 chai.use(chaiAsPromised)
 
 describe('trimming', function () {
-  const ctx = {name: 'harttle'}
+  const ctx = { name: 'harttle' }
 
   describe('tag trimming', function () {
     it('should respect trim_tag_left', function () {
@@ -50,7 +50,7 @@ describe('trimming', function () {
         .to.eventually.equal('aharttle')
     })
     it('should respect to greedy:false by default', function () {
-      const engine = Liquid({greedy: false})
+      const engine = Liquid({ greedy: false })
       return expect(engine.parseAndRender(src, ctx))
         .to.eventually.equal('\n a \nharttle ')
     })

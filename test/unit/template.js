@@ -1,4 +1,4 @@
-import {resolve} from '../../src/template.js'
+import { resolve } from '../../src/template.js'
 import mock from 'mock-fs'
 import chai from 'chai'
 import path from 'path'
@@ -15,12 +15,12 @@ describe('template', function () {
   })
   describe('#resolve()', function () {
     it('should resolve based on root', function () {
-      const filepath = resolve('bar.html', '/foo', {root: []})
+      const filepath = resolve('bar.html', '/foo', { root: [] })
       const expected = path.resolve('/foo/bar.html')
       return expect(filepath).to.eventually.equal(expected)
     })
     it('should resolve based on root', function () {
-      return expect(resolve('foo.html', '/foo', {root: []}))
+      return expect(resolve('foo.html', '/foo', { root: [] }))
         .to.rejectedWith(/Failed to lookup foo.html in: \/foo/)
     })
   })

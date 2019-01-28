@@ -1,4 +1,4 @@
-import {resolve} from '../../src/template-browser.js'
+import { resolve } from '../../src/template-browser.js'
 import chai from 'chai'
 
 const expect = chai.expect

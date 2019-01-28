@@ -31,7 +31,7 @@ describe('Liquid', function () {
     })
   })
   describe('#express()', function () {
-    const liquid = new Liquid({root: '/root'})
+    const liquid = new Liquid({ root: '/root' })
     const render = liquid.express()
     before(function () {
       mock({
@@ -42,14 +42,14 @@ describe('Liquid', function () {
       mock.restore()
     })
     it('should render single template', function (done) {
-      render.call({root: '.'}, 'foo', null, (err, result) => {
+      render.call({ root: '.' }, 'foo', null, (err, result) => {
         if (err) return done(err)
         expect(result).to.equal('foo')
         done()
       })
     })
     it('should render single template with Array-typed root', function (done) {
-      render.call({root: ['.']}, 'foo', null, (err, result) => {
+      render.call({ root: ['.'] }, 'foo', null, (err, result) => {
         if (err) return done(err)
         expect(result).to.equal('foo')
         done()

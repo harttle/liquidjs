@@ -1,7 +1,7 @@
 import * as lexical from './lexical.js'
-import {evalValue} from './syntax.js'
+import { evalValue } from './syntax.js'
 import assert from './util/assert.js'
-import {assign, create} from './util/underscore.js'
+import { assign, create } from './util/underscore.js'
 
 const valueRE = new RegExp(`${lexical.value.source}`, 'g')
 

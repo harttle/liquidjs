@@ -1,9 +1,9 @@
-import {create} from '../util/underscore.js'
+import { create } from '../util/underscore.js'
 import assert from '../util/assert.js'
-import {identifier} from '../lexical.js'
+import { identifier } from '../lexical.js'
 
 export default function (liquid, Liquid) {
-  const {CaptureScope, AssignScope, DecrementScope} = Liquid.Types
+  const { CaptureScope, AssignScope, DecrementScope } = Liquid.Types
 
   liquid.registerTag('decrement', {
     parse: function (token) {

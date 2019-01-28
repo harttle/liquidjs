@@ -1,6 +1,6 @@
 import * as _ from './util/underscore.js'
 import path from 'path'
-import {anySeries} from './util/promise.js'
+import { anySeries } from './util/promise.js'
 import fs from 'fs'
 
 const statFileAsync = _.promisify(fs.stat)

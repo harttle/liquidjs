@@ -1,7 +1,7 @@
-import {mapSeries} from '../util/promise.js'
-import {isString, isObject, isArray} from '../util/underscore.js'
+import { mapSeries } from '../util/promise.js'
+import { isString, isObject, isArray } from '../util/underscore.js'
 import assert from '../util/assert.js'
-import {identifier, value, hash} from '../lexical.js'
+import { identifier, value, hash } from '../lexical.js'
 
 export default function (liquid, Liquid) {
   const RenderBreakError = Liquid.Types.RenderBreakError
@@ -11,7 +11,7 @@ export default function (liquid, Liquid) {
       `(?:\\s+(reversed))?` +
       `(?:\\s+${hash.source})*$`)
 
-  liquid.registerTag('for', {parse, render})
+  liquid.registerTag('for', { parse, render })
 
   function parse (tagToken, remainTokens) {
     const match = re.exec(tagToken.args)

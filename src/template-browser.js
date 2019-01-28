@@ -1,4 +1,4 @@
-import {last, isArray} from './util/underscore'
+import { last, isArray } from './util/underscore'
 
 function domResolve (root, path) {
   const base = document.createElement('base')

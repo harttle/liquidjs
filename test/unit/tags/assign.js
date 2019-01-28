@@ -23,7 +23,7 @@ describe('tags/assign', function () {
       .to.eventually.equal('10086')
   })
   it('should shading rather than overwriting', function () {
-    const ctx = {foo: 'foo'}
+    const ctx = { foo: 'foo' }
     const src = '{% assign foo="FOO" %}{{foo}}'
     return liquid.parseAndRender(src, ctx)
       .then(x => {

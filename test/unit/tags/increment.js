@@ -15,7 +15,7 @@ describe('tags/increment', function () {
 
   it('should increment defined variable', function () {
     const src = '{% increment one %}{% increment one %}{% increment one %}'
-    const ctx = {one: 7}
+    const ctx = { one: 7 }
     return liquid.parseAndRender(src, ctx)
       .then(x => {
         expect(x).to.equal('789')

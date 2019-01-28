@@ -1,5 +1,5 @@
 import chai from 'chai'
-import {factory as scopeFactory} from '../../src/scope.js'
+import { factory as scopeFactory } from '../../src/scope.js'
 
 const expect = chai.expect
 
@@ -97,18 +97,18 @@ describe('scope', function () {
     })
 
     it('should respect to to_liquid', function () {
-      const scope = scopeFactory({foo: {
-        to_liquid: () => ({bar: 'BAR'}),
+      const scope = scopeFactory({ foo: {
+        to_liquid: () => ({ bar: 'BAR' }),
         bar: 'bar'
-      }})
+      } })
       expect(scope.get('foo.bar')).to.equal('BAR')
     })
 
     it('should respect to toLiquid', function () {
-      const scope = scopeFactory({foo: {
-        toLiquid: () => ({bar: 'BAR'}),
+      const scope = scopeFactory({ foo: {
+        toLiquid: () => ({ bar: 'BAR' }),
         bar: 'bar'
-      }})
+      } })
       expect(scope.get('foo.bar')).to.equal('BAR')
     })
 
@@ -152,12 +152,12 @@ describe('scope', function () {
       expect(scope.get('a.b.c.d')).to.equal('COO')
     })
     it('should keep other properties of parent', function () {
-      scope.push({obj: {foo: 'FOO'}})
+      scope.push({ obj: { foo: 'FOO' } })
       scope.set('obj.bar', 'BAR')
       expect(scope.get('obj.foo')).to.equal('FOO')
     })
     it('should abort if property cannot be set', function () {
-      scope.push({obj: {foo: 'FOO'}})
+      scope.push({ obj: { foo: 'FOO' } })
       scope.set('obj.foo.bar', 'BAR')
       expect(scope.get('obj.foo')).to.equal('FOO')
     })
@@ -220,8 +220,8 @@ describe('scope', function () {
       expect(scope.get('bar')).to.equal('bar')
     })
     it('should hide deep properties by push', function () {
-      scope.set('bar', {bar: 'bar'})
-      scope.push({bar: {foo: 'foo'}})
+      scope.set('bar', { bar: 'bar' })
+      scope.push({ bar: { foo: 'foo' } })
       expect(scope.get('bar.foo')).to.equal('foo')
       expect(scope.get('bar.bar')).to.equal(undefined)
     })

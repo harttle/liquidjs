@@ -1,6 +1,6 @@
 import chai from 'chai'
 import Tag from '../../src/tag.js'
-import {factory as scopeFactory} from '../../src/scope.js'
+import { factory as scopeFactory } from '../../src/scope.js'
 import sinon from 'sinon'
 import sinonChai from 'sinon-chai'
 

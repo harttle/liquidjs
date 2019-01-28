@@ -1,10 +1,10 @@
 import * as lexical from './lexical.js'
-import {TokenizationError} from './util/error.js'
+import { TokenizationError } from './util/error.js'
 import * as _ from './util/underscore.js'
 import assert from './util/assert.js'
 import whiteSpaceCtrl from './whitespace-ctrl.js'
 
-export {default as whiteSpaceCtrl} from './whitespace-ctrl.js'
+export { default as whiteSpaceCtrl } from './whitespace-ctrl.js'
 
 export function parse (input, file, options) {
   assert(_.isString(input), 'illegal input')

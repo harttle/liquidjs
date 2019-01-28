@@ -13,7 +13,7 @@ describe('.parseAndRender()', function () {
     })
   })
   it('should value object', function () {
-    var ctx = { obj: {foo: 'bar'} }
+    var ctx = { obj: { foo: 'bar' } }
     return expect(engine.parseAndRender('{{obj}}', ctx)).to.eventually.equal('{"foo":"bar"}')
   })
   it('should value array', function () {
@@ -39,7 +39,7 @@ describe('.parseAndRender()', function () {
     }).to.not.throw()
   })
   it('should render template multiple times', function () {
-    var ctx = {obj: {foo: 'bar'}}
+    var ctx = { obj: { foo: 'bar' } }
     var template = engine.parse('{{obj}}')
     return engine.render(template, ctx)
       .then(result => expect(result).to.equal('{"foo":"bar"}'))
@@ -47,7 +47,7 @@ describe('.parseAndRender()', function () {
       .then((result) => expect(result).to.equal('{"foo":"bar"}'))
   })
   it('should render filters', function () {
-    var ctx = {names: ['alice', 'bob']}
+    var ctx = { names: ['alice', 'bob'] }
     var template = engine.parse('<p>{{names | join: ","}}</p>')
     return expect(engine.render(template, ctx)).to.eventually.equal('<p>alice,bob</p>')
   })
