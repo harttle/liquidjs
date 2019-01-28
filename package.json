@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint src/ test/ *.js",
     "unit": "mocha test/unit",
-    "e2e": "npm run build && mocha test/e2e",
+    "e2e": "mocha test/e2e",
     "test": "npm run unit && npm run e2e",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=html npm run unit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
