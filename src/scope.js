@@ -60,16 +60,10 @@ const Scope = {
     if (_.isNil(obj)) {
       val = undefined
     } else {
-      if (typeof obj.to_liquid === 'function') {
-        obj = obj.to_liquid()
-      } else if (typeof obj.toLiquid === 'function') {
-        obj = obj.toLiquid()
-      }
-
-      if (key === 'size' && (_.isArray(obj) || _.isString(obj))) {
-        val = obj.length
-      } else {
-        val = obj[key]
+      obj = toLiquid(obj)
+      val = key === 'size' ? readSize(obj) : obj[key]
+      if (_.isFunction(obj.liquid_method_missing)) {
+        val = obj.liquid_method_missing(key)
       }
     }
     if (_.isNil(val) && this.opts.strict_variables) {
@@ -136,6 +130,22 @@ const Scope = {
       name = ''
     }
   }
+}
+
+function toLiquid (obj) {
+  if (_.isFunction(obj.to_liquid)) {
+    return obj.to_liquid()
+  }
+  if (_.isFunction(obj.toLiquid)) {
+    return obj.toLiquid()
+  }
+  return obj
+}
+
+function readSize (obj) {
+  if (!_.isNil(obj.size)) return obj.size
+  if (_.isArray(obj) || _.isString(obj)) return obj.length
+  return obj.size
 }
 
 function matchRightBracket (str, begin) {

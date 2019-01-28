@@ -8,9 +8,10 @@
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src/ test/ *.js",
-    "test": "mocha test/unit",
+    "unit": "mocha test/unit",
     "e2e": "mocha test/e2e",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=html npm test",
+    "test": "npm run unit && npm run e2e",
+    "coverage": "cross-env NODE_ENV=test nyc --reporter=html npm run unit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c && ls -lh dist",
     "version": "npm run build && git add -A dist",

@@ -63,6 +63,24 @@ describe('render', function () {
       const tpl = Template.parseValue('obj')
       return expect(render.renderValue(tpl, scope)).to.eventually.equal('{"foo":"foo"}')
     })
+    it('should respect to .toString()', async () => {
+      const scope = scopeFactory({ obj: { toString: () => 'FOO' } })
+      const tpl = Template.parseValue('obj')
+      const str = await render.renderValue(tpl, scope)
+      return expect(str).to.equal('FOO')
+    })
+    it('should respect to .to_s()', async () => {
+      const scope = scopeFactory({ obj: { to_s: () => 'FOO' } })
+      const tpl = Template.parseValue('obj')
+      const str = await render.renderValue(tpl, scope)
+      return expect(str).to.equal('FOO')
+    })
+    it('should respect to .liquid_method_missing()', async () => {
+      const scope = scopeFactory({ obj: { liquid_method_missing: x => x.toUpperCase() } })
+      const tpl = Template.parseValue('obj.foo')
+      const str = await render.renderValue(tpl, scope)
+      return expect(str).to.equal('FOO')
+    })
   })
 
   describe('.evalValue()', function () {

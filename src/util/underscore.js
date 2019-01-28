@@ -1,4 +1,5 @@
 const toStr = Object.prototype.toString
+const arrToStr = Array.prototype.toString
 
 /*
  * Checks if value is classified as a String primitive or object.
@@ -7,6 +8,10 @@ const toStr = Object.prototype.toString
  */
 export function isString (value) {
   return toStr.call(value) === '[object String]'
+}
+
+export function isFunction (value) {
+  return typeof value === 'function'
 }
 
 export function promisify (fn) {
@@ -20,19 +25,16 @@ export function promisify (fn) {
 }
 
 export function stringify (value) {
-  if (isNil(value)) {
-    return String(value)
-  }
-  if (typeof value.to_liquid === 'function') {
-    return stringify(value.to_liquid())
-  }
-  if (typeof value.toLiquid === 'function') {
-    return stringify(value.toLiquid())
-  }
-  if (isString(value) || value instanceof RegExp || value instanceof Date) {
-    return value.toString()
-  }
+  if (isNil(value)) return String(value)
+  if (isFunction(value.to_liquid)) return stringify(value.to_liquid())
+  if (isFunction(value.toLiquid)) return stringify(value.toLiquid())
+  if (isFunction(value.to_s)) return value.to_s()
+  if ([toStr, arrToStr].indexOf(value.toString) > -1) return defaultToString(value)
+  if (isFunction(value.toString)) return value.toString()
+  return toStr.call(value)
+}
 
+function defaultToString (value) {
   const cache = []
   return JSON.stringify(value, (key, value) => {
     if (isObject(value)) {
