@@ -6,14 +6,12 @@ node_js:
 jobs:
   include:
     - stage: test
-    - name: 'Linting'
+      name: 'Linting'
       script: npm run lint
     - name: 'Unit Test'
-      script: if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run unit; fi
+      script: if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run unit && npm run coveralls; fi
     - name: 'E2E Test'
       script: npm run e2e
-    - name: 'Test Coverage'
-      script: if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run coveralls; fi
 
     - stage: build
       script: npm run build
