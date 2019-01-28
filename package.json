@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint src/ test/ *.js",
     "unit": "mocha test/unit",
-    "e2e": "mocha test/e2e",
+    "e2e": "npm run build && mocha test/e2e",
     "test": "npm run unit && npm run e2e",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=html npm run unit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
@@ -68,7 +68,7 @@
     "mocha": "^5.2.0",
     "mock-fs": "^4.7.0",
     "nyc": "^13.1.0",
-    "regenerator-runtime": "^0.13.1",
+    "regenerator-runtime": "^0.12.1",
     "rollup": "^1.1.2",
     "rollup-plugin-alias": "^1.5.1",
     "rollup-plugin-babel": "^3.0.7",
