@@ -1,24 +1,24 @@
 language: node_js
-node_js:
-  - "8"
-  - "6"
-  - "4"
+node_js: "8"
 jobs:
   include:
     - stage: test
       name: 'Linting'
       script: npm run lint
     - name: 'Unit Test'
-      script: if (( $TRAVIS_NODE_VERSION >= 6 )); then npm run unit && npm run coveralls; fi
+      script: npm run unit && npm run coveralls
     - name: 'E2E Test'
       script: npm run e2e
+      node_js:
+        - "8"
+        - "6"
+        - "4"
 
     - stage: build
       script: npm run build
 
     - stage: release
       if: branch = master
-      node_js: "8"
       script: skip
       deploy:
         provider: script
