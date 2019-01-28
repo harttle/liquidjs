@@ -5,9 +5,10 @@ node_js:
   - "4"
 jobs:
   include:
-    - stage: lint
+    - stage: test
+      name: 'Linting'
       script: npm run lint
-    - stage: coverage
+    - name: 'Coverage'
       script: npm run coverage && npm run coveralls
     - stage: release
       if: branch = master
