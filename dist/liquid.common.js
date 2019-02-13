@@ -1,5 +1,5 @@
 /*
- * liquidjs@6.4.2, https://github.com/harttle/liquidjs
+ * liquidjs@6.4.3, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -3625,6 +3625,7 @@ function Liquid(options) {
   return engine;
 }
 
+Liquid.default = Liquid;
 Liquid.isTruthy = isTruthy;
 Liquid.isFalsy = isFalsy;
 Liquid.evalExp = evalExp;
