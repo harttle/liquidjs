@@ -1,4 +1,4 @@
-const Liquid = require('../..')
+const Liquid = require('liquidjs')
 
 const engine = new Liquid({
   root: __dirname,

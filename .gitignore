@@ -12,3 +12,4 @@ build/
 
 # editors
 .*.swp
+.vscode

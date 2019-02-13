@@ -117,6 +117,7 @@ export default function Liquid (options) {
   return engine
 }
 
+Liquid.default = Liquid
 Liquid.isTruthy = isTruthy
 Liquid.isFalsy = isFalsy
 Liquid.evalExp = evalExp
