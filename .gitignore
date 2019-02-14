@@ -2,7 +2,8 @@
 *.log
 npm-debug.log*
 
-# tests
+# cache
+.rpt2_cache
 coverage/
 .nyc_output/
 

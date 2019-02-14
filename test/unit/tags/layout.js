@@ -1,6 +1,6 @@
 import Liquid from '../../../src'
-import mock from 'mock-fs'
-import chai from 'chai'
+import * as mock from 'mock-fs'
+import * as chai from 'chai'
 
 const expect = chai.expect
 chai.use(require('chai-as-promised'))

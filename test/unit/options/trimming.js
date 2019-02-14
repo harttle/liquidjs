@@ -1,6 +1,6 @@
-import chai from 'chai'
+import * as chai from 'chai'
 import Liquid from '../../../src'
-import chaiAsPromised from 'chai-as-promised'
+import * as chaiAsPromised from 'chai-as-promised'
 
 const expect = chai.expect
 chai.use(chaiAsPromised)

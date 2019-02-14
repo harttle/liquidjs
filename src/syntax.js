@@ -1,6 +1,6 @@
-import Operators from './operators.js'
-import * as lexical from './lexical.js'
-import assert from './util/assert.js'
+import Operators from './operators'
+import * as lexical from './lexical'
+import assert from './util/assert'
 
 const operators = Operators(isTruthy)
 

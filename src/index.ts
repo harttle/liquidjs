@@ -1,17 +1,16 @@
-import 'regenerator-runtime/runtime'
-import * as Scope from './scope'
+import Scope from './scope'
 import * as template from './template'
-import * as _ from './util/underscore.js'
-import assert from './util/assert.js'
-import * as tokenizer from './tokenizer.js'
-import Render from './render.js'
-import Tag from './tag.js'
-import Filter from './filter.js'
+import * as _ from './util/underscore'
+import assert from './util/assert'
+import * as tokenizer from './tokenizer'
+import Render from './render'
+import Tag from './tag'
+import Filter from './filter'
 import Parser from './parser'
-import { isTruthy, isFalsy, evalExp, evalValue } from './syntax.js'
-import { ParseError, TokenizationError, RenderBreakError, AssertionError } from './util/error.js'
-import tags from './tags/index.js'
-import filters from './filters.js'
+import { isTruthy, isFalsy, evalExp, evalValue } from './syntax'
+import { ParseError, TokenizationError, RenderBreakError, AssertionError } from './util/error'
+import tags from './tags/index'
+import filters from './filters'
 
 const _engine = {
   init: function (tag, filter, options) {
@@ -35,7 +34,7 @@ const _engine = {
   },
   render: function (tpl, ctx, opts) {
     opts = _.assign({}, this.options, opts)
-    const scope = Scope.factory(ctx, opts)
+    const scope = new Scope(ctx, opts)
     return this.renderer.renderTemplates(tpl, scope)
   },
   parseAndRender: async function (html, ctx, opts) {

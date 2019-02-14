@@ -1,5 +1,5 @@
-import chai from 'chai'
-import chaiAsPromised from 'chai-as-promised'
+import * as chai from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 import Liquid from '../../src/index'
 
 chai.use(chaiAsPromised)
@@ -130,7 +130,7 @@ describe('filters', function () {
       return test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara')
     })
     it('should escape function', function () {
-      return test('{{ func | escape }}', 'function func() {}')
+      return test('{{ func | escape }}', 'function () { }')
     })
   })
 

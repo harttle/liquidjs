@@ -1,17 +1,12 @@
-const chai = require('chai')
-const expect = chai.expect
-const syntax = require('../../src/syntax.js')
-const Scope = require('../../src/scope.js')
-
-const evalExp = syntax.evalExp
-const evalValue = syntax.evalValue
-const isTruthy = syntax.isTruthy
+import Scope from '../../src/scope'
+import { expect } from 'chai'
+import { evalExp, evalValue, isTruthy } from '../../src/syntax'
 
 describe('expression', function () {
   let scope
 
   beforeEach(function () {
-    scope = Scope.factory({
+    scope = new Scope({
       one: 1,
       two: 2,
       empty: '',

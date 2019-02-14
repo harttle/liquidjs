@@ -1,7 +1,7 @@
-import * as _ from './util/underscore.js'
-import path from 'path'
-import { anySeries } from './util/promise.js'
-import fs from 'fs'
+import * as _ from './util/underscore'
+import * as path from 'path'
+import { anySeries } from './util/promise'
+import * as fs from 'fs'
 
 const statFileAsync = _.promisify(fs.stat)
 const readFileAsync = _.promisify(fs.readFile)

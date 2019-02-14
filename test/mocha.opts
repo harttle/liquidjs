@@ -1,2 +1,2 @@
---require babel-core/register
+--require ts-node/register
 --recursive 

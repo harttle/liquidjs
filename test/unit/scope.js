@@ -1,5 +1,5 @@
-import chai from 'chai'
-import { factory as scopeFactory } from '../../src/scope.js'
+import * as chai from 'chai'
+import Scope from '../../src/scope'
 
 const expect = chai.expect
 
@@ -15,7 +15,7 @@ describe('scope', function () {
         arr: ['a', 'b']
       }
     }
-    scope = scopeFactory(ctx)
+    scope = new Scope(ctx)
   })
 
   describe('#propertyAccessSeq()', function () {
@@ -97,7 +97,7 @@ describe('scope', function () {
     })
 
     it('should respect to to_liquid', function () {
-      const scope = scopeFactory({ foo: {
+      const scope = new Scope({ foo: {
         to_liquid: () => ({ bar: 'BAR' }),
         bar: 'bar'
       } })
@@ -105,7 +105,7 @@ describe('scope', function () {
     })
 
     it('should respect to toLiquid', function () {
-      const scope = scopeFactory({ foo: {
+      const scope = new Scope({ foo: {
         toLiquid: () => ({ bar: 'BAR' }),
         bar: 'bar'
       } })
@@ -171,7 +171,7 @@ describe('scope', function () {
   describe('strict_variables', function () {
     let scope
     beforeEach(function () {
-      scope = scopeFactory(ctx, {
+      scope = new Scope(ctx, {
         strict_variables: true
       })
     })

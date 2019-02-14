@@ -1,6 +1,6 @@
-import Liquid from '../../src/index.js'
-import mock from 'mock-fs'
-import chai from 'chai'
+import Liquid from '../../src/index'
+import * as mock from 'mock-fs'
+import * as chai from 'chai'
 
 const expect = chai.expect
 

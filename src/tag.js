@@ -1,7 +1,7 @@
-import { hashCapture } from './lexical.js'
-import { create } from './util/underscore.js'
-import { evalValue } from './syntax.js'
-import assert from './util/assert.js'
+import { hashCapture } from './lexical'
+import { create } from './util/underscore'
+import { evalValue } from './syntax'
+import assert from './util/assert'
 
 function hash (markup, scope) {
   const obj = {}

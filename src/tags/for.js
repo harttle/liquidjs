@@ -1,7 +1,7 @@
-import { mapSeries } from '../util/promise.js'
-import { isString, isObject, isArray } from '../util/underscore.js'
-import assert from '../util/assert.js'
-import { identifier, value, hash } from '../lexical.js'
+import { mapSeries } from '../util/promise'
+import { isString, isObject, isArray } from '../util/underscore'
+import assert from '../util/assert'
+import { identifier, value, hash } from '../lexical'
 
 export default function (liquid, Liquid) {
   const RenderBreakError = Liquid.Types.RenderBreakError

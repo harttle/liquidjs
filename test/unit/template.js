@@ -1,8 +1,8 @@
-import { resolve } from '../../src/template.js'
-import mock from 'mock-fs'
-import chai from 'chai'
-import path from 'path'
-import chaiAsPromised from 'chai-as-promised'
+import { resolve } from '../../src/template'
+import * as mock from 'mock-fs'
+import * as chai from 'chai'
+import * as path from 'path'
+import * as chaiAsPromised from 'chai-as-promised'
 
 const expect = chai.expect
 chai.use(chaiAsPromised)

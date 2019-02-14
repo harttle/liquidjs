@@ -1,27 +1,28 @@
-import * as lexical from './lexical.js'
-import { create } from './util/underscore.js'
-import { ParseError } from './util/error.js'
-import assert from './util/assert.js'
+import * as lexical from './lexical'
+import { ParseError } from './util/error'
+import assert from './util/assert'
 
 export default function (Tag, Filter) {
-  const stream = {
-    init: function (tokens) {
+  class ParseStream {
+    tokens: Array<any>
+    handlers: object
+    stopRequested: boolean
+    constructor (tokens) {
       this.tokens = tokens
       this.handlers = {}
-      return this
-    },
-    on: function (name, cb) {
+    }
+    on (name, cb) {
       this.handlers[name] = cb
       return this
-    },
-    trigger: function (event, arg) {
+    }
+    trigger (event: string, arg?: any) {
       const h = this.handlers[event]
       if (typeof h === 'function') {
         h(arg)
         return true
       }
-    },
-    start: function () {
+    }
+    start () {
       this.trigger('start')
       let token
       while (!this.stopRequested && (token = this.tokens.shift())) {
@@ -35,8 +36,8 @@ export default function (Tag, Filter) {
       }
       if (!this.stopRequested) this.trigger('end')
       return this
-    },
-    stop: function () {
+    }
+    stop () {
       this.stopRequested = true
       return this
     }
@@ -93,8 +94,7 @@ export default function (Tag, Filter) {
   }
 
   function parseStream (tokens) {
-    const s = create(stream)
-    return s.init(tokens)
+    return new ParseStream(tokens)
   }
 
   return {

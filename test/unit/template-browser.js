@@ -1,5 +1,5 @@
-import { resolve } from '../../src/template-browser.js'
-import chai from 'chai'
+import { resolve } from '../../src/template-browser'
+import * as chai from 'chai'
 
 const expect = chai.expect
 

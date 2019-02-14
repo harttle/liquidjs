@@ -1,6 +1,6 @@
-import { read } from '../../src/template-browser.js'
-import sinon from 'sinon'
-import chai from 'chai'
+import { read } from '../../src/template-browser'
+import * as sinon from 'sinon'
+import * as chai from 'chai'
 
 chai.use(require('chai-as-promised'))
 

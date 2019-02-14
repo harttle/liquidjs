@@ -1,8 +1,8 @@
-import chai from 'chai'
-import Tag from '../../src/tag.js'
-import { factory as scopeFactory } from '../../src/scope.js'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
+import * as chai from 'chai'
+import Tag from '../../src/tag'
+import Scope from '../../src/scope'
+import * as sinon from 'sinon'
+import * as sinonChai from 'sinon-chai'
 
 chai.use(sinonChai)
 const expect = chai.expect
@@ -11,7 +11,7 @@ const tag = Tag()
 describe('tag', function () {
   let scope
   before(function () {
-    scope = scopeFactory({
+    scope = new Scope({
       foo: 'bar',
       arr: [2, 1],
       bar: {

@@ -1,8 +1,8 @@
-import chai from 'chai'
-import sinonChai from 'sinon-chai'
-import Filter from '../../src/filter.js'
-import Tag from '../../src/tag.js'
-import Template from '../../src/parser.js'
+import * as chai from 'chai'
+import * as sinonChai from 'sinon-chai'
+import Filter from '../../src/filter'
+import Tag from '../../src/tag'
+import Template from '../../src/parser'
 
 const expect = chai.expect
 const filter = Filter()

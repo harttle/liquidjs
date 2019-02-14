@@ -1,9 +1,8 @@
 import shim from 'rollup-plugin-shim'
 import alias from 'rollup-plugin-alias'
-import babel from 'rollup-plugin-babel'
 import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
-import nodeResolve from 'rollup-plugin-node-resolve'
+import typescript from 'rollup-plugin-typescript2'
 
 const fake = { fs: `export default {}`, path: `export default {}` }
 const version = process.env.VERSION || pkg.version
@@ -16,12 +15,10 @@ const banner = `/*
 const treeshake = {
   propertyReadSideEffects: false
 }
-const input = 'src/index.js'
-
-const babelConf = {
-  babelrc: false,
-  'presets': [['env', { 'modules': false }]],
-  'plugins': ['external-helpers']
+const input = 'src/index.ts'
+const tsOptions = {
+  include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
+  tsconfigOverride: { compilerOptions: { module: 'ES2015' } }
 }
 
 export default [{
@@ -33,10 +30,7 @@ export default [{
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [
-    nodeResolve(),
-    babel(babelConf)
-  ],
+  plugins: [typescript(tsOptions)],
   treeshake,
   input
 }, {
@@ -49,11 +43,8 @@ export default [{
   }],
   plugins: [
     shim(fake),
-    alias({
-      './template': './template-browser'
-    }),
-    nodeResolve(),
-    babel(babelConf)
+    alias({ './template': './template-browser' }),
+    typescript(tsOptions)
   ],
   treeshake,
   input
@@ -66,8 +57,8 @@ export default [{
   }],
   plugins: [
     shim(fake),
-    nodeResolve(),
-    babel(babelConf),
+    alias({ './template': './template-browser' }),
+    typescript(tsOptions),
     uglify()
   ],
   treeshake,

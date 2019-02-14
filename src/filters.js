@@ -1,6 +1,6 @@
-import strftime from './util/strftime.js'
-import * as _ from './util/underscore.js'
-import { isTruthy } from './syntax.js'
+import strftime from './util/strftime'
+import * as _ from './util/underscore'
+import { isTruthy } from './syntax'
 
 const escapeMap = {
   '&': '&amp;',
@@ -132,7 +132,7 @@ function isValidDate (date) {
   return date instanceof Date && !isNaN(date.getTime())
 }
 
-export default function registerAll (liquid) {
+export default function registerAll (liquid, Liquid) {
   return _.forOwn(filters, (func, name) => liquid.registerFilter(name, func))
 }
 

@@ -1,7 +1,7 @@
-import { evalExp } from './syntax.js'
-import { RenderBreakError, RenderError } from './util/error.js'
-import { stringify, create } from './util/underscore.js'
-import assert from './util/assert.js'
+import { evalExp } from './syntax'
+import { RenderBreakError, RenderError } from './util/error'
+import { stringify, create } from './util/underscore'
+import assert from './util/assert'
 
 const render = {
   renderTemplates: async function (templates, scope) {
@@ -16,7 +16,7 @@ const render = {
           e.resolvedHTML = html
           throw e
         }
-        throw new RenderError(e, tpl)
+        throw e instanceof RenderError ? e : new RenderError(e, tpl)
       }
     }
     return html

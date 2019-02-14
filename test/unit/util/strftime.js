@@ -1,5 +1,5 @@
-import chai from 'chai'
-import t from '../../../src/util/strftime.js'
+import * as chai from 'chai'
+import t from '../../../src/util/strftime'
 
 const expect = chai.expect
 

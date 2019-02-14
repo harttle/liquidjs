@@ -1,6 +1,6 @@
-import assert from '../util/assert.js'
-import { identifier } from '../lexical.js'
-import { create } from '../util/underscore.js'
+import assert from '../util/assert'
+import { identifier } from '../lexical'
+import { create } from '../util/underscore'
 
 export default function (liquid, Liquid) {
   const re = new RegExp(`(${identifier.source})\\s*=([^]*)`)

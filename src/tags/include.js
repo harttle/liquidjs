@@ -1,5 +1,5 @@
-import assert from '../util/assert.js'
-import { value, quotedLine } from '../lexical.js'
+import assert from '../util/assert'
+import { value, quotedLine } from '../lexical'
 
 const staticFileRE = /[^\s,]+/
 

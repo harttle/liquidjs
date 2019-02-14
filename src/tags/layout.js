@@ -1,5 +1,5 @@
-import assert from '../util/assert.js'
-import { value as rValue } from '../lexical.js'
+import assert from '../util/assert'
+import { value as rValue } from '../lexical'
 
 /*
  * blockMode:

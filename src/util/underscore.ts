@@ -15,9 +15,9 @@ export function isFunction (value) {
 }
 
 export function promisify (fn) {
-  return function () {
+  return function (...args) {
     return new Promise((resolve, reject) => {
-      fn(...arguments, (err, result) => {
+      fn(...args, (err, result) => {
         err ? reject(err) : resolve(result)
       })
     })
@@ -96,11 +96,14 @@ export function forOwn (object, iteratee) {
  * @param {...Object} sources The source objects.
  * @return {Object} Returns object.
  */
-export function assign (object) {
-  object = isObject(object) ? object : {}
-  const srcs = Array.prototype.slice.call(arguments, 1)
-  srcs.forEach((src) => Object.assign(object, src))
-  return object
+export function assign (obj, ...srcs) {
+  obj = isObject(obj) ? obj : {}
+  srcs.forEach(src => binaryAssign(obj, src))
+  return obj
+}
+
+function binaryAssign(target, src) {
+  for(let key in src) if (src.hasOwnProperty(key)) target[key] = src[key]
 }
 
 export function last (arr) {
@@ -139,7 +142,7 @@ export function isObject (value) {
  * Note that ranges that stop before they start are considered to be zero-length instead of
  * negative — if you'd like a negative range, use a negative step.
  */
-export function range (start, stop, step) {
+export function range (start: number, stop: number, step?: number) {
   if (arguments.length === 1) {
     stop = start
     start = 0

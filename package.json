@@ -11,13 +11,10 @@
     "unit": "mocha test/unit",
     "e2e": "mocha test/e2e",
     "test": "npm run unit && npm run e2e",
-    "coverage": "cross-env NODE_ENV=test nyc --reporter=html npm run unit",
+    "coverage": "nyc --reporter=html npm run unit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c && ls -lh dist",
-    "version": "npm run build && git add -A dist",
-    "demo:browser": "echo open http://localhost:8080/demo/browser && http-server -c-1",
-    "demo:nodejs": "node ./demo/nodejs/index.js",
-    "demo:express": "cd ./demo/express/ && npm start"
+    "version": "npm run build && git add -A dist"
   },
   "repository": {
     "type": "git",
@@ -45,12 +42,6 @@
     "@semantic-release/git": "^7.0.8",
     "@semantic-release/npm": "^5.1.4",
     "@semantic-release/release-notes-generator": "^7.1.4",
-    "babel-core": "^6.26.3",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-istanbul": "^5.1.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-runtime": "^6.26.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.2",
@@ -63,7 +54,6 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "express": "^4.16.4",
-    "http-server": "^0.11.1",
     "jsdom": "^13.2.0",
     "mocha": "^5.2.0",
     "mock-fs": "^4.7.0",
@@ -71,14 +61,15 @@
     "regenerator-runtime": "^0.12.1",
     "rollup": "^1.1.2",
     "rollup-plugin-alias": "^1.5.1",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-shim": "^1.0.0",
+    "rollup-plugin-typescript2": "^0.19.2",
     "rollup-plugin-uglify": "^6.0.2",
     "semantic-release": "^15.13.3",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0",
-    "supertest": "^3.4.2"
+    "supertest": "^3.4.2",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3"
   },
   "release": {
     "branch": "master",
@@ -89,35 +80,5 @@
       "@semantic-release/npm",
       "@semantic-release/git"
     ]
-  },
-  "nyc": {
-    "require": [
-      "babel-core/register"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ],
-    "plugins": [
-      [
-        "transform-runtime",
-        {
-          "helpers": false,
-          "polyfill": false,
-          "regenerator": true,
-          "moduleName": "babel-runtime"
-        }
-      ]
-    ],
-    "env": {
-      "test": {
-        "plugins": [
-          "istanbul"
-        ]
-      }
-    }
   }
 }

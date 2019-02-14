@@ -1,8 +1,8 @@
-import chai from 'chai'
-import sinon from 'sinon'
-import sinonChai from 'sinon-chai'
-import Filter from '../../src/filter.js'
-import { factory as scopeFactory } from '../../src/scope.js'
+import * as chai from 'chai'
+import * as sinon from 'sinon'
+import * as sinonChai from 'sinon-chai'
+import Filter from '../../src/filter'
+import { factory as scopeFactory } from '../../src/scope'
 
 chai.use(sinonChai)
 const expect = chai.expect
