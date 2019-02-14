@@ -60,7 +60,7 @@ Parse and Render:
 
 ```javascript
 var Liquid = require('liquidjs');
-var engine = Liquid();
+var engine = new Liquid();
 
 engine
     .parseAndRender('{{name | capitalize}}', {name: 'alice'})
@@ -83,7 +83,7 @@ engine
 ## Render from File
 
 ```javascript
-var engine = Liquid({
+var engine = new Liquid({
     root: path.resolve(__dirname, 'views/'),  // dirs to lookup layouts/includes
     extname: '.liquid'          // the extname used for layouts/includes, defaults ""
 });

@@ -8,7 +8,7 @@ describe('strict options', function () {
   let engine
   const ctx = {}
   beforeEach(function () {
-    engine = Liquid({
+    engine = new Liquid({
       root: '/root/',
       extname: '.html'
     })

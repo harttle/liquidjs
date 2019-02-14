@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/case', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
 
   it('should reject if not closed', function () {
     const src = '{% case "foo"%}'

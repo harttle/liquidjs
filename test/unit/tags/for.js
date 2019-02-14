@@ -7,7 +7,7 @@ chai.use(require('chai-as-promised'))
 describe('tags/for', function () {
   let liquid, ctx
   before(function () {
-    liquid = Liquid()
+    liquid = new Liquid()
     liquid.registerTag('throwingTag', {
       render: function () { throw new Error('intended render error') }
     })

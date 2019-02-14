@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/tablerow', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
 
   it('should support tablerow', function () {
     const src = '{% tablerow i in (1..3)%}{{ i }}{% endtablerow %}'

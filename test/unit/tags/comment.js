@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/comment', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
   it('should support empty content', function () {
     const src = '{% comment %}{% raw%}'
     return expect(liquid.parseAndRender(src))

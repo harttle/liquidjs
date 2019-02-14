@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/decrement', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
   it('should throw when variable expression illegal', function () {
     const src = '{% decrement / %}{{var}}'
     const ctx = {}

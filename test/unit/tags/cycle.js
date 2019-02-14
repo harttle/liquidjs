@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/cycle', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
 
   it('should support cycle', function () {
     const src = "{% cycle '1', '2', '3' %}"

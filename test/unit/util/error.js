@@ -6,8 +6,8 @@ import * as path from 'path'
 const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
-let engine = Liquid()
-const strictEngine = Liquid({
+let engine = new Liquid()
+const strictEngine = new Liquid({
   strict_variables: true,
   strict_filters: true
 })
@@ -76,7 +76,7 @@ describe('error', function () {
 
   describe('RenderError', function () {
     beforeEach(function () {
-      engine = Liquid({
+      engine = new Liquid({
         root: '/'
       })
       engine.registerTag('throwingTag', {
@@ -217,7 +217,7 @@ describe('error', function () {
 
   describe('ParseError', function () {
     beforeEach(function () {
-      engine = Liquid()
+      engine = new Liquid()
       engine.registerTag('throwsOnParse', {
         parse: function () {
           throw new Error('intended parse error')

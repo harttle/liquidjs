@@ -7,8 +7,8 @@ chai.use(require('chai-as-promised'))
 describe('.parseAndRender()', function () {
   var engine, strictEngine
   beforeEach(function () {
-    engine = Liquid()
-    strictEngine = Liquid({
+    engine = new Liquid()
+    strictEngine = new Liquid({
       strict_filters: true
     })
   })

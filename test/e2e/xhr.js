@@ -23,7 +23,7 @@ describe('xhr', () => {
     })
     global.XMLHttpRequest = sinon.useFakeXMLHttpRequest()
     global.document = dom.window.document
-    engine = Liquid({
+    engine = new Liquid({
       root: 'https://example.com/views/',
       extname: '.html'
     })
@@ -78,7 +78,7 @@ describe('xhr', () => {
   })
   describe('#renderFile() with root specified', () => {
     it('should support undefined root', () => {
-      engine = Liquid({
+      engine = new Liquid({
         extname: '.html'
       })
       server.respondWith('GET', 'https://example.com/foo/hello.html',
@@ -87,7 +87,7 @@ describe('xhr', () => {
         .to.eventually.equal('hello alice5')
     })
     it('should support empty root', () => {
-      engine = Liquid({
+      engine = new Liquid({
         root: '',
         extname: '.html'
       })
@@ -97,7 +97,7 @@ describe('xhr', () => {
         .to.eventually.equal('hello alice5')
     })
     it('should support with relative path', () => {
-      engine = Liquid({
+      engine = new Liquid({
         root: './views/',
         extname: '.html'
       })
@@ -107,7 +107,7 @@ describe('xhr', () => {
         .to.eventually.equal('hello alice5')
     })
     it('should support with absolute path', () => {
-      engine = Liquid({
+      engine = new Liquid({
         root: '/views/',
         extname: '.html'
       })
@@ -117,7 +117,7 @@ describe('xhr', () => {
         .to.eventually.equal('hello alice5')
     })
     it('should support with url', () => {
-      engine = Liquid({
+      engine = new Liquid({
         root: 'https://foo.com/bar/',
         extname: '.html'
       })
@@ -141,7 +141,7 @@ describe('xhr', () => {
         .then(html => expect(html).to.equal('foo2'))
     })
     it('should respect cache=true option', () => {
-      engine = Liquid({
+      engine = new Liquid({
         root: '/views/',
         extname: '.html',
         cache: true

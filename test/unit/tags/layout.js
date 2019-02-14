@@ -8,7 +8,7 @@ chai.use(require('chai-as-promised'))
 describe('tags/layout', function () {
   let liquid
   before(function () {
-    liquid = Liquid({
+    liquid = new Liquid({
       root: '/',
       extname: '.html'
     })
@@ -113,7 +113,7 @@ describe('tags/layout', function () {
         '/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
       })
-      const staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
       return expect(staticLiquid.renderFile('/main.html')).to
         .eventually.equal('blackA')
     })
@@ -123,7 +123,7 @@ describe('tags/layout', function () {
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout bar/../foo/parent.html color:"black"%}{%block%}A{%endblock%}'
       })
-      const staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
       return expect(staticLiquid.renderFile('/main.html')).to
         .eventually.equal('blackA')
     })
@@ -133,7 +133,7 @@ describe('tags/layout', function () {
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout foo/parent.html color:"black"%}{%block%}A{%endblock%}'
       })
-      const staticLiquid = Liquid({ root: '/', dynamicPartials: false })
+      const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
       return expect(staticLiquid.renderFile('/main.html')).to
         .eventually.equal('blackA')
     })

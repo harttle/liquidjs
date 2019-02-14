@@ -13,7 +13,7 @@ describe('engine#express()', function () {
 
   beforeEach(function () {
     app = express()
-    engine = Liquid({
+    engine = new Liquid({
       root: '/root',
       extname: '.html'
     })

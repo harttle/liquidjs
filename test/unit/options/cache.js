@@ -9,7 +9,7 @@ chai.use(chaiAsPromised)
 describe('cache options', function () {
   let engine
   beforeEach(function () {
-    engine = Liquid({
+    engine = new Liquid({
       root: '/root/',
       extname: '.html'
     })
@@ -28,7 +28,7 @@ describe('cache options', function () {
       .then(x => expect(x).to.equal('bar'))
   })
   it('should respect cache=true option', function () {
-    engine = Liquid({
+    engine = new Liquid({
       root: '/root/',
       extname: '.html',
       cache: true

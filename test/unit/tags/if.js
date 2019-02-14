@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/if', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
   const ctx = {
     one: 1,
     two: 2,

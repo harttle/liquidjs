@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/increment', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
 
   it('should increment undefined variable', function () {
     const src = '{% increment one %}{% increment one %}{% increment one %}'

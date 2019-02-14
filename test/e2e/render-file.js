@@ -8,7 +8,7 @@ chai.use(require('chai-as-promised'))
 describe('#renderFile()', function () {
   var engine
   beforeEach(function () {
-    engine = Liquid({
+    engine = new Liquid({
       root: '/root/',
       extname: '.html'
     })
@@ -29,7 +29,7 @@ describe('#renderFile()', function () {
       .to.eventually.equal('foo')
   })
   it('should find files without extname', function () {
-    var engine = Liquid({ root: '/root' })
+    var engine = new Liquid({ root: '/root' })
     return expect(engine.renderFile('/root/files/bar', {}))
       .to.eventually.equal('bar')
   })
@@ -38,7 +38,7 @@ describe('#renderFile()', function () {
       .to.eventually.equal('foo')
   })
   it('should resolve array as root', function () {
-    engine = Liquid({
+    engine = new Liquid({
       root: ['/boo', '/root/'],
       extname: '.html'
     })
@@ -50,7 +50,7 @@ describe('#renderFile()', function () {
     files[process.cwd() + '/foo.html'] = 'FOO'
     mock(files)
 
-    engine = Liquid({
+    engine = new Liquid({
       extname: '.html'
     })
     return expect(engine.renderFile('foo.html'))
@@ -64,7 +64,7 @@ describe('#renderFile()', function () {
     return expect(engine.renderFile('files/name', { name: 'harttle' })).to.eventually.equal('My name is harttle.')
   })
   it('should throw with lookup list when file not exist', function () {
-    engine = Liquid({
+    engine = new Liquid({
       root: ['/boo', '/root/'],
       extname: '.html'
     })

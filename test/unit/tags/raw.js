@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/raw', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
   it('should support raw 1', async function () {
     const p = liquid.parseAndRender('{% raw%}')
     return expect(p).be.rejectedWith(/{% raw%} not closed/)

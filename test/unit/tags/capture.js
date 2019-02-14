@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/capture', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
 
   it('should support capture', function () {
     const src = '{% capture f %}{{"a" | capitalize}}{%endcapture%}{{f}}'

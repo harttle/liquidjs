@@ -6,7 +6,7 @@ chai.use(sinonChai)
 const expect = chai.expect
 
 describe('tags/assign', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
   it('should throw when variable expression illegal', function () {
     const src = '{% assign / %}'
     const ctx = {}

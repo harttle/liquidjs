@@ -8,7 +8,7 @@ chai.use(require('chai-as-promised'))
 describe('tags/include', function () {
   let liquid
   before(function () {
-    liquid = Liquid({
+    liquid = new Liquid({
       root: '/',
       extname: '.html'
     })

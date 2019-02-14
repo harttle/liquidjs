@@ -5,7 +5,7 @@ const expect = chai.expect
 chai.use(require('chai-as-promised'))
 
 describe('tags/unless', function () {
-  const liquid = Liquid()
+  const liquid = new Liquid()
 
   it('should render else when predicate yields true', function () {
     // 0 is truthy

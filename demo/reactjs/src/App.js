@@ -14,7 +14,7 @@ class App extends Component {
 
 componentDidMount() {
 
-  let engine = Liquid({
+  let engine = new Liquid({
       root: path.resolve(__dirname, 'views/'),  // dirs to lookup layouts/includes
       extname: '.liquid'     // the extname used for layouts/includes, defaults 
   });

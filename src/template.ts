@@ -3,8 +3,8 @@ import * as path from 'path'
 import { anySeries } from './util/promise'
 import * as fs from 'fs'
 
-const statFileAsync = _.promisify(fs.stat)
-const readFileAsync = _.promisify(fs.readFile)
+const statFileAsync = <(filepath: string) => Promise<object>>_.promisify(fs.stat)
+const readFileAsync = <(filepath: string, encoding: string) => Promise<string>>_.promisify(fs.readFile)
 
 export async function resolve (filepath, root, options) {
   if (!path.extname(filepath)) {
@@ -24,6 +24,6 @@ export async function resolve (filepath, root, options) {
   })
 }
 
-export async function read (filepath) {
+export async function read (filepath): Promise<string> {
   return readFileAsync(filepath, 'utf8')
 }
