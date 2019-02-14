@@ -1,3 +1,15 @@
+# [7.0.0](https://github.com/harttle/liquidjs/compare/v6.4.3...v7.0.0) (2019-02-14)
+
+
+### chore
+
+* **TypeScript:** ship Liquid to class ([1cc7249](https://github.com/harttle/liquidjs/commit/1cc7249))
+
+
+### BREAKING CHANGES
+
+* **TypeScript:** calling `Liquid()` without `new` now becomes invalid
+
 ## [6.4.3](https://github.com/harttle/liquidjs/compare/v6.4.2...v6.4.3) (2019-02-13)
 
 
