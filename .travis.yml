@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - "8"
   - "6"
-  - "4"
 jobs:
   include:
     - stage: test
@@ -10,6 +9,9 @@ jobs:
       script: npm run lint
     - name: 'Coverage'
       script: npm run coverage && npm run coveralls
+    - name: 'E2E on Node.js 4'
+      script: npm run e2e
+      node_js: "4"
     - stage: release
       if: branch = master
       script: skip
