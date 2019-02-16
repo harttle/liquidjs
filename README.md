@@ -212,7 +212,7 @@ Filter arguments will be passed to the registered filter function, for example:
 engine.registerFilter('add', (initial, arg1, arg2) => initial + arg1 + arg2)
 ```
 
-See existing filter implementations here: <https://github.com/harttle/liquidjs/blob/master/filters.js>
+See existing filter implementations here: <https://github.com/harttle/liquidjs/tree/master/src/builtin/filters>
 
 ## Register Tags
 
@@ -232,7 +232,7 @@ engine.registerTag('upper', {
 * `parse`: Read tokens from `remainTokens` until your end token.
 * `render`: Combine scope data with your parsed tokens into HTML string.
 
-See existing tag implementations here: <https://github.com/harttle/liquidjs/blob/master/tags/>
+See existing tag implementations here: <https://github.com/harttle/liquidjs/tree/master/src/builtin/tags>
 
 ## Plugin API
 

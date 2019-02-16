@@ -1,5 +1,4 @@
 import shim from 'rollup-plugin-shim'
-import alias from 'rollup-plugin-alias'
 import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
@@ -15,11 +14,7 @@ const banner = `/*
 const treeshake = {
   propertyReadSideEffects: false
 }
-const input = 'src/index.ts'
-const tsOptions = {
-  include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
-  tsconfigOverride: { compilerOptions: { module: 'ES2015' } }
-}
+const input = 'src/liquid.ts'
 
 export default [{
   output: [{
@@ -30,7 +25,17 @@ export default [{
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [typescript(tsOptions)],
+  plugins: [typescript({
+    include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
+    tsconfigOverride: { compilerOptions: {
+      module: 'ES2015',
+      baseUrl: '.',
+      paths: {
+        'template': ['src/parser/template'],
+        'src/*': ['src/*']
+      }
+    } }
+  })],
   treeshake,
   input
 }, {
@@ -43,8 +48,17 @@ export default [{
   }],
   plugins: [
     shim(fake),
-    alias({ './template': './template-browser' }),
-    typescript(tsOptions)
+    typescript({
+      include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
+      tsconfigOverride: { compilerOptions: {
+        module: 'ES2015',
+        baseUrl: '.',
+        paths: {
+          'template': ['src/parser/template-browser'],
+          'src/*': ['src/*']
+        }
+      } }
+    })
   ],
   treeshake,
   input
@@ -57,8 +71,17 @@ export default [{
   }],
   plugins: [
     shim(fake),
-    alias({ './template': './template-browser' }),
-    typescript(tsOptions),
+    typescript({
+      include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
+      tsconfigOverride: { compilerOptions: {
+        module: 'ES2015',
+        baseUrl: '.',
+        paths: {
+          'template': ['src/parser/template-browser'],
+          'src/*': ['src/*']
+        }
+      } }
+    }),
     uglify()
   ],
   treeshake,

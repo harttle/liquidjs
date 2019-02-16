@@ -1,4 +1,5 @@
 import * as _ from './underscore'
+import Token from 'src/parser/token'
 
 function captureStack () {
   if (Error.captureStackTrace) {
@@ -13,8 +14,8 @@ abstract class LiquidError {
   message: string
   name: string
   stack: string
-  token: any
-  originalError: any
+  token: Token
+  originalError: Error
   constructor(err, token) {
     this.input = token.input
     this.line = token.line
@@ -66,6 +67,7 @@ RenderError.prototype.constructor = RenderError
 
 export class RenderBreakError {
   message: string
+  resolvedHTML: string
   constructor (message) {
     captureStack.call(this)
     this.message = message + ''
@@ -93,7 +95,7 @@ function mkContext (input, targetLine) {
     .range(begin, end + 1)
     .map(lineNumber => {
       const indicator = (lineNumber === targetLine) ? '>> ' : '   '
-      const num = padStart(String(end).length, lineNumber)
+      const num = _.padStart(String(lineNumber), String(end).length)
       const text = lines[lineNumber - 1]
       return `${indicator}${num}| ${text}`
     })
@@ -111,10 +113,4 @@ function mkMessage (msg, token) {
     msg += ', line:' + token.line
   }
   return msg
-}
-
-function padStart (length, str) {
-  str = String(str)
-  const blank = Array(length - str.length).join(' ')
-  return blank + str
 }

@@ -25,7 +25,7 @@ export function promisify (fn) {
 }
 
 export function stringify (value) {
-  if (isNil(value)) return String(value)
+  if (isNil(value)) return ''
   if (isFunction(value.to_liquid)) return stringify(value.to_liquid())
   if (isFunction(value.toLiquid)) return stringify(value.toLiquid())
   if (isFunction(value.to_s)) return value.to_s()
@@ -142,7 +142,7 @@ export function isObject (value) {
  * Note that ranges that stop before they start are considered to be zero-length instead of
  * negative — if you'd like a negative range, use a negative step.
  */
-export function range (start: number, stop: number, step?: number) {
+export function range (start: number, stop?: number, step?: number) {
   if (arguments.length === 1) {
     stop = start
     start = 0
@@ -154,4 +154,11 @@ export function range (start: number, stop: number, step?: number) {
     arr.push(i)
   }
   return arr
+}
+
+export function padStart(str: any, length: number, ch: string = ' ') {
+  str = String(str)
+  let n = length - str.length
+  while(n-- > 0) str = ch + str 
+  return str
 }

@@ -1,12 +1,16 @@
 {
   "extends": "standard",
   "env": {
+    "mocha": true,
     "es6": true,
     "browser": true,
     "node": true
   },
+  "parser": "@typescript-eslint/parser",
   "plugins": [
+    "mocha",
     "standard",
+    "@typescript-eslint",
     "promise"
   ],
   "rules": {

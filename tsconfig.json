@@ -7,9 +7,15 @@
     "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "baseUrl": ".",
+    "paths": {
+      "template": ["src/parser/template"],
+      "src/*": ["src/*"]
+    }
   },
   "include": [
-    "src"
-  ]
+    "src", "test"
+  ],
+  "exclude": [ "node_modules", "dist" ]
 }
