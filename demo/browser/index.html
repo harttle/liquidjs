@@ -3,12 +3,12 @@
 
 <head>
   <title>liquidjs for the browser</title>
-  <script src="../../dist/liquid.js"></script>
+  <script src="node_modules/liquidjs/dist/liquid.min.js"></script>
 </head>
 
 <body>
   <script>
-    var engine = window.Liquid({
+    var engine = new window.Liquid({
       extname: '.html',
       cache: true
     });

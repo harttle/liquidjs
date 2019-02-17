@@ -1,0 +1,11 @@
+{
+  "name": "liquidjs-demo-nodejs",
+  "description": "Node.js demo for liquidjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "liquidjs": "^7.0.0"
+  }
+}

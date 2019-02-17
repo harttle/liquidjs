@@ -1,7 +1,9 @@
 import { create } from 'src/util/underscore'
 import { stringify } from 'src/util/underscore'
 import assert from 'src/util/assert'
-import TagImpl from './tagimpl'
+import ITagImpl from './itag-impl'
+import ITagImplOptions from './itag-impl-options'
+import Liquid from 'src/liquid'
 import Hash from './hash'
 import Template from 'src/template/template'
 import ITemplate from 'src/template/itemplate'
@@ -10,10 +12,10 @@ import TagToken from 'src/parser/tag-token'
 export default class Tag extends Template implements ITemplate {
   name: string
   token: TagToken
-  private impl: TagImpl
+  private impl: ITagImpl
   static impls: object = {}
 
-  constructor (token, tokens, liquid) {
+  constructor (token, tokens, liquid: Liquid) {
     super(token)
     this.name = token.name
 
@@ -34,7 +36,7 @@ export default class Tag extends Template implements ITemplate {
     const html = await impl.render(scope, hash)
     return stringify(html)
   }
-  static register (name, tag) {
+  static register (name: string, tag: ITagImplOptions) {
     Tag.impls[name] = tag
   }
   static clear () {

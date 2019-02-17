@@ -8,6 +8,7 @@ import Render from './render/render'
 import Tag from './template/tag/tag'
 import Filter from './template/filter'
 import Parser from './parser/parser'
+import ITagImplOptions from './template/tag/itag-impl-options'
 import Value from './template/value'
 import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax'
 import builtinTags from './builtin/tags'
@@ -76,7 +77,7 @@ export default class Liquid {
   registerFilter (name, filter) {
     return Filter.register(name, filter)
   }
-  registerTag (name, tag) {
+  registerTag (name: string, tag: ITagImplOptions) {
     return Tag.register(name, tag)
   }
   plugin (plugin) {

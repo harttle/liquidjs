@@ -3,6 +3,7 @@
   "version": "7.0.0",
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "dist/liquid.common.js",
+  "types": "dist/liquid.d.ts",
   "browser": "dist/liquid.js",
   "scripts": {
     "lint": "eslint src/ test/ *.js",

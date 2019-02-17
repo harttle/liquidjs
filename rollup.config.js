@@ -26,15 +26,12 @@ export default [{
   }],
   external: ['path', 'fs'],
   plugins: [typescript({
-    include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
-    tsconfigOverride: { compilerOptions: {
-      module: 'ES2015',
-      baseUrl: '.',
-      paths: {
-        'template': ['src/parser/template'],
-        'src/*': ['src/*']
+    tsconfigOverride: {
+      exclude: [ 'test' ],
+      compilerOptions: {
+        module: 'ES2015'
       }
-    } }
+    }
   })],
   treeshake,
   input
@@ -49,15 +46,13 @@ export default [{
   plugins: [
     shim(fake),
     typescript({
-      include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
-      tsconfigOverride: { compilerOptions: {
-        module: 'ES2015',
-        baseUrl: '.',
-        paths: {
-          'template': ['src/parser/template-browser'],
-          'src/*': ['src/*']
+      tsconfigOverride: {
+        exclude: [ 'test' ],
+        compilerOptions: {
+          module: 'ES2015',
+          paths: { 'template': ['src/parser/template-browser'] }
         }
-      } }
+      }
     })
   ],
   treeshake,
@@ -72,15 +67,13 @@ export default [{
   plugins: [
     shim(fake),
     typescript({
-      include: [ '*.ts', '**/*.ts', '*.js', '**/*.js' ],
-      tsconfigOverride: { compilerOptions: {
-        module: 'ES2015',
-        baseUrl: '.',
-        paths: {
-          'template': ['src/parser/template-browser'],
-          'src/*': ['src/*']
+      tsconfigOverride: {
+        exclude: [ 'test' ],
+        compilerOptions: {
+          module: 'ES2015',
+          paths: { 'template': ['src/parser/template-browser'] }
         }
-      } }
+      }
     }),
     uglify()
   ],

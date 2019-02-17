@@ -8,14 +8,14 @@ function captureStack () {
 }
 
 abstract class LiquidError {
-  input: string
-  line: string
-  file: string
-  message: string
   name: string
+  message: string
   stack: string
-  token: Token
-  originalError: Error
+  private line: string
+  private file: string
+  private input: string
+  private token: Token
+  private originalError: Error
   constructor(err, token) {
     this.input = token.input
     this.line = token.line
@@ -30,7 +30,7 @@ abstract class LiquidError {
     const err = this.originalError
     const context = mkContext(this.input, this.line)
     this.message = mkMessage(err.message, this.token)
-    this.stack = context +
+    this.stack = this.message + '\n' + context +
       '\n' + (this.stack || this.message) +
         (err.stack ? '\nFrom ' + err.stack : '')
   }

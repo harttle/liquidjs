@@ -8,6 +8,7 @@ import { evalValue } from 'src/render/syntax'
  *    hash['foo'] === 'bar'
  */
 export default class Hash {
+  [key: string]: any
   constructor(markup, scope) {
     let match
     hashCapture.lastIndex = 0
