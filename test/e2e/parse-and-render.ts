@@ -1,8 +1,8 @@
-var chai = require('chai')
-var Liquid = require('../..')
-var expect = chai.expect
+import Liquid from '../..'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
 describe('.parseAndRender()', function () {
   var engine, strictEngine
@@ -12,19 +12,23 @@ describe('.parseAndRender()', function () {
       strict_filters: true
     })
   })
-  it('should stringify object', function () {
+  it('should stringify object', async function () {
     var ctx = { obj: { foo: 'bar' } }
-    return expect(engine.parseAndRender('{{obj}}', ctx)).to.eventually.equal('{"foo":"bar"}')
+    const html = await engine.parseAndRender('{{obj}}', ctx)
+    return expect(html).to.equal('{"foo":"bar"}')
   })
-  it('should stringify array ', function () {
+  it('should stringify array ', async function () {
     var ctx = { arr: [-2, 'a'] }
-    return expect(engine.parseAndRender('{{arr}}', ctx)).to.eventually.equal('[-2,"a"]')
+    const html = await engine.parseAndRender('{{arr}}', ctx)
+    return expect(html).to.equal('[-2,"a"]')
   })
-  it('should render undefined as empty', function () {
-    return expect(engine.parseAndRender('foo{{zzz}}bar', {})).to.eventually.equal('foobar')
+  it('should render undefined as empty', async function () {
+    const html = await engine.parseAndRender('foo{{zzz}}bar', {})
+    return expect(html).to.equal('foobar')
   })
-  it('should render as null when filter undefined', function () {
-    return expect(engine.parseAndRender('{{"foo" | filter1}}', {})).to.eventually.equal('foo')
+  it('should render as null when filter undefined', async function () {
+    const html = await engine.parseAndRender('{{"foo" | filter1}}', {})
+    return expect(html).to.equal('foo')
   })
   it('should throw upon undefined filter when strict_filters set', function () {
     return expect(strictEngine.parseAndRender('{{"foo" | filter1}}', {})).to
@@ -38,22 +42,24 @@ describe('.parseAndRender()', function () {
       engine.parse('<html><head>{{obj}}</head></html>')
     }).to.not.throw()
   })
-  it('should render template multiple times', function () {
-    var ctx = { obj: { foo: 'bar' } }
-    var template = engine.parse('{{obj}}')
-    return engine.render(template, ctx)
-      .then(result => expect(result).to.equal('{"foo":"bar"}'))
-      .then(() => engine.render(template, ctx))
-      .then((result) => expect(result).to.equal('{"foo":"bar"}'))
+  it('should render template multiple times', async function () {
+    const ctx = { obj: { foo: 'bar' } }
+    const template = engine.parse('{{obj}}')
+    const result = await engine.render(template, ctx)
+    expect(result).to.equal('{"foo":"bar"}')
+    const result2 = await engine.render(template, ctx)
+    expect(result2).to.equal('{"foo":"bar"}')
   })
-  it('should render filters', function () {
+  it('should render filters', async function () {
     var ctx = { names: ['alice', 'bob'] }
     var template = engine.parse('<p>{{names | join: ","}}</p>')
-    return expect(engine.render(template, ctx)).to.eventually.equal('<p>alice,bob</p>')
+    const html = await engine.render(template, ctx)
+    return expect(html).to.equal('<p>alice,bob</p>')
   })
-  it('should render accessive filters', function () {
+  it('should render accessive filters', async function () {
     var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
       '{{ my_array | first }}'
-    return expect(engine.parseAndRender(src)).to.eventually.equal('apples')
+    const html = await engine.parseAndRender(src)
+    return expect(html).to.equal('apples')
   })
 })

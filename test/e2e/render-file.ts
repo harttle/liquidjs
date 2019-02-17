@@ -1,9 +1,6 @@
-var chai = require('chai')
-var mock = require('mock-fs')
-var Liquid = require('../..')
-var expect = chai.expect
-
-chai.use(require('chai-as-promised'))
+import { expect } from 'chai'
+import * as mock from 'mock-fs'
+import Liquid from '../..'
 
 describe('#renderFile()', function () {
   var engine
@@ -24,28 +21,28 @@ describe('#renderFile()', function () {
   afterEach(function () {
     mock.restore()
   })
-  it('should render file', function () {
-    return expect(engine.renderFile('/root/files/foo.html', {}))
-      .to.eventually.equal('foo')
+  it('should render file', async function () {
+    const html = await engine.renderFile('/root/files/foo.html', {})
+    return expect(html).to.equal('foo')
   })
-  it('should find files without extname', function () {
+  it('should find files without extname', async function () {
     var engine = new Liquid({ root: '/root' })
-    return expect(engine.renderFile('/root/files/bar', {}))
-      .to.eventually.equal('bar')
+    const html = await engine.renderFile('/root/files/bar', {})
+    return expect(html).to.equal('bar')
   })
-  it('should accept relative path', function () {
-    return expect(engine.renderFile('files/foo.html'))
-      .to.eventually.equal('foo')
+  it('should accept relative path', async function () {
+    const html = await engine.renderFile('files/foo.html')
+    return expect(html).to.equal('foo')
   })
-  it('should resolve array as root', function () {
+  it('should resolve array as root', async function () {
     engine = new Liquid({
       root: ['/boo', '/root/'],
       extname: '.html'
     })
-    return expect(engine.renderFile('files/foo.html'))
-      .to.eventually.equal('foo')
+    const html = await engine.renderFile('files/foo.html')
+    return expect(html).to.equal('foo')
   })
-  it('should default root to cwd', function () {
+  it('should default root to cwd', async function () {
     var files = {}
     files[process.cwd() + '/foo.html'] = 'FOO'
     mock(files)
@@ -53,15 +50,16 @@ describe('#renderFile()', function () {
     engine = new Liquid({
       extname: '.html'
     })
-    return expect(engine.renderFile('foo.html'))
-      .to.eventually.equal('FOO')
+    const html = await engine.renderFile('foo.html')
+    return expect(html).to.equal('FOO')
   })
-  it('should render file with context', function () {
-    return expect(engine.renderFile('/root/files/name.html', { name: 'harttle' }))
-      .to.eventually.equal('My name is harttle.')
+  it('should render file with context', async function () {
+    const html = await engine.renderFile('/root/files/name.html', { name: 'harttle' })
+    return expect(html).to.equal('My name is harttle.')
   })
-  it('should use default extname', function () {
-    return expect(engine.renderFile('files/name', { name: 'harttle' })).to.eventually.equal('My name is harttle.')
+  it('should use default extname', async function () {
+    const html = await engine.renderFile('files/name', { name: 'harttle' })
+    return expect(html).to.equal('My name is harttle.')
   })
   it('should throw with lookup list when file not exist', function () {
     engine = new Liquid({

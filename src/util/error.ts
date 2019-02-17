@@ -16,14 +16,14 @@ abstract class LiquidError {
   private input: string
   private token: Token
   private originalError: Error
-  constructor(err, token) {
+  constructor (err, token) {
     this.input = token.input
     this.line = token.line
     this.file = token.file
     this.originalError = err
     this.token = token
   }
-  captureStackTrace(obj) {
+  captureStackTrace (obj) {
     this.name = obj.constructor.name
 
     captureStack.call(obj)
@@ -37,32 +37,32 @@ abstract class LiquidError {
 }
 
 export class TokenizationError extends LiquidError {
-  constructor(message, token) {
-    super({message}, token)
+  constructor (message, token) {
+    super({ message }, token)
     super.captureStackTrace(this)
   }
 }
-TokenizationError.prototype = _.create(Error.prototype)
+TokenizationError.prototype = _.create(Error.prototype) as any
 TokenizationError.prototype.constructor = TokenizationError
 
 export class ParseError extends LiquidError {
-  constructor(err, token) {
+  constructor (err, token) {
     super(err, token)
     _.assign(this, err)
     super.captureStackTrace(this)
   }
 }
-ParseError.prototype = _.create(Error.prototype)
+ParseError.prototype = _.create(Error.prototype) as any
 ParseError.prototype.constructor = ParseError
 
 export class RenderError extends LiquidError {
-  constructor(err, tpl) {
+  constructor (err, tpl) {
     super(err, tpl.token)
     _.assign(this, err)
     super.captureStackTrace(this)
   }
 }
-RenderError.prototype = _.create(Error.prototype)
+RenderError.prototype = _.create(Error.prototype) as any
 RenderError.prototype.constructor = RenderError
 
 export class RenderBreakError {
@@ -73,7 +73,7 @@ export class RenderBreakError {
     this.message = message + ''
   }
 }
-RenderBreakError.prototype = _.create(Error.prototype)
+RenderBreakError.prototype = _.create(Error.prototype) as any
 RenderBreakError.prototype.constructor = RenderBreakError
 
 export class AssertionError {
@@ -83,7 +83,7 @@ export class AssertionError {
     this.message = message + ''
   }
 }
-AssertionError.prototype = _.create(Error.prototype)
+AssertionError.prototype = _.create(Error.prototype) as any
 AssertionError.prototype.constructor = AssertionError
 
 function mkContext (input, targetLine) {

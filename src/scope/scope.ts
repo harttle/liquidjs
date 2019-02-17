@@ -15,7 +15,7 @@ export default class Scope {
       strict_variables: false,
       strict_filters: false,
       root: []
-    } , opts)
+    }, opts)
     this.contexts = [ctx || {}]
   }
   getAll () {
@@ -59,7 +59,7 @@ export default class Scope {
     }
     return this.contexts.splice(i, 1)[0]
   }
-  findContextFor (key: string, filter = (arg => true)) {
+  findContextFor (key: string, filter: ((conttext: object) => boolean) = () => true) {
     for (let i = this.contexts.length - 1; i >= 0; i--) {
       const candidate = this.contexts[i]
       if (!filter(candidate)) continue

@@ -2,7 +2,7 @@ import Token from 'src/parser/token'
 
 export default class Template {
   token: Token;
-  constructor(token) {
-    this.token = token;
+  constructor (token) {
+    this.token = token
   }
 }

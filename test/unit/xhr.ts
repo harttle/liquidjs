@@ -1,12 +1,11 @@
 import { read } from 'src/parser/template-browser'
 import * as sinon from 'sinon'
-import * as chai from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
-const expect = chai.expect
-
-describe('template-browser', () => {
+describe('xhr', () => {
   if (+process.version.match(/^v(\d+)/)[1] < 8) {
     console.info('jsdom not supported, skipping xhr...')
     return
@@ -24,9 +23,9 @@ describe('template-browser', () => {
     delete (global as any).XMLHttpRequest
   })
   describe('#read()', () => {
-    it('should get corresponding text', () => {
-      return expect(read('https://example.com/views/hello.html'))
-        .to.eventually.equal('hello {{name}}')
+    it('should get corresponding text', async function () {
+      const html = await read('https://example.com/views/hello.html')
+      return expect(html).to.equal('hello {{name}}')
     })
     it('should throw 404', () => {
       return expect(read('https://example.com/not/exist.html'))

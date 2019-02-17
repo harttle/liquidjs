@@ -7,7 +7,7 @@
 export function anySeries (iterable, iteratee) {
   let ret: Promise<any> = Promise.reject(new Error('init'))
   iterable.forEach(function (item, idx) {
-    ret = ret.catch(e => iteratee(item, idx, iterable))
+    ret = ret.catch(() => iteratee(item, idx, iterable))
   })
   return ret
 }

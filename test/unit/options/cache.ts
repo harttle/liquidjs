@@ -1,10 +1,6 @@
-import * as chai from 'chai'
+import { expect } from 'chai'
 import * as mock from 'mock-fs'
 import Liquid from '../../../src/liquid'
-import * as chaiAsPromised from 'chai-as-promised'
-
-const expect = chai.expect
-chai.use(chaiAsPromised)
 
 describe('LiquidOptions#cache', function () {
   let engine

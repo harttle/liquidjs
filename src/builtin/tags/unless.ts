@@ -6,21 +6,21 @@ export default {
     this.elseTemplates = []
     let p
     const stream = this.liquid.parser.parseStream(remainTokens)
-      .on('start', x => {
+      .on('start', () => {
         p = this.templates
         this.cond = tagToken.args
       })
       .on('tag:else', () => (p = this.elseTemplates))
-      .on('tag:endunless', token => stream.stop())
+      .on('tag:endunless', () => stream.stop())
       .on('template', tpl => p.push(tpl))
-      .on('end', x => {
+      .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
 
     stream.start()
   },
 
-  render: function (scope, hash) {
+  render: function (scope) {
     const cond = evalExp(this.cond, scope)
     return isFalsy(cond)
       ? this.liquid.renderer.renderTemplates(this.templates, scope)

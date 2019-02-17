@@ -1,5 +1,4 @@
 import * as chai from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
 import Scope from '../../src/scope/scope'
@@ -7,7 +6,6 @@ import Filter from 'src/template/filter'
 import Value from 'src/template/value'
 
 chai.use(sinonChai)
-chai.use(chaiAsPromised)
 
 const expect = chai.expect
 const add = (l, r) => l + r
@@ -40,7 +38,6 @@ describe('Value', function () {
     expect(tpl.initial).to.equal('foo')
     expect(tpl.filters.length).to.equal(2)
   })
-
 
   it('should eval value', function () {
     Filter.register('date', (l, r) => l + r)

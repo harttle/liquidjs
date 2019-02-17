@@ -18,16 +18,16 @@ export default {
         })
       })
       .on('tag:else', () => (p = this.elseTemplates))
-      .on('tag:endif', token => stream.stop())
+      .on('tag:endif', () => stream.stop())
       .on('template', tpl => p.push(tpl))
-      .on('end', x => {
+      .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
 
     stream.start()
   },
 
-  render: function (scope, hash) {
+  render: function (scope) {
     for (const branch of this.branches) {
       const cond = evalExp(branch.cond, scope)
       if (isTruthy(cond)) {

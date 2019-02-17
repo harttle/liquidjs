@@ -6,5 +6,5 @@ import ITagImpl from './itag-impl'
 
 export default interface ITagImplOptions {
   parse?: (this: ITagImpl, token: TagToken, remainingTokens: Array<Token>) => void
-  render?: (this: ITagImpl, scope: Scope, hash: Hash) => string | Promise<string>
+  render?: (this: ITagImpl, scope: Scope, hash: Hash) => any | Promise<any>
 }

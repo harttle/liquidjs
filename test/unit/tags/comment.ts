@@ -1,8 +1,8 @@
 import Liquid from 'src/liquid'
-import * as chai from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
 describe('tags/comment', function () {
   const liquid = new Liquid()
@@ -11,24 +11,24 @@ describe('tags/comment', function () {
     return expect(liquid.parseAndRender(src))
       .to.be.rejectedWith(/{% comment %} not closed/)
   })
-  it('should ignore plain string', function () {
+  it('should ignore plain string', async function () {
     const src = 'My name is {% comment %}super{% endcomment %} Shopify.'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('My name is  Shopify.')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('My name is  Shopify.')
   })
-  it('should ignore output tokens', function () {
+  it('should ignore output tokens', async function () {
     const src = '{% comment %}\n{{ foo}} \n{% endcomment %}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('')
   })
-  it('should ignore tag tokens', function () {
+  it('should ignore tag tokens', async function () {
     const src = '{% comment %}{%if true%}true{%else%}false{%endif%}{% endcomment %}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('')
   })
-  it('should ignore un-balenced tag tokens', function () {
+  it('should ignore un-balenced tag tokens', async function () {
     const src = '{% comment %}{%if true%}true{%else%}false{% endcomment %}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('')
   })
 })

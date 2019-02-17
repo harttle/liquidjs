@@ -5,7 +5,7 @@ export default class Token {
   input: string
   file: string
   value: string
-  constructor(raw, pos, input, file, line) {
+  constructor (raw, pos, input, file, line) {
     this.line = line
     this.raw = raw
     this.input = input

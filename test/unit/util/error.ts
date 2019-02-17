@@ -1,10 +1,7 @@
-import Liquid from '../../../src/liquid'
+import { expect } from 'chai'
+import Liquid from 'src/liquid'
 import * as mock from 'mock-fs'
-import * as chai from 'chai'
 import * as path from 'path'
-
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
 
 let engine = new Liquid()
 const strictEngine = new Liquid({
@@ -111,8 +108,9 @@ describe('error', function () {
       expect(err.name).to.equal('RenderError')
       expect(err.message).to.contain('throwed by filter')
     })
-    it('should not throw when variable undefined by default', function () {
-      return expect(engine.parseAndRender('X{{a}}Y')).to.eventually.equal('XY')
+    it('should not throw when variable undefined by default', async function () {
+      const html = await engine.parseAndRender('X{{a}}Y')
+      return expect(html).to.equal('XY')
     })
     it('should throw RenderError when variable not defined', async function () {
       const err = await expect(strictEngine.parseAndRender('{{a}}')).be.rejected

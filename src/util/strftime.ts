@@ -159,7 +159,7 @@ const formatCodes = {
   }
 };
 (formatCodes as any).h = formatCodes.b;
-(formatCodes as any).N = formatCodes.L;
+(formatCodes as any).N = formatCodes.L
 
 export default function (d, format) {
   let output = ''

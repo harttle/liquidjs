@@ -5,7 +5,7 @@ export default {
       .on('token', token => {
         if (token.name === 'endcomment') stream.stop()
       })
-      .on('end', x => {
+      .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
     stream.start()

@@ -1,26 +1,24 @@
 import Liquid from 'src/liquid'
-import * as chai from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
 describe('tags/capture', function () {
   const liquid = new Liquid()
 
-  it('should support capture', function () {
+  it('should support capture', async function () {
     const src = '{% capture f %}{{"a" | capitalize}}{%endcapture%}{{f}}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('A')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('A')
   })
 
-  it('should shading rather than overwriting', function () {
+  it('should shading rather than overwriting', async function () {
     const src = '{% capture var %}10{% endcapture %}{{var}}'
     const ctx = { 'var': 20 }
-    return liquid.parseAndRender(src, ctx)
-      .then(x => {
-        expect(x).to.equal('10')
-        expect(ctx.var).to.equal(20)
-      })
+    const html = await liquid.parseAndRender(src, ctx)
+    expect(html).to.equal('10')
+    expect(ctx.var).to.equal(20)
   })
 
   it('should throw on invalid identifier', function () {

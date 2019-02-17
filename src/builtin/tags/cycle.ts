@@ -6,7 +6,7 @@ const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')
 
 export default {
-  parse: function (tagToken, remainTokens) {
+  parse: function (tagToken) {
     let match = groupRE.exec(tagToken.args)
     assert(match, `illegal tag: ${tagToken.raw}`)
 
@@ -21,7 +21,7 @@ export default {
     assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
   },
 
-  render: function (scope, hash) {
+  render: function (scope) {
     const group = evalValue(this.group, scope)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
 

@@ -1,10 +1,7 @@
-import * as chai from 'chai'
+import { expect } from 'chai'
 import Liquid from '../..'
-import * as chaiAsPromised from 'chai-as-promised'
 
 const liquid = new Liquid()
-const expect = chai.expect
-chai.use(chaiAsPromised)
 
 const cases = [
   {
@@ -445,6 +442,9 @@ const cases = [
 describe('Whitespace Control', function () {
   cases.forEach(item => it(
     item.text,
-    () => expect(liquid.parseAndRender(item.text)).to.eventually.equal(item.expected)
+    async () => {
+      const html = await liquid.parseAndRender(item.text)
+      expect(html).to.equal(item.expected)
+    }
   ))
 })

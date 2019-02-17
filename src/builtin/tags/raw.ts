@@ -13,7 +13,7 @@ export default {
       })
     stream.start()
   },
-  render: function (scope, hash) {
+  render: function () {
     return this.tokens.map(token => token.raw).join('')
   }
 }

@@ -1,8 +1,8 @@
 import Liquid from 'src/liquid'
-import * as chai from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
 describe('tags/decrement', function () {
   const liquid = new Liquid()
@@ -12,49 +12,47 @@ describe('tags/decrement', function () {
     return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(/illegal/)
   })
 
-  it('should decrement undefined variable', function () {
+  it('should decrement undefined variable', async function () {
     const src = '{% decrement var %}{% decrement var %}{% decrement var %}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('-1-2-3')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('-1-2-3')
   })
 
-  it('should decrement defined variable', function () {
+  it('should decrement defined variable', async function () {
     const src = '{% decrement var %}{% decrement var %}{% decrement var %}'
     const ctx = { 'var': 10 }
-    return liquid.parseAndRender(src, ctx)
-      .then(x => {
-        expect(x).to.equal('987')
-        expect(ctx.var).to.equal(7)
-      })
+    const html = await liquid.parseAndRender(src, ctx)
+    expect(html).to.equal('987')
+    expect(ctx.var).to.equal(7)
   })
 
-  it('should be independent from assign', function () {
+  it('should be independent from assign', async function () {
     const src = '{% assign var=10 %}{% decrement var %}{% decrement var %}{% decrement var %}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('-1-2-3')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('-1-2-3')
   })
 
-  it('should be independent from capture', function () {
+  it('should be independent from capture', async function () {
     const src = '{% capture var %}10{% endcapture %}{% decrement var %}{% decrement var %}{% decrement var %}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('-1-2-3')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('-1-2-3')
   })
 
-  it('should not shading assign', function () {
+  it('should not shading assign', async function () {
     const src = '{% assign var=10 %}{% decrement var %}{% decrement var %}{% decrement var %} {{var}}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('-1-2-3 10')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('-1-2-3 10')
   })
 
-  it('should not shading capture', function () {
+  it('should not shading capture', async function () {
     const src = '{% capture var %}10{% endcapture %}{% decrement var %}{% decrement var %}{% decrement var %} {{var}}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('-1-2-3 10')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('-1-2-3 10')
   })
 
-  it('should share the same variable with increment', function () {
+  it('should share the same variable with increment', async function () {
     const src = '{%increment var%}{%increment var%}{%decrement var%}{%decrement var%}{%increment var%}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('01100')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('01100')
   })
 })

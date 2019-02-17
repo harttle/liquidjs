@@ -28,5 +28,5 @@ export default {
     let ret = arr.slice(0, l).join(' ')
     if (arr.length > l) ret += o
     return ret
-  },
+  }
 }

@@ -1,8 +1,5 @@
-import Liquid from '../../../src/liquid'
-import * as chai from 'chai'
-
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+import Liquid from 'src/liquid'
+import { expect } from 'chai'
 
 describe('LiquidOptions#strict_*', function () {
   let engine
@@ -13,9 +10,9 @@ describe('LiquidOptions#strict_*', function () {
       extname: '.html'
     })
   })
-  it('should not throw when strict_variables false (default)', function () {
-    return expect(engine.parseAndRender('before{{notdefined}}after', ctx)).to
-      .eventually.equal('beforeafter')
+  it('should not throw when strict_variables false (default)', async function () {
+    const html = await engine.parseAndRender('before{{notdefined}}after', ctx)
+    return expect(html).to.equal('beforeafter')
   })
   it('should throw when strict_variables true', function () {
     const tpl = engine.parse('before{{notdefined}}after')

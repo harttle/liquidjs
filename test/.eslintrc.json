@@ -1,0 +1,12 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "plugins": [
+    "mocha"
+  ],
+  "rules": {
+    "no-unused-expressions": "off",
+    "no-new": "off"
+  }
+}

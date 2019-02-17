@@ -1,9 +1,6 @@
 import Liquid from 'src/liquid'
+import { expect } from 'chai'
 import * as mock from 'mock-fs'
-import * as chai from 'chai'
-
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
 
 describe('tags/layout', function () {
   let liquid
@@ -35,51 +32,51 @@ describe('tags/layout', function () {
     })
   })
   describe('anonymous block', function () {
-    it('should handle anonymous block', function () {
+    it('should handle anonymous block', async function () {
       mock({
         '/parent.html': 'X{%block%}{%endblock%}Y'
       })
       const src = '{% layout "parent.html" %}{%block%}A{%endblock%}'
-      return expect(liquid.parseAndRender(src)).to
-        .eventually.equal('XAY')
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal('XAY')
     })
-    it('should handle top level contents as anonymous block', function () {
+    it('should handle top level contents as anonymous block', async function () {
       mock({
         '/parent.html': 'X{%block%}{%endblock%}Y'
       })
       const src = '{% layout "parent.html" %}A'
-      return expect(liquid.parseAndRender(src)).to
-        .eventually.equal('XAY')
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal('XAY')
     })
   })
-  it('should handle named blocks', function () {
+  it('should handle named blocks', async function () {
     mock({
       '/parent.html': 'X{% block "a"%}{% endblock %}Y{% block b%}{%endblock%}Z'
     })
     const src = '{% layout "parent.html" %}' +
       '{%block a%}A{%endblock%}' +
       '{%block b%}B{%endblock%}'
-    return expect(liquid.parseAndRender(src)).to
-      .eventually.equal('XAYBZ')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('XAYBZ')
   })
-  it('should support default block content', function () {
+  it('should support default block content', async function () {
     mock({
       '/parent.html': 'X{% block "a"%}A{% endblock %}Y{% block b%}B{%endblock%}Z'
     })
     const src = '{% layout "parent.html" %}{%block a%}a{%endblock%}'
-    return expect(liquid.parseAndRender(src)).to
-      .eventually.equal('XaYBZ')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('XaYBZ')
   })
-  it('should handle nested block', function () {
+  it('should handle nested block', async function () {
     mock({
       '/grand.html': 'X{%block a%}G{%endblock%}Y',
       '/parent.html': '{%layout "grand" %}{%block a%}P{%endblock%}',
       '/main.html': '{%layout "parent"%}{%block a%}A{%endblock%}'
     })
-    return expect(liquid.renderFile('/main.html')).to
-      .eventually.equal('XAY')
+    const html = await liquid.renderFile('/main.html')
+    return expect(html).to.equal('XAY')
   })
-  it('should not bleed scope into included layout', function () {
+  it('should not bleed scope into included layout', async function () {
     mock({
       '/parent.html': 'X{%block a%}{%endblock%}Y{%block b%}{%endblock%}Z',
       '/main.html': '{%layout "parent"%}' +
@@ -87,55 +84,55 @@ describe('tags/layout', function () {
         '{%block b%}I{%include "included"%}J{%endblock%}',
       '/included.html': '{%layout "parent"%}{%block a%}a{%endblock%}'
     })
-    return expect(liquid.renderFile('main')).to
-      .eventually.equal('XAYIXaYZJZ')
+    const html = await liquid.renderFile('main')
+    return expect(html).to.equal('XAYIXaYZJZ')
   })
-  it('should support hash list', function () {
+  it('should support hash list', async function () {
     mock({
       '/parent.html': '{{color}}{%block%}{%endblock%}',
       '/main.html': '{% layout "parent.html" color:"black"%}{%block%}A{%endblock%}'
     })
-    return expect(liquid.renderFile('/main.html')).to
-      .eventually.equal('blackA')
+    const html = await liquid.renderFile('/main.html')
+    return expect(html).to.equal('blackA')
   })
-  it('should support multiple hash', function () {
+  it('should support multiple hash', async function () {
     mock({
       '/parent.html': '{{color}}{{bg}}{%block%}{%endblock%}',
       '/main.html': '{% layout "parent.html" color:"black", bg:"red"%}{%block%}A{%endblock%}'
     })
-    return expect(liquid.renderFile('/main.html')).to
-      .eventually.equal('blackredA')
+    const html = await liquid.renderFile('/main.html')
+    return expect(html).to.equal('blackredA')
   })
 
   describe('static partial', function () {
-    it('should support filename with extention', function () {
+    it('should support filename with extention', async function () {
       mock({
         '/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
       })
       const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
-      return expect(staticLiquid.renderFile('/main.html')).to
-        .eventually.equal('blackA')
+      const html = await staticLiquid.renderFile('/main.html')
+      return expect(html).to.equal('blackA')
     })
 
-    it('should support parent paths', function () {
+    it('should support parent paths', async function () {
       mock({
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout bar/../foo/parent.html color:"black"%}{%block%}A{%endblock%}'
       })
       const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
-      return expect(staticLiquid.renderFile('/main.html')).to
-        .eventually.equal('blackA')
+      const html = await staticLiquid.renderFile('/main.html')
+      return expect(html).to.equal('blackA')
     })
 
-    it('should support subpaths', function () {
+    it('should support subpaths', async function () {
       mock({
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout foo/parent.html color:"black"%}{%block%}A{%endblock%}'
       })
       const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
-      return expect(staticLiquid.renderFile('/main.html')).to
-        .eventually.equal('blackA')
+      const html = await staticLiquid.renderFile('/main.html')
+      return expect(html).to.equal('blackA')
     })
   })
 })

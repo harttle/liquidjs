@@ -1,12 +1,8 @@
-import * as chai from 'chai'
+import { expect } from 'chai'
 import * as request from 'supertest'
 import * as express from 'express'
 import * as mock from 'mock-fs'
 import Liquid from '../../dist/liquid.common.js'
-import * as chaiAsPromised from 'chai-as-promised'
-
-const expect = chai.expect
-chai.use(chaiAsPromised)
 
 describe('express()', function () {
   var app, engine

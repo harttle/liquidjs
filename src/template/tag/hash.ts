@@ -9,7 +9,7 @@ import { evalValue } from 'src/render/syntax'
  */
 export default class Hash {
   [key: string]: any
-  constructor(markup, scope) {
+  constructor (markup, scope) {
     let match
     hashCapture.lastIndex = 0
     while ((match = hashCapture.exec(markup))) {

@@ -1,14 +1,14 @@
 import * as chai from 'chai'
 import Tag from 'src/template/tag/tag'
-import TagToken from 'src/parser/tag-token'
 import Scope from 'src/scope/scope'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import Liquid from 'src/liquid'
+import TagToken from 'src/parser/tag-token'
 
 chai.use(sinonChai)
 const expect = chai.expect
-const liquid = new Liquid();
+const liquid = new Liquid()
 
 describe('tag', function () {
   let scope
@@ -29,14 +29,14 @@ describe('tag', function () {
         type: 'tag',
         value: 'foo',
         name: 'foo'
-      }, [], liquid)
+      } as TagToken, [], liquid)
     }).to.throw(/tag foo not found/)
   })
 
   it('should register simple tag', function () {
     expect(function () {
       Tag.register('foo', {
-        render: x => 'bar'
+        render: () => 'bar'
       })
     }).not.throw()
   })
@@ -50,7 +50,7 @@ describe('tag', function () {
       type: 'tag',
       value: 'foo',
       name: 'foo'
-    }
+    } as TagToken
     await new Tag(token, [], liquid).render(scope)
     expect(spy).to.have.been.called
   })

@@ -1,14 +1,16 @@
 import assert from 'src/util/assert'
 import { identifier } from 'src/parser/lexical'
 import { CaptureScope, AssignScope, DecrementScope } from 'src/scope/scopes'
+import TagToken from 'src/parser/tag-token'
+import Scope from 'src/scope/scope'
 
 export default {
-  parse: function (token) {
+  parse: function (token: TagToken) {
     const match = token.args.match(identifier)
     assert(match, `illegal identifier ${token.args}`)
     this.variable = match[0]
   },
-  render: function (scope, hash) {
+  render: function (scope: Scope) {
     let context = scope.findContextFor(
       this.variable,
       ctx => {

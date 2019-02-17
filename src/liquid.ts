@@ -3,7 +3,7 @@ import * as Types from './types'
 import * as template from 'template'
 import * as _ from './util/underscore'
 import ITemplate from './template/itemplate'
-import * as tokenizer from './parser/tokenizer'
+import Tokenizer from './parser/tokenizer'
 import Render from './render/render'
 import Tag from './template/tag/tag'
 import Filter from './template/filter'
@@ -20,6 +20,7 @@ export default class Liquid {
   private cache: object
   private parser: Parser
   private renderer: Render
+  private tokenizer: Tokenizer
 
   constructor (options: LiquidOptions = {}) {
     options = _.assign({}, defaultOptions, options)
@@ -31,31 +32,32 @@ export default class Liquid {
     this.options = options
     this.parser = new Parser(this)
     this.renderer = new Render()
+    this.tokenizer = new Tokenizer(this.options)
 
     _.forOwn(builtinTags, (conf, name) => this.registerTag(name, conf))
     _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
   }
-  parse(html: string, filepath?: string) {
-    const tokens = tokenizer.parse(html, filepath, this.options)
+  parse (html: string, filepath?: string) {
+    const tokens = this.tokenizer.tokenize(html, filepath)
     return this.parser.parse(tokens)
   }
-  render(tpl: Array<ITemplate>, ctx?: object, opts?: LiquidOptions) {
+  render (tpl: Array<ITemplate>, ctx?: object, opts?: LiquidOptions) {
     opts = _.assign({}, this.options, opts)
     const scope = new Scope(ctx, opts)
     return this.renderer.renderTemplates(tpl, scope)
   }
-  async parseAndRender(html: string, ctx?: object, opts?: LiquidOptions) {
+  async parseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
     const tpl = await this.parse(html)
     return this.render(tpl, ctx, opts)
   }
-  async getTemplate(file, root) {
+  async getTemplate (file, root) {
     const filepath = await template.resolve(file, root, this.options)
     return this.respectCache(filepath, async () => {
       const str = await template.read(filepath)
       return this.parse(str, filepath)
     })
   }
-  async renderFile(file, ctx?: object, opts?: LiquidOptions) {
+  async renderFile (file, ctx?: object, opts?: LiquidOptions) {
     opts = _.assign({}, opts)
     const templates = await this.getTemplate(file, opts.root)
     return this.render(templates, ctx, opts)

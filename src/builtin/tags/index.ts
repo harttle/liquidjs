@@ -15,7 +15,10 @@ import tablerow from './tablerow'
 import unless from './unless'
 import Break from './break'
 import Continue from './continue'
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
 
-export default {
+const tags: { [key: string]: ITagImplOptions } = {
   assign, 'for': For, capture, 'case': Case, comment, include, decrement, increment, cycle, 'if': If, layout, block, raw, tablerow, unless, 'break': Break, 'continue': Continue
 }
+
+export default tags

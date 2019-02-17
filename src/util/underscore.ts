@@ -6,11 +6,11 @@ const arrToStr = Array.prototype.toString
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is a string, else false.
  */
-export function isString (value) {
+export function isString (value: any) {
   return toStr.call(value) === '[object String]'
 }
 
-export function isFunction (value) {
+export function isFunction (value: any) {
   return typeof value === 'function'
 }
 
@@ -24,7 +24,7 @@ export function promisify (fn) {
   }
 }
 
-export function stringify (value) {
+export function stringify (value: any): string {
   if (isNil(value)) return ''
   if (isFunction(value.to_liquid)) return stringify(value.to_liquid())
   if (isFunction(value.toLiquid)) return stringify(value.toLiquid())
@@ -34,7 +34,7 @@ export function stringify (value) {
   return toStr.call(value)
 }
 
-function defaultToString (value) {
+function defaultToString (value: any): string {
   const cache = []
   return JSON.stringify(value, (key, value) => {
     if (isObject(value)) {
@@ -47,20 +47,20 @@ function defaultToString (value) {
   })
 }
 
-export function create (proto) {
+export function create<T1 extends object, T2 extends T1 = T1> (proto: T1): T2 {
   return Object.create(proto)
 }
 
-export function isNil (value) {
+export function isNil (value: any): boolean {
   return value === null || value === undefined
 }
 
-export function isArray (value) {
+export function isArray (value: any): boolean {
   // be compatible with IE 8
   return toStr.call(value) === '[object Array]'
 }
 
-export function isError (value) {
+export function isError (value: any): boolean {
   const signature = toStr.call(value)
   // [object XXXError]
   return signature.substr(-6, 5) === 'Error' ||
@@ -75,7 +75,7 @@ export function isError (value) {
  * @param {Function} iteratee The function invoked per iteration.
  * @return {Object} Returns object.
  */
-export function forOwn (object, iteratee) {
+export function forOwn (object, iteratee: ((val: any, key: string, obj: object) => boolean | void)) {
   object = object || {}
   for (const k in object) {
     if (object.hasOwnProperty(k)) {
@@ -96,21 +96,22 @@ export function forOwn (object, iteratee) {
  * @param {...Object} sources The source objects.
  * @return {Object} Returns object.
  */
-export function assign (obj, ...srcs) {
+export function assign (obj: object, ...srcs: object[]): object {
   obj = isObject(obj) ? obj : {}
   srcs.forEach(src => binaryAssign(obj, src))
   return obj
 }
 
-function binaryAssign(target, src) {
-  for(let key in src) if (src.hasOwnProperty(key)) target[key] = src[key]
+function binaryAssign (target: object, src: object): object {
+  for (const key in src) if (src.hasOwnProperty(key)) target[key] = src[key]
+  return target
 }
 
-export function last (arr) {
+export function last (arr: any[]): any {
   return arr[arr.length - 1]
 }
 
-export function uniq (arr) {
+export function uniq (arr: any[]): any[] {
   const u = {}
   const a = []
   for (let i = 0, l = arr.length; i < l; ++i) {
@@ -129,7 +130,7 @@ export function uniq (arr) {
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is an object, else false.
  */
-export function isObject (value) {
+export function isObject (value: any): boolean {
   const type = typeof value
   return value !== null && (type === 'object' || type === 'function')
 }
@@ -156,9 +157,9 @@ export function range (start: number, stop?: number, step?: number) {
   return arr
 }
 
-export function padStart(str: any, length: number, ch: string = ' ') {
+export function padStart (str: any, length: number, ch: string = ' ') {
   str = String(str)
   let n = length - str.length
-  while(n-- > 0) str = ch + str 
+  while (n-- > 0) str = ch + str
   return str
 }

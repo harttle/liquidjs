@@ -1,9 +1,5 @@
-import * as chai from 'chai'
-import * as chaiAsPromised from 'chai-as-promised'
+import { expect } from 'chai'
 import Liquid from '../../src/liquid'
-
-chai.use(chaiAsPromised)
-const expect = chai.expect
 
 const ctx = {
   date: new Date(),
@@ -21,12 +17,13 @@ const ctx = {
 }
 let liquid
 
-function test (src, dst) {
-  return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(dst)
+async function test (src, dst) {
+  const html = await liquid.parseAndRender(src, ctx)
+  return expect(html).to.equal(dst)
 }
 
 describe('filters', function () {
-  before(() => liquid = new Liquid())
+  before(() => { liquid = new Liquid() })
   describe('abs', function () {
     it('should return 3 for -3', () => test('{{ -3 | abs }}', '3'))
     it('should return 2 for arr[0]', () => test('{{ arr[0] | abs }}', '2'))

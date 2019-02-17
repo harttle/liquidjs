@@ -7,7 +7,7 @@ import Scope from 'src/scope/scope'
 export default class {
   initial: any
   filters: Array<any>
-  constructor(str: string, strict_filters?: boolean) {
+  constructor (str: string, strictFilters?: boolean) {
     let match = lexical.matchValue(str)
     assert(match, `illegal value string: ${str}`)
 
@@ -20,9 +20,9 @@ export default class {
     }
 
     this.initial = initial
-    this.filters = filters.map(str => new Filter(str, strict_filters))
+    this.filters = filters.map(str => new Filter(str, strictFilters))
   }
-  value(scope: Scope) {
+  value (scope: Scope) {
     return this.filters.reduce(
       (prev, filter) => filter.render(prev, scope),
       evalExp(this.initial, scope))

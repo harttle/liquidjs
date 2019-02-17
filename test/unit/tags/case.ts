@@ -1,8 +1,8 @@
 import Liquid from 'src/liquid'
-import * as chai from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
 describe('tags/case', function () {
   const liquid = new Liquid()
@@ -12,42 +12,42 @@ describe('tags/case', function () {
     return expect(liquid.parseAndRender(src))
       .to.be.rejectedWith(/{% case "foo"%} not closed/)
   })
-  it('should hit the specified case', function () {
+  it('should hit the specified case', async function () {
     const src = '{% case "foo"%}' +
             '{% when "foo" %}foo{% when "bar"%}bar' +
             '{%endcase%}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('foo')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('foo')
   })
-  it('should resolve empty string if not hit', function () {
+  it('should resolve empty string if not hit', async function () {
     const src = '{% case empty %}' +
             '{% when "foo" %}foo{% when ""%}bar' +
             '{%endcase%}'
     const ctx = {
       empty: ''
     }
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('bar')
+    const html = await liquid.parseAndRender(src, ctx)
+    return expect(html).to.equal('bar')
   })
-  it('should accept empty string as branch name', function () {
+  it('should accept empty string as branch name', async function () {
     const src = '{% case false %}' +
             '{% when "foo" %}foo{% when ""%}bar' +
             '{%endcase%}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('')
   })
-  it('should support boolean case', function () {
+  it('should support boolean case', async function () {
     const src = '{% case false %}' +
             '{% when "foo" %}foo{% when false%}bar' +
             '{%endcase%}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('bar')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('bar')
   })
-  it('should support else branch', function () {
+  it('should support else branch', async function () {
     const src = '{% case "a" %}' +
             '{% when "b" %}b{% when "c"%}c{%else %}d' +
             '{%endcase%}'
-    return expect(liquid.parseAndRender(src))
-      .to.eventually.equal('d')
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('d')
   })
 })

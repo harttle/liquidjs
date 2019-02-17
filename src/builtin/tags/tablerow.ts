@@ -19,7 +19,7 @@ export default {
     let p
     const stream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
-      .on('tag:endtablerow', token => stream.stop())
+      .on('tag:endtablerow', () => stream.stop())
       .on('template', tpl => p.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
@@ -35,7 +35,7 @@ export default {
 
     collection = collection.slice(offset, offset + limit)
     const cols = hash.cols || collection.length
-    const contexts = collection.map((item, i) => {
+    const contexts = collection.map(item => {
       const ctx = {}
       ctx[this.variable] = item
       return ctx

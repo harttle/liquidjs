@@ -7,13 +7,13 @@ const expect = chai.expect
 describe('Liquid', function () {
   describe('#constructor()', function () {
     it('should throw on illegal root', function () {
-      expect(() => new (Liquid as any)({root: {}})).to.throw(/illegal root/)
+      expect(() => new (Liquid as any)({ root: {} })).to.throw(/illegal root/)
     })
   })
   describe('#plugin()', function () {
     it('should call plugin on the instance', async function () {
       const engine = new Liquid()
-      engine.plugin(function (Liquid) {
+      engine.plugin(function () {
         this.registerFilter('foo', x => `foo${x}foo`)
       })
       const html = await engine.parseAndRender('{{"bar"|foo}}')

@@ -15,16 +15,16 @@ export default {
         })
       })
       .on('tag:else', () => (p = this.elseTemplates))
-      .on('tag:endcase', token => stream.stop())
+      .on('tag:endcase', () => stream.stop())
       .on('template', tpl => p.push(tpl))
-      .on('end', x => {
+      .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
 
     stream.start()
   },
 
-  render: function (scope, hash) {
+  render: function (scope) {
     for (let i = 0; i < this.cases.length; i++) {
       const branch = this.cases[i]
       const val = evalExp(branch.val, scope)

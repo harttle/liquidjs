@@ -10,7 +10,7 @@ export default {
     return Math.round(v * amp) / amp
   },
   'plus': bindFixed((v, arg) => Number(v) + Number(arg)),
-  'times': (v, arg) => v * arg,
+  'times': (v, arg) => v * arg
 }
 
 function getFixed (v) {

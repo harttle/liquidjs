@@ -25,5 +25,5 @@ export default {
   'escape': escape,
   'escape_once': str => escape(unescape(str)),
   'newline_to_br': v => v.replace(/\n/g, '<br />'),
-  'strip_html': v => String(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, ''),
+  'strip_html': v => String(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
 }

@@ -1,7 +1,5 @@
 import { resolve } from '../../src/parser/template-browser'
-import * as chai from 'chai'
-
-const expect = chai.expect
+import { expect } from 'chai'
 
 describe('template-browser', function () {
   if (+process.version.match(/^v(\d+)/)[1] < 8) {

@@ -1,7 +1,5 @@
-import { stringify, create } from 'src/util/underscore'
 import { RenderBreakError, RenderError } from 'src/util/error'
 import assert from 'src/util/assert'
-import Scope from 'src/scope/scope'
 
 export default class Render {
   async renderTemplates (templates, scope) {

@@ -1,16 +1,16 @@
 import Liquid from 'src/liquid'
-import * as chai from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
 
-const expect = chai.expect
-chai.use(require('chai-as-promised'))
+use(chaiAsPromised)
 
 describe('tags/cycle', function () {
   const liquid = new Liquid()
 
-  it('should support cycle', function () {
+  it('should support cycle', async function () {
     const src = "{% cycle '1', '2', '3' %}"
-    return expect(liquid.parseAndRender(src + src + src + src))
-      .to.eventually.equal('1231')
+    const html = await liquid.parseAndRender(src + src + src + src)
+    return expect(html).to.equal('1231')
   })
 
   it('should throw when cycle candidates empty', function () {
@@ -18,23 +18,21 @@ describe('tags/cycle', function () {
       .to.be.rejectedWith(/empty candidates/)
   })
 
-  it('should support cycle in for block', function () {
+  it('should support cycle in for block', async function () {
     const src = '{% for i in (1..5) %}{% cycle one, "e"%}{% endfor %}'
     const ctx = {
       one: 1
     }
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('1e1e1')
+    const html = await liquid.parseAndRender(src, ctx)
+    return expect(html).to.equal('1e1e1')
   })
 
-  it('should support cycle group', function () {
+  it('should support cycle group', async function () {
     const src = "{% cycle one: '1', '2', '3'%}" +
             "{% cycle 1: '1', '2', '3'%}" +
             "{% cycle 2: '1', '2', '3'%}"
-    const ctx = {
-      one: 1
-    }
-    return expect(liquid.parseAndRender(src, ctx))
-      .to.eventually.equal('121')
+    const ctx = { one: 1 }
+    const html = await liquid.parseAndRender(src, ctx)
+    return expect(html).to.equal('121')
   })
 })

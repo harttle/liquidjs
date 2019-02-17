@@ -8,7 +8,7 @@ export default {
     assert(match, `illegal identifier ${token.args}`)
     this.variable = match[0]
   },
-  render: function (scope, hash) {
+  render: function (scope) {
     let context = scope.findContextFor(
       this.variable,
       ctx => {

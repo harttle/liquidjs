@@ -1,8 +1,9 @@
-const chai = require('chai')
-const sinon = require('sinon')
+import * as chai from 'chai'
+import * as sinon from 'sinon'
+import * as sinonChai from 'sinon-chai'
+
 const expect = chai.expect
-chai.use(require('chai-as-promised'))
-chai.use(require('sinon-chai'))
+chai.use(sinonChai)
 
 const P = require('../../../src/util/promise')
 
@@ -32,10 +33,12 @@ describe('util/promise', function () {
         item => Promise.reject(new Error(item)))
       return expect(p).to.be.rejectedWith('third')
     })
-    it('should resolve the value that first callback resolved', () => {
-      const p = P.anySeries(['first', 'second'],
-        item => Promise.resolve(item))
-      return expect(p).to.eventually.equal('first')
+    it('should resolve the value that first callback resolved', async () => {
+      const result = await P.anySeries(
+        ['first', 'second'],
+        item => Promise.resolve(item)
+      )
+      return expect(result).to.equal('first')
     })
     it('should not call rest of callbacks once resolved', () => {
       const spy = sinon.spy()
@@ -50,10 +53,12 @@ describe('util/promise', function () {
     })
   })
   describe('.mapSeries()', function () {
-    it('should resolve when all resolved', function () {
-      const p = P.mapSeries(['first', 'second', 'third'],
-        item => Promise.resolve(item))
-      return expect(p).to.eventually.deep.equal(['first', 'second', 'third'])
+    it('should resolve when all resolved', async function () {
+      const result = P.mapSeries(
+        ['first', 'second', 'third'],
+        item => Promise.resolve(item)
+      )
+      return expect(result).to.deep.equal(['first', 'second', 'third'])
     })
     it('should reject with the error that first callback rejected', () => {
       const p = P.mapSeries(['first', 'second'],
@@ -66,7 +71,7 @@ describe('util/promise', function () {
       return P
         .mapSeries(
           ['first', 'second'],
-          (item, idx) => new Promise(function (resolve, reject) {
+          (item, idx) => new Promise(function (resolve) {
             if (idx === 0) {
               setTimeout(function () {
                 spy1()

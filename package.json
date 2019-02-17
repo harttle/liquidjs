@@ -6,7 +6,7 @@
   "types": "dist/liquid.d.ts",
   "browser": "dist/liquid.js",
   "scripts": {
-    "lint": "eslint src/ test/ *.js",
+    "lint": "eslint . --ext .ts --ext .js",
     "unit": "mocha -r ts-node/register -r tsconfig-paths/register test/unit/**.ts",
     "e2e": "npm run build && mocha -r ts-node/register -r tsconfig-paths/register test/e2e/**/*.ts",
     "test": "npm run unit && npm run e2e",
