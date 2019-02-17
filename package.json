@@ -7,11 +7,11 @@
   "browser": "dist/liquid.js",
   "scripts": {
     "lint": "eslint . --ext .ts --ext .js",
-    "unit": "mocha -r ts-node/register -r tsconfig-paths/register test/unit/**.ts",
-    "e2e": "npm run build && mocha -r ts-node/register -r tsconfig-paths/register test/e2e/**/*.ts",
+    "unit": "mocha test/unit/*.ts test/unit/**/*.ts",
+    "e2e": "npm run build && mocha test/e2e/**/*.ts test/e2e/*.ts",
     "test": "npm run unit && npm run e2e",
-    "coverage": "nyc --reporter=html npm run unit",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "coverage-html": "nyc npm run unit && nyc report --reporter=html",
+    "coverage-coveralls": "nyc npm run unit && nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c && ls -lh dist",
     "version": "npm run build && git add -A dist"
   },
@@ -68,6 +68,7 @@
     "semantic-release": "^15.13.3",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0",
+    "source-map-support": "^0.5.10",
     "supertest": "^3.4.2",
     "ts-node": "^8.0.2",
     "tsconfig-paths": "^3.8.0",
@@ -82,5 +83,8 @@
       "@semantic-release/npm",
       "@semantic-release/git"
     ]
+  },
+  "nyc": {
+    "extension": [ ".ts" ]
   }
 }

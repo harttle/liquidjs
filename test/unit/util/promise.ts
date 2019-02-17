@@ -52,9 +52,9 @@ describe('util/promise', function () {
         .then(() => expect(spy).to.not.have.been.called)
     })
   })
-  describe('.mapSeries()', function () {
+  describe('.mapSeries()', async function () {
     it('should resolve when all resolved', async function () {
-      const result = P.mapSeries(
+      const result = await P.mapSeries(
         ['first', 'second', 'third'],
         item => Promise.resolve(item)
       )

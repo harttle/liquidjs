@@ -12,7 +12,7 @@ describe('LiquidOptions#trimming', function () {
     })
     it('should respect trim_tag_right', async function () {
       const engine = new Liquid({ trim_tag_right: true })
-      const html = engine.parseAndRender('\t{%if true%}foo{%endif%} \n')
+      const html = await engine.parseAndRender('\t{%if true%}foo{%endif%} \n')
       return expect(html).to.equal('\tfoo')
     })
     it('should not trim value', async function () {

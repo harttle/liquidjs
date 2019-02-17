@@ -8,7 +8,7 @@ jobs:
       name: 'Linting'
       script: npm run lint
     - name: 'Coverage'
-      script: npm run coverage && npm run coveralls
+      script: npm run coverage-coveralls
     - stage: release
       if: branch = master
       script: skip

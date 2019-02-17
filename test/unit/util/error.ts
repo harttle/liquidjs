@@ -47,7 +47,8 @@ describe('error', function () {
     it('should contain stack in err.stack', async function () {
       const err = await expect(engine.parseAndRender('{% . a %}')).be.rejected
       expect(err.message).to.contain('illegal tag syntax')
-      expect(err.stack).to.contain('at Object.parse')
+      console.log(err.stack)
+      expect(err.stack).to.contain('at Liquid.parse')
     })
     describe('captureStackTrace compatibility', function () {
       const captureStackTrace = Error.captureStackTrace
