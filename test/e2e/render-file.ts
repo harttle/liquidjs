@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import * as mock from 'mock-fs'
 import Liquid from '../..'
+import { mock, restore } from '../stub/mockfs'
 
 describe('#renderFile()', function () {
   var engine
@@ -13,14 +13,10 @@ describe('#renderFile()', function () {
       '/root/files/bar': 'bar',
       '/root/files/foo.html': 'foo',
       '/root/files/name.html': 'My name is {{name}}.',
-      '/un-readable.html': mock.file({
-        mode: '0000'
-      })
+      '/un-readable.html': { mode: '0000' }
     })
   })
-  afterEach(function () {
-    mock.restore()
-  })
+  afterEach(restore)
   it('should render file', async function () {
     const html = await engine.renderFile('/root/files/foo.html', {})
     return expect(html).to.equal('foo')

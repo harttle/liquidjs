@@ -1,6 +1,6 @@
 import Liquid from 'src/liquid'
 import { expect } from 'chai'
-import * as mock from 'mock-fs'
+import { mock, restore } from 'test/stub/mockfs'
 
 describe('tags/include', function () {
   let liquid
@@ -10,9 +10,7 @@ describe('tags/include', function () {
       extname: '.html'
     })
   })
-  afterEach(function () {
-    mock.restore()
-  })
+  afterEach(restore)
   it('should support include', async function () {
     mock({
       '/current.html': 'bar{% include "bar/foo.html" %}bar',

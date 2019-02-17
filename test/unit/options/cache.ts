@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import * as mock from 'mock-fs'
-import Liquid from '../../../src/liquid'
+import Liquid from 'src/liquid'
+import { mock, restore } from 'test/stub/mockfs'
 
 describe('LiquidOptions#cache', function () {
   let engine
@@ -11,9 +11,7 @@ describe('LiquidOptions#cache', function () {
     })
     mock({ '/root/files/foo.html': 'foo' })
   })
-  afterEach(function () {
-    mock.restore()
-  })
+  afterEach(restore)
   it('should be disabled by default', function () {
     return engine.renderFile('files/foo')
       .then(x => expect(x).to.equal('foo'))

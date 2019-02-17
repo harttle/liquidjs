@@ -11,7 +11,8 @@
     "baseUrl": ".",
     "paths": {
       "template": ["src/parser/template"],
-      "src/*": ["src/*"]
+      "src/*": ["src/*"],
+      "test/*": ["test/*"]
     }
   },
   "include": [ "src", "test" ],

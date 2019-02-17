@@ -1,6 +1,6 @@
 import Liquid from '../../src/liquid'
-import * as mock from 'mock-fs'
 import * as chai from 'chai'
+import { mock, restore } from 'test/stub/mockfs'
 
 const expect = chai.expect
 
@@ -36,9 +36,7 @@ describe('Liquid', function () {
         '/root/foo': 'foo'
       })
     })
-    after(function () {
-      mock.restore()
-    })
+    after(restore)
     it('should render single template', function (done) {
       render.call({ root: '.' }, 'foo', null, (err, result) => {
         if (err) return done(err)

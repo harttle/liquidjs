@@ -1,6 +1,6 @@
 import Liquid from 'src/liquid'
 import { expect } from 'chai'
-import * as mock from 'mock-fs'
+import { mock, restore } from 'test/stub/mockfs'
 
 describe('tags/layout', function () {
   let liquid
@@ -10,9 +10,7 @@ describe('tags/layout', function () {
       extname: '.html'
     })
   })
-  afterEach(function () {
-    mock.restore()
-  })
+  afterEach(restore)
 
   it('should throw when block not closed', function () {
     mock({

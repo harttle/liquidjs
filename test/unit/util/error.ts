@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import Liquid from 'src/liquid'
-import * as mock from 'mock-fs'
 import * as path from 'path'
+import { mock, restore } from 'test/stub/mockfs'
 
 let engine = new Liquid()
 const strictEngine = new Liquid({
@@ -10,9 +10,7 @@ const strictEngine = new Liquid({
 })
 
 describe('error', function () {
-  afterEach(function () {
-    mock.restore()
-  })
+  afterEach(restore)
 
   describe('TokenizationError', function () {
     it('should throw TokenizationError when tag illegal', async function () {
@@ -66,7 +64,7 @@ describe('error', function () {
         '/foo.html': html
       })
       const err = await expect(engine.renderFile('/foo.html')).be.rejected
-      mock.restore()
+      restore()
       expect(err.name).to.equal('TokenizationError')
       expect(err.file).to.equal(path.resolve('/foo.html'))
     })
@@ -207,7 +205,7 @@ describe('error', function () {
         '/foo.html': html
       })
       const err = await expect(engine.renderFile('/foo.html')).be.rejected
-      mock.restore()
+      restore()
       console.log(err, err.name)
       expect(err.name).to.equal('RenderError')
       expect(err.file).to.equal(path.resolve('/foo.html'))
@@ -299,7 +297,7 @@ describe('error', function () {
         '/foo.html': html
       })
       const err = await expect(engine.renderFile('/foo.html')).be.rejected
-      mock.restore()
+      restore()
       expect(err.name).to.equal('ParseError')
       expect(err.file).to.equal(path.resolve('/foo.html'))
     })

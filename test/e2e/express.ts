@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as express from 'express'
-import * as mock from 'mock-fs'
-import Liquid from '../../dist/liquid.common.js'
+import { mock, restore } from 'test/stub/mockfs'
+import Liquid from '../..'
 
 describe('express()', function () {
   var app, engine
@@ -24,9 +24,7 @@ describe('express()', function () {
       file: req.params.file
     }))
   })
-  after(function () {
-    mock.restore()
-  })
+  after(restore)
   it('should render express views', function (done) {
     mock({ '/views/name.html': 'My name is {{name}}.' })
     app.set('views', ['/views'])
