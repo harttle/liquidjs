@@ -1,4 +1,5 @@
-import { last, isArray } from '../util/underscore'
+import { last } from '../util/underscore'
+import IFS from './ifs'
 
 function domResolve (root, path) {
   const base = document.createElement('base')
@@ -15,25 +16,17 @@ function domResolve (root, path) {
   return resolved
 }
 
-export function resolve (filepath, root, options) {
-  root = root || options.root
-  if (isArray(root)) {
-    root = root[0]
-  }
-  if (root.length && last(root) !== '/') {
-    root += '/'
-  }
+function resolve (root, filepath, ext) {
+  if (root.length && last(root) !== '/') root += '/'
   const url = domResolve(root, filepath)
   return url.replace(/^(\w+:\/\/[^/]+)(\/[^?]+)/, (str, origin, path) => {
     const last = path.split('/').pop()
-    if (/\.\w+$/.test(last)) {
-      return str
-    }
-    return origin + path + options.extname
+    if (/\.\w+$/.test(last)) return str
+    return origin + path + ext
   })
 }
 
-export async function read (url: string): Promise<string> {
+async function readFile (url: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.onload = () => {
@@ -50,3 +43,9 @@ export async function read (url: string): Promise<string> {
     xhr.send()
   })
 }
+
+async function exists () {
+  return true
+}
+
+export default { readFile, resolve, exists } as IFS

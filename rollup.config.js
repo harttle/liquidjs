@@ -50,7 +50,7 @@ export default [{
         exclude: [ 'test' ],
         compilerOptions: {
           module: 'ES2015',
-          paths: { 'template': ['src/parser/template-browser'] }
+          paths: { 'src/fs': ['src/fs/browser'] }
         }
       }
     })
@@ -71,7 +71,7 @@ export default [{
         exclude: [ 'test' ],
         compilerOptions: {
           module: 'ES2015',
-          paths: { 'template': ['src/parser/template-browser'] }
+          paths: { 'src/fs': ['src/fs/browser'] }
         }
       }
     }),

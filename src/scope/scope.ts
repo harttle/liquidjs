@@ -1,21 +1,16 @@
 import * as _ from '../util/underscore'
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
-import { LiquidOptions, defaultOptions } from '../liquid-options'
+import { NormalizedOptions, defaultOptions } from '../liquid-options'
 import BlockMode from './block-mode'
 
 export default class Scope {
-  opts: LiquidOptions
+  opts: NormalizedOptions
   contexts: Array<object>
   blocks: object = {}
   blockMode: BlockMode = BlockMode.OUTPUT
-  constructor (ctx: object = {}, opts: LiquidOptions = defaultOptions) {
-    this.opts = _.assign({
-      dynamicPartials: true,
-      strict_variables: false,
-      strict_filters: false,
-      root: []
-    }, opts)
+  constructor (ctx: object = {}, opts: NormalizedOptions = defaultOptions) {
+    this.opts = { ...defaultOptions, ...opts }
     this.contexts = [ctx || {}]
   }
   getAll () {
@@ -43,10 +38,10 @@ export default class Scope {
       scope = scope[key]
     })
   }
-  unshift (ctx: object): any {
+  unshift (ctx: object) {
     return this.contexts.unshift(ctx)
   }
-  push (ctx: object): any {
+  push (ctx: object) {
     return this.contexts.push(ctx)
   }
   pop (ctx?: object): object {

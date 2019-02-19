@@ -1,8 +1,8 @@
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
-import { RenderError, RenderBreakError } from '../../../src/util/error'
-import * as _ from '../../../src/util/underscore'
+import { RenderError, RenderBreakError } from 'src/util/error'
+import * as _ from 'src/util/underscore'
 
 const expect = chai.expect
 chai.use(sinonChai)

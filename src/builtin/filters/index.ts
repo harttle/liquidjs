@@ -1,4 +1,3 @@
-import { assign } from 'src/util/underscore'
 import html from './html'
 import str from './string'
 import math from './math'
@@ -7,6 +6,4 @@ import array from './array'
 import date from './date'
 import obj from './object'
 
-const filters = assign({}, html, str, math, url, date, obj, array)
-
-export default filters
+export default { ...html, ...str, ...math, ...url, ...date, ...obj, ...array }

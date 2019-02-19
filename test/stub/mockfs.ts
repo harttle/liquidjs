@@ -1,31 +1,34 @@
-import { fs } from 'src/parser/template'
 import { isString } from 'src/util/underscore'
-
-const readFile = fs.readFile
-const stat = fs.stat
+import fs from 'src/fs'
 
 type fileDescriptor = { mode: string, content: string }
 
-export function mock (files: { [path: string]: (string | fileDescriptor) }) {
-  for (const [key, val] of Object.entries(files)) {
+let files: { [path: string]: fileDescriptor } = {}
+const readFile = fs.readFile
+const exists = fs.exists
+
+export function mock (options: { [path: string]: (string | fileDescriptor) }) {
+  for (const [key, val] of Object.entries(options)) {
     files[key] = isString(val)
       ? { mode: '33188', content: val as string }
-      : val
+      : val as fileDescriptor
   }
   fs.readFile = async function (path) {
-    const file = files[path] as fileDescriptor
+    console.log('mock fs read called', path)
+    const file = files[path]
     if (file === undefined) throw new Error('ENOENT')
-    if (file.mode === '000') throw new Error('EACCES')
+    if (file.mode === '0000') throw new Error('EACCES')
     return file.content
   }
-  fs.stat = async function (path) {
-    const file = files[path] as fileDescriptor
-    if (file === undefined) throw new Error('ENOENT')
-    return file
+
+  fs.exists = async function (path) {
+    console.log('mock fs exists called', path)
+    return !!files[path]
   }
 }
 
 export function restore () {
+  files = {}
   fs.readFile = readFile
-  fs.stat = stat
+  fs.exists = exists
 }

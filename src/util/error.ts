@@ -48,7 +48,7 @@ TokenizationError.prototype.constructor = TokenizationError
 export class ParseError extends LiquidError {
   constructor (err, token) {
     super(err, token)
-    _.assign(this, err)
+    this.message = err.message
     super.captureStackTrace(this)
   }
 }
@@ -58,7 +58,7 @@ ParseError.prototype.constructor = ParseError
 export class RenderError extends LiquidError {
   constructor (err, tpl) {
     super(err, tpl.token)
-    _.assign(this, err)
+    this.message = err.message
     super.captureStackTrace(this)
   }
 }

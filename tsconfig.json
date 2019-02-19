@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
-      "template": ["src/parser/template"],
+      "src/fs": ["src/fs/node"],
       "src/*": ["src/*"],
       "test/*": ["test/*"]
     }

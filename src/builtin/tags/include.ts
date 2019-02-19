@@ -45,7 +45,7 @@ export default {
     if (this.with) {
       hash[filepath] = evalValue(this.with, scope)
     }
-    const templates = await this.liquid.getTemplate(filepath, scope.opts.root)
+    const templates = await this.liquid.getTemplate(filepath, scope.opts)
     scope.push(hash)
     const html = await this.liquid.renderer.renderTemplates(templates, scope)
     scope.pop(hash)

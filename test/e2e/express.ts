@@ -1,16 +1,19 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as express from 'express'
-import { mock, restore } from 'test/stub/mockfs'
+import { resolve } from 'path'
 import Liquid from '../..'
 
 describe('express()', function () {
-  var app, engine
+  const root = resolve(__dirname, '../stub/root')
+  const views = resolve(__dirname, '../stub/views')
+  const partials = resolve(__dirname, '../stub/partials')
+  let app, engine
 
   beforeEach(function () {
     app = express()
     engine = new Liquid({
-      root: '/root',
+      root,
       extname: '.html'
     })
 
@@ -24,12 +27,16 @@ describe('express()', function () {
       file: req.params.file
     }))
   })
-  after(restore)
-  it('should render express views', function (done) {
-    mock({ '/views/name.html': 'My name is {{name}}.' })
-    app.set('views', ['/views'])
+  it('should respect express views(array)', function (done) {
+    app.set('views', [views])
     request(app).get('/name')
       .expect('My name is harttle.')
+      .expect(200, done)
+  })
+  it('should respect express views(string)', function (done) {
+    app.set('views', views)
+    request(app).get('/include/bar')
+      .expect('bar')
       .expect(200, done)
   })
   it('should pass error when file not found', function (done) {
@@ -49,41 +56,13 @@ describe('express()', function () {
     })
   })
   it('should respect root option when lookup', function (done) {
-    mock({
-      '/root/foo.html': 'foo',
-      '/views/include.html': '{% include file %}'
-    })
-    app.set('views', ['/views'])
+    app.set('views', [views])
     request(app).get('/include/foo')
       .expect('foo')
       .expect(200, done)
   })
   it('should respect express views (Array) when lookup', function (done) {
-    mock({
-      '/views/include.html': '{% include file %}',
-      '/partials/bar.html': 'bar'
-    })
-    app.set('views', ['/views', '/partials'])
-    request(app).get('/include/bar')
-      .expect('bar')
-      .expect(200, done)
-  })
-  it('should respect express views (String) when lookup', function (done) {
-    mock({
-      '/views/include.html': '{% include file %}',
-      '/views/bar.html': 'bar'
-    })
-    app.set('views', '/views')
-    request(app).get('/include/bar')
-      .expect('bar')
-      .expect(200, done)
-  })
-  it('should respect express views (undefined) when lookup', function (done) {
-    const files = {}
-    files[process.cwd() + '/views/include.html'] = '{% include file %}'
-    files[process.cwd() + '/views/bar.html'] = 'bar'
-    mock(files)
-
+    app.set('views', [views, partials])
     request(app).get('/include/bar')
       .expect('bar')
       .expect(200, done)

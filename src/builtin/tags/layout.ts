@@ -31,7 +31,7 @@ export default {
     if (scope.blocks[''] === undefined) {
       scope.blocks[''] = html
     }
-    const templates = await this.liquid.getTemplate(layout, scope.opts.root)
+    const templates = await this.liquid.getTemplate(layout, scope.opts)
     scope.push(hash)
     scope.blockMode = BlockMode.OUTPUT
     const partial = await this.liquid.renderer.renderTemplates(templates, scope)

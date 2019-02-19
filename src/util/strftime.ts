@@ -35,8 +35,6 @@ const _date = {
     return num + d.getDate()
   },
 
-  // Startday is an integer of which day to start the week measuring from
-  // TODO: that comment was retarted. fix it.
   getWeekOfYear: function (d, startDay) {
     // Skip to startDay of this week
     const now = this.getDayOfYear(d) + (startDay - d.getDay())

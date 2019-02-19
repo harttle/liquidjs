@@ -1,11 +1,10 @@
-import { assign } from 'src/util/underscore'
 import DelimitedToken from 'src/parser/delimited-token'
 import Token from 'src/parser/token'
 import TagToken from 'src/parser/tag-token'
 import { LiquidOptions } from 'src/liquid-options'
 
 export default function whiteSpaceCtrl (tokens: Token[], options: LiquidOptions) {
-  options = assign({ greedy: true }, options)
+  options = { greedy: true, ...options }
   let inRaw = false
 
   tokens.forEach((token: Token, i: number) => {

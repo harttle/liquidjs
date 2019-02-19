@@ -1,15 +1,10 @@
-import Liquid from '../../src/liquid'
+import Liquid from 'src/liquid'
 import * as chai from 'chai'
 import { mock, restore } from 'test/stub/mockfs'
 
 const expect = chai.expect
 
 describe('Liquid', function () {
-  describe('#constructor()', function () {
-    it('should throw on illegal root', function () {
-      expect(() => new (Liquid as any)({ root: {} })).to.throw(/illegal root/)
-    })
-  })
   describe('#plugin()', function () {
     it('should call plugin on the instance', async function () {
       const engine = new Liquid()

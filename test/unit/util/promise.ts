@@ -5,7 +5,7 @@ import * as sinonChai from 'sinon-chai'
 const expect = chai.expect
 chai.use(sinonChai)
 
-const P = require('../../../src/util/promise')
+const P = require('src/util/promise')
 
 describe('util/promise', function () {
   describe('.anySeries()', function () {
