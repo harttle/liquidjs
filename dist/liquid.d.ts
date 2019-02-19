@@ -1,0 +1,30 @@
+import Scope from './scope/scope';
+import * as Types from './types';
+import ITemplate from './template/itemplate';
+import ITagImplOptions from './template/tag/itag-impl-options';
+import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax';
+import { LiquidOptions, NormalizedOptions } from './liquid-options';
+export default class Liquid {
+    options: NormalizedOptions;
+    private cache;
+    private parser;
+    private renderer;
+    private tokenizer;
+    constructor(opts?: LiquidOptions);
+    parse(html: string, filepath?: string): any[];
+    render(tpl: Array<ITemplate>, ctx?: object, opts?: LiquidOptions): Promise<string>;
+    parseAndRender(html: string, ctx?: object, opts?: LiquidOptions): Promise<string>;
+    getTemplate(file: any, opts?: LiquidOptions): Promise<any>;
+    renderFile(file: any, ctx?: object, opts?: LiquidOptions): Promise<string>;
+    evalValue(str: string, scope: Scope): any;
+    registerFilter(name: any, filter: any): void;
+    registerTag(name: string, tag: ITagImplOptions): void;
+    plugin(plugin: any): any;
+    express(): (filePath: string, ctx: object, cb: (err: Error, html?: string) => void) => void;
+    static default: typeof Liquid;
+    static isTruthy: typeof isTruthy;
+    static isFalsy: typeof isFalsy;
+    static evalExp: typeof evalExp;
+    static evalValue: typeof evalValue;
+    static Types: typeof Types;
+}

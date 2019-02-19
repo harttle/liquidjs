@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.0.0, https://github.com/harttle/liquidjs
+ * liquidjs@7.0.1, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -37,6 +37,17 @@
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
+
+    var __assign = function() {
+        __assign = Object.assign || function __assign(t) {
+            for (var s, i = 1, n = arguments.length; i < n; i++) {
+                s = arguments[i];
+                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+            }
+            return t;
+        };
+        return __assign.apply(this, arguments);
+    };
 
     function __awaiter(thisArg, _arguments, P, generator) {
         return new (P || (P = Promise))(function (resolve, reject) {
@@ -90,7 +101,7 @@
     }
     function stringify(value) {
         if (isNil(value))
-            return String(value);
+            return '';
         if (isFunction(value.to_liquid))
             return stringify(value.to_liquid());
         if (isFunction(value.toLiquid))
@@ -167,6 +178,7 @@
         for (var key in src)
             if (src.hasOwnProperty(key))
                 target[key] = src[key];
+        return target;
     }
     function last(arr) {
         return arr[arr.length - 1];
@@ -201,6 +213,14 @@
         }
         return arr;
     }
+    function padStart(str, length, ch) {
+        if (ch === void 0) { ch = ' '; }
+        str = String(str);
+        var n = length - str.length;
+        while (n-- > 0)
+            str = ch + str;
+        return str;
+    }
 
     // quote related
     var singleQuoted = /'[^']*'/;
@@ -225,7 +245,7 @@
     var hash = new RegExp("(?:" + identifier.source + ")\\s*:\\s*(?:" + value.source + ")");
     var hashCapture = new RegExp("(" + identifier.source + ")\\s*:\\s*(" + value.source + ")", 'g');
     // full match
-    var tagLine = new RegExp("^\\s*(" + identifier.source + ")\\s*([\\s\\S]*)\\s*$");
+    var tagLine = new RegExp("^\\s*(" + identifier.source + ")\\s*([\\s\\S]*?)\\s*$");
     var literalLine = new RegExp("^" + literal.source + "$", 'i');
     var variableLine = new RegExp("^" + variable.source + "$");
     var numberLine = new RegExp("^" + number.source + "$");
@@ -291,7 +311,7 @@
             var err = this.originalError;
             var context = mkContext(this.input, this.line);
             this.message = mkMessage(err.message, this.token);
-            this.stack = context +
+            this.stack = this.message + '\n' + context +
                 '\n' + (this.stack || this.message) +
                 (err.stack ? '\nFrom ' + err.stack : '');
         };
@@ -312,7 +332,7 @@
         __extends(ParseError, _super);
         function ParseError(err, token) {
             var _this = _super.call(this, err, token) || this;
-            assign(_this, err);
+            _this.message = err.message;
             _super.prototype.captureStackTrace.call(_this, _this);
             return _this;
         }
@@ -324,7 +344,7 @@
         __extends(RenderError, _super);
         function RenderError(err, tpl) {
             var _this = _super.call(this, err, tpl.token) || this;
-            assign(_this, err);
+            _this.message = err.message;
             _super.prototype.captureStackTrace.call(_this, _this);
             return _this;
         }
@@ -357,7 +377,7 @@
         var context = range(begin, end + 1)
             .map(function (lineNumber) {
             var indicator = (lineNumber === targetLine) ? '>> ' : '   ';
-            var num = padStart(String(end).length, lineNumber);
+            var num = padStart(String(lineNumber), String(end).length);
             var text = lines[lineNumber - 1];
             return "" + indicator + num + "| " + text;
         })
@@ -374,11 +394,6 @@
         }
         return msg;
     }
-    function padStart(length, str) {
-        str = String(str);
-        var blank = Array(length - str.length).join(' ');
-        return blank + str;
-    }
 
     function assert (predicate, message) {
         if (!predicate) {
@@ -387,17 +402,50 @@
         }
     }
 
+    var defaultOptions = {
+        root: ['.'],
+        cache: false,
+        extname: '',
+        dynamicPartials: true,
+        trim_tag_right: false,
+        trim_tag_left: false,
+        trim_value_right: false,
+        trim_value_left: false,
+        greedy: true,
+        strict_filters: false,
+        strict_variables: false
+    };
+    function normalize(options) {
+        options = options || {};
+        if (options.hasOwnProperty('root')) {
+            options.root = normalizeStringArray(options.root);
+        }
+        return options;
+    }
+    function normalizeStringArray(value) {
+        if (isArray(value))
+            return value;
+        if (isString(value))
+            return [value];
+        return [];
+    }
+
+    var BlockMode;
+    (function (BlockMode) {
+        /* store rendered html into blocks */
+        BlockMode[BlockMode["OUTPUT"] = 0] = "OUTPUT";
+        /* output rendered html directly */
+        BlockMode[BlockMode["STORE"] = 1] = "STORE";
+    })(BlockMode || (BlockMode = {}));
+    var BlockMode$1 = BlockMode;
+
     var Scope = /** @class */ (function () {
         function Scope(ctx, opts) {
             if (ctx === void 0) { ctx = {}; }
-            var defaultOptions = {
-                dynamicPartials: true,
-                strict_variables: false,
-                strict_filters: false,
-                blocks: {},
-                root: []
-            };
-            this.opts = assign(defaultOptions, opts);
+            if (opts === void 0) { opts = defaultOptions; }
+            this.blocks = {};
+            this.blockMode = BlockMode$1.OUTPUT;
+            this.opts = __assign({}, defaultOptions, opts);
             this.contexts = [ctx || {}];
         }
         Scope.prototype.getAll = function () {
@@ -443,7 +491,7 @@
             return this.contexts.splice(i, 1)[0];
         };
         Scope.prototype.findContextFor = function (key, filter$$1) {
-            if (filter$$1 === void 0) { filter$$1 = (function (arg) { return true; }); }
+            if (filter$$1 === void 0) { filter$$1 = function () { return true; }; }
             for (var i = this.contexts.length - 1; i >= 0; i--) {
                 var candidate = this.contexts[i];
                 if (!filter$$1(candidate))
@@ -562,6 +610,40 @@
         return -1;
     }
 
+    var CaptureScope = /** @class */ (function () {
+        function CaptureScope() {
+        }
+        return CaptureScope;
+    }());
+    var AssignScope = /** @class */ (function () {
+        function AssignScope() {
+        }
+        return AssignScope;
+    }());
+    var IncrementScope = /** @class */ (function () {
+        function IncrementScope() {
+        }
+        return IncrementScope;
+    }());
+    var DecrementScope = /** @class */ (function () {
+        function DecrementScope() {
+        }
+        return DecrementScope;
+    }());
+
+
+
+    var Types = /*#__PURE__*/Object.freeze({
+        AssignScope: AssignScope,
+        CaptureScope: CaptureScope,
+        IncrementScope: IncrementScope,
+        DecrementScope: DecrementScope,
+        ParseError: ParseError,
+        TokenizationError: TokenizationError,
+        RenderBreakError: RenderBreakError,
+        AssertionError: AssertionError
+    });
+
     function domResolve(root, path) {
         var base = document.createElement('base');
         base.href = root;
@@ -573,24 +655,18 @@
         head.removeChild(base);
         return resolved;
     }
-    function resolve(filepath, root, options) {
-        root = root || options.root;
-        if (isArray(root)) {
-            root = root[0];
-        }
-        if (root.length && last(root) !== '/') {
+    function resolve(root, filepath, ext) {
+        if (root.length && last(root) !== '/')
             root += '/';
-        }
         var url = domResolve(root, filepath);
         return url.replace(/^(\w+:\/\/[^/]+)(\/[^?]+)/, function (str, origin, path) {
             var last$$1 = path.split('/').pop();
-            if (/\.\w+$/.test(last$$1)) {
+            if (/\.\w+$/.test(last$$1))
                 return str;
-            }
-            return origin + path + options.extname;
+            return origin + path + ext;
         });
     }
-    function read(url) {
+    function readFile(url) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, new Promise(function (resolve, reject) {
@@ -612,9 +688,17 @@
             });
         });
     }
+    function exists() {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, true];
+            });
+        });
+    }
+    var fs = { readFile: readFile, resolve: resolve, exists: exists };
 
     function whiteSpaceCtrl(tokens, options) {
-        options = assign({ greedy: true }, options);
+        options = __assign({ greedy: true }, options);
         var inRaw = false;
         tokens.forEach(function (token, i) {
             if (shouldTrimLeft(token, inRaw, options)) {
@@ -633,17 +717,17 @@
         if (inRaw)
             return false;
         if (token.type === 'tag')
-            return token.trim_left || options.trim_tag_left;
-        if (token.type === 'value')
-            return token.trim_left || options.trim_value_left;
+            return token.trimLeft || options.trim_tag_left;
+        if (token.type === 'output')
+            return token.trimLeft || options.trim_value_left;
     }
     function shouldTrimRight(token, inRaw, options) {
         if (inRaw)
             return false;
         if (token.type === 'tag')
-            return token.trim_right || options.trim_tag_right;
-        if (token.type === 'value')
-            return token.trim_right || options.trim_value_right;
+            return token.trimRight || options.trim_tag_right;
+        if (token.type === 'output')
+            return token.trimRight || options.trim_value_right;
     }
     function trimLeft(token, greedy) {
         if (!token || token.type !== 'html')
@@ -658,102 +742,185 @@
         token.value = token.value.replace(rRight, '');
     }
 
-    function parse(input, file, options) {
-        assert(isString(input), 'illegal input');
-        var rLiquid = /({%-?([\s\S]*?)-?%})|({{-?([\s\S]*?)-?}})/g;
-        var currIndent = 0;
-        var lineNumber = LineNumber(input);
-        var lastMatchEnd = 0;
-        var tokens = [];
-        for (var match = void 0; (match = rLiquid.exec(input)); lastMatchEnd = rLiquid.lastIndex) {
-            if (match.index > lastMatchEnd) {
-                tokens.push(parseHTMLToken(lastMatchEnd, match.index));
-            }
-            tokens.push(match[1]
-                ? parseTagToken(match[1], match[2].trim(), match.index)
-                : parseValueToken(match[3], match[4].trim(), match.index));
+    var Token = /** @class */ (function () {
+        function Token(raw, pos, input, file, line) {
+            this.line = line;
+            this.raw = raw;
+            this.input = input;
+            this.file = file;
         }
-        if (input.length > lastMatchEnd) {
-            tokens.push(parseHTMLToken(lastMatchEnd, input.length));
+        return Token;
+    }());
+
+    var HTMLToken = /** @class */ (function (_super) {
+        __extends(HTMLToken, _super);
+        function HTMLToken(str, begin, input, file, line) {
+            var _this = _super.call(this, str, begin, input, file, line) || this;
+            _this.type = 'html';
+            _this.value = str;
+            return _this;
         }
-        whiteSpaceCtrl(tokens, options);
-        return tokens;
-        function parseTagToken(raw, value$$1, pos) {
-            var match = value$$1.match(tagLine);
-            var token = {
-                type: 'tag',
-                indent: currIndent,
-                line: lineNumber.get(pos),
-                trim_left: raw.slice(0, 3) === '{%-',
-                trim_right: raw.slice(-3) === '-%}',
-                raw: raw,
-                value: value$$1,
-                input: input,
-                file: file
-            };
+        return HTMLToken;
+    }(Token));
+
+    var DelimitedToken = /** @class */ (function (_super) {
+        __extends(DelimitedToken, _super);
+        function DelimitedToken(raw, pos, input, file, line) {
+            var _this = _super.call(this, raw, pos, input, file, line) || this;
+            _this.trimLeft = raw[2] === '-';
+            _this.trimRight = raw[raw.length - 3] === '-';
+            _this.value = raw.slice(_this.trimLeft ? 3 : 2, _this.trimRight ? -3 : -2).trim();
+            return _this;
+        }
+        return DelimitedToken;
+    }(Token));
+
+    var TagToken = /** @class */ (function (_super) {
+        __extends(TagToken, _super);
+        function TagToken(raw, pos, input, file, line) {
+            var _this = _super.call(this, raw, pos, input, file, line) || this;
+            _this.type = 'tag';
+            var match = _this.value.match(tagLine);
             if (!match) {
-                throw new TokenizationError("illegal tag syntax", token);
+                throw new TokenizationError("illegal tag syntax", _this);
             }
-            token.name = match[1];
-            token.args = match[2];
-            return token;
+            _this.name = match[1];
+            _this.args = match[2];
+            return _this;
         }
-        function parseValueToken(raw, value$$1, pos) {
-            return {
-                type: 'value',
-                line: lineNumber.get(pos),
-                trim_left: raw.slice(0, 3) === '{{-',
-                trim_right: raw.slice(-3) === '-}}',
-                raw: raw,
-                value: value$$1,
-                input: input,
-                file: file
-            };
+        return TagToken;
+    }(DelimitedToken));
+
+    var OutputToken = /** @class */ (function (_super) {
+        __extends(OutputToken, _super);
+        function OutputToken(raw, pos, input, file, line) {
+            var _this = _super.call(this, raw, pos, input, file, line) || this;
+            _this.type = 'output';
+            return _this;
         }
-        function parseHTMLToken(begin, end) {
-            var htmlFragment = input.slice(begin, end);
-            currIndent = last((htmlFragment).split('\n')).length;
-            return {
-                type: 'html',
-                raw: htmlFragment,
-                value: htmlFragment
-            };
+        return OutputToken;
+    }(DelimitedToken));
+
+    var ParseState;
+    (function (ParseState) {
+        ParseState[ParseState["HTML"] = 0] = "HTML";
+        ParseState[ParseState["OUTPUT"] = 1] = "OUTPUT";
+        ParseState[ParseState["TAG"] = 2] = "TAG";
+    })(ParseState || (ParseState = {}));
+    var Tokenizer = /** @class */ (function () {
+        function Tokenizer(options) {
+            if (options === void 0) { options = defaultOptions; }
+            this.options = options;
         }
-    }
-    function LineNumber(html) {
-        var parsedLinesCount = 0;
-        var lastMatchBegin = -1;
-        return {
-            get: function (pos) {
-                var lines = html.slice(lastMatchBegin + 1, pos).split('\n');
-                parsedLinesCount += lines.length - 1;
-                lastMatchBegin = pos;
-                return parsedLinesCount + 1;
+        Tokenizer.prototype.tokenize = function (input, file) {
+            var tokens = [];
+            var p = 0;
+            var line = 1;
+            var state = ParseState.HTML;
+            var buffer = '';
+            var bufferBegin = 0;
+            while (p < input.length) {
+                if (input[p] === '\n')
+                    line++;
+                var bin = input.substr(p, 2);
+                if (state === ParseState.HTML) {
+                    if (bin === '{{' || bin === '{%') {
+                        if (buffer)
+                            tokens.push(new HTMLToken(buffer, bufferBegin, input, file, line));
+                        buffer = bin;
+                        bufferBegin = p;
+                        p += 2;
+                        state = bin === '{{' ? ParseState.OUTPUT : ParseState.TAG;
+                        continue;
+                    }
+                }
+                else if (state === ParseState.OUTPUT && bin === '}}') {
+                    buffer += '}}';
+                    tokens.push(new OutputToken(buffer, bufferBegin, input, file, line));
+                    p += 2;
+                    buffer = '';
+                    bufferBegin = p;
+                    state = ParseState.HTML;
+                    continue;
+                }
+                else if (bin === '%}') {
+                    buffer += '%}';
+                    tokens.push(new TagToken(buffer, bufferBegin, input, file, line));
+                    p += 2;
+                    buffer = '';
+                    bufferBegin = p;
+                    state = ParseState.HTML;
+                    continue;
+                }
+                buffer += input[p++];
             }
+            if (buffer)
+                tokens.push(new HTMLToken(buffer, bufferBegin, input, file, line));
+            whiteSpaceCtrl(tokens, this.options);
+            return tokens;
         };
-    }
+        return Tokenizer;
+    }());
 
-    function Operators (isTruthy) {
-        return {
-            '==': function (l, r) { return l === r; },
-            '!=': function (l, r) { return l !== r; },
-            '>': function (l, r) { return l !== null && r !== null && l > r; },
-            '<': function (l, r) { return l !== null && r !== null && l < r; },
-            '>=': function (l, r) { return l !== null && r !== null && l >= r; },
-            '<=': function (l, r) { return l !== null && r !== null && l <= r; },
-            'contains': function (l, r) {
-                if (!l)
-                    return false;
-                if (typeof l.indexOf !== 'function')
-                    return false;
-                return l.indexOf(r) > -1;
-            },
-            'and': function (l, r) { return isTruthy(l) && isTruthy(r); },
-            'or': function (l, r) { return isTruthy(l) || isTruthy(r); }
+    var Render = /** @class */ (function () {
+        function Render() {
+        }
+        Render.prototype.renderTemplates = function (templates, scope) {
+            return __awaiter(this, void 0, void 0, function () {
+                var html, _i, templates_1, tpl, _a, e_1;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            assert(scope, 'unable to evalTemplates: scope undefined');
+                            html = '';
+                            _i = 0, templates_1 = templates;
+                            _b.label = 1;
+                        case 1:
+                            if (!(_i < templates_1.length)) return [3 /*break*/, 6];
+                            tpl = templates_1[_i];
+                            _b.label = 2;
+                        case 2:
+                            _b.trys.push([2, 4, , 5]);
+                            _a = html;
+                            return [4 /*yield*/, tpl.render(scope)];
+                        case 3:
+                            html = _a + _b.sent();
+                            return [3 /*break*/, 5];
+                        case 4:
+                            e_1 = _b.sent();
+                            if (e_1 instanceof RenderBreakError) {
+                                e_1.resolvedHTML = html;
+                                throw e_1;
+                            }
+                            throw e_1 instanceof RenderError ? e_1 : new RenderError(e_1, tpl);
+                        case 5:
+                            _i++;
+                            return [3 /*break*/, 1];
+                        case 6: return [2 /*return*/, html];
+                    }
+                });
+            });
         };
-    }
+        return Render;
+    }());
 
-    var operators$1 = Operators(isTruthy);
+    var operators$1 = {
+        '==': function (l, r) { return l === r; },
+        '!=': function (l, r) { return l !== r; },
+        '>': function (l, r) { return l !== null && r !== null && l > r; },
+        '<': function (l, r) { return l !== null && r !== null && l < r; },
+        '>=': function (l, r) { return l !== null && r !== null && l >= r; },
+        '<=': function (l, r) { return l !== null && r !== null && l <= r; },
+        'contains': function (l, r) {
+            if (!l)
+                return false;
+            if (typeof l.indexOf !== 'function')
+                return false;
+            return l.indexOf(r) > -1;
+        },
+        'and': function (l, r) { return isTruthy(l) && isTruthy(r); },
+        'or': function (l, r) { return isTruthy(l) || isTruthy(r); }
+    };
     function evalExp(exp, scope) {
         assert(scope, 'unable to evalExp: scope undefined');
         var operatorREs = operators;
@@ -798,279 +965,160 @@
         return val === false || undefined === val || val === null;
     }
 
-    var render = {
-        renderTemplates: function (templates, scope) {
-            return __awaiter(this, void 0, void 0, function () {
-                function renderTemplate(template) {
-                    return __awaiter(this, void 0, void 0, function () {
-                        var partial;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    if (!(template.type === 'tag')) return [3 /*break*/, 2];
-                                    return [4 /*yield*/, this.renderTag(template, scope)];
-                                case 1:
-                                    partial = _a.sent();
-                                    return [2 /*return*/, partial === undefined ? '' : partial];
-                                case 2:
-                                    if (template.type === 'value') {
-                                        return [2 /*return*/, this.renderValue(template, scope)];
-                                    }
-                                    return [2 /*return*/, template.value];
-                            }
-                        });
-                    });
-                }
-                var html, _i, templates_1, tpl, _a, e_1;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            assert(scope, 'unable to evalTemplates: scope undefined');
-                            html = '';
-                            _i = 0, templates_1 = templates;
-                            _b.label = 1;
-                        case 1:
-                            if (!(_i < templates_1.length)) return [3 /*break*/, 6];
-                            tpl = templates_1[_i];
-                            _b.label = 2;
-                        case 2:
-                            _b.trys.push([2, 4, , 5]);
-                            _a = html;
-                            return [4 /*yield*/, renderTemplate.call(this, tpl)];
-                        case 3:
-                            html = _a + _b.sent();
-                            return [3 /*break*/, 5];
-                        case 4:
-                            e_1 = _b.sent();
-                            if (e_1 instanceof RenderBreakError) {
-                                e_1.resolvedHTML = html;
-                                throw e_1;
-                            }
-                            throw e_1 instanceof RenderError ? e_1 : new RenderError(e_1, tpl);
-                        case 5:
-                            _i++;
-                            return [3 /*break*/, 1];
-                        case 6: return [2 /*return*/, html];
-                    }
-                });
-            });
-        },
-        renderTag: function (template, scope) {
-            return __awaiter(this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    if (template.name === 'continue') {
-                        throw new RenderBreakError('continue');
-                    }
-                    if (template.name === 'break') {
-                        throw new RenderBreakError('break');
-                    }
-                    return [2 /*return*/, template.render(scope)];
-                });
-            });
-        },
-        renderValue: function (template, scope) {
-            return __awaiter(this, void 0, void 0, function () {
-                var partial;
-                return __generator(this, function (_a) {
-                    partial = this.evalValue(template, scope);
-                    return [2 /*return*/, partial === undefined ? '' : stringify(partial)];
-                });
-            });
-        },
-        evalValue: function (template, scope) {
-            assert(scope, 'unable to evalValue: scope undefined');
-            return template.filters.reduce(function (prev, filter) { return filter.render(prev, scope); }, evalExp(template.initial, scope));
-        }
-    };
-    function Render () {
-        var instance = create(render);
-        return instance;
-    }
-
-    function hash$1(markup, scope) {
-        var obj = {};
-        var match;
-        hashCapture.lastIndex = 0;
-        while ((match = hashCapture.exec(markup))) {
-            var k = match[1];
-            var v = match[2];
-            obj[k] = evalValue(v, scope);
-        }
-        return obj;
-    }
-    function Tag () {
-        var tagImpls = {};
-        var _tagInstance = {
-            render: function (scope) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var obj, impl;
-                    return __generator(this, function (_a) {
-                        obj = hash$1(this.token.args, scope);
-                        impl = this.tagImpl;
-                        if (typeof impl.render !== 'function') {
-                            return [2 /*return*/, ''];
-                        }
-                        return [2 /*return*/, impl.render(scope, obj)];
-                    });
-                });
-            },
-            parse: function (token, tokens) {
-                this.type = 'tag';
-                this.token = token;
-                this.name = token.name;
-                var tagImpl = tagImpls[this.name];
-                assert(tagImpl, "tag " + this.name + " not found");
-                this.tagImpl = create(tagImpl);
-                if (this.tagImpl.parse) {
-                    this.tagImpl.parse(token, tokens);
-                }
+    /**
+     * Key-Value Pairs Representing Tag Arguments
+     * Example:
+     *    For the markup `{% include 'head.html' foo='bar' %}`,
+     *    hash['foo'] === 'bar'
+     */
+    var Hash = /** @class */ (function () {
+        function Hash(markup, scope) {
+            var match;
+            hashCapture.lastIndex = 0;
+            while ((match = hashCapture.exec(markup))) {
+                var k = match[1];
+                var v = match[2];
+                this[k] = evalValue(v, scope);
             }
+        }
+        return Hash;
+    }());
+
+    var Template = /** @class */ (function () {
+        function Template(token) {
+            this.token = token;
+        }
+        return Template;
+    }());
+
+    var Tag = /** @class */ (function (_super) {
+        __extends(Tag, _super);
+        function Tag(token, tokens, liquid) {
+            var _this = _super.call(this, token) || this;
+            _this.name = token.name;
+            var impl = Tag.impls[token.name];
+            assert(impl, "tag " + token.name + " not found");
+            _this.impl = create(impl);
+            _this.impl.liquid = liquid;
+            if (_this.impl.parse) {
+                _this.impl.parse(token, tokens);
+            }
+            return _this;
+        }
+        Tag.prototype.render = function (scope) {
+            return __awaiter(this, void 0, void 0, function () {
+                var hash, impl, html;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            hash = new Hash(this.token.args, scope);
+                            impl = this.impl;
+                            if (typeof impl.render !== 'function') {
+                                return [2 /*return*/, ''];
+                            }
+                            return [4 /*yield*/, impl.render(scope, hash)];
+                        case 1:
+                            html = _a.sent();
+                            return [2 /*return*/, stringify(html)];
+                    }
+                });
+            });
         };
-        function register(name, tag) {
-            tagImpls[name] = tag;
-        }
-        function construct(token, tokens) {
-            var instance = create(_tagInstance);
-            instance.parse(token, tokens);
-            return instance;
-        }
-        function clear() {
-            tagImpls = {};
-        }
-        return {
-            construct: construct,
-            register: register,
-            clear: clear
+        Tag.register = function (name, tag) {
+            Tag.impls[name] = tag;
         };
-    }
+        Tag.clear = function () {
+            Tag.impls = {};
+        };
+        Tag.impls = {};
+        return Tag;
+    }(Template));
 
     var valueRE = new RegExp("" + value.source, 'g');
-    function Filter (options) {
-        options = assign({}, options);
-        var filters = {};
-        var _filterInstance = {
-            render: function (output, scope) {
-                var args = this.args.map(function (arg) { return evalValue(arg, scope); });
-                args.unshift(output);
-                return this.filter.apply(null, args);
-            },
-            parse: function (str) {
-                var match = filterLine.exec(str);
-                assert(match, 'illegal filter: ' + str);
-                var name = match[1];
-                var argList = match[2] || '';
-                var filter$$1 = filters[name];
-                if (typeof filter$$1 !== 'function') {
-                    if (options.strict_filters) {
-                        throw new TypeError("undefined filter: " + name);
-                    }
-                    this.name = name;
-                    this.filter = function (x) { return x; };
-                    this.args = [];
-                    return this;
-                }
-                var args = [];
-                while ((match = valueRE.exec(argList.trim()))) {
-                    var v = match[0];
-                    var re = new RegExp(v + "\\s*:", 'g');
-                    var keyMatch = re.exec(match.input);
-                    var currentMatchIsKey = keyMatch && keyMatch.index === match.index;
-                    currentMatchIsKey ? args.push("'" + v + "'") : args.push(v);
-                }
-                this.name = name;
-                this.filter = filter$$1;
-                this.args = args;
-                return this;
+    var Filter = /** @class */ (function () {
+        function Filter(str, strictFilters) {
+            if (strictFilters === void 0) { strictFilters = false; }
+            var match = filterLine.exec(str);
+            assert(match, 'illegal filter: ' + str);
+            var name = match[1];
+            var argList = match[2] || '';
+            var impl = Filter.impls[name];
+            if (!impl && strictFilters)
+                throw new TypeError("undefined filter: " + name);
+            this.name = name;
+            this.impl = impl || (function (x) { return x; });
+            this.args = this.parseArgs(argList);
+        }
+        Filter.prototype.parseArgs = function (argList) {
+            var match;
+            var args = [];
+            while ((match = valueRE.exec(argList.trim()))) {
+                var v = match[0];
+                var re = new RegExp(v + "\\s*:", 'g');
+                var keyMatch = re.exec(match.input);
+                var currentMatchIsKey = keyMatch && keyMatch.index === match.index;
+                currentMatchIsKey ? args.push("'" + v + "'") : args.push(v);
             }
+            return args;
         };
-        function construct(str) {
-            var instance = create(_filterInstance);
-            return instance.parse(str);
-        }
-        function register(name, filter$$1) {
-            filters[name] = filter$$1;
-        }
-        function clear() {
-            filters = {};
-        }
-        return {
-            construct: construct, register: register, clear: clear
+        Filter.prototype.render = function (value$$1, scope) {
+            var args = this.args.map(function (arg) { return evalValue(arg, scope); });
+            args.unshift(value$$1);
+            return this.impl.apply(null, args);
         };
-    }
+        Filter.register = function (name, filter$$1) {
+            Filter.impls[name] = filter$$1;
+        };
+        Filter.clear = function () {
+            Filter.impls = {};
+        };
+        Filter.impls = {};
+        return Filter;
+    }());
 
-    function Parser (Tag, Filter) {
-        var ParseStream = /** @class */ (function () {
-            function ParseStream(tokens) {
-                this.tokens = tokens;
-                this.handlers = {};
+    var ParseStream = /** @class */ (function () {
+        function ParseStream(tokens, parseToken) {
+            this.handlers = {};
+            this.tokens = tokens;
+            this.parseToken = parseToken;
+        }
+        ParseStream.prototype.on = function (name, cb) {
+            this.handlers[name] = cb;
+            return this;
+        };
+        ParseStream.prototype.trigger = function (event, arg) {
+            var h = this.handlers[event];
+            if (typeof h === 'function') {
+                h(arg);
+                return true;
             }
-            ParseStream.prototype.on = function (name, cb) {
-                this.handlers[name] = cb;
-                return this;
-            };
-            ParseStream.prototype.trigger = function (event, arg) {
-                var h = this.handlers[event];
-                if (typeof h === 'function') {
-                    h(arg);
-                    return true;
-                }
-            };
-            ParseStream.prototype.start = function () {
-                this.trigger('start');
-                var token;
-                while (!this.stopRequested && (token = this.tokens.shift())) {
-                    if (this.trigger('token', token))
-                        continue;
-                    if (token.type === 'tag' &&
-                        this.trigger("tag:" + token.name, token)) {
-                        continue;
-                    }
-                    var template = parseToken(token, this.tokens);
-                    this.trigger('template', template);
-                }
-                if (!this.stopRequested)
-                    this.trigger('end');
-                return this;
-            };
-            ParseStream.prototype.stop = function () {
-                this.stopRequested = true;
-                return this;
-            };
-            return ParseStream;
-        }());
-        function parse(tokens) {
+        };
+        ParseStream.prototype.start = function () {
+            this.trigger('start');
             var token;
-            var templates = [];
-            while ((token = tokens.shift())) {
-                templates.push(parseToken(token, tokens));
-            }
-            return templates;
-        }
-        function parseToken(token, tokens) {
-            try {
-                var tpl = null;
-                if (token.type === 'tag') {
-                    tpl = parseTag(token, tokens);
+            while (!this.stopRequested && (token = this.tokens.shift())) {
+                if (this.trigger('token', token))
+                    continue;
+                if (token.type === 'tag' &&
+                    this.trigger("tag:" + token.name, token)) {
+                    continue;
                 }
-                else if (token.type === 'value') {
-                    tpl = parseValue(token.value);
-                }
-                else { // token.type === 'html'
-                    tpl = token;
-                }
-                tpl.token = token;
-                return tpl;
+                var template = this.parseToken(token, this.tokens);
+                this.trigger('template', template);
             }
-            catch (e) {
-                throw new ParseError(e, token);
-            }
-        }
-        function parseTag(token, tokens) {
-            if (token.name === 'continue' || token.name === 'break')
-                return token;
-            return Tag.construct(token, tokens);
-        }
-        function parseValue(str) {
+            if (!this.stopRequested)
+                this.trigger('end');
+            return this;
+        };
+        ParseStream.prototype.stop = function () {
+            this.stopRequested = true;
+            return this;
+        };
+        return ParseStream;
+    }());
+
+    var default_1 = /** @class */ (function () {
+        function default_1(str, strictFilters) {
             var match = matchValue(str);
             assert(match, "illegal value string: " + str);
             var initial = match[0];
@@ -1079,27 +1127,108 @@
             while ((match = filter.exec(str))) {
                 filters.push([match[0].trim()]);
             }
-            return {
-                type: 'value',
-                initial: initial,
-                filters: filters.map(function (str) { return Filter.construct(str); })
-            };
+            this.initial = initial;
+            this.filters = filters.map(function (str) { return new Filter(str, strictFilters); });
         }
-        function parseStream(tokens) {
-            return new ParseStream(tokens);
-        }
-        return {
-            parse: parse,
-            parseTag: parseTag,
-            parseStream: parseStream,
-            parseValue: parseValue
+        default_1.prototype.value = function (scope) {
+            return this.filters.reduce(function (prev, filter$$1) { return filter$$1.render(prev, scope); }, evalExp(this.initial, scope));
         };
-    }
+        return default_1;
+    }());
+
+    var Output = /** @class */ (function (_super) {
+        __extends(Output, _super);
+        function Output(token, strictFilters) {
+            var _this = _super.call(this, token) || this;
+            _this.value = new default_1(token.value, strictFilters);
+            return _this;
+        }
+        Output.prototype.render = function (scope) {
+            return __awaiter(this, void 0, void 0, function () {
+                var html;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.value.value(scope)];
+                        case 1:
+                            html = _a.sent();
+                            return [2 /*return*/, stringify(html)];
+                    }
+                });
+            });
+        };
+        return Output;
+    }(Template));
+
+    var default_1$1 = /** @class */ (function (_super) {
+        __extends(default_1, _super);
+        function default_1(token) {
+            var _this = _super.call(this, token) || this;
+            _this.str = token.value;
+            return _this;
+        }
+        default_1.prototype.render = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, this.str];
+                });
+            });
+        };
+        return default_1;
+    }(Template));
+
+    var Parser = /** @class */ (function () {
+        function Parser(liquid) {
+            this.liquid = liquid;
+        }
+        Parser.prototype.parse = function (tokens) {
+            var token;
+            var templates = [];
+            while ((token = tokens.shift())) {
+                templates.push(this.parseToken(token, tokens));
+            }
+            return templates;
+        };
+        Parser.prototype.parseToken = function (token, remainTokens) {
+            try {
+                if (token.type === 'tag') {
+                    return new Tag(token, remainTokens, this.liquid);
+                }
+                if (token.type === 'output') {
+                    return new Output(token, this.liquid.options.strict_filters);
+                }
+                return new default_1$1(token);
+            }
+            catch (e) {
+                throw new ParseError(e, token);
+            }
+        };
+        Parser.prototype.parseStream = function (tokens) {
+            var _this = this;
+            return new ParseStream(tokens, function (token, tokens) { return _this.parseToken(token, tokens); });
+        };
+        return Parser;
+    }());
+
+    var re = new RegExp("(" + identifier.source + ")\\s*=([^]*)");
+    var assign$1 = {
+        parse: function (token) {
+            var match = token.args.match(re);
+            assert(match, "illegal token " + token.raw);
+            this.key = match[1];
+            this.value = match[2];
+        },
+        render: function (scope) {
+            var ctx = new AssignScope();
+            ctx[this.key] = this.liquid.evalValue(this.value, scope);
+            scope.push(ctx);
+            return Promise.resolve('');
+        }
+    };
 
     /*
      * Call functions in serial until someone resolved.
-     * @param {Array} iterable the array to iterate with.
-     * @param {Array} iteratee returns a new promise.
+     * @param iterable the array to iterate with.
+     * @param iteratee returns a new promise.
      * The iteratee is invoked with three arguments: (value, index, iterable).
      */
     /*
@@ -1119,654 +1248,725 @@
         return ret.then(function () { return result; });
     }
 
-    function For (liquid, Liquid) {
-        var RenderBreakError = Liquid.Types.RenderBreakError;
-        var re = new RegExp("^(" + identifier.source + ")\\s+in\\s+" +
-            ("(" + value.source + ")") +
-            ("(?:\\s+" + hash.source + ")*") +
-            "(?:\\s+(reversed))?" +
-            ("(?:\\s+" + hash.source + ")*$"));
-        liquid.registerTag('for', { parse: parse, render: render });
-        function parse(tagToken, remainTokens) {
+    var re$1 = new RegExp("^(" + identifier.source + ")\\s+in\\s+" +
+        ("(" + value.source + ")") +
+        ("(?:\\s+" + hash.source + ")*") +
+        "(?:\\s+(reversed))?" +
+        ("(?:\\s+" + hash.source + ")*$"));
+    function parse(tagToken, remainTokens) {
+        var _this = this;
+        var match = re$1.exec(tagToken.args);
+        assert(match, "illegal tag: " + tagToken.raw);
+        this.variable = match[1];
+        this.collection = match[2];
+        this.reversed = !!match[3];
+        this.templates = [];
+        this.elseTemplates = [];
+        var p;
+        var stream = this.liquid.parser.parseStream(remainTokens)
+            .on('start', function () { return (p = _this.templates); })
+            .on('tag:else', function () { return (p = _this.elseTemplates); })
+            .on('tag:endfor', function () { return stream.stop(); })
+            .on('template', function (tpl) { return p.push(tpl); })
+            .on('end', function () {
+            throw new Error("tag " + tagToken.raw + " not closed");
+        });
+        stream.start();
+    }
+    function render(scope, hash$$1) {
+        return __awaiter(this, void 0, void 0, function () {
+            var collection, offset, limit, contexts, html, finished;
             var _this = this;
-            var match = re.exec(tagToken.args);
-            assert(match, "illegal tag: " + tagToken.raw);
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        collection = evalExp(this.collection, scope);
+                        if (!isArray(collection)) {
+                            if (isString(collection) && collection.length > 0) {
+                                collection = [collection];
+                            }
+                            else if (isObject(collection)) {
+                                collection = Object.keys(collection).map(function (key) { return [key, collection[key]]; });
+                            }
+                        }
+                        if (!isArray(collection) || !collection.length) {
+                            return [2 /*return*/, this.liquid.renderer.renderTemplates(this.elseTemplates, scope)];
+                        }
+                        offset = hash$$1.offset || 0;
+                        limit = (hash$$1.limit === undefined) ? collection.length : hash$$1.limit;
+                        collection = collection.slice(offset, offset + limit);
+                        if (this.reversed)
+                            collection.reverse();
+                        contexts = collection.map(function (item, i) {
+                            var ctx = {};
+                            ctx[_this.variable] = item;
+                            ctx['forloop'] = {
+                                first: i === 0,
+                                index: i + 1,
+                                index0: i,
+                                last: i === collection.length - 1,
+                                length: collection.length,
+                                rindex: collection.length - i,
+                                rindex0: collection.length - i - 1
+                            };
+                            return ctx;
+                        });
+                        html = '';
+                        finished = false;
+                        return [4 /*yield*/, mapSeries(contexts, function (context) { return __awaiter(_this, void 0, void 0, function () {
+                                var _a, e_1;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            if (finished)
+                                                return [2 /*return*/];
+                                            scope.push(context);
+                                            _b.label = 1;
+                                        case 1:
+                                            _b.trys.push([1, 3, , 4]);
+                                            _a = html;
+                                            return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.templates, scope)];
+                                        case 2:
+                                            html = _a + _b.sent();
+                                            return [3 /*break*/, 4];
+                                        case 3:
+                                            e_1 = _b.sent();
+                                            if (e_1 instanceof RenderBreakError) {
+                                                html += e_1.resolvedHTML;
+                                                if (e_1.message === 'break') {
+                                                    finished = true;
+                                                }
+                                            }
+                                            else
+                                                throw e_1;
+                                            return [3 /*break*/, 4];
+                                        case 4:
+                                            scope.pop(context);
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, html];
+                }
+            });
+        });
+    }
+    var For = { parse: parse, render: render };
+
+    var re$2 = new RegExp("(" + identifier.source + ")");
+    var capture = {
+        parse: function (tagToken, remainTokens) {
+            var _this = this;
+            var match = tagToken.args.match(re$2);
+            assert(match, tagToken.args + " not valid identifier");
             this.variable = match[1];
-            this.collection = match[2];
-            this.reversed = !!match[3];
             this.templates = [];
+            var stream = this.liquid.parser.parseStream(remainTokens);
+            stream.on('tag:endcapture', function () { return stream.stop(); })
+                .on('template', function (tpl) { return _this.templates.push(tpl); })
+                .on('end', function () {
+                throw new Error("tag " + tagToken.raw + " not closed");
+            });
+            stream.start();
+        },
+        render: function (scope) {
+            return __awaiter(this, void 0, void 0, function () {
+                var html, ctx;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.templates, scope)];
+                        case 1:
+                            html = _a.sent();
+                            ctx = new CaptureScope();
+                            ctx[this.variable] = html;
+                            scope.push(ctx);
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        }
+    };
+
+    var Case = {
+        parse: function (tagToken, remainTokens) {
+            var _this = this;
+            this.cond = tagToken.args;
+            this.cases = [];
             this.elseTemplates = [];
-            var p;
-            var stream = liquid.parser.parseStream(remainTokens)
-                .on('start', function () { return (p = _this.templates); })
+            var p = [];
+            var stream = this.liquid.parser.parseStream(remainTokens)
+                .on('tag:when', function (token) {
+                _this.cases.push({
+                    val: token.args,
+                    templates: p = []
+                });
+            })
                 .on('tag:else', function () { return (p = _this.elseTemplates); })
-                .on('tag:endfor', function () { return stream.stop(); })
+                .on('tag:endcase', function () { return stream.stop(); })
                 .on('template', function (tpl) { return p.push(tpl); })
                 .on('end', function () {
                 throw new Error("tag " + tagToken.raw + " not closed");
             });
             stream.start();
+        },
+        render: function (scope) {
+            for (var i = 0; i < this.cases.length; i++) {
+                var branch = this.cases[i];
+                var val = evalExp(branch.val, scope);
+                var cond = evalExp(this.cond, scope);
+                if (val === cond) {
+                    return this.liquid.renderer.renderTemplates(branch.templates, scope);
+                }
+            }
+            return this.liquid.renderer.renderTemplates(this.elseTemplates, scope);
         }
-        function render(scope, hash$$1) {
+    };
+
+    var comment = {
+        parse: function (tagToken, remainTokens) {
+            var stream = this.liquid.parser.parseStream(remainTokens);
+            stream
+                .on('token', function (token) {
+                if (token.name === 'endcomment')
+                    stream.stop();
+            })
+                .on('end', function () {
+                throw new Error("tag " + tagToken.raw + " not closed");
+            });
+            stream.start();
+        }
+    };
+
+    var staticFileRE = /[^\s,]+/;
+    var withRE = new RegExp("with\\s+(" + value.source + ")");
+    var include = {
+        parse: function (token) {
+            var match = staticFileRE.exec(token.args);
+            if (match) {
+                this.staticValue = match[0];
+            }
+            match = value.exec(token.args);
+            if (match) {
+                this.value = match[0];
+            }
+            match = withRE.exec(token.args);
+            if (match) {
+                this.with = match[1];
+            }
+        },
+        render: function (scope, hash$$1) {
             return __awaiter(this, void 0, void 0, function () {
-                var collection, offset, limit, contexts, html, finished;
-                var _this = this;
+                var filepath, template, originBlocks, originBlockMode, templates, html;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            collection = Liquid.evalExp(this.collection, scope);
-                            if (!isArray(collection)) {
-                                if (isString(collection) && collection.length > 0) {
-                                    collection = [collection];
-                                }
-                                else if (isObject(collection)) {
-                                    collection = Object.keys(collection).map(function (key) { return [key, collection[key]]; });
-                                }
-                            }
-                            if (!isArray(collection) || !collection.length) {
-                                return [2 /*return*/, liquid.renderer.renderTemplates(this.elseTemplates, scope)];
-                            }
-                            offset = hash$$1.offset || 0;
-                            limit = (hash$$1.limit === undefined) ? collection.length : hash$$1.limit;
-                            collection = collection.slice(offset, offset + limit);
-                            if (this.reversed)
-                                collection.reverse();
-                            contexts = collection.map(function (item, i) {
-                                var ctx = {};
-                                ctx[_this.variable] = item;
-                                ctx.forloop = {
-                                    first: i === 0,
-                                    index: i + 1,
-                                    index0: i,
-                                    last: i === collection.length - 1,
-                                    length: collection.length,
-                                    rindex: collection.length - i,
-                                    rindex0: collection.length - i - 1
-                                };
-                                return ctx;
-                            });
-                            html = '';
-                            finished = false;
-                            return [4 /*yield*/, mapSeries(contexts, function (context) { return __awaiter(_this, void 0, void 0, function () {
-                                    var _a, e_1;
-                                    return __generator(this, function (_b) {
-                                        switch (_b.label) {
-                                            case 0:
-                                                if (finished)
-                                                    return [2 /*return*/];
-                                                scope.push(context);
-                                                _b.label = 1;
-                                            case 1:
-                                                _b.trys.push([1, 3, , 4]);
-                                                _a = html;
-                                                return [4 /*yield*/, liquid.renderer.renderTemplates(this.templates, scope)];
-                                            case 2:
-                                                html = _a + _b.sent();
-                                                return [3 /*break*/, 4];
-                                            case 3:
-                                                e_1 = _b.sent();
-                                                if (e_1 instanceof RenderBreakError) {
-                                                    html += e_1.resolvedHTML;
-                                                    if (e_1.message === 'break') {
-                                                        finished = true;
-                                                    }
-                                                }
-                                                else
-                                                    throw e_1;
-                                                return [3 /*break*/, 4];
-                                            case 4:
-                                                scope.pop(context);
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); })];
+                            if (!scope.opts.dynamicPartials) return [3 /*break*/, 4];
+                            if (!quotedLine.exec(this.value)) return [3 /*break*/, 2];
+                            template = this.value.slice(1, -1);
+                            return [4 /*yield*/, this.liquid.parseAndRender(template, scope.getAll(), scope.opts)];
                         case 1:
-                            _a.sent();
+                            filepath = _a.sent();
+                            return [3 /*break*/, 3];
+                        case 2:
+                            filepath = evalValue(this.value, scope);
+                            _a.label = 3;
+                        case 3: return [3 /*break*/, 5];
+                        case 4:
+                            filepath = this.staticValue;
+                            _a.label = 5;
+                        case 5:
+                            assert(filepath, "cannot include with empty filename");
+                            originBlocks = scope.blocks;
+                            originBlockMode = scope.blockMode;
+                            scope.blocks = {};
+                            scope.blockMode = BlockMode$1.OUTPUT;
+                            if (this.with) {
+                                hash$$1[filepath] = evalValue(this.with, scope);
+                            }
+                            return [4 /*yield*/, this.liquid.getTemplate(filepath, scope.opts)];
+                        case 6:
+                            templates = _a.sent();
+                            scope.push(hash$$1);
+                            return [4 /*yield*/, this.liquid.renderer.renderTemplates(templates, scope)];
+                        case 7:
+                            html = _a.sent();
+                            scope.pop(hash$$1);
+                            scope.blocks = originBlocks;
+                            scope.blockMode = originBlockMode;
                             return [2 /*return*/, html];
                     }
                 });
             });
         }
-    }
+    };
 
-    function Assign (liquid, Liquid) {
-        var re = new RegExp("(" + identifier.source + ")\\s*=([^]*)");
-        var AssignScope = Liquid.Types.AssignScope;
-        liquid.registerTag('assign', {
-            parse: function (token) {
-                var match = token.args.match(re);
-                assert(match, "illegal token " + token.raw);
-                this.key = match[1];
-                this.value = match[2];
-            },
-            render: function (scope) {
-                var ctx = create(AssignScope);
-                ctx[this.key] = liquid.evalValue(this.value, scope);
-                scope.push(ctx);
-                return Promise.resolve('');
+    var decrement = {
+        parse: function (token) {
+            var match = token.args.match(identifier);
+            assert(match, "illegal identifier " + token.args);
+            this.variable = match[0];
+        },
+        render: function (scope) {
+            var context = scope.findContextFor(this.variable, function (ctx) {
+                return !(ctx instanceof CaptureScope) && !(ctx instanceof AssignScope);
+            });
+            if (!context) {
+                context = new DecrementScope();
+                scope.unshift(context);
             }
-        });
-    }
-
-    function Capture (liquid, Liquid) {
-        var re = new RegExp("(" + identifier.source + ")");
-        var CaptureScope = Liquid.Types.CaptureScope;
-        liquid.registerTag('capture', {
-            parse: function (tagToken, remainTokens) {
-                var _this = this;
-                var match = tagToken.args.match(re);
-                assert(match, tagToken.args + " not valid identifier");
-                this.variable = match[1];
-                this.templates = [];
-                var stream = liquid.parser.parseStream(remainTokens);
-                stream.on('tag:endcapture', function (token) { return stream.stop(); })
-                    .on('template', function (tpl) { return _this.templates.push(tpl); })
-                    .on('end', function (x) {
-                    throw new Error("tag " + tagToken.raw + " not closed");
-                });
-                stream.start();
-            },
-            render: function (scope, hash$$1) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var html, ctx;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, liquid.renderer.renderTemplates(this.templates, scope)];
-                            case 1:
-                                html = _a.sent();
-                                ctx = create(CaptureScope);
-                                ctx[this.variable] = html;
-                                scope.push(ctx);
-                                return [2 /*return*/];
-                        }
-                    });
-                });
+            if (typeof context[this.variable] !== 'number') {
+                context[this.variable] = 0;
             }
-        });
-    }
+            return --context[this.variable];
+        }
+    };
 
-    function Case (liquid, Liquid) {
-        liquid.registerTag('case', {
-            parse: function (tagToken, remainTokens) {
-                var _this = this;
-                this.cond = tagToken.args;
-                this.cases = [];
-                this.elseTemplates = [];
-                var p = [];
-                var stream = liquid.parser.parseStream(remainTokens)
-                    .on('tag:when', function (token) {
-                    _this.cases.push({
-                        val: token.args,
-                        templates: p = []
-                    });
-                })
-                    .on('tag:else', function () { return (p = _this.elseTemplates); })
-                    .on('tag:endcase', function (token) { return stream.stop(); })
-                    .on('template', function (tpl) { return p.push(tpl); })
-                    .on('end', function (x) {
-                    throw new Error("tag " + tagToken.raw + " not closed");
+    var groupRE = new RegExp("^(?:(" + value.source + ")\\s*:\\s*)?(.*)$");
+    var candidatesRE = new RegExp(value.source, 'g');
+    var cycle = {
+        parse: function (tagToken) {
+            var match = groupRE.exec(tagToken.args);
+            assert(match, "illegal tag: " + tagToken.raw);
+            this.group = match[1] || '';
+            var candidates = match[2];
+            this.candidates = [];
+            while ((match = candidatesRE.exec(candidates))) {
+                this.candidates.push(match[0]);
+            }
+            assert(this.candidates.length, "empty candidates: " + tagToken.raw);
+        },
+        render: function (scope) {
+            var group = evalValue(this.group, scope);
+            var fingerprint = "cycle:" + group + ":" + this.candidates.join(',');
+            var groups = scope.opts.groups = scope.opts.groups || {};
+            var idx = groups[fingerprint];
+            if (idx === undefined) {
+                idx = groups[fingerprint] = 0;
+            }
+            var candidate = this.candidates[idx];
+            idx = (idx + 1) % this.candidates.length;
+            groups[fingerprint] = idx;
+            return evalValue(candidate, scope);
+        }
+    };
+
+    var If = {
+        parse: function (tagToken, remainTokens) {
+            var _this = this;
+            this.branches = [];
+            this.elseTemplates = [];
+            var p;
+            var stream = this.liquid.parser.parseStream(remainTokens)
+                .on('start', function () { return _this.branches.push({
+                cond: tagToken.args,
+                templates: (p = [])
+            }); })
+                .on('tag:elsif', function (token) {
+                _this.branches.push({
+                    cond: token.args,
+                    templates: p = []
                 });
-                stream.start();
-            },
-            render: function (scope, hash) {
-                for (var i = 0; i < this.cases.length; i++) {
-                    var branch = this.cases[i];
-                    var val = Liquid.evalExp(branch.val, scope);
-                    var cond = Liquid.evalExp(this.cond, scope);
-                    if (val === cond) {
-                        return liquid.renderer.renderTemplates(branch.templates, scope);
+            })
+                .on('tag:else', function () { return (p = _this.elseTemplates); })
+                .on('tag:endif', function () { return stream.stop(); })
+                .on('template', function (tpl) { return p.push(tpl); })
+                .on('end', function () {
+                throw new Error("tag " + tagToken.raw + " not closed");
+            });
+            stream.start();
+        },
+        render: function (scope) {
+            for (var _i = 0, _a = this.branches; _i < _a.length; _i++) {
+                var branch = _a[_i];
+                var cond = evalExp(branch.cond, scope);
+                if (isTruthy(cond)) {
+                    return this.liquid.renderer.renderTemplates(branch.templates, scope);
+                }
+            }
+            return this.liquid.renderer.renderTemplates(this.elseTemplates, scope);
+        }
+    };
+
+    var increment = {
+        parse: function (token) {
+            var match = token.args.match(identifier);
+            assert(match, "illegal identifier " + token.args);
+            this.variable = match[0];
+        },
+        render: function (scope) {
+            var context = scope.findContextFor(this.variable, function (ctx) {
+                return !(ctx instanceof CaptureScope) && !(ctx instanceof AssignScope);
+            });
+            if (!context) {
+                context = new IncrementScope();
+                scope.unshift(context);
+            }
+            if (typeof context[this.variable] !== 'number') {
+                context[this.variable] = 0;
+            }
+            var val = context[this.variable];
+            context[this.variable]++;
+            return val;
+        }
+    };
+
+    var staticFileRE$1 = /\S+/;
+    var layout = {
+        parse: function (token, remainTokens) {
+            var match = staticFileRE$1.exec(token.args);
+            if (match) {
+                this.staticLayout = match[0];
+            }
+            match = value.exec(token.args);
+            if (match) {
+                this.layout = match[0];
+            }
+            this.tpls = this.liquid.parser.parse(remainTokens);
+        },
+        render: function (scope, hash$$1) {
+            return __awaiter(this, void 0, void 0, function () {
+                var layout, html, templates, partial;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            layout = scope.opts.dynamicPartials
+                                ? evalValue(this.layout, scope)
+                                : this.staticLayout;
+                            assert(layout, "cannot apply layout with empty filename");
+                            // render the remaining tokens immediately
+                            scope.blockMode = BlockMode$1.STORE;
+                            return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.tpls, scope)];
+                        case 1:
+                            html = _a.sent();
+                            if (scope.blocks[''] === undefined) {
+                                scope.blocks[''] = html;
+                            }
+                            return [4 /*yield*/, this.liquid.getTemplate(layout, scope.opts)];
+                        case 2:
+                            templates = _a.sent();
+                            scope.push(hash$$1);
+                            scope.blockMode = BlockMode$1.OUTPUT;
+                            return [4 /*yield*/, this.liquid.renderer.renderTemplates(templates, scope)];
+                        case 3:
+                            partial = _a.sent();
+                            scope.pop(hash$$1);
+                            return [2 /*return*/, partial];
                     }
-                }
-                return liquid.renderer.renderTemplates(this.elseTemplates, scope);
-            }
-        });
-    }
-
-    function Comment (liquid) {
-        liquid.registerTag('comment', {
-            parse: function (tagToken, remainTokens) {
-                var stream = liquid.parser.parseStream(remainTokens);
-                stream
-                    .on('token', function (token) {
-                    if (token.name === 'endcomment')
-                        stream.stop();
-                })
-                    .on('end', function (x) {
-                    throw new Error("tag " + tagToken.raw + " not closed");
                 });
-                stream.start();
-            }
-        });
-    }
+            });
+        }
+    };
 
-    var staticFileRE = /[^\s,]+/;
-    function Include (liquid, Liquid) {
-        var withRE = new RegExp("with\\s+(" + value.source + ")");
-        liquid.registerTag('include', {
-            parse: function (token) {
-                var match = staticFileRE.exec(token.args);
-                if (match) {
-                    this.staticValue = match[0];
-                }
-                match = value.exec(token.args);
-                if (match) {
-                    this.value = match[0];
-                }
-                match = withRE.exec(token.args);
-                if (match) {
-                    this.with = match[1];
-                }
-            },
-            render: function (scope, hash$$1) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var filepath, template, originBlocks, originBlockMode, templates, html;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                if (!scope.opts.dynamicPartials) return [3 /*break*/, 4];
-                                if (!quotedLine.exec(this.value)) return [3 /*break*/, 2];
-                                template = this.value.slice(1, -1);
-                                return [4 /*yield*/, liquid.parseAndRender(template, scope.getAll(), scope.opts)];
-                            case 1:
-                                filepath = _a.sent();
-                                return [3 /*break*/, 3];
-                            case 2:
-                                filepath = Liquid.evalValue(this.value, scope);
-                                _a.label = 3;
-                            case 3: return [3 /*break*/, 5];
-                            case 4:
-                                filepath = this.staticValue;
-                                _a.label = 5;
-                            case 5:
-                                assert(filepath, "cannot include with empty filename");
-                                originBlocks = scope.opts.blocks;
-                                originBlockMode = scope.opts.blockMode;
-                                scope.opts.blocks = {};
-                                scope.opts.blockMode = 'output';
-                                if (this.with) {
-                                    hash$$1[filepath] = Liquid.evalValue(this.with, scope);
-                                }
-                                return [4 /*yield*/, liquid.getTemplate(filepath, scope.opts.root)];
-                            case 6:
-                                templates = _a.sent();
-                                scope.push(hash$$1);
-                                return [4 /*yield*/, liquid.renderer.renderTemplates(templates, scope)];
-                            case 7:
-                                html = _a.sent();
-                                scope.pop(hash$$1);
-                                scope.opts.blocks = originBlocks;
-                                scope.opts.blockMode = originBlockMode;
-                                return [2 /*return*/, html];
-                        }
-                    });
-                });
-            }
-        });
-    }
-
-    function Decrement (liquid, Liquid) {
-        var _a = Liquid.Types, CaptureScope = _a.CaptureScope, AssignScope = _a.AssignScope, DecrementScope = _a.DecrementScope;
-        liquid.registerTag('decrement', {
-            parse: function (token) {
-                var match = token.args.match(identifier);
-                assert(match, "illegal identifier " + token.args);
-                this.variable = match[0];
-            },
-            render: function (scope, hash$$1) {
-                var context = scope.findContextFor(this.variable, function (ctx) {
-                    var proto = Object.getPrototypeOf(ctx);
-                    return proto !== CaptureScope && proto !== AssignScope;
-                });
-                if (!context) {
-                    context = create(DecrementScope);
-                    scope.unshift(context);
-                }
-                if (typeof context[this.variable] !== 'number') {
-                    context[this.variable] = 0;
-                }
-                return --context[this.variable];
-            }
-        });
-    }
-
-    function Cycle (liquid, Liquid) {
-        var groupRE = new RegExp("^(?:(" + value.source + ")\\s*:\\s*)?(.*)$");
-        var candidatesRE = new RegExp(value.source, 'g');
-        liquid.registerTag('cycle', {
-            parse: function (tagToken, remainTokens) {
-                var match = groupRE.exec(tagToken.args);
-                assert(match, "illegal tag: " + tagToken.raw);
-                this.group = match[1] || '';
-                var candidates = match[2];
-                this.candidates = [];
-                while ((match = candidatesRE.exec(candidates))) {
-                    this.candidates.push(match[0]);
-                }
-                assert(this.candidates.length, "empty candidates: " + tagToken.raw);
-            },
-            render: function (scope, hash$$1) {
-                var group = Liquid.evalValue(this.group, scope);
-                var fingerprint = "cycle:" + group + ":" + this.candidates.join(',');
-                var groups = scope.opts.groups = scope.opts.groups || {};
-                var idx = groups[fingerprint];
-                if (idx === undefined) {
-                    idx = groups[fingerprint] = 0;
-                }
-                var candidate = this.candidates[idx];
-                idx = (idx + 1) % this.candidates.length;
-                groups[fingerprint] = idx;
-                return Liquid.evalValue(candidate, scope);
-            }
-        });
-    }
-
-    function If (liquid, Liquid) {
-        liquid.registerTag('if', {
-            parse: function (tagToken, remainTokens) {
-                var _this = this;
-                this.branches = [];
-                this.elseTemplates = [];
-                var p;
-                var stream = liquid.parser.parseStream(remainTokens)
-                    .on('start', function () { return _this.branches.push({
-                    cond: tagToken.args,
-                    templates: (p = [])
-                }); })
-                    .on('tag:elsif', function (token) {
-                    _this.branches.push({
-                        cond: token.args,
-                        templates: p = []
-                    });
-                })
-                    .on('tag:else', function () { return (p = _this.elseTemplates); })
-                    .on('tag:endif', function (token) { return stream.stop(); })
-                    .on('template', function (tpl) { return p.push(tpl); })
-                    .on('end', function (x) {
-                    throw new Error("tag " + tagToken.raw + " not closed");
-                });
-                stream.start();
-            },
-            render: function (scope, hash) {
-                for (var _i = 0, _a = this.branches; _i < _a.length; _i++) {
-                    var branch = _a[_i];
-                    var cond = Liquid.evalExp(branch.cond, scope);
-                    if (Liquid.isTruthy(cond)) {
-                        return liquid.renderer.renderTemplates(branch.templates, scope);
+    var block = {
+        parse: function (token, remainTokens) {
+            var _this = this;
+            var match = /\w+/.exec(token.args);
+            this.block = match ? match[0] : '';
+            this.tpls = [];
+            var stream = this.liquid.parser.parseStream(remainTokens)
+                .on('tag:endblock', function () { return stream.stop(); })
+                .on('template', function (tpl) { return _this.tpls.push(tpl); })
+                .on('end', function () {
+                throw new Error("tag " + token.raw + " not closed");
+            });
+            stream.start();
+        },
+        render: function (scope) {
+            return __awaiter(this, void 0, void 0, function () {
+                var childDefined, html, _a;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            childDefined = scope.blocks[this.block];
+                            if (!(childDefined !== undefined)) return [3 /*break*/, 1];
+                            _a = childDefined;
+                            return [3 /*break*/, 3];
+                        case 1: return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.tpls, scope)];
+                        case 2:
+                            _a = _b.sent();
+                            _b.label = 3;
+                        case 3:
+                            html = _a;
+                            if (scope.blockMode === BlockMode$1.STORE) {
+                                scope.blocks[this.block] = html;
+                                return [2 /*return*/, ''];
+                            }
+                            return [2 /*return*/, html];
                     }
-                }
-                return liquid.renderer.renderTemplates(this.elseTemplates, scope);
-            }
-        });
-    }
-
-    function Increment (liquid, Liquid) {
-        var _a = Liquid.Types, CaptureScope = _a.CaptureScope, AssignScope = _a.AssignScope, IncrementScope = _a.IncrementScope;
-        liquid.registerTag('increment', {
-            parse: function (token) {
-                var match = token.args.match(identifier);
-                assert(match, "illegal identifier " + token.args);
-                this.variable = match[0];
-            },
-            render: function (scope, hash$$1) {
-                var context = scope.findContextFor(this.variable, function (ctx) {
-                    var proto = Object.getPrototypeOf(ctx);
-                    return proto !== CaptureScope && proto !== AssignScope;
                 });
-                if (!context) {
-                    context = create(IncrementScope);
-                    scope.unshift(context);
-                }
-                if (typeof context[this.variable] !== 'number') {
-                    context[this.variable] = 0;
-                }
-                var val = context[this.variable];
-                context[this.variable]++;
-                return val;
-            }
-        });
-    }
+            });
+        }
+    };
 
-    /*
-     * blockMode:
-     * * "store": store rendered html into blocks
-     * * "output": output rendered html
-     */
-    function Layout (liquid, Liquid) {
-        var staticFileRE = /\S+/;
-        liquid.registerTag('layout', {
-            parse: function (token, remainTokens) {
-                var match = staticFileRE.exec(token.args);
-                if (match) {
-                    this.staticLayout = match[0];
-                }
-                match = value.exec(token.args);
-                if (match) {
-                    this.layout = match[0];
-                }
-                this.tpls = liquid.parser.parse(remainTokens);
-            },
-            render: function (scope, hash$$1) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var layout, html, templates, partial;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                layout = scope.opts.dynamicPartials
-                                    ? Liquid.evalValue(this.layout, scope)
-                                    : this.staticLayout;
-                                assert(layout, "cannot apply layout with empty filename");
-                                // render the remaining tokens immediately
-                                scope.opts.blockMode = 'store';
-                                return [4 /*yield*/, liquid.renderer.renderTemplates(this.tpls, scope)];
-                            case 1:
-                                html = _a.sent();
-                                if (scope.opts.blocks[''] === undefined) {
-                                    scope.opts.blocks[''] = html;
-                                }
-                                return [4 /*yield*/, liquid.getTemplate(layout, scope.opts.root)];
-                            case 2:
-                                templates = _a.sent();
-                                scope.push(hash$$1);
-                                scope.opts.blockMode = 'output';
-                                return [4 /*yield*/, liquid.renderer.renderTemplates(templates, scope)];
-                            case 3:
-                                partial = _a.sent();
-                                scope.pop(hash$$1);
-                                return [2 /*return*/, partial];
-                        }
-                    });
-                });
-            }
-        });
-        liquid.registerTag('block', {
-            parse: function (token, remainTokens) {
+    var raw = {
+        parse: function (tagToken, remainTokens) {
+            var _this = this;
+            this.tokens = [];
+            var stream = this.liquid.parser.parseStream(remainTokens);
+            stream
+                .on('token', function (token) {
+                if (token.name === 'endraw')
+                    stream.stop();
+                else
+                    _this.tokens.push(token);
+            })
+                .on('end', function () {
+                throw new Error("tag " + tagToken.raw + " not closed");
+            });
+            stream.start();
+        },
+        render: function () {
+            return this.tokens.map(function (token) { return token.raw; }).join('');
+        }
+    };
+
+    var re$3 = new RegExp("^(" + identifier.source + ")\\s+in\\s+" +
+        ("(" + value.source + ")") +
+        ("(?:\\s+" + hash.source + ")*$"));
+    var tablerow = {
+        parse: function (tagToken, remainTokens) {
+            var _this = this;
+            var match = re$3.exec(tagToken.args);
+            assert(match, "illegal tag: " + tagToken.raw);
+            this.variable = match[1];
+            this.collection = match[2];
+            this.templates = [];
+            var p;
+            var stream = this.liquid.parser.parseStream(remainTokens)
+                .on('start', function () { return (p = _this.templates); })
+                .on('tag:endtablerow', function () { return stream.stop(); })
+                .on('template', function (tpl) { return p.push(tpl); })
+                .on('end', function () {
+                throw new Error("tag " + tagToken.raw + " not closed");
+            });
+            stream.start();
+        },
+        render: function (scope, hash$$1) {
+            return __awaiter(this, void 0, void 0, function () {
+                var collection, offset, limit, cols, contexts, row, html;
                 var _this = this;
-                var match = /\w+/.exec(token.args);
-                this.block = match ? match[0] : '';
-                this.tpls = [];
-                var stream = liquid.parser.parseStream(remainTokens)
-                    .on('tag:endblock', function () { return stream.stop(); })
-                    .on('template', function (tpl) { return _this.tpls.push(tpl); })
-                    .on('end', function () {
-                    throw new Error("tag " + token.raw + " not closed");
-                });
-                stream.start();
-            },
-            render: function (scope) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var childDefined, html, _a;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
-                            case 0:
-                                childDefined = scope.opts.blocks[this.block];
-                                if (!(childDefined !== undefined)) return [3 /*break*/, 1];
-                                _a = childDefined;
-                                return [3 /*break*/, 3];
-                            case 1: return [4 /*yield*/, liquid.renderer.renderTemplates(this.tpls, scope)];
-                            case 2:
-                                _a = _b.sent();
-                                _b.label = 3;
-                            case 3:
-                                html = _a;
-                                if (scope.opts.blockMode === 'store') {
-                                    scope.opts.blocks[this.block] = html;
-                                    return [2 /*return*/, ''];
-                                }
-                                return [2 /*return*/, html];
-                        }
-                    });
-                });
-            }
-        });
-    }
-
-    function Raw (liquid) {
-        liquid.registerTag('raw', {
-            parse: function (tagToken, remainTokens) {
-                var _this = this;
-                this.tokens = [];
-                var stream = liquid.parser.parseStream(remainTokens);
-                stream
-                    .on('token', function (token) {
-                    if (token.name === 'endraw')
-                        stream.stop();
-                    else
-                        _this.tokens.push(token);
-                })
-                    .on('end', function () {
-                    throw new Error("tag " + tagToken.raw + " not closed");
-                });
-                stream.start();
-            },
-            render: function (scope, hash) {
-                return this.tokens.map(function (token) { return token.raw; }).join('');
-            }
-        });
-    }
-
-    function Tablerow (liquid, Liquid) {
-        var re = new RegExp("^(" + identifier.source + ")\\s+in\\s+" +
-            ("(" + value.source + ")") +
-            ("(?:\\s+" + hash.source + ")*$"));
-        liquid.registerTag('tablerow', {
-            parse: function (tagToken, remainTokens) {
-                var _this = this;
-                var match = re.exec(tagToken.args);
-                assert(match, "illegal tag: " + tagToken.raw);
-                this.variable = match[1];
-                this.collection = match[2];
-                this.templates = [];
-                var p;
-                var stream = liquid.parser.parseStream(remainTokens)
-                    .on('start', function () { return (p = _this.templates); })
-                    .on('tag:endtablerow', function (token) { return stream.stop(); })
-                    .on('template', function (tpl) { return p.push(tpl); })
-                    .on('end', function () {
-                    throw new Error("tag " + tagToken.raw + " not closed");
-                });
-                stream.start();
-            },
-            render: function (scope, hash$$1) {
-                return __awaiter(this, void 0, void 0, function () {
-                    var collection, offset, limit, cols, contexts, row, html;
-                    var _this = this;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                collection = Liquid.evalExp(this.collection, scope) || [];
-                                offset = hash$$1.offset || 0;
-                                limit = (hash$$1.limit === undefined) ? collection.length : hash$$1.limit;
-                                collection = collection.slice(offset, offset + limit);
-                                cols = hash$$1.cols || collection.length;
-                                contexts = collection.map(function (item, i) {
-                                    var ctx = {};
-                                    ctx[_this.variable] = item;
-                                    return ctx;
-                                });
-                                html = '';
-                                return [4 /*yield*/, mapSeries(contexts, function (context, idx) { return __awaiter(_this, void 0, void 0, function () {
-                                        var col, _a;
-                                        return __generator(this, function (_b) {
-                                            switch (_b.label) {
-                                                case 0:
-                                                    row = Math.floor(idx / cols) + 1;
-                                                    col = (idx % cols) + 1;
-                                                    if (col === 1) {
-                                                        if (row !== 1) {
-                                                            html += '</tr>';
-                                                        }
-                                                        html += "<tr class=\"row" + row + "\">";
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            collection = evalExp(this.collection, scope) || [];
+                            offset = hash$$1.offset || 0;
+                            limit = (hash$$1.limit === undefined) ? collection.length : hash$$1.limit;
+                            collection = collection.slice(offset, offset + limit);
+                            cols = hash$$1.cols || collection.length;
+                            contexts = collection.map(function (item) {
+                                var ctx = {};
+                                ctx[_this.variable] = item;
+                                return ctx;
+                            });
+                            html = '';
+                            return [4 /*yield*/, mapSeries(contexts, function (context, idx) { return __awaiter(_this, void 0, void 0, function () {
+                                    var col, _a;
+                                    return __generator(this, function (_b) {
+                                        switch (_b.label) {
+                                            case 0:
+                                                row = Math.floor(idx / cols) + 1;
+                                                col = (idx % cols) + 1;
+                                                if (col === 1) {
+                                                    if (row !== 1) {
+                                                        html += '</tr>';
                                                     }
-                                                    html += "<td class=\"col" + col + "\">";
-                                                    scope.push(context);
-                                                    _a = html;
-                                                    return [4 /*yield*/, liquid.renderer.renderTemplates(this.templates, scope)];
-                                                case 1:
-                                                    html = _a + _b.sent();
-                                                    html += '</td>';
-                                                    scope.pop(context);
-                                                    return [2 /*return*/, html];
-                                            }
-                                        });
-                                    }); })];
-                            case 1:
-                                _a.sent();
-                                if (row > 0) {
-                                    html += '</tr>';
-                                }
-                                return [2 /*return*/, html];
-                        }
-                    });
+                                                    html += "<tr class=\"row" + row + "\">";
+                                                }
+                                                html += "<td class=\"col" + col + "\">";
+                                                scope.push(context);
+                                                _a = html;
+                                                return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.templates, scope)];
+                                            case 1:
+                                                html = _a + _b.sent();
+                                                html += '</td>';
+                                                scope.pop(context);
+                                                return [2 /*return*/, html];
+                                        }
+                                    });
+                                }); })];
+                        case 1:
+                            _a.sent();
+                            if (row > 0) {
+                                html += '</tr>';
+                            }
+                            return [2 /*return*/, html];
+                    }
                 });
-            }
-        });
+            });
+        }
+    };
+
+    var unless = {
+        parse: function (tagToken, remainTokens) {
+            var _this = this;
+            this.templates = [];
+            this.elseTemplates = [];
+            var p;
+            var stream = this.liquid.parser.parseStream(remainTokens)
+                .on('start', function () {
+                p = _this.templates;
+                _this.cond = tagToken.args;
+            })
+                .on('tag:else', function () { return (p = _this.elseTemplates); })
+                .on('tag:endunless', function () { return stream.stop(); })
+                .on('template', function (tpl) { return p.push(tpl); })
+                .on('end', function () {
+                throw new Error("tag " + tagToken.raw + " not closed");
+            });
+            stream.start();
+        },
+        render: function (scope) {
+            var cond = evalExp(this.cond, scope);
+            return isFalsy(cond)
+                ? this.liquid.renderer.renderTemplates(this.templates, scope)
+                : this.liquid.renderer.renderTemplates(this.elseTemplates, scope);
+        }
+    };
+
+    var Break = {
+        render: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    throw new RenderBreakError('break');
+                });
+            });
+        }
+    };
+
+    var Continue = {
+        render: function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    throw new RenderBreakError('continue');
+                });
+            });
+        }
+    };
+
+    var tags = {
+        assign: assign$1, 'for': For, capture: capture, 'case': Case, comment: comment, include: include, decrement: decrement, increment: increment, cycle: cycle, 'if': If, layout: layout, block: block, raw: raw, tablerow: tablerow, unless: unless, 'break': Break, 'continue': Continue
+    };
+
+    var escapeMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&#34;',
+        "'": '&#39;'
+    };
+    var unescapeMap = {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&#34;': '"',
+        '&#39;': "'"
+    };
+    function escape(str) {
+        return String(str).replace(/&|<|>|"|'/g, function (m) { return escapeMap[m]; });
+    }
+    function unescape(str) {
+        return String(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) { return unescapeMap[m]; });
+    }
+    var html = {
+        'escape': escape,
+        'escape_once': function (str) { return escape(unescape(str)); },
+        'newline_to_br': function (v) { return v.replace(/\n/g, '<br />'); },
+        'strip_html': function (v) { return String(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, ''); }
+    };
+
+    var str = {
+        'append': function (v, arg) { return v + arg; },
+        'prepend': function (v, arg) { return arg + v; },
+        'capitalize': function (str) { return String(str).charAt(0).toUpperCase() + str.slice(1); },
+        'concat': function (v, arg) { return Array.prototype.concat.call(v, arg); },
+        'lstrip': function (v) { return String(v).replace(/^\s+/, ''); },
+        'downcase': function (v) { return v.toLowerCase(); },
+        'upcase': function (str) { return String(str).toUpperCase(); },
+        'remove': function (v, arg) { return v.split(arg).join(''); },
+        'remove_first': function (v, l) { return v.replace(l, ''); },
+        'replace': function (v, pattern, replacement) {
+            return String(v).split(pattern).join(replacement);
+        },
+        'replace_first': function (v, arg1, arg2) { return String(v).replace(arg1, arg2); },
+        'rstrip': function (str) { return String(str).replace(/\s+$/, ''); },
+        'split': function (v, arg) { return String(v).split(arg); },
+        'strip': function (v) { return String(v).trim(); },
+        'strip_newlines': function (v) { return String(v).replace(/\n/g, ''); },
+        'truncate': function (v, l, o) {
+            v = String(v);
+            o = (o === undefined) ? '...' : o;
+            l = l || 16;
+            if (v.length <= l)
+                return v;
+            return v.substr(0, l - o.length) + o;
+        },
+        'truncatewords': function (v, l, o) {
+            if (o === undefined)
+                o = '...';
+            var arr = v.split(' ');
+            var ret = arr.slice(0, l).join(' ');
+            if (arr.length > l)
+                ret += o;
+            return ret;
+        }
+    };
+
+    var math = {
+        'abs': function (v) { return Math.abs(v); },
+        'ceil': function (v) { return Math.ceil(v); },
+        'divided_by': function (v, arg) { return v / arg; },
+        'floor': function (v) { return Math.floor(v); },
+        'minus': bindFixed(function (v, arg) { return v - arg; }),
+        'modulo': bindFixed(function (v, arg) { return v % arg; }),
+        'round': function (v, arg) {
+            var amp = Math.pow(10, arg || 0);
+            return Math.round(v * amp) / amp;
+        },
+        'plus': bindFixed(function (v, arg) { return Number(v) + Number(arg); }),
+        'times': function (v, arg) { return v * arg; }
+    };
+    function getFixed(v) {
+        var p = String(v).split('.');
+        return (p.length > 1) ? p[1].length : 0;
+    }
+    function bindFixed(cb) {
+        return function (l, r) {
+            var f = Math.max(getFixed(l), getFixed(r));
+            return cb(l, r).toFixed(f);
+        };
     }
 
-    function Unless (liquid, Liquid) {
-        liquid.registerTag('unless', {
-            parse: function (tagToken, remainTokens) {
-                var _this = this;
-                this.templates = [];
-                this.elseTemplates = [];
-                var p;
-                var stream = liquid.parser.parseStream(remainTokens)
-                    .on('start', function (x) {
-                    p = _this.templates;
-                    _this.cond = tagToken.args;
-                })
-                    .on('tag:else', function () { return (p = _this.elseTemplates); })
-                    .on('tag:endunless', function (token) { return stream.stop(); })
-                    .on('template', function (tpl) { return p.push(tpl); })
-                    .on('end', function (x) {
-                    throw new Error("tag " + tagToken.raw + " not closed");
-                });
-                stream.start();
-            },
-            render: function (scope, hash) {
-                var cond = Liquid.evalExp(this.cond, scope);
-                return Liquid.isFalsy(cond)
-                    ? liquid.renderer.renderTemplates(this.templates, scope)
-                    : liquid.renderer.renderTemplates(this.elseTemplates, scope);
-            }
-        });
-    }
+    var url = {
+        'url_decode': function (x) { return x.split('+').map(decodeURIComponent).join(' '); },
+        'url_encode': function (x) { return x.split(' ').map(encodeURIComponent).join('+'); }
+    };
 
-    function tags (engine, Liquid) {
-        Assign(engine, Liquid);
-        Capture(engine, Liquid);
-        Case(engine, Liquid);
-        Comment(engine, Liquid);
-        Cycle(engine, Liquid);
-        Decrement(engine, Liquid);
-        For(engine, Liquid);
-        If(engine, Liquid);
-        Include(engine, Liquid);
-        Increment(engine, Liquid);
-        Layout(engine, Liquid);
-        Raw(engine, Liquid);
-        Tablerow(engine, Liquid);
-        Unless(engine, Liquid);
-    }
+    var array = {
+        'join': function (v, arg) { return v.join(arg === undefined ? ' ' : arg); },
+        'last': function (v) { return last(v); },
+        'first': function (v) { return v[0]; },
+        'map': function (arr, arg) { return arr.map(function (v) { return v[arg]; }); },
+        'reverse': function (v) { return v.reverse(); },
+        'sort': function (v, arg) { return v.sort(arg); },
+        'size': function (v) { return v.length; },
+        'slice': function (v, begin, length) {
+            if (length === undefined)
+                length = 1;
+            return v.slice(begin, begin + length);
+        },
+        'uniq': function (arr) {
+            var u = {};
+            return (arr || []).filter(function (val) {
+                if (u.hasOwnProperty(val)) {
+                    return false;
+                }
+                u[val] = true;
+                return true;
+            });
+        }
+    };
 
     var monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -1799,15 +1999,13 @@
             }
             return num + d.getDate();
         },
-        // Startday is an integer of which day to start the week measuring from
-        // TODO: that comment was retarted. fix it.
         getWeekOfYear: function (d, startDay) {
             // Skip to startDay of this week
             var now = this.getDayOfYear(d) + (startDay - d.getDay());
             // Find the first startDay of the year
             var jan1 = new Date(d.getFullYear(), 0, 1);
             var then = (7 - jan1.getDay() + startDay);
-            return _number.pad(Math.floor((now - then) / 7) + 1, 2);
+            return padStart(String(Math.floor((now - then) / 7) + 1), 2, '0');
         },
         isLeapYear: function (d) {
             var year = d.getFullYear();
@@ -1820,18 +2018,6 @@
         },
         century: function (d) {
             return parseInt(d.getFullYear().toString().substring(0, 2), 10);
-        }
-    };
-    var _number = {
-        pad: function (value, size, ch) {
-            if (!ch)
-                ch = '0';
-            var result = value.toString();
-            var pad = size - result.length;
-            while (pad-- > 0) {
-                result = ch + result;
-            }
-            return result;
         }
     };
     var formatCodes = {
@@ -1854,34 +2040,34 @@
             return _date.century(d);
         },
         d: function (d) {
-            return _number.pad(d.getDate(), 2);
+            return padStart(d.getDate(), 2, '0');
         },
         e: function (d) {
-            return _number.pad(d.getDate(), 2, ' ');
+            return padStart(d.getDate(), 2);
         },
         H: function (d) {
-            return _number.pad(d.getHours(), 2);
+            return padStart(d.getHours(), 2, '0');
         },
         I: function (d) {
-            return _number.pad(d.getHours() % 12 || 12, 2);
+            return padStart(String(d.getHours() % 12 || 12), 2, '0');
         },
         j: function (d) {
-            return _number.pad(_date.getDayOfYear(d), 3);
+            return padStart(_date.getDayOfYear(d), 3, '0');
         },
         k: function (d) {
-            return _number.pad(d.getHours(), 2, ' ');
+            return padStart(d.getHours(), 2);
         },
         l: function (d) {
-            return _number.pad(d.getHours() % 12 || 12, 2, ' ');
+            return padStart(String(d.getHours() % 12 || 12), 2);
         },
         L: function (d) {
-            return _number.pad(d.getMilliseconds(), 3);
+            return padStart(d.getMilliseconds(), 3, '0');
         },
         m: function (d) {
-            return _number.pad(d.getMonth() + 1, 2);
+            return padStart(d.getMonth() + 1, 2, '0');
         },
         M: function (d) {
-            return _number.pad(d.getMinutes(), 2);
+            return padStart(d.getMinutes(), 2, '0');
         },
         p: function (d) {
             return (d.getHours() < 12 ? 'AM' : 'PM');
@@ -1896,7 +2082,7 @@
             return Math.round(d.valueOf() / 1000);
         },
         S: function (d) {
-            return _number.pad(d.getSeconds(), 2);
+            return padStart(d.getSeconds(), 2, '0');
         },
         u: function (d) {
             return d.getDay() || 7;
@@ -1924,7 +2110,7 @@
         },
         z: function (d) {
             var tz = d.getTimezoneOffset() / 60 * 100;
-            return (tz > 0 ? '-' : '+') + _number.pad(Math.abs(tz), 4);
+            return (tz > 0 ? '-' : '+') + padStart(String(Math.abs(tz)), 4, '0');
         },
         '%': function () {
             return '%';
@@ -1952,26 +2138,7 @@
         }
     }
 
-    var escapeMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&#34;',
-        "'": '&#39;'
-    };
-    var unescapeMap = {
-        '&amp;': '&',
-        '&lt;': '<',
-        '&gt;': '>',
-        '&#34;': '"',
-        '&#39;': "'"
-    };
-    var filters = {
-        'abs': function (v) { return Math.abs(v); },
-        'append': function (v, arg) { return v + arg; },
-        'capitalize': function (str) { return stringify$1(str).charAt(0).toUpperCase() + str.slice(1); },
-        'ceil': function (v) { return Math.ceil(v); },
-        'concat': function (v, arg) { return Array.prototype.concat.call(v, arg); },
+    var date = {
         'date': function (v, arg) {
             var date = v;
             if (v === 'now') {
@@ -1981,142 +2148,40 @@
                 date = new Date(v);
             }
             return isValidDate(date) ? strftime(date, arg) : v;
-        },
-        'default': function (v, arg) { return isTruthy(v) ? v : arg; },
-        'divided_by': function (v, arg) { return v / arg; },
-        'downcase': function (v) { return v.toLowerCase(); },
-        'escape': escape,
-        'escape_once': function (str) { return escape(unescape(str)); },
-        'first': function (v) { return v[0]; },
-        'floor': function (v) { return Math.floor(v); },
-        'join': function (v, arg) { return v.join(arg === undefined ? ' ' : arg); },
-        'last': function (v) { return last(v); },
-        'lstrip': function (v) { return stringify$1(v).replace(/^\s+/, ''); },
-        'map': function (arr, arg) { return arr.map(function (v) { return v[arg]; }); },
-        'minus': bindFixed(function (v, arg) { return v - arg; }),
-        'modulo': bindFixed(function (v, arg) { return v % arg; }),
-        'newline_to_br': function (v) { return v.replace(/\n/g, '<br />'); },
-        'plus': bindFixed(function (v, arg) { return Number(v) + Number(arg); }),
-        'prepend': function (v, arg) { return arg + v; },
-        'remove': function (v, arg) { return v.split(arg).join(''); },
-        'remove_first': function (v, l) { return v.replace(l, ''); },
-        'replace': function (v, pattern, replacement) {
-            return stringify$1(v).split(pattern).join(replacement);
-        },
-        'replace_first': function (v, arg1, arg2) { return stringify$1(v).replace(arg1, arg2); },
-        'reverse': function (v) { return v.reverse(); },
-        'round': function (v, arg) {
-            var amp = Math.pow(10, arg || 0);
-            return Math.round(v * amp, arg) / amp;
-        },
-        'rstrip': function (str) { return stringify$1(str).replace(/\s+$/, ''); },
-        'size': function (v) { return v.length; },
-        'slice': function (v, begin, length) {
-            if (length === undefined)
-                length = 1;
-            return v.slice(begin, begin + length);
-        },
-        'sort': function (v, arg) { return v.sort(arg); },
-        'split': function (v, arg) { return stringify$1(v).split(arg); },
-        'strip': function (v) { return stringify$1(v).trim(); },
-        'strip_html': function (v) { return stringify$1(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, ''); },
-        'strip_newlines': function (v) { return stringify$1(v).replace(/\n/g, ''); },
-        'times': function (v, arg) { return v * arg; },
-        'truncate': function (v, l, o) {
-            v = stringify$1(v);
-            o = (o === undefined) ? '...' : o;
-            l = l || 16;
-            if (v.length <= l)
-                return v;
-            return v.substr(0, l - o.length) + o;
-        },
-        'truncatewords': function (v, l, o) {
-            if (o === undefined)
-                o = '...';
-            var arr = v.split(' ');
-            var ret = arr.slice(0, l).join(' ');
-            if (arr.length > l)
-                ret += o;
-            return ret;
-        },
-        'uniq': function (arr) {
-            var u = {};
-            return (arr || []).filter(function (val) {
-                if (u.hasOwnProperty(val)) {
-                    return false;
-                }
-                u[val] = true;
-                return true;
-            });
-        },
-        'upcase': function (str) { return stringify$1(str).toUpperCase(); },
-        'url_decode': function (x) { return x.split('+').map(decodeURIComponent).join(' '); },
-        'url_encode': function (x) { return x.split(' ').map(encodeURIComponent).join('+'); }
+        }
     };
-    function escape(str) {
-        return stringify$1(str).replace(/&|<|>|"|'/g, function (m) { return escapeMap[m]; });
-    }
-    function unescape(str) {
-        return stringify$1(str).replace(/&(amp|lt|gt|#34|#39);/g, function (m) { return unescapeMap[m]; });
-    }
-    function getFixed(v) {
-        var p = (v + '').split('.');
-        return (p.length > 1) ? p[1].length : 0;
-    }
-    function getMaxFixed(l, r) {
-        return Math.max(getFixed(l), getFixed(r));
-    }
-    function stringify$1(obj) {
-        return obj + '';
-    }
-    function bindFixed(cb) {
-        return function (l, r) {
-            var f = getMaxFixed(l, r);
-            return cb(l, r).toFixed(f);
-        };
-    }
     function isValidDate(date) {
         return date instanceof Date && !isNaN(date.getTime());
     }
-    function registerAll(liquid, Liquid) {
-        return forOwn(filters, function (func, name) { return liquid.registerFilter(name, func); });
-    }
-    registerAll.filters = filters;
+
+    var obj = {
+        'default': function (v, arg) { return isTruthy(v) ? v : arg; }
+    };
+
+    var builtinFilters = __assign({}, html, str, math, url, date, obj, array);
 
     var Liquid = /** @class */ (function () {
-        function Liquid(options) {
-            options = assign({
-                root: ['.'],
-                cache: false,
-                extname: '',
-                dynamicPartials: true,
-                trim_tag_right: false,
-                trim_tag_left: false,
-                trim_value_right: false,
-                trim_value_left: false,
-                greedy: true,
-                strict_filters: false,
-                strict_variables: false
-            }, options);
-            options.root = normalizeStringArray(options.root);
+        function Liquid(opts) {
+            if (opts === void 0) { opts = {}; }
+            var _this = this;
+            var options = __assign({}, defaultOptions, normalize(opts));
             if (options.cache) {
                 this.cache = {};
             }
             this.options = options;
-            this.tags = Tag();
-            this.filters = Filter(options);
-            this.parser = Parser(this.tags, this.filters);
-            this.renderer = Render();
-            tags(this, Liquid);
-            registerAll(this, Liquid);
+            this.parser = new Parser(this);
+            this.renderer = new Render();
+            this.tokenizer = new Tokenizer(this.options);
+            forOwn(tags, function (conf, name) { return _this.registerTag(name, conf); });
+            forOwn(builtinFilters, function (handler, name) { return _this.registerFilter(name, handler); });
         }
         Liquid.prototype.parse = function (html, filepath) {
-            var tokens = parse(html, filepath, this.options);
+            var tokens = this.tokenizer.tokenize(html, filepath);
             return this.parser.parse(tokens);
         };
         Liquid.prototype.render = function (tpl, ctx, opts) {
-            opts = assign({}, this.options, opts);
-            var scope = new Scope(ctx, opts);
+            var options = __assign({}, this.options, normalize(opts));
+            var scope = new Scope(ctx, options);
             return this.renderer.renderTemplates(tpl, scope);
         };
         Liquid.prototype.parseAndRender = function (html, ctx, opts) {
@@ -2132,38 +2197,54 @@
                 });
             });
         };
-        Liquid.prototype.getTemplate = function (file, root) {
+        Liquid.prototype.getTemplate = function (file, opts) {
             return __awaiter(this, void 0, void 0, function () {
-                var filepath;
+                var options, roots, paths, _i, paths_1, filepath, value, _a, err;
                 var _this = this;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, resolve(file, root, this.options)];
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            options = normalize(opts);
+                            roots = options.root ? options.root.concat(this.options.root) : this.options.root;
+                            paths = roots.map(function (root) { return fs.resolve(root, file, _this.options.extname); });
+                            _i = 0, paths_1 = paths;
+                            _b.label = 1;
                         case 1:
-                            filepath = _a.sent();
-                            return [2 /*return*/, this.respectCache(filepath, function () { return __awaiter(_this, void 0, void 0, function () {
-                                    var str;
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4 /*yield*/, read(filepath)];
-                                            case 1:
-                                                str = _a.sent();
-                                                return [2 /*return*/, this.parse(str, filepath)];
-                                        }
-                                    });
-                                }); })];
+                            if (!(_i < paths_1.length)) return [3 /*break*/, 5];
+                            filepath = paths_1[_i];
+                            return [4 /*yield*/, fs.exists(filepath)];
+                        case 2:
+                            if (!(_b.sent()))
+                                return [3 /*break*/, 4];
+                            if (this.options.cache && this.cache[filepath])
+                                return [2 /*return*/, this.cache[filepath]];
+                            _a = this.parse;
+                            return [4 /*yield*/, fs.readFile(filepath)];
+                        case 3:
+                            value = _a.apply(this, [_b.sent(), filepath]);
+                            if (this.options.cache)
+                                this.cache[filepath] = value;
+                            return [2 /*return*/, value];
+                        case 4:
+                            _i++;
+                            return [3 /*break*/, 1];
+                        case 5:
+                            err = new Error('ENOENT');
+                            err.message = "ENOENT: Failed to lookup \"" + file + "\" in \"" + roots + "\"";
+                            err.code = 'ENOENT';
+                            throw err;
                     }
                 });
             });
         };
         Liquid.prototype.renderFile = function (file, ctx, opts) {
             return __awaiter(this, void 0, void 0, function () {
-                var templates;
+                var options, templates;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            opts = assign({}, opts);
-                            return [4 /*yield*/, this.getTemplate(file, opts.root)];
+                            options = normalize(opts);
+                            return [4 /*yield*/, this.getTemplate(file, options)];
                         case 1:
                             templates = _a.sent();
                             return [2 /*return*/, this.render(templates, ctx, opts)];
@@ -2171,46 +2252,22 @@
                 });
             });
         };
-        Liquid.prototype.respectCache = function (key, getter) {
-            return __awaiter(this, void 0, void 0, function () {
-                var cacheEnabled, value;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            cacheEnabled = this.options.cache;
-                            if (cacheEnabled && this.cache[key]) {
-                                return [2 /*return*/, this.cache[key]];
-                            }
-                            return [4 /*yield*/, getter()];
-                        case 1:
-                            value = _a.sent();
-                            if (cacheEnabled) {
-                                this.cache[key] = value;
-                            }
-                            return [2 /*return*/, value];
-                    }
-                });
-            });
-        };
         Liquid.prototype.evalValue = function (str, scope) {
-            var tpl = this.parser.parseValue(str.trim());
-            return this.renderer.evalValue(tpl, scope);
+            return new default_1(str, this.options.strict_filters).value(scope);
         };
         Liquid.prototype.registerFilter = function (name, filter) {
-            return this.filters.register(name, filter);
+            return Filter.register(name, filter);
         };
         Liquid.prototype.registerTag = function (name, tag) {
-            return this.tags.register(name, tag);
+            return Tag.register(name, tag);
         };
         Liquid.prototype.plugin = function (plugin) {
             return plugin.call(this, Liquid);
         };
-        Liquid.prototype.express = function (opts) {
-            opts = opts || {};
+        Liquid.prototype.express = function () {
             var self = this;
             return function (filePath, ctx, cb) {
-                assert(isArray(this.root) || isString(this.root), 'illegal views root, are you using express.js?');
-                opts.root = this.root;
+                var opts = { root: this.root };
                 self.renderFile(filePath, ctx, opts).then(function (html) { return cb(null, html); }, cb);
             };
         };
@@ -2219,25 +2276,9 @@
         Liquid.isFalsy = isFalsy;
         Liquid.evalExp = evalExp;
         Liquid.evalValue = evalValue;
-        Liquid.Types = {
-            ParseError: ParseError,
-            TokenizationError: TokenizationError,
-            RenderBreakError: RenderBreakError,
-            AssertionError: AssertionError,
-            AssignScope: {},
-            CaptureScope: {},
-            IncrementScope: {},
-            DecrementScope: {}
-        };
+        Liquid.Types = Types;
         return Liquid;
     }());
-    function normalizeStringArray(value) {
-        if (isArray(value))
-            return value;
-        if (isString(value))
-            return [value];
-        throw new TypeError('illegal root: ' + value);
-    }
 
     return Liquid;
 
