@@ -1,4 +1,4 @@
-import { isString } from 'src/util/underscore'
+import { isString, forOwn } from 'src/util/underscore'
 import fs from 'src/fs'
 
 type fileDescriptor = { mode: string, content: string }
@@ -8,11 +8,11 @@ const readFile = fs.readFile
 const exists = fs.exists
 
 export function mock (options: { [path: string]: (string | fileDescriptor) }) {
-  for (const [key, val] of Object.entries(options)) {
+  forOwn(options, (val, key) => {
     files[key] = isString(val)
       ? { mode: '33188', content: val as string }
       : val as fileDescriptor
-  }
+  })
   fs.readFile = async function (path) {
     console.log('mock fs read called', path)
     const file = files[path]
