@@ -1,4 +1,4 @@
-import { test, ctx, liquid } from 'test/stub/render'
+import { test, ctx } from 'test/stub/render'
 
 describe('filters/date', function () {
   it('should support date: %a %b %d %Y', function () {

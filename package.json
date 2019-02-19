@@ -7,8 +7,8 @@
   "browser": "dist/liquid.js",
   "scripts": {
     "lint": "eslint . --ext .ts --ext .js",
-    "unit": "mocha test/unit/*.ts test/unit/**/*.ts",
-    "e2e": "npm run build && mocha test/e2e/**/*.ts test/e2e/*.ts",
+    "unit": "mocha 'test/unit/**/*.ts'",
+    "e2e": "npm run build && mocha 'test/e2e/**/*.ts'",
     "test": "npm run unit && npm run e2e",
     "coverage-html": "nyc npm run unit && nyc report --reporter=html",
     "coverage-coveralls": "nyc npm run unit && nyc report --reporter=text-lcov | coveralls",

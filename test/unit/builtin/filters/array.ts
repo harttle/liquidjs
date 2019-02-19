@@ -1,4 +1,4 @@
-import { test, ctx, liquid } from 'test/stub/render'
+import { test } from 'test/stub/render'
 
 describe('filters/array', function () {
   describe('join', function () {
