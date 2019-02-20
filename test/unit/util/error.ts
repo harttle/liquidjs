@@ -28,7 +28,7 @@ describe('error', function () {
         'TokenizationError'
       ]
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
-      expect(err.message).to.equal('illegal tag syntax, line:3')
+      expect(err.message).to.equal('illegal tag syntax, line:3, col:2')
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('TokenizationError')
     })
@@ -37,10 +37,10 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender(html)).be.rejected
       expect(err.input).to.equal(html)
     })
-    it('should contain line number in err.line', async function () {
+    it('should contain line number in err.token.line', async function () {
       const err = await expect(engine.parseAndRender('1\n2\n{% . a %}\n4')).be.rejected
       expect(err.name).to.equal('TokenizationError')
-      expect(err.line).to.equal(3)
+      expect(err.token.line).to.equal(3)
     })
     it('should contain stack in err.stack', async function () {
       const err = await expect(engine.parseAndRender('{% . a %}')).be.rejected
@@ -67,6 +67,12 @@ describe('error', function () {
       restore()
       expect(err.name).to.equal('TokenizationError')
       expect(err.file).to.equal(path.resolve('/foo.html'))
+    })
+    it('should throw error with line and pos if tag unmatched', async function () {
+      const err = await expect(engine.parseAndRender('1\n2\nfoo{% assign a = 4 }\n4')).be.rejected
+      expect(err.name).to.equal('TokenizationError')
+      expect(err.token.line).to.equal(3)
+      expect(err.token.col).to.equal(4)
     })
   })
 
@@ -128,7 +134,7 @@ describe('error', function () {
         'RenderError'
       ]
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
-      expect(err.message).to.equal('intended render error, line:4')
+      expect(err.message).to.equal('intended render error, line:4, col:2')
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('RenderError')
     })
@@ -157,7 +163,7 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender(html)).be.rejected
       console.log(err.message)
       console.log(err.stack)
-      expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4`)
+      expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`)
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('RenderError')
     })
@@ -177,7 +183,7 @@ describe('error', function () {
         'RenderError'
       ]
       const err = await expect(engine.parseAndRender(html)).be.rejected
-      expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4`)
+      expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`)
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('RenderError')
     })
@@ -187,10 +193,10 @@ describe('error', function () {
       expect(err.input).to.equal(html)
       expect(err.name).to.equal('RenderError')
     })
-    it('should contain line number in err.line', async function () {
+    it('should contain line number in err.token.line', async function () {
       const src = '1\n2\n{{1|throwingFilter}}\n4'
       const err = await expect(engine.parseAndRender(src)).be.rejected
-      expect(err.line).to.equal(3)
+      expect(err.token.line).to.equal(3)
       expect(err.name).to.equal('RenderError')
     })
     it('should contain stack in err.stack', async function () {
@@ -260,7 +266,7 @@ describe('error', function () {
         'ParseError: tag a not found'
       ]
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
-      expect(err.message).to.equal('tag a not found, line:4')
+      expect(err.message).to.equal('tag a not found, line:4, col:2')
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('ParseError')
     })
@@ -275,14 +281,14 @@ describe('error', function () {
         'ParseError: tag a not found'
       ]
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
-      expect(err.message).to.equal('tag a not found, line:2')
+      expect(err.message).to.equal('tag a not found, line:2, col:2')
       expect(err.stack).to.contain(message.join('\n'))
     })
 
-    it('should contain line number in err.line', async function () {
+    it('should contain line number in err.token.line', async function () {
       const html = '<html>\n<head>\n\n{% raw %}\n\n'
       const err = await expect(engine.parseAndRender(html)).be.rejected
-      expect(err.line).to.equal(4)
+      expect(err.token.line).to.equal(4)
     })
 
     it('should contain stack in err.stack', async function () {

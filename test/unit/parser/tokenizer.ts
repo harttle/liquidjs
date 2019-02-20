@@ -6,7 +6,7 @@ import HTMLToken from 'src/parser/html-token'
 
 describe('tokenizer', function () {
   const tokenizer = new Tokenizer()
-  describe('parse', function () {
+  describe('#tokenize()', function () {
     it('should handle plain HTML', function () {
       const html = '<html><body><p>Lorem Ipsum</p></body></html>'
       const tokens = tokenizer.tokenize(html)
@@ -65,6 +65,16 @@ describe('tokenizer', function () {
       expect(tokens.length).to.equal(1)
       expect(tokens[0]).instanceOf(OutputToken)
       expect(tokens[0].raw).to.equal('{{foo\n|date:\n"%Y-%m-%d"\n}}')
+    })
+    it('should throw if tag not closed', function () {
+      expect(() => {
+        tokenizer.tokenize('{% assign foo = bar {{foo}}')
+      }).to.throw(/tag "{% assign foo..." not closed/)
+    })
+    it('should throw if output not closed', function () {
+      expect(() => {
+        tokenizer.tokenize('{{name}')
+      }).to.throw(/output "{{name}" not closed/)
     })
   })
 })

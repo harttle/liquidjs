@@ -11,14 +11,12 @@ abstract class LiquidError {
   name: string
   message: string
   stack: string
-  private line: string
   private file: string
   private input: string
   private token: Token
   private originalError: Error
   constructor (err, token) {
     this.input = token.input
-    this.line = token.line
     this.file = token.file
     this.originalError = err
     this.token = token
@@ -28,7 +26,7 @@ abstract class LiquidError {
 
     captureStack.call(obj)
     const err = this.originalError
-    const context = mkContext(this.input, this.line)
+    const context = mkContext(this.input, this.token.line)
     this.message = mkMessage(err.message, this.token)
     this.stack = this.message + '\n' + context +
       '\n' + (this.stack || this.message) +
@@ -110,7 +108,7 @@ function mkMessage (msg, token) {
     msg += ', file:' + token.file
   }
   if (token.line) {
-    msg += ', line:' + token.line
+    msg += `, line:${token.line}, col:${token.col}`
   }
   return msg
 }
