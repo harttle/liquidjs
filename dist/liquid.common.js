@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.0.2, https://github.com/harttle/liquidjs
+ * liquidjs@7.1.0, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -312,7 +312,6 @@ function captureStack() {
 var LiquidError = /** @class */ (function () {
     function LiquidError(err, token) {
         this.input = token.input;
-        this.line = token.line;
         this.file = token.file;
         this.originalError = err;
         this.token = token;
@@ -321,7 +320,7 @@ var LiquidError = /** @class */ (function () {
         this.name = obj.constructor.name;
         captureStack.call(obj);
         var err = this.originalError;
-        var context = mkContext(this.input, this.line);
+        var context = mkContext(this.input, this.token.line);
         this.message = mkMessage(err.message, this.token);
         this.stack = this.message + '\n' + context +
             '\n' + (this.stack || this.message) +
@@ -402,7 +401,7 @@ function mkMessage(msg, token) {
         msg += ', file:' + token.file;
     }
     if (token.line) {
-        msg += ', line:' + token.line;
+        msg += ", line:" + token.line + ", col:" + token.col;
     }
     return msg;
 }
@@ -718,7 +717,8 @@ function trimRight(token, greedy) {
 }
 
 var Token = /** @class */ (function () {
-    function Token(raw, pos, input, file, line) {
+    function Token(raw, col, input, file, line) {
+        this.col = col;
         this.line = line;
         this.raw = raw;
         this.input = input;
@@ -790,20 +790,25 @@ var Tokenizer = /** @class */ (function () {
     Tokenizer.prototype.tokenize = function (input, file) {
         var tokens = [];
         var p = 0;
-        var line = 1;
+        var curLine = 1;
         var state = ParseState.HTML;
         var buffer = '';
-        var bufferBegin = 0;
+        var lineBegin = 0;
+        var line = 1;
+        var col = 1;
         while (p < input.length) {
-            if (input[p] === '\n')
-                line++;
+            if (input[p] === '\n') {
+                curLine++;
+                lineBegin = p + 1;
+            }
             var bin = input.substr(p, 2);
             if (state === ParseState.HTML) {
                 if (bin === '{{' || bin === '{%') {
                     if (buffer)
-                        tokens.push(new HTMLToken(buffer, bufferBegin, input, file, line));
+                        tokens.push(new HTMLToken(buffer, col, input, file, line));
                     buffer = bin;
-                    bufferBegin = p;
+                    line = curLine;
+                    col = p - lineBegin + 1;
                     p += 2;
                     state = bin === '{{' ? ParseState.OUTPUT : ParseState.TAG;
                     continue;
@@ -811,26 +816,33 @@ var Tokenizer = /** @class */ (function () {
             }
             else if (state === ParseState.OUTPUT && bin === '}}') {
                 buffer += '}}';
-                tokens.push(new OutputToken(buffer, bufferBegin, input, file, line));
+                tokens.push(new OutputToken(buffer, col, input, file, line));
                 p += 2;
                 buffer = '';
-                bufferBegin = p;
+                line = curLine;
+                col = p - lineBegin + 1;
                 state = ParseState.HTML;
                 continue;
             }
             else if (bin === '%}') {
                 buffer += '%}';
-                tokens.push(new TagToken(buffer, bufferBegin, input, file, line));
+                tokens.push(new TagToken(buffer, col, input, file, line));
                 p += 2;
                 buffer = '';
-                bufferBegin = p;
+                line = curLine;
+                col = p - lineBegin + 1;
                 state = ParseState.HTML;
                 continue;
             }
             buffer += input[p++];
         }
+        if (state !== ParseState.HTML) {
+            var t = state === ParseState.OUTPUT ? 'output' : 'tag';
+            var str = buffer.length > 16 ? buffer.slice(0, 13) + '...' : buffer;
+            throw new TokenizationError(new Error(t + " \"" + str + "\" not closed"), new Token(buffer, col, input, file, line));
+        }
         if (buffer)
-            tokens.push(new HTMLToken(buffer, bufferBegin, input, file, line));
+            tokens.push(new HTMLToken(buffer, col, input, file, line));
         whiteSpaceCtrl(tokens, this.options);
         return tokens;
     };

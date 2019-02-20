@@ -2,7 +2,6 @@ declare abstract class LiquidError {
     name: string;
     message: string;
     stack: string;
-    private line;
     private file;
     private input;
     private token;
