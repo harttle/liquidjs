@@ -19,6 +19,11 @@
     "type": "git",
     "url": "git+https://github.com/harttle/liquidjs.git"
   },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "engines": {
     "node": ">=4.8.7"
   },
