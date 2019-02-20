@@ -15,6 +15,10 @@ export default class Tokenizer {
   }
   tokenize (input: string, file?: string) {
     const tokens = []
+    const tagL = this.options.tag_delimiter_left
+    const tagR = this.options.tag_delimiter_right
+    const outputL = this.options.output_delimiter_left
+    const outputR = this.options.output_delimiter_right
     let p = 0
     let curLine = 1
     let state = ParseState.HTML
@@ -28,30 +32,37 @@ export default class Tokenizer {
         curLine++
         lineBegin = p + 1
       }
-      const bin = input.substr(p, 2)
       if (state === ParseState.HTML) {
-        if (bin === '{{' || bin === '{%') {
+        if (input.substr(p, outputL.length) === outputL) {
           if (buffer) tokens.push(new HTMLToken(buffer, col, input, file, line))
-          buffer = bin
+          buffer = outputL
           line = curLine
           col = p - lineBegin + 1
-          p += 2
-          state = bin === '{{' ? ParseState.OUTPUT : ParseState.TAG
+          p += outputL.length
+          state = ParseState.OUTPUT
+          continue
+        } else if (input.substr(p, tagL.length) === tagL) {
+          if (buffer) tokens.push(new HTMLToken(buffer, col, input, file, line))
+          buffer = tagL
+          line = curLine
+          col = p - lineBegin + 1
+          p += tagL.length
+          state = ParseState.TAG
           continue
         }
-      } else if (state === ParseState.OUTPUT && bin === '}}') {
-        buffer += '}}'
-        tokens.push(new OutputToken(buffer, col, input, file, line))
-        p += 2
+      } else if (state === ParseState.OUTPUT && input.substr(p, outputR.length) === outputR) {
+        buffer += outputR
+        tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), col, input, file, line))
+        p += outputR.length
         buffer = ''
         line = curLine
         col = p - lineBegin + 1
         state = ParseState.HTML
         continue
-      } else if (bin === '%}') {
-        buffer += '%}'
-        tokens.push(new TagToken(buffer, col, input, file, line))
-        p += 2
+      } else if (input.substr(p, tagR.length) === tagR) {
+        buffer += tagR
+        tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), col, input, file, line))
+        p += tagR.length
         buffer = ''
         line = curLine
         col = p - lineBegin + 1

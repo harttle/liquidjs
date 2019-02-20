@@ -196,6 +196,10 @@ Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
 * `trim_output_left` is similiar to `trim_output_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
 
+* `tag_delimiter_left` and `tag_delimiter_right` are used to override the delimiter for liquid tags.
+
+* `output_delimiter_left` and `output_delimiter_right` are used to override the delimiter for liquid outputs.
+
 * `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`.
 
 ## Register Filters

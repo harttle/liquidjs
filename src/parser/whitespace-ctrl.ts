@@ -1,9 +1,9 @@
 import DelimitedToken from 'src/parser/delimited-token'
 import Token from 'src/parser/token'
 import TagToken from 'src/parser/tag-token'
-import { LiquidOptions } from 'src/liquid-options'
+import { NormalizedFullOptions } from 'src/liquid-options'
 
-export default function whiteSpaceCtrl (tokens: Token[], options: LiquidOptions) {
+export default function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
   options = { greedy: true, ...options }
   let inRaw = false
 

@@ -23,6 +23,12 @@ export interface LiquidOptions {
   trim_output_right?: boolean
   /** `trim_output_left` is similar to `trim_output_right`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */
   trim_output_left?: boolean
+  /** `tag_delimiter_left` and `tag_delimiter_right` are used to override the delimiter for liquid tags **/
+  tag_delimiter_left?: string,
+  tag_delimiter_right?: string,
+  /** `output_delimiter_left` and `output_delimiter_right` are used to override the delimiter for liquid outputs **/
+  output_delimiter_left?: string,
+  output_delimiter_right?: string,
   /** `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`. */
   greedy?: boolean
 }
@@ -55,6 +61,10 @@ const defaultOptions: NormalizedFullOptions = {
   trim_output_right: false,
   trim_output_left: false,
   greedy: true,
+  tag_delimiter_left: '{%',
+  tag_delimiter_right: '%}',
+  output_delimiter_left: '{{',
+  output_delimiter_right: '}}',
   strict_filters: false,
   strict_variables: false
 }
