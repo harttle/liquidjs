@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.0.1, https://github.com/harttle/liquidjs
+ * liquidjs@7.0.2, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
