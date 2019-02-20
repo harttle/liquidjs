@@ -5,6 +5,10 @@
 
 * override output/tag delimiter, fixes [#54](https://github.com/harttle/liquidjs/issues/54) ([d20a043](https://github.com/harttle/liquidjs/commit/d20a043))
 
+### BREAKING CHANGES
+
+`trim_value_left` option renamed to `trim_output_left`, `trim_value_right` option renamed to `trim_output_right`
+
 # [7.1.0](https://github.com/harttle/liquidjs/compare/v7.0.2...v7.1.0) (2019-02-20)
 
 
