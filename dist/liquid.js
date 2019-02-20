@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.1.0, https://github.com/harttle/liquidjs
+ * liquidjs@7.2.0, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -401,6 +401,7 @@
         }
     }
 
+    /* eslint-disable camelcase */
     var defaultOptions = {
         root: ['.'],
         cache: false,
@@ -408,9 +409,13 @@
         dynamicPartials: true,
         trim_tag_right: false,
         trim_tag_left: false,
-        trim_value_right: false,
-        trim_value_left: false,
+        trim_output_right: false,
+        trim_output_left: false,
         greedy: true,
+        tag_delimiter_left: '{%',
+        tag_delimiter_right: '%}',
+        output_delimiter_left: '{{',
+        output_delimiter_right: '}}',
         strict_filters: false,
         strict_variables: false
     };
@@ -420,6 +425,9 @@
             options.root = normalizeStringArray(options.root);
         }
         return options;
+    }
+    function applyDefault(options) {
+        return __assign({}, defaultOptions, options);
     }
     function normalizeStringArray(value) {
         if (isArray(value))
@@ -441,10 +449,9 @@
     var Scope = /** @class */ (function () {
         function Scope(ctx, opts) {
             if (ctx === void 0) { ctx = {}; }
-            if (opts === void 0) { opts = defaultOptions; }
             this.blocks = {};
             this.blockMode = BlockMode$1.OUTPUT;
-            this.opts = __assign({}, defaultOptions, opts);
+            this.opts = applyDefault(opts);
             this.contexts = [ctx || {}];
         }
         Scope.prototype.getAll = function () {
@@ -718,7 +725,7 @@
         if (token.type === 'tag')
             return token.trimLeft || options.trim_tag_left;
         if (token.type === 'output')
-            return token.trimLeft || options.trim_value_left;
+            return token.trimLeft || options.trim_output_left;
     }
     function shouldTrimRight(token, inRaw, options) {
         if (inRaw)
@@ -726,7 +733,7 @@
         if (token.type === 'tag')
             return token.trimRight || options.trim_tag_right;
         if (token.type === 'output')
-            return token.trimRight || options.trim_value_right;
+            return token.trimRight || options.trim_output_right;
     }
     function trimLeft(token, greedy) {
         if (!token || token.type !== 'html')
@@ -765,11 +772,13 @@
 
     var DelimitedToken = /** @class */ (function (_super) {
         __extends(DelimitedToken, _super);
-        function DelimitedToken(raw, pos, input, file, line) {
+        function DelimitedToken(raw, value, pos, input, file, line) {
             var _this = _super.call(this, raw, pos, input, file, line) || this;
-            _this.trimLeft = raw[2] === '-';
-            _this.trimRight = raw[raw.length - 3] === '-';
-            _this.value = raw.slice(_this.trimLeft ? 3 : 2, _this.trimRight ? -3 : -2).trim();
+            _this.trimLeft = value[0] === '-';
+            _this.trimRight = value[value.length - 1] === '-';
+            _this.value = value
+                .slice(_this.trimLeft ? 1 : 0, _this.trimRight ? -1 : value.length)
+                .trim();
             return _this;
         }
         return DelimitedToken;
@@ -777,8 +786,8 @@
 
     var TagToken = /** @class */ (function (_super) {
         __extends(TagToken, _super);
-        function TagToken(raw, pos, input, file, line) {
-            var _this = _super.call(this, raw, pos, input, file, line) || this;
+        function TagToken(raw, value$$1, pos, input, file, line) {
+            var _this = _super.call(this, raw, value$$1, pos, input, file, line) || this;
             _this.type = 'tag';
             var match = _this.value.match(tagLine);
             if (!match) {
@@ -793,8 +802,8 @@
 
     var OutputToken = /** @class */ (function (_super) {
         __extends(OutputToken, _super);
-        function OutputToken(raw, pos, input, file, line) {
-            var _this = _super.call(this, raw, pos, input, file, line) || this;
+        function OutputToken(raw, value, pos, input, file, line) {
+            var _this = _super.call(this, raw, value, pos, input, file, line) || this;
             _this.type = 'output';
             return _this;
         }
@@ -809,11 +818,14 @@
     })(ParseState || (ParseState = {}));
     var Tokenizer = /** @class */ (function () {
         function Tokenizer(options) {
-            if (options === void 0) { options = defaultOptions; }
-            this.options = options;
+            this.options = applyDefault(options);
         }
         Tokenizer.prototype.tokenize = function (input, file) {
             var tokens = [];
+            var tagL = this.options.tag_delimiter_left;
+            var tagR = this.options.tag_delimiter_right;
+            var outputL = this.options.output_delimiter_left;
+            var outputR = this.options.output_delimiter_right;
             var p = 0;
             var curLine = 1;
             var state = ParseState.HTML;
@@ -826,33 +838,42 @@
                     curLine++;
                     lineBegin = p + 1;
                 }
-                var bin = input.substr(p, 2);
                 if (state === ParseState.HTML) {
-                    if (bin === '{{' || bin === '{%') {
+                    if (input.substr(p, outputL.length) === outputL) {
                         if (buffer)
                             tokens.push(new HTMLToken(buffer, col, input, file, line));
-                        buffer = bin;
+                        buffer = outputL;
                         line = curLine;
                         col = p - lineBegin + 1;
-                        p += 2;
-                        state = bin === '{{' ? ParseState.OUTPUT : ParseState.TAG;
+                        p += outputL.length;
+                        state = ParseState.OUTPUT;
+                        continue;
+                    }
+                    else if (input.substr(p, tagL.length) === tagL) {
+                        if (buffer)
+                            tokens.push(new HTMLToken(buffer, col, input, file, line));
+                        buffer = tagL;
+                        line = curLine;
+                        col = p - lineBegin + 1;
+                        p += tagL.length;
+                        state = ParseState.TAG;
                         continue;
                     }
                 }
-                else if (state === ParseState.OUTPUT && bin === '}}') {
-                    buffer += '}}';
-                    tokens.push(new OutputToken(buffer, col, input, file, line));
-                    p += 2;
+                else if (state === ParseState.OUTPUT && input.substr(p, outputR.length) === outputR) {
+                    buffer += outputR;
+                    tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), col, input, file, line));
+                    p += outputR.length;
                     buffer = '';
                     line = curLine;
                     col = p - lineBegin + 1;
                     state = ParseState.HTML;
                     continue;
                 }
-                else if (bin === '%}') {
-                    buffer += '%}';
-                    tokens.push(new TagToken(buffer, col, input, file, line));
-                    p += 2;
+                else if (input.substr(p, tagR.length) === tagR) {
+                    buffer += tagR;
+                    tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), col, input, file, line));
+                    p += tagR.length;
                     buffer = '';
                     line = curLine;
                     col = p - lineBegin + 1;
@@ -2176,11 +2197,10 @@
         function Liquid(opts) {
             if (opts === void 0) { opts = {}; }
             var _this = this;
-            var options = __assign({}, defaultOptions, normalize(opts));
-            if (options.cache) {
+            this.options = applyDefault(normalize(opts));
+            if (this.options.cache) {
                 this.cache = {};
             }
-            this.options = options;
             this.parser = new Parser(this);
             this.renderer = new Render();
             this.tokenizer = new Tokenizer(this.options);

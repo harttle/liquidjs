@@ -1,6 +1,6 @@
-import { LiquidOptions } from 'src/liquid-options';
+import { NormalizedFullOptions } from '../liquid-options';
 export default class Tokenizer {
-    options: LiquidOptions;
-    constructor(options?: LiquidOptions);
+    options: NormalizedFullOptions;
+    constructor(options?: NormalizedFullOptions);
     tokenize(input: string, file?: string): any[];
 }

@@ -15,15 +15,34 @@ export interface LiquidOptions {
     trim_tag_right?: boolean;
     /** `trim_tag_left` is similar to `trim_tag_right`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */
     trim_tag_left?: boolean;
-    /** ``trim_value_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of values (`{{ }}`) until `\n` (inclusive). Defaults to `false`. */
-    trim_value_right?: boolean;
-    /** `trim_value_left` is similar to `trim_value_right`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */
-    trim_value_left?: boolean;
+    /** ``trim_output_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of values (`{{ }}`) until `\n` (inclusive). Defaults to `false`. */
+    trim_output_right?: boolean;
+    /** `trim_output_left` is similar to `trim_output_right`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */
+    trim_output_left?: boolean;
+    /** `tag_delimiter_left` and `tag_delimiter_right` are used to override the delimiter for liquid tags **/
+    tag_delimiter_left?: string;
+    tag_delimiter_right?: string;
+    /** `output_delimiter_left` and `output_delimiter_right` are used to override the delimiter for liquid outputs **/
+    output_delimiter_left?: string;
+    output_delimiter_right?: string;
     /** `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`. */
     greedy?: boolean;
 }
 export interface NormalizedOptions extends LiquidOptions {
     root?: string[];
 }
-export declare const defaultOptions: NormalizedOptions;
+export interface NormalizedFullOptions extends NormalizedOptions {
+    root: string[];
+    extname: string;
+    cache: boolean;
+    dynamicPartials: boolean;
+    strict_filters: boolean;
+    strict_variables: boolean;
+    trim_tag_right: boolean;
+    trim_tag_left: boolean;
+    trim_output_right: boolean;
+    trim_output_left: boolean;
+    greedy: boolean;
+}
 export declare function normalize(options: LiquidOptions): NormalizedOptions;
+export declare function applyDefault(options: NormalizedOptions): NormalizedFullOptions;

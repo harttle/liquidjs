@@ -3,9 +3,9 @@ import * as Types from './types';
 import ITemplate from './template/itemplate';
 import ITagImplOptions from './template/tag/itag-impl-options';
 import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax';
-import { LiquidOptions, NormalizedOptions } from './liquid-options';
+import { LiquidOptions, NormalizedFullOptions } from './liquid-options';
 export default class Liquid {
-    options: NormalizedOptions;
+    options: NormalizedFullOptions;
     private cache;
     private parser;
     private renderer;

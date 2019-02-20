@@ -1,11 +1,11 @@
-import { NormalizedOptions } from '../liquid-options';
+import { NormalizedFullOptions } from '../liquid-options';
 import BlockMode from './block-mode';
 export default class Scope {
-    opts: NormalizedOptions;
+    opts: NormalizedFullOptions;
     contexts: Array<object>;
     blocks: object;
     blockMode: BlockMode;
-    constructor(ctx?: object, opts?: NormalizedOptions);
+    constructor(ctx?: object, opts?: NormalizedFullOptions);
     getAll(): object;
     get(path: string): any;
     set(path: string, v: any): void;
