@@ -22,18 +22,18 @@ describe('LiquidOptions#trimming', function () {
     })
   })
   describe('value trimming', function () {
-    it('should respect trim_value_left', async function () {
-      const engine = new Liquid({ trim_value_left: true })
+    it('should respect trim_output_left', async function () {
+      const engine = new Liquid({ trim_output_left: true })
       const html = await engine.parseAndRender(' \n \t{{name}} ', ctx)
       return expect(html).to.equal('harttle ')
     })
-    it('should respect trim_value_right', async function () {
-      const engine = new Liquid({ trim_value_right: true })
+    it('should respect trim_output_right', async function () {
+      const engine = new Liquid({ trim_output_right: true })
       const html = await engine.parseAndRender(' \n \t{{name}} ', ctx)
       return expect(html).to.equal(' \n \tharttle')
     })
     it('should respect not trim tag', async function () {
-      const engine = new Liquid({ trim_value_left: true, trim_value_right: true })
+      const engine = new Liquid({ trim_output_left: true, trim_output_right: true })
       const html = await engine.parseAndRender('\t{% if true %} aha {%endif%}\t')
       return expect(html).to.equal('\t aha \t')
     })

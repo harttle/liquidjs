@@ -13,21 +13,20 @@ import Value from './template/value'
 import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax'
 import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
-import { LiquidOptions, NormalizedOptions, defaultOptions, normalize } from './liquid-options'
+import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 
 export default class Liquid {
-  public options: NormalizedOptions
+  public options: NormalizedFullOptions
   private cache: object
   private parser: Parser
   private renderer: Render
   private tokenizer: Tokenizer
 
   constructor (opts: LiquidOptions = {}) {
-    const options = { ...defaultOptions, ...normalize(opts) }
-    if (options.cache) {
+    this.options = applyDefault(normalize(opts))
+    if (this.options.cache) {
       this.cache = {}
     }
-    this.options = options
     this.parser = new Parser(this)
     this.renderer = new Render()
     this.tokenizer = new Tokenizer(this.options)

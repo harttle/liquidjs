@@ -173,7 +173,7 @@ describe('scope', function () {
     beforeEach(function () {
       scope = new Scope(ctx, {
         strict_variables: true
-      })
+      } as any)
     })
     it('should throw when variable not defined', function () {
       function fn () {

@@ -24,13 +24,13 @@ export default function whiteSpaceCtrl (tokens: Token[], options: LiquidOptions)
 function shouldTrimLeft (token: DelimitedToken, inRaw: boolean, options) {
   if (inRaw) return false
   if (token.type === 'tag') return token.trimLeft || options.trim_tag_left
-  if (token.type === 'output') return token.trimLeft || options.trim_value_left
+  if (token.type === 'output') return token.trimLeft || options.trim_output_left
 }
 
 function shouldTrimRight (token: DelimitedToken, inRaw: boolean, options) {
   if (inRaw) return false
   if (token.type === 'tag') return token.trimRight || options.trim_tag_right
-  if (token.type === 'output') return token.trimRight || options.trim_value_right
+  if (token.type === 'output') return token.trimRight || options.trim_output_right
 }
 
 function trimLeft (token: Token, greedy: boolean) {

@@ -4,14 +4,14 @@ import TagToken from './tag-token'
 import Token from './token'
 import OutputToken from './output-token'
 import { TokenizationError } from 'src/util/error'
-import { LiquidOptions, defaultOptions } from 'src/liquid-options'
+import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 
 enum ParseState { HTML, OUTPUT, TAG }
 
 export default class Tokenizer {
-  options: LiquidOptions
-  constructor (options: LiquidOptions = defaultOptions) {
-    this.options = options
+  options: NormalizedFullOptions
+  constructor (options?: NormalizedFullOptions) {
+    this.options = applyDefault(options)
   }
   tokenize (input: string, file?: string) {
     const tokens = []

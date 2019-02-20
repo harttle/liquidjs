@@ -1,16 +1,16 @@
 import * as _ from '../util/underscore'
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
-import { NormalizedOptions, defaultOptions } from '../liquid-options'
+import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
 
 export default class Scope {
-  opts: NormalizedOptions
+  opts: NormalizedFullOptions
   contexts: Array<object>
   blocks: object = {}
   blockMode: BlockMode = BlockMode.OUTPUT
-  constructor (ctx: object = {}, opts: NormalizedOptions = defaultOptions) {
-    this.opts = { ...defaultOptions, ...opts }
+  constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
+    this.opts = applyDefault(opts)
     this.contexts = [ctx || {}]
   }
   getAll () {
