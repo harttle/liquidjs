@@ -1,3 +1,4 @@
+import Scope from 'src/scope/scope';
 /**
  * Key-Value Pairs Representing Tag Arguments
  * Example:
@@ -6,5 +7,5 @@
  */
 export default class Hash {
     [key: string]: any;
-    constructor(markup: any, scope: any);
+    constructor(markup: string, scope: Scope);
 }

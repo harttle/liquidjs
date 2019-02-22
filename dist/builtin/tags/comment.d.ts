@@ -1,4 +1,3 @@
-declare const _default: {
-    parse: (tagToken: any, remainTokens: any) => void;
-};
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
+declare const _default: ITagImplOptions;
 export default _default;

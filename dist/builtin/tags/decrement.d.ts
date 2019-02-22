@@ -1,7 +1,3 @@
-import TagToken from 'src/parser/tag-token';
-import Scope from 'src/scope/scope';
-declare const _default: {
-    parse: (token: TagToken) => void;
-    render: (scope: Scope) => number;
-};
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
+declare const _default: ITagImplOptions;
 export default _default;

@@ -1,20 +1,5 @@
+import { FilterImpl } from 'src/template/filter/filter-impl';
 declare const _default: {
-    'append': (v: any, arg: any) => any;
-    'prepend': (v: any, arg: any) => any;
-    'capitalize': (str: any) => string;
-    'concat': (v: any, arg: any) => any;
-    'lstrip': (v: any) => string;
-    'downcase': (v: any) => any;
-    'upcase': (str: any) => string;
-    'remove': (v: any, arg: any) => any;
-    'remove_first': (v: any, l: any) => any;
-    'replace': (v: any, pattern: any, replacement: any) => string;
-    'replace_first': (v: any, arg1: any, arg2: any) => string;
-    'rstrip': (str: any) => string;
-    'split': (v: any, arg: any) => string[];
-    'strip': (v: any) => string;
-    'strip_newlines': (v: any) => string;
-    'truncate': (v: any, l: any, o: any) => any;
-    'truncatewords': (v: any, l: any, o: any) => any;
+    [key: string]: FilterImpl;
 };
 export default _default;

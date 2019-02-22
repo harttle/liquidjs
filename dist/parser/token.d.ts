@@ -4,7 +4,7 @@ export default class Token {
     col: number;
     raw: string;
     input: string;
-    file: string;
+    file?: string;
     value: string;
-    constructor(raw: any, col: any, input: any, file: any, line: any);
+    constructor(raw: string, input: string, line: number, col: number, file?: string);
 }

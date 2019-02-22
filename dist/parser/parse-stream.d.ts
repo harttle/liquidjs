@@ -1,15 +1,14 @@
 import Token from 'src/parser/token';
 import ITemplate from 'src/template/itemplate';
-declare type parseToken = (token: Token, remainTokens: Array<Token>) => ITemplate;
-declare type eventHandler = ((arg?: Token | ITemplate) => void);
+declare type ParseToken = ((token: Token, remainTokens: Array<Token>) => ITemplate);
 export default class ParseStream {
     private tokens;
     private handlers;
     private stopRequested;
     private parseToken;
-    constructor(tokens: Array<Token>, parseToken: parseToken);
-    on(name: string, cb: eventHandler): this;
-    trigger(event: string, arg?: Token | ITemplate): boolean;
+    constructor(tokens: Array<Token>, parseToken: ParseToken);
+    on<T extends ITemplate | Token | undefined>(name: string, cb: (arg: T) => void): ParseStream;
+    trigger<T extends Token | ITemplate>(event: string, arg?: T): boolean;
     start(): this;
     stop(): this;
 }

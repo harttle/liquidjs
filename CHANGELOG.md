@@ -1,3 +1,10 @@
+## [7.2.1](https://github.com/harttle/liquidjs/compare/v7.2.0...v7.2.1) (2019-02-22)
+
+
+### Bug Fixes
+
+* default length for truncate and truncatewords ([56c7992](https://github.com/harttle/liquidjs/commit/56c7992))
+
 # [7.2.0](https://github.com/harttle/liquidjs/compare/v7.1.0...v7.2.0) (2019-02-20)
 
 

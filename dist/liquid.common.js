@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.2.0, https://github.com/harttle/liquidjs
+ * liquidjs@7.2.1, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -166,32 +166,6 @@ function forOwn(object, iteratee) {
     }
     return object;
 }
-/*
- * Assigns own enumerable string keyed properties of source objects to the destination object.
- * Source objects are applied from left to right.
- * Subsequent sources overwrite property assignments of previous sources.
- *
- * Note: This method mutates object and is loosely based on Object.assign.
- *
- * @param {Object} object The destination object.
- * @param {...Object} sources The source objects.
- * @return {Object} Returns object.
- */
-function assign(obj) {
-    var srcs = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        srcs[_i - 1] = arguments[_i];
-    }
-    obj = isObject(obj) ? obj : {};
-    srcs.forEach(function (src) { return binaryAssign(obj, src); });
-    return obj;
-}
-function binaryAssign(target, src) {
-    for (var key in src)
-        if (src.hasOwnProperty(key))
-            target[key] = src[key];
-    return target;
-}
 function last(arr) {
     return arr[arr.length - 1];
 }
@@ -214,7 +188,7 @@ function isObject(value) {
  * negative — if you'd like a negative range, use a negative step.
  */
 function range(start, stop, step) {
-    if (arguments.length === 1) {
+    if (stop === undefined) {
         stop = start;
         start = 0;
     }
@@ -241,7 +215,7 @@ var quoted = new RegExp(singleQuoted.source + "|" + doubleQuoted.source);
 var quoteBalanced = new RegExp("(?:" + quoted.source + "|[^'\"])*");
 // basic types
 var integer = /-?\d+/;
-var number = /-?\d+\.?\d*|\.?\d+/;
+var number = /[+-]?(?:\d+\.?\d*|\.?\d+)/;
 var bool = /true|false/;
 // property access
 var identifier = /[\w-]+[?]?/;
@@ -304,90 +278,83 @@ function parseLiteral(str) {
     throw new TypeError("cannot parse '" + str + "' as literal");
 }
 
-function captureStack() {
-    if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-    }
-}
-var LiquidError = /** @class */ (function () {
+var LiquidError = /** @class */ (function (_super) {
+    __extends(LiquidError, _super);
     function LiquidError(err, token) {
-        this.input = token.input;
-        this.file = token.file;
-        this.originalError = err;
-        this.token = token;
+        var _this = _super.call(this, err.message) || this;
+        _this.originalError = err;
+        _this.token = token;
+        return _this;
     }
-    LiquidError.prototype.captureStackTrace = function (obj) {
-        this.name = obj.constructor.name;
-        captureStack.call(obj);
+    LiquidError.prototype.update = function () {
         var err = this.originalError;
-        var context = mkContext(this.input, this.token.line);
+        var context = mkContext(this.token);
         this.message = mkMessage(err.message, this.token);
         this.stack = this.message + '\n' + context +
-            '\n' + (this.stack || this.message) +
-            (err.stack ? '\nFrom ' + err.stack : '');
+            '\n' + this.stack + '\nFrom ' + err.stack;
     };
     return LiquidError;
-}());
+}(Error));
 var TokenizationError = /** @class */ (function (_super) {
     __extends(TokenizationError, _super);
     function TokenizationError(message, token) {
-        var _this = _super.call(this, { message: message }, token) || this;
-        _super.prototype.captureStackTrace.call(_this, _this);
+        var _this = _super.call(this, new Error(message), token) || this;
+        _this.name = 'TokenizationError';
+        _super.prototype.update.call(_this);
         return _this;
     }
     return TokenizationError;
 }(LiquidError));
-TokenizationError.prototype = create(Error.prototype);
-TokenizationError.prototype.constructor = TokenizationError;
 var ParseError = /** @class */ (function (_super) {
     __extends(ParseError, _super);
     function ParseError(err, token) {
         var _this = _super.call(this, err, token) || this;
+        _this.name = 'ParseError';
         _this.message = err.message;
-        _super.prototype.captureStackTrace.call(_this, _this);
+        _super.prototype.update.call(_this);
         return _this;
     }
     return ParseError;
 }(LiquidError));
-ParseError.prototype = create(Error.prototype);
-ParseError.prototype.constructor = ParseError;
 var RenderError = /** @class */ (function (_super) {
     __extends(RenderError, _super);
     function RenderError(err, tpl) {
         var _this = _super.call(this, err, tpl.token) || this;
+        _this.name = 'RenderError';
         _this.message = err.message;
-        _super.prototype.captureStackTrace.call(_this, _this);
+        _super.prototype.update.call(_this);
         return _this;
     }
     return RenderError;
 }(LiquidError));
-RenderError.prototype = create(Error.prototype);
-RenderError.prototype.constructor = RenderError;
-var RenderBreakError = /** @class */ (function () {
+var RenderBreakError = /** @class */ (function (_super) {
+    __extends(RenderBreakError, _super);
     function RenderBreakError(message) {
-        captureStack.call(this);
-        this.message = message + '';
+        var _this = _super.call(this, message) || this;
+        _this.resolvedHTML = '';
+        _this.name = 'RenderBreakError';
+        _this.message = message + '';
+        return _this;
     }
     return RenderBreakError;
-}());
-RenderBreakError.prototype = create(Error.prototype);
-RenderBreakError.prototype.constructor = RenderBreakError;
-var AssertionError = /** @class */ (function () {
+}(Error));
+var AssertionError = /** @class */ (function (_super) {
+    __extends(AssertionError, _super);
     function AssertionError(message) {
-        captureStack.call(this);
-        this.message = message + '';
+        var _this = _super.call(this, message) || this;
+        _this.name = 'AssertionError';
+        _this.message = message + '';
+        return _this;
     }
     return AssertionError;
-}());
-AssertionError.prototype = create(Error.prototype);
-AssertionError.prototype.constructor = AssertionError;
-function mkContext(input, targetLine) {
-    var lines = input.split('\n');
-    var begin = Math.max(targetLine - 2, 1);
-    var end = Math.min(targetLine + 3, lines.length);
+}(Error));
+function mkContext(token) {
+    var lines = token.input.split('\n');
+    var begin = Math.max(token.line - 2, 1);
+    var end = Math.min(token.line + 3, lines.length);
     var context = range(begin, end + 1)
         .map(function (lineNumber) {
-        var indicator = (lineNumber === targetLine) ? '>> ' : '   ';
+        var indicator = (lineNumber === token.line) ? '>> ' : '   ';
         var num = padStart(String(lineNumber), String(end).length);
         var text = lines[lineNumber - 1];
         return "" + indicator + num + "| " + text;
@@ -396,13 +363,9 @@ function mkContext(input, targetLine) {
     return context;
 }
 function mkMessage(msg, token) {
-    msg = msg || '';
-    if (token.file) {
-        msg += ', file:' + token.file;
-    }
-    if (token.line) {
-        msg += ", line:" + token.line + ", col:" + token.col;
-    }
+    if (token.file)
+        msg += ", file:" + token.file;
+    msg += ", line:" + token.line + ", col:" + token.col;
     return msg;
 }
 
@@ -462,12 +425,13 @@ var Scope = /** @class */ (function () {
     function Scope(ctx, opts) {
         if (ctx === void 0) { ctx = {}; }
         this.blocks = {};
+        this.groups = {};
         this.blockMode = BlockMode$1.OUTPUT;
         this.opts = applyDefault(opts);
         this.contexts = [ctx || {}];
     }
     Scope.prototype.getAll = function () {
-        return this.contexts.reduce(function (ctx, val) { return assign(ctx, val); }, create(null));
+        return this.contexts.reduce(function (ctx, val) { return __assign(ctx, val); }, {});
     };
     Scope.prototype.get = function (path$$1) {
         var _this = this;
@@ -490,6 +454,7 @@ var Scope = /** @class */ (function () {
                 scope[key] = {};
             }
             scope = scope[key];
+            return false;
         });
     };
     Scope.prototype.unshift = function (ctx) {
@@ -724,10 +689,12 @@ function trimRight(token, greedy) {
 }
 
 var Token = /** @class */ (function () {
-    function Token(raw, col, input, file, line) {
+    function Token(raw, input, line, col, file) {
+        this.type = 'notset';
         this.col = col;
         this.line = line;
         this.raw = raw;
+        this.value = raw;
         this.input = input;
         this.file = file;
     }
@@ -736,8 +703,8 @@ var Token = /** @class */ (function () {
 
 var HTMLToken = /** @class */ (function (_super) {
     __extends(HTMLToken, _super);
-    function HTMLToken(str, begin, input, file, line) {
-        var _this = _super.call(this, str, begin, input, file, line) || this;
+    function HTMLToken(str, input, line, col, file) {
+        var _this = _super.call(this, str, input, line, col, file) || this;
         _this.type = 'html';
         _this.value = str;
         return _this;
@@ -747,10 +714,10 @@ var HTMLToken = /** @class */ (function (_super) {
 
 var DelimitedToken = /** @class */ (function (_super) {
     __extends(DelimitedToken, _super);
-    function DelimitedToken(raw, value, pos, input, file, line) {
-        var _this = _super.call(this, raw, pos, input, file, line) || this;
+    function DelimitedToken(raw, value, input, line, pos, file) {
+        var _this = _super.call(this, raw, input, line, pos, file) || this;
         _this.trimLeft = value[0] === '-';
-        _this.trimRight = value[value.length - 1] === '-';
+        _this.trimRight = last(value) === '-';
         _this.value = value
             .slice(_this.trimLeft ? 1 : 0, _this.trimRight ? -1 : value.length)
             .trim();
@@ -761,8 +728,8 @@ var DelimitedToken = /** @class */ (function (_super) {
 
 var TagToken = /** @class */ (function (_super) {
     __extends(TagToken, _super);
-    function TagToken(raw, value$$1, pos, input, file, line) {
-        var _this = _super.call(this, raw, value$$1, pos, input, file, line) || this;
+    function TagToken(raw, value$$1, input, line, pos, file) {
+        var _this = _super.call(this, raw, value$$1, input, line, pos, file) || this;
         _this.type = 'tag';
         var match = _this.value.match(tagLine);
         if (!match) {
@@ -777,8 +744,8 @@ var TagToken = /** @class */ (function (_super) {
 
 var OutputToken = /** @class */ (function (_super) {
     __extends(OutputToken, _super);
-    function OutputToken(raw, value, pos, input, file, line) {
-        var _this = _super.call(this, raw, value, pos, input, file, line) || this;
+    function OutputToken(raw, value, input, line, pos, file) {
+        var _this = _super.call(this, raw, value, input, line, pos, file) || this;
         _this.type = 'output';
         return _this;
     }
@@ -816,7 +783,7 @@ var Tokenizer = /** @class */ (function () {
             if (state === ParseState.HTML) {
                 if (input.substr(p, outputL.length) === outputL) {
                     if (buffer)
-                        tokens.push(new HTMLToken(buffer, col, input, file, line));
+                        tokens.push(new HTMLToken(buffer, input, line, col, file));
                     buffer = outputL;
                     line = curLine;
                     col = p - lineBegin + 1;
@@ -826,7 +793,7 @@ var Tokenizer = /** @class */ (function () {
                 }
                 else if (input.substr(p, tagL.length) === tagL) {
                     if (buffer)
-                        tokens.push(new HTMLToken(buffer, col, input, file, line));
+                        tokens.push(new HTMLToken(buffer, input, line, col, file));
                     buffer = tagL;
                     line = curLine;
                     col = p - lineBegin + 1;
@@ -837,7 +804,7 @@ var Tokenizer = /** @class */ (function () {
             }
             else if (state === ParseState.OUTPUT && input.substr(p, outputR.length) === outputR) {
                 buffer += outputR;
-                tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), col, input, file, line));
+                tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), input, line, col, file));
                 p += outputR.length;
                 buffer = '';
                 line = curLine;
@@ -847,7 +814,7 @@ var Tokenizer = /** @class */ (function () {
             }
             else if (input.substr(p, tagR.length) === tagR) {
                 buffer += tagR;
-                tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), col, input, file, line));
+                tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), input, line, col, file));
                 p += tagR.length;
                 buffer = '';
                 line = curLine;
@@ -860,10 +827,10 @@ var Tokenizer = /** @class */ (function () {
         if (state !== ParseState.HTML) {
             var t = state === ParseState.OUTPUT ? 'output' : 'tag';
             var str = buffer.length > 16 ? buffer.slice(0, 13) + '...' : buffer;
-            throw new TokenizationError(new Error(t + " \"" + str + "\" not closed"), new Token(buffer, col, input, file, line));
+            throw new TokenizationError(t + " \"" + str + "\" not closed", new Token(buffer, input, line, col, file));
         }
         if (buffer)
-            tokens.push(new HTMLToken(buffer, col, input, file, line));
+            tokens.push(new HTMLToken(buffer, input, line, col, file));
         whiteSpaceCtrl(tokens, this.options);
         return tokens;
     };
@@ -896,11 +863,11 @@ var Render = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 4:
                         e_1 = _b.sent();
-                        if (e_1 instanceof RenderBreakError) {
+                        if (e_1.name === 'RenderBreakError') {
                             e_1.resolvedHTML = html;
                             throw e_1;
                         }
-                        throw e_1 instanceof RenderError ? e_1 : new RenderError(e_1, tpl);
+                        throw e_1.name === 'RenderError' ? e_1 : new RenderError(e_1, tpl);
                     case 5:
                         _i++;
                         return [3 /*break*/, 1];
@@ -946,11 +913,7 @@ function evalExp(exp, scope) {
     if ((match = exp.match(rangeLine))) {
         var low = evalValue(match[1], scope);
         var high = evalValue(match[2], scope);
-        var range = [];
-        for (var j = low; j <= high; j++) {
-            range.push(j);
-        }
-        return range;
+        return range(low, high + 1);
     }
     return evalValue(exp, scope);
 }
@@ -1071,8 +1034,7 @@ var Filter = /** @class */ (function () {
     };
     Filter.prototype.render = function (value$$1, scope) {
         var args = this.args.map(function (arg) { return evalValue(arg, scope); });
-        args.unshift(value$$1);
-        return this.impl.apply(null, args);
+        return this.impl.apply(null, [value$$1].concat(args));
     };
     Filter.register = function (name, filter$$1) {
         Filter.impls[name] = filter$$1;
@@ -1087,6 +1049,7 @@ var Filter = /** @class */ (function () {
 var ParseStream = /** @class */ (function () {
     function ParseStream(tokens, parseToken) {
         this.handlers = {};
+        this.stopRequested = false;
         this.tokens = tokens;
         this.parseToken = parseToken;
     }
@@ -1100,6 +1063,7 @@ var ParseStream = /** @class */ (function () {
             h(arg);
             return true;
         }
+        return false;
     };
     ParseStream.prototype.start = function () {
         this.trigger('start');
@@ -1107,8 +1071,7 @@ var ParseStream = /** @class */ (function () {
         while (!this.stopRequested && (token = this.tokens.shift())) {
             if (this.trigger('token', token))
                 continue;
-            if (token.type === 'tag' &&
-                this.trigger("tag:" + token.name, token)) {
+            if (token.type === 'tag' && this.trigger("tag:" + token.name, token)) {
                 continue;
             }
             var template = this.parseToken(token, this.tokens);
@@ -1127,16 +1090,14 @@ var ParseStream = /** @class */ (function () {
 
 var default_1 = /** @class */ (function () {
     function default_1(str, strictFilters) {
+        this.filters = [];
         var match = matchValue(str);
         assert(match, "illegal value string: " + str);
-        var initial = match[0];
+        this.initial = match[0];
         str = str.substr(match.index + match[0].length);
-        var filters = [];
         while ((match = filter.exec(str))) {
-            filters.push([match[0].trim()]);
+            this.filters.push(new Filter(match[0].trim(), strictFilters));
         }
-        this.initial = initial;
-        this.filters = filters.map(function (str) { return new Filter(str, strictFilters); });
     }
     default_1.prototype.value = function (scope) {
         return this.filters.reduce(function (prev, filter$$1) { return filter$$1.render(prev, scope); }, evalExp(this.initial, scope));
@@ -1218,7 +1179,7 @@ var Parser = /** @class */ (function () {
 }());
 
 var re = new RegExp("(" + identifier.source + ")\\s*=([^]*)");
-var assign$1 = {
+var assign = {
     parse: function (token) {
         var match = token.args.match(re);
         assert(match, "illegal token " + token.raw);
@@ -1234,19 +1195,13 @@ var assign$1 = {
 };
 
 /*
- * Call functions in serial until someone resolved.
- * @param iterable the array to iterate with.
- * @param iteratee returns a new promise.
- * The iteratee is invoked with three arguments: (value, index, iterable).
- */
-/*
  * Call functions in serial until someone rejected.
  * @param {Array} iterable the array to iterate with.
  * @param {Array} iteratee returns a new promise.
  * The iteratee is invoked with three arguments: (value, index, iterable).
  */
 function mapSeries(iterable, iteratee) {
-    var ret = Promise.resolve('init');
+    var ret = Promise.resolve(0);
     var result = [];
     iterable.forEach(function (item, idx) {
         ret = ret
@@ -1261,107 +1216,109 @@ var re$1 = new RegExp("^(" + identifier.source + ")\\s+in\\s+" +
     ("(?:\\s+" + hash.source + ")*") +
     "(?:\\s+(reversed))?" +
     ("(?:\\s+" + hash.source + ")*$"));
-function parse(tagToken, remainTokens) {
-    var _this = this;
-    var match = re$1.exec(tagToken.args);
-    assert(match, "illegal tag: " + tagToken.raw);
-    this.variable = match[1];
-    this.collection = match[2];
-    this.reversed = !!match[3];
-    this.templates = [];
-    this.elseTemplates = [];
-    var p;
-    var stream = this.liquid.parser.parseStream(remainTokens)
-        .on('start', function () { return (p = _this.templates); })
-        .on('tag:else', function () { return (p = _this.elseTemplates); })
-        .on('tag:endfor', function () { return stream.stop(); })
-        .on('template', function (tpl) { return p.push(tpl); })
-        .on('end', function () {
-        throw new Error("tag " + tagToken.raw + " not closed");
-    });
-    stream.start();
-}
-function render(scope, hash$$1) {
-    return __awaiter(this, void 0, void 0, function () {
-        var collection, offset, limit, contexts, html, finished;
+var For = {
+    type: 'block',
+    parse: function (tagToken, remainTokens) {
         var _this = this;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    collection = evalExp(this.collection, scope);
-                    if (!isArray(collection)) {
-                        if (isString(collection) && collection.length > 0) {
-                            collection = [collection];
-                        }
-                        else if (isObject(collection)) {
-                            collection = Object.keys(collection).map(function (key) { return [key, collection[key]]; });
-                        }
-                    }
-                    if (!isArray(collection) || !collection.length) {
-                        return [2 /*return*/, this.liquid.renderer.renderTemplates(this.elseTemplates, scope)];
-                    }
-                    offset = hash$$1.offset || 0;
-                    limit = (hash$$1.limit === undefined) ? collection.length : hash$$1.limit;
-                    collection = collection.slice(offset, offset + limit);
-                    if (this.reversed)
-                        collection.reverse();
-                    contexts = collection.map(function (item, i) {
-                        var ctx = {};
-                        ctx[_this.variable] = item;
-                        ctx['forloop'] = {
-                            first: i === 0,
-                            index: i + 1,
-                            index0: i,
-                            last: i === collection.length - 1,
-                            length: collection.length,
-                            rindex: collection.length - i,
-                            rindex0: collection.length - i - 1
-                        };
-                        return ctx;
-                    });
-                    html = '';
-                    finished = false;
-                    return [4 /*yield*/, mapSeries(contexts, function (context) { return __awaiter(_this, void 0, void 0, function () {
-                            var _a, e_1;
-                            return __generator(this, function (_b) {
-                                switch (_b.label) {
-                                    case 0:
-                                        if (finished)
-                                            return [2 /*return*/];
-                                        scope.push(context);
-                                        _b.label = 1;
-                                    case 1:
-                                        _b.trys.push([1, 3, , 4]);
-                                        _a = html;
-                                        return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.templates, scope)];
-                                    case 2:
-                                        html = _a + _b.sent();
-                                        return [3 /*break*/, 4];
-                                    case 3:
-                                        e_1 = _b.sent();
-                                        if (e_1 instanceof RenderBreakError) {
-                                            html += e_1.resolvedHTML;
-                                            if (e_1.message === 'break') {
-                                                finished = true;
-                                            }
-                                        }
-                                        else
-                                            throw e_1;
-                                        return [3 /*break*/, 4];
-                                    case 4:
-                                        scope.pop(context);
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); })];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/, html];
-            }
+        var match = re$1.exec(tagToken.args);
+        assert(match, "illegal tag: " + tagToken.raw);
+        this.variable = match[1];
+        this.collection = match[2];
+        this.reversed = !!match[3];
+        this.templates = [];
+        this.elseTemplates = [];
+        var p;
+        var stream = this.liquid.parser.parseStream(remainTokens)
+            .on('start', function () { return (p = _this.templates); })
+            .on('tag:else', function () { return (p = _this.elseTemplates); })
+            .on('tag:endfor', function () { return stream.stop(); })
+            .on('template', function (tpl) { return p.push(tpl); })
+            .on('end', function () {
+            throw new Error("tag " + tagToken.raw + " not closed");
         });
-    });
-}
-var For = { parse: parse, render: render };
+        stream.start();
+    },
+    render: function (scope, hash$$1) {
+        return __awaiter(this, void 0, void 0, function () {
+            var collection, offset, limit, contexts, html, finished;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        collection = evalExp(this.collection, scope);
+                        if (!isArray(collection)) {
+                            if (isString(collection) && collection.length > 0) {
+                                collection = [collection];
+                            }
+                            else if (isObject(collection)) {
+                                collection = Object.keys(collection).map(function (key) { return [key, collection[key]]; });
+                            }
+                        }
+                        if (!isArray(collection) || !collection.length) {
+                            return [2 /*return*/, this.liquid.renderer.renderTemplates(this.elseTemplates, scope)];
+                        }
+                        offset = hash$$1.offset || 0;
+                        limit = (hash$$1.limit === undefined) ? collection.length : hash$$1.limit;
+                        collection = collection.slice(offset, offset + limit);
+                        if (this.reversed)
+                            collection.reverse();
+                        contexts = collection.map(function (item, i) {
+                            var ctx = {};
+                            ctx[_this.variable] = item;
+                            ctx['forloop'] = {
+                                first: i === 0,
+                                index: i + 1,
+                                index0: i,
+                                last: i === collection.length - 1,
+                                length: collection.length,
+                                rindex: collection.length - i,
+                                rindex0: collection.length - i - 1
+                            };
+                            return ctx;
+                        });
+                        html = '';
+                        finished = false;
+                        return [4 /*yield*/, mapSeries(contexts, function (context) { return __awaiter(_this, void 0, void 0, function () {
+                                var _a, e_1;
+                                return __generator(this, function (_b) {
+                                    switch (_b.label) {
+                                        case 0:
+                                            if (finished)
+                                                return [2 /*return*/];
+                                            scope.push(context);
+                                            _b.label = 1;
+                                        case 1:
+                                            _b.trys.push([1, 3, , 4]);
+                                            _a = html;
+                                            return [4 /*yield*/, this.liquid.renderer.renderTemplates(this.templates, scope)];
+                                        case 2:
+                                            html = _a + _b.sent();
+                                            return [3 /*break*/, 4];
+                                        case 3:
+                                            e_1 = _b.sent();
+                                            if (e_1.name === 'RenderBreakError') {
+                                                html += e_1.resolvedHTML;
+                                                if (e_1.message === 'break') {
+                                                    finished = true;
+                                                }
+                                            }
+                                            else
+                                                throw e_1;
+                                            return [3 /*break*/, 4];
+                                        case 4:
+                                            scope.pop(context);
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            }); })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, html];
+                }
+            });
+        });
+    }
+};
 
 var re$2 = new RegExp("(" + identifier.source + ")");
 var capture = {
@@ -1548,7 +1505,7 @@ var cycle = {
     render: function (scope) {
         var group = evalValue(this.group, scope);
         var fingerprint = "cycle:" + group + ":" + this.candidates.join(',');
-        var groups = scope.opts.groups = scope.opts.groups || {};
+        var groups = scope.groups;
         var idx = groups[fingerprint];
         if (idx === undefined) {
             idx = groups[fingerprint] = 0;
@@ -1768,6 +1725,7 @@ var tablerow = {
                             ctx[_this.variable] = item;
                             return ctx;
                         });
+                        row = 0;
                         html = '';
                         return [4 /*yield*/, mapSeries(contexts, function (context, idx) { return __awaiter(_this, void 0, void 0, function () {
                                 var col, _a;
@@ -1854,7 +1812,7 @@ var Continue = {
 };
 
 var tags = {
-    assign: assign$1, 'for': For, capture: capture, 'case': Case, comment: comment, include: include, decrement: decrement, increment: increment, cycle: cycle, 'if': If, layout: layout, block: block, raw: raw, tablerow: tablerow, unless: unless, 'break': Break, 'continue': Continue
+    assign: assign, 'for': For, capture: capture, 'case': Case, comment: comment, include: include, decrement: decrement, increment: increment, cycle: cycle, 'if': If, layout: layout, block: block, raw: raw, tablerow: tablerow, unless: unless, 'break': Break, 'continue': Continue
 };
 
 var escapeMap = {
@@ -1881,14 +1839,13 @@ var html = {
     'escape': escape,
     'escape_once': function (str) { return escape(unescape(str)); },
     'newline_to_br': function (v) { return v.replace(/\n/g, '<br />'); },
-    'strip_html': function (v) { return String(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, ''); }
+    'strip_html': function (v) { return v.replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, ''); }
 };
 
 var str = {
     'append': function (v, arg) { return v + arg; },
     'prepend': function (v, arg) { return arg + v; },
     'capitalize': function (str) { return String(str).charAt(0).toUpperCase() + str.slice(1); },
-    'concat': function (v, arg) { return Array.prototype.concat.call(v, arg); },
     'lstrip': function (v) { return String(v).replace(/^\s+/, ''); },
     'downcase': function (v) { return v.toLowerCase(); },
     'upcase': function (str) { return String(str).toUpperCase(); },
@@ -1903,19 +1860,19 @@ var str = {
     'strip': function (v) { return String(v).trim(); },
     'strip_newlines': function (v) { return String(v).replace(/\n/g, ''); },
     'truncate': function (v, l, o) {
+        if (l === void 0) { l = 50; }
+        if (o === void 0) { o = '...'; }
         v = String(v);
-        o = (o === undefined) ? '...' : o;
-        l = l || 16;
         if (v.length <= l)
             return v;
         return v.substr(0, l - o.length) + o;
     },
     'truncatewords': function (v, l, o) {
-        if (o === undefined)
-            o = '...';
-        var arr = v.split(' ');
+        if (l === void 0) { l = 15; }
+        if (o === void 0) { o = '...'; }
+        var arr = v.split(/\s+/);
         var ret = arr.slice(0, l).join(' ');
-        if (arr.length > l)
+        if (arr.length >= l)
             ret += o;
         return ret;
     }
@@ -1929,7 +1886,8 @@ var math = {
     'minus': bindFixed(function (v, arg) { return v - arg; }),
     'modulo': bindFixed(function (v, arg) { return v % arg; }),
     'round': function (v, arg) {
-        var amp = Math.pow(10, arg || 0);
+        if (arg === void 0) { arg = 0; }
+        var amp = Math.pow(10, arg);
         return Math.round(v * amp) / amp;
     },
     'plus': bindFixed(function (v, arg) { return Number(v) + Number(arg); }),
@@ -1959,6 +1917,7 @@ var array = {
     'reverse': function (v) { return v.reverse(); },
     'sort': function (v, arg) { return v.sort(arg); },
     'size': function (v) { return v.length; },
+    'concat': function (v, arg) { return Array.prototype.concat.call(v, arg); },
     'slice': function (v, begin, length) {
         if (length === undefined)
             length = 1;
@@ -1967,10 +1926,9 @@ var array = {
     'uniq': function (arr) {
         var u = {};
         return (arr || []).filter(function (val) {
-            if (u.hasOwnProperty(val)) {
+            if (u.hasOwnProperty(String(val)))
                 return false;
-            }
-            u[val] = true;
+            u[String(val)] = true;
             return true;
         });
     }
@@ -2142,7 +2100,7 @@ function strftime (d, format) {
         // Add the format code
         var ch = results[0].charAt(1);
         var func = formatCodes[ch];
-        output += func ? func.call(this, d) : '%' + ch;
+        output += func ? func(d) : '%' + ch;
     }
 }
 
@@ -2172,10 +2130,8 @@ var Liquid = /** @class */ (function () {
     function Liquid(opts) {
         if (opts === void 0) { opts = {}; }
         var _this = this;
+        this.cache = {};
         this.options = applyDefault(normalize(opts));
-        if (this.options.cache) {
-            this.cache = {};
-        }
         this.parser = new Parser(this);
         this.renderer = new Render();
         this.tokenizer = new Tokenizer(this.options);

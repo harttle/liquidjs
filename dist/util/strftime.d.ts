@@ -1,1 +1,1 @@
-export default function (d: any, format: any): string;
+export default function (d: Date, format: string): string;

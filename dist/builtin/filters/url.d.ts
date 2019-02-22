@@ -1,5 +1,5 @@
 declare const _default: {
-    'url_decode': (x: any) => any;
-    'url_encode': (x: any) => any;
+    'url_decode': (x: string) => string;
+    'url_encode': (x: string) => string;
 };
 export default _default;

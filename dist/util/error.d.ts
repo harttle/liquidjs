@@ -1,30 +1,25 @@
-declare abstract class LiquidError {
-    name: string;
-    message: string;
-    stack: string;
-    private file;
-    private input;
+import Token from 'src/parser/token';
+import ITemplate from 'src/template/itemplate';
+declare abstract class LiquidError extends Error {
     private token;
     private originalError;
-    constructor(err: any, token: any);
-    captureStackTrace(obj: any): void;
+    constructor(err: Error, token: Token);
+    protected update(): void;
 }
 export declare class TokenizationError extends LiquidError {
-    constructor(message: any, token: any);
+    constructor(message: string, token: Token);
 }
 export declare class ParseError extends LiquidError {
-    constructor(err: any, token: any);
+    constructor(err: Error, token: Token);
 }
 export declare class RenderError extends LiquidError {
-    constructor(err: any, tpl: any);
+    constructor(err: Error, tpl: ITemplate);
 }
-export declare class RenderBreakError {
-    message: string;
+export declare class RenderBreakError extends Error {
     resolvedHTML: string;
-    constructor(message: any);
+    constructor(message: string);
 }
-export declare class AssertionError {
-    message: string;
-    constructor(message: any);
+export declare class AssertionError extends Error {
+    constructor(message: string);
 }
 export {};

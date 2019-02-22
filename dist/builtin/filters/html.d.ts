@@ -1,8 +1,8 @@
-declare function escape(str: any): string;
+declare function escape(str: string): string;
 declare const _default: {
     'escape': typeof escape;
-    'escape_once': (str: any) => string;
-    'newline_to_br': (v: any) => any;
-    'strip_html': (v: any) => string;
+    'escape_once': (str: string) => string;
+    'newline_to_br': (v: string) => string;
+    'strip_html': (v: string) => string;
 };
 export default _default;

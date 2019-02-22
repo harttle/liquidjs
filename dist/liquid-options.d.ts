@@ -42,7 +42,11 @@ export interface NormalizedFullOptions extends NormalizedOptions {
     trim_tag_left: boolean;
     trim_output_right: boolean;
     trim_output_left: boolean;
+    tag_delimiter_left: string;
+    tag_delimiter_right: string;
+    output_delimiter_left: string;
+    output_delimiter_right: string;
     greedy: boolean;
 }
-export declare function normalize(options: LiquidOptions): NormalizedOptions;
-export declare function applyDefault(options: NormalizedOptions): NormalizedFullOptions;
+export declare function normalize(options?: LiquidOptions): NormalizedOptions;
+export declare function applyDefault(options?: NormalizedOptions): NormalizedFullOptions;
