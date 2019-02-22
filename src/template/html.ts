@@ -1,10 +1,10 @@
 import Template from 'src/template/template'
 import ITemplate from 'src/template/itemplate'
-import Token from 'src/parser/token'
+import HTMLToken from 'src/parser/html-token'
 
-export default class extends Template implements ITemplate {
+export default class extends Template<HTMLToken> implements ITemplate {
   str: string
-  constructor (token: Token) {
+  constructor (token: HTMLToken) {
     super(token)
     this.str = token.value
   }

@@ -5,7 +5,7 @@ import * as chaiAsPromised from 'chai-as-promised'
 use(chaiAsPromised)
 
 describe('tags/unless', function () {
-  let liquid
+  let liquid: Liquid
   before(() => { liquid = new Liquid() })
 
   it('should render else when predicate yields true', async function () {

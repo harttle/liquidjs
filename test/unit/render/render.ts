@@ -2,12 +2,12 @@ import { expect } from 'chai'
 import Scope from 'src/scope/scope'
 import Token from 'src/parser/token'
 import Tag from 'src/template/tag/tag'
-import Filter from 'src/template/filter'
+import Filter from 'src/template/filter/Filter'
 import Render from 'src/render/render'
 import HTML from 'src/template/html'
 
 describe('render', function () {
-  let render
+  let render: Render
   before(function () {
     Filter.clear()
     Tag.clear()
@@ -16,7 +16,7 @@ describe('render', function () {
 
   describe('.renderTemplates()', function () {
     it('should throw when scope undefined', function () {
-      expect(render.renderTemplates([])).to.be.rejectedWith(/scope undefined/)
+      expect(render.renderTemplates([], null as any)).to.be.rejectedWith(/scope undefined/)
     })
 
     it('should render html', async function () {

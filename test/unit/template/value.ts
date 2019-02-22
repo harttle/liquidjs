@@ -2,13 +2,13 @@ import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
 import Scope from 'src/scope/scope'
-import Filter from 'src/template/filter'
+import Filter from 'src/template/filter/filter'
 import Value from 'src/template/value'
 
 chai.use(sinonChai)
 
 const expect = chai.expect
-const add = (l, r) => l + r
+const add = (l: number, r: number) => l + r
 
 describe('Value', function () {
   beforeEach(() => Filter.clear())

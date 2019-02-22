@@ -48,6 +48,10 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   trim_tag_left: boolean
   trim_output_right: boolean
   trim_output_left: boolean
+  tag_delimiter_left: string,
+  tag_delimiter_right: string,
+  output_delimiter_left: string,
+  output_delimiter_right: string,
   greedy: boolean
 }
 
@@ -69,7 +73,7 @@ const defaultOptions: NormalizedFullOptions = {
   strict_variables: false
 }
 
-export function normalize (options: LiquidOptions): NormalizedOptions {
+export function normalize (options?: LiquidOptions): NormalizedOptions {
   options = options || {}
   if (options.hasOwnProperty('root')) {
     options.root = normalizeStringArray(options.root)
@@ -77,11 +81,11 @@ export function normalize (options: LiquidOptions): NormalizedOptions {
   return options as NormalizedOptions
 }
 
-export function applyDefault (options: NormalizedOptions): NormalizedFullOptions {
+export function applyDefault (options?: NormalizedOptions): NormalizedFullOptions {
   return { ...defaultOptions, ...options }
 }
 
-function normalizeStringArray (value: string | string[]): string[] {
+function normalizeStringArray (value: any): string[] {
   if (_.isArray(value)) return value as string[]
   if (_.isString(value)) return [value as string]
   return []

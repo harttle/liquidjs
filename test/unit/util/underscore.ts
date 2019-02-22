@@ -3,6 +3,7 @@ import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
 import { RenderError, RenderBreakError } from 'src/util/error'
 import * as _ from 'src/util/underscore'
+import ITemplate from 'src/template/itemplate'
 
 const expect = chai.expect
 chai.use(sinonChai)
@@ -17,7 +18,7 @@ describe('util/underscore', function () {
         token: {
           input: 'xx'
         }
-      }
+      } as ITemplate
       expect(_.isError(new RenderError(new Error(), tpl))).to.be.true
     })
     it('should return true for RenderBreakError', function () {
@@ -104,7 +105,7 @@ describe('util/underscore', function () {
   })
   describe('.isObject()', function () {
     it('should return true for function', function () {
-      expect(_.isObject(x => x)).to.be.true
+      expect(_.isObject((x: any) => x)).to.be.true
     })
     it('should return true for plain object', function () {
       expect(_.isObject({})).to.be.true
@@ -114,51 +115,6 @@ describe('util/underscore', function () {
     })
     it('should return false for number', function () {
       expect(_.isObject(2)).to.be.false
-    })
-  })
-  describe('.assign()', function () {
-    it('should handle null dst', function () {
-      expect(_.assign(null, {
-        foo: 'bar'
-      })).to.deep.equal({
-        foo: 'bar'
-      })
-    })
-    it('should assign 2 objects', function () {
-      const src = {
-        foo: 'foo',
-        bar: 'bar'
-      }
-      const dst = {
-        foo: 'bar',
-        kaa: 'kaa'
-      }
-      expect(_.assign(dst, src)).to.deep.equal({
-        foo: 'foo',
-        bar: 'bar',
-        kaa: 'kaa'
-      })
-    })
-    it('should assign 3 objects', function () {
-      expect(_.assign({
-        foo: 'foo'
-      }, {
-        bar: 'bar'
-      }, {
-        car: 'car'
-      })).to.deep.equal({
-        foo: 'foo',
-        bar: 'bar',
-        car: 'car'
-      })
-    })
-  })
-  describe('.uniq()', function () {
-    it('should handle empty array', function () {
-      expect(_.uniq([])).to.deep.equal([])
-    })
-    it('should do uniq', function () {
-      expect(_.uniq([1, 'a', 'a', 1])).to.deep.equal([1, 'a'])
     })
   })
 })

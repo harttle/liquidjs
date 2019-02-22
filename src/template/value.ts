@@ -1,26 +1,22 @@
 import { evalExp } from 'src/render/syntax'
 import * as lexical from 'src/parser/lexical'
 import assert from 'src/util/assert'
-import Filter from './filter'
+import Filter from './filter/filter'
 import Scope from 'src/scope/scope'
 
 export default class {
   initial: any
-  filters: Array<any>
+  filters: Array<Filter> = []
   constructor (str: string, strictFilters?: boolean) {
-    let match = lexical.matchValue(str)
+    let match: RegExpExecArray | null = lexical.matchValue(str) as RegExpExecArray
     assert(match, `illegal value string: ${str}`)
 
-    const initial = match[0]
+    this.initial = match[0]
     str = str.substr(match.index + match[0].length)
 
-    const filters = []
     while ((match = lexical.filter.exec(str))) {
-      filters.push([match[0].trim()])
+      this.filters.push(new Filter(match[0].trim(), strictFilters))
     }
-
-    this.initial = initial
-    this.filters = filters.map(str => new Filter(str, strictFilters))
   }
   value (scope: Scope) {
     return this.filters.reduce(

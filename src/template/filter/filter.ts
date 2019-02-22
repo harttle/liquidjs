@@ -2,19 +2,18 @@ import assert from 'src/util/assert'
 import * as lexical from 'src/parser/lexical'
 import { evalValue } from 'src/render/syntax'
 import Scope from 'src/scope/scope'
-
-type impl = (value: any, ...args: any[]) => any
+import FilterImpl from './filter-impl'
 
 const valueRE = new RegExp(`${lexical.value.source}`, 'g')
 
 export default class Filter {
   name: string
-  impl: impl
+  impl: FilterImpl
   args: string[]
-  private static impls: {[key: string]: impl} = {}
+  private static impls: {[key: string]: FilterImpl} = {}
 
   constructor (str: string, strictFilters: boolean = false) {
-    const match = lexical.filterLine.exec(str)
+    const match = lexical.filterLine.exec(str) as string[]
     assert(match, 'illegal filter: ' + str)
 
     const name = match[1]
@@ -27,7 +26,7 @@ export default class Filter {
     this.args = this.parseArgs(argList)
   }
   parseArgs (argList: string): string[] {
-    let match; const args = []
+    let match; const args: string[] = []
     while ((match = valueRE.exec(argList.trim()))) {
       const v = match[0]
       const re = new RegExp(`${v}\\s*:`, 'g')
@@ -39,10 +38,9 @@ export default class Filter {
   }
   render (value: any, scope: Scope): any {
     const args = this.args.map(arg => evalValue(arg, scope))
-    args.unshift(value)
-    return this.impl.apply(null, args)
+    return this.impl.apply(null, [value, ...args])
   }
-  static register (name, filter) {
+  static register (name: string, filter: FilterImpl) {
     Filter.impls[name] = filter
   }
   static clear () {

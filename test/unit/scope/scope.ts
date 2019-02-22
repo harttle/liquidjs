@@ -1,10 +1,11 @@
 import * as chai from 'chai'
 import Scope from 'src/scope/scope'
+import IContext from 'src/scope/icontext';
 
 const expect = chai.expect
 
 describe('scope', function () {
-  let scope, ctx
+  let scope: Scope, ctx: IContext
   beforeEach(function () {
     ctx = {
       foo: 'zoo',
@@ -68,7 +69,7 @@ describe('scope', function () {
       }
       expect(fn).to.not.throw()
       expect(scope.get('notdefined')).to.equal(undefined)
-      expect(scope.get(false)).to.equal(undefined)
+      expect(scope.get(false as any)).to.equal(undefined)
     })
 
     it('should throw for invalid path', function () {
@@ -169,7 +170,7 @@ describe('scope', function () {
     })
   })
   describe('strict_variables', function () {
-    let scope
+    let scope: Scope
     beforeEach(function () {
       scope = new Scope(ctx, {
         strict_variables: true

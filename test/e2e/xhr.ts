@@ -1,5 +1,5 @@
 import Liquid from '../../dist/liquid.js'
-import { createFakeServer, useFakeXMLHttpRequest } from 'sinon'
+import * as sinon from 'sinon'
 import { expect, use } from 'chai'
 import { JSDOM } from 'jsdom'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -7,13 +7,13 @@ import * as chaiAsPromised from 'chai-as-promised'
 use(chaiAsPromised)
 
 describe('xhr', () => {
-  if (+process.version.match(/^v(\d+)/)[1] < 8) {
+  if (+(process.version.match(/^v(\d+)/) as RegExpMatchArray)[1] < 8) {
     console.info('jsdom not supported, skipping xhr...')
     return
   }
-  let server, engine
+  let server: sinon.SinonFakeServer, engine: Liquid
   beforeEach(() => {
-    server = createFakeServer()
+    server = sinon.fakeServer.create()
     server.autoRespond = true
     server.respondWith('GET', 'https://example.com/views/hello.html',
       [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
@@ -22,7 +22,7 @@ describe('xhr', () => {
       contentType: 'text/html',
       includeNodeLocations: true
     });
-    (global as any).XMLHttpRequest = useFakeXMLHttpRequest();
+    (global as any).XMLHttpRequest = sinon.FakeXMLHttpRequest;
     (global as any).document = dom.window.document
     engine = new Liquid({
       root: 'https://example.com/views/',
@@ -68,7 +68,7 @@ describe('xhr', () => {
     it('should throw error', function () {
       const result = expect(engine.renderFile('hello.html'))
         .to.be.rejectedWith('An error occurred whilst receiving the response.');
-      (global as any).XMLHttpRequest.onCreate = function (request) {
+      (global as any).XMLHttpRequest.onCreate = function (request: sinon.SinonFakeXMLHttpRequest) {
         setTimeout(() => request.error())
       }
       return result

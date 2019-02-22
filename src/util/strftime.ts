@@ -16,18 +16,18 @@ const suffixes = {
   'default': 'th'
 }
 
-function abbr (str) {
+function abbr (str: string) {
   return str.slice(0, 3)
 }
 
 // prototype extensions
 const _date = {
-  daysInMonth: function (d) {
+  daysInMonth: function (d: Date) {
     const feb = _date.isLeapYear(d) ? 29 : 28
     return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   },
 
-  getDayOfYear: function (d) {
+  getDayOfYear: function (d: Date) {
     let num = 0
     for (let i = 0; i < d.getMonth(); ++i) {
       num += _date.daysInMonth(d)[i]
@@ -35,7 +35,7 @@ const _date = {
     return num + d.getDate()
   },
 
-  getWeekOfYear: function (d, startDay) {
+  getWeekOfYear: function (d: Date, startDay: number) {
     // Skip to startDay of this week
     const now = this.getDayOfYear(d) + (startDay - d.getDay())
     // Find the first startDay of the year
@@ -44,111 +44,111 @@ const _date = {
     return padStart(String(Math.floor((now - then) / 7) + 1), 2, '0')
   },
 
-  isLeapYear: function (d) {
+  isLeapYear: function (d: Date) {
     const year = d.getFullYear()
     return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)))
   },
 
-  getSuffix: function (d) {
+  getSuffix: function (d: Date) {
     const str = d.getDate().toString()
     const index = parseInt(str.slice(-1))
     return suffixes[index] || suffixes['default']
   },
 
-  century: function (d) {
+  century: function (d: Date) {
     return parseInt(d.getFullYear().toString().substring(0, 2), 10)
   }
 }
 
 const formatCodes = {
-  a: function (d) {
+  a: function (d: Date) {
     return dayNamesShort[d.getDay()]
   },
-  A: function (d) {
+  A: function (d: Date) {
     return dayNames[d.getDay()]
   },
-  b: function (d) {
+  b: function (d: Date) {
     return monthNamesShort[d.getMonth()]
   },
-  B: function (d) {
+  B: function (d: Date) {
     return monthNames[d.getMonth()]
   },
-  c: function (d) {
+  c: function (d: Date) {
     return d.toLocaleString()
   },
-  C: function (d) {
+  C: function (d: Date) {
     return _date.century(d)
   },
-  d: function (d) {
+  d: function (d: Date) {
     return padStart(d.getDate(), 2, '0')
   },
-  e: function (d) {
+  e: function (d: Date) {
     return padStart(d.getDate(), 2)
   },
-  H: function (d) {
+  H: function (d: Date) {
     return padStart(d.getHours(), 2, '0')
   },
-  I: function (d) {
+  I: function (d: Date) {
     return padStart(String(d.getHours() % 12 || 12), 2, '0')
   },
-  j: function (d) {
+  j: function (d: Date) {
     return padStart(_date.getDayOfYear(d), 3, '0')
   },
-  k: function (d) {
+  k: function (d: Date) {
     return padStart(d.getHours(), 2)
   },
-  l: function (d) {
+  l: function (d: Date) {
     return padStart(String(d.getHours() % 12 || 12), 2)
   },
-  L: function (d) {
+  L: function (d: Date) {
     return padStart(d.getMilliseconds(), 3, '0')
   },
-  m: function (d) {
+  m: function (d: Date) {
     return padStart(d.getMonth() + 1, 2, '0')
   },
-  M: function (d) {
+  M: function (d: Date) {
     return padStart(d.getMinutes(), 2, '0')
   },
-  p: function (d) {
+  p: function (d: Date) {
     return (d.getHours() < 12 ? 'AM' : 'PM')
   },
-  P: function (d) {
+  P: function (d: Date) {
     return (d.getHours() < 12 ? 'am' : 'pm')
   },
-  q: function (d) {
+  q: function (d: Date) {
     return _date.getSuffix(d)
   },
-  s: function (d) {
+  s: function (d: Date) {
     return Math.round(d.valueOf() / 1000)
   },
-  S: function (d) {
+  S: function (d: Date) {
     return padStart(d.getSeconds(), 2, '0')
   },
-  u: function (d) {
+  u: function (d: Date) {
     return d.getDay() || 7
   },
-  U: function (d) {
+  U: function (d: Date) {
     return _date.getWeekOfYear(d, 0)
   },
-  w: function (d) {
+  w: function (d: Date) {
     return d.getDay()
   },
-  W: function (d) {
+  W: function (d: Date) {
     return _date.getWeekOfYear(d, 1)
   },
-  x: function (d) {
+  x: function (d: Date) {
     return d.toLocaleDateString()
   },
-  X: function (d) {
+  X: function (d: Date) {
     return d.toLocaleTimeString()
   },
-  y: function (d) {
+  y: function (d: Date) {
     return d.getFullYear().toString().substring(2, 4)
   },
-  Y: function (d) {
+  Y: function (d: Date) {
     return d.getFullYear()
   },
-  z: function (d) {
+  z: function (d: Date) {
     const tz = d.getTimezoneOffset() / 60 * 100
     return (tz > 0 ? '-' : '+') + padStart(String(Math.abs(tz)), 4, '0')
   },
@@ -159,7 +159,7 @@ const formatCodes = {
 (formatCodes as any).h = formatCodes.b;
 (formatCodes as any).N = formatCodes.L
 
-export default function (d, format) {
+export default function (d: Date, format: string) {
   let output = ''
   let remaining = format
 
@@ -179,6 +179,6 @@ export default function (d, format) {
     // Add the format code
     const ch = results[0].charAt(1)
     const func = formatCodes[ch]
-    output += func ? func.call(this, d) : '%' + ch
+    output += func ? func.call(null, d) : '%' + ch
   }
 }

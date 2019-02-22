@@ -1,13 +1,16 @@
 import assert from 'src/util/assert'
 import { value as rValue } from 'src/parser/lexical'
 import { evalValue } from 'src/render/syntax'
+import TagToken from 'src/parser/tag-token';
+import Scope from 'src/scope/scope';
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
 
 const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')
 
-export default {
-  parse: function (tagToken) {
-    let match = groupRE.exec(tagToken.args)
+export default <ITagImplOptions>{
+  parse: function (tagToken: TagToken) {
+    let match: RegExpExecArray | null = groupRE.exec(tagToken.args) as RegExpExecArray
     assert(match, `illegal tag: ${tagToken.raw}`)
 
     this.group = match[1] || ''
@@ -21,11 +24,10 @@ export default {
     assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
   },
 
-  render: function (scope) {
+  render: function (scope: Scope) {
     const group = evalValue(this.group, scope)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
-
-    const groups = scope.opts.groups = scope.opts.groups || {}
+    const groups = scope.groups
     let idx = groups[fingerprint]
 
     if (idx === undefined) {

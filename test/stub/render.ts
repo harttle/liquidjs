@@ -12,7 +12,7 @@ export const ctx = {
   posts: [{ category: 'foo' }, { category: 'bar' }]
 }
 
-export async function test (src, dst) {
+export async function test (src: string, dst: string) {
   const html = await liquid.parseAndRender(src, ctx)
   return expect(html).to.equal(dst)
 }

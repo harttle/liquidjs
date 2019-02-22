@@ -1,8 +1,10 @@
 import { RenderBreakError, RenderError } from 'src/util/error'
 import assert from 'src/util/assert'
+import Scope from 'src/scope/scope';
+import ITemplate from 'src/template/itemplate';
 
 export default class Render {
-  async renderTemplates (templates, scope) {
+  async renderTemplates (templates: ITemplate[], scope: Scope) {
     assert(scope, 'unable to evalTemplates: scope undefined')
 
     let html = ''
@@ -10,11 +12,11 @@ export default class Render {
       try {
         html += await tpl.render(scope)
       } catch (e) {
-        if (e instanceof RenderBreakError) {
+        if (e.name === 'RenderBreakError') {
           e.resolvedHTML = html
           throw e
         }
-        throw e instanceof RenderError ? e : new RenderError(e, tpl)
+        throw e.name === 'RenderError' ? e : new RenderError(e, tpl)
       }
     }
     return html

@@ -8,7 +8,7 @@ use(chaiAsPromised)
 describe('#renderFile()', function () {
   const root = resolve(__dirname, '../stub/root')
   const views = resolve(__dirname, '../stub/views')
-  let engine
+  let engine: Liquid
   beforeEach(function () {
     engine = new Liquid({
       root,

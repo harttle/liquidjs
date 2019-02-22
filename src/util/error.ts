@@ -1,98 +1,77 @@
 import * as _ from './underscore'
+import { __extends } from 'tslib'
 import Token from 'src/parser/token'
+import ITemplate from 'src/template/itemplate'
 
-function captureStack () {
-  if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, this.constructor)
-  }
-}
-
-abstract class LiquidError {
-  name: string
-  message: string
-  stack: string
-  private file: string
-  private input: string
+abstract class LiquidError extends Error {
   private token: Token
   private originalError: Error
-  constructor (err, token) {
-    this.input = token.input
-    this.file = token.file
+  constructor (err: Error, token: Token) {
+    super(err.message)
     this.originalError = err
     this.token = token
   }
-  captureStackTrace (obj) {
-    this.name = obj.constructor.name
-
-    captureStack.call(obj)
+  protected update() {
     const err = this.originalError
-    const context = mkContext(this.input, this.token.line)
+    const context = mkContext(this.token)
     this.message = mkMessage(err.message, this.token)
     this.stack = this.message + '\n' + context +
-      '\n' + (this.stack || this.message) +
-        (err.stack ? '\nFrom ' + err.stack : '')
+      '\n' + this.stack + '\nFrom ' + err.stack
   }
 }
 
 export class TokenizationError extends LiquidError {
-  constructor (message, token) {
-    super({ message }, token)
-    super.captureStackTrace(this)
+  constructor (message: string, token: Token) {
+    super(new Error(message), token)
+    this.name = 'TokenizationError'
+    super.update()
   }
 }
-TokenizationError.prototype = _.create(Error.prototype) as any
-TokenizationError.prototype.constructor = TokenizationError
 
 export class ParseError extends LiquidError {
-  constructor (err, token) {
+  constructor (err: Error, token: Token) {
     super(err, token)
+    this.name = 'ParseError'
     this.message = err.message
-    super.captureStackTrace(this)
+    super.update()
   }
 }
-ParseError.prototype = _.create(Error.prototype) as any
-ParseError.prototype.constructor = ParseError
 
 export class RenderError extends LiquidError {
-  constructor (err, tpl) {
+  constructor (err: Error, tpl: ITemplate) {
     super(err, tpl.token)
+    this.name = 'RenderError'
     this.message = err.message
-    super.captureStackTrace(this)
+    super.update()
   }
 }
-RenderError.prototype = _.create(Error.prototype) as any
-RenderError.prototype.constructor = RenderError
 
-export class RenderBreakError {
-  message: string
-  resolvedHTML: string
-  constructor (message) {
-    captureStack.call(this)
+export class RenderBreakError extends Error {
+  resolvedHTML: string = ''
+  constructor (message: string) {
+    super(message)
+    this.name = 'RenderBreakError'
     this.message = message + ''
   }
 }
-RenderBreakError.prototype = _.create(Error.prototype) as any
-RenderBreakError.prototype.constructor = RenderBreakError
 
-export class AssertionError {
-  message: string
-  constructor (message) {
-    captureStack.call(this)
+export class AssertionError extends Error {
+  constructor (message: string) {
+    super(message)
+    this.name = 'AssertionError'
     this.message = message + ''
   }
 }
-AssertionError.prototype = _.create(Error.prototype) as any
-AssertionError.prototype.constructor = AssertionError
 
-function mkContext (input, targetLine) {
-  const lines = input.split('\n')
-  const begin = Math.max(targetLine - 2, 1)
-  const end = Math.min(targetLine + 3, lines.length)
+function mkContext (token: Token) {
+  const lines = token.input.split('\n')
+  const begin = Math.max(token.line - 2, 1)
+  const end = Math.min(token.line + 3, lines.length)
 
   const context = _
     .range(begin, end + 1)
     .map(lineNumber => {
-      const indicator = (lineNumber === targetLine) ? '>> ' : '   '
+      const indicator = (lineNumber === token.line) ? '>> ' : '   '
       const num = _.padStart(String(lineNumber), String(end).length)
       const text = lines[lineNumber - 1]
       return `${indicator}${num}| ${text}`
@@ -102,13 +81,8 @@ function mkContext (input, targetLine) {
   return context
 }
 
-function mkMessage (msg, token) {
-  msg = msg || ''
-  if (token.file) {
-    msg += ', file:' + token.file
-  }
-  if (token.line) {
-    msg += `, line:${token.line}, col:${token.col}`
-  }
+function mkMessage (msg: string, token: Token) {
+  if (token.file) msg += `, file:${token.file}`
+  msg += `, line:${token.line}, col:${token.col}`
   return msg
 }

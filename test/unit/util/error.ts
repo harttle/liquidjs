@@ -32,10 +32,10 @@ describe('error', function () {
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('TokenizationError')
     })
-    it('should contain the whole template content in err.input', async function () {
+    it('should contain the whole template content in err.token.input', async function () {
       const html = 'bar\nfoo{% . a %}\nfoo'
       const err = await expect(engine.parseAndRender(html)).be.rejected
-      expect(err.input).to.equal(html)
+      expect(err.token.input).to.equal(html)
     })
     it('should contain line number in err.token.line', async function () {
       const err = await expect(engine.parseAndRender('1\n2\n{% . a %}\n4')).be.rejected
@@ -49,24 +49,11 @@ describe('error', function () {
       expect(err.stack).to.contain('at Liquid.parse')
     })
     describe('captureStackTrace compatibility', function () {
-      const captureStackTrace = Error.captureStackTrace
-      before(() => (Error.captureStackTrace = null))
-      after(() => (Error.captureStackTrace = captureStackTrace))
       it('should be empty when captureStackTrace undefined', async function () {
         const err = await expect(engine.parseAndRender('{% . a %}')).be.rejected
         expect(err.stack).to.contain('illegal tag syntax')
         expect(err.stack).to.not.contain('at Object.parse')
       })
-    })
-    it('should contain file path in err.file', async function () {
-      const html = '<html>\n<head>\n\n{% . a %}\n\n'
-      mock({
-        '/foo.html': html
-      })
-      const err = await expect(engine.renderFile('/foo.html')).be.rejected
-      restore()
-      expect(err.name).to.equal('TokenizationError')
-      expect(err.file).to.equal(path.resolve('/foo.html'))
     })
     it('should throw error with line and pos if tag unmatched', async function () {
       const err = await expect(engine.parseAndRender('1\n2\nfoo{% assign a = 4 }\n4')).be.rejected
@@ -187,12 +174,6 @@ describe('error', function () {
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('RenderError')
     })
-    it('should contain the whole template content in err.input', async function () {
-      const html = 'bar\nfoo{%throwingTag%}\nfoo'
-      const err = await expect(engine.parseAndRender(html)).be.rejected
-      expect(err.input).to.equal(html)
-      expect(err.name).to.equal('RenderError')
-    })
     it('should contain line number in err.token.line', async function () {
       const src = '1\n2\n{{1|throwingFilter}}\n4'
       const err = await expect(engine.parseAndRender(src)).be.rejected
@@ -203,18 +184,6 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender('{%rejectingTag%}')).be.rejected
       expect(err.message).to.contain('intended render reject')
       expect(err.stack).to.match(/at .*:\d+:\d+/)
-    })
-
-    it('should contain file path in err.file', async function () {
-      const html = '<html>\n<head>\n\n{% throwingTag %}\n\n'
-      mock({
-        '/foo.html': html
-      })
-      const err = await expect(engine.renderFile('/foo.html')).be.rejected
-      restore()
-      console.log(err, err.name)
-      expect(err.name).to.equal('RenderError')
-      expect(err.file).to.equal(path.resolve('/foo.html'))
     })
   })
 
@@ -295,17 +264,6 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender('{% -a %}')).be.rejected
       expect(err.stack).to.contain('ParseError: tag -a not found')
       expect(err.stack).to.match(/at .*:\d+:\d+\)/)
-    })
-
-    it('should contain file path in err.file', async function () {
-      const html = '<html>\n<head>\n\n{% raw %}\n\n'
-      mock({
-        '/foo.html': html
-      })
-      const err = await expect(engine.renderFile('/foo.html')).be.rejected
-      restore()
-      expect(err.name).to.equal('ParseError')
-      expect(err.file).to.equal(path.resolve('/foo.html'))
     })
   })
 })

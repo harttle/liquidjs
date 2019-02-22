@@ -33,14 +33,14 @@ describe('Liquid', function () {
     })
     after(restore)
     it('should render single template', function (done) {
-      render.call({ root: '.' }, 'foo', null, (err, result) => {
+      render.call({ root: '.' }, 'foo', null as any, (err: Error | null, result: string | undefined) => {
         if (err) return done(err)
         expect(result).to.equal('foo')
         done()
       })
     })
     it('should render single template with Array-typed root', function (done) {
-      render.call({ root: ['.'] }, 'foo', null, (err, result) => {
+      render.call({ root: ['.'] }, 'foo', null as any, (err: Error | null, result: string | undefined) => {
         if (err) return done(err)
         expect(result).to.equal('foo')
         done()

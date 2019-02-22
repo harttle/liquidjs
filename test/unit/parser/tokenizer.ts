@@ -56,7 +56,7 @@ describe('tokenizer', function () {
       const tokens = tokenizer.tokenize(html)
       expect(tokens.length).to.equal(1)
       expect(tokens[0]).instanceOf(TagToken)
-      expect(tokens[0].args).to.equal('a:a\nb:1.23')
+      expect((tokens[0] as TagToken).args).to.equal('a:a\nb:1.23')
       expect(tokens[0].raw).to.equal('{%foo\na:a\nb:1.23\n%}')
     })
     it('should handle multiple lines value', function () {

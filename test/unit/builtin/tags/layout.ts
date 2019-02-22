@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { mock, restore } from 'test/stub/mockfs'
 
 describe('tags/layout', function () {
-  let liquid
+  let liquid: Liquid
   before(function () {
     liquid = new Liquid({
       root: '/',

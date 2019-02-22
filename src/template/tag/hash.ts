@@ -1,5 +1,6 @@
 import { hashCapture } from 'src/parser/lexical'
 import { evalValue } from 'src/render/syntax'
+import Scope from 'src/scope/scope';
 
 /**
  * Key-Value Pairs Representing Tag Arguments
@@ -9,7 +10,7 @@ import { evalValue } from 'src/render/syntax'
  */
 export default class Hash {
   [key: string]: any
-  constructor (markup, scope) {
+  constructor (markup: string, scope: Scope) {
     let match
     hashCapture.lastIndex = 0
     while ((match = hashCapture.exec(markup))) {

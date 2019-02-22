@@ -14,7 +14,7 @@ export default class Tokenizer {
     this.options = applyDefault(options)
   }
   tokenize (input: string, file?: string) {
-    const tokens = []
+    const tokens: Token[] = []
     const tagL = this.options.tag_delimiter_left
     const tagR = this.options.tag_delimiter_right
     const outputL = this.options.output_delimiter_left
@@ -34,7 +34,7 @@ export default class Tokenizer {
       }
       if (state === ParseState.HTML) {
         if (input.substr(p, outputL.length) === outputL) {
-          if (buffer) tokens.push(new HTMLToken(buffer, col, input, file, line))
+          if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
           buffer = outputL
           line = curLine
           col = p - lineBegin + 1
@@ -42,7 +42,7 @@ export default class Tokenizer {
           state = ParseState.OUTPUT
           continue
         } else if (input.substr(p, tagL.length) === tagL) {
-          if (buffer) tokens.push(new HTMLToken(buffer, col, input, file, line))
+          if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
           buffer = tagL
           line = curLine
           col = p - lineBegin + 1
@@ -52,7 +52,7 @@ export default class Tokenizer {
         }
       } else if (state === ParseState.OUTPUT && input.substr(p, outputR.length) === outputR) {
         buffer += outputR
-        tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), col, input, file, line))
+        tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), input, line, col, file))
         p += outputR.length
         buffer = ''
         line = curLine
@@ -61,7 +61,7 @@ export default class Tokenizer {
         continue
       } else if (input.substr(p, tagR.length) === tagR) {
         buffer += tagR
-        tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), col, input, file, line))
+        tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), input, line, col, file))
         p += tagR.length
         buffer = ''
         line = curLine
@@ -75,11 +75,11 @@ export default class Tokenizer {
       const t = state === ParseState.OUTPUT ? 'output' : 'tag'
       const str = buffer.length > 16 ? buffer.slice(0, 13) + '...' : buffer
       throw new TokenizationError(
-        new Error(`${t} "${str}" not closed`),
-        new Token(buffer, col, input, file, line)
+        `${t} "${str}" not closed`,
+        new Token(buffer, input, line, col, file)
       )
     }
-    if (buffer) tokens.push(new HTMLToken(buffer, col, input, file, line))
+    if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
 
     whiteSpaceCtrl(tokens, this.options)
     return tokens

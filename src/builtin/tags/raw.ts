@@ -1,10 +1,14 @@
-export default {
-  parse: function (tagToken, remainTokens) {
+import TagToken from "src/parser/tag-token";
+import Token from "src/parser/token";
+import ITagImplOptions from "src/template/tag/itag-impl-options";
+
+export default <ITagImplOptions>{
+  parse: function (tagToken: TagToken, remainTokens: Token[]) {
     this.tokens = []
 
     const stream = this.liquid.parser.parseStream(remainTokens)
     stream
-      .on('token', token => {
+      .on('token', (token: TagToken) => {
         if (token.name === 'endraw') stream.stop()
         else this.tokens.push(token)
       })
@@ -14,6 +18,6 @@ export default {
     stream.start()
   },
   render: function () {
-    return this.tokens.map(token => token.raw).join('')
+    return this.tokens.map((token: Token) => token.raw).join('')
   }
 }

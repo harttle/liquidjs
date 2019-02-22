@@ -5,7 +5,7 @@ import * as chaiAsPromised from 'chai-as-promised'
 use(chaiAsPromised)
 
 describe('.parseAndRender()', function () {
-  var engine, strictEngine
+  var engine: Liquid, strictEngine: Liquid
   beforeEach(function () {
     engine = new Liquid()
     strictEngine = new Liquid({

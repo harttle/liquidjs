@@ -3,7 +3,7 @@ import Liquid from 'src/liquid'
 import { mock, restore } from 'test/stub/mockfs'
 
 describe('LiquidOptions#cache', function () {
-  let engine
+  let engine: Liquid
   beforeEach(function () {
     engine = new Liquid({
       root: '/root/',

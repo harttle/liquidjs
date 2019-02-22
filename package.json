@@ -12,7 +12,7 @@
     "test": "npm run unit && npm run e2e",
     "coverage-html": "nyc npm run unit && nyc report --reporter=html",
     "coverage-coveralls": "nyc npm run unit && nyc report --reporter=text-lcov | coveralls",
-    "build": "rollup -c && ls -lh dist",
+    "build": "rollup -c rollup.config.ts && ls -lh dist",
     "version": "npm run build && git add -A dist"
   },
   "repository": {
@@ -46,8 +46,14 @@
     "@semantic-release/git": "^7.0.8",
     "@semantic-release/npm": "^5.1.4",
     "@semantic-release/release-notes-generator": "^7.1.4",
+    "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/express": "^4.16.1",
     "@types/jsdom": "^12.2.2",
     "@types/mocha": "^5.2.6",
+    "@types/sinon": "^7.0.6",
+    "@types/sinon-chai": "^3.2.2",
+    "@types/supertest": "^2.0.7",
     "@typescript-eslint/eslint-plugin": "^1.3.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
@@ -75,6 +81,7 @@
     "supertest": "^3.4.2",
     "ts-node": "^8.0.2",
     "tsconfig-paths": "^3.8.0",
+    "tslib": "^1.9.3",
     "typescript": "^3.3.3"
   },
   "release": {

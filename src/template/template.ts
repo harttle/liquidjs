@@ -1,8 +1,6 @@
-import Token from 'src/parser/token'
-
-export default class Template {
-  token: Token;
-  constructor (token) {
+export default abstract class Template<T> {
+  token: T;
+  constructor (token: T) {
     this.token = token
   }
 }

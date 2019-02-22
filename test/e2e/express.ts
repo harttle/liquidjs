@@ -8,7 +8,7 @@ describe('express()', function () {
   const root = resolve(__dirname, '../stub/root')
   const views = resolve(__dirname, '../stub/views')
   const partials = resolve(__dirname, '../stub/partials')
-  let app, engine
+  let app: express.Application, engine: Liquid
 
   beforeEach(function () {
     app = express()
@@ -45,7 +45,7 @@ describe('express()', function () {
     }
     const file = '/not-exist.html'
     const ctx = {}
-    engine.express().call(view, file, ctx, function (err) {
+    engine.express().call(view, file, ctx, function (err: any) {
       try {
         expect(err.code).to.equal('ENOENT')
         expect(err.message).to.match(/Failed to lookup/)

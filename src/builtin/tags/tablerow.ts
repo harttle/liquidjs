@@ -2,14 +2,21 @@ import { mapSeries } from 'src/util/promise'
 import assert from 'src/util/assert'
 import { evalExp } from 'src/render/syntax'
 import { identifier, value, hash } from 'src/parser/lexical'
+import TagToken from 'src/parser/tag-token';
+import Token from 'src/parser/token';
+import ITemplate from 'src/template/itemplate';
+import Scope from 'src/scope/scope';
+import Hash from 'src/template/tag/hash';
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
+import ParseStream from 'src/parser/parse-stream';
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(${value.source})` +
   `(?:\\s+${hash.source})*$`)
 
 export default {
-  parse: function (tagToken, remainTokens) {
-    const match = re.exec(tagToken.args)
+  parse: function (tagToken: TagToken, remainTokens: Token[]) {
+    const match = re.exec(tagToken.args) as RegExpExecArray
     assert(match, `illegal tag: ${tagToken.raw}`)
 
     this.variable = match[1]
@@ -17,10 +24,10 @@ export default {
     this.templates = []
 
     let p
-    const stream = this.liquid.parser.parseStream(remainTokens)
+    const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
       .on('tag:endtablerow', () => stream.stop())
-      .on('template', tpl => p.push(tpl))
+      .on('template', (tpl: ITemplate) => p.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -28,20 +35,20 @@ export default {
     stream.start()
   },
 
-  render: async function (scope, hash) {
+  render: async function (scope: Scope, hash: Hash) {
     let collection = evalExp(this.collection, scope) || []
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 
     collection = collection.slice(offset, offset + limit)
     const cols = hash.cols || collection.length
-    const contexts = collection.map(item => {
+    const contexts = collection.map((item: any) => {
       const ctx = {}
       ctx[this.variable] = item
       return ctx
     })
 
-    let row
+    let row: number = 0
     let html = ''
     await mapSeries(contexts, async (context, idx) => {
       row = Math.floor(idx / cols) + 1
@@ -65,4 +72,4 @@ export default {
     }
     return html
   }
-}
+} as ITagImplOptions

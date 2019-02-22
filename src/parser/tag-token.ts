@@ -5,8 +5,8 @@ import * as lexical from './lexical'
 export default class TagToken extends DelimitedToken {
   name: string
   args: string
-  constructor (raw, value, pos, input, file, line) {
-    super(raw, value, pos, input, file, line)
+  constructor (raw: string, value: string, input: string, line: number, pos: number, file?: string) {
+    super(raw, value, input, line, pos, file)
     this.type = 'tag'
     const match = this.value.match(lexical.tagLine)
     if (!match) {

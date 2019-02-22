@@ -1,7 +1,7 @@
 import { last } from '../util/underscore'
 import IFS from './ifs'
 
-function domResolve (root, path) {
+function domResolve (root: string, path: string) {
   const base = document.createElement('base')
   base.href = root
 
@@ -16,7 +16,7 @@ function domResolve (root, path) {
   return resolved
 }
 
-function resolve (root, filepath, ext) {
+function resolve (root: string, filepath: string, ext: string) {
   if (root.length && last(root) !== '/') root += '/'
   const url = domResolve(root, filepath)
   return url.replace(/^(\w+:\/\/[^/]+)(\/[^?]+)/, (str, origin, path) => {

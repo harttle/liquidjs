@@ -8,7 +8,7 @@ const resolve = fs.resolve
 
 describe('fs/browser', function () {
   describe('#resolve()', function () {
-    if (+process.version.match(/^v(\d+)/)[1] < 8) {
+    if (+(process.version.match(/^v(\d+)/) as RegExpMatchArray)[1] < 8) {
       console.info('jsdom not supported, skipping template-browser...')
       return
     }
@@ -54,9 +54,9 @@ describe('fs/browser', function () {
   })
 
   describe('#readFile()', () => {
-    let server
+    let server: sinon.SinonFakeServer
     beforeEach(() => {
-      server = sinon.createFakeServer()
+      server = sinon.fakeServer.create()
       server.autoRespond = true
       server.respondWith('GET', 'https://example.com/views/hello.html',
         [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}']);

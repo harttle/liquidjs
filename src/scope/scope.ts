@@ -1,20 +1,23 @@
 import * as _ from '../util/underscore'
+import { __assign } from 'tslib'
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
+import IContext from './icontext';
 
 export default class Scope {
   opts: NormalizedFullOptions
-  contexts: Array<object>
+  contexts: Array<IContext>
   blocks: object = {}
+  groups: {[key: string]: number} = {}
   blockMode: BlockMode = BlockMode.OUTPUT
   constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
     this.opts = applyDefault(opts)
     this.contexts = [ctx || {}]
   }
   getAll () {
-    return this.contexts.reduce((ctx, val) => _.assign(ctx, val), _.create(null))
+    return this.contexts.reduce((ctx, val) => __assign(ctx, val), {})
   }
   get (path: string): any {
     const paths = this.propertyAccessSeq(path)
@@ -36,6 +39,7 @@ export default class Scope {
         scope[key] = {}
       }
       scope = scope[key]
+      return false
     })
   }
   unshift (ctx: object) {
@@ -44,7 +48,7 @@ export default class Scope {
   push (ctx: object) {
     return this.contexts.push(ctx)
   }
-  pop (ctx?: object): object {
+  pop (ctx?: object): object | undefined {
     if (!arguments.length) {
       return this.contexts.pop()
     }
@@ -64,7 +68,7 @@ export default class Scope {
     }
     return null
   }
-  readProperty (obj, key) {
+  readProperty (obj: IContext, key: string) {
     let val
     if (_.isNil(obj)) {
       val = undefined
@@ -72,7 +76,7 @@ export default class Scope {
       obj = toLiquid(obj)
       val = key === 'size' ? readSize(obj) : obj[key]
       if (_.isFunction(obj.liquid_method_missing)) {
-        val = obj.liquid_method_missing(key)
+        val = obj.liquid_method_missing!(key)
       }
     }
     if (_.isNil(val) && this.opts.strict_variables) {
@@ -89,9 +93,9 @@ export default class Scope {
    * accessSeq("foo['b]r']")      // ['foo', 'b]r']
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
-  propertyAccessSeq (str) {
+  propertyAccessSeq (str: string) {
     str = String(str)
-    const seq = []
+    const seq: string[] = []
     let name = ''
     let j
     let i = 0
@@ -141,7 +145,7 @@ export default class Scope {
   }
 }
 
-function toLiquid (obj) {
+function toLiquid (obj: IContext) {
   if (_.isFunction(obj.to_liquid)) {
     return obj.to_liquid()
   }
@@ -151,13 +155,13 @@ function toLiquid (obj) {
   return obj
 }
 
-function readSize (obj) {
+function readSize (obj: IContext) {
   if (!_.isNil(obj.size)) return obj.size
   if (_.isArray(obj) || _.isString(obj)) return obj.length
   return obj.size
 }
 
-function matchRightBracket (str, begin) {
+function matchRightBracket (str: string, begin: number) {
   let stack = 1 // count of '[' - count of ']'
   for (let i = begin; i < str.length; i++) {
     if (str[i] === '[') {

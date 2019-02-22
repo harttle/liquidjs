@@ -2,7 +2,7 @@ import Liquid from 'src/liquid'
 import { expect } from 'chai'
 
 describe('LiquidOptions#strict_*', function () {
-  let engine
+  let engine: Liquid
   const ctx = {}
   beforeEach(function () {
     engine = new Liquid({

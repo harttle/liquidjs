@@ -6,7 +6,7 @@ import ITemplate from './template/itemplate'
 import Tokenizer from './parser/tokenizer'
 import Render from './render/render'
 import Tag from './template/tag/tag'
-import Filter from './template/filter'
+import Filter from './template/filter/filter'
 import Parser from './parser/parser'
 import ITagImplOptions from './template/tag/itag-impl-options'
 import Value from './template/value'
@@ -14,19 +14,17 @@ import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax'
 import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
 import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
+import FilterImpl from './template/filter/filter-impl';
 
 export default class Liquid {
   public options: NormalizedFullOptions
-  private cache: object
-  private parser: Parser
-  private renderer: Render
+  public renderer: Render
+  public parser: Parser
+  private cache: object = {}
   private tokenizer: Tokenizer
 
   constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
-    if (this.options.cache) {
-      this.cache = {}
-    }
     this.parser = new Parser(this)
     this.renderer = new Render()
     this.tokenizer = new Tokenizer(this.options)
@@ -47,7 +45,7 @@ export default class Liquid {
     const tpl = await this.parse(html)
     return this.render(tpl, ctx, opts)
   }
-  async getTemplate (file, opts?: LiquidOptions) {
+  async getTemplate (file: string, opts?: LiquidOptions) {
     const options = normalize(opts)
     const roots = options.root ? [...options.root, ...this.options.root] : this.options.root
     const paths = roots.map(root => fs.resolve(root, file, this.options.extname))
@@ -66,7 +64,7 @@ export default class Liquid {
     err.code = 'ENOENT'
     throw err
   }
-  async renderFile (file, ctx?: object, opts?: LiquidOptions) {
+  async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
     const options = normalize(opts)
     const templates = await this.getTemplate(file, options)
     return this.render(templates, ctx, opts)
@@ -74,18 +72,18 @@ export default class Liquid {
   evalValue (str: string, scope: Scope) {
     return new Value(str, this.options.strict_filters).value(scope)
   }
-  registerFilter (name, filter) {
+  registerFilter (name: string, filter: FilterImpl) {
     return Filter.register(name, filter)
   }
   registerTag (name: string, tag: ITagImplOptions) {
     return Tag.register(name, tag)
   }
-  plugin (plugin) {
+  plugin (plugin: (this: Liquid, L: typeof Liquid) => void) {
     return plugin.call(this, Liquid)
   }
   express () {
     const self = this
-    return function (filePath: string, ctx: object, cb: (err: Error, html?: string) => void) {
+    return function (this: any, filePath: string, ctx: object, cb: (err: Error | null, html?: string) => void) {
       const opts = { root: this.root }
       self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
     }

@@ -3,10 +3,11 @@ import { identifier } from 'src/parser/lexical'
 import { CaptureScope, AssignScope, DecrementScope } from 'src/scope/scopes'
 import TagToken from 'src/parser/tag-token'
 import Scope from 'src/scope/scope'
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
 
 export default {
   parse: function (token: TagToken) {
-    const match = token.args.match(identifier)
+    const match = token.args.match(identifier) as RegExpMatchArray
     assert(match, `illegal identifier ${token.args}`)
     this.variable = match[0]
   },
@@ -26,4 +27,4 @@ export default {
     }
     return --context[this.variable]
   }
-}
+} as ITagImplOptions

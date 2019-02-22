@@ -13,17 +13,17 @@ const unescapeMap = {
   '&#39;': "'"
 }
 
-function escape (str) {
+function escape (str: string) {
   return String(str).replace(/&|<|>|"|'/g, m => escapeMap[m])
 }
 
-function unescape (str) {
+function unescape (str: string) {
   return String(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m])
 }
 
 export default {
   'escape': escape,
-  'escape_once': str => escape(unescape(str)),
-  'newline_to_br': v => v.replace(/\n/g, '<br />'),
-  'strip_html': v => String(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
+  'escape_once': (str: string) => escape(unescape(str)),
+  'newline_to_br': (v: string) => v.replace(/\n/g, '<br />'),
+  'strip_html': (v: string) => v.replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
 }

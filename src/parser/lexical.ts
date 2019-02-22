@@ -49,27 +49,27 @@ export const operators = [
   /==|!=|<=|>=|<|>|\s+contains\s+/
 ]
 
-export function isInteger (str) {
+export function isInteger (str: string) {
   return integerLine.test(str)
 }
 
-export function isLiteral (str) {
+export function isLiteral (str: string) {
   return literalLine.test(str)
 }
 
-export function isRange (str) {
+export function isRange (str: string) {
   return rangeLine.test(str)
 }
 
-export function isVariable (str) {
+export function isVariable (str: string) {
   return variableLine.test(str)
 }
 
-export function matchValue (str) {
+export function matchValue (str: string) {
   return value.exec(str)
 }
 
-export function parseLiteral (str) {
+export function parseLiteral (str: string) {
   let res = str.match(numberLine)
   if (res) {
     return Number(str)

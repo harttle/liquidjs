@@ -11,7 +11,7 @@ const expect = chai.expect
 const liquid = new Liquid()
 
 describe('tag', function () {
-  let scope
+  let scope: Scope
   before(function () {
     scope = new Scope({
       foo: 'bar',
@@ -56,7 +56,7 @@ describe('tag', function () {
   })
 
   describe('hash', function () {
-    let spy, token
+    let spy: sinon.SinonSpy, token: TagToken
     beforeEach(function () {
       spy = sinon.spy()
       Tag.register('foo', {
@@ -67,7 +67,7 @@ describe('tag', function () {
         value: 'foo aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo',
         name: 'foo',
         args: 'aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo'
-      }
+      } as TagToken
     })
     it('should call tag.render with scope', async function () {
       await new Tag(token, [], liquid).render(scope)

@@ -4,8 +4,8 @@ import t from 'src/util/strftime'
 const expect = chai.expect
 
 describe('util/strftime', function () {
-  let now
-  let then
+  let now: Date
+  let then: Date
   before(function () {
     mockUTC()
     now = new Date('2016-01-04T13:15:23.000Z')

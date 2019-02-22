@@ -2,12 +2,16 @@ import assert from 'src/util/assert'
 import { value, quotedLine } from 'src/parser/lexical'
 import { evalValue } from 'src/render/syntax'
 import BlockMode from 'src/scope/block-mode'
+import TagToken from 'src/parser/tag-token';
+import Scope from 'src/scope/scope';
+import Hash from 'src/template/tag/hash';
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
 
 const staticFileRE = /[^\s,]+/
 const withRE = new RegExp(`with\\s+(${value.source})`)
 
-export default {
-  parse: function (token) {
+export default <ITagImplOptions>{
+  parse: function (token: TagToken) {
     let match = staticFileRE.exec(token.args)
     if (match) {
       this.staticValue = match[0]
@@ -23,7 +27,7 @@ export default {
       this.with = match[1]
     }
   },
-  render: async function (scope, hash) {
+  render: async function (scope: Scope, hash: Hash) {
     let filepath
     if (scope.opts.dynamicPartials) {
       if (quotedLine.exec(this.value)) {

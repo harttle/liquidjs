@@ -21,7 +21,7 @@ export function mock (options: { [path: string]: (string | fileDescriptor) }) {
     return file.content
   }
 
-  fs.exists = async function (path) {
+  fs.exists = async function (path: string) {
     console.log('mock fs exists called', path)
     return !!files[path]
   }

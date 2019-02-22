@@ -3,11 +3,11 @@ import { resolve, extname } from 'path'
 import { stat, readFile } from 'fs'
 import IFS from './ifs'
 
-const statAsync = _.promisify(stat) as (filepath: string) => Promise<object>
-const readFileAsync = _.promisify(readFile) as (filepath: string, encoding: string) => Promise<string>
+const statAsync = _.promisify(stat)
+const readFileAsync = _.promisify<string, string, string>(readFile)
 
 const fs: IFS = {
-  exists: filepath => {
+  exists: (filepath: string) => {
     return statAsync(filepath).then(() => true).catch(() => false)
   },
   readFile: filepath => {

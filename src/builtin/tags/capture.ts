@@ -4,12 +4,13 @@ import { CaptureScope } from 'src/scope/scopes'
 import TagToken from 'src/parser/tag-token'
 import Token from 'src/parser/token'
 import Scope from 'src/scope/scope'
+import ITagImplOptions from 'src/template/tag/itag-impl-options';
 
 const re = new RegExp(`(${identifier.source})`)
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
-    const match = tagToken.args.match(re)
+    const match = tagToken.args.match(re) as RegExpMatchArray
     assert(match, `${tagToken.args} not valid identifier`)
 
     this.variable = match[1]
@@ -17,7 +18,7 @@ export default {
 
     const stream = this.liquid.parser.parseStream(remainTokens)
     stream.on('tag:endcapture', () => stream.stop())
-      .on('template', tpl => this.templates.push(tpl))
+      .on('template', (tpl) => this.templates.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -29,4 +30,4 @@ export default {
     ctx[this.variable] = html
     scope.push(ctx)
   }
-}
+} as ITagImplOptions

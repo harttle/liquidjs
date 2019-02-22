@@ -1,24 +1,23 @@
 import { last } from 'src/util/underscore'
 
 export default {
-  'join': (v, arg) => v.join(arg === undefined ? ' ' : arg),
-  'last': v => last(v),
-  'first': v => v[0],
-  'map': (arr, arg) => arr.map(v => v[arg]),
-  'reverse': v => v.reverse(),
-  'sort': (v, arg) => v.sort(arg),
-  'size': v => v.length,
-  'slice': (v, begin, length) => {
+  'join': (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg),
+  'last': <T>(v: T[]): T => last(v),
+  'first': <T>(v: T[]): T => v[0],
+  'map': <T1, T2>(arr: {[key: string]: T1}[], arg: string): T1[] => arr.map(v => v[arg]),
+  'reverse': (v: any[]) => v.reverse(),
+  'sort': <T>(v: T[], arg: (lhs: T, rhs: T) => number) => v.sort(arg),
+  'size': (v: string | any[]) => v.length,
+  'concat': <T1, T2>(v: T1[], arg: T2[] | T2): Array<T1 | T2> => Array.prototype.concat.call(v, arg),
+  'slice': <T>(v: T[], begin: number, length: number): T[] => {
     if (length === undefined) length = 1
     return v.slice(begin, begin + length)
   },
-  'uniq': function (arr) {
+  'uniq': function<T> (arr: T[]): T[] {
     const u = {}
     return (arr || []).filter(val => {
-      if (u.hasOwnProperty(val)) {
-        return false
-      }
-      u[val] = true
+      if (u.hasOwnProperty(String(val))) return false
+      u[String(val)] = true
       return true
     })
   }

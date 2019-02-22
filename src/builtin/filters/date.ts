@@ -2,7 +2,7 @@ import strftime from 'src/util/strftime'
 import { isString } from 'src/util/underscore'
 
 export default {
-  'date': (v, arg) => {
+  'date': (v: string | Date, arg: string) => {
     let date = v
     if (v === 'now') {
       date = new Date()
@@ -13,6 +13,6 @@ export default {
   }
 }
 
-function isValidDate (date) {
+function isValidDate (date: any): date is Date {
   return date instanceof Date && !isNaN(date.getTime())
 }

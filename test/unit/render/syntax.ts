@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { evalExp, evalValue, isTruthy } from 'src/render/syntax'
 
 describe('expression', function () {
-  let scope
+  let scope: Scope
 
   beforeEach(function () {
     scope = new Scope({

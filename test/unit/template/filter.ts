@@ -1,14 +1,14 @@
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
-import Filter from 'src/template/filter'
+import Filter from 'src/template/filter/filter'
 import Scope from 'src/scope/scope'
 
 chai.use(sinonChai)
 const expect = chai.expect
 
 describe('filter', function () {
-  let scope
+  let scope: Scope
   beforeEach(function () {
     Filter.clear()
     scope = new Scope()

@@ -7,6 +7,7 @@ import OutputToken from './output-token'
 import Tag from 'src/template/tag/tag'
 import Output from 'src/template/output'
 import HTML from 'src/template/html'
+import ITemplate from 'src/template/itemplate'
 
 export default class Parser {
   liquid: Liquid
@@ -16,7 +17,7 @@ export default class Parser {
   }
   parse (tokens: Array<Token>) {
     let token
-    const templates = []
+    const templates: ITemplate[] = []
     while ((token = tokens.shift())) {
       templates.push(this.parseToken(token, tokens))
     }

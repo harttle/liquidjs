@@ -14,10 +14,12 @@ export function isFunction (value: any) {
   return typeof value === 'function'
 }
 
-export function promisify (fn) {
-  return function (...args) {
+export function promisify<T1, T2> (fn: (arg1: T1, cb: (err: Error | null, result: T2) => void) => void): (arg1: T1) => Promise<T2>;
+export function promisify<T1, T2, T3> (fn: (arg1: T1, arg2: T2, cb: (err: Error | null, result: T3) => void) => void):(arg1: T1, arg2: T2) => Promise<T3>;
+export function promisify (fn: any) {
+  return function (...args: any[]) {
     return new Promise((resolve, reject) => {
-      fn(...args, (err, result) => {
+      fn(...args, (err: Error, result: any) => {
         err ? reject(err) : resolve(result)
       })
     })
@@ -35,7 +37,7 @@ export function stringify (value: any): string {
 }
 
 function defaultToString (value: any): string {
-  const cache = []
+  const cache: string[] = []
   return JSON.stringify(value, (key, value) => {
     if (isObject(value)) {
       if (cache.indexOf(value) !== -1) {
@@ -75,7 +77,10 @@ export function isError (value: any): boolean {
  * @param {Function} iteratee The function invoked per iteration.
  * @return {Object} Returns object.
  */
-export function forOwn (object, iteratee: ((val: any, key: string, obj: object) => boolean | void)) {
+export function forOwn <T>(
+  object: {[key: string]: T} | undefined,
+  iteratee: ((val: T, key: string, obj: {[key: string]: T}) => boolean | void)
+  ) {
   object = object || {}
   for (const k in object) {
     if (object.hasOwnProperty(k)) {
@@ -85,43 +90,10 @@ export function forOwn (object, iteratee: ((val: any, key: string, obj: object) 
   return object
 }
 
-/*
- * Assigns own enumerable string keyed properties of source objects to the destination object.
- * Source objects are applied from left to right.
- * Subsequent sources overwrite property assignments of previous sources.
- *
- * Note: This method mutates object and is loosely based on Object.assign.
- *
- * @param {Object} object The destination object.
- * @param {...Object} sources The source objects.
- * @return {Object} Returns object.
- */
-export function assign (obj: object, ...srcs: object[]): object {
-  obj = isObject(obj) ? obj : {}
-  srcs.forEach(src => binaryAssign(obj, src))
-  return obj
-}
-
-function binaryAssign (target: object, src: object): object {
-  for (const key in src) if (src.hasOwnProperty(key)) target[key] = src[key]
-  return target
-}
-
-export function last (arr: any[]): any {
+export function last <T>(arr: T[]): T;
+export function last (arr: string): string;
+export function last (arr: any[] | string): any | string {
   return arr[arr.length - 1]
-}
-
-export function uniq (arr: any[]): any[] {
-  const u = {}
-  const a = []
-  for (let i = 0, l = arr.length; i < l; ++i) {
-    if (u.hasOwnProperty(arr[i])) {
-      continue
-    }
-    a.push(arr[i])
-    u[arr[i]] = 1
-  }
-  return a
 }
 
 /*
@@ -144,13 +116,13 @@ export function isObject (value: any): boolean {
  * negative — if you'd like a negative range, use a negative step.
  */
 export function range (start: number, stop?: number, step?: number) {
-  if (arguments.length === 1) {
+  if (stop === undefined) {
     stop = start
     start = 0
   }
   step = step || 1
 
-  const arr = []
+  const arr: number[] = []
   for (let i = start; i < stop; i += step) {
     arr.push(i)
   }
