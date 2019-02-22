@@ -10,7 +10,7 @@
     "unit": "mocha 'test/unit/**/*.ts'",
     "e2e": "npm run build && mocha 'test/e2e/**/*.ts'",
     "test": "npm run unit && npm run e2e",
-    "coverage-html": "nyc npm run unit && nyc report --reporter=html",
+    "coverage-html": "nyc --reporter=html npm run unit",
     "coverage-coveralls": "nyc npm run unit && nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c rollup.config.ts && ls -lh dist",
     "version": "npm run build && git add -A dist"
@@ -98,5 +98,6 @@
     "extension": [
       ".ts"
     ]
-  }
+  },
+  "dependencies": {}
 }

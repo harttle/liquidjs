@@ -68,7 +68,7 @@ export default class Scope {
     }
     return null
   }
-  readProperty (obj: IContext, key: string) {
+  private readProperty (obj: IContext, key: string) {
     let val
     if (_.isNil(obj)) {
       val = undefined

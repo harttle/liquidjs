@@ -16,15 +16,15 @@ export default {
   'split': (v: string, arg: string) => String(v).split(arg),
   'strip': (v: string) => String(v).trim(),
   'strip_newlines': (v: string) => String(v).replace(/\n/g, ''),
-  'truncate': (v: string, l: number = 16, o: string = '...') => {
+  'truncate': (v: string, l: number = 50, o: string = '...') => {
     v = String(v)
     if (v.length <= l) return v
     return v.substr(0, l - o.length) + o
   },
-  'truncatewords': (v: string, l: number = v.length, o: string = '...') => {
-    const arr = v.split(' ')
+  'truncatewords': (v: string, l: number = 15, o: string = '...') => {
+    const arr = v.split(/\s+/)
     let ret = arr.slice(0, l).join(' ')
-    if (arr.length > l) ret += o
+    if (arr.length >= l) ret += o
     return ret
   }
 } as {[key: string]: FilterImpl}

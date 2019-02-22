@@ -47,4 +47,14 @@ describe('Liquid', function () {
       })
     })
   })
+  describe('#renderFile', function () {
+    it('should throw with lookup list when file not exist', function () {
+      const engine = new Liquid({
+        root: ['/boo', '/root/'],
+        extname: '.html'
+      })
+      return expect(engine.renderFile('/not/exist.html')).to
+        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+    })
+  })
 })

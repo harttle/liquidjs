@@ -4,7 +4,6 @@ import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
 use(chaiAsPromised)
-const resolve = fs.resolve
 
 describe('fs/browser', function () {
   describe('#resolve()', function () {
@@ -25,31 +24,38 @@ describe('fs/browser', function () {
       delete (global as any).document
     })
     it('should support relative root', function () {
-      expect(resolve('./views/', 'foo', '')).to.equal('https://example.com/foo/bar/views/foo')
+      expect(fs.resolve('./views/', 'foo', '')).to.equal('https://example.com/foo/bar/views/foo')
     })
     it('should treat root as directory', function () {
-      expect(resolve('./views', 'foo', '')).to.equal('https://example.com/foo/bar/views/foo')
+      expect(fs.resolve('./views', 'foo', '')).to.equal('https://example.com/foo/bar/views/foo')
     })
     it('should support absolute root', function () {
-      expect(resolve('/views', 'foo', '')).to.equal('https://example.com/views/foo')
+      expect(fs.resolve('/views', 'foo', '')).to.equal('https://example.com/views/foo')
     })
     it('should support empty root', function () {
-      expect(resolve('', 'page.html', '')).to.equal('https://example.com/foo/bar/page.html')
+      expect(fs.resolve('', 'page.html', '')).to.equal('https://example.com/foo/bar/page.html')
     })
     it('should support full url as root', function () {
-      expect(resolve('https://example.com/views/', 'page.html', '')).to.equal('https://example.com/views/page.html')
+      expect(fs.resolve('https://example.com/views/', 'page.html', '')).to.equal('https://example.com/views/page.html')
     })
     it('should add extname when absent', function () {
-      expect(resolve('https://example.com/views/', 'page', '.html')).to.equal('https://example.com/views/page.html')
+      expect(fs.resolve('https://example.com/views/', 'page', '.html')).to.equal('https://example.com/views/page.html')
     })
     it('should add extname for urls have searchParams', function () {
-      expect(resolve('https://example.com/views/', 'page?foo=bar', '.html')).to.equal('https://example.com/views/page.html?foo=bar')
+      expect(fs.resolve('https://example.com/views/', 'page?foo=bar', '.html')).to.equal('https://example.com/views/page.html?foo=bar')
     })
     it('should not add extname when full url is given', function () {
-      expect(resolve('https://example.com/views/', 'https://google.com/page.php', '.html')).to.equal('https://google.com/page.php')
+      expect(fs.resolve('https://example.com/views/', 'https://google.com/page.php', '.html')).to.equal('https://google.com/page.php')
     })
     it('should not add extname when already have one', function () {
-      expect(resolve('https://example.com/views/', 'page.php', '.html')).to.equal('https://example.com/views/page.php')
+      expect(fs.resolve('https://example.com/views/', 'page.php', '.html')).to.equal('https://example.com/views/page.php')
+    })
+  })
+
+  describe('#exists()', () => {
+    it('should always return true', async function () {
+      const val = await fs.exists('/foo/bar')
+      expect(val).to.equal(true)
     })
   })
 

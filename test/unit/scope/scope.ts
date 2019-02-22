@@ -10,6 +10,7 @@ describe('scope', function () {
     ctx = {
       foo: 'zoo',
       one: 1,
+      zoo: { size: 4 },
       bar: {
         zoo: 'coo',
         'Mr.Smith': 'John',
@@ -132,6 +133,18 @@ describe('scope', function () {
 
     it('should return undefined when not exist', function () {
       expect(scope.get('foo.foo.foo')).to.be.undefined
+    })
+    it('should return string length as size', function () {
+      expect(scope.get('foo.size')).to.equal(3)
+    })
+    it('should return array length as size', function () {
+      expect(scope.get('bar.arr.size')).to.equal(2)
+    })
+    it('should return size property if exists', function () {
+      expect(scope.get('zoo.size')).to.equal(4)
+    })
+    it('should return undefined if do not have size and length', function () {
+      expect(scope.get('one.size')).to.equal(undefined)
     })
   })
 

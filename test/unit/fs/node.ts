@@ -2,17 +2,10 @@ import fs from 'src/fs/node'
 import * as path from 'path'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
-import { mock, restore } from 'test/stub/mockfs'
 
 use(chaiAsPromised)
 
 describe('fs', function () {
-  before(() => mock({
-    '/foo/bar.html': 'bar',
-    '/un-readable.html': { mode: '0000', content: '' }
-  }))
-  after(restore)
-
   describe('#resolve()', function () {
     it('should resolve based on root', async function () {
       const filepath = fs.resolve('/foo', 'bar.html', '.liquid')
@@ -27,21 +20,21 @@ describe('fs', function () {
   })
   describe('#exists', () => {
     it('should resolve as false if not exists', async () => {
-      const result = await fs.exists('/foo/foo.html')
+      const result = await fs.exists('/foo/bar')
       return expect(result).to.be.false
     })
     it('should resolve as true if exists', async () => {
-      const result = await fs.exists('/foo/bar.html')
+      const result = await fs.exists(__filename)
       return expect(result).to.be.true
     })
   })
   describe('#readFile', function () {
     it('should throw when not exist', function () {
-      return expect(fs.readFile('/foo/foo.html')).to.rejectedWith('ENOENT')
+      return expect(fs.readFile('/foo/bar')).to.rejectedWith('ENOENT')
     })
-    it('should throw when file not readable', function () {
-      return expect(fs.readFile('/un-readable.html')).to
-        .be.rejectedWith(/EACCES/)
+    it('should read content if exists', async function () {
+      const content = await fs.readFile(__filename)
+      return expect(content).to.contain('should read content if exists')
     })
   })
 })

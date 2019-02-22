@@ -52,6 +52,10 @@ describe('util/underscore', function () {
     it('should return "" for undefined', function () {
       expect(_.stringify(undefined)).to.equal('')
     })
+    it('should use Object.prototype.toString if no toString method exists', function () {
+      const obj = { toString: undefined }
+      expect(_.stringify(obj)).to.equal('[object Object]')
+    })
     it('should return regex string for RegExp', function () {
       const reg = /foo/g
       expect(_.stringify(reg)).to.equal('/foo/g')

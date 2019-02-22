@@ -136,8 +136,14 @@ describe('filters/string', function () {
     it('should not truncate when short enough', function () {
       return test('{{ "12345" | truncate: 5 }}', '12345')
     })
-    it('should default to 16', function () {
-      return test('{{ "1234567890abcdefghi" | truncate }}', '1234567890abc...')
+    it('should truncate to "..." when len <= 3', function () {
+      return test('{{ "12345" | truncate: 2 }}', '...')
+    })
+    it('should not truncate if length is exactly len', function () {
+      return test('{{ "12345" | truncate: 5 }}', '12345')
+    })
+    it('should default to 50', function () {
+      return test('{{ "1234567890123456789012345678901234567890123456789abc" | truncate }}', '12345678901234567890123456789012345678901234567...')
     })
   })
   describe('truncatewords', function () {
@@ -156,6 +162,15 @@ describe('filters/string', function () {
     it('should truncate with empty custom ellipsis', function () {
       return test('{{ "Ground control to Major Tom." | truncatewords: 3, "" }}',
         'Ground control to')
+    })
+    it('should allow multiple space chars between', function () {
+      return test('{{ "1 \t2  3 \n4" | truncatewords: 3 }}', '1 2 3...')
+    })
+    it('should show ellipsis if length is exactly len', function () {
+      return test('{{ "1 2 3" | truncatewords: 3 }}', '1 2 3...')
+    })
+    it('should default len to 15', function () {
+      return test('{{ "1 2 3 4 5 6 7 8 9 a b c d e f" | truncatewords }}', '1 2 3 4 5 6 7 8 9 a b c d e f...')
     })
   })
 })
