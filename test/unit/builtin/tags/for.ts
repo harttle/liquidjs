@@ -1,7 +1,7 @@
 import Liquid from 'src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
-import IContext from 'src/scope/icontext';
+import IContext from 'src/scope/icontext'
 
 use(chaiAsPromised)
 

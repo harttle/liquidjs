@@ -1,9 +1,9 @@
 import assert from 'src/util/assert'
 import { identifier } from 'src/parser/lexical'
 import { AssignScope } from 'src/scope/scopes'
-import TagToken from 'src/parser/tag-token';
-import Scope from 'src/scope/scope';
-import ITagImplOptions from 'src/template/tag/itag-impl-options';
+import TagToken from 'src/parser/tag-token'
+import Scope from 'src/scope/scope'
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
 
 const re = new RegExp(`(${identifier.source})\\s*=([^]*)`)
 

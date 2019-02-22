@@ -1,6 +1,6 @@
 import Token from 'src/parser/token'
 import ITemplate from 'src/template/itemplate'
-import TagToken from './tag-token';
+import TagToken from './tag-token'
 
 type ParseToken = ((token: Token, remainTokens: Array<Token>) => ITemplate)
 
@@ -18,7 +18,7 @@ export default class ParseStream {
     this.handlers[name] = cb
     return this
   }
-  trigger <T extends Token | ITemplate>(event: string, arg?: T) {
+  trigger <T extends Token | ITemplate> (event: string, arg?: T) {
     const h = this.handlers[event]
     if (typeof h === 'function') {
       h(arg)

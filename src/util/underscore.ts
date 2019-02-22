@@ -77,10 +77,10 @@ export function isError (value: any): boolean {
  * @param {Function} iteratee The function invoked per iteration.
  * @return {Object} Returns object.
  */
-export function forOwn <T>(
+export function forOwn <T> (
   object: {[key: string]: T} | undefined,
   iteratee: ((val: T, key: string, obj: {[key: string]: T}) => boolean | void)
-  ) {
+) {
   object = object || {}
   for (const k in object) {
     if (object.hasOwnProperty(k)) {

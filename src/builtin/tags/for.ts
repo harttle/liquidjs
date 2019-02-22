@@ -3,13 +3,13 @@ import { isString, isObject, isArray } from 'src/util/underscore'
 import { evalExp } from 'src/render/syntax'
 import assert from 'src/util/assert'
 import { identifier, value, hash } from 'src/parser/lexical'
-import TagToken from 'src/parser/tag-token';
-import Token from 'src/parser/token';
-import Scope from 'src/scope/scope';
-import Hash from 'src/template/tag/hash';
-import ITemplate from 'src/template/itemplate';
-import ITagImplOptions from 'src/template/tag/itag-impl-options';
-import ParseStream from 'src/parser/parse-stream';
+import TagToken from 'src/parser/tag-token'
+import Token from 'src/parser/token'
+import Scope from 'src/scope/scope'
+import Hash from 'src/template/tag/hash'
+import ITemplate from 'src/template/itemplate'
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
+import ParseStream from 'src/parser/parse-stream'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(${value.source})` +
@@ -25,10 +25,10 @@ export default <ITagImplOptions>{
     this.variable = match[1]
     this.collection = match[2]
     this.reversed = !!match[3]
-  
+
     this.templates = []
     this.elseTemplates = []
-  
+
     let p
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
@@ -38,12 +38,12 @@ export default <ITagImplOptions>{
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
-  
+
     stream.start()
   },
   render: async function (scope: Scope, hash: Hash) {
     let collection = evalExp(this.collection, scope)
-  
+
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {
         collection = [collection] as string[]
@@ -54,13 +54,13 @@ export default <ITagImplOptions>{
     if (!isArray(collection) || !collection.length) {
       return this.liquid.renderer.renderTemplates(this.elseTemplates, scope)
     }
-  
+
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
-  
+
     collection = collection.slice(offset, offset + limit)
     if (this.reversed) collection.reverse()
-  
+
     const contexts = collection.map((item: string, i: number) => {
       const ctx = {}
       ctx[this.variable] = item
@@ -75,12 +75,12 @@ export default <ITagImplOptions>{
       }
       return ctx
     })
-  
+
     let html = ''
     let finished = false
     await mapSeries(contexts, async context => {
       if (finished) return
-  
+
       scope.push(context)
       try {
         html += await this.liquid.renderer.renderTemplates(this.templates, scope)

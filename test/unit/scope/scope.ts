@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import Scope from 'src/scope/scope'
-import IContext from 'src/scope/icontext';
+import IContext from 'src/scope/icontext'
 
 const expect = chai.expect
 

@@ -179,6 +179,6 @@ export default function (d: Date, format: string) {
     // Add the format code
     const ch = results[0].charAt(1)
     const func = formatCodes[ch]
-    output += func ? func.call(null, d) : '%' + ch
+    output += func ? func(d) : '%' + ch
   }
 }

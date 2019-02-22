@@ -2,13 +2,13 @@ import { mapSeries } from 'src/util/promise'
 import assert from 'src/util/assert'
 import { evalExp } from 'src/render/syntax'
 import { identifier, value, hash } from 'src/parser/lexical'
-import TagToken from 'src/parser/tag-token';
-import Token from 'src/parser/token';
-import ITemplate from 'src/template/itemplate';
-import Scope from 'src/scope/scope';
-import Hash from 'src/template/tag/hash';
-import ITagImplOptions from 'src/template/tag/itag-impl-options';
-import ParseStream from 'src/parser/parse-stream';
+import TagToken from 'src/parser/tag-token'
+import Token from 'src/parser/token'
+import ITemplate from 'src/template/itemplate'
+import Scope from 'src/scope/scope'
+import Hash from 'src/template/tag/hash'
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
+import ParseStream from 'src/parser/parse-stream'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(${value.source})` +

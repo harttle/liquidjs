@@ -14,7 +14,7 @@ import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax'
 import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
 import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
-import FilterImpl from './template/filter/filter-impl';
+import { FilterImpl } from './template/filter/filter-impl'
 
 export default class Liquid {
   public options: NormalizedFullOptions

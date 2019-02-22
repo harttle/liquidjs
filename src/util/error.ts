@@ -1,5 +1,4 @@
 import * as _ from './underscore'
-import { __extends } from 'tslib'
 import Token from 'src/parser/token'
 import ITemplate from 'src/template/itemplate'
 
@@ -11,7 +10,7 @@ abstract class LiquidError extends Error {
     this.originalError = err
     this.token = token
   }
-  protected update() {
+  protected update () {
     const err = this.originalError
     const context = mkContext(this.token)
     this.message = mkMessage(err.message, this.token)

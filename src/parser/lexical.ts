@@ -6,7 +6,7 @@ export const quoteBalanced = new RegExp(`(?:${quoted.source}|[^'"])*`)
 
 // basic types
 export const integer = /-?\d+/
-export const number = /-?\d+\.?\d*|\.?\d+/
+export const number = /[+-]?(?:\d+\.?\d*|\.?\d+)/
 export const bool = /true|false/
 
 // property access

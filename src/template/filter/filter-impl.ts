@@ -1,3 +1,1 @@
-type FilterImpl = (value: any, ...args: any[]) => any
-
-export default FilterImpl
+export type FilterImpl = (value: any, ...args: any[]) => any

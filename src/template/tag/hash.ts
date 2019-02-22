@@ -1,6 +1,6 @@
 import { hashCapture } from 'src/parser/lexical'
 import { evalValue } from 'src/render/syntax'
-import Scope from 'src/scope/scope';
+import Scope from 'src/scope/scope'
 
 /**
  * Key-Value Pairs Representing Tag Arguments

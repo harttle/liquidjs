@@ -1,7 +1,7 @@
-import { RenderBreakError, RenderError } from 'src/util/error'
+import { RenderError } from 'src/util/error'
 import assert from 'src/util/assert'
-import Scope from 'src/scope/scope';
-import ITemplate from 'src/template/itemplate';
+import Scope from 'src/scope/scope'
+import ITemplate from 'src/template/itemplate'
 
 export default class Render {
   async renderTemplates (templates: ITemplate[], scope: Scope) {

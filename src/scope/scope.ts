@@ -4,7 +4,7 @@ import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
-import IContext from './icontext';
+import IContext from './icontext'
 
 export default class Scope {
   opts: NormalizedFullOptions

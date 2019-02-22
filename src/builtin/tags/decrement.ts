@@ -3,7 +3,7 @@ import { identifier } from 'src/parser/lexical'
 import { CaptureScope, AssignScope, DecrementScope } from 'src/scope/scopes'
 import TagToken from 'src/parser/tag-token'
 import Scope from 'src/scope/scope'
-import ITagImplOptions from 'src/template/tag/itag-impl-options';
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
 
 export default {
   parse: function (token: TagToken) {

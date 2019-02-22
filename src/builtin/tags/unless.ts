@@ -1,10 +1,9 @@
 import { evalExp, isFalsy } from 'src/render/syntax'
-import TagToken from 'src/parser/tag-token';
-import Token from 'src/parser/token';
-import ITemplate from 'src/template/itemplate';
-import Scope from 'src/scope/scope';
-import ITagImplOptions from 'src/template/tag/itag-impl-options';
-import ParseStream from 'src/parser/parse-stream';
+import TagToken from 'src/parser/tag-token'
+import Token from 'src/parser/token'
+import Scope from 'src/scope/scope'
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
+import ParseStream from 'src/parser/parse-stream'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {

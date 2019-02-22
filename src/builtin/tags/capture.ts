@@ -4,7 +4,7 @@ import { CaptureScope } from 'src/scope/scopes'
 import TagToken from 'src/parser/tag-token'
 import Token from 'src/parser/token'
 import Scope from 'src/scope/scope'
-import ITagImplOptions from 'src/template/tag/itag-impl-options';
+import ITagImplOptions from 'src/template/tag/itag-impl-options'
 
 const re = new RegExp(`(${identifier.source})`)
 
