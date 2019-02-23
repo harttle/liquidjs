@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.2.1, https://github.com/harttle/liquidjs
+ * liquidjs@7.2.2, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -208,76 +208,6 @@ function padStart(str, length, ch) {
     return str;
 }
 
-// quote related
-var singleQuoted = /'[^']*'/;
-var doubleQuoted = /"[^"]*"/;
-var quoted = new RegExp(singleQuoted.source + "|" + doubleQuoted.source);
-var quoteBalanced = new RegExp("(?:" + quoted.source + "|[^'\"])*");
-// basic types
-var integer = /-?\d+/;
-var number = /[+-]?(?:\d+\.?\d*|\.?\d+)/;
-var bool = /true|false/;
-// property access
-var identifier = /[\w-]+[?]?/;
-var subscript = new RegExp("\\[(?:" + quoted.source + "|[\\w-\\.]+)\\]");
-var literal = new RegExp("(?:" + quoted.source + "|" + bool.source + "|" + number.source + ")");
-var variable = new RegExp(identifier.source + "(?:\\." + identifier.source + "|" + subscript.source + ")*");
-// range related
-var rangeLimit = new RegExp("(?:" + variable.source + "|" + number.source + ")");
-var range$1 = new RegExp("\\(" + rangeLimit.source + "\\.\\." + rangeLimit.source + "\\)");
-var rangeCapture = new RegExp("\\((" + rangeLimit.source + ")\\.\\.(" + rangeLimit.source + ")\\)");
-var value = new RegExp("(?:" + variable.source + "|" + literal.source + "|" + range$1.source + ")");
-// hash related
-var hash = new RegExp("(?:" + identifier.source + ")\\s*:\\s*(?:" + value.source + ")");
-var hashCapture = new RegExp("(" + identifier.source + ")\\s*:\\s*(" + value.source + ")", 'g');
-// full match
-var tagLine = new RegExp("^\\s*(" + identifier.source + ")\\s*([\\s\\S]*?)\\s*$");
-var literalLine = new RegExp("^" + literal.source + "$", 'i');
-var variableLine = new RegExp("^" + variable.source + "$");
-var numberLine = new RegExp("^" + number.source + "$");
-var boolLine = new RegExp("^" + bool.source + "$", 'i');
-var quotedLine = new RegExp("^" + quoted.source + "$");
-var rangeLine = new RegExp("^" + rangeCapture.source + "$");
-var integerLine = new RegExp("^" + integer.source + "$");
-// filter related
-var valueDeclaration = new RegExp("(?:" + identifier.source + "\\s*:\\s*)?" + value.source);
-var valueList = new RegExp(valueDeclaration.source + "(\\s*,\\s*" + valueDeclaration.source + ")*");
-var filter = new RegExp(identifier.source + "(?:\\s*:\\s*" + valueList.source + ")?", 'g');
-var filterCapture = new RegExp("(" + identifier.source + ")(?:\\s*:\\s*(" + valueList.source + "))?");
-var filterLine = new RegExp("^" + filterCapture.source + "$");
-var operators = [
-    /\s+or\s+/,
-    /\s+and\s+/,
-    /==|!=|<=|>=|<|>|\s+contains\s+/
-];
-function isInteger(str) {
-    return integerLine.test(str);
-}
-function isLiteral(str) {
-    return literalLine.test(str);
-}
-function isVariable(str) {
-    return variableLine.test(str);
-}
-function matchValue(str) {
-    return value.exec(str);
-}
-function parseLiteral(str) {
-    var res = str.match(numberLine);
-    if (res) {
-        return Number(str);
-    }
-    res = str.match(boolLine);
-    if (res) {
-        return str.toLowerCase() === 'true';
-    }
-    res = str.match(quotedLine);
-    if (res) {
-        return str.slice(1, -1);
-    }
-    throw new TypeError("cannot parse '" + str + "' as literal");
-}
-
 var LiquidError = /** @class */ (function (_super) {
     __extends(LiquidError, _super);
     function LiquidError(err, token) {
@@ -437,7 +367,7 @@ var Scope = /** @class */ (function () {
         var _this = this;
         var paths = this.propertyAccessSeq(path$$1);
         var scope = this.findContextFor(paths[0]) || last(this.contexts);
-        return paths.reduce(function (value$$1, key) { return _this.readProperty(value$$1, key); }, scope);
+        return paths.reduce(function (value, key) { return _this.readProperty(value, key); }, scope);
     };
     Scope.prototype.set = function (path$$1, v) {
         var paths = this.propertyAccessSeq(path$$1);
@@ -473,11 +403,11 @@ var Scope = /** @class */ (function () {
         }
         return this.contexts.splice(i, 1)[0];
     };
-    Scope.prototype.findContextFor = function (key, filter$$1) {
-        if (filter$$1 === void 0) { filter$$1 = function () { return true; }; }
+    Scope.prototype.findContextFor = function (key, filter) {
+        if (filter === void 0) { filter = function () { return true; }; }
         for (var i = this.contexts.length - 1; i >= 0; i--) {
             var candidate = this.contexts[i];
-            if (!filter$$1(candidate))
+            if (!filter(candidate))
                 continue;
             if (key in candidate) {
                 return candidate;
@@ -532,7 +462,7 @@ var Scope = /** @class */ (function () {
                         j = matchRightBracket(str, i + 1);
                         assert(j !== -1, "unbalanced []: " + str);
                         name = str.slice(i + 1, j);
-                        if (!isInteger(name)) { // foo[bar] vs. foo[1]
+                        if (!/^[+-]?\d+$/.test(name)) { // foo[bar] vs. foo[1]
                             name = String(this.get(name));
                         }
                         push();
@@ -726,6 +656,37 @@ var DelimitedToken = /** @class */ (function (_super) {
     return DelimitedToken;
 }(Token));
 
+// quote related
+var singleQuoted = /'[^']*'/;
+var doubleQuoted = /"[^"]*"/;
+var quoted = new RegExp(singleQuoted.source + "|" + doubleQuoted.source);
+var quoteBalanced = new RegExp("(?:" + quoted.source + "|[^'\"])*");
+// basic types
+var number = /[+-]?(?:\d+\.?\d*|\.?\d+)/;
+var bool = /true|false/;
+// property access
+var identifier = /[\w-]+[?]?/;
+var subscript = new RegExp("\\[(?:" + quoted.source + "|[\\w-\\.]+)\\]");
+var literal = new RegExp("(?:" + quoted.source + "|" + bool.source + "|" + number.source + ")");
+var variable = new RegExp(identifier.source + "(?:\\." + identifier.source + "|" + subscript.source + ")*");
+// range related
+var rangeLimit = new RegExp("(?:" + variable.source + "|" + number.source + ")");
+var range$1 = new RegExp("\\(" + rangeLimit.source + "\\.\\." + rangeLimit.source + "\\)");
+var rangeCapture = new RegExp("\\((" + rangeLimit.source + ")\\.\\.(" + rangeLimit.source + ")\\)");
+var value = new RegExp("(?:" + variable.source + "|" + literal.source + "|" + range$1.source + ")");
+// hash related
+var hash = new RegExp("(?:" + identifier.source + ")\\s*:\\s*(?:" + value.source + ")");
+var hashCapture = new RegExp("(" + identifier.source + ")\\s*:\\s*(" + value.source + ")", 'g');
+// full match
+var tagLine = new RegExp("^\\s*(" + identifier.source + ")\\s*([\\s\\S]*?)\\s*$");
+var quotedLine = new RegExp("^" + quoted.source + "$");
+var rangeLine = new RegExp("^" + rangeCapture.source + "$");
+var operators = [
+    /\s+or\s+/,
+    /\s+and\s+/,
+    /==|!=|<=|>=|<|>|\s+contains\s+/
+];
+
 var TagToken = /** @class */ (function (_super) {
     __extends(TagToken, _super);
     function TagToken(raw, value$$1, input, line, pos, file) {
@@ -918,16 +879,18 @@ function evalExp(exp, scope) {
     return evalValue(exp, scope);
 }
 function evalValue(str, scope) {
-    str = str && str.trim();
     if (!str)
-        return undefined;
-    if (isLiteral(str)) {
-        return parseLiteral(str);
-    }
-    if (isVariable(str)) {
-        return scope.get(str);
-    }
-    throw new TypeError("cannot eval '" + str + "' as value");
+        return null;
+    str = str.trim();
+    if (str === 'true')
+        return true;
+    if (str === 'false')
+        return false;
+    if (!isNaN(Number(str)))
+        return Number(str);
+    if ((str[0] === '"' || str[0] === "'") && str[0] === last(str))
+        return str.slice(1, -1);
+    return scope.get(str);
 }
 function isTruthy(val) {
     return !isFalsy(val);
@@ -1005,39 +968,21 @@ var Tag = /** @class */ (function (_super) {
     return Tag;
 }(Template));
 
-var valueRE = new RegExp("" + value.source, 'g');
 var Filter = /** @class */ (function () {
-    function Filter(str, strictFilters) {
-        if (strictFilters === void 0) { strictFilters = false; }
-        var match = filterLine.exec(str);
-        assert(match, 'illegal filter: ' + str);
-        var name = match[1];
-        var argList = match[2] || '';
+    function Filter(name, args, strictFilters) {
         var impl = Filter.impls[name];
         if (!impl && strictFilters)
             throw new TypeError("undefined filter: " + name);
         this.name = name;
         this.impl = impl || (function (x) { return x; });
-        this.args = this.parseArgs(argList);
+        this.args = args;
     }
-    Filter.prototype.parseArgs = function (argList) {
-        var match;
-        var args = [];
-        while ((match = valueRE.exec(argList.trim()))) {
-            var v = match[0];
-            var re = new RegExp(v + "\\s*:", 'g');
-            var keyMatch = re.exec(match.input);
-            var currentMatchIsKey = keyMatch && keyMatch.index === match.index;
-            currentMatchIsKey ? args.push("'" + v + "'") : args.push(v);
-        }
-        return args;
-    };
-    Filter.prototype.render = function (value$$1, scope) {
+    Filter.prototype.render = function (value, scope) {
         var args = this.args.map(function (arg) { return evalValue(arg, scope); });
-        return this.impl.apply(null, [value$$1].concat(args));
+        return this.impl.apply(null, [value].concat(args));
     };
-    Filter.register = function (name, filter$$1) {
-        Filter.impls[name] = filter$$1;
+    Filter.register = function (name, filter) {
+        Filter.impls[name] = filter;
     };
     Filter.clear = function () {
         Filter.impls = {};
@@ -1088,19 +1033,87 @@ var ParseStream = /** @class */ (function () {
     return ParseStream;
 }());
 
+var ParseState$1;
+(function (ParseState) {
+    ParseState[ParseState["INIT"] = 0] = "INIT";
+    ParseState[ParseState["FILTER_NAME"] = 1] = "FILTER_NAME";
+    ParseState[ParseState["FILTER_ARG"] = 2] = "FILTER_ARG";
+})(ParseState$1 || (ParseState$1 = {}));
 var default_1 = /** @class */ (function () {
+    /**
+     * @param str value string, like: "i have a dream | truncate: 3
+     */
     function default_1(str, strictFilters) {
         this.filters = [];
-        var match = matchValue(str);
-        assert(match, "illegal value string: " + str);
-        this.initial = match[0];
-        str = str.substr(match.index + match[0].length);
-        while ((match = filter.exec(str))) {
-            this.filters.push(new Filter(match[0].trim(), strictFilters));
+        var buffer = '';
+        var quoted = '';
+        var state = ParseState$1.INIT;
+        var sealed = false;
+        var filterName = '';
+        var filterArgs = [];
+        for (var i = 0; i < str.length; i++) {
+            if (quoted) {
+                if (str[i] === quoted) {
+                    quoted = '';
+                    sealed = true;
+                }
+                buffer += str[i];
+            }
+            else if (/\s/.test(str[i])) {
+                if (!buffer)
+                    continue;
+                else
+                    sealed = true;
+            }
+            else if (str[i] === '|') {
+                if (state === ParseState$1.INIT) {
+                    this.initial = buffer;
+                }
+                else {
+                    if (state === ParseState$1.FILTER_NAME)
+                        filterName = buffer;
+                    else
+                        filterArgs.push(buffer);
+                    this.filters.push(new Filter(filterName, filterArgs, strictFilters));
+                    filterName = '';
+                    filterArgs = [];
+                }
+                state = ParseState$1.FILTER_NAME;
+                buffer = '';
+                sealed = false;
+            }
+            else if (state === ParseState$1.FILTER_NAME && str[i] === ':') {
+                filterName = buffer;
+                state = ParseState$1.FILTER_ARG;
+                buffer = '';
+                sealed = false;
+            }
+            else if (state === ParseState$1.FILTER_ARG && str[i] === ',') {
+                filterArgs.push(buffer);
+                buffer = '';
+                sealed = false;
+            }
+            else if (sealed)
+                continue;
+            else {
+                if ((str[i] === '"' || str[i] === "'") && !quoted)
+                    quoted = str[i];
+                buffer += str[i];
+            }
+        }
+        if (buffer) {
+            if (state === ParseState$1.INIT)
+                this.initial = buffer;
+            else if (state === ParseState$1.FILTER_NAME)
+                this.filters.push(new Filter(buffer, [], strictFilters));
+            else {
+                filterArgs.push(buffer);
+                this.filters.push(new Filter(filterName, filterArgs, strictFilters));
+            }
         }
     }
     default_1.prototype.value = function (scope) {
-        return this.filters.reduce(function (prev, filter$$1) { return filter$$1.render(prev, scope); }, evalExp(this.initial, scope));
+        return this.filters.reduce(function (prev, filter) { return filter.render(prev, scope); }, evalExp(this.initial, scope));
     };
     return default_1;
 }());
