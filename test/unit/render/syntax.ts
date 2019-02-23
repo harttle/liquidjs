@@ -18,21 +18,25 @@ describe('expression', function () {
   })
 
   describe('.evalValue()', function () {
-    it('should eval literals', function () {
-      expect(evalValue('2.3', scope)).to.equal(2.3)
-      expect(evalValue('"foo"', scope)).to.equal('foo')
+    it('should eval boolean literal', function () {
+      expect(evalValue('true', scope)).to.equal(true)
+      expect(evalValue('TrUE', scope)).to.equal(undefined)
+      expect(evalValue('false', scope)).to.equal(false)
     })
-
-    it('should eval variables', function () {
+    it('should eval number literal', function () {
+      expect(evalValue('2.3', scope)).to.equal(2.3)
+      expect(evalValue('.32', scope)).to.equal(0.32)
+      expect(evalValue('-23.', scope)).to.equal(-23)
       expect(evalValue('23', scope)).to.equal(23)
+    })
+    it('should eval literal', function () {
+      expect(evalValue('"ab\'c"', scope)).to.equal("ab'c")
+      expect(evalValue("'ab\"c'", scope)).to.equal('ab"c')
+    })
+    it('should eval scope variables', function () {
       expect(evalValue('one', scope)).to.equal(1)
       expect(evalValue('has_value?', scope)).to.equal(true)
       expect(evalValue('x', scope)).to.equal('XXX')
-    })
-
-    it('should throw if not valid', function () {
-      const fn = () => evalValue('===', scope)
-      expect(fn).to.throw("cannot eval '===' as value")
     })
   })
 

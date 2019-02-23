@@ -1,7 +1,7 @@
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
 import Scope from 'src/scope/scope'
-import { range } from 'src/util/underscore'
+import { range, last } from 'src/util/underscore'
 
 const operators = {
   '==': (l: any, r: any) => l === r,
@@ -46,15 +46,12 @@ export function evalExp (exp: string, scope: Scope): any {
 export function evalValue (str: string, scope: Scope) {
   if (!str) return null
   str = str.trim()
-  if (!str) return undefined
 
-  if (lexical.isLiteral(str)) {
-    return lexical.parseLiteral(str)
-  }
-  if (lexical.isVariable(str)) {
-    return scope.get(str)
-  }
-  throw new TypeError(`cannot eval '${str}' as value`)
+  if (str === 'true') return true
+  if (str === 'false') return false
+  if (!isNaN(Number(str))) return Number(str)
+  if ((str[0] === '"' || str[0] === "'") && str[0] === last(str)) return str.slice(1, -1)
+  return scope.get(str)
 }
 
 export function isTruthy (val: any): boolean {

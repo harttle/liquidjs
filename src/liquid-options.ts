@@ -33,7 +33,7 @@ export interface LiquidOptions {
   greedy?: boolean
 }
 
-export interface NormalizedOptions extends LiquidOptions {
+interface NormalizedOptions extends LiquidOptions {
   root?: string[]
 }
 

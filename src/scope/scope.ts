@@ -1,6 +1,5 @@
 import * as _ from '../util/underscore'
 import { __assign } from 'tslib'
-import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
@@ -115,7 +114,7 @@ export default class Scope {
             j = matchRightBracket(str, i + 1)
             assert(j !== -1, `unbalanced []: ${str}`)
             name = str.slice(i + 1, j)
-            if (!lexical.isInteger(name)) { // foo[bar] vs. foo[1]
+            if (!/^[+-]?\d+$/.test(name)) { // foo[bar] vs. foo[1]
               name = String(this.get(name))
             }
             push()
