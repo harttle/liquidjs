@@ -14,7 +14,6 @@ export function mock (options: { [path: string]: (string | fileDescriptor) }) {
       : val as fileDescriptor
   })
   fs.readFile = async function (path) {
-    console.log('mock fs read called', path)
     const file = files[path]
     if (file === undefined) throw new Error('ENOENT')
     if (file.mode === '0000') throw new Error('EACCES')
@@ -22,7 +21,6 @@ export function mock (options: { [path: string]: (string | fileDescriptor) }) {
   }
 
   fs.exists = async function (path: string) {
-    console.log('mock fs exists called', path)
     return !!files[path]
   }
 }

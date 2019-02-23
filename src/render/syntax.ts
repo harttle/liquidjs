@@ -44,7 +44,8 @@ export function evalExp (exp: string, scope: Scope): any {
 }
 
 export function evalValue (str: string, scope: Scope) {
-  str = str && str.trim()
+  if (!str) return null
+  str = str.trim()
   if (!str) return undefined
 
   if (lexical.isLiteral(str)) {

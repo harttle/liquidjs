@@ -11,10 +11,11 @@
     "baseUrl": ".",
     "paths": {
       "src/fs": ["src/fs/node"],
+      "benchmark": ["node_modules/benchmark"],
       "src/*": ["src/*"],
       "test/*": ["test/*"]
     }
   },
-  "include": [ "src", "test" ],
+  "all": true,
   "exclude": [ "node_modules", "dist" ]
 }

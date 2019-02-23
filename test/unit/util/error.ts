@@ -45,7 +45,6 @@ describe('error', function () {
     it('should contain stack in err.stack', async function () {
       const err = await expect(engine.parseAndRender('{% . a %}')).be.rejected
       expect(err.message).to.contain('illegal tag syntax')
-      console.log(err.stack)
       expect(err.stack).to.contain('at Liquid.parse')
     })
     describe('captureStackTrace compatibility', function () {
@@ -148,8 +147,6 @@ describe('error', function () {
         'RenderError'
       ]
       const err = await expect(engine.parseAndRender(html)).be.rejected
-      console.log(err.message)
-      console.log(err.stack)
       expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`)
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('RenderError')
