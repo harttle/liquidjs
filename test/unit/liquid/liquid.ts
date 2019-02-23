@@ -23,6 +23,18 @@ describe('Liquid', function () {
       expect(html).to.equal('true')
     })
   })
+  describe('#parseAndRender', function () {
+    const engine = new Liquid()
+    it('should parse and render variable output', async function () {
+      const html = await engine.parseAndRender('{{"foo"}}')
+      expect(html).to.equal('foo')
+    })
+    it('should parse and render complex output', async function () {
+      const tpl = '{{ "Welcome|to]Liquid" | split: "|" | join: "("}}'
+      const html = await engine.parseAndRender(tpl)
+      expect(html).to.equal('Welcome(to]Liquid')
+    })
+  })
   describe('#express()', function () {
     const liquid = new Liquid({ root: '/root' })
     const render = liquid.express()

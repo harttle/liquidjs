@@ -7,7 +7,7 @@ import OutputToken from 'src/parser/output-token'
 
 export default class Output extends Template<OutputToken> implements ITemplate {
   value: Value
-  constructor (token: OutputToken, strictFilters?: boolean) {
+  constructor (token: OutputToken, strictFilters: boolean) {
     super(token)
     this.value = new Value(token.value, strictFilters)
   }

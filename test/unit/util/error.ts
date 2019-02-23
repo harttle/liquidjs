@@ -193,7 +193,7 @@ describe('error', function () {
         }
       })
     })
-    it('should throw RenderError when filter not defined', async function () {
+    it('should throw ParseError when filter not defined', async function () {
       const err = await expect(strictEngine.parseAndRender('{{1 | a}}')).be.rejected
       expect(err).to.have.property('name', 'ParseError')
       expect(err.message).to.contain('undefined filter: a')

@@ -12,29 +12,13 @@ export default class Filter {
   args: string[]
   private static impls: {[key: string]: FilterImpl} = {}
 
-  constructor (str: string, strictFilters: boolean = false) {
-    const match = lexical.filterLine.exec(str) as string[]
-    assert(match, 'illegal filter: ' + str)
-
-    const name = match[1]
-    const argList = match[2] || ''
+  constructor (name: string, args: string[], strictFilters: boolean) {
     const impl = Filter.impls[name]
     if (!impl && strictFilters) throw new TypeError(`undefined filter: ${name}`)
 
     this.name = name
     this.impl = impl || (x => x)
-    this.args = this.parseArgs(argList)
-  }
-  parseArgs (argList: string): string[] {
-    let match; const args: string[] = []
-    while ((match = valueRE.exec(argList.trim()))) {
-      const v = match[0]
-      const re = new RegExp(`${v}\\s*:`, 'g')
-      const keyMatch = re.exec(match.input)
-      const currentMatchIsKey = keyMatch && keyMatch.index === match.index
-      currentMatchIsKey ? args.push(`'${v}'`) : args.push(v)
-    }
-    return args
+    this.args = args
   }
   render (value: any, scope: Scope): any {
     const args = this.args.map(arg => evalValue(arg, scope))
