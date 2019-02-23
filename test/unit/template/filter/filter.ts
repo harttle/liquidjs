@@ -35,7 +35,7 @@ describe('filter', function () {
 
   it('should render filters with argument', function () {
     Filter.register('add', (a, b) => a + b)
-    expect(new Filter('add', ["2"], false).render(3, scope)).to.equal(5)
+    expect(new Filter('add', ['2'], false).render(3, scope)).to.equal(5)
   })
 
   it('should render filters with multiple arguments', function () {

@@ -1,8 +1,6 @@
 import { evalExp } from 'src/render/syntax'
-import * as lexical from 'src/parser/lexical'
 import Filter from './filter/filter'
 import Scope from 'src/scope/scope'
-
 
 enum ParseState {
   INIT = 0,
@@ -18,7 +16,6 @@ export default class {
    * @param str value string, like: "i have a dream | truncate: 3
    */
   constructor (str: string, strictFilters: boolean) {
-    const N = str.length
     let buffer = ''
     let quoted = ''
     let state = ParseState.INIT
@@ -27,23 +24,20 @@ export default class {
     let filterName = ''
     let filterArgs: string[] = []
 
-    for(let i = 0; i < str.length; i++) {
+    for (let i = 0; i < str.length; i++) {
       if (quoted) {
-        if (str[i] == quoted) {
+        if (str[i] === quoted) {
           quoted = ''
           sealed = true
         }
         buffer += str[i]
-      }
-      else if (/\s/.test(str[i])) {
+      } else if (/\s/.test(str[i])) {
         if (!buffer) continue
         else sealed = true
-      }
-      else if (str[i] === '|') {
+      } else if (str[i] === '|') {
         if (state === ParseState.INIT) {
           this.initial = buffer
-        }
-        else {
+        } else {
           if (state === ParseState.FILTER_NAME) filterName = buffer
           else filterArgs.push(buffer)
           this.filters.push(new Filter(filterName, filterArgs, strictFilters))
@@ -53,19 +47,16 @@ export default class {
         state = ParseState.FILTER_NAME
         buffer = ''
         sealed = false
-      }
-      else if (state === ParseState.FILTER_NAME && str[i] === ':') {
+      } else if (state === ParseState.FILTER_NAME && str[i] === ':') {
         filterName = buffer
         state = ParseState.FILTER_ARG
         buffer = ''
         sealed = false
-      }
-      else if (state === ParseState.FILTER_ARG && str[i] === ',') {
+      } else if (state === ParseState.FILTER_ARG && str[i] === ',') {
         filterArgs.push(buffer)
         buffer = ''
         sealed = false
-      }
-      else if (sealed) continue
+      } else if (sealed) continue
       else {
         if ((str[i] === '"' || str[i] === "'") && !quoted) quoted = str[i]
         buffer += str[i]

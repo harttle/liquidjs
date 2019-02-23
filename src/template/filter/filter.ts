@@ -1,10 +1,6 @@
-import assert from 'src/util/assert'
-import * as lexical from 'src/parser/lexical'
 import { evalValue } from 'src/render/syntax'
 import Scope from 'src/scope/scope'
 import { FilterImpl } from './filter-impl'
-
-const valueRE = new RegExp(`${lexical.value.source}`, 'g')
 
 export default class Filter {
   name: string
