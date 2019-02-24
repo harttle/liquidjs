@@ -9,6 +9,13 @@ describe('drop', function () {
   beforeEach(function () {
     engine = new Liquid()
   })
+  it('should support liquid_method_missing', async function () {
+    let i = 0
+    const src = `{{settings.foo}},{{settings.foo}},{{settings.foo}}`
+    const ctx = { settings: { liquid_method_missing: () => i++ } }
+    const html = await engine.parseAndRender(src, ctx)
+    return expect(html).to.equal('0,1,2')
+  })
   it('should test blank strings', async function () {
     const src = `
     {% unless settings.fp_heading == blank %}
