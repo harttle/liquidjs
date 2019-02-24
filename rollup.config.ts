@@ -30,6 +30,7 @@ export default [{
       include: [ 'src' ],
       exclude: [ 'test', 'benchmark' ],
       compilerOptions: {
+        target: 'es5',
         module: 'ES2015'
       }
     }
@@ -51,6 +52,7 @@ export default [{
         include: [ 'src' ],
         exclude: [ 'test', 'benchmark' ],
         compilerOptions: {
+          target: 'es5',
           module: 'ES2015',
           paths: { 'src/fs': ['src/fs/browser'] }
         }
@@ -73,6 +75,7 @@ export default [{
         include: [ 'src' ],
         exclude: [ 'test', 'benchmark' ],
         compilerOptions: {
+          target: 'es5',
           module: 'ES2015',
           paths: { 'src/fs': ['src/fs/browser'] }
         }
