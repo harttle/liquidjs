@@ -27,7 +27,8 @@ export default [{
   external: ['path', 'fs'],
   plugins: [typescript({
     tsconfigOverride: {
-      exclude: [ 'test' ],
+      include: [ 'src' ],
+      exclude: [ 'test', 'benchmark' ],
       compilerOptions: {
         module: 'ES2015'
       }
@@ -47,7 +48,8 @@ export default [{
     shim(fake),
     typescript({
       tsconfigOverride: {
-        exclude: [ 'test' ],
+        include: [ 'src' ],
+        exclude: [ 'test', 'benchmark' ],
         compilerOptions: {
           module: 'ES2015',
           paths: { 'src/fs': ['src/fs/browser'] }
@@ -68,7 +70,8 @@ export default [{
     shim(fake),
     typescript({
       tsconfigOverride: {
-        exclude: [ 'test' ],
+        include: [ 'src' ],
+        exclude: [ 'test', 'benchmark' ],
         compilerOptions: {
           module: 'ES2015',
           paths: { 'src/fs': ['src/fs/browser'] }

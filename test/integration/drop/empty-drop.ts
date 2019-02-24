@@ -49,4 +49,34 @@ describe('drop/empty-drop', function () {
     const html = await liquid.parseAndRender(src, { arr: [1] })
     expect(html).to.equal('[1] != empty')
   })
+  it('1 < empty should be false', async function () {
+    const src = '{%if 1 < empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
+  it('1 <= empty should be false', async function () {
+    const src = '{%if 1 <= empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
+  it('1 > empty should be false', async function () {
+    const src = '{%if 1 > empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
+  it('1 >= empty should be false', async function () {
+    const src = '{%if 1 >= empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
+  it('1 == empty should be false', async function () {
+    const src = '{%if 1 == empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
+  it('1 != empty should be true', async function () {
+    const src = '{%if 1 != empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('true')
+  })
 })

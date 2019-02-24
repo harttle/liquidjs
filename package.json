@@ -8,13 +8,14 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "unit": "mocha 'test/unit/**/*.ts'",
+    "integration": "mocha 'test/integration/**/*.ts'",
     "e2e": "npm run build && mocha 'test/e2e/**/*.ts'",
-    "test": "npm run unit && npm run e2e",
+    "test": "npm run build && mocha 'test/**/*.ts'",
     "benchmark": "ts-node --require tsconfig-paths/register benchmark",
-    "coverage-html": "nyc --reporter=html npm run unit",
-    "coverage-coveralls": "nyc npm run unit && nyc report --reporter=text-lcov | coveralls",
+    "coverage-html": "nyc --reporter=html mocha 'test/{unit,integration}/**/*.ts'",
+    "coverage-coveralls": "nyc mocha 'test/{unit,integration}/**/*.ts' && nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c rollup.config.ts && ls -lh dist",
-    "version": "npm run build && git add -A dist"
+    "version": "npm run build"
   },
   "repository": {
     "type": "git",

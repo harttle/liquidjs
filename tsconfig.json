@@ -16,6 +16,6 @@
       "test/*": ["test/*"]
     }
   },
-  "all": true,
+  "include": [ "*.ts", "src", "test", "benchmark" ],
   "exclude": [ "node_modules", "dist" ]
 }
