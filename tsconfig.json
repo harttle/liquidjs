@@ -6,6 +6,7 @@
     "sourceMap": true,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "baseUrl": ".",
@@ -16,6 +17,6 @@
       "test/*": ["test/*"]
     }
   },
-  "include": [ "*.ts", "src", "test", "benchmark" ],
+  "all": true,
   "exclude": [ "node_modules", "dist" ]
 }
