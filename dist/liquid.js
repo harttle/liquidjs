@@ -1,5 +1,5 @@
 /*
- * liquidjs@7.2.2, https://github.com/harttle/liquidjs
+ * liquidjs@7.3.0, https://github.com/harttle/liquidjs
  * (c) 2016-2019 harttle
  * Released under the MIT License.
  */
@@ -406,7 +406,7 @@
         Scope.prototype.readProperty = function (obj, key) {
             var val;
             if (isNil(obj)) {
-                val = undefined;
+                val = obj;
             }
             else {
                 obj = toLiquid(obj);
@@ -865,13 +865,136 @@
         return Render;
     }());
 
-    var operators$1 = {
-        '==': function (l, r) { return l === r; },
-        '!=': function (l, r) { return l !== r; },
-        '>': function (l, r) { return l !== null && r !== null && l > r; },
-        '<': function (l, r) { return l !== null && r !== null && l < r; },
-        '>=': function (l, r) { return l !== null && r !== null && l >= r; },
-        '<=': function (l, r) { return l !== null && r !== null && l <= r; },
+    function isComparable(arg) {
+        return arg && isFunction(arg.equals);
+    }
+
+    var Drop = /** @class */ (function () {
+        function Drop() {
+        }
+        return Drop;
+    }());
+
+    function isDrop(value) {
+        return value instanceof Drop && isFunction(value.value);
+    }
+
+    var EmptyDrop = /** @class */ (function (_super) {
+        __extends(EmptyDrop, _super);
+        function EmptyDrop() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        EmptyDrop.prototype.equals = function (value) {
+            if (isString(value) || isArray(value))
+                return value.length === 0;
+            if (isObject(value))
+                return Object.keys(value).length === 0;
+            return false;
+        };
+        EmptyDrop.prototype.gt = function () {
+            return false;
+        };
+        EmptyDrop.prototype.geq = function () {
+            return false;
+        };
+        EmptyDrop.prototype.lt = function () {
+            return false;
+        };
+        EmptyDrop.prototype.leq = function () {
+            return false;
+        };
+        EmptyDrop.prototype.value = function () {
+            return '';
+        };
+        return EmptyDrop;
+    }(Drop));
+
+    var BlankDrop = /** @class */ (function (_super) {
+        __extends(BlankDrop, _super);
+        function BlankDrop() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        BlankDrop.prototype.equals = function (value) {
+            if (value === false)
+                return true;
+            if (isNil(isDrop(value) ? value.value() : value))
+                return true;
+            if (isString(value))
+                return /^\s*$/.test(value);
+            return _super.prototype.equals.call(this, value);
+        };
+        return BlankDrop;
+    }(EmptyDrop));
+
+    var NullDrop = /** @class */ (function (_super) {
+        __extends(NullDrop, _super);
+        function NullDrop() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        NullDrop.prototype.equals = function (value) {
+            return isNil(isDrop(value) ? value.value() : value) || value instanceof BlankDrop;
+        };
+        NullDrop.prototype.gt = function () {
+            return false;
+        };
+        NullDrop.prototype.geq = function () {
+            return false;
+        };
+        NullDrop.prototype.lt = function () {
+            return false;
+        };
+        NullDrop.prototype.leq = function () {
+            return false;
+        };
+        NullDrop.prototype.value = function () {
+            return null;
+        };
+        return NullDrop;
+    }(Drop));
+
+    var binaryOperators = {
+        '==': function (l, r) {
+            if (isComparable(l))
+                return l.equals(r);
+            if (isComparable(r))
+                return r.equals(l);
+            return l === r;
+        },
+        '!=': function (l, r) {
+            if (isComparable(l))
+                return !l.equals(r);
+            if (isComparable(r))
+                return !r.equals(l);
+            return l !== r;
+        },
+        '>': function (l, r) {
+            if (isComparable(l))
+                return l.gt(r);
+            if (isComparable(r))
+                return r.lt(l);
+            return l > r;
+        },
+        '<': function (l, r) {
+            if (isComparable(l))
+                return l.lt(r);
+            if (isComparable(r))
+                return r.gt(l);
+            return l < r;
+        },
+        '>=': function (l, r) {
+            if (isComparable(l))
+                return l.geq(r);
+            if (isComparable(r))
+                return r.leq(l);
+            return l >= r;
+        },
+        '<=': function (l, r) {
+            if (isComparable(l))
+                return l.leq(r);
+            if (isComparable(r))
+                return r.geq(l);
+            return l <= r;
+        },
         'contains': function (l, r) {
             if (!l)
                 return false;
@@ -882,28 +1005,32 @@
         'and': function (l, r) { return isTruthy(l) && isTruthy(r); },
         'or': function (l, r) { return isTruthy(l) || isTruthy(r); }
     };
-    function evalExp(exp, scope) {
-        assert(scope, 'unable to evalExp: scope undefined');
+    function parseExp(exp, scope) {
+        assert(scope, 'unable to parseExp: scope undefined');
         var operatorREs = operators;
         var match;
         for (var i = 0; i < operatorREs.length; i++) {
             var operatorRE = operatorREs[i];
             var expRE = new RegExp("^(" + quoteBalanced.source + ")(" + operatorRE.source + ")(" + quoteBalanced.source + ")$");
             if ((match = exp.match(expRE))) {
-                var l = evalExp(match[1], scope);
-                var op = operators$1[match[2].trim()];
-                var r = evalExp(match[3], scope);
+                var l = parseExp(match[1], scope);
+                var op = binaryOperators[match[2].trim()];
+                var r = parseExp(match[3], scope);
                 return op(l, r);
             }
         }
         if ((match = exp.match(rangeLine))) {
-            var low = evalValue(match[1], scope);
-            var high = evalValue(match[2], scope);
+            var low = parseValue(match[1], scope);
+            var high = parseValue(match[2], scope);
             return range(low, high + 1);
         }
-        return evalValue(exp, scope);
+        return parseValue(exp, scope);
     }
-    function evalValue(str, scope) {
+    function evalExp(str, scope) {
+        var value$$1 = parseExp(str, scope);
+        return isDrop(value$$1) ? value$$1.value() : value$$1;
+    }
+    function parseValue(str, scope) {
         if (!str)
             return null;
         str = str.trim();
@@ -911,11 +1038,21 @@
             return true;
         if (str === 'false')
             return false;
+        if (str === 'nil' || str === 'null')
+            return new NullDrop();
+        if (str === 'empty')
+            return new EmptyDrop();
+        if (str === 'blank')
+            return new BlankDrop();
         if (!isNaN(Number(str)))
             return Number(str);
         if ((str[0] === '"' || str[0] === "'") && str[0] === last(str))
             return str.slice(1, -1);
         return scope.get(str);
+    }
+    function evalValue(str, scope) {
+        var value$$1 = parseValue(str, scope);
+        return isDrop(value$$1) ? value$$1.value() : value$$1;
     }
     function isTruthy(val) {
         return !isFalsy(val);
