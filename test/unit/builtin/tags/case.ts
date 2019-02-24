@@ -19,22 +19,20 @@ describe('tags/case', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('foo')
   })
-  it('should resolve empty string if not hit', async function () {
-    const src = '{% case empty %}' +
-            '{% when "foo" %}foo{% when ""%}bar' +
-            '{%endcase%}'
-    const ctx = {
-      empty: ''
-    }
-    const html = await liquid.parseAndRender(src, ctx)
+  it('should resolve blank as empty string', async function () {
+    const src = '{% case blank %}{% when ""%}bar{%endcase%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('bar')
+  })
+  it('should resolve empty as empty string', async function () {
+    const src = '{% case empty %}{% when ""%}bar{%endcase%}'
+    const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('bar')
   })
   it('should accept empty string as branch name', async function () {
-    const src = '{% case false %}' +
-            '{% when "foo" %}foo{% when ""%}bar' +
-            '{%endcase%}'
+    const src = '{% case "" %}{% when ""%}bar{%endcase%}'
     const html = await liquid.parseAndRender(src)
-    return expect(html).to.equal('')
+    return expect(html).to.equal('bar')
   })
   it('should support boolean case', async function () {
     const src = '{% case false %}' +

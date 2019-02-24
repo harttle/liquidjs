@@ -6,11 +6,11 @@ const arrToStr = Array.prototype.toString
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is a string, else false.
  */
-export function isString (value: any) {
+export function isString (value: any): value is string {
   return toStr.call(value) === '[object String]'
 }
 
-export function isFunction (value: any) {
+export function isFunction (value: any): value is Function {
   return typeof value === 'function'
 }
 
@@ -37,7 +37,7 @@ export function stringify (value: any): string {
 }
 
 function defaultToString (value: any): string {
-  const cache: string[] = []
+  const cache: any[] = []
   return JSON.stringify(value, (key, value) => {
     if (isObject(value)) {
       if (cache.indexOf(value) !== -1) {
@@ -57,12 +57,12 @@ export function isNil (value: any): boolean {
   return value === null || value === undefined
 }
 
-export function isArray (value: any): boolean {
+export function isArray (value: any): value is any[] {
   // be compatible with IE 8
   return toStr.call(value) === '[object Array]'
 }
 
-export function isError (value: any): boolean {
+export function isError (value: any): value is Error {
   const signature = toStr.call(value)
   // [object XXXError]
   return signature.substr(-6, 5) === 'Error' ||
@@ -102,7 +102,7 @@ export function last (arr: any[] | string): any | string {
  * @param {any} value The value to check.
  * @return {Boolean} Returns true if value is an object, else false.
  */
-export function isObject (value: any): boolean {
+export function isObject (value: any): value is object {
   const type = typeof value
   return value !== null && (type === 'object' || type === 'function')
 }

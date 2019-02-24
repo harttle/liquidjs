@@ -2,7 +2,7 @@ import Scope from 'src/scope/scope'
 import { expect } from 'chai'
 import { evalExp, evalValue, isTruthy } from 'src/render/syntax'
 
-describe('expression', function () {
+describe('render/syntax', function () {
   let scope: Scope
 
   beforeEach(function () {
@@ -29,9 +29,15 @@ describe('expression', function () {
       expect(evalValue('-23.', scope)).to.equal(-23)
       expect(evalValue('23', scope)).to.equal(23)
     })
-    it('should eval literal', function () {
+    it('should eval string literal', function () {
       expect(evalValue('"ab\'c"', scope)).to.equal("ab'c")
       expect(evalValue("'ab\"c'", scope)).to.equal('ab"c')
+    })
+    it('should eval nil literal', function () {
+      expect(evalValue('nil', scope)).to.be.null
+    })
+    it('should eval null literal', function () {
+      expect(evalValue('null', scope)).to.be.null
     })
     it('should eval scope variables', function () {
       expect(evalValue('one', scope)).to.equal(1)

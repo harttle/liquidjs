@@ -1,11 +1,10 @@
 import * as chai from 'chai'
-import Scope from 'src/scope/scope'
-import IContext from 'src/scope/icontext'
+import Scope, { Context } from 'src/scope/scope'
 
 const expect = chai.expect
 
 describe('scope', function () {
-  let scope: Scope, ctx: IContext
+  let scope: Scope, ctx: Context
   beforeEach(function () {
     ctx = {
       foo: 'zoo',
@@ -64,7 +63,7 @@ describe('scope', function () {
       expect(scope.get('foo')).equal('zoo')
     })
 
-    it('should get undefined property', function () {
+    it('undefined property should yield undefined', function () {
       function fn () {
         scope.get('notdefined')
       }

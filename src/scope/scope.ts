@@ -3,11 +3,17 @@ import { __assign } from 'tslib'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
-import IContext from './icontext'
+
+export type Context = {
+  [key: string]: any
+  liquid_method_missing?: (key: string) => any // eslint-disable-line
+  to_liquid?: () => any // eslint-disable-line
+  toLiquid?: () => any  // eslint-disable-line
+}
 
 export default class Scope {
   opts: NormalizedFullOptions
-  contexts: Array<IContext>
+  contexts: Array<Context>
   blocks: object = {}
   groups: {[key: string]: number} = {}
   blockMode: BlockMode = BlockMode.OUTPUT
@@ -67,10 +73,10 @@ export default class Scope {
     }
     return null
   }
-  private readProperty (obj: IContext, key: string) {
+  private readProperty (obj: Context, key: string) {
     let val
     if (_.isNil(obj)) {
-      val = undefined
+      val = obj
     } else {
       obj = toLiquid(obj)
       val = key === 'size' ? readSize(obj) : obj[key]
@@ -144,7 +150,7 @@ export default class Scope {
   }
 }
 
-function toLiquid (obj: IContext) {
+function toLiquid (obj: Context) {
   if (_.isFunction(obj.to_liquid)) {
     return obj.to_liquid()
   }
@@ -154,7 +160,7 @@ function toLiquid (obj: IContext) {
   return obj
 }
 
-function readSize (obj: IContext) {
+function readSize (obj: Context) {
   if (!_.isNil(obj.size)) return obj.size
   if (_.isArray(obj) || _.isString(obj)) return obj.length
   return obj.size

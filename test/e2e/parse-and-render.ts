@@ -62,4 +62,9 @@ describe('.parseAndRender()', function () {
     const html = await engine.parseAndRender(src)
     return expect(html).to.equal('apples')
   })
+  it('should support nil(null, undefined) literal', async function () {
+    const src = '{% if notexist == nil %}true{% endif %}'
+    const html = await engine.parseAndRender(src)
+    expect(html).to.equal('true')
+  })
 })

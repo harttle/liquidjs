@@ -1,12 +1,12 @@
 import Liquid from 'src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
-import IContext from 'src/scope/icontext'
+import { Context } from 'src/scope/scope'
 
 use(chaiAsPromised)
 
 describe('tags/for', function () {
-  let liquid: Liquid, ctx: IContext
+  let liquid: Liquid, ctx: Context
   before(function () {
     liquid = new Liquid()
     liquid.registerTag('throwingTag', {
