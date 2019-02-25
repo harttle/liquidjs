@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import Scope from 'src/scope/scope'
-import Token from 'src/parser/token'
-import Tag from 'src/template/tag/tag'
-import Filter from 'src/template/filter/filter'
-import Render from 'src/render/render'
-import HTML from 'src/template/html'
+import Scope from '../../../src/scope/scope'
+import Token from '../../../src/parser/token'
+import Tag from '../../../src/template/tag/tag'
+import Filter from '../../../src/template/filter/filter'
+import Render from '../../../src/render/render'
+import HTML from '../../../src/template/html'
 
 describe('render', function () {
   let render: Render

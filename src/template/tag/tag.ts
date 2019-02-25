@@ -1,14 +1,14 @@
-import { create, stringify } from 'src/util/underscore'
-import assert from 'src/util/assert'
-import Scope from 'src/scope/scope'
+import { create, stringify } from '../../util/underscore'
+import assert from '../../util/assert'
+import Scope from '../../scope/scope'
 import ITagImpl from './itag-impl'
 import ITagImplOptions from './itag-impl-options'
-import Liquid from 'src/liquid'
+import Liquid from '../../liquid'
 import Hash from './hash'
-import Template from 'src/template/template'
-import ITemplate from 'src/template/itemplate'
-import TagToken from 'src/parser/tag-token'
-import Token from 'src/parser/token'
+import Template from '../../template/template'
+import ITemplate from '../../template/itemplate'
+import TagToken from '../../parser/tag-token'
+import Token from '../../parser/token'
 
 export default class Tag extends Template<TagToken> implements ITemplate {
   name: string

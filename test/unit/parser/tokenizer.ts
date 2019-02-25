@@ -1,8 +1,8 @@
 import { expect } from 'chai'
-import Tokenizer from 'src/parser/tokenizer'
-import TagToken from 'src/parser/tag-token'
-import OutputToken from 'src/parser/output-token'
-import HTMLToken from 'src/parser/html-token'
+import Tokenizer from '../../../src/parser/tokenizer'
+import TagToken from '../../../src/parser/tag-token'
+import OutputToken from '../../../src/parser/output-token'
+import HTMLToken from '../../../src/parser/html-token'
 
 describe('tokenizer', function () {
   const tokenizer = new Tokenizer()

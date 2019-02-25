@@ -1,7 +1,7 @@
-import DelimitedToken from 'src/parser/delimited-token'
-import Token from 'src/parser/token'
-import TagToken from 'src/parser/tag-token'
-import { NormalizedFullOptions } from 'src/liquid-options'
+import DelimitedToken from '../parser/delimited-token'
+import Token from '../parser/token'
+import TagToken from '../parser/tag-token'
+import { NormalizedFullOptions } from '../liquid-options'
 
 export default function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
   options = { greedy: true, ...options }

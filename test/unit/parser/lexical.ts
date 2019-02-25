@@ -1,7 +1,7 @@
 import * as chai from 'chai'
 
 const expect = chai.expect
-const lexical = require('src/parser/lexical')
+const lexical = require('../../../src/parser/lexical')
 
 describe('lexical', function () {
   it('should test range literal', function () {

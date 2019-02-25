@@ -1,5 +1,5 @@
-import strftime from 'src/util/strftime'
-import { isString } from 'src/util/underscore'
+import strftime from '../../util/strftime'
+import { isString } from '../../util/underscore'
 
 export default {
   'date': (v: string | Date, arg: string) => {

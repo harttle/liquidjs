@@ -62,13 +62,6 @@ export function isArray (value: any): value is any[] {
   return toStr.call(value) === '[object Array]'
 }
 
-export function isError (value: any): value is Error {
-  const signature = toStr.call(value)
-  // [object XXXError]
-  return signature.substr(-6, 5) === 'Error' ||
-        (typeof value.message === 'string' && typeof value.name === 'string')
-}
-
 /*
  * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property.
  * The iteratee is invoked with three arguments: (value, key, object).

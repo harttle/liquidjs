@@ -3,7 +3,7 @@ import HTMLToken from './html-token'
 import TagToken from './tag-token'
 import Token from './token'
 import OutputToken from './output-token'
-import { TokenizationError } from 'src/util/error'
+import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 
 enum ParseState { HTML, OUTPUT, TAG }

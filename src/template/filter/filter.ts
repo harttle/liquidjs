@@ -1,5 +1,5 @@
-import { evalValue } from 'src/render/syntax'
-import Scope from 'src/scope/scope'
+import { evalValue } from '../../render/syntax'
+import Scope from '../../scope/scope'
 import { FilterImpl } from './filter-impl'
 
 export default class Filter {

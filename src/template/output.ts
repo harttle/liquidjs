@@ -1,9 +1,9 @@
 import Value from './value'
-import { stringify } from 'src/util/underscore'
-import Template from 'src/template/template'
-import ITemplate from 'src/template/itemplate'
-import Scope from 'src/scope/scope'
-import OutputToken from 'src/parser/output-token'
+import { stringify } from '../util/underscore'
+import Template from '../template/template'
+import ITemplate from '../template/itemplate'
+import Scope from '../scope/scope'
+import OutputToken from '../parser/output-token'
 
 export default class Output extends Template<OutputToken> implements ITemplate {
   value: Value

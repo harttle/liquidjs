@@ -1,5 +1,5 @@
 import Token from './token'
-import { last } from 'src/util/underscore'
+import { last } from '../util/underscore'
 
 export default class DelimitedToken extends Token {
   trimLeft: boolean

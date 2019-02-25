@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import assert from 'src/util/assert'
+import assert from '../../../src/util/assert'
 
 const expect = chai.expect
 

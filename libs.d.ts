@@ -1,6 +1,6 @@
 declare module 'rollup-plugin-uglify' {
   export function uglify (): any
 }
-declare module 'rollup-plugin-shim' {
-  export default function shim(options: any): any
+declare module 'rollup-plugin-alias' {
+  export default function alias(options: any): any
 }

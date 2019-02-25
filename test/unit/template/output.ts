@@ -1,8 +1,8 @@
 import * as chai from 'chai'
-import Scope from 'src/scope/scope'
-import Output from 'src/template/output'
-import OutputToken from 'src/parser/output-token'
-import Filter from 'src/template/filter/filter'
+import Scope from '../../../src/scope/scope'
+import Output from '../../../src/template/output'
+import OutputToken from '../../../src/parser/output-token'
+import Filter from '../../../src/template/filter/filter'
 
 const expect = chai.expect
 

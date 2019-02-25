@@ -76,7 +76,7 @@
     "nyc": "^13.1.0",
     "regenerator-runtime": "^0.12.1",
     "rollup": "^1.1.2",
-    "rollup-plugin-shim": "^1.0.0",
+    "rollup-plugin-alias": "^1.5.1",
     "rollup-plugin-typescript2": "^0.19.2",
     "rollup-plugin-uglify": "^6.0.2",
     "semantic-release": "^15.13.3",
@@ -84,7 +84,6 @@
     "sinon-chai": "^3.3.0",
     "supertest": "^3.4.2",
     "ts-node": "^8.0.2",
-    "tsconfig-paths": "^3.8.0",
     "tslib": "^1.9.3",
     "typescript": "^3.3.3"
   },

@@ -1,7 +1,7 @@
 import * as Benchmark from 'benchmark'
-import Liquid from 'src/liquid'
-import TagToken from 'src/parser/tag-token'
-import Scope from 'src/scope/scope'
+import Liquid from '../src/liquid'
+import TagToken from '../src/parser/tag-token'
+import Scope from '../src/scope/scope'
 
 const engine = new Liquid({
   root: __dirname,

@@ -1,7 +1,7 @@
-import assert from 'src/util/assert'
-import { identifier } from 'src/parser/lexical'
-import { CaptureScope, AssignScope, IncrementScope } from 'src/scope/scopes'
-import ITagImplOptions from 'src/template/tag/itag-impl-options'
+import assert from '../../util/assert'
+import { identifier } from '../../parser/lexical'
+import { CaptureScope, AssignScope, IncrementScope } from '../../scope/scopes'
+import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 export default {
   parse: function (token) {

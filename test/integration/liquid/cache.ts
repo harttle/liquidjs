@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import Liquid from 'src/liquid'
-import { mock, restore } from 'test/stub/mockfs'
+import Liquid from '../../../src/liquid'
+import { mock, restore } from '../../stub/mockfs'
 
 describe('LiquidOptions#cache', function () {
   let engine: Liquid

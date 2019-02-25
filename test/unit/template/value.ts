@@ -1,9 +1,9 @@
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
-import Scope from 'src/scope/scope'
-import Filter from 'src/template/filter/filter'
-import Value from 'src/template/value'
+import Scope from '../../../src/scope/scope'
+import Filter from '../../../src/template/filter/filter'
+import Value from '../../../src/template/value'
 
 chai.use(sinonChai)
 

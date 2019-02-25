@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import Liquid from 'src/liquid'
+import Liquid from '../../../src/liquid'
 import * as path from 'path'
-import { mock, restore } from 'test/stub/mockfs'
+import { mock, restore } from '../../stub/mockfs'
 
 let engine = new Liquid()
 const strictEngine = new Liquid({

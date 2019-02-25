@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import Scope, { Context } from 'src/scope/scope'
+import Scope, { Context } from '../../../src/scope/scope'
 
 const expect = chai.expect
 

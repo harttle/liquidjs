@@ -1,6 +1,6 @@
-import Template from 'src/template/template'
-import ITemplate from 'src/template/itemplate'
-import HTMLToken from 'src/parser/html-token'
+import Template from '../template/template'
+import ITemplate from '../template/itemplate'
+import HTMLToken from '../parser/html-token'
 
 export default class extends Template<HTMLToken> implements ITemplate {
   str: string

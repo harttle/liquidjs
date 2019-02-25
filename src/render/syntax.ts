@@ -1,12 +1,12 @@
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
-import Scope from 'src/scope/scope'
-import { range, last } from 'src/util/underscore'
-import { isComparable } from 'src/drop/icomparable'
-import { NullDrop } from 'src/drop/null-drop'
-import { EmptyDrop } from 'src/drop/empty-drop'
-import { BlankDrop } from 'src/drop/blank-drop'
-import { isDrop } from 'src/drop/idrop'
+import Scope from '../scope/scope'
+import { range, last } from '../util/underscore'
+import { isComparable } from '../drop/icomparable'
+import { NullDrop } from '../drop/null-drop'
+import { EmptyDrop } from '../drop/empty-drop'
+import { BlankDrop } from '../drop/blank-drop'
+import { isDrop } from '../drop/idrop'
 
 const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   '==': (l: any, r: any) => {

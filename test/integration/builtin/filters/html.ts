@@ -1,4 +1,4 @@
-import { test } from 'test/stub/render'
+import { test } from '../../../stub/render'
 
 describe('filters/html', function () {
   describe('escape', function () {

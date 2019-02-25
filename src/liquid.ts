@@ -1,6 +1,6 @@
 import Scope from './scope/scope'
 import * as Types from './types'
-import fs from 'src/fs'
+import fs from './fs/node'
 import * as _ from './util/underscore'
 import ITemplate from './template/itemplate'
 import Tokenizer from './parser/tokenizer'

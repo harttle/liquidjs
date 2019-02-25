@@ -1,6 +1,6 @@
-import Liquid from 'src/liquid'
+import Liquid from '../../../../src/liquid'
 import { expect } from 'chai'
-import { mock, restore } from 'test/stub/mockfs'
+import { mock, restore } from '../../../stub/mockfs'
 
 describe('tags/include', function () {
   let liquid: Liquid

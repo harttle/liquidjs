@@ -1,4 +1,4 @@
-import { normalize } from 'src/liquid-options'
+import { normalize } from '../../../src/liquid-options'
 import { expect } from 'chai'
 
 describe('LiquidOptions', function () {

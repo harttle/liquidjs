@@ -1,7 +1,7 @@
-import Scope from 'src/scope/scope'
-import TagToken from 'src/parser/tag-token'
-import Token from 'src/parser/token'
-import Hash from 'src/template/tag/hash'
+import Scope from '../../scope/scope'
+import TagToken from '../../parser/tag-token'
+import Token from '../../parser/token'
+import Hash from '../../template/tag/hash'
 import ITagImpl from './itag-impl'
 
 export default interface ITagImplOptions {

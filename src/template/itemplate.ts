@@ -1,5 +1,5 @@
-import Scope from 'src/scope/scope'
-import Token from 'src/parser/token'
+import Scope from '../scope/scope'
+import Token from '../parser/token'
 
 export default interface ITemplate {
   token: Token;

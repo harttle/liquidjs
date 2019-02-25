@@ -1,6 +1,6 @@
-import { evalExp } from 'src/render/syntax'
+import { evalExp } from '../render/syntax'
 import Filter from './filter/filter'
-import Scope from 'src/scope/scope'
+import Scope from '../scope/scope'
 
 enum ParseState {
   INIT = 0,

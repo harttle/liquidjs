@@ -1,4 +1,4 @@
-import { isFunction } from 'src/util/underscore'
+import { isFunction } from '../util/underscore'
 
 export interface IComparable {
   equals: (rhs: any) => boolean

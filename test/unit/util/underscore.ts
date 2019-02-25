@@ -1,30 +1,14 @@
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
-import { RenderError, RenderBreakError } from 'src/util/error'
-import * as _ from 'src/util/underscore'
-import ITemplate from 'src/template/itemplate'
+import { RenderError, RenderBreakError } from '../../../src/util/error'
+import * as _ from '../../../src/util/underscore'
+import ITemplate from '../../../src/template/itemplate'
 
 const expect = chai.expect
 chai.use(sinonChai)
 
 describe('util/underscore', function () {
-  describe('.isError()', function () {
-    it('should return true for new Error', function () {
-      expect(_.isError(new Error())).to.be.true
-    })
-    it('should return true for RenderError', function () {
-      const tpl = {
-        token: {
-          input: 'xx'
-        }
-      } as ITemplate
-      expect(_.isError(new RenderError(new Error(), tpl))).to.be.true
-    })
-    it('should return true for RenderBreakError', function () {
-      expect(_.isError(new RenderBreakError(''))).to.be.true
-    })
-  })
   describe('.isString()', function () {
     it('should return true for literal string', function () {
       expect(_.isString('foo')).to.be.true

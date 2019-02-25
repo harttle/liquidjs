@@ -1,4 +1,4 @@
-import { FilterImpl } from 'src/template/filter/filter-impl'
+import { FilterImpl } from '../../template/filter/filter-impl'
 
 export default {
   'append': (v: string, arg: string) => v + arg,

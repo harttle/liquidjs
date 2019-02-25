@@ -1,7 +1,7 @@
 import { Drop } from './drop'
 import { IComparable } from './icomparable'
-import { isObject, isString, isArray } from 'src/util/underscore'
-import { IDrop } from 'src/drop/idrop'
+import { isObject, isString, isArray } from '../util/underscore'
+import { IDrop } from '../drop/idrop'
 
 export class EmptyDrop extends Drop implements IDrop, IComparable {
   equals (value: any) {

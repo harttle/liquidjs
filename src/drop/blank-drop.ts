@@ -1,6 +1,6 @@
-import { isNil, isString } from 'src/util/underscore'
-import { isDrop } from 'src/drop/idrop'
-import { EmptyDrop } from 'src/drop/empty-drop'
+import { isNil, isString } from '../util/underscore'
+import { isDrop } from '../drop/idrop'
+import { EmptyDrop } from '../drop/empty-drop'
 
 export class BlankDrop extends EmptyDrop {
   equals (value: any) {

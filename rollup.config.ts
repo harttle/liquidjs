@@ -1,9 +1,8 @@
-import shim from 'rollup-plugin-shim'
+import alias from 'rollup-plugin-alias'
 import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
 
-const fake = { fs: `export default {}`, path: `export default {}` }
 const version = process.env.VERSION || pkg.version
 const sourcemap = true
 const banner = `/*
@@ -14,7 +13,7 @@ const banner = `/*
 const treeshake = {
   propertyReadSideEffects: false
 }
-const input = 'src/liquid.ts'
+const input = './src/liquid.ts'
 
 export default [{
   output: [{
@@ -46,15 +45,14 @@ export default [{
     banner
   }],
   plugins: [
-    shim(fake),
+    alias({ resolve: ['.ts'], './fs/node': './fs/browser' }),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
         exclude: [ 'test', 'benchmark' ],
         compilerOptions: {
           target: 'es5',
-          module: 'ES2015',
-          paths: { 'src/fs': ['src/fs/browser'] }
+          module: 'ES2015'
         }
       }
     })
@@ -69,15 +67,14 @@ export default [{
     sourcemap
   }],
   plugins: [
-    shim(fake),
+    alias({ resolve: ['.ts'], './fs/node': './fs/browser' }),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
         exclude: [ 'test', 'benchmark' ],
         compilerOptions: {
           target: 'es5',
-          module: 'ES2015',
-          paths: { 'src/fs': ['src/fs/browser'] }
+          module: 'ES2015'
         }
       }
     }),

@@ -1,4 +1,4 @@
-import { last } from 'src/util/underscore'
+import { last } from '../../util/underscore'
 
 export default {
   'join': (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg),

@@ -8,14 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "strict": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "baseUrl": ".",
-    "paths": {
-      "src/fs": ["src/fs/node"],
-      "benchmark": ["node_modules/benchmark"],
-      "src/*": ["src/*"],
-      "test/*": ["test/*"]
-    }
+    "suppressImplicitAnyIndexErrors": true
   },
   "all": true,
   "exclude": [ "node_modules", "dist" ]

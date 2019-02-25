@@ -1,4 +1,4 @@
-import { test } from 'test/stub/render'
+import { test } from '../../../stub/render'
 
 describe('filters/array', function () {
   describe('join', function () {

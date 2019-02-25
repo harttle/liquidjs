@@ -1,5 +1,5 @@
 import { Drop } from './drop'
-import { isFunction } from 'src/util/underscore'
+import { isFunction } from '../util/underscore'
 
 export interface IDrop {
   value(): any

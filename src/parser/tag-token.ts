@@ -1,5 +1,5 @@
 import DelimitedToken from './delimited-token'
-import { TokenizationError } from 'src/util/error'
+import { TokenizationError } from '../util/error'
 import * as lexical from './lexical'
 
 export default class TagToken extends DelimitedToken {

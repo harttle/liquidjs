@@ -1,4 +1,4 @@
-import Liquid from '../../dist/liquid.js'
+import Liquid from 'liquidjs'
 
 const engine = new Liquid({
   root: __dirname,

@@ -1,5 +1,5 @@
-import { isString, forOwn } from 'src/util/underscore'
-import fs from 'src/fs'
+import { isString, forOwn } from '../../src/util/underscore'
+import fs from '../../src/fs/node'
 
 type fileDescriptor = { mode: string, content: string }
 

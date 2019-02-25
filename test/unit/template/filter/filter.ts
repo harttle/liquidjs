@@ -1,8 +1,8 @@
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
-import Filter from 'src/template/filter/filter'
-import Scope from 'src/scope/scope'
+import Filter from '../../../../src/template/filter/filter'
+import Scope from '../../../../src/scope/scope'
 
 chai.use(sinonChai)
 const expect = chai.expect

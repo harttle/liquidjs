@@ -1,6 +1,6 @@
-import Liquid from 'src/liquid'
+import Liquid from '../../../src/liquid'
 import * as chai from 'chai'
-import { mock, restore } from 'test/stub/mockfs'
+import { mock, restore } from '../../stub/mockfs'
 
 const expect = chai.expect
 

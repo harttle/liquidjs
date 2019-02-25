@@ -1,6 +1,6 @@
-import Scope from 'src/scope/scope'
+import Scope from '../../../src/scope/scope'
 import { expect } from 'chai'
-import { evalExp, evalValue, isTruthy } from 'src/render/syntax'
+import { evalExp, evalValue, isTruthy } from '../../../src/render/syntax'
 
 describe('render/syntax', function () {
   let scope: Scope

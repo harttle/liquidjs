@@ -1,10 +1,10 @@
 import * as chai from 'chai'
-import Tag from 'src/template/tag/tag'
-import Scope from 'src/scope/scope'
+import Tag from '../../../src/template/tag/tag'
+import Scope from '../../../src/scope/scope'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
-import Liquid from 'src/liquid'
-import TagToken from 'src/parser/tag-token'
+import Liquid from '../../../src/liquid'
+import TagToken from '../../../src/parser/tag-token'
 
 chai.use(sinonChai)
 const expect = chai.expect

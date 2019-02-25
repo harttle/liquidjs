@@ -1,4 +1,4 @@
-import fs from 'src/fs/browser'
+import fs from '../../../src/fs/browser'
 import * as sinon from 'sinon'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'

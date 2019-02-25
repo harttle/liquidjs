@@ -1,4 +1,4 @@
-import { RenderBreakError } from 'src/util/error'
+import { RenderBreakError } from '../../util/error'
 
 export default {
   render: async function () {

@@ -1,5 +1,5 @@
-import Token from 'src/parser/token'
-import ITemplate from 'src/template/itemplate'
+import Token from '../parser/token'
+import ITemplate from '../template/itemplate'
 import TagToken from './tag-token'
 
 type ParseToken = ((token: Token, remainTokens: Array<Token>) => ITemplate)

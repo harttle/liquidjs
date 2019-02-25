@@ -1,10 +1,10 @@
-import assert from 'src/util/assert'
-import { identifier } from 'src/parser/lexical'
-import { CaptureScope } from 'src/scope/scopes'
-import TagToken from 'src/parser/tag-token'
-import Token from 'src/parser/token'
-import Scope from 'src/scope/scope'
-import ITagImplOptions from 'src/template/tag/itag-impl-options'
+import assert from '../../util/assert'
+import { identifier } from '../../parser/lexical'
+import { CaptureScope } from '../../scope/scopes'
+import TagToken from '../../parser/tag-token'
+import Token from '../../parser/token'
+import Scope from '../../scope/scope'
+import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 const re = new RegExp(`(${identifier.source})`)
 

@@ -7,7 +7,7 @@ const expect = chai.expect
 chai.use(sinonChai)
 chai.use(chaiAsPromised)
 
-const P = require('src/util/promise')
+const P = require('../../../src/util/promise')
 
 describe('util/promise', function () {
   describe('.mapSeries()', async function () {
