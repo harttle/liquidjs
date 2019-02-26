@@ -1,12 +1,11 @@
 import { Drop } from './drop'
 import { IComparable } from './icomparable'
 import { isNil } from '../util/underscore'
-import { IDrop, isDrop } from '../drop/idrop'
 import { BlankDrop } from '../drop/blank-drop'
 
-export class NullDrop extends Drop implements IDrop, IComparable {
+export class NullDrop extends Drop implements IComparable {
   equals (value: any) {
-    return isNil(isDrop(value) ? value.valueOf() : value) || value instanceof BlankDrop
+    return isNil(value instanceof Drop ? value.valueOf() : value) || value instanceof BlankDrop
   }
   gt () {
     return false

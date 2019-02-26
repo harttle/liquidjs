@@ -6,7 +6,7 @@ import { isComparable } from '../drop/icomparable'
 import { NullDrop } from '../drop/null-drop'
 import { EmptyDrop } from '../drop/empty-drop'
 import { BlankDrop } from '../drop/blank-drop'
-import { isDrop } from '../drop/idrop'
+import { Drop } from '../drop/drop'
 
 const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   '==': (l: any, r: any) => {
@@ -74,7 +74,7 @@ export function parseExp (exp: string, scope: Scope): any {
 
 export function evalExp (str: string, scope: Scope): any {
   const value = parseExp(str, scope)
-  return isDrop(value) ? value.valueOf() : value
+  return value instanceof Drop ? value.valueOf() : value
 }
 
 function parseValue (str: string, scope: Scope): any {
@@ -93,7 +93,7 @@ function parseValue (str: string, scope: Scope): any {
 
 export function evalValue (str: string, scope: Scope): any {
   const value = parseValue(str, scope)
-  return isDrop(value) ? value.valueOf() : value
+  return value instanceof Drop ? value.valueOf() : value
 }
 
 export function isTruthy (val: any): boolean {
