@@ -21,7 +21,7 @@ export class EmptyDrop extends Drop implements IDrop, IComparable {
   leq () {
     return false
   }
-  value () {
+  valueOf () {
     return ''
   }
 }

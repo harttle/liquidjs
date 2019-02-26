@@ -6,7 +6,7 @@ import { BlankDrop } from '../drop/blank-drop'
 
 export class NullDrop extends Drop implements IDrop, IComparable {
   equals (value: any) {
-    return isNil(isDrop(value) ? value.value() : value) || value instanceof BlankDrop
+    return isNil(isDrop(value) ? value.valueOf() : value) || value instanceof BlankDrop
   }
   gt () {
     return false
@@ -20,7 +20,7 @@ export class NullDrop extends Drop implements IDrop, IComparable {
   leq () {
     return false
   }
-  value () {
+  valueOf () {
     return null
   }
 }

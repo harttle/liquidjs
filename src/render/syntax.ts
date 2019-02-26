@@ -74,7 +74,7 @@ export function parseExp (exp: string, scope: Scope): any {
 
 export function evalExp (str: string, scope: Scope): any {
   const value = parseExp(str, scope)
-  return isDrop(value) ? value.value() : value
+  return isDrop(value) ? value.valueOf() : value
 }
 
 function parseValue (str: string, scope: Scope): any {
@@ -93,7 +93,7 @@ function parseValue (str: string, scope: Scope): any {
 
 export function evalValue (str: string, scope: Scope): any {
   const value = parseValue(str, scope)
-  return isDrop(value) ? value.value() : value
+  return isDrop(value) ? value.valueOf() : value
 }
 
 export function isTruthy (val: any): boolean {
