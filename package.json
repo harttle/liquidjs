@@ -11,7 +11,7 @@
     "integration": "mocha 'test/integration/**/*.ts'",
     "e2e": "npm run build && mocha 'test/e2e/**/*.ts'",
     "test": "npm run build && mocha 'test/**/*.ts'",
-    "benchmark": "ts-node --require tsconfig-paths/register benchmark",
+    "benchmark": "ts-node benchmark",
     "coverage-html": "nyc --reporter=html mocha 'test/{unit,integration}/**/*.ts'",
     "coverage-coveralls": "nyc mocha 'test/{unit,integration}/**/*.ts' && nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c rollup.config.ts && ls -lh dist",
