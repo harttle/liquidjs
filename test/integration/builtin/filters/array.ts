@@ -19,7 +19,7 @@ describe('filters/array', function () {
     return test(src, 'tiger')
   })
   it('should support map', function () {
-    return test('{{posts | map: "category"}}', '["foo","bar"]')
+    return test('{{posts | map: "category"}}', 'foo,bar')
   })
   it('should support reverse', function () {
     return test('{{ "Ground control to Major Tom." | split: "" | reverse | join: "" }}',

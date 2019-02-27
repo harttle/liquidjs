@@ -1,5 +1,5 @@
+import { deprecate } from './deprecate'
 const toStr = Object.prototype.toString
-const arrToStr = Array.prototype.toString
 
 /*
  * Checks if value is classified as a String primitive or object.
@@ -28,25 +28,21 @@ export function promisify (fn: any) {
 
 export function stringify (value: any): string {
   if (isNil(value)) return ''
-  if (isFunction(value.to_liquid)) return stringify(value.to_liquid())
-  if (isFunction(value.toLiquid)) return stringify(value.toLiquid())
-  if (isFunction(value.to_s)) return value.to_s()
-  if ([toStr, arrToStr].indexOf(value.toString) > -1) return defaultToString(value)
-  if (isFunction(value.toString)) return value.toString()
-  return toStr.call(value)
+  value = toLiquid(value)
+  if (isFunction(value.to_s)) {
+    deprecate('to_s is deprecated, use toString instead.', 109)
+    return value.to_s()
+  }
+  return String(value)
 }
 
-function defaultToString (value: any): string {
-  const cache: any[] = []
-  return JSON.stringify(value, (key, value) => {
-    if (isObject(value)) {
-      if (cache.indexOf(value) !== -1) {
-        return
-      }
-      cache.push(value)
-    }
-    return value
-  })
+export function toLiquid (value: any): any {
+  if (isFunction(value.to_liquid)) {
+    deprecate('to_liquid is deprecated, use toLiquid instead.', 109)
+    return toLiquid(value.to_liquid())
+  }
+  if (isFunction(value.toLiquid)) return toLiquid(value.toLiquid())
+  return value
 }
 
 export function create<T1 extends object, T2 extends T1 = T1> (proto: T1): T2 {

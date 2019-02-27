@@ -9,18 +9,13 @@ describe('.parseAndRender()', function () {
   beforeEach(function () {
     engine = new Liquid()
     strictEngine = new Liquid({
-      strict_filters: true
+      strictFilters: true
     })
-  })
-  it('should stringify object', async function () {
-    var ctx = { obj: { foo: 'bar' } }
-    const html = await engine.parseAndRender('{{obj}}', ctx)
-    return expect(html).to.equal('{"foo":"bar"}')
   })
   it('should stringify array ', async function () {
     var ctx = { arr: [-2, 'a'] }
     const html = await engine.parseAndRender('{{arr}}', ctx)
-    return expect(html).to.equal('[-2,"a"]')
+    return expect(html).to.equal('-2,a')
   })
   it('should render undefined as empty', async function () {
     const html = await engine.parseAndRender('foo{{zzz}}bar', {})
@@ -30,7 +25,7 @@ describe('.parseAndRender()', function () {
     const html = await engine.parseAndRender('{{"foo" | filter1}}', {})
     return expect(html).to.equal('foo')
   })
-  it('should throw upon undefined filter when strict_filters set', function () {
+  it('should throw upon undefined filter when strictFilters set', function () {
     return expect(strictEngine.parseAndRender('{{"foo" | filter1}}', {})).to
       .be.rejectedWith(/undefined filter: filter1/)
   })
@@ -42,13 +37,13 @@ describe('.parseAndRender()', function () {
       engine.parse('<html><head>{{obj}}</head></html>')
     }).to.not.throw()
   })
-  it('should render template multiple times', async function () {
-    const ctx = { obj: { foo: 'bar' } }
+  it('template should be able to be rendered multiple times', async function () {
+    const ctx = { obj: [1, 2] }
     const template = engine.parse('{{obj}}')
     const result = await engine.render(template, ctx)
-    expect(result).to.equal('{"foo":"bar"}')
+    expect(result).to.equal('1,2')
     const result2 = await engine.render(template, ctx)
-    expect(result2).to.equal('{"foo":"bar"}')
+    expect(result2).to.equal('1,2')
   })
   it('should render filters', async function () {
     var ctx = { names: ['alice', 'bob'] }

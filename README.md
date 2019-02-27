@@ -24,11 +24,11 @@ This is a liquid implementation for both Node.js and browsers. Website: <http://
 
 Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
 
-* Dynamic file locating (enabled by default), which means layout/partial name can be an variable in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
+* Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
 * Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
 * Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
-* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) has a `.toLiquid()` alias and and the JavaScript `.toString()` is aliased to `.to_s()`.
-* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) uses `JSON.prototype.stringify` as default, rather than Ruby's inspect.
+* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
+* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 
 ## TOC
 
@@ -182,25 +182,25 @@ Defaults to `["."]`
 
 * `dynamicPartials`: if set, treat `<filepath>` parameter in `{%include filepath %}`, `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`.
 
-* `strict_filters` is used to enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`.
+* `strictFilters` is used to enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`.
 
-* `strict_variables` is used to enable strict variable derivation. 
+* `strictVariables` is used to enable strict variable derivation. 
 If set to `false`, undefined variables will be rendered as empty string.
 Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
-* `trim_tag_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`.
+* `trimTagRight` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`.
 
-* `trim_tag_left` is similiar to `trim_tag_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
+* `trimTagLeft` is similiar to `trimTagRight`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
 
-* `trim_output_right` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of values (`{{ }}`) until `\n` (inclusive). Defaults to `false`.
+* `trimOutputRight` is used to strip blank characters (including ` `, `\t`, and `\r`) from the right of values (`{{ }}`) until `\n` (inclusive). Defaults to `false`.
 
-* `trim_output_left` is similiar to `trim_output_right`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
+* `trimOutputLeft` is similiar to `trimOutputRight`, whereas the `\n` is exclusive. Defaults to `false`. See [Whitespace Control][whitespace control] for details.
 
-* `tag_delimiter_left` and `tag_delimiter_right` are used to override the delimiter for liquid tags.
+* `tagDelimiterLeft` and `tagDelimiterRight` are used to override the delimiter for liquid tags.
 
-* `output_delimiter_left` and `output_delimiter_right` are used to override the delimiter for liquid outputs.
+* `outputDelimiterLeft` and `outputDelimiterRight` are used to override the delimiter for liquid outputs.
 
-* `greedy` is used to specify whether `trim_left`/`trim_right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`.
+* `greedy` is used to specify whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`.
 
 ## Register Filters
 

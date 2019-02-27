@@ -70,7 +70,7 @@ export default class Liquid {
     return this.render(templates, ctx, opts)
   }
   evalValue (str: string, scope: Scope) {
-    return new Value(str, this.options.strict_filters).value(scope)
+    return new Value(str, this.options.strictFilters).value(scope)
   }
   registerFilter (name: string, filter: FilterImpl) {
     return Filter.register(name, filter)

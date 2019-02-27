@@ -15,6 +15,6 @@ describe('filters/date', function () {
     return test('{{ "foo" | date: "%Y"}}', 'foo')
   })
   it('should render object as string if not valid', function () {
-    return test('{{ obj | date: "%Y"}}', '{"foo":"bar"}')
+    return test('{{ obj | date: "%Y"}}', '[object Object]')
   })
 })

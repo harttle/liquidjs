@@ -4,25 +4,38 @@ import * as chaiAsPromised from 'chai-as-promised'
 
 use(chaiAsPromised)
 
+class SettingsDrop extends Liquid.Types.Drop {
+  foo: string = 'FOO'
+  bar() {
+    return 'BAR'
+  }
+  liquidMethodMissing(key: string) {
+    return key.toUpperCase()
+  }
+}
+
 describe('drop', function () {
-  var engine: Liquid
+  const settings = new SettingsDrop()
+  let engine: Liquid
   beforeEach(function () {
     engine = new Liquid()
   })
-  it('should support liquid_method_missing', async function () {
+  it('should support liquidMethodMissing', async function () {
     let i = 0
-    const src = `{{settings.foo}},{{settings.foo}},{{settings.foo}}`
-    const ctx = { settings: { liquid_method_missing: () => i++ } }
-    const html = await engine.parseAndRender(src, ctx)
-    return expect(html).to.equal('0,1,2')
+    const src = `{{settings.foo}},{{settings.bar}},{{settings.coo}}`
+    const html = await engine.parseAndRender(src, { settings })
+    return expect(html).to.equal('FOO,BAR,COO')
   })
-  it('should test blank strings', async function () {
-    const src = `
-    {% unless settings.fp_heading == blank %}
-        <h1>{{ settings.fp_heading }}</h1>
-    {% endunless %}`
-    var ctx = { settings: { fp_heading: '' } }
-    const html = await engine.parseAndRender(src, ctx)
-    return expect(html).to.match(/^\s+$/)
+
+  describe('BlandDrop', function () {
+    it('should test blank strings', async function () {
+      const src = `
+      {% unless settings.fp_heading == blank %}
+          <h1>{{ settings.fp_heading }}</h1>
+      {% endunless %}`
+      var ctx = { settings: { fp_heading: '' } }
+      const html = await engine.parseAndRender(src, ctx)
+      return expect(html).to.match(/^\s+$/)
+    })
   })
 })

@@ -15,10 +15,10 @@ export default class Tokenizer {
   }
   tokenize (input: string, file?: string) {
     const tokens: Token[] = []
-    const tagL = this.options.tag_delimiter_left
-    const tagR = this.options.tag_delimiter_right
-    const outputL = this.options.output_delimiter_left
-    const outputR = this.options.output_delimiter_right
+    const tagL = this.options.tagDelimiterLeft
+    const tagR = this.options.tagDelimiterRight
+    const outputL = this.options.outputDelimiterLeft
+    const outputR = this.options.outputDelimiterRight
     let p = 0
     let curLine = 1
     let state = ParseState.HTML

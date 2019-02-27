@@ -25,20 +25,13 @@ describe('Output', function () {
     })
     const output = new Output({ value: 'foo' } as OutputToken, false)
     const html = await output.render(scope)
-    return expect(html).to.equal('{"obj":{"arr":["a",2]}}')
-  })
-  it('should skip circular property', async function () {
-    const ctx = { foo: { num: 2 }, bar: 'bar' } as any
-    ctx.foo.circular = ctx
-    const output = new Output({ value: 'foo' } as OutputToken, false)
-    const html = await output.render(new Scope(ctx))
-    return expect(html).equal('{"num":2,"circular":{"bar":"bar"}}')
+    return expect(html).to.equal('[object Object]')
   })
   it('should skip function property', async function () {
     const scope = new Scope({ obj: { foo: 'foo', bar: (x: any) => x } })
     const output = new Output({ value: 'obj' } as OutputToken, false)
     const html = await output.render(scope)
-    return expect(html).to.equal('{"foo":"foo"}')
+    return expect(html).to.equal('[object Object]')
   })
   it('should respect to .toString()', async () => {
     const scope = new Scope({ obj: { toString: () => 'FOO' } })
@@ -52,9 +45,9 @@ describe('Output', function () {
     const str = await output.render(scope)
     return expect(str).to.equal('FOO')
   })
-  it('should respect to .liquid_method_missing()', async () => {
-    const scope = new Scope({ obj: { liquid_method_missing: (x: string) => x.toUpperCase() } })
-    const output = new Output({ value: 'obj.foo' } as OutputToken, false)
+  it('should respect to .toString()', async () => {
+    const scope = new Scope({ obj: { toString: () => 'FOO' } })
+    const output = new Output({ value: 'obj' } as OutputToken, false)
     const str = await output.render(scope)
     return expect(str).to.equal('FOO')
   })

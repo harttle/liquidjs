@@ -5,8 +5,8 @@ import { mock, restore } from '../../stub/mockfs'
 
 let engine = new Liquid()
 const strictEngine = new Liquid({
-  strict_variables: true,
-  strict_filters: true
+  strictVariables: true,
+  strictFilters: true
 })
 
 describe('error', function () {

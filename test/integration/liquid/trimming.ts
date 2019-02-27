@@ -6,34 +6,34 @@ describe('LiquidOptions#trimming', function () {
 
   describe('tag trimming', function () {
     it('should respect trim_tag_left', async function () {
-      const engine = new Liquid({ trim_tag_left: true })
+      const engine = new Liquid({ trim_tag_left: true } as any)
       const html = await engine.parseAndRender(' \n \t{%if true%}foo{%endif%} ')
       return expect(html).to.equal('foo ')
     })
     it('should respect trim_tag_right', async function () {
-      const engine = new Liquid({ trim_tag_right: true })
+      const engine = new Liquid({ trim_tag_right: true } as any)
       const html = await engine.parseAndRender('\t{%if true%}foo{%endif%} \n')
       return expect(html).to.equal('\tfoo')
     })
     it('should not trim value', async function () {
-      const engine = new Liquid({ trim_tag_left: true, trim_tag_right: true })
+      const engine = new Liquid({ trim_tag_left: true, trim_tag_right: true } as any)
       const html = await engine.parseAndRender('{%if true%}a {{name}} b{%endif%}', ctx)
       return expect(html).to.equal('a harttle b')
     })
   })
   describe('value trimming', function () {
     it('should respect trim_output_left', async function () {
-      const engine = new Liquid({ trim_output_left: true })
+      const engine = new Liquid({ trim_output_left: true } as any)
       const html = await engine.parseAndRender(' \n \t{{name}} ', ctx)
       return expect(html).to.equal('harttle ')
     })
     it('should respect trim_output_right', async function () {
-      const engine = new Liquid({ trim_output_right: true })
+      const engine = new Liquid({ trim_output_right: true } as any)
       const html = await engine.parseAndRender(' \n \t{{name}} ', ctx)
       return expect(html).to.equal(' \n \tharttle')
     })
     it('should respect not trim tag', async function () {
-      const engine = new Liquid({ trim_output_left: true, trim_output_right: true })
+      const engine = new Liquid({ trim_output_left: true, trim_output_right: true } as any)
       const html = await engine.parseAndRender('\t{% if true %} aha {%endif%}\t')
       return expect(html).to.equal('\t aha \t')
     })
@@ -46,7 +46,7 @@ describe('LiquidOptions#trimming', function () {
       return expect(html).to.equal('aharttle')
     })
     it('should respect to greedy:false by default', async function () {
-      const engine = new Liquid({ greedy: false })
+      const engine = new Liquid({ greedy: false } as any)
       const html = await engine.parseAndRender(src, ctx)
       return expect(html).to.equal('\n a \nharttle ')
     })

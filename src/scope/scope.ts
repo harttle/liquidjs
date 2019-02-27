@@ -1,4 +1,5 @@
 import * as _ from '../util/underscore'
+import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
@@ -27,7 +28,13 @@ export default class Scope {
   get (path: string): any {
     const paths = this.propertyAccessSeq(path)
     const scope = this.findContextFor(paths[0]) || _.last(this.contexts)
-    return paths.reduce((value, key) => this.readProperty(value, key), scope)
+    return paths.reduce((value, key) => {
+      const val = this.readProperty(value, key)
+      if (_.isNil(val) && this.opts.strictVariables) {
+        throw new TypeError(`undefined variable: ${key}`)
+      }
+      return val
+    }, scope)
   }
   set (path: string, v: any): void {
     const paths = this.propertyAccessSeq(path)
@@ -74,26 +81,20 @@ export default class Scope {
     return null
   }
   private readProperty (obj: Context, key: string) {
-    let val
-    if (_.isNil(obj)) {
-      val = obj
-    } else {
-      obj = toLiquid(obj)
-      val = key === 'size' ? readSize(obj) : obj[key]
-      if (_.isFunction(obj.liquid_method_missing)) {
-        val = obj.liquid_method_missing!(key)
-      }
+    if (_.isNil(obj)) return obj
+    obj = _.toLiquid(obj)
+    if (obj instanceof Drop) {
+      if (_.isFunction(obj[key])) return obj[key]()
+      if (obj.hasOwnProperty(key)) return obj[key]
+      return obj.liquidMethodMissing(key)
     }
-    if (_.isNil(val) && this.opts.strict_variables) {
-      throw new TypeError(`undefined variable: ${key}`)
-    }
-    return val
+    return key === 'size' ? readSize(obj) : obj[key]
   }
 
   /*
    * Parse property access sequence from access string
    * @example
-   * accessSeq("foo.bar")            // ['foo', 'bar']
+   * accessSeq("foo.bar")         // ['foo', 'bar']
    * accessSeq("foo['bar']")      // ['foo', 'bar']
    * accessSeq("foo['b]r']")      // ['foo', 'b]r']
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
@@ -148,16 +149,6 @@ export default class Scope {
       name = ''
     }
   }
-}
-
-function toLiquid (obj: Context) {
-  if (_.isFunction(obj.to_liquid)) {
-    return obj.to_liquid()
-  }
-  if (_.isFunction(obj.toLiquid)) {
-    return obj.toLiquid()
-  }
-  return obj
 }
 
 function readSize (obj: Context) {

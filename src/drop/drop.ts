@@ -1,6 +1,11 @@
-export abstract class Drop {
-  abstract valueOf(): any;
+import { deprecate } from '../util/deprecate'
 
-  liquid_method_missing (name: string) { // eslint-disable-line
+export abstract class Drop {
+  valueOf(): any {
+    return undefined
+  }
+
+  liquidMethodMissing (key: string): string | undefined {
+    return undefined
   }
 }

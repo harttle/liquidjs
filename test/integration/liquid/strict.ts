@@ -10,22 +10,22 @@ describe('LiquidOptions#strict_*', function () {
       extname: '.html'
     })
   })
-  it('should not throw when strict_variables false (default)', async function () {
+  it('should not throw when strictVariables false (default)', async function () {
     const html = await engine.parseAndRender('before{{notdefined}}after', ctx)
     return expect(html).to.equal('beforeafter')
   })
-  it('should throw when strict_variables true', function () {
+  it('should throw when strictVariables true', function () {
     const tpl = engine.parse('before{{notdefined}}after')
     const opts = {
-      strict_variables: true
+      strictVariables: true
     }
     return expect(engine.render(tpl, ctx, opts)).to
       .be.rejectedWith(/undefined variable: notdefined/)
   })
-  it('should pass strict_variables to render by parseAndRender', function () {
+  it('should pass strictVariables to render by parseAndRender', function () {
     const html = 'before{{notdefined}}after'
     const opts = {
-      strict_variables: true
+      strictVariables: true
     }
     return expect(engine.parseAndRender(html, ctx, opts)).to
       .be.rejectedWith(/undefined variable: notdefined/)
