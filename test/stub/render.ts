@@ -1,7 +1,7 @@
 import Liquid from '../../src/liquid'
 import { expect } from 'chai'
 
-const liquid = new Liquid()
+export const liquid = new Liquid()
 
 export const ctx = {
   date: new Date(),

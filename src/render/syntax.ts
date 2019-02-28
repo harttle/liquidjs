@@ -64,8 +64,8 @@ export function parseExp (exp: string, scope: Scope): any {
   }
 
   if ((match = exp.match(lexical.rangeLine))) {
-    const low = parseValue(match[1], scope)
-    const high = parseValue(match[2], scope)
+    const low = evalValue(match[1], scope)
+    const high = evalValue(match[2], scope)
     return range(low, high + 1)
   }
 

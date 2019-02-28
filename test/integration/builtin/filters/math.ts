@@ -1,4 +1,5 @@
-import { test } from '../../../stub/render'
+import { expect } from 'chai'
+import { test, liquid } from '../../../stub/render'
 
 describe('filters/math', function () {
   describe('abs', function () {
@@ -35,8 +36,10 @@ describe('filters/math', function () {
   describe('modulo', function () {
     it('should return "1" for 3,2', () => test('{{ 3 | modulo: 2 }}', '1'))
     it('should return "3" for 24,7', () => test('{{ 24 | modulo: 7 }}', '3'))
-    it('should return "3.357" for 183.357,12',
-      () => test('{{ 183.357 | modulo: 12 }}', '3.357'))
+    it('should return "3.357" for 183.357,12', async () => {
+      const html = await liquid.parseAndRender('{{ 183.357 | modulo: 12 }}')
+      expect(Number(html)).to.be.closeTo(3.357, 0.001)
+    })
     it('should convert string', () => test('{{ "24" | modulo: "7" }}', '3'))
   })
   describe('plus', function () {

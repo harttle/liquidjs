@@ -1,7 +1,5 @@
-import { deprecate } from '../util/deprecate'
-
 export abstract class Drop {
-  valueOf(): any {
+  valueOf (): any {
     return undefined
   }
 

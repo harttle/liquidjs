@@ -81,9 +81,6 @@ describe('util/underscore', function () {
     it('should return a range of integers', function () {
       expect(_.range(3, 5)).to.deep.equal([3, 4])
     })
-    it('should start from 0 if begin omitted', function () {
-      expect(_.range(3)).to.deep.equal([0, 1, 2])
-    })
   })
   describe('.isObject()', function () {
     it('should return true for function', function () {

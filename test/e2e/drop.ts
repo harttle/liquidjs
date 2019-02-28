@@ -6,10 +6,10 @@ use(chaiAsPromised)
 
 class SettingsDrop extends Liquid.Types.Drop {
   foo: string = 'FOO'
-  bar() {
+  bar () {
     return 'BAR'
   }
-  liquidMethodMissing(key: string) {
+  liquidMethodMissing (key: string) {
     return key.toUpperCase()
   }
 }
@@ -21,7 +21,6 @@ describe('drop', function () {
     engine = new Liquid()
   })
   it('should support liquidMethodMissing', async function () {
-    let i = 0
     const src = `{{settings.foo}},{{settings.bar}},{{settings.coo}}`
     const html = await engine.parseAndRender(src, { settings })
     return expect(html).to.equal('FOO,BAR,COO')

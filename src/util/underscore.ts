@@ -96,21 +96,7 @@ export function isObject (value: any): value is object {
   return value !== null && (type === 'object' || type === 'function')
 }
 
-/*
- * A function to create flexibly-numbered lists of integers,
- * handy for each and map loops. start, if omitted, defaults to 0; step defaults to 1.
- * Returns a list of integers from start (inclusive) to stop (exclusive),
- * incremented (or decremented) by step, exclusive.
- * Note that ranges that stop before they start are considered to be zero-length instead of
- * negative — if you'd like a negative range, use a negative step.
- */
-export function range (start: number, stop?: number, step?: number) {
-  if (stop === undefined) {
-    stop = start
-    start = 0
-  }
-  step = step || 1
-
+export function range (start: number, stop: number, step: number = 1) {
   const arr: number[] = []
   for (let i = start; i < stop; i += step) {
     arr.push(i)

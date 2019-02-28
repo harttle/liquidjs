@@ -1,8 +1,10 @@
 import Liquid from '../../../src/liquid'
 import * as chai from 'chai'
 import { mock, restore } from '../../stub/mockfs'
+import * as chaiAsPromised from 'chai-as-promised'
 
 const expect = chai.expect
+chai.use(chaiAsPromised)
 
 describe('Liquid', function () {
   describe('#plugin()', function () {
@@ -33,6 +35,12 @@ describe('Liquid', function () {
       const tpl = '{{ "Welcome|to]Liquid" | split: "|" | join: "("}}'
       const html = await engine.parseAndRender(tpl)
       expect(html).to.equal('Welcome(to]Liquid')
+    })
+    it('should support for-in with variable', async function () {
+      const src = '{% assign total = 3 | minus: 1 %}' +
+        '{% for i in (1..total) %}{{ i }}{% endfor %}'
+      const html = await engine.parseAndRender(src, {})
+      return expect(html).to.equal('12')
     })
   })
   describe('#express()', function () {
