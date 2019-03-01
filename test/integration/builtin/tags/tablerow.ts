@@ -69,10 +69,42 @@ describe('tags/tablerow', function () {
     return expect(html).to.equal(dst)
   })
 
-  it('should support tablerow with offset', async function () {
-    const src = '{% tablerow i in (1..5) cols:2 offset:3 %}{{ i }}{% endtablerow %}'
-    const dst = '<tr class="row1"><td class="col1">4</td><td class="col2">5</td></tr>'
+  it('should support index0, index, rindex0, rindex', async function () {
+    const src = '{% tablerow i in (1..3)%}{{tablerowloop.index0}}{{tablerowloop.index}}{{tablerowloop.rindex0}}{{tablerowloop.rindex}}{% endtablerow %}'
+    const dst = '<tr class="row1"><td class="col1">0123</td><td class="col2">1212</td><td class="col3">2301</td></tr>'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal(dst)
+  })
+  it('should support first, last, length', async function () {
+    const src = '{% tablerow i in (1..3)%}{{tablerowloop.first}} {{tablerowloop.last}} {{tablerowloop.length}}{% endtablerow %}'
+    const dst = '<tr class="row1"><td class="col1">true false 3</td><td class="col2">false false 3</td><td class="col3">false true 3</td></tr>'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal(dst)
+  })
+  it('should support col, row, col0, col_first, col_last', async function () {
+    const src = '{% tablerow i in (1..3)%}{{tablerowloop.col}} {{tablerowloop.col0}} {{tablerowloop.col_first}} {{tablerowloop.col_last}}{% endtablerow %}'
+    const dst = '<tr class="row1"><td class="col1">1 0 true false</td><td class="col2">2 1 false false</td><td class="col3">3 2 false true</td></tr>'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal(dst)
+  })
+  describe('offset', function () {
+    it('should support tablerow with offset', async function () {
+      const src = '{% tablerow i in (1..5) cols:2 offset:3 %}{{ i }}{% endtablerow %}'
+      const dst = '<tr class="row1"><td class="col1">4</td><td class="col2">5</td></tr>'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal(dst)
+    })
+    it('index should also start at 1', async function () {
+      const src = '{% tablerow i in (1..4) cols:2 offset:2 %}{{tablerowloop.index}}{% endtablerow %}'
+      const dst = '<tr class="row1"><td class="col1">1</td><td class="col2">2</td></tr>'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal(dst)
+    })
+    it('col should also start at 1', async function () {
+      const src = '{% tablerow i in (1..4) cols:2 offset:3 %}{{tablerowloop.col}}{% endtablerow %}'
+      const dst = '<tr class="row1"><td class="col1">1</td></tr>'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal(dst)
+    })
   })
 })

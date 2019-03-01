@@ -1,4 +1,3 @@
-import { mapSeries } from '../../util/promise'
 import { isString, isObject, isArray } from '../../util/underscore'
 import { evalExp } from '../../render/syntax'
 import assert from '../../util/assert'
@@ -10,6 +9,7 @@ import Hash from '../../template/tag/hash'
 import ITemplate from '../../template/itemplate'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 import ParseStream from '../../parser/parse-stream'
+import { ForloopDrop } from '../../drop/forloop-drop'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(${value.source})` +
@@ -61,39 +61,22 @@ export default <ITagImplOptions>{
     collection = collection.slice(offset, offset + limit)
     if (this.reversed) collection.reverse()
 
-    const contexts = collection.map((item: string, i: number) => {
-      const ctx = {}
-      ctx[this.variable] = item
-      ctx['forloop'] = {
-        first: i === 0,
-        index: i + 1,
-        index0: i,
-        last: i === collection.length - 1,
-        length: collection.length,
-        rindex: collection.length - i,
-        rindex0: collection.length - i - 1
-      }
-      return ctx
-    })
-
+    const context = { forloop: new ForloopDrop(collection.length) }
+    scope.push(context)
     let html = ''
-    let finished = false
-    await mapSeries(contexts, async context => {
-      if (finished) return
-
-      scope.push(context)
+    for (const item of collection) {
+      context[this.variable] = item
       try {
         html += await this.liquid.renderer.renderTemplates(this.templates, scope)
       } catch (e) {
         if (e.name === 'RenderBreakError') {
           html += e.resolvedHTML
-          if (e.message === 'break') {
-            finished = true
-          }
+          if (e.message === 'break') break
         } else throw e
       }
-      scope.pop(context)
-    })
+      context.forloop.next()
+    }
+    scope.pop()
     return html
   }
 }

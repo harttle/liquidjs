@@ -1,4 +1,3 @@
-import { mapSeries } from '../../util/promise'
 import assert from '../../util/assert'
 import { evalExp } from '../../render/syntax'
 import { identifier, value, hash } from '../../parser/lexical'
@@ -9,6 +8,7 @@ import Scope from '../../scope/scope'
 import Hash from '../../template/tag/hash'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 import ParseStream from '../../parser/parse-stream'
+import { TablerowloopDrop } from '../../drop/tablerowloop-drop'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(${value.source})` +
@@ -42,34 +42,24 @@ export default {
 
     collection = collection.slice(offset, offset + limit)
     const cols = hash.cols || collection.length
-    const contexts = collection.map((item: any) => {
-      const ctx = {}
-      ctx[this.variable] = item
-      return ctx
-    })
 
-    let row: number = 0
+    const tablerowloop = new TablerowloopDrop(collection.length, cols)
+    const ctx = { tablerowloop }
+    scope.push(ctx)
+
     let html = ''
-    await mapSeries(contexts, async (context, idx) => {
-      row = Math.floor(idx / cols) + 1
-      const col = (idx % cols) + 1
-      if (col === 1) {
-        if (row !== 1) {
-          html += '</tr>'
-        }
-        html += `<tr class="row${row}">`
+    for (let idx = 0; idx < collection.length; idx++, tablerowloop.next()) {
+      ctx[this.variable] = collection[idx]
+      if (tablerowloop.col0() === 0) {
+        if (tablerowloop.row() !== 1) html += '</tr>'
+        html += `<tr class="row${tablerowloop.row()}">`
       }
-
-      html += `<td class="col${col}">`
-      scope.push(context)
+      html += `<td class="col${tablerowloop.col()}">`
       html += await this.liquid.renderer.renderTemplates(this.templates, scope)
       html += '</td>'
-      scope.pop(context)
-      return html
-    })
-    if (row > 0) {
-      html += '</tr>'
     }
+    if (collection.length) html += '</tr>'
+    scope.pop(ctx)
     return html
   }
 } as ITagImplOptions

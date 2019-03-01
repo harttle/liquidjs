@@ -34,7 +34,11 @@ describe('tags/for', function () {
     const html = await liquid.parseAndRender(src, ctx)
     return expect(html).to.equal('foo,bar-coo,haa-')
   })
-
+  it('should output forloop', async function () {
+    const src = '{%for i in (1..1)%}{{forloop}}{%endfor%}'
+    const html = await liquid.parseAndRender(src, ctx)
+    return expect(html).to.equal('{"i":0,"length":1}')
+  })
   describe('scope', function () {
     it('should read super scope', async function () {
       const src = '{%for a in (1..2)%}{{num}}{%endfor%}'
