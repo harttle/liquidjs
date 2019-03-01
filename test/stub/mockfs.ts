@@ -1,5 +1,6 @@
 import { isString, forOwn } from '../../src/util/underscore'
 import fs from '../../src/fs/node'
+import { resolve } from 'path'
 
 type fileDescriptor = { mode: string, content: string }
 
@@ -9,8 +10,8 @@ const exists = fs.exists
 
 export function mock (options: { [path: string]: (string | fileDescriptor) }) {
   forOwn(options, (val, key) => {
-    files[key] = isString(val)
-      ? { mode: '33188', content: val as string }
+    files[resolve(key)] = isString(val)
+      ? { mode: '33188', content: val }
       : val as fileDescriptor
   })
   fs.readFile = async function (path) {

@@ -1,7 +1,7 @@
-import alias from 'rollup-plugin-alias'
 import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
+import replace from 'rollup-plugin-replace'
 
 const version = process.env.VERSION || pkg.version
 const sourcemap = true
@@ -45,7 +45,11 @@ export default [{
     banner
   }],
   plugins: [
-    alias({ resolve: ['.ts'], './fs/node': './fs/browser' }),
+    replace({
+      include: './src/liquid.ts',
+      delimiters: ["'", "'"],
+      './fs/node': './fs/browser'
+    }),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
@@ -67,7 +71,11 @@ export default [{
     sourcemap
   }],
   plugins: [
-    alias({ resolve: ['.ts'], './fs/node': './fs/browser' }),
+    replace({
+      include: './src/liquid.ts',
+      delimiters: ["'", "'"],
+      './fs/node': './fs/browser'
+    }),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
