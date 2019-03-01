@@ -47,7 +47,7 @@ export default [{
   plugins: [
     replace({
       include: './src/liquid.ts',
-      delimiters: ["'", "'"],
+      delimiters: ['', ''],
       './fs/node': './fs/browser'
     }),
     typescript({
@@ -73,7 +73,7 @@ export default [{
   plugins: [
     replace({
       include: './src/liquid.ts',
-      delimiters: ["'", "'"],
+      delimiters: ['', ''],
       './fs/node': './fs/browser'
     }),
     typescript({
