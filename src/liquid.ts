@@ -41,6 +41,10 @@ export default class Liquid {
     const scope = new Scope(ctx, options)
     return this.renderer.renderTemplates(tpl, scope)
   }
+  syncParseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
+    const tpl = this.parse(html)
+    return this.render(tpl, ctx, opts)
+  }
   async parseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
     const tpl = await this.parse(html)
     return this.render(tpl, ctx, opts)
