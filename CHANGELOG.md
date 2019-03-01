@@ -1,3 +1,10 @@
+# [7.5.0](https://github.com/harttle/liquidjs/compare/v7.4.0...v7.5.0) (2019-03-01)
+
+
+### Features
+
+* tablerowloop object ([3647305](https://github.com/harttle/liquidjs/commit/3647305))
+
 # [7.4.0](https://github.com/harttle/liquidjs/compare/v7.3.1...v7.4.0) (2019-02-28)
 
 
