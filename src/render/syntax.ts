@@ -77,7 +77,7 @@ export function evalExp (str: string, scope: Scope): any {
   return value instanceof Drop ? value.valueOf() : value
 }
 
-function parseValue (str: string, scope: Scope): any {
+function parseValue (str: string | undefined, scope: Scope): any {
   if (!str) return null
   str = str.trim()
 
@@ -91,7 +91,7 @@ function parseValue (str: string, scope: Scope): any {
   return scope.get(str)
 }
 
-export function evalValue (str: string, scope: Scope): any {
+export function evalValue (str: string | undefined, scope: Scope): any {
   const value = parseValue(str, scope)
   return value instanceof Drop ? value.valueOf() : value
 }

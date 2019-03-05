@@ -1,14 +1,17 @@
 import { evalValue } from '../../render/syntax'
 import Scope from '../../scope/scope'
+import { isArray } from '../../util/underscore'
 import { FilterImpl } from './filter-impl'
 
-export default class Filter {
+export type FilterArgs = Array<string|[string?, string?]>
+
+export class Filter {
   name: string
   impl: FilterImpl
-  args: string[]
+  args: FilterArgs
   private static impls: {[key: string]: FilterImpl} = {}
 
-  constructor (name: string, args: string[], strictFilters: boolean) {
+  constructor (name: string, args: FilterArgs, strictFilters: boolean) {
     const impl = Filter.impls[name]
     if (!impl && strictFilters) throw new TypeError(`undefined filter: ${name}`)
 
@@ -17,7 +20,7 @@ export default class Filter {
     this.args = args
   }
   render (value: any, scope: Scope): any {
-    const args = this.args.map(arg => evalValue(arg, scope))
+    const args = this.args.map(arg => isArray(arg) ? [arg[0], evalValue(arg[1], scope)] : evalValue(arg, scope))
     return this.impl.apply(null, [value, ...args])
   }
   static register (name: string, filter: FilterImpl) {

@@ -1,80 +1,76 @@
 import { evalExp } from '../render/syntax'
-import Filter from './filter/filter'
+import { FilterArgs, Filter } from './filter/filter'
 import Scope from '../scope/scope'
 
-enum ParseState {
-  INIT = 0,
-  FILTER_NAME = 1,
-  FILTER_ARG = 2
-}
-
-export default class {
-  initial: any
+export default class Value {
+  private strictFilters: boolean
+  initial: string
   filters: Array<Filter> = []
 
   /**
    * @param str value string, like: "i have a dream | truncate: 3
    */
   constructor (str: string, strictFilters: boolean) {
-    let buffer = ''
-    let quoted = ''
-    let state = ParseState.INIT
-    let sealed = false
-
-    let filterName = ''
-    let filterArgs: string[] = []
-
-    for (let i = 0; i < str.length; i++) {
-      if (quoted) {
-        if (str[i] === quoted) {
-          quoted = ''
-          sealed = true
+    const tokens = Value.tokenize(str)
+    this.strictFilters = strictFilters
+    this.initial = tokens[0]
+    this.parseFilters(tokens, 1)
+  }
+  private parseFilters (tokens: string[], begin: number) {
+    let i = begin
+    while (i < tokens.length) {
+      if (tokens[i] !== '|') {
+        i++
+        continue
+      }
+      const j = ++i
+      while (i < tokens.length && tokens[i] !== '|') i++
+      this.parseFilter(tokens, j, i)
+    }
+  }
+  private parseFilter (tokens: string[], begin: number, end: number) {
+    const name = tokens[begin]
+    const args: FilterArgs = []
+    let argName, argValue
+    for (let i = begin + 1; i < end + 1; i++) {
+      if (i === end || tokens[i] === ',') {
+        if (argName || argValue) {
+          args.push(argName ? [argName, argValue] : <string>argValue)
         }
-        buffer += str[i]
-      } else if (/\s/.test(str[i])) {
-        if (!buffer) continue
-        else sealed = true
-      } else if (str[i] === '|') {
-        if (state === ParseState.INIT) {
-          this.initial = buffer
-        } else {
-          if (state === ParseState.FILTER_NAME) filterName = buffer
-          else filterArgs.push(buffer)
-          this.filters.push(new Filter(filterName, filterArgs, strictFilters))
-          filterName = ''
-          filterArgs = []
-        }
-        state = ParseState.FILTER_NAME
-        buffer = ''
-        sealed = false
-      } else if (state === ParseState.FILTER_NAME && str[i] === ':') {
-        filterName = buffer
-        state = ParseState.FILTER_ARG
-        buffer = ''
-        sealed = false
-      } else if (state === ParseState.FILTER_ARG && str[i] === ',') {
-        filterArgs.push(buffer)
-        buffer = ''
-        sealed = false
-      } else if (sealed) continue
-      else {
-        if ((str[i] === '"' || str[i] === "'") && !quoted) quoted = str[i]
-        buffer += str[i]
+        argValue = argName = undefined
+      } else if (tokens[i] === ':') {
+        argName = argValue
+        argValue = undefined
+      } else if (argValue === undefined) {
+        argValue = tokens[i]
       }
     }
-
-    if (buffer) {
-      if (state === ParseState.INIT) this.initial = buffer
-      else if (state === ParseState.FILTER_NAME) this.filters.push(new Filter(buffer, [], strictFilters))
-      else {
-        filterArgs.push(buffer)
-        this.filters.push(new Filter(filterName, filterArgs, strictFilters))
-      }
-    }
+    this.filters.push(new Filter(name, args, this.strictFilters))
   }
   value (scope: Scope) {
     return this.filters.reduce(
       (prev, filter) => filter.render(prev, scope),
       evalExp(this.initial, scope))
+  }
+  static tokenize (str: string): Array<'|' | ',' | ':' | string> {
+    const tokens = []
+    let i = 0
+    while (i < str.length) {
+      const ch = str[i]
+      if (ch === '"' || ch === "'") {
+        const j = i
+        for (i += 2; i < str.length && str[i - 1] !== ch; ++i);
+        tokens.push(str.slice(j, i))
+      } else if (/\s/.test(ch)) {
+        i++
+      } else if (/[|,:]/.test(ch)) {
+        tokens.push(str[i++])
+      } else {
+        const j = i++
+        for (; i < str.length && !/[|,:\s]/.test(str[i]); ++i);
+        tokens.push(str.slice(j, i))
+      }
+    }
+    return tokens
   }
 }
