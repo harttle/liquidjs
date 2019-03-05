@@ -25,6 +25,12 @@ describe('Value', function () {
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].args).to.eql([])
     })
+    it('should parse "foo,foo | add"', function () {
+      const tpl = new Value('foo,foo | add', false)
+      expect(tpl.initial).to.equal('foo')
+      expect(tpl.filters.length).to.equal(1)
+      expect(tpl.filters[0].args).to.eql([])
+    })
     it('should parse "foo | add: 3, false"', function () {
       const tpl = new Value('foo | add: 3, "foo"', false)
       expect(tpl.initial).to.equal('foo')

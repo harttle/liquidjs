@@ -1,6 +1,6 @@
 import { test, liquid } from '../../stub/render'
 
-describe('registerFilter', function () {
+describe('liquid#registerFilter()', function () {
   describe('object arguments', function () {
     liquid.registerFilter('obj_test', function () {
       return JSON.stringify(arguments)
