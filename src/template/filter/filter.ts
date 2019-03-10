@@ -21,7 +21,7 @@ export class Filter {
   }
   async render (value: any, scope: Scope) {
     const argv: any[] = []
-    for(let arg of this.args) {
+    for (const arg of this.args) {
       if (isArray(arg)) argv.push([arg[0], await evalValue(arg[1], scope)])
       else argv.push(await evalValue(arg, scope))
     }

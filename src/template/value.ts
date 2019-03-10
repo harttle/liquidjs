@@ -49,7 +49,7 @@ export default class Value {
   }
   async value (scope: Scope) {
     let val = await evalExp(this.initial, scope)
-    for (let filter of this.filters) {
+    for (const filter of this.filters) {
       val = await filter.render(val, scope)
     }
     return val

@@ -19,9 +19,6 @@ describe('util/underscore', function () {
     })
   })
   describe('.stringify()', function () {
-    it('should respect to to_liquid() method', function () {
-      expect(_.stringify({ to_liquid: () => 'foo' })).to.equal('foo')
-    })
     it('should respect to toLiquid() method', function () {
       expect(_.stringify({ toLiquid: () => 'foo' })).to.equal('foo')
     })

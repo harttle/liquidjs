@@ -1,4 +1,3 @@
-import { deprecate } from './util/deprecate'
 import * as _ from './util/underscore'
 
 export interface LiquidOptions {
@@ -76,13 +75,6 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
   options = options || {}
   if (options.hasOwnProperty('root')) {
     options.root = normalizeStringArray(options.root)
-  }
-  for (const key of Object.keys(options)) {
-    if (key.indexOf('_') > -1) {
-      const newKey = key.replace(/_([a-z])/g, (_, ch) => ch.toUpperCase())
-      deprecate(`${key} is deprecated, use ${newKey} instead.`, 109)
-      options[newKey] = options[key]
-    }
   }
   return options as NormalizedOptions
 }

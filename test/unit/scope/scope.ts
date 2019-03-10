@@ -85,15 +85,6 @@ describe('scope', function () {
     it("should throw when '' unbalanced", async function () {
       expect(scope.get("foo['bar]")).to.be.rejectedWith(/unbalanced '/)
     })
-
-    it('should respect to to_liquid', async function () {
-      const scope = new Scope({ foo: {
-        to_liquid: () => ({ bar: 'BAR' }),
-        bar: 'bar'
-      } })
-      expect(await scope.get('foo.bar')).to.equal('BAR')
-    })
-
     it('should respect to toLiquid', async function () {
       const scope = new Scope({ foo: {
         toLiquid: () => ({ bar: 'BAR' }),

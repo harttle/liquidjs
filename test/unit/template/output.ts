@@ -11,14 +11,6 @@ describe('Output', function () {
     Filter.clear()
   })
 
-  it('should respect to .to_liquid() method', async function () {
-    const scope = new Scope({
-      bar: { to_liquid: () => 'custom' }
-    })
-    const output = new Output({ value: 'bar' } as OutputToken, false)
-    const html = await output.render(scope)
-    return expect(html).to.equal('custom')
-  })
   it('should stringify objects', async function () {
     const scope = new Scope({
       foo: { obj: { arr: ['a', 2] } }
@@ -35,12 +27,6 @@ describe('Output', function () {
   })
   it('should respect to .toString()', async () => {
     const scope = new Scope({ obj: { toString: () => 'FOO' } })
-    const output = new Output({ value: 'obj' } as OutputToken, false)
-    const str = await output.render(scope)
-    return expect(str).to.equal('FOO')
-  })
-  it('should respect to .to_s()', async () => {
-    const scope = new Scope({ obj: { to_s: () => 'FOO' } })
     const output = new Output({ value: 'obj' } as OutputToken, false)
     const str = await output.render(scope)
     return expect(str).to.equal('FOO')

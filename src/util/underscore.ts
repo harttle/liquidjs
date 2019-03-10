@@ -1,4 +1,3 @@
-import { deprecate } from './deprecate'
 const toStr = Object.prototype.toString
 
 /*
@@ -29,18 +28,10 @@ export function promisify (fn: any) {
 export function stringify (value: any): string {
   if (isNil(value)) return ''
   value = toLiquid(value)
-  if (isFunction(value.to_s)) {
-    deprecate('to_s is deprecated, use toString instead.', 109)
-    return value.to_s()
-  }
   return String(value)
 }
 
 export function toLiquid (value: any): any {
-  if (isFunction(value.to_liquid)) {
-    deprecate('to_liquid is deprecated, use toLiquid instead.', 109)
-    return toLiquid(value.to_liquid())
-  }
   if (isFunction(value.toLiquid)) return toLiquid(value.toLiquid())
   return value
 }

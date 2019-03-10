@@ -22,7 +22,7 @@ export default class Scope {
   async get (path: string) {
     const paths = await this.propertyAccessSeq(path)
     let ctx = this.findContextFor(paths[0]) || _.last(this.contexts)
-    for (let path of paths) {
+    for (const path of paths) {
       ctx = this.readProperty(ctx, path)
       if (_.isNil(ctx) && this.opts.strictVariables) {
         throw new TypeError(`undefined variable: ${path}`)
