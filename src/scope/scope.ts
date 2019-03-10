@@ -4,13 +4,7 @@ import { __assign } from 'tslib'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
-
-export type Context = {
-  [key: string]: any
-  liquid_method_missing?: (key: string) => any // eslint-disable-line
-  to_liquid?: () => any // eslint-disable-line
-  toLiquid?: () => any  // eslint-disable-line
-}
+import { Context } from './context'
 
 export default class Scope {
   opts: NormalizedFullOptions
@@ -25,19 +19,19 @@ export default class Scope {
   getAll () {
     return this.contexts.reduce((ctx, val) => __assign(ctx, val), {})
   }
-  get (path: string): any {
-    const paths = this.propertyAccessSeq(path)
-    const scope = this.findContextFor(paths[0]) || _.last(this.contexts)
-    return paths.reduce((value, key) => {
-      const val = this.readProperty(value, key)
-      if (_.isNil(val) && this.opts.strictVariables) {
-        throw new TypeError(`undefined variable: ${key}`)
+  async get (path: string) {
+    const paths = await this.propertyAccessSeq(path)
+    let ctx = this.findContextFor(paths[0]) || _.last(this.contexts)
+    for (let path of paths) {
+      ctx = this.readProperty(ctx, path)
+      if (_.isNil(ctx) && this.opts.strictVariables) {
+        throw new TypeError(`undefined variable: ${path}`)
       }
-      return val
-    }, scope)
+    }
+    return ctx
   }
-  set (path: string, v: any): void {
-    const paths = this.propertyAccessSeq(path)
+  async set (path: string, v: any) {
+    const paths = await this.propertyAccessSeq(path)
     let scope = this.findContextFor(paths[0]) || _.last(this.contexts)
     paths.some((key, i) => {
       if (!_.isObject(scope)) {
@@ -99,7 +93,7 @@ export default class Scope {
    * accessSeq("foo['b]r']")      // ['foo', 'b]r']
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
-  propertyAccessSeq (str: string) {
+  async propertyAccessSeq (str: string) {
     str = String(str)
     const seq: string[] = []
     let name = ''
@@ -122,7 +116,7 @@ export default class Scope {
             assert(j !== -1, `unbalanced []: ${str}`)
             name = str.slice(i + 1, j)
             if (!/^[+-]?\d+$/.test(name)) { // foo[bar] vs. foo[1]
-              name = String(this.get(name))
+              name = String(await this.get(name))
             }
             push()
             i = j + 1
@@ -152,9 +146,9 @@ export default class Scope {
 }
 
 function readSize (obj: Context) {
-  if (!_.isNil(obj.size)) return obj.size
+  if (!_.isNil(obj['size'])) return obj['size']
   if (_.isArray(obj) || _.isString(obj)) return obj.length
-  return obj.size
+  return obj['size']
 }
 
 function matchRightBracket (str: string, begin: number) {

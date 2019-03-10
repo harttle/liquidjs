@@ -48,7 +48,7 @@ const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   'or': (l: any, r: any) => isTruthy(l) || isTruthy(r)
 }
 
-export function parseExp (exp: string, scope: Scope): any {
+export async function parseExp (exp: string, scope: Scope): Promise<any> {
   assert(scope, 'unable to parseExp: scope undefined')
   const operatorREs = lexical.operators
   let match
@@ -56,28 +56,28 @@ export function parseExp (exp: string, scope: Scope): any {
     const operatorRE = operatorREs[i]
     const expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`)
     if ((match = exp.match(expRE))) {
-      const l = parseExp(match[1], scope)
+      const l = await parseExp(match[1], scope)
       const op = binaryOperators[match[2].trim()]
-      const r = parseExp(match[3], scope)
+      const r = await parseExp(match[3], scope)
       return op(l, r)
     }
   }
 
   if ((match = exp.match(lexical.rangeLine))) {
-    const low = evalValue(match[1], scope)
-    const high = evalValue(match[2], scope)
-    return range(low, high + 1)
+    const low = await evalValue(match[1], scope)
+    const high = await evalValue(match[2], scope)
+    return range(+low, +high + 1)
   }
 
   return parseValue(exp, scope)
 }
 
-export function evalExp (str: string, scope: Scope): any {
-  const value = parseExp(str, scope)
+export async function evalExp (str: string, scope: Scope): Promise<any> {
+  const value = await parseExp(str, scope)
   return value instanceof Drop ? value.valueOf() : value
 }
 
-function parseValue (str: string | undefined, scope: Scope): any {
+async function parseValue (str: string | undefined, scope: Scope): Promise<any> {
   if (!str) return null
   str = str.trim()
 
@@ -91,8 +91,8 @@ function parseValue (str: string | undefined, scope: Scope): any {
   return scope.get(str)
 }
 
-export function evalValue (str: string | undefined, scope: Scope): any {
-  const value = parseValue(str, scope)
+export async function evalValue (str: string | undefined, scope: Scope) {
+  const value = await parseValue(str, scope)
   return value instanceof Drop ? value.valueOf() : value
 }
 

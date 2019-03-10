@@ -10,13 +10,15 @@ import Scope from '../../scope/scope'
  */
 export default class Hash {
   [key: string]: any
-  constructor (markup: string, scope: Scope) {
+  static async create (markup: string, scope: Scope) {
+    const instance = new Hash()
     let match
     hashCapture.lastIndex = 0
     while ((match = hashCapture.exec(markup))) {
       const k = match[1]
       const v = match[2]
-      this[k] = evalValue(v, scope)
+      instance[k] = await evalValue(v, scope)
     }
+    return instance
   }
 }

@@ -18,35 +18,35 @@ describe('render/syntax', function () {
   })
 
   describe('.evalValue()', function () {
-    it('should eval boolean literal', function () {
-      expect(evalValue('true', scope)).to.equal(true)
-      expect(evalValue('TrUE', scope)).to.equal(undefined)
-      expect(evalValue('false', scope)).to.equal(false)
+    it('should eval boolean literal', async function () {
+      expect(await evalValue('true', scope)).to.equal(true)
+      expect(await evalValue('TrUE', scope)).to.equal(undefined)
+      expect(await evalValue('false', scope)).to.equal(false)
     })
-    it('should eval number literal', function () {
-      expect(evalValue('2.3', scope)).to.equal(2.3)
-      expect(evalValue('.32', scope)).to.equal(0.32)
-      expect(evalValue('-23.', scope)).to.equal(-23)
-      expect(evalValue('23', scope)).to.equal(23)
+    it('should eval number literal', async function () {
+      expect(await evalValue('2.3', scope)).to.equal(2.3)
+      expect(await evalValue('.32', scope)).to.equal(0.32)
+      expect(await evalValue('-23.', scope)).to.equal(-23)
+      expect(await evalValue('23', scope)).to.equal(23)
     })
-    it('should eval string literal', function () {
-      expect(evalValue('"ab\'c"', scope)).to.equal("ab'c")
-      expect(evalValue("'ab\"c'", scope)).to.equal('ab"c')
+    it('should eval string literal', async function () {
+      expect(await evalValue('"ab\'c"', scope)).to.equal("ab'c")
+      expect(await evalValue("'ab\"c'", scope)).to.equal('ab"c')
     })
-    it('should eval nil literal', function () {
-      expect(evalValue('nil', scope)).to.be.null
+    it('should eval nil literal', async function () {
+      expect(await evalValue('nil', scope)).to.be.null
     })
-    it('should eval null literal', function () {
-      expect(evalValue('null', scope)).to.be.null
+    it('should eval null literal', async function () {
+      expect(await evalValue('null', scope)).to.be.null
     })
-    it('should eval scope variables', function () {
-      expect(evalValue('one', scope)).to.equal(1)
-      expect(evalValue('has_value?', scope)).to.equal(true)
-      expect(evalValue('x', scope)).to.equal('XXX')
+    it('should eval scope variables', async function () {
+      expect(await evalValue('one', scope)).to.equal(1)
+      expect(await evalValue('has_value?', scope)).to.equal(true)
+      expect(await evalValue('x', scope)).to.equal('XXX')
     })
   })
 
-  describe('.isTruthy()', function () {
+  describe('.isTruthy()', async function () {
     // Spec: https://shopify.github.io/liquid/basics/truthy-and-falsy/
     expect(isTruthy(true)).to.be.true
     expect(isTruthy(false)).to.be.false
@@ -61,44 +61,42 @@ describe('render/syntax', function () {
   })
 
   describe('.evalExp()', function () {
-    it('should throw when scope undefined', function () {
-      expect(function () {
-        (evalExp as any)('')
-      }).to.throw(/scope undefined/)
+    it('should throw when scope undefined', async function () {
+      return expect((evalExp as any)('')).to.be.rejectedWith(/scope undefined/)
     })
 
-    it('should eval simple expression', function () {
-      expect(evalExp('1<2', scope)).to.equal(true)
-      expect(evalExp('2<=2', scope)).to.equal(true)
-      expect(evalExp('one<=two', scope)).to.equal(true)
-      expect(evalExp('x contains "x"', scope)).to.equal(false)
-      expect(evalExp('x contains "X"', scope)).to.equal(true)
-      expect(evalExp('1 contains "x"', scope)).to.equal(false)
-      expect(evalExp('y contains "x"', scope)).to.equal(false)
-      expect(evalExp('z contains "x"', scope)).to.equal(false)
-      expect(evalExp('(1..5) contains 3', scope)).to.equal(true)
-      expect(evalExp('(1..5) contains 6', scope)).to.equal(false)
-      expect(evalExp('"<=" == "<="', scope)).to.equal(true)
+    it('should eval simple expression', async function () {
+      expect(await evalExp('1<2', scope)).to.equal(true)
+      expect(await evalExp('2<=2', scope)).to.equal(true)
+      expect(await evalExp('one<=two', scope)).to.equal(true)
+      expect(await evalExp('x contains "x"', scope)).to.equal(false)
+      expect(await evalExp('x contains "X"', scope)).to.equal(true)
+      expect(await evalExp('1 contains "x"', scope)).to.equal(false)
+      expect(await evalExp('y contains "x"', scope)).to.equal(false)
+      expect(await evalExp('z contains "x"', scope)).to.equal(false)
+      expect(await evalExp('(1..5) contains 3', scope)).to.equal(true)
+      expect(await evalExp('(1..5) contains 6', scope)).to.equal(false)
+      expect(await evalExp('"<=" == "<="', scope)).to.equal(true)
     })
 
     describe('complex expression', function () {
-      it('should support value or value', function () {
-        expect(evalExp('false or true', scope)).to.equal(true)
+      it('should support value or value', async function () {
+        expect(await evalExp('false or true', scope)).to.equal(true)
       })
-      it('should support < and contains', function () {
-        expect(evalExp('1<2 and x contains "x"', scope)).to.equal(false)
+      it('should support < and contains', async function () {
+        expect(await evalExp('1<2 and x contains "x"', scope)).to.equal(false)
       })
-      it('should support < or contains', function () {
-        expect(evalExp('1<2 or x contains "x"', scope)).to.equal(true)
+      it('should support < or contains', async function () {
+        expect(await evalExp('1<2 or x contains "x"', scope)).to.equal(true)
       })
-      it('should support value and !=', function () {
-        expect(evalExp('empty and empty != ""', scope)).to.equal(false)
+      it('should support value and !=', async function () {
+        expect(await evalExp('empty and empty != ""', scope)).to.equal(false)
       })
     })
 
-    it('should eval range expression', function () {
-      expect(evalExp('(2..4)', scope)).to.deep.equal([2, 3, 4])
-      expect(evalExp('(two..4)', scope)).to.deep.equal([2, 3, 4])
+    it('should eval range expression', async function () {
+      expect(await evalExp('(2..4)', scope)).to.deep.equal([2, 3, 4])
+      expect(await evalExp('(two..4)', scope)).to.deep.equal([2, 3, 4])
     })
   })
 })

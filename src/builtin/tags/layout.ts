@@ -26,7 +26,7 @@ export default {
   },
   render: async function (scope: Scope, hash: Hash) {
     const layout = scope.opts.dynamicPartials
-      ? evalValue(this.layout, scope)
+      ? await evalValue(this.layout, scope)
       : this.staticLayout
     assert(layout, `cannot apply layout with empty filename`)
 

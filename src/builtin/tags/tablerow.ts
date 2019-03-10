@@ -36,7 +36,7 @@ export default {
   },
 
   render: async function (scope: Scope, hash: Hash) {
-    let collection = evalExp(this.collection, scope) || []
+    let collection = await evalExp(this.collection, scope) || []
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 

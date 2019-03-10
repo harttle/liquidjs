@@ -99,7 +99,7 @@ describe('Value', function () {
   })
 
   describe('#value()', function () {
-    it('should call chained filters correctly', function () {
+    it('should call chained filters correctly', async function () {
       const date = sinon.stub().returns('y')
       const time = sinon.spy()
       Filter.register('date', date)
@@ -108,7 +108,7 @@ describe('Value', function () {
       const scope = new Scope({
         foo: { bar: 'bar' }
       })
-      tpl.value(scope)
+      await tpl.value(scope)
       expect(date).to.have.been.calledWith('bar', 'b')
       expect(time).to.have.been.calledWith('y', 2)
     })

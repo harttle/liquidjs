@@ -14,10 +14,9 @@ export default {
     this.key = match[1]
     this.value = match[2]
   },
-  render: function (scope: Scope) {
+  render: async function (scope: Scope) {
     const ctx = new AssignScope()
-    ctx[this.key] = this.liquid.evalValue(this.value, scope)
+    ctx[this.key] = await this.liquid.evalValue(this.value, scope)
     scope.push(ctx)
-    return Promise.resolve('')
   }
 } as ITagImplOptions

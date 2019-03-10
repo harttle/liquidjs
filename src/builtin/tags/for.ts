@@ -42,7 +42,7 @@ export default <ITagImplOptions>{
     stream.start()
   },
   render: async function (scope: Scope, hash: Hash) {
-    let collection = evalExp(this.collection, scope)
+    let collection = await evalExp(this.collection, scope)
 
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {

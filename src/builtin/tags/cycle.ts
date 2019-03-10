@@ -24,8 +24,8 @@ export default <ITagImplOptions>{
     assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
   },
 
-  render: function (scope: Scope) {
-    const group = evalValue(this.group, scope)
+  render: async function (scope: Scope) {
+    const group = await evalValue(this.group, scope)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = scope.groups
     let idx = groups[fingerprint]

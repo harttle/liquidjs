@@ -13,34 +13,34 @@ describe('filter', function () {
     Filter.clear()
     scope = new Scope()
   })
-  it('should create default filter if not registered', function () {
+  it('should create default filter if not registered', async function () {
     const result = new Filter('foo', [], false)
     expect(result.name).to.equal('foo')
   })
 
-  it('should render input if filter not registered', function () {
-    expect(new Filter('undefined', [], false).render('foo', scope)).to.equal('foo')
+  it('should render input if filter not registered', async function () {
+    expect(await new Filter('undefined', [], false).render('foo', scope)).to.equal('foo')
   })
 
-  it('should call filter impl with corrct arguments', function () {
+  it('should call filter impl with corrct arguments', async function () {
     const spy = sinon.spy()
     Filter.register('foo', spy)
-    new Filter('foo', ['33'], false).render('foo', scope)
+    await new Filter('foo', ['33'], false).render('foo', scope)
     expect(spy).to.have.been.calledWith('foo', 33)
   })
-  it('should render a simple filter', function () {
+  it('should render a simple filter', async function () {
     Filter.register('upcase', x => x.toUpperCase())
-    expect(new Filter('upcase', [], false).render('foo', scope)).to.equal('FOO')
+    expect(await new Filter('upcase', [], false).render('foo', scope)).to.equal('FOO')
   })
 
-  it('should render filters with argument', function () {
+  it('should render filters with argument', async function () {
     Filter.register('add', (a, b) => a + b)
-    expect(new Filter('add', ['2'], false).render(3, scope)).to.equal(5)
+    expect(await new Filter('add', ['2'], false).render(3, scope)).to.equal(5)
   })
 
-  it('should render filters with multiple arguments', function () {
+  it('should render filters with multiple arguments', async function () {
     Filter.register('add', (a, b, c) => a + b + c)
-    expect(new Filter('add', ['2', '"c"'], false).render(3, scope)).to.equal('5c')
+    expect(await new Filter('add', ['2', '"c"'], false).render(3, scope)).to.equal('5c')
   })
 
   it('should not throw when filter name illegal', function () {

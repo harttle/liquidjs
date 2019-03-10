@@ -25,8 +25,8 @@ export default {
     stream.start()
   },
 
-  render: function (scope: Scope) {
-    const cond = evalExp(this.cond, scope)
+  render: async function (scope: Scope) {
+    const cond = await evalExp(this.cond, scope)
     return isFalsy(cond)
       ? this.liquid.renderer.renderTemplates(this.templates, scope)
       : this.liquid.renderer.renderTemplates(this.elseTemplates, scope)

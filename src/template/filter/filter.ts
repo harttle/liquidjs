@@ -19,9 +19,13 @@ export class Filter {
     this.impl = impl || (x => x)
     this.args = args
   }
-  render (value: any, scope: Scope): any {
-    const args = this.args.map(arg => isArray(arg) ? [arg[0], evalValue(arg[1], scope)] : evalValue(arg, scope))
-    return this.impl.apply(null, [value, ...args])
+  async render (value: any, scope: Scope) {
+    const argv: any[] = []
+    for(let arg of this.args) {
+      if (isArray(arg)) argv.push([arg[0], await evalValue(arg[1], scope)])
+      else argv.push(await evalValue(arg, scope))
+    }
+    return this.impl.apply(null, [value, ...argv])
   }
   static register (name: string, filter: FilterImpl) {
     Filter.impls[name] = filter

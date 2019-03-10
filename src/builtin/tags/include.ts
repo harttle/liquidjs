@@ -34,7 +34,7 @@ export default <ITagImplOptions>{
         const template = this.value.slice(1, -1)
         filepath = await this.liquid.parseAndRender(template, scope.getAll(), scope.opts)
       } else {
-        filepath = evalValue(this.value, scope)
+        filepath = await evalValue(this.value, scope)
       }
     } else {
       filepath = this.staticValue
@@ -47,7 +47,7 @@ export default <ITagImplOptions>{
     scope.blocks = {}
     scope.blockMode = BlockMode.OUTPUT
     if (this.with) {
-      hash[filepath] = evalValue(this.with, scope)
+      hash[filepath] = await evalValue(this.with, scope)
     }
     const templates = await this.liquid.getTemplate(filepath, scope.opts)
     scope.push(hash)

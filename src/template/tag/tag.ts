@@ -28,7 +28,7 @@ export default class Tag extends Template<TagToken> implements ITemplate {
     }
   }
   async render (scope: Scope) {
-    const hash = new Hash(this.token.args, scope)
+    const hash = await Hash.create(this.token.args, scope)
     const impl = this.impl
     if (typeof impl.render !== 'function') {
       return ''

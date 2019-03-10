@@ -30,11 +30,11 @@ export default {
     stream.start()
   },
 
-  render: function (scope: Scope) {
+  render: async function (scope: Scope) {
     for (let i = 0; i < this.cases.length; i++) {
       const branch = this.cases[i]
-      const val = evalExp(branch.val, scope)
-      const cond = evalExp(this.cond, scope)
+      const val = await evalExp(branch.val, scope)
+      const cond = await evalExp(this.cond, scope)
       if (val === cond) {
         return this.liquid.renderer.renderTemplates(branch.templates, scope)
       }

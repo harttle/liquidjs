@@ -47,10 +47,12 @@ export default class Value {
     }
     this.filters.push(new Filter(name, args, this.strictFilters))
   }
-  value (scope: Scope) {
-    return this.filters.reduce(
-      (prev, filter) => filter.render(prev, scope),
-      evalExp(this.initial, scope))
+  async value (scope: Scope) {
+    let val = await evalExp(this.initial, scope)
+    for (let filter of this.filters) {
+      val = await filter.render(val, scope)
+    }
+    return val
   }
   static tokenize (str: string): Array<'|' | ',' | ':' | string> {
     const tokens = []
