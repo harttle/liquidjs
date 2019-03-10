@@ -1,3 +1,20 @@
+# [8.0.0](https://github.com/harttle/liquidjs/compare/v7.5.1...v8.0.0) (2019-03-10)
+
+
+### Code Refactoring
+
+* use camelCase for JavaScript APIs ([64e0c87](https://github.com/harttle/liquidjs/commit/64e0c87))
+
+
+### Features
+
+* promise support for drops, working on [#65](https://github.com/harttle/liquidjs/issues/65) ([4a8088d](https://github.com/harttle/liquidjs/commit/4a8088d))
+
+
+### BREAKING CHANGES
+
+* Options and method names in JavaScript API are now renamed to cammelCase, for a complete list see #109
+
 ## [7.5.1](https://github.com/harttle/liquidjs/compare/v7.5.0...v7.5.1) (2019-03-05)
 
 
