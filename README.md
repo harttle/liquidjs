@@ -228,7 +228,9 @@ engine.registerTag('upper', {
     },
     render: function(scope, hash) {
         var str = Liquid.evalValue(this.str, scope); // 'alice'
-        return Promise.resolve(str.toUpperCase()); // 'Alice'
+        return str.then(function(name) {
+            return name.toUpperCase()  // 'Alice'
+        })
     }
 });
 ```
