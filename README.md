@@ -226,11 +226,9 @@ engine.registerTag('upper', {
     parse: function(tagToken, remainTokens) {
         this.str = tagToken.args; // name
     },
-    render: function(scope, hash) {
-        var str = Liquid.evalValue(this.str, scope); // 'alice'
-        return str.then(function(name) {
-            return name.toUpperCase()  // 'Alice'
-        })
+    render: async function(scope, hash) {
+        var str = await Liquid.evalValue(this.str, scope); // 'alice'
+        return str.toUpperCase()  // 'Alice'
     }
 });
 ```
