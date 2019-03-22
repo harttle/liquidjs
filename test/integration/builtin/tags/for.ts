@@ -39,19 +39,6 @@ describe('tags/for', function () {
     const html = await liquid.parseAndRender(src, ctx)
     return expect(html).to.equal('{"i":0,"length":1}')
   })
-  describe('scope', function () {
-    it('should read super scope', async function () {
-      const src = '{%for a in (1..2)%}{{num}}{%endfor%}'
-      const html = await liquid.parseAndRender(src, { num: 1 })
-      return expect(html).to.equal('11')
-    })
-    it('should write super scope', async function () {
-      const src = '{%for a in (1..2)%}{{num}}{%assign num = 2%}{%endfor%}'
-      const html = await liquid.parseAndRender(src, { num: 1 })
-      return expect(html).to.equal('12')
-    })
-  })
-
   describe('illegal', function () {
     it('should reject when for not closed', function () {
       const src = '{%for c in alpha%}{{c}}'

@@ -1,6 +1,5 @@
 import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
-import { CaptureScope, AssignScope, IncrementScope } from '../../scope/scopes'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 export default {
@@ -9,22 +8,13 @@ export default {
     assert(match, `illegal identifier ${token.args}`)
     this.variable = match![0]
   },
-  render: function (scope) {
-    let context = scope.findContextFor(
-      this.variable,
-      ctx => {
-        return !(ctx instanceof CaptureScope) && !(ctx instanceof AssignScope)
-      }
-    )
-    if (!context) {
-      context = new IncrementScope()
-      scope.unshift(context)
+  render: function (context) {
+    const scope = context.environments
+    if (typeof scope[this.variable] !== 'number') {
+      scope[this.variable] = 0
     }
-    if (typeof context[this.variable] !== 'number') {
-      context[this.variable] = 0
-    }
-    const val = context[this.variable]
-    context[this.variable]++
+    const val = scope[this.variable]
+    scope[this.variable]++
     return val
   }
 } as ITagImplOptions

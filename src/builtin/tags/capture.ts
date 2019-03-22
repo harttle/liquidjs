@@ -1,6 +1,5 @@
 import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
-import { CaptureScope } from '../../scope/scopes'
 import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
 import Scope from '../../scope/scope'
@@ -26,8 +25,6 @@ export default {
   },
   render: async function (scope: Scope) {
     const html = await this.liquid.renderer.renderTemplates(this.templates, scope)
-    const ctx = new CaptureScope()
-    ctx[this.variable] = html
-    scope.push(ctx)
+    scope.contexts[0][this.variable] = html
   }
 } as ITagImplOptions

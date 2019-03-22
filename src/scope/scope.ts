@@ -8,20 +8,22 @@ import { Context } from './context'
 
 export default class Scope {
   opts: NormalizedFullOptions
-  contexts: Array<Context>
+  contexts: Array<Context> = [{}]
+  environments: Context
   blocks: object = {}
   groups: {[key: string]: number} = {}
   blockMode: BlockMode = BlockMode.OUTPUT
   constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
     this.opts = applyDefault(opts)
-    this.contexts = [ctx || {}]
+    this.environments = ctx
   }
   getAll () {
-    return this.contexts.reduce((ctx, val) => __assign(ctx, val), {})
+    return [this.environments, ...this.contexts]
+      .reduce((ctx, val) => __assign(ctx, val), {})
   }
   async get (path: string) {
     const paths = await this.propertyAccessSeq(path)
-    let ctx = this.findContextFor(paths[0]) || _.last(this.contexts)
+    let ctx = this.findContextFor(paths[0]) || this.environments
     for (const path of paths) {
       ctx = this.readProperty(ctx, path)
       if (_.isNil(ctx) && this.opts.strictVariables) {
@@ -29,27 +31,6 @@ export default class Scope {
       }
     }
     return ctx
-  }
-  async set (path: string, v: any) {
-    const paths = await this.propertyAccessSeq(path)
-    let scope = this.findContextFor(paths[0]) || _.last(this.contexts)
-    paths.some((key, i) => {
-      if (!_.isObject(scope)) {
-        return true
-      }
-      if (i === paths.length - 1) {
-        scope[key] = v
-        return true
-      }
-      if (undefined === scope[key]) {
-        scope[key] = {}
-      }
-      scope = scope[key]
-      return false
-    })
-  }
-  unshift (ctx: object) {
-    return this.contexts.unshift(ctx)
   }
   push (ctx: object) {
     return this.contexts.push(ctx)
@@ -64,10 +45,9 @@ export default class Scope {
     }
     return this.contexts.splice(i, 1)[0]
   }
-  findContextFor (key: string, filter: ((conttext: object) => boolean) = () => true) {
+  findContextFor (key: string) {
     for (let i = this.contexts.length - 1; i >= 0; i--) {
       const candidate = this.contexts[i]
-      if (!filter(candidate)) continue
       if (key in candidate) {
         return candidate
       }

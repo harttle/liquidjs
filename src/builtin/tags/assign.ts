@@ -1,6 +1,5 @@
 import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
-import { AssignScope } from '../../scope/scopes'
 import TagToken from '../../parser/tag-token'
 import Scope from '../../scope/scope'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
@@ -15,8 +14,6 @@ export default {
     this.value = match[2]
   },
   render: async function (scope: Scope) {
-    const ctx = new AssignScope()
-    ctx[this.key] = await this.liquid.evalValue(this.value, scope)
-    scope.push(ctx)
+    scope.contexts[0][this.key] = await this.liquid.evalValue(this.value, scope)
   }
 } as ITagImplOptions

@@ -21,13 +21,6 @@ describe('tags/assign', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('10086')
   })
-  it('should shading rather than overwriting', async function () {
-    const ctx = { foo: 'foo' }
-    const src = '{% assign foo="FOO" %}{{foo}}'
-    const html = await liquid.parseAndRender(src, ctx)
-    expect(html).to.equal('FOO')
-    expect(ctx.foo).to.equal('foo')
-  })
   it('should assign as array', async function () {
     const src = '{% assign foo=(1..3) %}{{foo}}'
     const html = await liquid.parseAndRender(src)
@@ -75,5 +68,17 @@ describe('tags/assign', function () {
     const src = '{% assign -6 = 5 %}{{ -6 }}'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('-6')
+  })
+  describe('scope', function () {
+    it('should read from parent scope', async function () {
+      const src = '{%for a in (1..2)%}{{num}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, { num: 1 })
+      return expect(html).to.equal('11')
+    })
+    it('should write to the belonging scope', async function () {
+      const src = '{%for a in (1..2)%}{%assign num = a%}{{a}}{%endfor%} {{num}}'
+      const html = await liquid.parseAndRender(src, { num: 1 })
+      return expect(html).to.equal('12 2')
+    })
   })
 })
