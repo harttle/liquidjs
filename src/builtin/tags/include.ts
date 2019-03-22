@@ -1,9 +1,9 @@
 import assert from '../../util/assert'
 import { value, quotedLine } from '../../parser/lexical'
 import { evalValue } from '../../render/syntax'
-import BlockMode from '../../scope/block-mode'
+import BlockMode from '../../context/block-mode'
 import TagToken from '../../parser/tag-token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import Hash from '../../template/tag/hash'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
@@ -27,34 +27,34 @@ export default <ITagImplOptions>{
       this.with = match[1]
     }
   },
-  render: async function (scope: Scope, hash: Hash) {
+  render: async function (ctx: Context, hash: Hash) {
     let filepath
-    if (scope.opts.dynamicPartials) {
+    if (ctx.opts.dynamicPartials) {
       if (quotedLine.exec(this.value)) {
         const template = this.value.slice(1, -1)
-        filepath = await this.liquid.parseAndRender(template, scope.getAll(), scope.opts)
+        filepath = await this.liquid.parseAndRender(template, ctx.getAll(), ctx.opts)
       } else {
-        filepath = await evalValue(this.value, scope)
+        filepath = await evalValue(this.value, ctx)
       }
     } else {
       filepath = this.staticValue
     }
     assert(filepath, `cannot include with empty filename`)
 
-    const originBlocks = scope.blocks
-    const originBlockMode = scope.blockMode
+    const originBlocks = ctx.blocks
+    const originBlockMode = ctx.blockMode
 
-    scope.blocks = {}
-    scope.blockMode = BlockMode.OUTPUT
+    ctx.blocks = {}
+    ctx.blockMode = BlockMode.OUTPUT
     if (this.with) {
-      hash[filepath] = await evalValue(this.with, scope)
+      hash[filepath] = await evalValue(this.with, ctx)
     }
-    const templates = await this.liquid.getTemplate(filepath, scope.opts)
-    scope.push(hash)
-    const html = await this.liquid.renderer.renderTemplates(templates, scope)
-    scope.pop(hash)
-    scope.blocks = originBlocks
-    scope.blockMode = originBlockMode
+    const templates = await this.liquid.getTemplate(filepath, ctx.opts)
+    ctx.push(hash)
+    const html = await this.liquid.renderer.renderTemplates(templates, ctx)
+    ctx.pop(hash)
+    ctx.blocks = originBlocks
+    ctx.blockMode = originBlockMode
     return html
   }
 }

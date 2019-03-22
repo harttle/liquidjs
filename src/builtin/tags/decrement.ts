@@ -1,7 +1,7 @@
 import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
 import TagToken from '../../parser/tag-token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 export default {
@@ -10,7 +10,7 @@ export default {
     assert(match, `illegal identifier ${token.args}`)
     this.variable = match[0]
   },
-  render: function (context: Scope) {
+  render: function (context: Context) {
     const scope = context.environments
     if (typeof scope[this.variable] !== 'number') {
       scope[this.variable] = 0

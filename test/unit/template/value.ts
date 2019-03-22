@@ -1,7 +1,7 @@
 import * as chai from 'chai'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
-import Scope from '../../../src/scope/scope'
+import Context from '../../../src/context/context'
 import { Filter } from '../../../src/template/filter/filter'
 import Value from '../../../src/template/value'
 
@@ -105,7 +105,7 @@ describe('Value', function () {
       Filter.register('date', date)
       Filter.register('time', time)
       const tpl = new Value('foo.bar | date: "b" | time:2', false)
-      const scope = new Scope({
+      const scope = new Context({
         foo: { bar: 'bar' }
       })
       await tpl.value(scope)

@@ -1,7 +1,7 @@
 import { evalExp, isTruthy } from '../../render/syntax'
 import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import ITemplate from '../../template/itemplate'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 import ParseStream from '../../parser/parse-stream'
@@ -33,13 +33,13 @@ export default {
     stream.start()
   },
 
-  render: async function (scope: Scope) {
+  render: async function (ctx: Context) {
     for (const branch of this.branches) {
-      const cond = await evalExp(branch.cond, scope)
+      const cond = await evalExp(branch.cond, ctx)
       if (isTruthy(cond)) {
-        return this.liquid.renderer.renderTemplates(branch.templates, scope)
+        return this.liquid.renderer.renderTemplates(branch.templates, ctx)
       }
     }
-    return this.liquid.renderer.renderTemplates(this.elseTemplates, scope)
+    return this.liquid.renderer.renderTemplates(this.elseTemplates, ctx)
   }
 } as ITagImplOptions

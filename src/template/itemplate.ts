@@ -1,7 +1,7 @@
-import Scope from '../scope/scope'
+import Context from '../context/context'
 import Token from '../parser/token'
 
 export default interface ITemplate {
   token: Token;
-  render(scope: Scope): Promise<string>;
+  render(ctx: Context): Promise<string>;
 }

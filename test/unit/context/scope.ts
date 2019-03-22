@@ -1,13 +1,13 @@
 import * as chai from 'chai'
-import Scope from '../../../src/scope/scope'
-import { Context } from '../../../src/scope/context'
+import Context from '../../../src/context/context'
+import { Scope } from '../../../src/context/scope'
 
 const expect = chai.expect
 
 describe('scope', function () {
-  let scope: Scope, ctx: Context
+  let ctx: Context, scope: Scope
   beforeEach(function () {
-    ctx = {
+    scope = {
       foo: 'zoo',
       one: 1,
       zoo: { size: 4 },
@@ -17,76 +17,76 @@ describe('scope', function () {
         arr: ['a', 'b']
       }
     }
-    scope = new Scope(ctx)
+    ctx = new Context(scope)
   })
 
   describe('#propertyAccessSeq()', function () {
     it('should handle dot syntax', async function () {
-      expect(await scope.propertyAccessSeq('foo.bar'))
+      expect(await ctx.propertyAccessSeq('foo.bar'))
         .to.deep.equal(['foo', 'bar'])
     })
     it('should handle [<String>] syntax', async function () {
-      expect(await scope.propertyAccessSeq('foo["bar"]'))
+      expect(await ctx.propertyAccessSeq('foo["bar"]'))
         .to.deep.equal(['foo', 'bar'])
     })
     it('should handle [<Identifier>] syntax', async function () {
-      expect(await scope.propertyAccessSeq('foo[foo]'))
+      expect(await ctx.propertyAccessSeq('foo[foo]'))
         .to.deep.equal(['foo', 'zoo'])
     })
     it('should handle nested access 1', async function () {
-      expect(await scope.propertyAccessSeq('foo[bar.zoo]'))
+      expect(await ctx.propertyAccessSeq('foo[bar.zoo]'))
         .to.deep.equal(['foo', 'coo'])
     })
     it('should handle nested access 2', async function () {
-      expect(await scope.propertyAccessSeq('foo[bar["zoo"]]'))
+      expect(await ctx.propertyAccessSeq('foo[bar["zoo"]]'))
         .to.deep.equal(['foo', 'coo'])
     })
     it('should handle nested access 3', async function () {
-      expect(await scope.propertyAccessSeq('bar["foo"].zoo'))
+      expect(await ctx.propertyAccessSeq('bar["foo"].zoo'))
         .to.deep.equal(['bar', 'foo', 'zoo'])
     })
     it('should handle nested access 4', async function () {
-      expect(await scope.propertyAccessSeq('foo[0].bar'))
+      expect(await ctx.propertyAccessSeq('foo[0].bar'))
         .to.deep.equal(['foo', '0', 'bar'])
     })
     it('should handle nested access 5', async function () {
-      expect(await scope.propertyAccessSeq('foo[one].bar'))
+      expect(await ctx.propertyAccessSeq('foo[one].bar'))
         .to.deep.equal(['foo', '1', 'bar'])
     })
     it('should handle nested access 6', async function () {
-      expect(await scope.propertyAccessSeq('foo[two].bar'))
+      expect(await ctx.propertyAccessSeq('foo[two].bar'))
         .to.deep.equal(['foo', 'undefined', 'bar'])
     })
   })
 
   describe('#get()', function () {
     it('should get direct property', async function () {
-      expect(await await scope.get('foo')).equal('zoo')
+      expect(await await ctx.get('foo')).equal('zoo')
     })
 
     it('undefined property should yield undefined', async function () {
-      expect(scope.get('notdefined')).to.be.rejected
-      expect(await scope.get('notdefined')).to.equal(undefined)
-      expect(await scope.get(false as any)).to.equal(undefined)
+      expect(ctx.get('notdefined')).to.be.rejected
+      expect(await ctx.get('notdefined')).to.equal(undefined)
+      expect(await ctx.get(false as any)).to.equal(undefined)
     })
 
     it('should throw for invalid path', async function () {
-      expect(scope.get('')).to.be.rejectedWith('invalid path:""')
+      expect(ctx.get('')).to.be.rejectedWith('invalid path:""')
     })
 
     it('should throw when [] unbalanced', async function () {
-      expect(scope.get('foo[bar')).to.be.rejectedWith(/unbalanced \[\]/)
+      expect(ctx.get('foo[bar')).to.be.rejectedWith(/unbalanced \[\]/)
     })
 
     it('should throw when "" unbalanced', async function () {
-      expect(scope.get('foo["bar]')).to.be.rejectedWith(/unbalanced "/)
+      expect(ctx.get('foo["bar]')).to.be.rejectedWith(/unbalanced "/)
     })
 
     it("should throw when '' unbalanced", async function () {
-      expect(scope.get("foo['bar]")).to.be.rejectedWith(/unbalanced '/)
+      expect(ctx.get("foo['bar]")).to.be.rejectedWith(/unbalanced '/)
     })
     it('should respect to toLiquid', async function () {
-      const scope = new Scope({ foo: {
+      const scope = new Context({ foo: {
         toLiquid: () => ({ bar: 'BAR' }),
         bar: 'bar'
       } })
@@ -94,94 +94,94 @@ describe('scope', function () {
     })
 
     it('should access child property via dot syntax', async function () {
-      expect(await scope.get('bar.zoo')).to.equal('coo')
-      expect(await scope.get('bar.arr')).to.deep.equal(['a', 'b'])
+      expect(await ctx.get('bar.zoo')).to.equal('coo')
+      expect(await ctx.get('bar.arr')).to.deep.equal(['a', 'b'])
     })
 
     it('should access child property via [<String>] syntax', async function () {
-      expect(await scope.get('bar["zoo"]')).to.equal('coo')
+      expect(await ctx.get('bar["zoo"]')).to.equal('coo')
     })
 
     it('should access child property via [<Number>] syntax', async function () {
-      expect(await scope.get('bar.arr[0]')).to.equal('a')
+      expect(await ctx.get('bar.arr[0]')).to.equal('a')
     })
 
     it('should access child property via [<Identifier>] syntax', async function () {
-      expect(await scope.get('bar[foo]')).to.equal('coo')
+      expect(await ctx.get('bar[foo]')).to.equal('coo')
     })
 
     it('should return undefined when not exist', async function () {
-      expect(await scope.get('foo.foo.foo')).to.be.undefined
+      expect(await ctx.get('foo.foo.foo')).to.be.undefined
     })
     it('should return string length as size', async function () {
-      expect(await scope.get('foo.size')).to.equal(3)
+      expect(await ctx.get('foo.size')).to.equal(3)
     })
     it('should return array length as size', async function () {
-      expect(await scope.get('bar.arr.size')).to.equal(2)
+      expect(await ctx.get('bar.arr.size')).to.equal(2)
     })
     it('should return size property if exists', async function () {
-      expect(await scope.get('zoo.size')).to.equal(4)
+      expect(await ctx.get('zoo.size')).to.equal(4)
     })
     it('should return undefined if do not have size and length', async function () {
-      expect(await scope.get('one.size')).to.equal(undefined)
+      expect(await ctx.get('one.size')).to.equal(undefined)
     })
   })
   describe('strictVariables', async function () {
-    let scope: Scope
+    let ctx: Context
     beforeEach(function () {
-      scope = new Scope(ctx, {
+      ctx = new Context(ctx, {
         strictVariables: true
       } as any)
     })
     it('should throw when variable not defined', function () {
-      return expect(scope.get('notdefined')).to.be.rejectedWith(/undefined variable: notdefined/)
+      return expect(ctx.get('notdefined')).to.be.rejectedWith(/undefined variable: notdefined/)
     })
     it('should throw when deep variable not exist', async function () {
-      scope.contexts.push({ 'foo': 'FOO' })
-      return expect(scope.get('foo.bar.not.defined')).to.be.rejectedWith(/undefined variable: bar/)
+      ctx.scopes.push({ 'foo': 'FOO' })
+      return expect(ctx.get('foo.bar.not.defined')).to.be.rejectedWith(/undefined variable: bar/)
     })
     it('should throw when itself not defined', async function () {
-      scope.contexts.push({ 'foo': 'FOO' })
-      return expect(scope.get('foo.BAR')).to.be.rejectedWith(/undefined variable: BAR/)
+      ctx.scopes.push({ 'foo': 'FOO' })
+      return expect(ctx.get('foo.BAR')).to.be.rejectedWith(/undefined variable: BAR/)
     })
     it('should find variable in parent scope', async function () {
-      scope.contexts.push({ 'foo': 'foo' })
-      scope.push({
+      ctx.scopes.push({ 'foo': 'foo' })
+      ctx.push({
         'bar': 'bar'
       })
-      expect(await scope.get('foo')).to.equal('foo')
+      expect(await ctx.get('foo')).to.equal('foo')
     })
   })
 
   describe('.getAll()', function () {
     it('should get all properties when arguments empty', async function () {
-      expect(await scope.getAll()).deep.equal(ctx)
+      expect(await ctx.getAll()).deep.equal(scope)
     })
   })
 
   describe('.push()', function () {
     it('should push scope', async function () {
-      scope.contexts.push({ 'bar': 'bar' })
-      scope.push({
+      ctx.scopes.push({ 'bar': 'bar' })
+      ctx.push({
         foo: 'foo'
       })
-      expect(await scope.get('foo')).to.equal('foo')
-      expect(await scope.get('bar')).to.equal('bar')
+      expect(await ctx.get('foo')).to.equal('foo')
+      expect(await ctx.get('bar')).to.equal('bar')
     })
     it('should hide deep properties by push', async function () {
-      scope.contexts.push({ 'bar': { bar: 'bar' } })
-      scope.push({ bar: { foo: 'foo' } })
-      expect(await scope.get('bar.foo')).to.equal('foo')
-      expect(await scope.get('bar.bar')).to.equal(undefined)
+      ctx.scopes.push({ 'bar': { bar: 'bar' } })
+      ctx.push({ bar: { foo: 'foo' } })
+      expect(await ctx.get('bar.foo')).to.equal('foo')
+      expect(await ctx.get('bar.bar')).to.equal(undefined)
     })
   })
   describe('.pop()', function () {
     it('should pop scope', async function () {
-      scope.push({
+      ctx.push({
         foo: 'foo'
       })
-      scope.pop()
-      expect(await scope.get('foo')).to.equal('zoo')
+      ctx.pop()
+      expect(await ctx.get('foo')).to.equal('zoo')
     })
   })
   it('should pop specified scope', async function () {
@@ -191,18 +191,18 @@ describe('scope', function () {
     const scope2 = {
       bar: 'bar'
     }
-    scope.push(scope1)
-    scope.push(scope2)
-    expect(await scope.get('foo')).to.equal('foo')
-    expect(await scope.get('bar')).to.equal('bar')
-    scope.pop(scope1)
-    expect(await scope.get('foo')).to.equal('zoo')
-    expect(await scope.get('bar')).to.equal('bar')
+    ctx.push(scope1)
+    ctx.push(scope2)
+    expect(await ctx.get('foo')).to.equal('foo')
+    expect(await ctx.get('bar')).to.equal('bar')
+    ctx.pop(scope1)
+    expect(await ctx.get('foo')).to.equal('zoo')
+    expect(await ctx.get('bar')).to.equal('bar')
   })
   it('should throw when specified scope not found', function () {
     const scope1 = {
       foo: 'foo'
     }
-    expect(() => scope.pop(scope1)).to.throw('scope not found, cannot pop')
+    expect(() => ctx.pop(scope1)).to.throw('scope not found, cannot pop')
   })
 })

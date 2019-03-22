@@ -1,7 +1,7 @@
 import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
 import TagToken from '../../parser/tag-token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 const re = new RegExp(`(${identifier.source})\\s*=([^]*)`)
@@ -13,7 +13,7 @@ export default {
     this.key = match[1]
     this.value = match[2]
   },
-  render: async function (scope: Scope) {
-    scope.contexts[0][this.key] = await this.liquid.evalValue(this.value, scope)
+  render: async function (ctx: Context) {
+    ctx.scopes[0][this.key] = await this.liquid.evalValue(this.value, ctx)
   }
 } as ITagImplOptions

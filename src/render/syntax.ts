@@ -1,6 +1,6 @@
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
-import Scope from '../scope/scope'
+import Context from '../context/context'
 import { range, last } from '../util/underscore'
 import { isComparable } from '../drop/icomparable'
 import { NullDrop } from '../drop/null-drop'
@@ -48,36 +48,36 @@ const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   'or': (l: any, r: any) => isTruthy(l) || isTruthy(r)
 }
 
-export async function parseExp (exp: string, scope: Scope): Promise<any> {
-  assert(scope, 'unable to parseExp: scope undefined')
+export async function parseExp (exp: string, ctx: Context): Promise<any> {
+  assert(ctx, 'unable to parseExp: scope undefined')
   const operatorREs = lexical.operators
   let match
   for (let i = 0; i < operatorREs.length; i++) {
     const operatorRE = operatorREs[i]
     const expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`)
     if ((match = exp.match(expRE))) {
-      const l = await parseExp(match[1], scope)
+      const l = await parseExp(match[1], ctx)
       const op = binaryOperators[match[2].trim()]
-      const r = await parseExp(match[3], scope)
+      const r = await parseExp(match[3], ctx)
       return op(l, r)
     }
   }
 
   if ((match = exp.match(lexical.rangeLine))) {
-    const low = await evalValue(match[1], scope)
-    const high = await evalValue(match[2], scope)
+    const low = await evalValue(match[1], ctx)
+    const high = await evalValue(match[2], ctx)
     return range(+low, +high + 1)
   }
 
-  return parseValue(exp, scope)
+  return parseValue(exp, ctx)
 }
 
-export async function evalExp (str: string, scope: Scope): Promise<any> {
-  const value = await parseExp(str, scope)
+export async function evalExp (str: string, ctx: Context): Promise<any> {
+  const value = await parseExp(str, ctx)
   return value instanceof Drop ? value.valueOf() : value
 }
 
-async function parseValue (str: string | undefined, scope: Scope): Promise<any> {
+async function parseValue (str: string | undefined, ctx: Context): Promise<any> {
   if (!str) return null
   str = str.trim()
 
@@ -88,11 +88,11 @@ async function parseValue (str: string | undefined, scope: Scope): Promise<any> 
   if (str === 'blank') return new BlankDrop()
   if (!isNaN(Number(str))) return Number(str)
   if ((str[0] === '"' || str[0] === "'") && str[0] === last(str)) return str.slice(1, -1)
-  return scope.get(str)
+  return ctx.get(str)
 }
 
-export async function evalValue (str: string | undefined, scope: Scope) {
-  const value = await parseValue(str, scope)
+export async function evalValue (str: string | undefined, ctx: Context) {
+  const value = await parseValue(str, ctx)
   return value instanceof Drop ? value.valueOf() : value
 }
 

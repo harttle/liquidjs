@@ -1,5 +1,5 @@
 import { evalValue } from '../../render/syntax'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import { isArray } from '../../util/underscore'
 import { FilterImpl } from './filter-impl'
 
@@ -19,11 +19,11 @@ export class Filter {
     this.impl = impl || (x => x)
     this.args = args
   }
-  async render (value: any, scope: Scope) {
+  async render (value: any, ctx: Context) {
     const argv: any[] = []
     for (const arg of this.args) {
-      if (isArray(arg)) argv.push([arg[0], await evalValue(arg[1], scope)])
-      else argv.push(await evalValue(arg, scope))
+      if (isArray(arg)) argv.push([arg[0], await evalValue(arg[1], ctx)])
+      else argv.push(await evalValue(arg, ctx))
     }
     return this.impl.apply(null, [value, ...argv])
   }

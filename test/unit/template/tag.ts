@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import Tag from '../../../src/template/tag/tag'
-import Scope from '../../../src/scope/scope'
+import Context from '../../../src/context/context'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import Liquid from '../../../src/liquid'
@@ -11,9 +11,9 @@ const expect = chai.expect
 const liquid = new Liquid()
 
 describe('tag', function () {
-  let scope: Scope
+  let ctx: Context
   before(function () {
-    scope = new Scope({
+    ctx = new Context({
       foo: 'bar',
       arr: [2, 1],
       bar: {
@@ -51,7 +51,7 @@ describe('tag', function () {
       value: 'foo',
       name: 'foo'
     } as TagToken
-    await new Tag(token, [], liquid).render(scope)
+    await new Tag(token, [], liquid).render(ctx)
     expect(spy).to.have.been.called
   })
 
@@ -70,30 +70,30 @@ describe('tag', function () {
       } as TagToken
     })
     it('should call tag.render with scope', async function () {
-      await new Tag(token, [], liquid).render(scope)
-      expect(spy).to.have.been.calledWithMatch(scope)
+      await new Tag(token, [], liquid).render(ctx)
+      expect(spy).to.have.been.calledWithMatch(ctx)
     })
     it('should resolve identifier hash', async function () {
-      await new Tag(token, [], liquid).render(scope)
+      await new Tag(token, [], liquid).render(ctx)
       expect(spy).to.have.been.calledWithMatch({}, {
         aa: 'bar'
       })
     })
     it('should accept space between key/value', async function () {
-      await new Tag(token, [], liquid).render(scope)
+      await new Tag(token, [], liquid).render(ctx)
       expect(spy).to.have.been.calledWithMatch({}, {
         bb: 2
       })
     })
     it('should resolve number value hash', async function () {
-      await new Tag(token, [], liquid).render(scope)
-      expect(spy).to.have.been.calledWithMatch(scope, {
+      await new Tag(token, [], liquid).render(ctx)
+      expect(spy).to.have.been.calledWithMatch(ctx, {
         cc: 2.3
       })
     })
     it('should resolve property access hash', async function () {
-      await new Tag(token, [], liquid).render(scope)
-      expect(spy).to.have.been.calledWithMatch(scope, {
+      await new Tag(token, [], liquid).render(ctx)
+      expect(spy).to.have.been.calledWithMatch(ctx, {
         dd: 'uoo'
       })
     })

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Scope from '../../../src/scope/scope'
+import Context from '../../../src/context/context'
 import Token from '../../../src/parser/token'
 import Tag from '../../../src/template/tag/tag'
 import { Filter } from '../../../src/template/filter/filter'
@@ -20,7 +20,7 @@ describe('render', function () {
     })
 
     it('should render html', async function () {
-      const scope = new Scope()
+      const scope = new Context()
       const token = { type: 'html', value: '<p>' } as Token
       const html = await render.renderTemplates([new HTML(token)], scope)
       return expect(html).to.equal('<p>')

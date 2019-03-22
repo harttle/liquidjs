@@ -1,6 +1,6 @@
 import { evalExp } from '../render/syntax'
 import { FilterArgs, Filter } from './filter/filter'
-import Scope from '../scope/scope'
+import Context from '../context/context'
 
 export default class Value {
   private strictFilters: boolean
@@ -47,10 +47,10 @@ export default class Value {
     }
     this.filters.push(new Filter(name, args, this.strictFilters))
   }
-  async value (scope: Scope) {
-    let val = await evalExp(this.initial, scope)
+  async value (ctx: Context) {
+    let val = await evalExp(this.initial, ctx)
     for (const filter of this.filters) {
-      val = await filter.render(val, scope)
+      val = await filter.render(val, ctx)
     }
     return val
   }

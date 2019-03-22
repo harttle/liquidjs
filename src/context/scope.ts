@@ -5,4 +5,4 @@ type PlainObject = {
   toLiquid?: () => any
 }
 
-export type Context = PlainObject | Drop
+export type Scope = PlainObject | Drop

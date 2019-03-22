@@ -1,12 +1,12 @@
-import Scope from '../../../src/scope/scope'
+import Context from '../../../src/context/context'
 import { expect } from 'chai'
 import { evalExp, evalValue, isTruthy } from '../../../src/render/syntax'
 
 describe('render/syntax', function () {
-  let scope: Scope
+  let ctx: Context
 
   beforeEach(function () {
-    scope = new Scope({
+    ctx = new Context({
       one: 1,
       two: 2,
       empty: '',
@@ -19,30 +19,30 @@ describe('render/syntax', function () {
 
   describe('.evalValue()', function () {
     it('should eval boolean literal', async function () {
-      expect(await evalValue('true', scope)).to.equal(true)
-      expect(await evalValue('TrUE', scope)).to.equal(undefined)
-      expect(await evalValue('false', scope)).to.equal(false)
+      expect(await evalValue('true', ctx)).to.equal(true)
+      expect(await evalValue('TrUE', ctx)).to.equal(undefined)
+      expect(await evalValue('false', ctx)).to.equal(false)
     })
     it('should eval number literal', async function () {
-      expect(await evalValue('2.3', scope)).to.equal(2.3)
-      expect(await evalValue('.32', scope)).to.equal(0.32)
-      expect(await evalValue('-23.', scope)).to.equal(-23)
-      expect(await evalValue('23', scope)).to.equal(23)
+      expect(await evalValue('2.3', ctx)).to.equal(2.3)
+      expect(await evalValue('.32', ctx)).to.equal(0.32)
+      expect(await evalValue('-23.', ctx)).to.equal(-23)
+      expect(await evalValue('23', ctx)).to.equal(23)
     })
     it('should eval string literal', async function () {
-      expect(await evalValue('"ab\'c"', scope)).to.equal("ab'c")
-      expect(await evalValue("'ab\"c'", scope)).to.equal('ab"c')
+      expect(await evalValue('"ab\'c"', ctx)).to.equal("ab'c")
+      expect(await evalValue("'ab\"c'", ctx)).to.equal('ab"c')
     })
     it('should eval nil literal', async function () {
-      expect(await evalValue('nil', scope)).to.be.null
+      expect(await evalValue('nil', ctx)).to.be.null
     })
     it('should eval null literal', async function () {
-      expect(await evalValue('null', scope)).to.be.null
+      expect(await evalValue('null', ctx)).to.be.null
     })
     it('should eval scope variables', async function () {
-      expect(await evalValue('one', scope)).to.equal(1)
-      expect(await evalValue('has_value?', scope)).to.equal(true)
-      expect(await evalValue('x', scope)).to.equal('XXX')
+      expect(await evalValue('one', ctx)).to.equal(1)
+      expect(await evalValue('has_value?', ctx)).to.equal(true)
+      expect(await evalValue('x', ctx)).to.equal('XXX')
     })
   })
 
@@ -66,37 +66,37 @@ describe('render/syntax', function () {
     })
 
     it('should eval simple expression', async function () {
-      expect(await evalExp('1<2', scope)).to.equal(true)
-      expect(await evalExp('2<=2', scope)).to.equal(true)
-      expect(await evalExp('one<=two', scope)).to.equal(true)
-      expect(await evalExp('x contains "x"', scope)).to.equal(false)
-      expect(await evalExp('x contains "X"', scope)).to.equal(true)
-      expect(await evalExp('1 contains "x"', scope)).to.equal(false)
-      expect(await evalExp('y contains "x"', scope)).to.equal(false)
-      expect(await evalExp('z contains "x"', scope)).to.equal(false)
-      expect(await evalExp('(1..5) contains 3', scope)).to.equal(true)
-      expect(await evalExp('(1..5) contains 6', scope)).to.equal(false)
-      expect(await evalExp('"<=" == "<="', scope)).to.equal(true)
+      expect(await evalExp('1<2', ctx)).to.equal(true)
+      expect(await evalExp('2<=2', ctx)).to.equal(true)
+      expect(await evalExp('one<=two', ctx)).to.equal(true)
+      expect(await evalExp('x contains "x"', ctx)).to.equal(false)
+      expect(await evalExp('x contains "X"', ctx)).to.equal(true)
+      expect(await evalExp('1 contains "x"', ctx)).to.equal(false)
+      expect(await evalExp('y contains "x"', ctx)).to.equal(false)
+      expect(await evalExp('z contains "x"', ctx)).to.equal(false)
+      expect(await evalExp('(1..5) contains 3', ctx)).to.equal(true)
+      expect(await evalExp('(1..5) contains 6', ctx)).to.equal(false)
+      expect(await evalExp('"<=" == "<="', ctx)).to.equal(true)
     })
 
     describe('complex expression', function () {
       it('should support value or value', async function () {
-        expect(await evalExp('false or true', scope)).to.equal(true)
+        expect(await evalExp('false or true', ctx)).to.equal(true)
       })
       it('should support < and contains', async function () {
-        expect(await evalExp('1<2 and x contains "x"', scope)).to.equal(false)
+        expect(await evalExp('1<2 and x contains "x"', ctx)).to.equal(false)
       })
       it('should support < or contains', async function () {
-        expect(await evalExp('1<2 or x contains "x"', scope)).to.equal(true)
+        expect(await evalExp('1<2 or x contains "x"', ctx)).to.equal(true)
       })
       it('should support value and !=', async function () {
-        expect(await evalExp('empty and empty != ""', scope)).to.equal(false)
+        expect(await evalExp('empty and empty != ""', ctx)).to.equal(false)
       })
     })
 
     it('should eval range expression', async function () {
-      expect(await evalExp('(2..4)', scope)).to.deep.equal([2, 3, 4])
-      expect(await evalExp('(two..4)', scope)).to.deep.equal([2, 3, 4])
+      expect(await evalExp('(2..4)', ctx)).to.deep.equal([2, 3, 4])
+      expect(await evalExp('(two..4)', ctx)).to.deep.equal([2, 3, 4])
     })
   })
 })

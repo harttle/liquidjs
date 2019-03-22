@@ -1,10 +1,10 @@
 import assert from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
 import { evalValue } from '../../render/syntax'
-import BlockMode from '../../scope/block-mode'
+import BlockMode from '../../context/block-mode'
 import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import Hash from '../../template/tag/hash'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
@@ -24,23 +24,23 @@ export default {
 
     this.tpls = this.liquid.parser.parse(remainTokens)
   },
-  render: async function (scope: Scope, hash: Hash) {
-    const layout = scope.opts.dynamicPartials
-      ? await evalValue(this.layout, scope)
+  render: async function (ctx: Context, hash: Hash) {
+    const layout = ctx.opts.dynamicPartials
+      ? await evalValue(this.layout, ctx)
       : this.staticLayout
     assert(layout, `cannot apply layout with empty filename`)
 
     // render the remaining tokens immediately
-    scope.blockMode = BlockMode.STORE
-    const html = await this.liquid.renderer.renderTemplates(this.tpls, scope)
-    if (scope.blocks[''] === undefined) {
-      scope.blocks[''] = html
+    ctx.blockMode = BlockMode.STORE
+    const html = await this.liquid.renderer.renderTemplates(this.tpls, ctx)
+    if (ctx.blocks[''] === undefined) {
+      ctx.blocks[''] = html
     }
-    const templates = await this.liquid.getTemplate(layout, scope.opts)
-    scope.push(hash)
-    scope.blockMode = BlockMode.OUTPUT
-    const partial = await this.liquid.renderer.renderTemplates(templates, scope)
-    scope.pop(hash)
+    const templates = await this.liquid.getTemplate(layout, ctx.opts)
+    ctx.push(hash)
+    ctx.blockMode = BlockMode.OUTPUT
+    const partial = await this.liquid.renderer.renderTemplates(templates, ctx)
+    ctx.pop(hash)
     return partial
   }
 } as ITagImplOptions

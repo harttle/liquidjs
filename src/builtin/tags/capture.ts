@@ -2,7 +2,7 @@ import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
 import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 const re = new RegExp(`(${identifier.source})`)
@@ -23,8 +23,8 @@ export default {
       })
     stream.start()
   },
-  render: async function (scope: Scope) {
-    const html = await this.liquid.renderer.renderTemplates(this.templates, scope)
-    scope.contexts[0][this.variable] = html
+  render: async function (ctx: Context) {
+    const html = await this.liquid.renderer.renderTemplates(this.templates, ctx)
+    ctx.scopes[0][this.variable] = html
   }
 } as ITagImplOptions

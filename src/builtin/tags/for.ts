@@ -4,7 +4,7 @@ import assert from '../../util/assert'
 import { identifier, value, hash } from '../../parser/lexical'
 import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import Hash from '../../template/tag/hash'
 import ITemplate from '../../template/itemplate'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
@@ -41,8 +41,8 @@ export default <ITagImplOptions>{
 
     stream.start()
   },
-  render: async function (scope: Scope, hash: Hash) {
-    let collection = await evalExp(this.collection, scope)
+  render: async function (ctx: Context, hash: Hash) {
+    let collection = await evalExp(this.collection, ctx)
 
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {
@@ -52,7 +52,7 @@ export default <ITagImplOptions>{
       }
     }
     if (!isArray(collection) || !collection.length) {
-      return this.liquid.renderer.renderTemplates(this.elseTemplates, scope)
+      return this.liquid.renderer.renderTemplates(this.elseTemplates, ctx)
     }
 
     const offset = hash.offset || 0
@@ -62,12 +62,12 @@ export default <ITagImplOptions>{
     if (this.reversed) collection.reverse()
 
     const context = { forloop: new ForloopDrop(collection.length) }
-    scope.push(context)
+    ctx.push(context)
     let html = ''
     for (const item of collection) {
       context[this.variable] = item
       try {
-        html += await this.liquid.renderer.renderTemplates(this.templates, scope)
+        html += await this.liquid.renderer.renderTemplates(this.templates, ctx)
       } catch (e) {
         if (e.name === 'RenderBreakError') {
           html += e.resolvedHTML
@@ -76,7 +76,7 @@ export default <ITagImplOptions>{
       }
       context.forloop.next()
     }
-    scope.pop()
+    ctx.pop()
     return html
   }
 }

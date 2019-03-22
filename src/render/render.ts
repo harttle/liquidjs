@@ -1,16 +1,16 @@
 import { RenderError } from '../util/error'
 import assert from '../util/assert'
-import Scope from '../scope/scope'
+import Context from '../context/context'
 import ITemplate from '../template/itemplate'
 
 export default class Render {
-  async renderTemplates (templates: ITemplate[], scope: Scope) {
-    assert(scope, 'unable to evalTemplates: scope undefined')
+  async renderTemplates (templates: ITemplate[], ctx: Context) {
+    assert(ctx, 'unable to evalTemplates: context undefined')
 
     let html = ''
     for (const tpl of templates) {
       try {
-        html += await tpl.render(scope)
+        html += await tpl.render(ctx)
       } catch (e) {
         if (e.name === 'RenderBreakError') {
           e.resolvedHTML = html

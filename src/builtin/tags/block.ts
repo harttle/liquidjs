@@ -1,8 +1,8 @@
-import BlockMode from '../../scope/block-mode'
+import BlockMode from '../../context/block-mode'
 import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
 import ITemplate from '../../template/itemplate'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 import ParseStream from '../../parser/parse-stream'
 
@@ -19,14 +19,14 @@ export default {
       })
     stream.start()
   },
-  render: async function (scope: Scope) {
-    const childDefined = scope.blocks[this.block]
+  render: async function (ctx: Context) {
+    const childDefined = ctx.blocks[this.block]
     const html = childDefined !== undefined
       ? childDefined
-      : await this.liquid.renderer.renderTemplates(this.tpls, scope)
+      : await this.liquid.renderer.renderTemplates(this.tpls, ctx)
 
-    if (scope.blockMode === BlockMode.STORE) {
-      scope.blocks[this.block] = html
+    if (ctx.blockMode === BlockMode.STORE) {
+      ctx.blocks[this.block] = html
       return ''
     }
     return html

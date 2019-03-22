@@ -1,4 +1,4 @@
-import Scope from './scope/scope'
+import Context from './context/context'
 import * as Types from './types'
 import fs from './fs/node'
 import * as _ from './util/underscore'
@@ -38,7 +38,7 @@ export default class Liquid {
   }
   render (tpl: Array<ITemplate>, ctx?: object, opts?: LiquidOptions) {
     const options = { ...this.options, ...normalize(opts) }
-    const scope = new Scope(ctx, options)
+    const scope = new Context(ctx, options)
     return this.renderer.renderTemplates(tpl, scope)
   }
   async parseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
@@ -69,8 +69,8 @@ export default class Liquid {
     const templates = await this.getTemplate(file, options)
     return this.render(templates, ctx, opts)
   }
-  evalValue (str: string, scope: Scope) {
-    return new Value(str, this.options.strictFilters).value(scope)
+  evalValue (str: string, ctx: Context) {
+    return new Value(str, this.options.strictFilters).value(ctx)
   }
   registerFilter (name: string, filter: FilterImpl) {
     return Filter.register(name, filter)

@@ -1,6 +1,6 @@
 import { create, stringify } from '../../util/underscore'
 import assert from '../../util/assert'
-import Scope from '../../scope/scope'
+import Context from '../../context/context'
 import ITagImpl from './itag-impl'
 import ITagImplOptions from './itag-impl-options'
 import Liquid from '../../liquid'
@@ -27,13 +27,13 @@ export default class Tag extends Template<TagToken> implements ITemplate {
       this.impl.parse(token, tokens)
     }
   }
-  async render (scope: Scope) {
-    const hash = await Hash.create(this.token.args, scope)
+  async render (ctx: Context) {
+    const hash = await Hash.create(this.token.args, ctx)
     const impl = this.impl
     if (typeof impl.render !== 'function') {
       return ''
     }
-    const html = await impl.render(scope, hash)
+    const html = await impl.render(ctx, hash)
     return stringify(html)
   }
   static register (name: string, tag: ITagImplOptions) {

@@ -4,12 +4,12 @@ import { __assign } from 'tslib'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import BlockMode from './block-mode'
-import { Context } from './context'
+import { Scope } from './scope'
 
-export default class Scope {
+export default class Context {
   opts: NormalizedFullOptions
-  contexts: Array<Context> = [{}]
-  environments: Context
+  scopes: Array<Scope> = [{}]
+  environments: Scope
   blocks: object = {}
   groups: {[key: string]: number} = {}
   blockMode: BlockMode = BlockMode.OUTPUT
@@ -18,7 +18,7 @@ export default class Scope {
     this.environments = ctx
   }
   getAll () {
-    return [this.environments, ...this.contexts]
+    return [this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
   async get (path: string) {
@@ -33,28 +33,28 @@ export default class Scope {
     return ctx
   }
   push (ctx: object) {
-    return this.contexts.push(ctx)
+    return this.scopes.push(ctx)
   }
   pop (ctx?: object): object | undefined {
     if (!arguments.length) {
-      return this.contexts.pop()
+      return this.scopes.pop()
     }
-    const i = this.contexts.findIndex(scope => scope === ctx)
+    const i = this.scopes.findIndex(scope => scope === ctx)
     if (i === -1) {
       throw new TypeError('scope not found, cannot pop')
     }
-    return this.contexts.splice(i, 1)[0]
+    return this.scopes.splice(i, 1)[0]
   }
   findContextFor (key: string) {
-    for (let i = this.contexts.length - 1; i >= 0; i--) {
-      const candidate = this.contexts[i]
+    for (let i = this.scopes.length - 1; i >= 0; i--) {
+      const candidate = this.scopes[i]
       if (key in candidate) {
         return candidate
       }
     }
     return null
   }
-  private readProperty (obj: Context, key: string) {
+  private readProperty (obj: Scope, key: string) {
     if (_.isNil(obj)) return obj
     obj = _.toLiquid(obj)
     if (obj instanceof Drop) {
@@ -125,7 +125,7 @@ export default class Scope {
   }
 }
 
-function readSize (obj: Context) {
+function readSize (obj: Scope) {
   if (!_.isNil(obj['size'])) return obj['size']
   if (_.isArray(obj) || _.isString(obj)) return obj.length
   return obj['size']

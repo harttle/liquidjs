@@ -1,7 +1,7 @@
 import * as Benchmark from 'benchmark'
 import Liquid from '../src/liquid'
 import TagToken from '../src/parser/tag-token'
-import Scope from '../src/scope/scope'
+import Context from '../src/context/context'
 
 const engine = new Liquid({
   root: __dirname,
@@ -13,8 +13,8 @@ engine.registerTag('header', {
     const [key, val] = token.args.split(':')
     this[key] = val
   },
-  render: function (scope: Scope) {
-    const title = this.liquid.evalValue(this.content, scope)
+  render: function (ctx: Context) {
+    const title = this.liquid.evalValue(this.content, ctx)
     return `<h1>${title}</h1>`
   }
 })
