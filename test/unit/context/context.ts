@@ -22,39 +22,39 @@ describe('scope', function () {
 
   describe('#propertyAccessSeq()', function () {
     it('should handle dot syntax', async function () {
-      expect(await ctx.propertyAccessSeq('foo.bar'))
+      expect(await ctx.parseProp('foo.bar'))
         .to.deep.equal(['foo', 'bar'])
     })
     it('should handle [<String>] syntax', async function () {
-      expect(await ctx.propertyAccessSeq('foo["bar"]'))
+      expect(await ctx.parseProp('foo["bar"]'))
         .to.deep.equal(['foo', 'bar'])
     })
     it('should handle [<Identifier>] syntax', async function () {
-      expect(await ctx.propertyAccessSeq('foo[foo]'))
+      expect(await ctx.parseProp('foo[foo]'))
         .to.deep.equal(['foo', 'zoo'])
     })
     it('should handle nested access 1', async function () {
-      expect(await ctx.propertyAccessSeq('foo[bar.zoo]'))
+      expect(await ctx.parseProp('foo[bar.zoo]'))
         .to.deep.equal(['foo', 'coo'])
     })
     it('should handle nested access 2', async function () {
-      expect(await ctx.propertyAccessSeq('foo[bar["zoo"]]'))
+      expect(await ctx.parseProp('foo[bar["zoo"]]'))
         .to.deep.equal(['foo', 'coo'])
     })
     it('should handle nested access 3', async function () {
-      expect(await ctx.propertyAccessSeq('bar["foo"].zoo'))
+      expect(await ctx.parseProp('bar["foo"].zoo'))
         .to.deep.equal(['bar', 'foo', 'zoo'])
     })
     it('should handle nested access 4', async function () {
-      expect(await ctx.propertyAccessSeq('foo[0].bar'))
+      expect(await ctx.parseProp('foo[0].bar'))
         .to.deep.equal(['foo', '0', 'bar'])
     })
     it('should handle nested access 5', async function () {
-      expect(await ctx.propertyAccessSeq('foo[one].bar'))
+      expect(await ctx.parseProp('foo[one].bar'))
         .to.deep.equal(['foo', '1', 'bar'])
     })
     it('should handle nested access 6', async function () {
-      expect(await ctx.propertyAccessSeq('foo[two].bar'))
+      expect(await ctx.parseProp('foo[two].bar'))
         .to.deep.equal(['foo', 'undefined', 'bar'])
     })
   })

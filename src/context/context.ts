@@ -22,8 +22,8 @@ export default class Context {
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
   async get (path: string) {
-    const paths = await this.propertyAccessSeq(path)
-    let ctx = this.findContextFor(paths[0]) || this.environments
+    const paths = await this.parseProp(path)
+    let ctx = this.findScope(paths[0]) || this.environments
     for (const path of paths) {
       ctx = this.readProperty(ctx, path)
       if (_.isNil(ctx) && this.opts.strictVariables) {
@@ -45,7 +45,7 @@ export default class Context {
     }
     return this.scopes.splice(i, 1)[0]
   }
-  findContextFor (key: string) {
+  findScope (key: string) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
       if (key in candidate) {
@@ -73,7 +73,7 @@ export default class Context {
    * accessSeq("foo['b]r']")      // ['foo', 'b]r']
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
-  async propertyAccessSeq (str: string) {
+  async parseProp (str: string) {
     str = String(str)
     const seq: string[] = []
     let name = ''
