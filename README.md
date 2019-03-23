@@ -12,51 +12,50 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://github.com/harttle/liquidjs)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/harttle/liquidjs)
 
-This is a liquid implementation for both Node.js and browsers. Website: <http://harttle.github.io/liquidjs/>, Live Demo: <https://jsfiddle.net/6u40xbzs/> 
+A [shopify][shopify/liquid] compatible template engine in pure JavaScript. See [this tutorial][tutorial] for the Liquid language.
 
-**Features**
+liquidjs can be installed via npm:
 
-* Fully compatible to [shopify][shopify/liquid], with all [tags][tags] and [filters][filters] implemented
-* Support layout(extend) and include syntax
-* In pure JavaScript with Promise-based API
+```bash
+npm install --save liquidjs
+```
 
-**Differences**
+or include the UMD build:
 
-Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
+```html
+<script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>     <!--for production-->
+<script src="//unpkg.com/liquidjs/dist/liquid.js"></script>         <!--for development-->
+```
 
-* Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
-* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
-* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
-* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
-* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
+You may need a [Promise polyfill][pp] for Node.js < 4 and ES5 browsers like [IE and Android UC][caniuse-promises].
 
 ## TOC
 
-* Usage
+* Get Started
     * [Render from String](#render-from-string)
     * [Render from File](#render-from-file)
     * [Use with Express.js](#use-with-expressjs)
-    * [Use in Browser](#use-in-browser)
     * [Include Partials](#include-partials)
     * [Layout Templates (Extends)](#layout-templates-extends)
-* API Spec
-    * [Constructor Options](#options)
+* Demos
+    * Node.js: [/demo/node/](demo/node/)
+    * Browser: <https://jsfiddle.net/6u40xbzs/>, [/demo/browser/](demo/browser/).
+    * Express.js: [/demo/express/](demo/express/)
+    * TypeScript: [/demo/typescript/](demo/typescript/)
+    * React JS: [/demo/reactjs/](demo/reactjs/)
+* Advanced
+    * [Options](#options)
     * [Register Filters](#register-filters), [Builtin Filters](https://github.com/harttle/liquidjs/wiki/Builtin-Filters)
     * [Register Tags](#register-tags), [Builtin Tags](https://github.com/harttle/liquidjs/wiki/Builtin-Tags)
     * [Operators](https://github.com/harttle/liquidjs/wiki/Operators)
     * [Whitespace Control](https://github.com/harttle/liquidjs/wiki/Whitespace-Control)
+    * [Plugin API](#plugin-api)
+    * [Differences With shopify/liquid](#differences-with-shopify%2fliquid)
 * [Contribute Guidelines](#contribute-guidelines)
 
 ## Render from String
 
-Install as Node.js dependency:
-
-```bash
-# You'll need a promise-polyfill for Node.js < 4
-npm install --save liquidjs
-```
-
-Parse and Render:
+Just render a template string with a context:
 
 ```javascript
 var Liquid = require('liquidjs');
@@ -64,35 +63,27 @@ var engine = new Liquid();
 
 engine
     .parseAndRender('{{name | capitalize}}', {name: 'alice'})
-    .then(console.log);
-
-// outputs 'Alice'
+    .then(console.log);     // outputs 'Alice'
 ```
 
-Caching templates:
+Caching parsed templates:
 
 ```javascript
 var tpl = engine.parse('{{name | capitalize}}');
 engine
     .render(tpl, {name: 'alice'})
-    .then(console.log);
-
-// outputs 'Alice'
+    .then(console.log);     // outputs 'Alice'
 ```
 
 ## Render from File
 
 ```javascript
 var engine = new Liquid({
-    root: path.resolve(__dirname, 'views/'),  // dirs to lookup layouts/includes
-    extname: '.liquid'          // the extname used for layouts/includes, defaults ""
+    root: path.resolve(__dirname, 'views/'),  // root for layouts/includes lookup
+    extname: '.liquid'          // used for layouts/includes, defaults ""
 });
-engine.renderFile("hello.liquid", {name: 'alice'})
-    .then(console.log)  // outputs "Alice"
-
-// which is equivalent to: 
 engine
-    .renderFile("hello", {name: 'alice'})
+    .renderFile("hello", {name: 'alice'})   // will read and render `views/hello.liquid`
     .then(console.log)  // outputs "Alice"
 ```
 
@@ -105,23 +96,8 @@ app.set('views', './views');            // specify the views directory
 app.set('view engine', 'liquid');       // set to default
 ```
 
-[Here](demo/express/)'s an Express demo. When used with Express.js,
-Express [`views`][express-views] will be included when looking up
+[`views`][express-views] in express.js will be included when looking up
 partials(includes and layouts).
-
-## Use in Browser
-
-You can get a dist file for browsers from
-
-* [Releases][releases] page for liquidjs, or
-* unpkg.com: <https://unpkg.com/liquidjs/dist/liquid.min.js> 
-
-Here's the demo:
-
-* JSFiddle: <https://jsfiddle.net/6u40xbzs/> 
-* Demo directory: [/demo/browser/](demo/browser/).
-
-Note: For [IE and Android UC][caniuse-promises] browser, you will need a [Promise polyfill][pp].
 
 ## Include Partials
 
@@ -257,6 +233,16 @@ Plugin List:
 
 * To add your plugin, contact me or simply send a PR.
 
+## Differences With shopify/liquid
+
+Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
+
+* Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
+* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
+* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
+* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
+* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
+
 ## Contribute Guidelines
 
 This repo uses [eslint](https://eslint.org/) to check code style, [semantic-release](https://github.com/semantic-release/semantic-release) to generate changelog and publish to npm and Github Releases.
@@ -269,7 +255,6 @@ This repo uses [eslint](https://eslint.org/) to check code style, [semantic-rele
 [shopify/liquid]: https://shopify.github.io/liquid/
 [jekyll]: http://jekyllrb.com/
 [gh]: https://pages.github.com/
-[releases]: https://github.com/harttle/liquidjs/releases
 [any-promise]: https://github.com/kevinbeaty/any-promise
 [test]: https://github.com/harttle/liquidjs/tree/master/test
 [caniuse-promises]: http://caniuse.com/#feat=promises
@@ -278,3 +263,4 @@ This repo uses [eslint](https://eslint.org/) to check code style, [semantic-rele
 [filters]: https://github.com/harttle/liquidjs/wiki/Builtin-Filters
 [express-views]: http://expressjs.com/en/guide/using-template-engines.html
 [pp]: https://github.com/taylorhakes/promise-polyfill
+[tutorial]: https://shopify.github.io/liquid/basics/introduction/
