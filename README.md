@@ -12,15 +12,15 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://github.com/harttle/liquidjs)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/harttle/liquidjs)
 
-A [shopify][shopify/liquid] compatible template engine in pure JavaScript. See [this tutorial][tutorial] for the Liquid language.
+A [shopify][shopify/liquid] compatible [Liquid][tutorial] template engine in pure JavaScript.
 
-liquidjs can be installed via npm:
+Install via npm:
 
 ```bash
 npm install --save liquidjs
 ```
 
-or include the UMD build:
+Or include the UMD build:
 
 ```html
 <script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>     <!--for production-->
