@@ -45,7 +45,7 @@ export default class Context {
     }
     return this.scopes.splice(i, 1)[0]
   }
-  findScope (key: string) {
+  private findScope (key: string) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
       if (key in candidate) {
@@ -73,7 +73,7 @@ export default class Context {
    * accessSeq("foo['b]r']")      // ['foo', 'b]r']
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
-  async parseProp (str: string) {
+  private async parseProp (str: string) {
     str = String(str)
     const seq: string[] = []
     let name = ''
@@ -107,8 +107,7 @@ export default class Context {
           i++
           break
         default:// foo.bar
-          name += str[i]
-          i++
+          name += str[i++]
       }
     }
     push()

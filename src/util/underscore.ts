@@ -36,10 +36,6 @@ export function toLiquid (value: any): any {
   return value
 }
 
-export function create<T1 extends object, T2 extends T1 = T1> (proto: T1): T2 {
-  return Object.create(proto)
-}
-
 export function isNil (value: any): boolean {
   return value === null || value === undefined
 }

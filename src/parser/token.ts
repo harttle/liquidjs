@@ -1,4 +1,6 @@
 export default class Token {
+  trimLeft: boolean = false
+  trimRight: boolean = false
   type: string = 'notset'
   line: number
   col: number

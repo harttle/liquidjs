@@ -9,16 +9,18 @@ import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 enum ParseState { HTML, OUTPUT, TAG }
 
 export default class Tokenizer {
-  options: NormalizedFullOptions
+  private options: NormalizedFullOptions
   constructor (options?: NormalizedFullOptions) {
     this.options = applyDefault(options)
   }
   tokenize (input: string, file?: string) {
     const tokens: Token[] = []
-    const tagL = this.options.tagDelimiterLeft
-    const tagR = this.options.tagDelimiterRight
-    const outputL = this.options.outputDelimiterLeft
-    const outputR = this.options.outputDelimiterRight
+    const {
+      tagDelimiterLeft,
+      tagDelimiterRight,
+      outputDelimiterLeft,
+      outputDelimiterRight
+    } = this.options
     let p = 0
     let curLine = 1
     let state = ParseState.HTML
@@ -33,36 +35,39 @@ export default class Tokenizer {
         lineBegin = p + 1
       }
       if (state === ParseState.HTML) {
-        if (input.substr(p, outputL.length) === outputL) {
+        if (input.substr(p, outputDelimiterLeft.length) === outputDelimiterLeft) {
           if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
-          buffer = outputL
+          buffer = outputDelimiterLeft
           line = curLine
           col = p - lineBegin + 1
-          p += outputL.length
+          p += outputDelimiterLeft.length
           state = ParseState.OUTPUT
           continue
-        } else if (input.substr(p, tagL.length) === tagL) {
+        } else if (input.substr(p, tagDelimiterLeft.length) === tagDelimiterLeft) {
           if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
-          buffer = tagL
+          buffer = tagDelimiterLeft
           line = curLine
           col = p - lineBegin + 1
-          p += tagL.length
+          p += tagDelimiterLeft.length
           state = ParseState.TAG
           continue
         }
-      } else if (state === ParseState.OUTPUT && input.substr(p, outputR.length) === outputR) {
-        buffer += outputR
-        tokens.push(new OutputToken(buffer, buffer.slice(outputL.length, -outputR.length), input, line, col, file))
-        p += outputR.length
+      } else if (
+        state === ParseState.OUTPUT &&
+        input.substr(p, outputDelimiterRight.length) === outputDelimiterRight
+      ) {
+        buffer += outputDelimiterRight
+        tokens.push(new OutputToken(buffer, buffer.slice(outputDelimiterLeft.length, -outputDelimiterRight.length), input, line, col, this.options, file))
+        p += outputDelimiterRight.length
         buffer = ''
         line = curLine
         col = p - lineBegin + 1
         state = ParseState.HTML
         continue
-      } else if (input.substr(p, tagR.length) === tagR) {
-        buffer += tagR
-        tokens.push(new TagToken(buffer, buffer.slice(tagL.length, -tagR.length), input, line, col, file))
-        p += tagR.length
+      } else if (input.substr(p, tagDelimiterRight.length) === tagDelimiterRight) {
+        buffer += tagDelimiterRight
+        tokens.push(new TagToken(buffer, buffer.slice(tagDelimiterLeft.length, -tagDelimiterRight.length), input, line, col, this.options, file))
+        p += tagDelimiterRight.length
         buffer = ''
         line = curLine
         col = p - lineBegin + 1

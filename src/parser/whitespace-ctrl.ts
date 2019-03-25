@@ -1,47 +1,38 @@
-import DelimitedToken from '../parser/delimited-token'
 import Token from '../parser/token'
 import TagToken from '../parser/tag-token'
+import HTMLToken from '../parser/html-token'
 import { NormalizedFullOptions } from '../liquid-options'
 
 export default function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
   options = { greedy: true, ...options }
   let inRaw = false
 
-  tokens.forEach((token: Token, i: number) => {
-    if (shouldTrimLeft(token as DelimitedToken, inRaw, options)) {
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i]
+    if (!inRaw && token.trimLeft) {
       trimLeft(tokens[i - 1], options.greedy)
     }
 
-    if (token.type === 'tag' && (token as TagToken).name === 'raw') inRaw = true
-    if (token.type === 'tag' && (token as TagToken).name === 'endraw') inRaw = false
+    if (TagToken.is(token)) {
+      if (token.name === 'raw') inRaw = true
+      else if (token.name === 'endraw') inRaw = false
+    }
 
-    if (shouldTrimRight(token as DelimitedToken, inRaw, options)) {
+    if (!inRaw && token.trimRight) {
       trimRight(tokens[i + 1], options.greedy)
     }
-  })
-}
-
-function shouldTrimLeft (token: DelimitedToken, inRaw: boolean, options: NormalizedFullOptions) {
-  if (inRaw) return false
-  if (token.type === 'tag') return token.trimLeft || options.trimTagLeft
-  if (token.type === 'output') return token.trimLeft || options.trimOutputLeft
-}
-
-function shouldTrimRight (token: DelimitedToken, inRaw: boolean, options: NormalizedFullOptions) {
-  if (inRaw) return false
-  if (token.type === 'tag') return token.trimRight || options.trimTagRight
-  if (token.type === 'output') return token.trimRight || options.trimOutputRight
+  }
 }
 
 function trimLeft (token: Token, greedy: boolean) {
-  if (!token || token.type !== 'html') return
+  if (!token || !HTMLToken.is(token)) return
 
   const rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
   token.value = token.value.replace(rLeft, '')
 }
 
 function trimRight (token: Token, greedy: boolean) {
-  if (!token || token.type !== 'html') return
+  if (!token || !HTMLToken.is(token)) return
 
   const rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g
   token.value = token.value.replace(rRight, '')

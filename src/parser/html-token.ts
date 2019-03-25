@@ -6,4 +6,7 @@ export default class HTMLToken extends Token {
     this.type = 'html'
     this.value = str
   }
+  static is (token: Token): token is HTMLToken {
+    return token.type === 'html'
+  }
 }

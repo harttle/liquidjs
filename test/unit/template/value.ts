@@ -14,70 +14,70 @@ describe('Value', function () {
 
   describe('#constructor()', function () {
     it('should parse "foo', function () {
-      const tpl = new Value('foo', false)
+      const tpl = new Value('foo', false) as any
       expect(tpl.initial).to.equal('foo')
       expect(tpl.filters).to.deep.equal([])
     })
 
     it('should parse "foo | add"', function () {
-      const tpl = new Value('foo | add', false)
+      const tpl = new Value('foo | add', false) as any
       expect(tpl.initial).to.equal('foo')
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].args).to.eql([])
     })
     it('should parse "foo,foo | add"', function () {
-      const tpl = new Value('foo,foo | add', false)
-      expect(tpl.initial).to.equal('foo')
+      const tpl = new Value('foo,foo | add', false) as any
+      expect(tpl.initial).to.equal('foo') as any
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].args).to.eql([])
     })
     it('should parse "foo | add: 3, false"', function () {
-      const tpl = new Value('foo | add: 3, "foo"', false)
+      const tpl = new Value('foo | add: 3, "foo"', false) as any
       expect(tpl.initial).to.equal('foo')
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].args).to.eql(['3', '"foo"'])
     })
     it('should parse "foo | add: "foo" bar, 3"', function () {
-      const tpl = new Value('foo | add: "foo" bar, 3', false)
+      const tpl = new Value('foo | add: "foo" bar, 3', false) as any
       expect(tpl.initial).to.equal('foo')
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].name).to.eql('add')
       expect(tpl.filters[0].args).to.eql(['"foo"', '3'])
     })
     it('should parse "foo | add: "|", 3', function () {
-      const tpl = new Value('foo | add: "|", 3', false)
+      const tpl = new Value('foo | add: "|", 3', false) as any
       expect(tpl.initial).to.equal('foo')
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].args).to.eql(['"|"', '3'])
     })
     it('should parse "foo | add: "|", 3', function () {
-      const tpl = new Value('foo | add: "|", 3', false)
+      const tpl = new Value('foo | add: "|", 3', false) as any
       expect(tpl.initial).to.equal('foo')
       expect(tpl.filters.length).to.equal(1)
       expect(tpl.filters[0].args).to.eql(['"|"', '3'])
     })
     it('should support arguments as named key/values', function () {
-      const f = new Value('o | foo: key1: "literal1", key2: value2', false)
+      const f = new Value('o | foo: key1: "literal1", key2: value2', false) as any
       expect(f.filters[0].name).to.equal('foo')
       expect(f.filters[0].args).to.eql([['key1', '"literal1"'], ['key2', 'value2']])
     })
     it('should support arguments as named key/values with inline literals', function () {
-      const f = new Value('o | foo: "test0", key1: "literal1", key2: value2', false)
+      const f = new Value('o | foo: "test0", key1: "literal1", key2: value2', false) as any
       expect(f.filters[0].name).to.equal('foo')
       expect(f.filters[0].args).to.deep.equal(['"test0"', ['key1', '"literal1"'], ['key2', 'value2']])
     })
     it('should support arguments as named key/values with inline values', function () {
-      const f = new Value('o | foo: test0, key1: "literal1", key2: value2', false)
+      const f = new Value('o | foo: test0, key1: "literal1", key2: value2', false) as any
       expect(f.filters[0].name).to.equal('foo')
       expect(f.filters[0].args).to.deep.equal(['test0', ['key1', '"literal1"'], ['key2', 'value2']])
     })
     it('should support argument values named same as keys', function () {
-      const f = new Value('o | foo: a: a', false)
+      const f = new Value('o | foo: a: a', false) as any
       expect(f.filters[0].name).to.equal('foo')
       expect(f.filters[0].args).to.deep.equal([['a', 'a']])
     })
     it('should support argument literals named same as keys', function () {
-      const f = new Value('o | foo: a: "a"', false)
+      const f = new Value('o | foo: a: "a"', false) as any
       expect(f.filters[0].name).to.equal('foo')
       expect(f.filters[0].args).to.deep.equal([['a', '"a"']])
     })

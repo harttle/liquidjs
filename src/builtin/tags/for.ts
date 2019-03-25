@@ -48,7 +48,7 @@ export default <ITagImplOptions>{
       if (isString(collection) && collection.length > 0) {
         collection = [collection] as string[]
       } else if (isObject(collection)) {
-        collection = Object.keys(collection).map((key) => [key, collection[key]]) as Array<[string, any]>
+        collection = Object.keys(collection).map((key) => [key, collection[key]])
       }
     }
     if (!isArray(collection) || !collection.length) {

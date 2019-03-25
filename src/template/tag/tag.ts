@@ -1,4 +1,4 @@
-import { create, stringify } from '../../util/underscore'
+import { stringify, isFunction } from '../../util/underscore'
 import assert from '../../util/assert'
 import Context from '../../context/context'
 import ITagImpl from './itag-impl'
@@ -21,7 +21,8 @@ export default class Tag extends Template<TagToken> implements ITemplate {
 
     const impl = Tag.impls[token.name]
     assert(impl, `tag ${token.name} not found`)
-    this.impl = create<ITagImplOptions, ITagImpl>(impl)
+
+    this.impl = Object.create(impl)
     this.impl.liquid = liquid
     if (this.impl.parse) {
       this.impl.parse(token, tokens)
@@ -30,11 +31,7 @@ export default class Tag extends Template<TagToken> implements ITemplate {
   async render (ctx: Context) {
     const hash = await Hash.create(this.token.args, ctx)
     const impl = this.impl
-    if (typeof impl.render !== 'function') {
-      return ''
-    }
-    const html = await impl.render(ctx, hash)
-    return stringify(html)
+    return isFunction(impl.render) ? stringify(await impl.render(ctx, hash)) : ''
   }
   static register (name: string, tag: ITagImplOptions) {
     Tag.impls[name] = tag

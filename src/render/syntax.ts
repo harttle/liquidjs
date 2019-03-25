@@ -1,7 +1,7 @@
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
 import Context from '../context/context'
-import { range, last } from '../util/underscore'
+import { range, last, isFunction } from '../util/underscore'
 import { isComparable } from '../drop/icomparable'
 import { NullDrop } from '../drop/null-drop'
 import { EmptyDrop } from '../drop/empty-drop'
@@ -40,9 +40,7 @@ const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
     return l <= r
   },
   'contains': (l: any, r: any) => {
-    if (!l) return false
-    if (typeof l.indexOf !== 'function') return false
-    return l.indexOf(r) > -1
+    return l && isFunction(l.indexOf) ? l.indexOf(r) > -1 : false
   },
   'and': (l: any, r: any) => isTruthy(l) && isTruthy(r),
   'or': (l: any, r: any) => isTruthy(l) || isTruthy(r)

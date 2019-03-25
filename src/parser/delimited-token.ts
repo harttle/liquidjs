@@ -2,17 +2,26 @@ import Token from './token'
 import { last } from '../util/underscore'
 
 export default class DelimitedToken extends Token {
-  trimLeft: boolean
-  trimRight: boolean
-  constructor (raw: string, value: string, input: string, line: number, pos: number, file?: string) {
+  constructor (
+    raw: string,
+    value: string,
+    input: string,
+    line: number,
+    pos: number,
+    trimLeft: boolean,
+    trimRight: boolean,
+    file?: string
+  ) {
     super(raw, input, line, pos, file)
-    this.trimLeft = value[0] === '-'
-    this.trimRight = last(value) === '-'
+    const tl = value[0] === '-'
+    const tr = last(value) === '-'
     this.value = value
       .slice(
-        this.trimLeft ? 1 : 0,
-        this.trimRight ? -1 : value.length
+        tl ? 1 : 0,
+        tr ? -1 : value.length
       )
       .trim()
+    this.trimLeft = tl || trimLeft
+    this.trimRight = tr || trimRight
   }
 }

@@ -4,8 +4,8 @@ import Context from '../context/context'
 
 export default class Value {
   private strictFilters: boolean
-  initial: string
-  filters: Array<Filter> = []
+  private initial: string
+  private filters: Array<Filter> = []
 
   /**
    * @param str value string, like: "i have a dream | truncate: 3

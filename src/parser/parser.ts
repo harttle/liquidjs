@@ -25,10 +25,10 @@ export default class Parser {
   }
   parseToken (token: Token, remainTokens: Array<Token>) {
     try {
-      if (token.type === 'tag') {
-        return new Tag(token as TagToken, remainTokens, this.liquid)
+      if (TagToken.is(token)) {
+        return new Tag(token, remainTokens, this.liquid)
       }
-      if (token.type === 'output') {
+      if (OutputToken.is(token)) {
         return new Output(token as OutputToken, this.liquid.options.strictFilters)
       }
       return new HTML(token)

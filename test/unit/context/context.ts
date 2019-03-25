@@ -5,7 +5,7 @@ import { Scope } from '../../../src/context/scope'
 const expect = chai.expect
 
 describe('scope', function () {
-  let ctx: Context, scope: Scope
+  let ctx: any, scope: Scope
   beforeEach(function () {
     scope = {
       foo: 'zoo',

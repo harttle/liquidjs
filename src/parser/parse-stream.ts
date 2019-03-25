@@ -18,20 +18,16 @@ export default class ParseStream {
     this.handlers[name] = cb
     return this
   }
-  trigger <T extends Token | ITemplate> (event: string, arg?: T) {
+  private trigger <T extends Token | ITemplate> (event: string, arg?: T) {
     const h = this.handlers[event]
-    if (typeof h === 'function') {
-      h(arg)
-      return true
-    }
-    return false
+    return h ? (h(arg), true) : false
   }
   start () {
     this.trigger('start')
     let token: Token | undefined
     while (!this.stopRequested && (token = this.tokens.shift())) {
       if (this.trigger('token', token)) continue
-      if (token.type === 'tag' && this.trigger(`tag:${(<TagToken>token).name}`, token)) {
+      if (TagToken.is(token) && this.trigger(`tag:${token.name}`, token)) {
         continue
       }
       const template = this.parseToken(token, this.tokens)
