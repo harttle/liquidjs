@@ -43,6 +43,7 @@ describe('filters/array', function () {
     it('should slice third char by 2', () => test('{{ "Liquid" | slice: 2 }}', 'q'))
     it('should slice substr by 2,5', () => test('{{ "Liquid" | slice: 2, 5 }}', 'quid'))
     it('should slice substr by -3,2', () => test('{{ "Liquid" | slice: -3, 2 }}', 'ui'))
+    it('should slice substr by -2,2', () => test('{{ "abc" | slice: -2, 2 }}', 'bc'))
     it('should support array', () => test('{{ "1,2,3,4" | split: "," | slice: 1,2 | join }}', '2 3'))
   })
   it('should support sort', function () {
