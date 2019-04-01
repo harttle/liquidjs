@@ -1,4 +1,5 @@
 import { last } from '../../util/underscore'
+import { isTruthy } from '../../render/syntax'
 
 export default {
   'join': (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg),
@@ -20,5 +21,8 @@ export default {
       u[String(val)] = true
       return true
     })
+  },
+  'where': function<T> (arr: T[], property: string, value?: any): T[] {
+    return arr.filter(obj => value === undefined ? isTruthy(obj[property]) : obj[property] === value)
   }
 }

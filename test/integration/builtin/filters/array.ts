@@ -64,4 +64,28 @@ describe('filters/array', function () {
       return test('{{"" | uniq | join: ","}}', '')
     })
   })
+  describe('where', function () {
+    it('should support filter by property value', function () {
+      return test(`{% assign kitchen_products = products | where: "type", "kitchen" %}
+Kitchen products:
+{% for product in kitchen_products -%}
+- {{ product.title }}
+{% endfor %}`, `
+Kitchen products:
+- Spatula
+- Garlic press
+`)
+    })
+    it('should support filter truthy property', function () {
+      return test(`{% assign available_products = products | where: "available" %}
+Available products:
+{% for product in available_products -%}
+- {{ product.title }}
+{% endfor %}`, `
+Available products:
+- Coffee mug
+- Boring sneakers
+`)
+    })
+  })
 })
