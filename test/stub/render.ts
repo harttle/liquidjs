@@ -11,13 +11,13 @@ export const ctx = {
   func: function () {},
   posts: [{ category: 'foo' }, { category: 'bar' }],
   products: [
-    {title: 'Vacuum', type: 'living room'},
-    {title: 'Spatula', type: 'kitchen'},
-    {title: 'Television', type: 'living room'},
-    {title: 'Garlic press', type: 'kitchen'},
-    {title: 'Coffee mug', available: true},
-    {title: 'Limited edition sneakers', available: false},
-    {title: 'Boring sneakers', available: true}
+    { title: 'Vacuum', type: 'living room' },
+    { title: 'Spatula', type: 'kitchen' },
+    { title: 'Television', type: 'living room' },
+    { title: 'Garlic press', type: 'kitchen' },
+    { title: 'Coffee mug', available: true },
+    { title: 'Limited edition sneakers', available: false },
+    { title: 'Boring sneakers', available: true }
   ]
 }
 
