@@ -4,6 +4,7 @@
     "module":"CommonJS",
     "lib": ["es2015", "es2016", "es2017", "dom"],
     "sourceMap": true,
+    "outDir": "dist",
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
