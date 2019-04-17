@@ -14,7 +14,7 @@ import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax'
 import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
 import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
-import { FilterImpl } from './template/filter/filter-impl'
+import { FilterImplOptions } from './template/filter/filter-impl-options'
 
 export default class Liquid {
   public options: NormalizedFullOptions
@@ -72,7 +72,7 @@ export default class Liquid {
   evalValue (str: string, ctx: Context) {
     return new Value(str, this.options.strictFilters).value(ctx)
   }
-  registerFilter (name: string, filter: FilterImpl) {
+  registerFilter (name: string, filter: FilterImplOptions) {
     return Filter.register(name, filter)
   }
   registerTag (name: string, tag: ITagImplOptions) {

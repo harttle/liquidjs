@@ -59,7 +59,7 @@ export default {
       html += '</td>'
     }
     if (collection.length) html += '</tr>'
-    ctx.pop(scope)
+    ctx.pop()
     return html
   }
 } as ITagImplOptions

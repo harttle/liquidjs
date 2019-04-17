@@ -20,13 +20,14 @@ export default {
     stream.start()
   },
   render: async function (ctx: Context) {
-    const childDefined = ctx.blocks[this.block]
+    const blocks = ctx.getRegister('blocks')
+    const childDefined = blocks[this.block]
     const html = childDefined !== undefined
       ? childDefined
       : await this.liquid.renderer.renderTemplates(this.tpls, ctx)
 
-    if (ctx.blockMode === BlockMode.STORE) {
-      ctx.blocks[this.block] = html
+    if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
+      blocks[this.block] = html
       return ''
     }
     return html

@@ -1,5 +1,3 @@
-import { FilterImpl } from '../../template/filter/filter-impl'
-
 export default {
   'append': (v: string, arg: string) => v + arg,
   'prepend': (v: string, arg: string) => arg + v,
@@ -27,4 +25,4 @@ export default {
     if (arr.length >= l) ret += o
     return ret
   }
-} as {[key: string]: FilterImpl}
+}

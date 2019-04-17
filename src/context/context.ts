@@ -3,19 +3,22 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import assert from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
-import BlockMode from './block-mode'
 import { Scope } from './scope'
 
 export default class Context {
   opts: NormalizedFullOptions
-  scopes: Array<Scope> = [{}]
   environments: Scope
-  blocks: object = {}
-  groups: {[key: string]: number} = {}
-  blockMode: BlockMode = BlockMode.OUTPUT
+  private scopes: Array<Scope> = [{}]
+  private registers = {}
   constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
     this.opts = applyDefault(opts)
     this.environments = ctx
+  }
+  getRegister(key: string, defaultValue = {}) {
+    return this.registers[key] = this.registers[key] || defaultValue
+  }
+  setRegister(key: string, value: any) {
+    return this.registers[key] = value
   }
   getAll () {
     return [this.environments, ...this.scopes]
@@ -25,7 +28,7 @@ export default class Context {
     const paths = await this.parseProp(path)
     let ctx = this.findScope(paths[0]) || this.environments
     for (const path of paths) {
-      ctx = this.readProperty(ctx, path)
+      ctx = readProperty(ctx, path)
       if (_.isNil(ctx) && this.opts.strictVariables) {
         throw new TypeError(`undefined variable: ${path}`)
       }
@@ -35,15 +38,11 @@ export default class Context {
   push (ctx: object) {
     return this.scopes.push(ctx)
   }
-  pop (ctx?: object): object | undefined {
-    if (!arguments.length) {
-      return this.scopes.pop()
-    }
-    const i = this.scopes.findIndex(scope => scope === ctx)
-    if (i === -1) {
-      throw new TypeError('scope not found, cannot pop')
-    }
-    return this.scopes.splice(i, 1)[0]
+  pop () {
+    return this.scopes.pop()
+  }
+  front () {
+    return this.scopes[0]
   }
   private findScope (key: string) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
@@ -53,16 +52,6 @@ export default class Context {
       }
     }
     return null
-  }
-  private readProperty (obj: Scope, key: string) {
-    if (_.isNil(obj)) return obj
-    obj = _.toLiquid(obj)
-    if (obj instanceof Drop) {
-      if (_.isFunction(obj[key])) return obj[key]()
-      if (obj.hasOwnProperty(key)) return obj[key]
-      return obj.liquidMethodMissing(key)
-    }
-    return key === 'size' ? readSize(obj) : obj[key]
   }
 
   /*
@@ -122,6 +111,17 @@ export default class Context {
       name = ''
     }
   }
+}
+
+function readProperty (obj: Scope, key: string) {
+  if (_.isNil(obj)) return obj
+  obj = _.toLiquid(obj)
+  if (obj instanceof Drop) {
+    if (_.isFunction(obj[key])) return obj[key]()
+    if (obj.hasOwnProperty(key)) return obj[key]
+    return obj.liquidMethodMissing(key)
+  }
+  return key === 'size' ? readSize(obj) : obj[key]
 }
 
 function readSize (obj: Scope) {

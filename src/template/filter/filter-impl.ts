@@ -1,1 +1,5 @@
-export type FilterImpl = (value: any, ...args: any[]) => any
+import Context from "../../context/context";
+
+export interface FilterImpl {
+    context: Context
+}

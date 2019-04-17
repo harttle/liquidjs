@@ -31,16 +31,17 @@ export default {
     assert(layout, `cannot apply layout with empty filename`)
 
     // render the remaining tokens immediately
-    ctx.blockMode = BlockMode.STORE
+    ctx.setRegister('blockMode', BlockMode.STORE)
+    const blocks = ctx.getRegister('blocks')
     const html = await this.liquid.renderer.renderTemplates(this.tpls, ctx)
-    if (ctx.blocks[''] === undefined) {
-      ctx.blocks[''] = html
+    if (blocks[''] === undefined) {
+      blocks[''] = html
     }
     const templates = await this.liquid.getTemplate(layout, ctx.opts)
     ctx.push(hash)
-    ctx.blockMode = BlockMode.OUTPUT
+    ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const partial = await this.liquid.renderer.renderTemplates(templates, ctx)
-    ctx.pop(hash)
+    ctx.pop()
     return partial
   }
 } as ITagImplOptions

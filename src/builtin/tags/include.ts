@@ -41,20 +41,20 @@ export default <ITagImplOptions>{
     }
     assert(filepath, `cannot include with empty filename`)
 
-    const originBlocks = ctx.blocks
-    const originBlockMode = ctx.blockMode
+    const originBlocks = ctx.getRegister('blocks')
+    const originBlockMode = ctx.getRegister('blockMode')
 
-    ctx.blocks = {}
-    ctx.blockMode = BlockMode.OUTPUT
+    ctx.setRegister('blocks', {})
+    ctx.setRegister('blockMode', BlockMode.OUTPUT)
     if (this.with) {
       hash[filepath] = await evalValue(this.with, ctx)
     }
     const templates = await this.liquid.getTemplate(filepath, ctx.opts)
     ctx.push(hash)
     const html = await this.liquid.renderer.renderTemplates(templates, ctx)
-    ctx.pop(hash)
-    ctx.blocks = originBlocks
-    ctx.blockMode = originBlockMode
+    ctx.pop()
+    ctx.setRegister('blocks', originBlocks)
+    ctx.setRegister('blockMode', originBlockMode)
     return html
   }
 }

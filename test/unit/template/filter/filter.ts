@@ -22,11 +22,17 @@ describe('filter', function () {
     expect(await new Filter('undefined', [], false).render('foo', ctx)).to.equal('foo')
   })
 
-  it('should call filter impl with corrct arguments', async function () {
+  it('should call filter impl with correct arguments', async function () {
     const spy = sinon.spy()
     Filter.register('foo', spy)
     await new Filter('foo', ['33'], false).render('foo', ctx)
     expect(spy).to.have.been.calledWith('foo', 33)
+  })
+  it('should call filter impl with correct this arg', async function () {
+    const spy = sinon.spy()
+    Filter.register('foo', spy)
+    await new Filter('foo', ['33'], false).render('foo', ctx)
+    expect(spy).to.have.been.calledOn(sinon.match.has('context', ctx))
   })
   it('should render a simple filter', async function () {
     Filter.register('upcase', x => x.toUpperCase())

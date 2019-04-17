@@ -25,6 +25,6 @@ export default {
   },
   render: async function (ctx: Context) {
     const html = await this.liquid.renderer.renderTemplates(this.templates, ctx)
-    ctx.scopes[0][this.variable] = html
+    ctx.front()[this.variable] = html
   }
 } as ITagImplOptions

@@ -27,7 +27,7 @@ export default <ITagImplOptions>{
   render: async function (ctx: Context) {
     const group = await evalValue(this.group, ctx)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
-    const groups = ctx.groups
+    const groups = ctx.getRegister('cycle')
     let idx = groups[fingerprint]
 
     if (idx === undefined) {

@@ -137,15 +137,15 @@ describe('scope', function () {
       return expect(ctx.get('notdefined')).to.be.rejectedWith(/undefined variable: notdefined/)
     })
     it('should throw when deep variable not exist', async function () {
-      ctx.scopes.push({ 'foo': 'FOO' })
+      ctx.push({ foo: 'FOO' })
       return expect(ctx.get('foo.bar.not.defined')).to.be.rejectedWith(/undefined variable: bar/)
     })
     it('should throw when itself not defined', async function () {
-      ctx.scopes.push({ 'foo': 'FOO' })
+      ctx.push({ foo: 'FOO' })
       return expect(ctx.get('foo.BAR')).to.be.rejectedWith(/undefined variable: BAR/)
     })
     it('should find variable in parent scope', async function () {
-      ctx.scopes.push({ 'foo': 'foo' })
+      ctx.push({ 'foo': 'foo' })
       ctx.push({
         'bar': 'bar'
       })
@@ -161,7 +161,7 @@ describe('scope', function () {
 
   describe('.push()', function () {
     it('should push scope', async function () {
-      ctx.scopes.push({ 'bar': 'bar' })
+      ctx.push({ 'bar': 'bar' })
       ctx.push({
         foo: 'foo'
       })
@@ -169,7 +169,7 @@ describe('scope', function () {
       expect(await ctx.get('bar')).to.equal('bar')
     })
     it('should hide deep properties by push', async function () {
-      ctx.scopes.push({ 'bar': { bar: 'bar' } })
+      ctx.push({ bar: { bar: 'bar' } })
       ctx.push({ bar: { foo: 'foo' } })
       expect(await ctx.get('bar.foo')).to.equal('foo')
       expect(await ctx.get('bar.bar')).to.equal(undefined)
@@ -183,26 +183,5 @@ describe('scope', function () {
       ctx.pop()
       expect(await ctx.get('foo')).to.equal('zoo')
     })
-  })
-  it('should pop specified scope', async function () {
-    const scope1 = {
-      foo: 'foo'
-    }
-    const scope2 = {
-      bar: 'bar'
-    }
-    ctx.push(scope1)
-    ctx.push(scope2)
-    expect(await ctx.get('foo')).to.equal('foo')
-    expect(await ctx.get('bar')).to.equal('bar')
-    ctx.pop(scope1)
-    expect(await ctx.get('foo')).to.equal('zoo')
-    expect(await ctx.get('bar')).to.equal('bar')
-  })
-  it('should throw when specified scope not found', function () {
-    const scope1 = {
-      foo: 'foo'
-    }
-    expect(() => ctx.pop(scope1)).to.throw('scope not found, cannot pop')
   })
 })
