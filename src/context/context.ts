@@ -14,11 +14,11 @@ export default class Context {
     this.opts = applyDefault(opts)
     this.environments = ctx
   }
-  getRegister(key: string, defaultValue = {}) {
-    return this.registers[key] = this.registers[key] || defaultValue
+  getRegister (key: string, defaultValue = {}) {
+    return (this.registers[key] = this.registers[key] || defaultValue)
   }
-  setRegister(key: string, value: any) {
-    return this.registers[key] = value
+  setRegister (key: string, value: any) {
+    return (this.registers[key] = value)
   }
   getAll () {
     return [this.environments, ...this.scopes]
