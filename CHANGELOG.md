@@ -1,3 +1,10 @@
+# [8.2.0](https://github.com/harttle/liquidjs/compare/v8.1.0...v8.2.0) (2019-04-17)
+
+
+### Features
+
+* pass context to filters ([00bc1ef](https://github.com/harttle/liquidjs/commit/00bc1ef))
+
 # [8.1.0](https://github.com/harttle/liquidjs/compare/v8.0.3...v8.1.0) (2019-04-02)
 
 
