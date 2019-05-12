@@ -130,13 +130,13 @@ describe('xhr', () => {
       server.respondWith('GET', 'https://example.com/views/foo.html',
         [200, { 'Content-Type': 'text/plain' }, 'foo1'])
       return engine.renderFile('foo.html')
-        .then((html) => {
+        .then((html: string) => {
           expect(html).to.equal('foo1')
           server.respondWith('GET', 'https://example.com/views/foo.html',
             [200, { 'Content-Type': 'text/plain' }, 'foo2'])
           return engine.renderFile('foo.html')
         })
-        .then(html => expect(html).to.equal('foo2'))
+        .then((html:string) => expect(html).to.equal('foo2'))
     })
     it('should respect cache=true option', () => {
       engine = new Liquid({
@@ -147,13 +147,13 @@ describe('xhr', () => {
       server.respondWith('GET', 'https://example.com/views/foo.html',
         [200, { 'Content-Type': 'text/plain' }, 'foo1'])
       return engine.renderFile('foo.html')
-        .then((html) => {
+        .then((html: string) => {
           expect(html).to.equal('foo1')
           server.respondWith('GET', 'https://example.com/views/foo.html',
             [200, { 'Content-Type': 'text/plain' }, 'foo2'])
           return engine.renderFile('foo.html')
         })
-        .then(html => expect(html).to.equal('foo1'))
+        .then((html:string) => expect(html).to.equal('foo1'))
     })
   })
 })
