@@ -18,6 +18,14 @@ describe('util/underscore', function () {
       expect(_.isString(123)).to.be.false
     })
   })
+  describe('.isNumber()', function () {
+    it('should return false for "foo"', function () {
+      expect(_.isNumber('foo')).to.be.false
+    })
+    it('should return true for 0', function () {
+      expect(_.isNumber(0)).to.be.true
+    })
+  })
   describe('.stringify()', function () {
     it('should respect to toLiquid() method', function () {
       expect(_.stringify({ toLiquid: () => 'foo' })).to.equal('foo')

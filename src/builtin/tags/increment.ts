@@ -1,5 +1,6 @@
 import assert from '../../util/assert'
 import { identifier } from '../../parser/lexical'
+import { isNumber } from '../../util/underscore'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 export default {
@@ -10,7 +11,7 @@ export default {
   },
   render: function (context) {
     const scope = context.environments
-    if (typeof scope[this.variable] !== 'number') {
+    if (!isNumber(scope[this.variable])) {
       scope[this.variable] = 0
     }
     const val = scope[this.variable]

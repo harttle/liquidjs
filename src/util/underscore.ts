@@ -37,6 +37,10 @@ export function toValue (value: any): any {
   return value instanceof Drop ? value.valueOf() : value
 }
 
+export function isNumber (value: any): value is number {
+  return typeof value === 'number'
+}
+
 export function toLiquid (value: any): any {
   if (isFunction(value.toLiquid)) return toLiquid(value.toLiquid())
   return value

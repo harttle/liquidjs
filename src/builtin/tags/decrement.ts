@@ -3,6 +3,7 @@ import { identifier } from '../../parser/lexical'
 import TagToken from '../../parser/tag-token'
 import Context from '../../context/context'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
+import { isNumber } from '../../util/underscore'
 
 export default {
   parse: function (token: TagToken) {
@@ -12,7 +13,7 @@ export default {
   },
   render: function (context: Context) {
     const scope = context.environments
-    if (typeof scope[this.variable] !== 'number') {
+    if (!isNumber(scope[this.variable])) {
       scope[this.variable] = 0
     }
     return --scope[this.variable]
