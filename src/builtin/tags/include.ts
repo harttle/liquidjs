@@ -1,6 +1,6 @@
 import assert from '../../util/assert'
 import { value, quotedLine } from '../../parser/lexical'
-import { evalValue } from '../../render/syntax'
+import { evalValue, parseValue } from '../../render/syntax'
 import BlockMode from '../../context/block-mode'
 import TagToken from '../../parser/tag-token'
 import Context from '../../context/context'
@@ -13,19 +13,13 @@ const withRE = new RegExp(`with\\s+(${value.source})`)
 export default <ITagImplOptions>{
   parse: function (token: TagToken) {
     let match = staticFileRE.exec(token.args)
-    if (match) {
-      this.staticValue = match[0]
-    }
+    if (match) this.staticValue = match[0]
 
     match = value.exec(token.args)
-    if (match) {
-      this.value = match[0]
-    }
+    if (match) this.value = match[0]
 
     match = withRE.exec(token.args)
-    if (match) {
-      this.with = match[1]
-    }
+    if (match) this.with = match[1]
   },
   render: async function (ctx: Context, hash: Hash) {
     let filepath
@@ -47,7 +41,7 @@ export default <ITagImplOptions>{
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     if (this.with) {
-      hash[filepath] = await evalValue(this.with, ctx)
+      hash[filepath] = await parseValue(this.with, ctx)
     }
     const templates = await this.liquid.getTemplate(filepath, ctx.opts)
     ctx.push(hash)

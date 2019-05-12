@@ -1,12 +1,11 @@
 import * as lexical from '../parser/lexical'
 import assert from '../util/assert'
 import Context from '../context/context'
-import { range, last, isFunction } from '../util/underscore'
+import { range, last, isFunction, toValue } from '../util/underscore'
 import { isComparable } from '../drop/icomparable'
 import { NullDrop } from '../drop/null-drop'
 import { EmptyDrop } from '../drop/empty-drop'
 import { BlankDrop } from '../drop/blank-drop'
-import { Drop } from '../drop/drop'
 
 const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   '==': (l: any, r: any) => {
@@ -71,11 +70,10 @@ export async function parseExp (exp: string, ctx: Context): Promise<any> {
 }
 
 export async function evalExp (str: string, ctx: Context): Promise<any> {
-  const value = await parseExp(str, ctx)
-  return value instanceof Drop ? value.valueOf() : value
+  return toValue(await parseExp(str, ctx))
 }
 
-async function parseValue (str: string | undefined, ctx: Context): Promise<any> {
+export async function parseValue (str: string | undefined, ctx: Context): Promise<any> {
   if (!str) return null
   str = str.trim()
 
@@ -90,8 +88,7 @@ async function parseValue (str: string | undefined, ctx: Context): Promise<any> 
 }
 
 export async function evalValue (str: string | undefined, ctx: Context) {
-  const value = await parseValue(str, ctx)
-  return value instanceof Drop ? value.valueOf() : value
+  return toValue(await parseValue(str, ctx))
 }
 
 export function isTruthy (val: any): boolean {

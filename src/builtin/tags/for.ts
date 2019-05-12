@@ -1,5 +1,5 @@
 import { isString, isObject, isArray } from '../../util/underscore'
-import { evalExp } from '../../render/syntax'
+import { parseExp } from '../../render/syntax'
 import assert from '../../util/assert'
 import { identifier, value, hash } from '../../parser/lexical'
 import TagToken from '../../parser/tag-token'
@@ -42,7 +42,7 @@ export default <ITagImplOptions>{
     stream.start()
   },
   render: async function (ctx: Context, hash: Hash) {
-    let collection = await evalExp(this.collection, ctx)
+    let collection = await parseExp(this.collection, ctx)
 
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {

@@ -1,4 +1,4 @@
-import { evalExp } from '../render/syntax'
+import { parseExp } from '../render/syntax'
 import { FilterArgs, Filter } from './filter/filter'
 import Context from '../context/context'
 
@@ -48,7 +48,7 @@ export default class Value {
     this.filters.push(new Filter(name, args, this.strictFilters))
   }
   async value (ctx: Context) {
-    let val = await evalExp(this.initial, ctx)
+    let val = await parseExp(this.initial, ctx)
     for (const filter of this.filters) {
       val = await filter.render(val, ctx)
     }

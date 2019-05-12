@@ -1,9 +1,11 @@
-import { evalValue } from '../../render/syntax'
+import { parseValue } from '../../render/syntax'
 import Context from '../../context/context'
 import { isArray } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
 
-export type FilterArgs = Array<string|[string?, string?]>
+type KeyValuePair = [string?, string?]
+type FilterArg = string|KeyValuePair
+export type FilterArgs = Array<FilterArg>
 
 export class Filter {
   name: string
@@ -22,8 +24,8 @@ export class Filter {
   async render (value: any, context: Context) {
     const argv: any[] = []
     for (const arg of this.args) {
-      if (isArray(arg)) argv.push([arg[0], await evalValue(arg[1], context)])
-      else argv.push(await evalValue(arg, context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], await parseValue(arg[1], context)])
+      else argv.push(await parseValue(arg, context))
     }
     return this.impl.apply({ context }, [value, ...argv])
   }
@@ -33,4 +35,8 @@ export class Filter {
   static clear () {
     Filter.impls = {}
   }
+}
+
+function isKeyValuePair (arr: FilterArg): arr is KeyValuePair {
+  return isArray(arr)
 }

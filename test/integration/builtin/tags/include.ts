@@ -83,6 +83,33 @@ describe('tags/include', function () {
     const html = await liquid.renderFile('with.html')
     return expect(html).to.equal('color:red, shape:rect')
   })
+  it('should support include: with as Liquid Drop', async function () {
+    class ColorDrop extends Liquid.Types.Drop {
+      valueOf (): string {
+        return 'red!'
+      }
+    }
+    mock({
+      '/with.html': '{% include "color" with color %}',
+      '/color.html': 'color:{{color}}'
+    })
+    const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
+    expect(html).to.equal('color:red!')
+  })
+  it('should support include: with passed as Liquid Drop', async function () {
+    class ColorDrop extends Liquid.Types.Drop {
+      valueOf (): string {
+        return 'red!'
+      }
+    }
+    liquid.registerFilter('name', x => x.constructor.name)
+    mock({
+      '/with.html': '{% include "color" with color %}',
+      '/color.html': '{{color | name}}'
+    })
+    const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
+    expect(html).to.equal('ColorDrop')
+  })
 
   it('should support nested includes', async function () {
     mock({

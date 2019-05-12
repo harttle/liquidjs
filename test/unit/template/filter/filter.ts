@@ -49,6 +49,12 @@ describe('filter', function () {
     expect(await new Filter('add', ['2', '"c"'], false).render(3, ctx)).to.equal('5c')
   })
 
+  it('should pass Objects/Drops as it is', async function () {
+    Filter.register('name', a => a.constructor.name)
+    class Foo {}
+    expect(await new Filter('name', [], false).render(new Foo(), ctx)).to.equal('Foo')
+  })
+
   it('should not throw when filter name illegal', function () {
     expect(function () {
       new Filter('/', [], false)

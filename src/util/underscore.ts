@@ -1,3 +1,5 @@
+import { Drop } from '../drop/drop'
+
 const toStr = Object.prototype.toString
 
 /*
@@ -29,6 +31,10 @@ export function stringify (value: any): string {
   if (isNil(value)) return ''
   value = toLiquid(value)
   return String(value)
+}
+
+export function toValue (value: any): any {
+  return value instanceof Drop ? value.valueOf() : value
 }
 
 export function toLiquid (value: any): any {

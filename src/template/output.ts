@@ -1,5 +1,5 @@
 import Value from './value'
-import { stringify } from '../util/underscore'
+import { stringify, toValue } from '../util/underscore'
 import Template from '../template/template'
 import ITemplate from '../template/itemplate'
 import Context from '../context/context'
@@ -12,7 +12,7 @@ export default class Output extends Template<OutputToken> implements ITemplate {
     this.value = new Value(token.value, strictFilters)
   }
   async render (ctx: Context): Promise<string> {
-    const html = await this.value.value(ctx)
-    return stringify(html)
+    const val = await this.value.value(ctx)
+    return stringify(toValue(val))
   }
 }

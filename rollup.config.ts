@@ -15,7 +15,7 @@ const treeshake = {
 }
 const input = './src/liquid.ts'
 
-export default [{
+const cjs = {
   output: [{
     file: 'dist/liquid.common.js',
     name: 'Liquid',
@@ -36,7 +36,9 @@ export default [{
   })],
   treeshake,
   input
-}, {
+}
+
+const umd = {
   output: [{
     file: 'dist/liquid.js',
     name: 'Liquid',
@@ -63,7 +65,9 @@ export default [{
   ],
   treeshake,
   input
-}, {
+}
+
+const min = {
   output: [{
     file: 'dist/liquid.min.js',
     name: 'Liquid',
@@ -90,4 +94,13 @@ export default [{
   ],
   treeshake,
   input
-}]
+}
+
+const bundles = []
+const env = process.env.BUNDLES || ''
+if (env.includes('cjs')) bundles.push(cjs)
+if (env.includes('umd')) bundles.push(umd)
+if (env.includes('min')) bundles.push(min)
+if (bundles.length === 0) bundles.push(cjs, umd, min)
+
+export default bundles

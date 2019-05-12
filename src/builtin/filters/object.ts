@@ -1,5 +1,8 @@
 import { isFalsy } from '../../render/syntax'
+import { toValue } from '../../util/underscore'
 
 export default {
-  'default': <T1, T2>(v: string | T1, arg: T2): string | T1 | T2 => isFalsy(v) || v === '' ? arg : v
+  'default': function<T1, T2> (v: string | T1, arg: T2): string | T1 | T2 {
+    return isFalsy(toValue(v)) || v === '' ? arg : v
+  }
 }
