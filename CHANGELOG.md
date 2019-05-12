@@ -1,3 +1,11 @@
+## [8.2.2](https://github.com/harttle/liquidjs/compare/v8.2.1...v8.2.2) (2019-05-12)
+
+
+### Bug Fixes
+
+* date from integer, [#125](https://github.com/harttle/liquidjs/issues/125) ([fdf0043](https://github.com/harttle/liquidjs/commit/fdf0043))
+* pass drops directly to filters/tags ([bef2909](https://github.com/harttle/liquidjs/commit/bef2909))
+
 ## [8.2.1](https://github.com/harttle/liquidjs/compare/v8.2.0...v8.2.1) (2019-04-26)
 
 
