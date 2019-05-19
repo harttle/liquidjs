@@ -1,6 +1,6 @@
 import { test } from '../../../stub/render'
 import Liquid from '../../../../src/liquid'
-import {expect} from 'chai'
+import { expect } from 'chai'
 
 describe('filters/array', function () {
   let liquid: Liquid
@@ -33,7 +33,7 @@ describe('filters/array', function () {
       expect(html).to.equal('.moT rojaM ot lortnoc dnuorG')
     })
     it('should be pure', async function () {
-      const scope = {arr: ['a', 'b', 'c']}
+      const scope = { arr: ['a', 'b', 'c'] }
       await liquid.parseAndRender('{{ arr | reverse | join: "" }}', scope)
       const html = await liquid.parseAndRender('{{ arr | join: "" }}', scope)
       expect(html).to.equal('abc')
