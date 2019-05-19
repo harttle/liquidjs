@@ -1,6 +1,12 @@
 import { test } from '../../../stub/render'
+import Liquid from '../../../../src/liquid'
+import {expect} from 'chai'
 
 describe('filters/array', function () {
+  let liquid: Liquid
+  beforeEach(function () {
+    liquid = new Liquid()
+  })
   describe('join', function () {
     it('should support join', function () {
       const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
@@ -21,9 +27,17 @@ describe('filters/array', function () {
   it('should support map', function () {
     return test('{{posts | map: "category"}}', 'foo,bar')
   })
-  it('should support reverse', function () {
-    return test('{{ "Ground control to Major Tom." | split: "" | reverse | join: "" }}',
-      '.moT rojaM ot lortnoc dnuorG')
+  describe('reverse', function () {
+    it('should support reverse', async function () {
+      const html = await liquid.parseAndRender('{{ "Ground control to Major Tom." | split: "" | reverse | join: "" }}')
+      expect(html).to.equal('.moT rojaM ot lortnoc dnuorG')
+    })
+    it('should be pure', async function () {
+      const scope = {arr: ['a', 'b', 'c']}
+      await liquid.parseAndRender('{{ arr | reverse | join: "" }}', scope)
+      const html = await liquid.parseAndRender('{{ arr | join: "" }}', scope)
+      expect(html).to.equal('abc')
+    })
   })
   describe('size', function () {
     it('should return string length',

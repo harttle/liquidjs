@@ -6,7 +6,7 @@ export default {
   'last': <T>(v: T[]): T => last(v),
   'first': <T>(v: T[]): T => v[0],
   'map': <T1, T2>(arr: {[key: string]: T1}[], arg: string): T1[] => arr.map(v => v[arg]),
-  'reverse': (v: any[]) => v.reverse(),
+  'reverse': (v: any[]) => [...v].reverse(),
   'sort': <T>(v: T[], arg: (lhs: T, rhs: T) => number) => v.sort(arg),
   'size': (v: string | any[]) => v.length,
   'concat': <T1, T2>(v: T1[], arg: T2[] | T2): Array<T1 | T2> => Array.prototype.concat.call(v, arg),
