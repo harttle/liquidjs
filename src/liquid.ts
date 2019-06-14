@@ -51,9 +51,10 @@ export default class Liquid {
     const paths = roots.map(root => fs.resolve(root, file, this.options.extname))
 
     for (const filepath of paths) {
+      if (this.options.cache && this.cache[filepath]) return this.cache[filepath]
+
       if (!(await fs.exists(filepath))) continue
 
-      if (this.options.cache && this.cache[filepath]) return this.cache[filepath]
       const value = this.parse(await fs.readFile(filepath), filepath)
       if (this.options.cache) this.cache[filepath] = value
       return value
