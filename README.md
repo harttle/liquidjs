@@ -178,6 +178,8 @@ Otherwise, undefined variables will cause an exception. Defaults to `false`.
 
 * `greedy` is used to specify whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`.
 
+* `fs` is used to override the default file-system module with a custom implementation.
+
 ## Register Filters
 
 ```javascript

@@ -1,4 +1,5 @@
 import * as _ from './util/underscore'
+import IFS from './fs/ifs';
 
 export interface LiquidOptions {
   /** `root` is a directory or an array of directories to resolve layouts and includes, as well as the filename passed in when calling `.renderFile()`. If an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -28,7 +29,9 @@ export interface LiquidOptions {
   outputDelimiterLeft?: string,
   outputDelimiterRight?: string,
   /** `greedy` is used to specify whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`. */
-  greedy?: boolean
+  greedy?: boolean,
+  /** `fs` is used to override the default file-system module with a custom implementation */
+  fs?: IFS
 }
 
 interface NormalizedOptions extends LiquidOptions {
