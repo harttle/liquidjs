@@ -15,6 +15,7 @@ import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
 import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
+import IFS from './fs/ifs';
 
 export default class Liquid {
   public options: NormalizedFullOptions
@@ -22,12 +23,14 @@ export default class Liquid {
   public parser: Parser
   private cache: object = {}
   private tokenizer: Tokenizer
+  private fs: IFS
 
   constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
     this.parser = new Parser(this)
     this.renderer = new Render()
     this.tokenizer = new Tokenizer(this.options)
+    this.fs = opts.fs || fs
 
     _.forOwn(builtinTags, (conf, name) => this.registerTag(name, conf))
     _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
@@ -48,14 +51,14 @@ export default class Liquid {
   async getTemplate (file: string, opts?: LiquidOptions) {
     const options = normalize(opts)
     const roots = options.root ? [...options.root, ...this.options.root] : this.options.root
-    const paths = roots.map(root => fs.resolve(root, file, this.options.extname))
+    const paths = roots.map(root => this.fs.resolve(root, file, this.options.extname))
 
     for (const filepath of paths) {
       if (this.options.cache && this.cache[filepath]) return this.cache[filepath]
 
-      if (!(await fs.exists(filepath))) continue
+      if (!(await this.fs.exists(filepath))) continue
 
-      const value = this.parse(await fs.readFile(filepath), filepath)
+      const value = this.parse(await this.fs.readFile(filepath), filepath)
       if (this.options.cache) this.cache[filepath] = value
       return value
     }
