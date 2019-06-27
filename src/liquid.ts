@@ -15,7 +15,7 @@ import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
 import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
-import IFS from './fs/ifs';
+import IFS from './fs/ifs'
 
 export default class Liquid {
   public options: NormalizedFullOptions

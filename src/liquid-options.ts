@@ -1,5 +1,5 @@
 import * as _ from './util/underscore'
-import IFS from './fs/ifs';
+import IFS from './fs/ifs'
 
 export interface LiquidOptions {
   /** `root` is a directory or an array of directories to resolve layouts and includes, as well as the filename passed in when calling `.renderFile()`. If an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
