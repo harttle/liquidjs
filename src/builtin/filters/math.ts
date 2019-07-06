@@ -18,7 +18,7 @@ export default {
   'times': (v: number, arg: number) => v * arg
 }
 
-function caseInsensitiveCmp (a, b) {
+function caseInsensitiveCmp (a: any, b: any) {
   if (!b) return -1
   if (!a) return 1
   a = toLowerCase.call(a)

@@ -6,22 +6,22 @@ describe('drop/drop', function () {
   before(() => (liquid = new Liquid()))
 
   class CustomDrop extends Liquid.Types.Drop {
-    name: string = 'NAME'
-    getName () {
+    private name: string = 'NAME'
+    public getName () {
       return 'GET NAME'
     }
   }
   class CustomDropWithMethodMissing extends CustomDrop {
-    liquidMethodMissing (key: string) {
+    public liquidMethodMissing (key: string) {
       return key.toUpperCase()
     }
   }
   class PromiseDrop extends Liquid.Types.Drop {
-    name = Promise.resolve('NAME')
-    async getName () {
+    private name = Promise.resolve('NAME')
+    public async getName () {
       return 'GET NAME'
     }
-    async liquidMethodMissing (key: string) {
+    public async liquidMethodMissing (key: string) {
       return key.toUpperCase()
     }
   }

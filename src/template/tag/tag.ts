@@ -11,11 +11,11 @@ import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
 
 export default class Tag extends Template<TagToken> implements ITemplate {
-  name: string
+  public name: string
   private impl: ITagImpl
-  static impls: { [key: string]: ITagImplOptions } = {}
+  private static impls: { [key: string]: ITagImplOptions } = {}
 
-  constructor (token: TagToken, tokens: Token[], liquid: Liquid) {
+  public constructor (token: TagToken, tokens: Token[], liquid: Liquid) {
     super(token)
     this.name = token.name
 
@@ -28,15 +28,15 @@ export default class Tag extends Template<TagToken> implements ITemplate {
       this.impl.parse(token, tokens)
     }
   }
-  async render (ctx: Context) {
+  public async render (ctx: Context) {
     const hash = await Hash.create(this.token.args, ctx)
     const impl = this.impl
     return isFunction(impl.render) ? stringify(await impl.render(ctx, hash)) : ''
   }
-  static register (name: string, tag: ITagImplOptions) {
+  public static register (name: string, tag: ITagImplOptions) {
     Tag.impls[name] = tag
   }
-  static clear () {
+  public static clear () {
     Tag.impls = {}
   }
 }

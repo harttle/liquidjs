@@ -1,5 +1,5 @@
 {
-  "extends": "standard",
+  "extends": ["standard", "plugin:@typescript-eslint/recommended"],
   "env": {
     "mocha": true,
     "es6": true,
@@ -17,6 +17,14 @@
     "no-var": 2,
     "prefer-const": 2,
     "no-unused-vars": "off",
+    "indent": "off",
+    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-object-literal-type-assertion": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "import/export": "off",
     "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }]
   }

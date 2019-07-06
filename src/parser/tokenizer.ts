@@ -10,10 +10,10 @@ enum ParseState { HTML, OUTPUT, TAG }
 
 export default class Tokenizer {
   private options: NormalizedFullOptions
-  constructor (options?: NormalizedFullOptions) {
+  public constructor (options?: NormalizedFullOptions) {
     this.options = applyDefault(options)
   }
-  tokenize (input: string, file?: string) {
+  public tokenize (input: string, file?: string) {
     const tokens: Token[] = []
     const {
       tagDelimiterLeft,

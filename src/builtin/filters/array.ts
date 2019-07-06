@@ -9,7 +9,7 @@ export default {
   'reverse': (v: any[]) => [...v].reverse(),
   'sort': <T>(v: T[], arg: (lhs: T, rhs: T) => number) => v.sort(arg),
   'size': (v: string | any[]) => v.length,
-  'concat': <T1, T2>(v: T1[], arg: T2[] | T2): Array<T1 | T2> => Array.prototype.concat.call(v, arg),
+  'concat': <T1, T2>(v: T1[], arg: T2[] | T2): (T1 | T2)[] => Array.prototype.concat.call(v, arg),
   'slice': <T>(v: T[], begin: number, length: number = 1): T[] => {
     begin = begin < 0 ? v.length + begin : begin
     return v.slice(begin, begin + length)

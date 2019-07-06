@@ -4,22 +4,22 @@ import { isNil, toValue } from '../util/underscore'
 import { BlankDrop } from '../drop/blank-drop'
 
 export class NullDrop extends Drop implements IComparable {
-  equals (value: any) {
+  public equals (value: any) {
     return isNil(toValue(value)) || value instanceof BlankDrop
   }
-  gt () {
+  public gt () {
     return false
   }
-  geq () {
+  public geq () {
     return false
   }
-  lt () {
+  public lt () {
     return false
   }
-  leq () {
+  public leq () {
     return false
   }
-  valueOf () {
+  public valueOf () {
     return null
   }
 }

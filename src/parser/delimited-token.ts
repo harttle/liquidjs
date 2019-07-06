@@ -2,7 +2,7 @@ import Token from './token'
 import { last } from '../util/underscore'
 
 export default class DelimitedToken extends Token {
-  constructor (
+  public constructor (
     raw: string,
     value: string,
     input: string,

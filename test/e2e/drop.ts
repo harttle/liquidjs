@@ -5,11 +5,11 @@ import * as chaiAsPromised from 'chai-as-promised'
 use(chaiAsPromised)
 
 class SettingsDrop extends Liquid.Types.Drop {
-  foo: string = 'FOO'
-  bar () {
+  private foo: string = 'FOO'
+  public bar () {
     return 'BAR'
   }
-  liquidMethodMissing (key: string) {
+  public liquidMethodMissing (key: string) {
     return key.toUpperCase()
   }
 }
@@ -29,10 +29,10 @@ describe('drop', function () {
   describe('BlandDrop', function () {
     it('should test blank strings', async function () {
       const src = `
-      {% unless settings.fp_heading == blank %}
-          <h1>{{ settings.fp_heading }}</h1>
+      {% unless settings.fpHeading == blank %}
+          <h1>{{ settings.fpHeading }}</h1>
       {% endunless %}`
-      var ctx = { settings: { fp_heading: '' } }
+      var ctx = { settings: { fpHeading: '' } }
       const html = await engine.parseAndRender(src, ctx)
       return expect(html).to.match(/^\s+$/)
     })

@@ -10,7 +10,7 @@ import Context from '../../context/context'
  */
 export default class Hash {
   [key: string]: any
-  static async create (markup: string, ctx: Context) {
+  public static async create (markup: string, ctx: Context) {
     const instance = new Hash()
     let match
     hashCapture.lastIndex = 0

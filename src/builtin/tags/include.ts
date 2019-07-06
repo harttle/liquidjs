@@ -10,7 +10,7 @@ import ITagImplOptions from '../../template/tag/itag-impl-options'
 const staticFileRE = /[^\s,]+/
 const withRE = new RegExp(`with\\s+(${value.source})`)
 
-export default <ITagImplOptions>{
+export default {
   parse: function (token: TagToken) {
     let match = staticFileRE.exec(token.args)
     if (match) this.staticValue = match[0]
@@ -51,4 +51,4 @@ export default <ITagImplOptions>{
     ctx.setRegister('blockMode', originBlockMode)
     return html
   }
-}
+} as ITagImplOptions

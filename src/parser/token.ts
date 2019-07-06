@@ -1,14 +1,14 @@
 export default class Token {
-  trimLeft: boolean = false
-  trimRight: boolean = false
-  type: string = 'notset'
-  line: number
-  col: number
-  raw: string
-  input: string
-  file?: string
-  value: string
-  constructor (raw: string, input: string, line: number, col: number, file?: string) {
+  public trimLeft: boolean = false
+  public trimRight: boolean = false
+  public type: string = 'notset'
+  public line: number
+  public col: number
+  public raw: string
+  public input: string
+  public file?: string
+  public value: string
+  public constructor (raw: string, input: string, line: number, col: number, file?: string) {
     this.col = col
     this.line = line
     this.raw = raw

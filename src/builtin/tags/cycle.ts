@@ -8,7 +8,7 @@ import ITagImplOptions from '../../template/tag/itag-impl-options'
 const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')
 
-export default <ITagImplOptions>{
+export default {
   parse: function (tagToken: TagToken) {
     let match: RegExpExecArray | null = groupRE.exec(tagToken.args) as RegExpExecArray
     assert(match, `illegal tag: ${tagToken.raw}`)
@@ -40,4 +40,4 @@ export default <ITagImplOptions>{
 
     return evalValue(candidate, ctx)
   }
-}
+} as ITagImplOptions

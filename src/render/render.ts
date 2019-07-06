@@ -4,7 +4,7 @@ import Context from '../context/context'
 import ITemplate from '../template/itemplate'
 
 export default class Render {
-  async renderTemplates (templates: ITemplate[], ctx: Context) {
+  public async renderTemplates (templates: ITemplate[], ctx: Context) {
     assert(ctx, 'unable to evalTemplates: context undefined')
 
     let html = ''

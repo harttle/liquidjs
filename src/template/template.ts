@@ -1,6 +1,6 @@
 export default abstract class Template<T> {
-  token: T;
-  constructor (token: T) {
+  public token: T;
+  public constructor (token: T) {
     this.token = token
   }
 }

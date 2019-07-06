@@ -5,9 +5,9 @@ import * as lexical from './lexical'
 import { NormalizedFullOptions } from '../liquid-options'
 
 export default class TagToken extends DelimitedToken {
-  name: string
-  args: string
-  constructor (
+  public name: string
+  public args: string
+  public constructor (
     raw: string,
     value: string,
     input: string,
@@ -25,7 +25,7 @@ export default class TagToken extends DelimitedToken {
     this.name = match[1]
     this.args = match[2]
   }
-  static is (token: Token): token is TagToken {
+  public static is (token: Token): token is TagToken {
     return token.type === 'tag'
   }
 }

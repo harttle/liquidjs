@@ -3,7 +3,7 @@ import Token from './token'
 import { NormalizedFullOptions } from '../liquid-options'
 
 export default class OutputToken extends DelimitedToken {
-  constructor (
+  public constructor (
     raw: string,
     value: string,
     input: string,
@@ -15,7 +15,7 @@ export default class OutputToken extends DelimitedToken {
     super(raw, value, input, line, pos, options.trimOutputLeft, options.trimOutputRight, file)
     this.type = 'output'
   }
-  static is (token: Token): token is OutputToken {
+  public static is (token: Token): token is OutputToken {
     return token.type === 'output'
   }
 }

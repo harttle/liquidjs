@@ -17,7 +17,7 @@ const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(?:\\s+(reversed))?` +
   `(?:\\s+${hash.source})*$`)
 
-export default <ITagImplOptions>{
+export default {
   type: 'block',
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
     const match = re.exec(tagToken.args) as RegExpExecArray
@@ -79,4 +79,4 @@ export default <ITagImplOptions>{
     ctx.pop()
     return html
   }
-}
+} as ITagImplOptions

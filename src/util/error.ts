@@ -5,7 +5,7 @@ import ITemplate from '../template/itemplate'
 abstract class LiquidError extends Error {
   private token: Token
   private originalError: Error
-  constructor (err: Error, token: Token) {
+  public constructor (err: Error, token: Token) {
     super(err.message)
     this.originalError = err
     this.token = token
@@ -20,7 +20,7 @@ abstract class LiquidError extends Error {
 }
 
 export class TokenizationError extends LiquidError {
-  constructor (message: string, token: Token) {
+  public constructor (message: string, token: Token) {
     super(new Error(message), token)
     this.name = 'TokenizationError'
     super.update()
@@ -28,7 +28,7 @@ export class TokenizationError extends LiquidError {
 }
 
 export class ParseError extends LiquidError {
-  constructor (err: Error, token: Token) {
+  public constructor (err: Error, token: Token) {
     super(err, token)
     this.name = 'ParseError'
     this.message = err.message
@@ -37,7 +37,7 @@ export class ParseError extends LiquidError {
 }
 
 export class RenderError extends LiquidError {
-  constructor (err: Error, tpl: ITemplate) {
+  public constructor (err: Error, tpl: ITemplate) {
     super(err, tpl.token)
     this.name = 'RenderError'
     this.message = err.message
@@ -46,8 +46,8 @@ export class RenderError extends LiquidError {
 }
 
 export class RenderBreakError extends Error {
-  resolvedHTML: string = ''
-  constructor (message: string) {
+  public resolvedHTML: string = ''
+  public constructor (message: string) {
     super(message)
     this.name = 'RenderBreakError'
     this.message = message + ''
@@ -55,7 +55,7 @@ export class RenderBreakError extends Error {
 }
 
 export class AssertionError extends Error {
-  constructor (message: string) {
+  public constructor (message: string) {
     super(message)
     this.name = 'AssertionError'
     this.message = message + ''

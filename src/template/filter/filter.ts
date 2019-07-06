@@ -5,15 +5,15 @@ import { FilterImplOptions } from './filter-impl-options'
 
 type KeyValuePair = [string?, string?]
 type FilterArg = string|KeyValuePair
-export type FilterArgs = Array<FilterArg>
+export type FilterArgs = FilterArg[]
 
 export class Filter {
-  name: string
-  impl: FilterImplOptions
-  args: FilterArgs
+  private name: string
+  private impl: FilterImplOptions
+  private args: FilterArgs
   private static impls: {[key: string]: FilterImplOptions} = {}
 
-  constructor (name: string, args: FilterArgs, strictFilters: boolean) {
+  public constructor (name: string, args: FilterArgs, strictFilters: boolean) {
     const impl = Filter.impls[name]
     if (!impl && strictFilters) throw new TypeError(`undefined filter: ${name}`)
 
@@ -21,7 +21,7 @@ export class Filter {
     this.impl = impl || (x => x)
     this.args = args
   }
-  async render (value: any, context: Context) {
+  public async render (value: any, context: Context) {
     const argv: any[] = []
     for (const arg of this.args) {
       if (isKeyValuePair(arg)) argv.push([arg[0], await parseValue(arg[1], context)])
@@ -29,10 +29,10 @@ export class Filter {
     }
     return this.impl.apply({ context }, [value, ...argv])
   }
-  static register (name: string, filter: FilterImplOptions) {
+  public static register (name: string, filter: FilterImplOptions) {
     Filter.impls[name] = filter
   }
-  static clear () {
+  public static clear () {
     Filter.impls = {}
   }
 }

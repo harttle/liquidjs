@@ -5,12 +5,12 @@ import Context from '../context/context'
 export default class Value {
   private strictFilters: boolean
   private initial: string
-  private filters: Array<Filter> = []
+  private filters: Filter[] = []
 
   /**
    * @param str value string, like: "i have a dream | truncate: 3
    */
-  constructor (str: string, strictFilters: boolean) {
+  public constructor (str: string, strictFilters: boolean) {
     const tokens = Value.tokenize(str)
     this.strictFilters = strictFilters
     this.initial = tokens[0]
@@ -35,7 +35,7 @@ export default class Value {
     for (let i = begin + 1; i < end + 1; i++) {
       if (i === end || tokens[i] === ',') {
         if (argName || argValue) {
-          args.push(argName ? [argName, argValue] : <string>argValue)
+          args.push(argName ? [argName, argValue] : argValue as string)
         }
         argValue = argName = undefined
       } else if (tokens[i] === ':') {
@@ -47,14 +47,14 @@ export default class Value {
     }
     this.filters.push(new Filter(name, args, this.strictFilters))
   }
-  async value (ctx: Context) {
+  public async value (ctx: Context) {
     let val = await parseExp(this.initial, ctx)
     for (const filter of this.filters) {
       val = await filter.render(val, ctx)
     }
     return val
   }
-  static tokenize (str: string): Array<'|' | ',' | ':' | string> {
+  public static tokenize (str: string): ('|' | ',' | ':' | string)[] {
     const tokens = []
     let i = 0
     while (i < str.length) {

@@ -2,7 +2,7 @@ import TagToken from '../../parser/tag-token'
 import Token from '../../parser/token'
 import ITagImplOptions from '../../template/tag/itag-impl-options'
 
-export default <ITagImplOptions>{
+export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
     this.tokens = []
 
@@ -20,4 +20,4 @@ export default <ITagImplOptions>{
   render: function () {
     return this.tokens.map((token: Token) => token.raw).join('')
   }
-}
+} as ITagImplOptions

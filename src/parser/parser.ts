@@ -10,12 +10,12 @@ import HTML from '../template/html'
 import ITemplate from '../template/itemplate'
 
 export default class Parser {
-  liquid: Liquid
+  private liquid: Liquid
 
-  constructor (liquid: Liquid) {
+  public constructor (liquid: Liquid) {
     this.liquid = liquid
   }
-  parse (tokens: Array<Token>) {
+  public parse (tokens: Token[]) {
     let token
     const templates: ITemplate[] = []
     while ((token = tokens.shift())) {
@@ -23,7 +23,7 @@ export default class Parser {
     }
     return templates
   }
-  parseToken (token: Token, remainTokens: Array<Token>) {
+  public parseToken (token: Token, remainTokens: Token[]) {
     try {
       if (TagToken.is(token)) {
         return new Tag(token, remainTokens, this.liquid)
@@ -36,7 +36,7 @@ export default class Parser {
       throw new ParseError(e, token)
     }
   }
-  parseStream (tokens: Array<Token>) {
+  public parseStream (tokens: Token[]) {
     return new ParseStream(tokens, (token, tokens) => this.parseToken(token, tokens))
   }
 }

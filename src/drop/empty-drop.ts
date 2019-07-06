@@ -3,24 +3,24 @@ import { IComparable } from './icomparable'
 import { isObject, isString, isArray } from '../util/underscore'
 
 export class EmptyDrop extends Drop implements IComparable {
-  equals (value: any) {
+  public equals (value: any) {
     if (isString(value) || isArray(value)) return value.length === 0
     if (isObject(value)) return Object.keys(value).length === 0
     return false
   }
-  gt () {
+  public gt () {
     return false
   }
-  geq () {
+  public geq () {
     return false
   }
-  lt () {
+  public lt () {
     return false
   }
-  leq () {
+  public leq () {
     return false
   }
-  valueOf () {
+  public valueOf () {
     return ''
   }
 }

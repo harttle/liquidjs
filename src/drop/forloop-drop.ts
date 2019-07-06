@@ -2,33 +2,33 @@ import { Drop } from './drop'
 
 export class ForloopDrop extends Drop {
   protected i: number = 0
-  length: number
-  constructor (length: number) {
+  public length: number
+  public constructor (length: number) {
     super()
     this.length = length
   }
-  next () {
+  public next () {
     this.i++
   }
-  index0 () {
+  public index0 () {
     return this.i
   }
-  index () {
+  public index () {
     return this.i + 1
   }
-  first () {
+  public first () {
     return this.i === 0
   }
-  last () {
+  public last () {
     return this.i === this.length - 1
   }
-  rindex () {
+  public rindex () {
     return this.length - this.i
   }
-  rindex0 () {
+  public rindex0 () {
     return this.length - this.i - 1
   }
-  valueOf () {
+  public valueOf () {
     return JSON.stringify(this)
   }
 }

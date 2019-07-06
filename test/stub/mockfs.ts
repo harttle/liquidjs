@@ -2,17 +2,20 @@ import { isString, forOwn } from '../../src/util/underscore'
 import fs from '../../src/fs/node'
 import { resolve } from 'path'
 
-type fileDescriptor = { mode: string, content: string }
+interface FileDescriptor {
+  mode: string;
+  content: string;
+}
 
-let files: { [path: string]: fileDescriptor } = {}
+let files: { [path: string]: FileDescriptor } = {}
 const readFile = fs.readFile
 const exists = fs.exists
 
-export function mock (options: { [path: string]: (string | fileDescriptor) }) {
+export function mock (options: { [path: string]: (string | FileDescriptor) }) {
   forOwn(options, (val, key) => {
     files[resolve(key)] = isString(val)
       ? { mode: '33188', content: val }
-      : val as fileDescriptor
+      : val as FileDescriptor
   })
   fs.readFile = async function (path) {
     const file = files[path]

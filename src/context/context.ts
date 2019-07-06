@@ -6,25 +6,25 @@ import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import { Scope } from './scope'
 
 export default class Context {
-  opts: NormalizedFullOptions
-  environments: Scope
-  private scopes: Array<Scope> = [{}]
+  private scopes: Scope[] = [{}]
   private registers = {}
-  constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
+  public environments: Scope
+  public opts: NormalizedFullOptions
+  public constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
     this.opts = applyDefault(opts)
     this.environments = ctx
   }
-  getRegister (key: string, defaultValue = {}) {
+  public getRegister (key: string, defaultValue = {}) {
     return (this.registers[key] = this.registers[key] || defaultValue)
   }
-  setRegister (key: string, value: any) {
+  public setRegister (key: string, value: any) {
     return (this.registers[key] = value)
   }
-  getAll () {
+  public getAll () {
     return [this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
-  async get (path: string) {
+  public async get (path: string) {
     const paths = await this.parseProp(path)
     let ctx = this.findScope(paths[0]) || this.environments
     for (const path of paths) {
@@ -35,13 +35,13 @@ export default class Context {
     }
     return ctx
   }
-  push (ctx: object) {
+  public push (ctx: object) {
     return this.scopes.push(ctx)
   }
-  pop () {
+  public pop () {
     return this.scopes.pop()
   }
-  front () {
+  public front () {
     return this.scopes[0]
   }
   private findScope (key: string) {

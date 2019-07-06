@@ -85,7 +85,7 @@ describe('tags/include', function () {
   })
   it('should support include: with as Liquid Drop', async function () {
     class ColorDrop extends Liquid.Types.Drop {
-      valueOf (): string {
+      public valueOf (): string {
         return 'red!'
       }
     }
@@ -98,7 +98,7 @@ describe('tags/include', function () {
   })
   it('should support include: with passed as Liquid Drop', async function () {
     class ColorDrop extends Liquid.Types.Drop {
-      valueOf (): string {
+      public valueOf (): string {
         return 'red!'
       }
     }

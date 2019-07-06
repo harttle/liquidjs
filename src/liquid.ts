@@ -25,7 +25,7 @@ export default class Liquid {
   private tokenizer: Tokenizer
   private fs: IFS
 
-  constructor (opts: LiquidOptions = {}) {
+  public constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
     this.parser = new Parser(this)
     this.renderer = new Render()
@@ -35,20 +35,20 @@ export default class Liquid {
     _.forOwn(builtinTags, (conf, name) => this.registerTag(name, conf))
     _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
   }
-  parse (html: string, filepath?: string) {
+  public parse (html: string, filepath?: string) {
     const tokens = this.tokenizer.tokenize(html, filepath)
     return this.parser.parse(tokens)
   }
-  render (tpl: Array<ITemplate>, ctx?: object, opts?: LiquidOptions) {
+  public render (tpl: ITemplate[], ctx?: object, opts?: LiquidOptions) {
     const options = { ...this.options, ...normalize(opts) }
     const scope = new Context(ctx, options)
     return this.renderer.renderTemplates(tpl, scope)
   }
-  async parseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
+  public async parseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
     const tpl = await this.parse(html)
     return this.render(tpl, ctx, opts)
   }
-  async getTemplate (file: string, opts?: LiquidOptions) {
+  public async getTemplate (file: string, opts?: LiquidOptions) {
     const options = normalize(opts)
     const roots = options.root ? [...options.root, ...this.options.root] : this.options.root
     const paths = roots.map(root => this.fs.resolve(root, file, this.options.extname))
@@ -68,34 +68,34 @@ export default class Liquid {
     err.code = 'ENOENT'
     throw err
   }
-  async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
+  public async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
     const options = normalize(opts)
     const templates = await this.getTemplate(file, options)
     return this.render(templates, ctx, opts)
   }
-  evalValue (str: string, ctx: Context) {
+  public evalValue (str: string, ctx: Context) {
     return new Value(str, this.options.strictFilters).value(ctx)
   }
-  registerFilter (name: string, filter: FilterImplOptions) {
+  public registerFilter (name: string, filter: FilterImplOptions) {
     return Filter.register(name, filter)
   }
-  registerTag (name: string, tag: ITagImplOptions) {
+  public registerTag (name: string, tag: ITagImplOptions) {
     return Tag.register(name, tag)
   }
-  plugin (plugin: (this: Liquid, L: typeof Liquid) => void) {
+  public plugin (plugin: (this: Liquid, L: typeof Liquid) => void) {
     return plugin.call(this, Liquid)
   }
-  express () {
+  public express () {
     const self = this
     return function (this: any, filePath: string, ctx: object, cb: (err: Error | null, html?: string) => void) {
       const opts = { root: this.root }
       self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
     }
   }
-  static default = Liquid
-  static isTruthy = isTruthy
-  static isFalsy = isFalsy
-  static evalExp = evalExp
-  static evalValue = evalValue
-  static Types = Types
+  public static default = Liquid
+  public static isTruthy = isTruthy
+  public static isFalsy = isFalsy
+  public static evalExp = evalExp
+  public static evalValue = evalValue
+  public static Types = Types
 }
