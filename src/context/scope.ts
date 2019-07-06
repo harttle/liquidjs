@@ -1,6 +1,6 @@
 import { Drop } from '../drop/drop'
 
-interface PlainObject {
+export interface PlainObject {
   [key: string]: any;
   toLiquid?: () => any;
 }
