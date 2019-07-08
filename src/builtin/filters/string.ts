@@ -14,6 +14,7 @@ export default {
   'split': (v: string, arg: string) => String(v).split(arg),
   'strip': (v: string) => String(v).trim(),
   'strip_newlines': (v: string) => String(v).replace(/\n/g, ''),
+  'handle': (v: string) => String(v).toLowerCase().replace(/[^\w\u00C0-\u024f]+/g, '-').replace(/^-+|-+$/g, ''),
   'truncate': (v: string, l: number = 50, o: string = '...') => {
     v = String(v)
     if (v.length <= l) return v
