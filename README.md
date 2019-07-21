@@ -12,22 +12,34 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://github.com/harttle/liquidjs)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/harttle/liquidjs)
 
-A [shopify][shopify/liquid] compatible [Liquid][tutorial] template engine in pure JavaScript.
-
-Install via npm:
+A [shopify][shopify/liquid] compatible [Liquid][tutorial] template engine in pure JavaScript. Install via npm:
 
 ```bash
 npm install --save liquidjs
 ```
 
-Or include the UMD build:
+Or include the UMD build (You may need a [Promise polyfill][pp] for Node.js &lt; 4 and ES5 browsers like [IE and Android UC][caniuse-promises]):
 
 ```html
 <script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>     <!--for production-->
 <script src="//unpkg.com/liquidjs/dist/liquid.js"></script>         <!--for development-->
 ```
 
-You may need a [Promise polyfill][pp] for Node.js < 4 and ES5 browsers like [IE and Android UC][caniuse-promises].
+**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community.
+All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be supported here,
+though there are still some differences:
+
+* Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
+* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
+* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
+* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
+* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
+
+Features that available on shopify website but not on shopify/liquid repo will not be implemented in this repo,
+but there're some plugins available (feel free to add yours):
+
+* color filters: https://github.com/harttle/liquidjs-color-filters
+* sections tags (WIP): https://github.com/harttle/liquidjs-section-tags
 
 ## TOC
 
@@ -50,7 +62,6 @@ You may need a [Promise polyfill][pp] for Node.js < 4 and ES5 browsers like [IE 
     * [Operators](https://github.com/harttle/liquidjs/wiki/Operators)
     * [Whitespace Control](https://github.com/harttle/liquidjs/wiki/Whitespace-Control)
     * [Plugin API](#plugin-api)
-    * [Differences With shopify/liquid](#differences-with-shopify%2fliquid)
 * [Contribute Guidelines](#contribute-guidelines)
 
 ## Render from String
@@ -230,20 +241,6 @@ module.exports = function (Liquid) {
     this.registerFilter('foo', x => x);
 }
 ```
-
-Plugin List:
-
-* To add your plugin, contact me or simply send a PR.
-
-## Differences With shopify/liquid
-
-Though being compatible with [Ruby Liquid](https://github.com/shopify/liquid) is one of our priorities, there're still certain differences. You may need some configuration to get it compatible in these senarios:
-
-* Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
-* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
-* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
-* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
-* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 
 ## Contribute Guidelines
 
