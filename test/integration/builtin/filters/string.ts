@@ -1,13 +1,30 @@
 import { test } from '../../../stub/render'
+import Liquid from '../../../../src/liquid'
+import { expect } from 'chai'
 
 describe('filters/string', function () {
+  let liquid: Liquid
+  beforeEach(function () {
+    liquid = new Liquid()
+  })
   describe('append', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
     it('should return "abar" for "a",foo', () => test('{{ "a" | append: foo }}', 'abar'))
   })
   describe('capitalize', function () {
-    it('should capitalize first', () => test('{{ "i am good" | capitalize }}', 'I am good'))
+    it('should capitalize first', async () => {
+      const html = await liquid.parseAndRender('{{ "i am good" | capitalize }}')
+      expect(html).to.equal('I am good')
+    })
+    it('should return empty for nil', async () => {
+      const html = await liquid.parseAndRender('{{ nil | capitalize }}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{ foo | capitalize }}')
+      expect(html).to.equal('')
+    })
   })
   describe('concat', function () {
     it('should concat arrays', () => test(`
@@ -45,10 +62,18 @@ describe('filters/string', function () {
       `))
   })
   describe('downcase', function () {
-    it('should return "parker moore" for "Parker Moore"',
-      () => test('{{ "Parker Moore" | downcase }}', 'parker moore'))
-    it('should return "apple" for "apple"',
-      () => test('{{ "apple" | downcase }}', 'apple'))
+    it('should return "parker moore" for "Parker Moore"', async () => {
+      const html = await liquid.parseAndRender('{{ "Parker Moore" | downcase }}')
+      expect(html).to.equal('parker moore')
+    })
+    it('should return "apple" for "apple"', async () => {
+      const html = await liquid.parseAndRender('{{ "apple" | downcase }}')
+      expect(html).to.equal('apple')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{ foo | downcase }}')
+      expect(html).to.equal('')
+    })
   })
   describe('split', function () {
     it('should support split/first', function () {
@@ -57,7 +82,16 @@ describe('filters/string', function () {
       return test(src, 'apples')
     })
   })
-  it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
+  describe('upcase', function () {
+    it('should support upcase', async () => {
+      const html = await liquid.parseAndRender('{{ "Parker Moore" | upcase }}')
+      expect(html).to.equal('PARKER MOORE')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{ foo | upcase }}')
+      expect(html).to.equal('')
+    })
+  })
   it('should support lstrip', function () {
     const src = '{{ "          So much room for activities!          " | lstrip }}'
     return test(src, 'So much room for activities!          ')
@@ -78,13 +112,25 @@ describe('filters/string', function () {
             '{{ "/index.html" | prepend: url }}',
     'liquidmarkup.com/index.html')
   })
-  it('should support remove', function () {
-    return test('{{ "I strained to see the train through the rain" | remove: "rain" }}',
-      'I sted to see the t through the ')
+  describe('remove', function () {
+    it('should support remove', async () => {
+      const html = await liquid.parseAndRender('{{ "I strained to see the train through the rain" | remove: "rain" }}')
+      expect(html).to.equal('I sted to see the t through the ')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{ foo | remove: "rain" }}')
+      expect(html).to.equal('')
+    })
   })
-  it('should support remove_first', function () {
-    return test('{{ "I strained to see the train through the rain" | remove_first: "rain" }}',
-      'I sted to see the train through the rain')
+  describe('remove_first', function () {
+    it('should support remove_first', async () => {
+      const html = await liquid.parseAndRender('{{ "I strained to see the train through the rain" | remove_first: "rain" }}')
+      expect(html).to.equal('I sted to see the train through the rain')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{ foo | remove_first: "r" }}')
+      expect(html).to.equal('')
+    })
   })
   it('should support replace', function () {
     return test('{{ "Take my protein pills and put my helmet on" | replace: "my", "your" }}',

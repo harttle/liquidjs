@@ -27,12 +27,6 @@ describe('util/underscore', function () {
     })
   })
   describe('.stringify()', function () {
-    it('should respect to toLiquid() method', function () {
-      expect(_.stringify({ toLiquid: () => 'foo' })).to.equal('foo')
-    })
-    it('should recursively call toLiquid()', function () {
-      expect(_.stringify({ toLiquid: () => ({ toLiquid: () => 'foo' }) })).to.equal('foo')
-    })
     it('should return "" for null', function () {
       expect(_.stringify(null)).to.equal('')
     })

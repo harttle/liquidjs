@@ -28,9 +28,8 @@ export function promisify (fn: any) {
 }
 
 export function stringify (value: any): string {
-  if (isNil(value)) return ''
-  value = toLiquid(value)
-  return String(value)
+  value = toValue(value)
+  return isNil(value) ? '' : String(value)
 }
 
 export function toValue (value: any): any {
@@ -42,7 +41,7 @@ export function isNumber (value: any): value is number {
 }
 
 export function toLiquid (value: any): any {
-  if (isFunction(value.toLiquid)) return toLiquid(value.toLiquid())
+  if (value && isFunction(value.toLiquid)) return toLiquid(value.toLiquid())
   return value
 }
 

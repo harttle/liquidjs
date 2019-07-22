@@ -31,7 +31,7 @@ though there are still some differences:
 
 * Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
 * Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
-* Number Rendering. Since JavaScript do not distinguish `float` and `integer`, we cannot either convert between them nor render regarding to their type. See [#59](https://github.com/harttle/liquidjs/issues/59).
+* Number. In JavaScript we cannot distinguish or convert between `float` and `integer`, see [#59](https://github.com/harttle/liquidjs/issues/59). And when applied `size` filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a `length` property.
 * [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
 * [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 
