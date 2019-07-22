@@ -60,6 +60,10 @@ describe('filters/math', function () {
       () => test('{{ 183.357 | plus: 12 }}', '195.357'))
     it('should convert first arg as number', () => test('{{ "4" | plus: 2 }}', '6'))
     it('should convert both args as number', () => test('{{ "4" | plus: "2" }}', '6'))
+    it('should support variable', async () => {
+      const html = await l.parseAndRender('{{ 4 | plus: b }}', { b: 2 })
+      expect(html).to.equal('6')
+    })
   })
 
   describe('sort_natural', function () {

@@ -40,17 +40,85 @@ describe('filters/array', function () {
     })
   })
   describe('size', function () {
-    it('should return string length',
-      () => test('{{ "Ground control to Major Tom." | size }}', '28'))
-    it('should return array size', function () {
-      return test('{% assign my_array = "apples, oranges, peaches, plums"' +
-                ' | split: ", " %}{{ my_array | size }}',
-      '4')
+    it('should return string length', async () => {
+      const html = await liquid.parseAndRender('{{ "Ground control to Major Tom." | size }}')
+      expect(html).to.equal('28')
     })
-    it('should be respected with <string>.size notation',
-      () => test('{% assign my_string = "Ground control to Major Tom." %}{{ my_string.size }}', '28'))
-    it('should be respected with <array>.size notation',
-      () => test('{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}{{ my_array.size }}', '4'))
+    it('should return array size', async () => {
+      const html = await liquid.parseAndRender(
+        '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}{{ my_array | size }}')
+      expect(html).to.equal('4')
+    })
+    it('should be respected with <string>.size notation', async () => {
+      const html = await liquid.parseAndRender('{% assign my_string = "Ground control to Major Tom." %}{{ my_string.size }}')
+      expect(html).to.equal('28')
+    })
+    it('should be respected with <array>.size notation', async () => {
+      const html = await liquid.parseAndRender('{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}{{ my_array.size }}')
+      expect(html).to.equal('4')
+    })
+    it('should return 0 for false', async () => {
+      const html = await liquid.parseAndRender('{{ false | size }}')
+      expect(html).to.equal('0')
+    })
+    it('should return 0 for nil', async () => {
+      const html = await liquid.parseAndRender('{{ nil | size }}')
+      expect(html).to.equal('0')
+    })
+    it('should return 0 for undefined', async () => {
+      const html = await liquid.parseAndRender('{{ foo | size }}')
+      expect(html).to.equal('0')
+    })
+  })
+  describe('first', function () {
+    it('should support first', async () => {
+      const html = await liquid.parseAndRender(
+        '{{arr | first}}',
+        { arr: [ 'zebra', 'tiger' ] }
+      )
+      expect(html).to.equal('zebra')
+    })
+    it('should return empty for nil', async () => {
+      const html = await liquid.parseAndRender('{{nil | first}}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{foo | first}}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for false', async () => {
+      const html = await liquid.parseAndRender('{{false | first}}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for string', async () => {
+      const html = await liquid.parseAndRender('{{"zebra" | first}}')
+      expect(html).to.equal('')
+    })
+  })
+  describe('last', function () {
+    it('should support last', async () => {
+      const html = await liquid.parseAndRender(
+        '{{arr | last}}',
+        { arr: [ 'zebra', 'tiger' ] }
+      )
+      expect(html).to.equal('tiger')
+    })
+    it('should return empty for nil', async () => {
+      const html = await liquid.parseAndRender('{{nil | last}}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for undefined', async () => {
+      const html = await liquid.parseAndRender('{{foo | last}}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for false', async () => {
+      const html = await liquid.parseAndRender('{{false | last}}')
+      expect(html).to.equal('')
+    })
+    it('should return empty for string', async () => {
+      const html = await liquid.parseAndRender('{{"zebra" | last}}')
+      expect(html).to.equal('')
+    })
   })
   describe('slice', function () {
     it('should slice first char by 0', () => test('{{ "Liquid" | slice: 0 }}', 'L'))
