@@ -6,8 +6,8 @@
 import { stringify } from '../../util/underscore'
 
 export default {
-  'append': (v: string, arg: string) => stringify(v) + arg,
-  'prepend': (v: string, arg: string) => arg + stringify(v),
+  'append': (v: string, arg: string) => stringify(v) + stringify(arg),
+  'prepend': (v: string, arg: string) => stringify(arg) + stringify(v),
   'capitalize': capitalize,
   'lstrip': (v: string) => stringify(v).replace(/^\s+/, ''),
   'downcase': (v: string) => stringify(v).toLowerCase(),
