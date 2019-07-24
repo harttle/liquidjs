@@ -10,7 +10,16 @@ describe('filters/string', function () {
   describe('append', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
-    it('should return "abar" for "a",foo', () => test('{{ "a" | append: foo }}', 'abar'))
+    it('should return "abar" for "a", foo', () => test('{{ "a" | append: foo }}', 'abar'))
+    it('should return "abc" for "abc", undefined', () => test('{{ "abc" | append: undefinedVar }}', 'abc'))
+    it('should return "abcfalse" for "abc", false', () => test('{{ "abc" | append: false }}', 'abcfalse'))
+  })
+  describe('prepend', function () {
+    it('should return "-3abc" for -3, "abc"',
+      () => test('{{ -3 | prepend: "abc" }}', 'abc-3'))
+    it('should return "abar" for "a", foo', () => test('{{ "a" | prepend: foo }}', 'bara'))
+    it('should return "abc" for "abc", undefined', () => test('{{ "abc" | prepend: undefinedVar }}', 'abc'))
+    it('should return "falseabc" for "abc", false', () => test('{{ "abc" | prepend: false }}', 'falseabc'))
   })
   describe('capitalize', function () {
     it('should capitalize first', async () => {
