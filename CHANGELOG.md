@@ -1,3 +1,10 @@
+# [8.5.0](https://github.com/harttle/liquidjs/compare/v8.4.1...v8.5.0) (2019-08-01)
+
+
+### Features
+
+* CLI support ([fc045b5](https://github.com/harttle/liquidjs/commit/fc045b5))
+
 ## [8.4.1](https://github.com/harttle/liquidjs/compare/v8.4.0...v8.4.1) (2019-07-22)
 
 
