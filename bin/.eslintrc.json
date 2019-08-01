@@ -1,0 +1,21 @@
+{
+  "extends": ["standard"],
+  "env": {
+    "mocha": true,
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": [
+    "mocha",
+    "standard",
+    "promise"
+  ],
+  "rules": {
+    "no-var": 2,
+    "prefer-const": 2,
+    "@typescript-eslint/no-var-requires": "off",
+    "no-unused-vars": "off",
+    "indent": "off"
+  }
+}

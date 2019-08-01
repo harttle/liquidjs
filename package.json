@@ -17,6 +17,10 @@
     "build": "rollup -c rollup.config.ts && ls -lh dist",
     "version": "npm run build"
   },
+  "bin": {
+    "liquidjs": "./bin/liquid.js",
+    "liquid": "./bin/liquid.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/harttle/liquidjs.git"

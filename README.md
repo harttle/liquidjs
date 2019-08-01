@@ -98,6 +98,12 @@ engine
     .then(console.log)  // outputs "Alice"
 ```
 
+Or from the CLI:
+
+```bash
+echo '{{ "hello" | capitalize }}' | liquidjs
+```
+
 ## Use with Express.js
 
 ```javascript
