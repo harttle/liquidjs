@@ -50,7 +50,7 @@ but there're some plugins available (feel free to add yours):
     * [Include Partials](#include-partials)
     * [Layout Templates (Extends)](#layout-templates-extends)
 * Demos
-    * Node.js: [/demo/node/](demo/node/)
+    * Node.js: [/demo/nodejs/](demo/nodejs/)
     * Browser: <https://jsfiddle.net/6u40xbzs/>, [/demo/browser/](demo/browser/).
     * Express.js: [/demo/express/](demo/express/)
     * TypeScript: [/demo/typescript/](demo/typescript/)
