@@ -7,6 +7,7 @@
   "browser": "dist/liquid.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
+    "doc": "typedoc --out doc src --readme none",
     "unit": "mocha \"test/unit/**/*.ts\"",
     "integration": "mocha \"test/integration/**/*.ts\"",
     "e2e": "npm run build && mocha \"test/e2e/**/*.ts\"",
@@ -15,7 +16,7 @@
     "coverage-html": "nyc --reporter=html mocha \"test/{unit,integration}/**/*.ts\"",
     "coverage-coveralls": "nyc mocha \"test/{unit,integration}/**/*.ts\" && nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c rollup.config.ts && ls -lh dist",
-    "version": "npm run build"
+    "version": "npm run build && npm run doc"
   },
   "bin": {
     "liquidjs": "./bin/liquid.js",
@@ -27,6 +28,7 @@
   },
   "files": [
     "dist",
+    "doc",
     "LICENSE",
     "README.md"
   ],
@@ -63,6 +65,7 @@
     "@types/supertest": "^2.0.7",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
+    "all-contributors-cli": "^6.8.1",
     "benchmark": "^2.1.4",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
@@ -84,12 +87,13 @@
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-typescript2": "^0.21.1",
     "rollup-plugin-uglify": "^6.0.2",
-    "semantic-release": "^15.13.14",
+    "semantic-release": "^15.13.19",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0",
     "supertest": "^3.4.2",
     "ts-node": "^8.0.2",
     "tslib": "^1.9.3",
+    "typedoc": "^0.15.0",
     "typescript": "^3.3.3"
   },
   "release": {
