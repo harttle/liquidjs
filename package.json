@@ -27,6 +27,7 @@
     "url": "git+https://github.com/harttle/liquidjs.git"
   },
   "files": [
+    "bin",
     "dist",
     "doc",
     "LICENSE",
