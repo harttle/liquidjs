@@ -51,7 +51,9 @@ Also available from CLI:
 echo '{{"hello" | capitalize}}' | npx liquidjs
 ```
 
-For more tutorials and the full API, refer to the [wiki page](https://github.com/harttle/liquidjs/wiki).
+* A live demo is available on jsfiddle: <https://jsfiddle.net/6u40xbzs/>
+* For more tutorials and the full API, refer to the [wiki page](https://github.com/harttle/liquidjs/wiki).
+* Typedoc is also available here: <https://harttle.github.io/liquidjs/classes/_liquid_.liquid.html>
 
 ## Differences and Limitations
 
