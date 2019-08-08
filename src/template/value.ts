@@ -69,7 +69,12 @@ export default class Value {
         tokens.push(str[i++])
       } else {
         const j = i++
-        for (; i < str.length && !/[|,:\s]/.test(str[i]); ++i);
+        let ch
+        for (; i < str.length && !/[|,:\s]/.test(ch = str[i]); ++i) {
+          if (ch === '"' || ch === "'") {
+            for (i += 2; i < str.length && str[i - 1] !== ch; ++i);
+          }
+        }
         tokens.push(str.slice(j, i))
       }
     }
