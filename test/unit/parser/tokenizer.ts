@@ -66,6 +66,13 @@ describe('tokenizer', function () {
       expect(tokens[0]).instanceOf(OutputToken)
       expect(tokens[0].raw).to.equal('{{foo\n|date:\n"%Y-%m-%d"\n}}')
     })
+    it('should handle complex object property access', function () {
+      const html = '{{ obj["my:property with anything"] }}'
+      const tokens = tokenizer.tokenize(html)
+      expect(tokens.length).to.equal(1)
+      expect(tokens[0]).instanceOf(OutputToken)
+      expect(tokens[0].value).to.equal('obj["my:property with anything"]')
+    })
     it('should throw if tag not closed', function () {
       expect(() => {
         tokenizer.tokenize('{% assign foo = bar {{foo}}')
