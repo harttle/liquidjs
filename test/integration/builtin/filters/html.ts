@@ -12,6 +12,9 @@ describe('filters/html', function () {
     it('should escape function', function () {
       return test('{{ func | escape }}', 'function () { }')
     })
+    it('should escape undefined', function () {
+      return test('{{ nonExistent.value | escape }}', '')
+    })
   })
   describe('escape_once', function () {
     it('should do escape', () =>
