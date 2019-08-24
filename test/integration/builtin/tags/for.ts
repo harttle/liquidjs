@@ -113,13 +113,23 @@ describe('tags/for', function () {
     const html = await liquid.parseAndRender(src, ctx)
     return expect(html).to.equal('12345')
   })
-  it('should support for with break', async function () {
-    const src = '{% for i in (one..5) %}' +
-      '{% if i == 4 %}{% break %}{% endif %}' +
-      '{{ i }}' +
-      '{% endfor %}'
-    const html = await liquid.parseAndRender(src, ctx)
-    return expect(html).to.equal('123')
+  describe('break', function () {
+    it('should support break', async function () {
+      const src = '{% for i in (one..5) %}' +
+        '{% if i == 4 %}{% break %}{% endif %}' +
+        '{{ i }}' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, ctx)
+      return expect(html).to.equal('123')
+    })
+    it('should output contents before break', async function () {
+      const src = '{% for i in (1..5) %}' +
+        '{% if i == 4 %}breaking{% break %}{% endif %}' +
+        '{{ i }}' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, ctx)
+      return expect(html).to.equal('123breaking')
+    })
   })
 
   describe('limit', function () {
