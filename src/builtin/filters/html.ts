@@ -14,7 +14,7 @@ const unescapeMap = {
 }
 
 function escape (str: string) {
-  return !!str ? String(str).replace(/&|<|>|"|'/g, m => escapeMap[m]) : ""
+  return str ? String(str).replace(/&|<|>|"|'/g, m => escapeMap[m]) : ''
 }
 
 function unescape (str: string) {
