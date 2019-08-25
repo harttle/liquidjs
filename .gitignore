@@ -10,7 +10,10 @@ coverage/
 # modules
 node_modules/
 dist/
+demo/*/package-lock.json
+demo/*/yarn.json
 
 # editors
 .*.swp
 .vscode
+
