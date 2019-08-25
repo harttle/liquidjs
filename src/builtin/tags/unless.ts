@@ -1,9 +1,4 @@
-import { evalExp, isFalsy } from '../../render/syntax'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import Context from '../../context/context'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
-import ParseStream from '../../parser/parse-stream'
+import { Emitter, evalExp, isFalsy, ParseStream, Context, ITagImplOptions, Token, Hash , TagToken } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -25,10 +20,10 @@ export default {
     stream.start()
   },
 
-  render: async function (ctx: Context) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     const cond = await evalExp(this.cond, ctx)
-    return isFalsy(cond)
-      ? this.liquid.renderer.renderTemplates(this.templates, ctx)
-      : this.liquid.renderer.renderTemplates(this.elseTemplates, ctx)
+    isFalsy(cond)
+      ? await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
+      : await this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)
   }
 } as ITagImplOptions

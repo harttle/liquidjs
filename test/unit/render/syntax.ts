@@ -1,4 +1,4 @@
-import Context from '../../../src/context/context'
+import { Context } from '../../../src/context/context'
 import { expect } from 'chai'
 import { evalExp, evalValue, isTruthy } from '../../../src/render/syntax'
 
@@ -62,7 +62,7 @@ describe('render/syntax', function () {
 
   describe('.evalExp()', function () {
     it('should throw when scope undefined', async function () {
-      return expect((evalExp as any)('')).to.be.rejectedWith(/scope undefined/)
+      return expect(() => (evalExp as any)('')).to.throw(/scope undefined/)
     })
 
     it('should eval simple expression', async function () {

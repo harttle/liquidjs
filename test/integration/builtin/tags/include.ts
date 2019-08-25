@@ -1,4 +1,4 @@
-import Liquid from '../../../../src/liquid'
+import { Liquid, Drop } from '../../../../src/liquid'
 import { expect } from 'chai'
 import { mock, restore } from '../../../stub/mockfs'
 
@@ -83,8 +83,8 @@ describe('tags/include', function () {
     const html = await liquid.renderFile('with.html')
     return expect(html).to.equal('color:red, shape:rect')
   })
-  it('should support include: with as Liquid Drop', async function () {
-    class ColorDrop extends Liquid.Types.Drop {
+  it('should support include: with as Drop', async function () {
+    class ColorDrop extends Drop {
       public valueOf (): string {
         return 'red!'
       }
@@ -96,8 +96,8 @@ describe('tags/include', function () {
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
     expect(html).to.equal('color:red!')
   })
-  it('should support include: with passed as Liquid Drop', async function () {
-    class ColorDrop extends Liquid.Types.Drop {
+  it('should support include: with passed as Drop', async function () {
+    class ColorDrop extends Drop {
       public valueOf (): string {
         return 'red!'
       }

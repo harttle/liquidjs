@@ -1,23 +1,22 @@
-import Context from './context/context'
-import * as Types from './types'
+import { Context } from './context/context'
 import fs from './fs/node'
 import * as _ from './util/underscore'
-import ITemplate from './template/itemplate'
-import Tokenizer from './parser/tokenizer'
-import Render from './render/render'
-import Tag from './template/tag/tag'
+import { ITemplate } from './template/itemplate'
+import { Tokenizer } from './parser/tokenizer'
+import { Render } from './render/render'
+import { Tag } from './template/tag/tag'
 import { Filter } from './template/filter/filter'
 import Parser from './parser/parser'
-import ITagImplOptions from './template/tag/itag-impl-options'
-import Value from './template/value'
-import { isTruthy, isFalsy, evalExp, evalValue } from './render/syntax'
+import { ITagImplOptions } from './template/tag/itag-impl-options'
+import { Value } from './template/value'
 import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
 import { LiquidOptions, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import IFS from './fs/ifs'
+export * from './types'
 
-export default class Liquid {
+export class Liquid {
   public options: NormalizedFullOptions
   public renderer: Render
   public parser: Parser
@@ -39,10 +38,10 @@ export default class Liquid {
     const tokens = this.tokenizer.tokenize(html, filepath)
     return this.parser.parse(tokens)
   }
-  public render (tpl: ITemplate[], ctx?: object, opts?: LiquidOptions) {
+  public render (tpl: ITemplate[], scope?: object, opts?: LiquidOptions) {
     const options = { ...this.options, ...normalize(opts) }
-    const scope = new Context(ctx, options)
-    return this.renderer.renderTemplates(tpl, scope)
+    const ctx = new Context(scope, options)
+    return this.renderer.renderTemplates(tpl, ctx)
   }
   public async parseAndRender (html: string, ctx?: object, opts?: LiquidOptions) {
     const tpl = await this.parse(html)
@@ -92,10 +91,5 @@ export default class Liquid {
       self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
     }
   }
-  public static default = Liquid
-  public static isTruthy = isTruthy
-  public static isFalsy = isFalsy
-  public static evalExp = evalExp
-  public static evalValue = evalValue
-  public static Types = Types
+  public static default = Liquid // compatible to import { Liquid } from 'liquidjs'
 }

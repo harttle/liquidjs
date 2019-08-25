@@ -1,4 +1,4 @@
-export default class Token {
+export class Token {
   public trimLeft: boolean = false
   public trimRight: boolean = false
   public type: string = 'notset'

@@ -1,7 +1,5 @@
 import * as Benchmark from 'benchmark'
-import Liquid from '../src/liquid'
-import TagToken from '../src/parser/tag-token'
-import Context from '../src/context/context'
+import { Context, TagToken, Liquid } from '../src/liquid'
 
 const engine = new Liquid({
   root: __dirname,
@@ -34,13 +32,13 @@ const template = `
 </ul>
 `
 
-export default function () {
+export function demo () {
   console.log('--- demo ---')
   return new Promise(resolve => {
     new Benchmark.Suite('demo')
       .add('demo', {
         defer: true,
-        fn: (d: any) => engine.parseAndRender(template, ctx).then(x => d.resolve(x))
+        fn: (d: any) => engine.parseAndRender(template, ctx).then((x: any) => d.resolve(x))
       })
       .on('cycle', (event: any) => console.log(String(event.target)))
       .on('complete', resolve)

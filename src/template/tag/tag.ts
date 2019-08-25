@@ -1,16 +1,11 @@
 import { stringify, isFunction } from '../../util/underscore'
-import assert from '../../util/assert'
-import Context from '../../context/context'
-import ITagImpl from './itag-impl'
-import ITagImplOptions from './itag-impl-options'
-import Liquid from '../../liquid'
-import Hash from './hash'
-import Template from '../../template/template'
-import ITemplate from '../../template/itemplate'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
+import { assert } from '../../util/assert'
+import { Liquid } from '../../liquid'
+import { Template } from '../../template/template'
+import { Emitter, Hash, Context, ITagImplOptions, TagToken, ITemplate, Token } from '../../types'
+import { ITagImpl } from './itag-impl'
 
-export default class Tag extends Template<TagToken> implements ITemplate {
+export class Tag extends Template<TagToken> implements ITemplate {
   public name: string
   private impl: ITagImpl
   private static impls: { [key: string]: ITagImplOptions } = {}
@@ -28,10 +23,11 @@ export default class Tag extends Template<TagToken> implements ITemplate {
       this.impl.parse(token, tokens)
     }
   }
-  public async render (ctx: Context) {
+  public async render (ctx: Context, emitter: Emitter) {
     const hash = await Hash.create(this.token.args, ctx)
     const impl = this.impl
-    return isFunction(impl.render) ? stringify(await impl.render(ctx, hash)) : ''
+    const html = isFunction(impl.render) ? stringify(await impl.render(ctx, hash, emitter)) : ''
+    html && emitter.write(html)
   }
   public static register (name: string, tag: ITagImplOptions) {
     Tag.impls[name] = tag

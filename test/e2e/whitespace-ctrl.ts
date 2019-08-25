@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Liquid from '../..'
+import { Liquid } from '../..'
 
 const liquid = new Liquid()
 

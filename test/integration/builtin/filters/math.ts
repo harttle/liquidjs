@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { test, liquid } from '../../../stub/render'
-import Liquid from '../../../../src/liquid'
+import { Liquid } from '../../../../src/liquid'
 
 describe('filters/math', function () {
   const l = new Liquid()

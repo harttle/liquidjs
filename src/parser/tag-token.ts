@@ -1,10 +1,10 @@
-import DelimitedToken from './delimited-token'
-import Token from './token'
+import { DelimitedToken } from './delimited-token'
+import { Token } from './token'
 import { TokenizationError } from '../util/error'
 import * as lexical from './lexical'
 import { NormalizedFullOptions } from '../liquid-options'
 
-export default class TagToken extends DelimitedToken {
+export class TagToken extends DelimitedToken {
   public name: string
   public args: string
   public constructor (

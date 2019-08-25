@@ -1,4 +1,4 @@
-import Liquid from '../../../../src/liquid'
+import { Liquid } from '../../../../src/liquid'
 import { expect } from 'chai'
 import { mock, restore } from '../../../stub/mockfs'
 

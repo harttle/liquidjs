@@ -1,4 +1,4 @@
-import Liquid from '../../../src/liquid'
+import { Liquid, isFalsy } from '../../../src/liquid'
 import * as chai from 'chai'
 import { mock, restore } from '../../stub/mockfs'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -19,7 +19,7 @@ describe('Liquid', function () {
     it('should call plugin with Liquid', async function () {
       const engine = new Liquid()
       engine.plugin(function (Liquid) {
-        this.registerFilter('t', x => Liquid.isFalsy(x))
+        this.registerFilter('t', x => isFalsy(x))
       })
       const html = await engine.parseAndRender('{{false|t}}')
       expect(html).to.equal('true')

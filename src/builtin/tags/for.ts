@@ -1,15 +1,10 @@
+import { Emitter, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
 import { isString, isObject, isArray } from '../../util/underscore'
 import { parseExp } from '../../render/syntax'
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { identifier, value, hash } from '../../parser/lexical'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import Context from '../../context/context'
-import Hash from '../../template/tag/hash'
-import ITemplate from '../../template/itemplate'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
-import ParseStream from '../../parser/parse-stream'
 import { ForloopDrop } from '../../drop/forloop-drop'
+import { Hash } from '../../template/tag/hash'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
   `(${value.source})` +
@@ -41,7 +36,7 @@ export default {
 
     stream.start()
   },
-  render: async function (ctx: Context, hash: Hash) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     let collection = await parseExp(this.collection, ctx)
 
     if (!isArray(collection)) {
@@ -63,20 +58,16 @@ export default {
 
     const context = { forloop: new ForloopDrop(collection.length) }
     ctx.push(context)
-    let html = ''
     for (const item of collection) {
       context[this.variable] = item
       try {
-        html += await this.liquid.renderer.renderTemplates(this.templates, ctx)
+        await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
       } catch (e) {
-        if (e.name === 'RenderBreakError') {
-          html += e.resolvedHTML
-          if (e.message === 'break') break
-        } else throw e
+        if (e.name !== 'RenderBreakError') throw e
+        if (e.message === 'break') break
       }
       context.forloop.next()
     }
     ctx.pop()
-    return html
   }
 } as ITagImplOptions

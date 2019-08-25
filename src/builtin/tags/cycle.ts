@@ -1,9 +1,9 @@
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
 import { evalValue } from '../../render/syntax'
-import TagToken from '../../parser/tag-token'
-import Context from '../../context/context'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
+import { TagToken } from '../../parser/tag-token'
+import { Context } from '../../context/context'
+import { ITagImplOptions } from '../../template/tag/itag-impl-options'
 
 const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')

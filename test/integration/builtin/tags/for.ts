@@ -1,4 +1,4 @@
-import Liquid from '../../../../src/liquid'
+import { Liquid } from '../../../../src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { Scope } from '../../../../src/context/scope'
@@ -106,12 +106,22 @@ describe('tags/for', function () {
     return expect(html).to.equal(dst)
   })
 
-  it('should support for with continue', async function () {
-    const src = '{% for i in (1..5) %}' +
-            '{{i}}{% continue %}after' +
-            '{% endfor %}'
-    const html = await liquid.parseAndRender(src, ctx)
-    return expect(html).to.equal('12345')
+  describe('continue', function () {
+    it('should support for with continue', async function () {
+      const src = '{% for i in (1..5) %}' +
+              '{% if i == 4 %}continue{% continue %}{% endif %}{{i}}' +
+              '{% endfor %}'
+      const html = await liquid.parseAndRender(src, ctx)
+      return expect(html).to.equal('123continue5')
+    })
+    it('should output contents before continue', async function () {
+      const src = '{% for i in (1..5) %}' +
+        '{% if i == 4 %}continue{% continue %}{% endif %}' +
+        '{{ i }}' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, ctx)
+      return expect(html).to.equal('123continue5')
+    })
   })
   describe('break', function () {
     it('should support break', async function () {

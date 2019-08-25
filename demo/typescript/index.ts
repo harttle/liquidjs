@@ -1,4 +1,4 @@
-import Liquid from 'liquidjs'
+import { Liquid, TagToken, Hash, Context } from 'liquidjs'
 
 const engine = new Liquid({
   root: __dirname,
@@ -6,12 +6,12 @@ const engine = new Liquid({
 })
 
 engine.registerTag('header', {
-  parse: function (token) {
+  parse: function (token: TagToken) {
     const [key, val] = token.args.split(':')
     this[key] = val
   },
-  render: function (scope, hash) {
-    const title = this.liquid.evalValue(this['content'], scope)
+  render: function (context: Context, hash: Hash) {
+    const title = this.liquid.evalValue(this['content'], context)
     return `<h1>${title}</h1>`
   }
 })

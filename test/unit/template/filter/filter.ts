@@ -2,7 +2,7 @@ import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { Filter } from '../../../../src/template/filter/filter'
-import Context from '../../../../src/context/context'
+import { Context } from '../../../../src/context/context'
 
 chai.use(sinonChai)
 const expect = chai.expect
@@ -14,7 +14,7 @@ describe('filter', function () {
     ctx = new Context()
   })
   it('should create default filter if not registered', async function () {
-    const result = new Filter('foo', [], false)
+    const result = new Filter('foo', [], false) as any
     expect(result.name).to.equal('foo')
   })
 

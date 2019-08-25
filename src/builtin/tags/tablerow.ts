@@ -1,13 +1,6 @@
-import assert from '../../util/assert'
-import { evalExp } from '../../render/syntax'
+import { assert } from '../../util/assert'
+import { evalExp, Emitter, Hash, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
 import { identifier, value, hash } from '../../parser/lexical'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import ITemplate from '../../template/itemplate'
-import Context from '../../context/context'
-import Hash from '../../template/tag/hash'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
-import ParseStream from '../../parser/parse-stream'
 import { TablerowloopDrop } from '../../drop/tablerowloop-drop'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
@@ -35,7 +28,7 @@ export default {
     stream.start()
   },
 
-  render: async function (ctx: Context, hash: Hash) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     let collection = await evalExp(this.collection, ctx) || []
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
@@ -47,19 +40,17 @@ export default {
     const scope = { tablerowloop }
     ctx.push(scope)
 
-    let html = ''
     for (let idx = 0; idx < collection.length; idx++, tablerowloop.next()) {
       scope[this.variable] = collection[idx]
       if (tablerowloop.col0() === 0) {
-        if (tablerowloop.row() !== 1) html += '</tr>'
-        html += `<tr class="row${tablerowloop.row()}">`
+        if (tablerowloop.row() !== 1) emitter.write('</tr>')
+        emitter.write(`<tr class="row${tablerowloop.row()}">`)
       }
-      html += `<td class="col${tablerowloop.col()}">`
-      html += await this.liquid.renderer.renderTemplates(this.templates, ctx)
-      html += '</td>'
+      emitter.write(`<td class="col${tablerowloop.col()}">`)
+      await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
+      emitter.write('</td>')
     }
-    if (collection.length) html += '</tr>'
+    if (collection.length) emitter.write('</tr>')
     ctx.pop()
-    return html
   }
 } as ITagImplOptions

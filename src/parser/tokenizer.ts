@@ -1,14 +1,14 @@
-import whiteSpaceCtrl from './whitespace-ctrl'
-import HTMLToken from './html-token'
-import TagToken from './tag-token'
-import Token from './token'
-import OutputToken from './output-token'
+import { whiteSpaceCtrl } from './whitespace-ctrl'
+import { HTMLToken } from './html-token'
+import { TagToken } from './tag-token'
+import { Token } from './token'
+import { OutputToken } from './output-token'
 import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 
 enum ParseState { HTML, OUTPUT, TAG }
 
-export default class Tokenizer {
+export class Tokenizer {
   private options: NormalizedFullOptions
   public constructor (options?: NormalizedFullOptions) {
     this.options = applyDefault(options)

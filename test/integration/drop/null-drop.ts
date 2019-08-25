@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Liquid from '../../../src/liquid'
+import { Liquid } from '../../../src/liquid'
 
 describe('drop/null-drop', function () {
   let liquid: Liquid

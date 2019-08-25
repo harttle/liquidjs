@@ -1,11 +1,11 @@
 import * as _ from '../util/underscore'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
-import assert from '../util/assert'
+import { assert } from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import { Scope } from './scope'
 
-export default class Context {
+export class Context {
   private scopes: Scope[] = [{}]
   private registers = {}
   public environments: Scope
@@ -24,8 +24,8 @@ export default class Context {
     return [this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
-  public async get (path: string) {
-    const paths = await this.parseProp(path)
+  public get (path: string) {
+    const paths = this.parseProp(path)
     let ctx = this.findScope(paths[0]) || this.environments
     for (const path of paths) {
       ctx = readProperty(ctx, path)
@@ -62,7 +62,7 @@ export default class Context {
    * accessSeq("foo['b]r']")      // ['foo', 'b]r']
    * accessSeq("foo[bar.coo]")    // ['foo', 'bar'], for bar.coo == 'bar'
    */
-  private async parseProp (str: string) {
+  private parseProp (str: string) {
     str = String(str)
     const seq: string[] = []
     let name = ''
@@ -85,7 +85,7 @@ export default class Context {
             assert(j !== -1, `unbalanced []: ${str}`)
             name = str.slice(i + 1, j)
             if (!/^[+-]?\d+$/.test(name)) { // foo[bar] vs. foo[1]
-              name = String(await this.get(name))
+              name = String(this.get(name))
             }
             push()
             i = j + 1

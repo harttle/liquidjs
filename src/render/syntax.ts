@@ -1,6 +1,6 @@
 import * as lexical from '../parser/lexical'
-import assert from '../util/assert'
-import Context from '../context/context'
+import { assert } from '../util/assert'
+import { Context } from '../context/context'
 import { range, last, isFunction, toValue } from '../util/underscore'
 import { isComparable } from '../drop/icomparable'
 import { NullDrop } from '../drop/null-drop'
@@ -45,7 +45,7 @@ const binaryOperators: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   'or': (l: any, r: any) => isTruthy(l) || isTruthy(r)
 }
 
-export async function parseExp (exp: string, ctx: Context): Promise<any> {
+export function parseExp (exp: string, ctx: Context): any {
   assert(ctx, 'unable to parseExp: scope undefined')
   const operatorREs = lexical.operators
   let match
@@ -53,27 +53,27 @@ export async function parseExp (exp: string, ctx: Context): Promise<any> {
     const operatorRE = operatorREs[i]
     const expRE = new RegExp(`^(${lexical.quoteBalanced.source})(${operatorRE.source})(${lexical.quoteBalanced.source})$`)
     if ((match = exp.match(expRE))) {
-      const l = await parseExp(match[1], ctx)
+      const l = parseExp(match[1], ctx)
       const op = binaryOperators[match[2].trim()]
-      const r = await parseExp(match[3], ctx)
+      const r = parseExp(match[3], ctx)
       return op(l, r)
     }
   }
 
   if ((match = exp.match(lexical.rangeLine))) {
-    const low = await evalValue(match[1], ctx)
-    const high = await evalValue(match[2], ctx)
+    const low = evalValue(match[1], ctx)
+    const high = evalValue(match[2], ctx)
     return range(+low, +high + 1)
   }
 
   return parseValue(exp, ctx)
 }
 
-export async function evalExp (str: string, ctx: Context): Promise<any> {
-  return toValue(await parseExp(str, ctx))
+export function evalExp (str: string, ctx: Context): any {
+  return toValue(parseExp(str, ctx))
 }
 
-export async function parseValue (str: string | undefined, ctx: Context): Promise<any> {
+export function parseValue (str: string | undefined, ctx: Context): any {
   if (!str) return null
   str = str.trim()
 
@@ -87,8 +87,8 @@ export async function parseValue (str: string | undefined, ctx: Context): Promis
   return ctx.get(str)
 }
 
-export async function evalValue (str: string | undefined, ctx: Context) {
-  return toValue(await parseValue(str, ctx))
+export function evalValue (str: string | undefined, ctx: Context) {
+  return toValue(parseValue(str, ctx))
 }
 
 export function isTruthy (val: any): boolean {

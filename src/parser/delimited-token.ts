@@ -1,7 +1,7 @@
-import Token from './token'
+import { Token } from './token'
 import { last } from '../util/underscore'
 
-export default class DelimitedToken extends Token {
+export class DelimitedToken extends Token {
   public constructor (
     raw: string,
     value: string,

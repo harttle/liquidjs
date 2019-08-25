@@ -1,6 +1,6 @@
 import { hashCapture } from '../../parser/lexical'
 import { parseValue } from '../../render/syntax'
-import Context from '../../context/context'
+import { Context } from '../../context/context'
 
 /**
  * Key-Value Pairs Representing Tag Arguments
@@ -8,7 +8,7 @@ import Context from '../../context/context'
  *    For the markup `{% include 'head.html' foo='bar' %}`,
  *    hash['foo'] === 'bar'
  */
-export default class Hash {
+export class Hash {
   [key: string]: any
   public static async create (markup: string, ctx: Context) {
     const instance = new Hash()
