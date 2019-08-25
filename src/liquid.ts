@@ -91,5 +91,4 @@ export class Liquid {
       self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
     }
   }
-  public static default = Liquid // compatible to import { Liquid } from 'liquidjs'
 }

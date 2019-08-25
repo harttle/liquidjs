@@ -2,9 +2,10 @@
   "name": "liquidjs",
   "version": "8.5.3",
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
-  "main": "dist/liquid.common.js",
-  "types": "dist/liquid.d.ts",
+  "main": "dist/liquid.cjs.js",
+  "es2015": "dist/liquid.esm.js",
   "browser": "dist/liquid.js",
+  "types": "dist/liquid.d.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
     "doc": "typedoc --out doc src --readme none",

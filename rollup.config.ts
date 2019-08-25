@@ -17,9 +17,8 @@ const input = './src/liquid.ts'
 
 const cjs = {
   output: [{
-    file: 'dist/liquid.common.js',
+    file: 'dist/liquid.cjs.js',
     format: 'cjs',
-    sourcemap,
     banner
   }],
   external: ['path', 'fs'],
@@ -28,7 +27,28 @@ const cjs = {
       include: [ 'src' ],
       exclude: [ 'test', 'benchmark' ],
       compilerOptions: {
-        target: 'es5',
+        target: 'ES2017',
+        module: 'ES2015'
+      }
+    }
+  })],
+  treeshake,
+  input
+}
+
+const esm = {
+  output: [{
+    file: 'dist/liquid.esm.js',
+    format: 'esm',
+    banner
+  }],
+  external: ['path', 'fs'],
+  plugins: [typescript({
+    tsconfigOverride: {
+      include: [ 'src' ],
+      exclude: [ 'test', 'benchmark' ],
+      compilerOptions: {
+        target: 'ES2017',
         module: 'ES2015'
       }
     }
@@ -98,8 +118,9 @@ const min = {
 const bundles = []
 const env = process.env.BUNDLES || ''
 if (env.includes('cjs')) bundles.push(cjs)
+if (env.includes('esm')) bundles.push(esm)
 if (env.includes('umd')) bundles.push(umd)
 if (env.includes('min')) bundles.push(min)
-if (bundles.length === 0) bundles.push(cjs, umd, min)
+if (bundles.length === 0) bundles.push(cjs, umd, min, esm)
 
 export default bundles
