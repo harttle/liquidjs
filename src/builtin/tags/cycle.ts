@@ -1,9 +1,6 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { Expression } from '../../render/expression'
-import { TagToken } from '../../parser/tag-token'
-import { Context } from '../../context/context'
-import { ITagImplOptions } from '../../template/tag/itag-impl-options'
+import { Emitter, Expression, TagToken, Context, ITagImplOptions, Hash } from '../../types'
 
 const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')
@@ -24,7 +21,7 @@ export default {
     assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
   },
 
-  render: async function (ctx: Context) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     const group = this.group.value(ctx)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle')
@@ -37,7 +34,6 @@ export default {
     const candidate = this.candidates[idx]
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
-
-    return new Expression(candidate).value(ctx)
+    emitter.write(new Expression(candidate).value(ctx))
   }
 } as ITagImplOptions

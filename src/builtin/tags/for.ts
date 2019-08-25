@@ -47,7 +47,8 @@ export default {
       }
     }
     if (!isArray(collection) || !collection.length) {
-      return this.liquid.renderer.renderTemplates(this.elseTemplates, ctx)
+      this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)
+      return
     }
 
     const offset = hash.offset || 0

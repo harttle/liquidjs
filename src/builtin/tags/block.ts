@@ -1,10 +1,5 @@
 import BlockMode from '../../context/block-mode'
-import { TagToken } from '../../parser/tag-token'
-import { Token } from '../../parser/token'
-import { ITemplate } from '../../template/itemplate'
-import { Context } from '../../context/context'
-import { ITagImplOptions } from '../../template/tag/itag-impl-options'
-import { ParseStream } from '../../parser/parse-stream'
+import { ParseStream, TagToken, Token, ITemplate, Context, ITagImplOptions, Emitter, Hash } from '../../types'
 
 export default {
   parse: function (token: TagToken, remainTokens: Token[]) {
@@ -19,7 +14,7 @@ export default {
       })
     stream.start()
   },
-  render: async function (ctx: Context) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     const blocks = ctx.getRegister('blocks')
     const childDefined = blocks[this.block]
     const html = childDefined !== undefined
@@ -28,8 +23,8 @@ export default {
 
     if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
       blocks[this.block] = html
-      return ''
+      return
     }
-    return html
+    emitter.write(html)
   }
 } as ITagImplOptions

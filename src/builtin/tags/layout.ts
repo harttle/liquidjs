@@ -1,8 +1,7 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { Expression, TagToken, Token, Context, ITagImplOptions } from '../../types'
+import { Emitter, Hash, Expression, TagToken, Token, Context, ITagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
-import { Hash } from '../../template/tag/hash'
 
 const staticFileRE = /\S+/
 
@@ -20,7 +19,7 @@ export default {
 
     this.tpls = this.liquid.parser.parse(remainTokens)
   },
-  render: async function (ctx: Context, hash: Hash) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     const layout = ctx.opts.dynamicPartials
       ? await (new Expression(this.layout).value(ctx))
       : this.staticLayout
@@ -38,6 +37,6 @@ export default {
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const partial = await this.liquid.renderer.renderTemplates(templates, ctx)
     ctx.pop()
-    return partial
+    emitter.write(partial)
   }
 } as ITagImplOptions
