@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 let path   = require('path')
-let Liquid = require('liquidjs'); 
+let { Liquid } = require('liquidjs'); 
 
 let config = require('./views/demo.liquid');
 let pageConfig = config.toString()
