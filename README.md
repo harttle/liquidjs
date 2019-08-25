@@ -19,8 +19,6 @@ A [shopify][shopify/liquid] compatible [Liquid][tutorial] template engine in pur
 All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be built in LiquidJS,
 though there are still some differences and limitations (see below).
 
-[Donate to our collective](https://opencollective.com/liquidjs/donate) if you like liquidjs.
-
 ## Get Started
 
 Install via npm:
@@ -30,7 +28,7 @@ npm install --save liquidjs
 ```
 
 ```javascript
-var Liquid = require('liquidjs');
+var { Liquid } = require('liquidjs');
 var engine = new Liquid();
 
 engine
