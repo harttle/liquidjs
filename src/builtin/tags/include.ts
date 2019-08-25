@@ -1,7 +1,6 @@
 import { assert } from '../../util/assert'
-import { Hash, Emitter, TagToken, Context, ITagImplOptions } from '../../types'
+import { Expression, Hash, Emitter, TagToken, Context, ITagImplOptions } from '../../types'
 import { value, quotedLine } from '../../parser/lexical'
-import { evalValue, parseValue } from '../../render/syntax'
 import BlockMode from '../../context/block-mode'
 
 const staticFileRE = /[^\s,]+/
@@ -25,7 +24,7 @@ export default {
         const template = this.value.slice(1, -1)
         filepath = await this.liquid.parseAndRender(template, ctx.getAll(), ctx.opts)
       } else {
-        filepath = await evalValue(this.value, ctx)
+        filepath = new Expression(this.value).value(ctx)
       }
     } else {
       filepath = this.staticValue
@@ -38,7 +37,7 @@ export default {
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     if (this.with) {
-      hash[filepath] = await parseValue(this.with, ctx)
+      hash[filepath] = new Expression(this.with).evaluate(ctx)
     }
     const templates = await this.liquid.getTemplate(filepath, ctx.opts)
     ctx.push(hash)

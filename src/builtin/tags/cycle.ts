@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { evalValue } from '../../render/syntax'
+import { Expression } from '../../render/expression'
 import { TagToken } from '../../parser/tag-token'
 import { Context } from '../../context/context'
 import { ITagImplOptions } from '../../template/tag/itag-impl-options'
@@ -13,7 +13,7 @@ export default {
     let match: RegExpExecArray | null = groupRE.exec(tagToken.args) as RegExpExecArray
     assert(match, `illegal tag: ${tagToken.raw}`)
 
-    this.group = match[1] || ''
+    this.group = new Expression(match[1])
     const candidates = match[2]
 
     this.candidates = []
@@ -25,7 +25,7 @@ export default {
   },
 
   render: async function (ctx: Context) {
-    const group = await evalValue(this.group, ctx)
+    const group = this.group.value(ctx)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle')
     let idx = groups[fingerprint]
@@ -38,6 +38,6 @@ export default {
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
 
-    return evalValue(candidate, ctx)
+    return new Expression(candidate).value(ctx)
   }
 } as ITagImplOptions

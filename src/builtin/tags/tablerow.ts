@@ -1,5 +1,5 @@
 import { assert } from '../../util/assert'
-import { evalExp, Emitter, Hash, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
+import { Expression, Emitter, Hash, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
 import { identifier, value, hash } from '../../parser/lexical'
 import { TablerowloopDrop } from '../../drop/tablerowloop-drop'
 
@@ -29,7 +29,7 @@ export default {
   },
 
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    let collection = await evalExp(this.collection, ctx) || []
+    let collection = new Expression(this.collection).value(ctx) || []
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 

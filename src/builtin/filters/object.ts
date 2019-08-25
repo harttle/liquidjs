@@ -1,4 +1,4 @@
-import { isFalsy } from '../../render/syntax'
+import { isFalsy } from '../../render/boolean'
 import { toValue } from '../../util/underscore'
 
 export default {

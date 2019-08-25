@@ -1,4 +1,4 @@
-import { Hash, Emitter, evalExp, isTruthy, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
+import { Hash, Emitter, isTruthy, Expression, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -29,7 +29,7 @@ export default {
 
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     for (const branch of this.branches) {
-      const cond = await evalExp(branch.cond, ctx)
+      const cond = new Expression(branch.cond).value(ctx)
       if (isTruthy(cond)) {
         await this.liquid.renderer.renderTemplates(branch.templates, ctx, emitter)
         return

@@ -1,6 +1,6 @@
 import { Emitter, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
 import { isString, isObject, isArray } from '../../util/underscore'
-import { parseExp } from '../../render/syntax'
+import { Expression } from '../../render/expression'
 import { assert } from '../../util/assert'
 import { identifier, value, hash } from '../../parser/lexical'
 import { ForloopDrop } from '../../drop/forloop-drop'
@@ -37,7 +37,7 @@ export default {
     stream.start()
   },
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    let collection = await parseExp(this.collection, ctx)
+    let collection = new Expression(this.collection).value(ctx)
 
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {

@@ -1,4 +1,4 @@
-import { parseValue } from '../../render/syntax'
+import { Expression } from '../../render/expression'
 import { Context } from '../../context/context'
 import { isArray } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
@@ -24,8 +24,8 @@ export class Filter {
   public render (value: any, context: Context) {
     const argv: any[] = []
     for (const arg of this.args) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], parseValue(arg[1], context)])
-      else argv.push(parseValue(arg, context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], new Expression(arg[1]).evaluate(context)])
+      else argv.push(new Expression(arg).evaluate(context))
     }
     return this.impl.apply({ context }, [value, ...argv])
   }

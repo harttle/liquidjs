@@ -1,5 +1,5 @@
 import { hashCapture } from '../../parser/lexical'
-import { parseValue } from '../../render/syntax'
+import { Expression } from '../../render/expression'
 import { Context } from '../../context/context'
 
 /**
@@ -17,7 +17,7 @@ export class Hash {
     while ((match = hashCapture.exec(markup))) {
       const k = match[1]
       const v = match[2]
-      instance[k] = await parseValue(v, ctx)
+      instance[k] = new Expression(v).evaluate(ctx)
     }
     return instance
   }
