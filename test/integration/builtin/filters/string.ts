@@ -1,5 +1,5 @@
 import { test } from '../../../stub/render'
-import Liquid from '../../../../src/liquid'
+import { Liquid } from '../../../../src/liquid'
 import { expect } from 'chai'
 
 describe('filters/string', function () {

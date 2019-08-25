@@ -17,17 +17,17 @@ const template = `
 {% block body %}a small body{% endblock %}
 `
 
-export default function () {
+export function layout () {
   console.log('--- layout ---')
   return new Promise(resolve => {
     new Benchmark.Suite('layout')
       .add('cache=false', {
         defer: true,
-        fn: (d: any) => engine.parseAndRender(template, {}).then(x => d.resolve(x))
+        fn: (d: any) => engine.parseAndRender(template, {}).then((x: any) => d.resolve(x))
       })
       .add('cache=true', {
         defer: true,
-        fn: (d: any) => cachingEngine.parseAndRender(template, {}).then(x => d.resolve(x))
+        fn: (d: any) => cachingEngine.parseAndRender(template, {}).then((x: any) => d.resolve(x))
       })
       .on('cycle', (event: any) => console.log(String(event.target)))
       .on('complete', resolve)

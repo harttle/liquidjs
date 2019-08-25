@@ -1,6 +1,6 @@
-import Token from './token'
+import { Token } from './token'
 
-export default class HTMLToken extends Token {
+export class HTMLToken extends Token {
   public constructor (str: string, input: string, line: number, col: number, file?: string) {
     super(str, input, line, col, file)
     this.type = 'html'

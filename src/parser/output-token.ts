@@ -1,8 +1,8 @@
-import DelimitedToken from './delimited-token'
-import Token from './token'
+import { DelimitedToken } from './delimited-token'
+import { Token } from './token'
 import { NormalizedFullOptions } from '../liquid-options'
 
-export default class OutputToken extends DelimitedToken {
+export class OutputToken extends DelimitedToken {
   public constructor (
     raw: string,
     value: string,

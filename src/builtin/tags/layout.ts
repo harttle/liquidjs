@@ -1,12 +1,9 @@
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
 import { evalValue } from '../../render/syntax'
+import { TagToken, Token, Context, ITagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import Context from '../../context/context'
-import Hash from '../../template/tag/hash'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
+import { Hash } from '../../template/tag/hash'
 
 const staticFileRE = /\S+/
 

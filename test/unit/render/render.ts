@@ -1,10 +1,10 @@
 import { expect } from 'chai'
-import Context from '../../../src/context/context'
-import Token from '../../../src/parser/token'
-import Tag from '../../../src/template/tag/tag'
+import { Context } from '../../../src/context/context'
+import { Token } from '../../../src/parser/token'
+import { Tag } from '../../../src/template/tag/tag'
 import { Filter } from '../../../src/template/filter/filter'
-import Render from '../../../src/render/render'
-import HTML from '../../../src/template/html'
+import { Render } from '../../../src/render/render'
+import { HTML } from '../../../src/template/html'
 
 describe('render', function () {
   let render: Render

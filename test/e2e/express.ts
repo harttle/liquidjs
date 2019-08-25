@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as express from 'express'
 import { resolve } from 'path'
-import Liquid from '../..'
+import { Liquid } from '../..'
 
 describe('express()', function () {
   const root = resolve(__dirname, '../stub/root')

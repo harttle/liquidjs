@@ -3,7 +3,7 @@ import Liquid from '../src/liquid'
 
 const liquid = new Liquid()
 
-export default function () {
+export function output () {
   console.log('--- output ---')
   return new Promise(resolve => {
     new Benchmark.Suite('output')
@@ -21,6 +21,6 @@ export default function () {
 function test (str: string) {
   return {
     defer: true,
-    fn: (d: any) => liquid.parseAndRender(str).then(x => d.resolve(x))
+    fn: (d: any) => liquid.parseAndRender(str).then((x: any) => d.resolve(x))
   }
 }

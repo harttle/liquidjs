@@ -1,10 +1,10 @@
-import Liquid from '../..'
+import { Liquid, Drop } from '../..'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
 use(chaiAsPromised)
 
-class SettingsDrop extends Liquid.Types.Drop {
+class SettingsDrop extends Drop {
   private foo: string = 'FOO'
   public bar () {
     return 'BAR'

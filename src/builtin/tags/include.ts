@@ -1,11 +1,8 @@
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
+import { Hash, Emitter, TagToken, Context, ITagImplOptions } from '../../types'
 import { value, quotedLine } from '../../parser/lexical'
 import { evalValue, parseValue } from '../../render/syntax'
 import BlockMode from '../../context/block-mode'
-import TagToken from '../../parser/tag-token'
-import Context from '../../context/context'
-import Hash from '../../template/tag/hash'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
 
 const staticFileRE = /[^\s,]+/
 const withRE = new RegExp(`with\\s+(${value.source})`)
@@ -21,7 +18,7 @@ export default {
     match = withRE.exec(token.args)
     if (match) this.with = match[1]
   },
-  render: async function (ctx: Context, hash: Hash) {
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     let filepath
     if (ctx.opts.dynamicPartials) {
       if (quotedLine.exec(this.value)) {
@@ -45,10 +42,9 @@ export default {
     }
     const templates = await this.liquid.getTemplate(filepath, ctx.opts)
     ctx.push(hash)
-    const html = await this.liquid.renderer.renderTemplates(templates, ctx)
+    await this.liquid.renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.setRegister('blocks', originBlocks)
     ctx.setRegister('blockMode', originBlockMode)
-    return html
   }
 } as ITagImplOptions

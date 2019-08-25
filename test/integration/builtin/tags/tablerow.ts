@@ -1,4 +1,4 @@
-import Liquid from '../../../../src/liquid'
+import { Liquid } from '../../../../src/liquid'
 import { expect } from 'chai'
 
 describe('tags/tablerow', function () {

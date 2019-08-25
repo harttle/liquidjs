@@ -1,9 +1,9 @@
-import Token from '../parser/token'
-import TagToken from '../parser/tag-token'
-import HTMLToken from '../parser/html-token'
+import { Token } from '../parser/token'
+import { TagToken } from '../parser/tag-token'
+import { HTMLToken } from '../parser/html-token'
 import { NormalizedFullOptions } from '../liquid-options'
 
-export default function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
+export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
   options = { greedy: true, ...options }
   let inRaw = false
 

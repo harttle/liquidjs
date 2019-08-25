@@ -1,10 +1,11 @@
-import Context from '../../context/context'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import Hash from '../../template/tag/hash'
-import ITagImpl from './itag-impl'
+import { Context } from '../../context/context'
+import { TagToken } from '../../parser/tag-token'
+import { Token } from '../../parser/token'
+import { ITagImpl } from './itag-impl'
+import { Hash } from '../../template/tag/hash'
+import { Emitter } from '../../render/emitter'
 
-export default interface ITagImplOptions {
+export interface ITagImplOptions {
   parse?: (this: ITagImpl, token: TagToken, remainingTokens: Token[]) => void;
-  render?: (this: ITagImpl, ctx: Context, hash: Hash) => any | Promise<any>;
+  render: (this: ITagImpl, ctx: Context, hash: Hash, emitter: Emitter) => void;
 }

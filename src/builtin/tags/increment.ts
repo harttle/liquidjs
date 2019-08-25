@@ -1,7 +1,7 @@
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { identifier } from '../../parser/lexical'
 import { isNumber } from '../../util/underscore'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
+import { ITagImplOptions } from '../../template/tag/itag-impl-options'
 
 export default {
   parse: function (token) {

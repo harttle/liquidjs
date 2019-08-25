@@ -1,5 +1,5 @@
 import { parseValue } from '../../render/syntax'
-import Context from '../../context/context'
+import { Context } from '../../context/context'
 import { isArray } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
 
@@ -21,11 +21,11 @@ export class Filter {
     this.impl = impl || (x => x)
     this.args = args
   }
-  public async render (value: any, context: Context) {
+  public render (value: any, context: Context) {
     const argv: any[] = []
     for (const arg of this.args) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], await parseValue(arg[1], context)])
-      else argv.push(await parseValue(arg, context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], parseValue(arg[1], context)])
+      else argv.push(parseValue(arg, context))
     }
     return this.impl.apply({ context }, [value, ...argv])
   }

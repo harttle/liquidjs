@@ -1,6 +1,4 @@
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
+import { TagToken, Token, ITagImplOptions } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {

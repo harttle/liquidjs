@@ -18,7 +18,6 @@ const input = './src/liquid.ts'
 const cjs = {
   output: [{
     file: 'dist/liquid.common.js',
-    name: 'Liquid',
     format: 'cjs',
     sourcemap,
     banner
@@ -41,7 +40,7 @@ const cjs = {
 const umd = {
   output: [{
     file: 'dist/liquid.js',
-    name: 'Liquid',
+    name: 'liquidjs',
     format: 'umd',
     sourcemap,
     banner
@@ -70,7 +69,7 @@ const umd = {
 const min = {
   output: [{
     file: 'dist/liquid.min.js',
-    name: 'Liquid',
+    name: 'liquidjs',
     format: 'umd',
     sourcemap
   }],

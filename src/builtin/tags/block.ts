@@ -1,10 +1,10 @@
 import BlockMode from '../../context/block-mode'
-import TagToken from '../../parser/tag-token'
-import Token from '../../parser/token'
-import ITemplate from '../../template/itemplate'
-import Context from '../../context/context'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
-import ParseStream from '../../parser/parse-stream'
+import { TagToken } from '../../parser/tag-token'
+import { Token } from '../../parser/token'
+import { ITemplate } from '../../template/itemplate'
+import { Context } from '../../context/context'
+import { ITagImplOptions } from '../../template/tag/itag-impl-options'
+import { ParseStream } from '../../parser/parse-stream'
 
 export default {
   parse: function (token: TagToken, remainTokens: Token[]) {

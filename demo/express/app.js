@@ -1,5 +1,5 @@
 const express = require('express')
-const Liquid = require('../..')
+const { Liquid } = require('liquidjs')
 
 const app = express()
 const engine = new Liquid({

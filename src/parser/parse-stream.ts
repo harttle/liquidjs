@@ -1,10 +1,10 @@
-import Token from '../parser/token'
-import ITemplate from '../template/itemplate'
-import TagToken from './tag-token'
+import { Token } from '../parser/token'
+import { ITemplate } from '../template/itemplate'
+import { TagToken } from './tag-token'
 
 type ParseToken = ((token: Token, remainTokens: Token[]) => ITemplate)
 
-export default class ParseStream {
+export class ParseStream {
   private tokens: Token[]
   private handlers: {[key: string]: (arg: any) => void} = {}
   private stopRequested: boolean = false

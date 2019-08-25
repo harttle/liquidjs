@@ -1,6 +1,6 @@
 import * as _ from './underscore'
-import Token from '../parser/token'
-import ITemplate from '../template/itemplate'
+import { Token } from '../parser/token'
+import { ITemplate } from '../template/itemplate'
 
 abstract class LiquidError extends Error {
   private token: Token

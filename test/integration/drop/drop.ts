@@ -1,11 +1,11 @@
 import { expect } from 'chai'
-import Liquid from '../../../src/liquid'
+import { Liquid, Drop } from '../../../src/liquid'
 
 describe('drop/drop', function () {
   let liquid: Liquid
   before(() => (liquid = new Liquid()))
 
-  class CustomDrop extends Liquid.Types.Drop {
+  class CustomDrop extends Drop {
     private name: string = 'NAME'
     public getName () {
       return 'GET NAME'
@@ -16,7 +16,7 @@ describe('drop/drop', function () {
       return key.toUpperCase()
     }
   }
-  class PromiseDrop extends Liquid.Types.Drop {
+  class PromiseDrop extends Drop {
     private name = Promise.resolve('NAME')
     public async getName () {
       return 'GET NAME'

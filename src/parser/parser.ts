@@ -1,13 +1,13 @@
 import { ParseError } from '../util/error'
-import Liquid from '../liquid'
-import ParseStream from './parse-stream'
-import Token from './token'
-import TagToken from './tag-token'
-import OutputToken from './output-token'
-import Tag from '../template/tag/tag'
-import Output from '../template/output'
-import HTML from '../template/html'
-import ITemplate from '../template/itemplate'
+import { Liquid } from '../liquid'
+import { ParseStream } from './parse-stream'
+import { Token } from './token'
+import { TagToken } from './tag-token'
+import { OutputToken } from './output-token'
+import { Tag } from '../template/tag/tag'
+import { Output } from '../template/output'
+import { HTML } from '../template/html'
+import { ITemplate } from '../template/itemplate'
 
 export default class Parser {
   private liquid: Liquid

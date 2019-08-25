@@ -1,8 +1,8 @@
-import assert from '../../util/assert'
+import { assert } from '../../util/assert'
 import { identifier } from '../../parser/lexical'
-import TagToken from '../../parser/tag-token'
-import Context from '../../context/context'
-import ITagImplOptions from '../../template/tag/itag-impl-options'
+import { TagToken } from '../../parser/tag-token'
+import { Context } from '../../context/context'
+import { ITagImplOptions } from '../../template/tag/itag-impl-options'
 import { isNumber } from '../../util/underscore'
 
 export default {

@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import Liquid from '../../../src/liquid'
+import { Liquid } from '../../../src/liquid'
 import * as path from 'path'
 import { mock, restore } from '../../stub/mockfs'
 
@@ -190,7 +190,8 @@ describe('error', function () {
       engine.registerTag('throwsOnParse', {
         parse: function () {
           throw new Error('intended parse error')
-        }
+        },
+        render: () => ''
       })
     })
     it('should throw ParseError when filter not defined', async function () {
