@@ -40,17 +40,17 @@ describe('tags/if', function () {
   })
   describe('expression as condition', function () {
     it('should support ==', async function () {
-      const src = '{% if 2==3 %}yes{%else%}no{%endif%}'
+      const src = '{% if 2 == 3 %}yes{%else%}no{%endif%}'
       const html = await liquid.parseAndRender(src, ctx)
       return expect(html).to.equal('no')
     })
     it('should support >=', async function () {
-      const src = '{% if 1>=2 and one<two %}a{%endif%}'
+      const src = '{% if 1 >= 2 and one<two %}a{%endif%}'
       const html = await liquid.parseAndRender(src, ctx)
       return expect(html).to.equal('')
     })
     it('should support !=', async function () {
-      const src = '{% if one!=two %}yes{%else%}no{%endif%}'
+      const src = '{% if one != two %}yes{%else%}no{%endif%}'
       const html = await liquid.parseAndRender(src, ctx)
       return expect(html).to.equal('yes')
     })
@@ -59,6 +59,11 @@ describe('tags/if', function () {
       const ctx = { 'version': '' }
       const html = await liquid.parseAndRender(src, ctx)
       return expect(html).to.equal('XY')
+    })
+    it('should evaluate right to left', async function () {
+      const src = `{% if false and false or true %}true{%endif%}`
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal('')
     })
   })
   describe('comparasion to null', function () {

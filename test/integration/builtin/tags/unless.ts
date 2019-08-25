@@ -20,17 +20,17 @@ describe('tags/unless', function () {
     return expect(html).to.equal('yes')
   })
   it('should reject when tag not closed', function () {
-    const src = '{% unless 1>2 %}yes'
+    const src = '{% unless 1 > 2 %}yes'
     return expect(liquid.parseAndRender(src))
-      .to.be.rejectedWith(/tag {% unless 1>2 %} not closed/)
+      .to.be.rejectedWith(/tag {% unless 1 > 2 %} not closed/)
   })
   it('should render unless when predicate yields false and else undefined', async function () {
-    const src = '{% unless 1>2 %}yes{%endunless%}'
+    const src = '{% unless 1 > 2 %}yes{%endunless%}'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('yes')
   })
   it('should render "" when predicate yields false and else undefined', async function () {
-    const src = '{% unless 1<2 %}yes{%endunless%}'
+    const src = '{% unless 1 < 2 %}yes{%endunless%}'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('')
   })

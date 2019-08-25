@@ -1,5 +1,5 @@
 import { isArray, last } from '../../util/underscore'
-import { isTruthy } from '../../render/syntax'
+import { isTruthy } from '../../render/boolean'
 
 export default {
   'join': (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg),

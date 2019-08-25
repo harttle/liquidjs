@@ -1,7 +1,6 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { evalValue } from '../../render/syntax'
-import { TagToken, Token, Context, ITagImplOptions } from '../../types'
+import { Expression, TagToken, Token, Context, ITagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
 import { Hash } from '../../template/tag/hash'
 
@@ -23,7 +22,7 @@ export default {
   },
   render: async function (ctx: Context, hash: Hash) {
     const layout = ctx.opts.dynamicPartials
-      ? await evalValue(this.layout, ctx)
+      ? await (new Expression(this.layout).value(ctx))
       : this.staticLayout
     assert(layout, `cannot apply layout with empty filename`)
 

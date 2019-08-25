@@ -1,4 +1,4 @@
-import { Emitter, evalExp, isFalsy, ParseStream, Context, ITagImplOptions, Token, Hash, TagToken } from '../../types'
+import { Emitter, Expression, isFalsy, ParseStream, Context, ITagImplOptions, Token, Hash, TagToken } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -21,7 +21,7 @@ export default {
   },
 
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    const cond = await evalExp(this.cond, ctx)
+    const cond = new Expression(this.cond).value(ctx)
     isFalsy(cond)
       ? await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
       : await this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)

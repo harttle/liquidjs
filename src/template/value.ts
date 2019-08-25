@@ -1,4 +1,4 @@
-import { parseExp } from '../render/syntax'
+import { Expression } from '../render/expression'
 import { FilterArgs, Filter } from './filter/filter'
 import { Context } from '../context/context'
 
@@ -48,7 +48,7 @@ export class Value {
     this.filters.push(new Filter(name, args, this.strictFilters))
   }
   public value (ctx: Context) {
-    let val = parseExp(this.initial, ctx)
+    let val = new Expression(this.initial).evaluate(ctx)
     for (const filter of this.filters) {
       val = filter.render(val, ctx)
     }
