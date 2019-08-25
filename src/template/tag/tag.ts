@@ -1,4 +1,4 @@
-import { stringify, isFunction } from '../../util/underscore'
+import { isFunction } from '../../util/underscore'
 import { assert } from '../../util/assert'
 import { Liquid } from '../../liquid'
 import { Template } from '../../template/template'
@@ -26,8 +26,7 @@ export class Tag extends Template<TagToken> implements ITemplate {
   public async render (ctx: Context, emitter: Emitter) {
     const hash = await Hash.create(this.token.args, ctx)
     const impl = this.impl
-    const html = isFunction(impl.render) ? stringify(await impl.render(ctx, hash, emitter)) : ''
-    html && emitter.write(html)
+    if (isFunction(impl.render)) await impl.render(ctx, hash, emitter)
   }
   public static register (name: string, tag: ITagImplOptions) {
     Tag.impls[name] = tag
