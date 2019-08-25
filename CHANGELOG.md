@@ -1,3 +1,10 @@
+## [8.5.3](https://github.com/harttle/liquidjs/compare/v8.5.2...v8.5.3) (2019-08-25)
+
+
+### Bug Fixes
+
+* escape filter when input is undefined ([a00945c](https://github.com/harttle/liquidjs/commit/a00945c))
+
 ## [8.5.2](https://github.com/harttle/liquidjs/compare/v8.5.1...v8.5.2) (2019-08-09)
 
 
