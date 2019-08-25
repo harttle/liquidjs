@@ -1,4 +1,4 @@
-import { Emitter, evalExp, isFalsy, ParseStream, Context, ITagImplOptions, Token, Hash , TagToken } from '../../types'
+import { Emitter, evalExp, isFalsy, ParseStream, Context, ITagImplOptions, Token, Hash, TagToken } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
