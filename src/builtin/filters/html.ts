@@ -1,3 +1,5 @@
+import { stringify } from '../../util/underscore'
+
 const escapeMap = {
   '&': '&amp;',
   '<': '&lt;',
@@ -14,7 +16,7 @@ const unescapeMap = {
 }
 
 function escape (str: string) {
-  return str ? String(str).replace(/&|<|>|"|'/g, m => escapeMap[m]) : ''
+  return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m])
 }
 
 function unescape (str: string) {
