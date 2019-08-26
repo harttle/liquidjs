@@ -8,7 +8,7 @@ export const ctx = {
   foo: 'bar',
   arr: [-2, 'a'],
   obj: { foo: 'bar' },
-  func: function () {},
+  func: function () {}, // eslint-disable-line
   posts: [{ category: 'foo' }, { category: 'bar' }],
   products: [
     { title: 'Vacuum', type: 'living room' },

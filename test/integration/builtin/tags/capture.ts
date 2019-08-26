@@ -32,4 +32,9 @@ describe('tags/capture', function () {
     return expect(liquid.parseAndRender(src))
       .to.be.rejectedWith(/tag .* not closed/)
   })
+  it('should support sync', function () {
+    const src = '{% capture f %}{{"a" | capitalize}}{%endcapture%}{{f}}'
+    const html = liquid.parseAndRenderSync(src)
+    return expect(html).to.equal('A')
+  })
 })

@@ -9,8 +9,10 @@ export class Context {
   private scopes: Scope[] = [{}]
   private registers = {}
   public environments: Scope
+  public sync: boolean
   public opts: NormalizedFullOptions
-  public constructor (ctx: object = {}, opts?: NormalizedFullOptions) {
+  public constructor (ctx: object = {}, opts?: NormalizedFullOptions, sync: boolean = false) {
+    this.sync = sync
     this.opts = applyDefault(opts)
     this.environments = ctx
   }

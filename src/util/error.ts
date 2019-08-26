@@ -43,14 +43,8 @@ export class RenderError extends LiquidError {
     this.message = err.message
     super.update()
   }
-}
-
-export class RenderBreakError extends Error {
-  public resolvedHTML: string = ''
-  public constructor (message: string) {
-    super(message)
-    this.name = 'RenderBreakError'
-    this.message = message + ''
+  public static is (obj: any): obj is RenderError {
+    return obj instanceof RenderError
   }
 }
 

@@ -25,15 +25,30 @@ export default {
   },
 
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+    const r = this.liquid.renderer
     for (let i = 0; i < this.cases.length; i++) {
       const branch = this.cases[i]
-      const val = new Expression(branch.val).value(ctx)
-      const cond = new Expression(this.cond).value(ctx)
+      const val = await new Expression(branch.val).value(ctx)
+      const cond = await new Expression(this.cond).value(ctx)
       if (val === cond) {
-        this.liquid.renderer.renderTemplates(branch.templates, ctx, emitter)
+        await r.renderTemplates(branch.templates, ctx, emitter)
         return
       }
     }
-    this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)
+    await r.renderTemplates(this.elseTemplates, ctx, emitter)
+  },
+
+  renderSync: function (ctx: Context, hash: Hash, emitter: Emitter) {
+    const r = this.liquid.renderer
+    for (let i = 0; i < this.cases.length; i++) {
+      const branch = this.cases[i]
+      const val = new Expression(branch.val).valueSync(ctx)
+      const cond = new Expression(this.cond).valueSync(ctx)
+      if (val === cond) {
+        r.renderTemplatesSync(branch.templates, ctx, emitter)
+        return
+      }
+    }
+    r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
   }
 } as ITagImplOptions

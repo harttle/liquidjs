@@ -10,7 +10,7 @@ chai.use(sinonChai)
 const expect = chai.expect
 const liquid = new Liquid()
 
-describe('tag', function () {
+describe('Tag', function () {
   let ctx: Context
   const emitter = { write: (html: string) => (emitter.html += html), html: '' }
   before(function () {

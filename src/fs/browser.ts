@@ -44,8 +44,22 @@ async function readFile (url: string): Promise<string> {
   })
 }
 
+function readFileSync (url: string): string {
+  const xhr = new XMLHttpRequest()
+  xhr.open('GET', url, false)
+  xhr.send()
+  if (xhr.status < 200 || xhr.status >= 300) {
+    throw new Error(xhr.statusText)
+  }
+  return xhr.responseText as string
+}
+
 async function exists () {
   return true
 }
 
-export default { readFile, resolve, exists } as IFS
+function existsSync () {
+  return true
+}
+
+export default { readFile, resolve, exists, existsSync, readFileSync } as IFS

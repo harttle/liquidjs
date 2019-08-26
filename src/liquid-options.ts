@@ -88,7 +88,7 @@ export function applyDefault (options?: NormalizedOptions): NormalizedFullOption
   return { ...defaultOptions, ...options }
 }
 
-function normalizeStringArray (value: any): string[] {
+export function normalizeStringArray (value: any): string[] {
   if (_.isArray(value)) return value as string[]
   if (_.isString(value)) return [value as string]
   return []

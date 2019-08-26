@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import { RenderError } from '../../../src/util/error'
 import { Liquid } from '../../../src/liquid'
 import * as path from 'path'
 import { mock, restore } from '../../stub/mockfs'
@@ -262,6 +263,48 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender('{% -a %}')).be.rejected
       expect(err.stack).to.contain('ParseError: tag -a not found')
       expect(err.stack).to.match(/at .*:\d+:\d+\)/)
+    })
+  })
+  describe('sync support', function () {
+    let engine
+    beforeEach(function () {
+      engine = new Liquid({
+        root: '/'
+      })
+      engine.registerTag('throwingTag', {
+        render: function () {
+          throw new Error('intended render error')
+        }
+      })
+    })
+    it('should throw RenderError when tag throws', function () {
+      const src = '{%throwingTag%}'
+      expect(() => engine.parseAndRenderSync(src))
+        .to.throw(RenderError, /intended render error/)
+    })
+    it('should contain original error info for {% include %}', function () {
+      const origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
+      mock({
+        '/throwing-tag.html': origin.join('\n')
+      })
+      const html = '{%include "throwing-tag.html"%}'
+      const message = [
+        '   2| 2nd',
+        '   3| 3rd',
+        '>> 4| X{%throwingTag%} Y',
+        '   5| 5th',
+        '   6| 6th',
+        '   7| 7th',
+        'RenderError'
+      ]
+      try {
+        engine.parseAndRenderSync(html)
+        throw new Error('expected throw')
+      } catch (err) {
+        expect(err.message).to.equal(`intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`)
+        expect(err.stack).to.contain(message.join('\n'))
+        expect(err.name).to.equal('RenderError')
+      }
     })
   })
 })

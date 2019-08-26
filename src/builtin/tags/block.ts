@@ -17,9 +17,13 @@ export default {
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     const blocks = ctx.getRegister('blocks')
     const childDefined = blocks[this.block]
+    const r = this.liquid.renderer
     const html = childDefined !== undefined
       ? childDefined
-      : await this.liquid.renderer.renderTemplates(this.tpls, ctx)
+      : (ctx.sync
+        ? r.renderTemplatesSync(this.tpls, ctx)
+        : await r.renderTemplates(this.tpls, ctx)
+      )
 
     if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
       blocks[this.block] = html

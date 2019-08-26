@@ -17,14 +17,14 @@ export default {
     match = withRE.exec(token.args)
     if (match) this.with = match[1]
   },
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+  renderSync: function (ctx: Context, hash: Hash, emitter: Emitter) {
     let filepath
     if (ctx.opts.dynamicPartials) {
       if (quotedLine.exec(this.value)) {
         const template = this.value.slice(1, -1)
-        filepath = await this.liquid.parseAndRender(template, ctx.getAll(), ctx.opts)
+        filepath = this.liquid.parseAndRenderSync(template, ctx.getAll(), ctx.opts)
       } else {
-        filepath = new Expression(this.value).value(ctx)
+        filepath = new Expression(this.value).valueSync(ctx)
       }
     } else {
       filepath = this.staticValue
@@ -37,7 +37,37 @@ export default {
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     if (this.with) {
-      hash[filepath] = new Expression(this.with).evaluate(ctx)
+      hash[filepath] = new Expression(this.with).evaluateSync(ctx)
+    }
+    const templates = this.liquid.getTemplateSync(filepath, ctx.opts)
+    ctx.push(hash)
+    this.liquid.renderer.renderTemplatesSync(templates, ctx, emitter)
+    ctx.pop()
+    ctx.setRegister('blocks', originBlocks)
+    ctx.setRegister('blockMode', originBlockMode)
+  },
+
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+    let filepath
+    if (ctx.opts.dynamicPartials) {
+      if (quotedLine.exec(this.value)) {
+        const template = this.value.slice(1, -1)
+        filepath = await this.liquid.parseAndRender(template, ctx.getAll(), ctx.opts)
+      } else {
+        filepath = await new Expression(this.value).value(ctx)
+      }
+    } else {
+      filepath = this.staticValue
+    }
+    assert(filepath, `cannot include with empty filename`)
+
+    const originBlocks = ctx.getRegister('blocks')
+    const originBlockMode = ctx.getRegister('blockMode')
+
+    ctx.setRegister('blocks', {})
+    ctx.setRegister('blockMode', BlockMode.OUTPUT)
+    if (this.with) {
+      hash[filepath] = await new Expression(this.with).evaluate(ctx)
     }
     const templates = await this.liquid.getTemplate(filepath, ctx.opts)
     ctx.push(hash)

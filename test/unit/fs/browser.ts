@@ -59,6 +59,12 @@ describe('fs/browser', function () {
     })
   })
 
+  describe('#existsSync()', () => {
+    it('should always return true', function () {
+      expect(fs.existsSync('/foo/bar')).to.equal(true)
+    })
+  })
+
   describe('#readFile()', () => {
     let server: sinon.SinonFakeServer
     beforeEach(() => {
@@ -85,6 +91,31 @@ describe('fs/browser', function () {
         .to.be.rejectedWith('An error occurred whilst receiving the response.')
       server.requests[0].error()
       return result
+    })
+  })
+
+  describe('#readFileSync()', () => {
+    let server: sinon.SinonFakeServer
+    beforeEach(() => {
+      server = sinon.fakeServer.create()
+      server.autoRespond = true
+      server.respondWith(
+        'GET', 'https://example.com/views/hello.html',
+        [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}']
+      );
+      (global as any).XMLHttpRequest = sinon.useFakeXMLHttpRequest()
+    })
+    afterEach(() => {
+      server.restore()
+      delete (global as any).XMLHttpRequest
+    })
+    it('should get corresponding text', function () {
+      const html = fs.readFileSync('https://example.com/views/hello.html')
+      return expect(html).to.equal('hello {{name}}')
+    })
+    it('should throw 404', () => {
+      return expect(() => fs.readFileSync('https://example.com/not/exist.html'))
+        .to.throw('Not Found')
     })
   })
 })

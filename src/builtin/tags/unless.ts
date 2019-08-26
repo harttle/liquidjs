@@ -20,10 +20,19 @@ export default {
     stream.start()
   },
 
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    const cond = new Expression(this.cond).value(ctx)
+  renderSync: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+    const r = this.liquid.renderer
+    const cond = new Expression(this.cond).valueSync(ctx)
     isFalsy(cond)
-      ? await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
-      : await this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)
+      ? r.renderTemplatesSync(this.templates, ctx, emitter)
+      : r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
+  },
+
+  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+    const r = this.liquid.renderer
+    const cond = await new Expression(this.cond).value(ctx)
+    await isFalsy(cond)
+      ? r.renderTemplates(this.templates, ctx, emitter)
+      : r.renderTemplates(this.elseTemplates, ctx, emitter)
   }
 } as ITagImplOptions

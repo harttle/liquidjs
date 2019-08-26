@@ -29,13 +29,16 @@ export default {
   },
 
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    let collection = new Expression(this.collection).value(ctx) || []
+    let collection = ctx.sync
+      ? new Expression(this.collection).valueSync(ctx) || []
+      : await new Expression(this.collection).value(ctx) || []
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 
     collection = collection.slice(offset, offset + limit)
     const cols = hash.cols || collection.length
 
+    const r = this.liquid.renderer
     const tablerowloop = new TablerowloopDrop(collection.length, cols)
     const scope = { tablerowloop }
     ctx.push(scope)
@@ -47,7 +50,9 @@ export default {
         emitter.write(`<tr class="row${tablerowloop.row()}">`)
       }
       emitter.write(`<td class="col${tablerowloop.col()}">`)
-      await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
+      ctx.sync
+        ? r.renderTemplatesSync(this.templates, ctx, emitter)
+        : await r.renderTemplates(this.templates, ctx, emitter)
       emitter.write('</td>')
     }
     if (collection.length) emitter.write('</tr>')

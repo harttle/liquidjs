@@ -8,8 +8,7 @@ interface FileDescriptor {
 }
 
 let files: { [path: string]: FileDescriptor } = {}
-const readFile = fs.readFile
-const exists = fs.exists
+const { readFile, exists, readFileSync, existsSync } = fs
 
 export function mock (options: { [path: string]: (string | FileDescriptor) }) {
   forOwn(options, (val, key) => {
@@ -18,19 +17,26 @@ export function mock (options: { [path: string]: (string | FileDescriptor) }) {
       : val as FileDescriptor
   })
   fs.readFile = async function (path) {
+    return fs.readFileSync(path)
+  }
+  fs.readFileSync = function (path) {
     const file = files[path]
     if (file === undefined) throw new Error('ENOENT')
     if (file.mode === '0000') throw new Error('EACCES')
     return file.content
   }
-
   fs.exists = async function (path: string) {
+    return fs.existsSync(path)
+  }
+  fs.existsSync = function (path: string) {
     return !!files[path]
   }
 }
 
 export function restore () {
   files = {}
+  fs.readFileSync = readFileSync
+  fs.existsSync = existsSync
   fs.readFile = readFile
   fs.exists = exists
 }

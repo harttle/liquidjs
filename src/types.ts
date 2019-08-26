@@ -1,4 +1,4 @@
-export { ParseError, TokenizationError, RenderBreakError, AssertionError } from './util/error'
+export { ParseError, TokenizationError, AssertionError } from './util/error'
 export { Drop } from './drop/drop'
 export { Emitter } from './render/emitter'
 export { Expression } from './render/expression'

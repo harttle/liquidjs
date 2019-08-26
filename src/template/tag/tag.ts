@@ -23,10 +23,16 @@ export class Tag extends Template<TagToken> implements ITemplate {
       this.impl.parse(token, tokens)
     }
   }
+  public renderSync (ctx: Context, emitter: Emitter) {
+    const hash = Hash.createSync(this.token.args, ctx)
+    const impl = this.impl
+    if (isFunction(impl.renderSync)) return impl.renderSync(ctx, hash, emitter)
+    if (isFunction(impl.render)) return impl.render(ctx, hash, emitter)
+  }
   public async render (ctx: Context, emitter: Emitter) {
     const hash = await Hash.create(this.token.args, ctx)
     const impl = this.impl
-    if (isFunction(impl.render)) await impl.render(ctx, hash, emitter)
+    if (isFunction(impl.render)) return impl.render(ctx, hash, emitter)
   }
   public static register (name: string, tag: ITagImplOptions) {
     Tag.impls[name] = tag

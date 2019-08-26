@@ -48,4 +48,20 @@ describe('tags/case', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('d')
   })
+  describe('sync support', function () {
+    it('should hit the specified case', function () {
+      const src = '{% case "foo"%}' +
+              '{% when "foo" %}foo{% when "bar"%}bar' +
+              '{%endcase%}'
+      const html = liquid.parseAndRenderSync(src)
+      return expect(html).to.equal('foo')
+    })
+    it('should support else branch', function () {
+      const src = '{% case "a" %}' +
+              '{% when "b" %}b{% when "c"%}c{%else %}d' +
+              '{%endcase%}'
+      const html = liquid.parseAndRenderSync(src)
+      return expect(html).to.equal('d')
+    })
+  })
 })
