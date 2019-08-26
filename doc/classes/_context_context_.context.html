@@ -94,6 +94,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_context_context_.context.html#opts" class="tsd-kind-icon">opts</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_context_context_.context.html#registers" class="tsd-kind-icon">registers</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_context_context_.context.html#scopes" class="tsd-kind-icon">scopes</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_context_context_.context.html#sync" class="tsd-kind-icon">sync</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -119,13 +120,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Context<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_liquid_options_.normalizedfulloptions.html" class="tsd-signature-type">NormalizedFullOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Context<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span>, opts<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_liquid_options_.normalizedfulloptions.html" class="tsd-signature-type">NormalizedFullOptions</a>, sync<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L12">context/context.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L13">context/context.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -135,6 +136,9 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> opts: <a href="../interfaces/_liquid_options_.normalizedfulloptions.html" class="tsd-signature-type">NormalizedFullOptions</a></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> sync: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h4>
@@ -150,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">environments<span class="tsd-signature-symbol">:</span> <a href="../modules/_context_scope_.html#scope" class="tsd-signature-type">Scope</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L11">context/context.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L11">context/context.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -160,7 +164,7 @@
 					<div class="tsd-signature tsd-kind-icon">opts<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_liquid_options_.normalizedfulloptions.html" class="tsd-signature-type">NormalizedFullOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L12">context/context.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L13">context/context.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -170,7 +174,7 @@
 					<div class="tsd-signature tsd-kind-icon">registers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L10">context/context.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L10">context/context.ts:10</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -185,7 +189,17 @@
 					<div class="tsd-signature tsd-kind-icon">scopes<span class="tsd-signature-symbol">:</span> <a href="../modules/_context_scope_.html#scope" class="tsd-signature-type">Scope</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[{}]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L9">context/context.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L9">context/context.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="sync" class="tsd-anchor"></a>
+					<h3>sync</h3>
+					<div class="tsd-signature tsd-kind-icon">sync<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L12">context/context.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -202,7 +216,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L47">context/context.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L49">context/context.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -230,7 +244,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L44">context/context.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L46">context/context.ts:46</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_context_scope_.plainobject.html" class="tsd-signature-type">PlainObject</a>
@@ -250,7 +264,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L27">context/context.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L29">context/context.ts:29</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -276,7 +290,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L23">context/context.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L25">context/context.ts:25</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_context_scope_.plainobject.html" class="tsd-signature-type">PlainObject</a>
@@ -296,7 +310,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L17">context/context.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L19">context/context.ts:19</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -324,7 +338,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L65">context/context.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L67">context/context.ts:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -347,7 +361,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L41">context/context.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L43">context/context.ts:43</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
@@ -369,7 +383,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L38">context/context.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L40">context/context.ts:40</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -392,7 +406,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/context/context.ts#L20">context/context.ts:20</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/context/context.ts#L22">context/context.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -442,6 +456,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_context_context_.context.html#scopes" class="tsd-kind-icon">scopes</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_context_context_.context.html#sync" class="tsd-kind-icon">sync</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
 								<a href="_context_context_.context.html#findscope" class="tsd-kind-icon">find<wbr>Scope</a>

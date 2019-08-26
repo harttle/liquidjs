@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Parser | liquidjs</title>
+	<title>Expression | liquidjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_parser_parser_.html">&quot;parser/parser&quot;</a>
+					<a href="../modules/_render_expression_.html">&quot;render/expression&quot;</a>
 				</li>
 				<li>
-					<a href="_parser_parser_.parser.html">Parser</a>
+					<a href="_render_expression_.expression.html">Expression</a>
 				</li>
 			</ul>
-			<h1>Class Parser</h1>
+			<h1>Class Expression</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">Parser</span>
+						<span class="target">Expression</span>
 					</li>
 				</ul>
 			</section>
@@ -84,21 +84,24 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_parser_parser_.parser.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_render_expression_.expression.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_parser_parser_.parser.html#liquid" class="tsd-kind-icon">liquid</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_render_expression_.expression.html#operands" class="tsd-kind-icon">operands</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_render_expression_.expression.html#postfix" class="tsd-kind-icon">postfix</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parser_parser_.parser.html#parse" class="tsd-kind-icon">parse</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parser_parser_.parser.html#parsestream" class="tsd-kind-icon">parse<wbr>Stream</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_parser_parser_.parser.html#parsetoken" class="tsd-kind-icon">parse<wbr>Token</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_render_expression_.expression.html#evaluate" class="tsd-kind-icon">evaluate</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_render_expression_.expression.html#evaluateonce" class="tsd-kind-icon">evaluate<wbr>Once</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_render_expression_.expression.html#evaluatesync" class="tsd-kind-icon">evaluate<wbr>Sync</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_render_expression_.expression.html#value" class="tsd-kind-icon">value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_render_expression_.expression.html#valuesync" class="tsd-kind-icon">value<wbr>Sync</a></li>
 							</ul>
 						</section>
 					</div>
@@ -110,22 +113,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Parser<span class="tsd-signature-symbol">(</span>liquid<span class="tsd-signature-symbol">: </span><a href="_liquid_.liquid.html" class="tsd-signature-type">Liquid</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_parser_.parser.html" class="tsd-signature-type">Parser</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Expression<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_render_expression_.expression.html" class="tsd-signature-type">Expression</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/parser.ts#L13">parser/parser.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L10">render/expression.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>liquid: <a href="_liquid_.liquid.html" class="tsd-signature-type">Liquid</a></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> str: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_parser_parser_.parser.html" class="tsd-signature-type">Parser</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_render_expression_.expression.html" class="tsd-signature-type">Expression</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -133,12 +136,22 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="liquid" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> liquid</h3>
-					<div class="tsd-signature tsd-kind-icon">liquid<span class="tsd-signature-symbol">:</span> <a href="_liquid_.liquid.html" class="tsd-signature-type">Liquid</a></div>
+					<a name="operands" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> operands</h3>
+					<div class="tsd-signature tsd-kind-icon">operands<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/parser.ts#L13">parser/parser.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L9">render/expression.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="postfix" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> postfix</h3>
+					<div class="tsd-signature tsd-kind-icon">postfix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L10">render/expression.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -146,79 +159,117 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="parse" class="tsd-anchor"></a>
-					<h3>parse</h3>
+					<a name="evaluate" class="tsd-anchor"></a>
+					<h3>evaluate</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">parse<span class="tsd-signature-symbol">(</span>tokens<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_template_itemplate_.itemplate.html" class="tsd-signature-type">ITemplate</a><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">evaluate<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/parser.ts#L18">parser/parser.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L15">render/expression.ts:15</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>tokens: <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_template_itemplate_.itemplate.html" class="tsd-signature-type">ITemplate</a><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="evaluateonce" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> evaluate<wbr>Once</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">evaluate<wbr>Once<span class="tsd-signature-symbol">(</span>token<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L48">render/expression.ts:48</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>token: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="parsestream" class="tsd-anchor"></a>
-					<h3>parse<wbr>Stream</h3>
+					<a name="evaluatesync" class="tsd-anchor"></a>
+					<h3>evaluate<wbr>Sync</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">parse<wbr>Stream<span class="tsd-signature-symbol">(</span>tokens<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></li>
+						<li class="tsd-signature tsd-kind-icon">evaluate<wbr>Sync<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/parser.ts#L39">parser/parser.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L27">render/expression.ts:27</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>tokens: <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="parsetoken" class="tsd-anchor"></a>
-					<h3>parse<wbr>Token</h3>
+					<a name="value" class="tsd-anchor"></a>
+					<h3>value</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">parse<wbr>Token<span class="tsd-signature-symbol">(</span>token<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a>, remainTokens<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_template_tag_tag_.tag.html" class="tsd-signature-type">Tag</a><span class="tsd-signature-symbol"> | </span><a href="_template_output_.output.html" class="tsd-signature-type">Output</a><span class="tsd-signature-symbol"> | </span><a href="_template_html_.html.html" class="tsd-signature-type">HTML</a></li>
+						<li class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/parser.ts#L26">parser/parser.ts:26</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L42">render/expression.ts:42</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>token: <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a></h5>
-								</li>
-								<li>
-									<h5>remainTokens: <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_template_tag_tag_.tag.html" class="tsd-signature-type">Tag</a>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="_template_output_.output.html" class="tsd-signature-type">Output</a>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="_template_html_.html.html" class="tsd-signature-type">HTML</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="valuesync" class="tsd-anchor"></a>
+					<h3>value<wbr>Sync</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">value<wbr>Sync<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/expression.ts#L45">render/expression.ts:45</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -231,7 +282,7 @@
 						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_parser_parser_.html">"parser/parser"</a>
+						<a href="../modules/_render_expression_.html">"render/expression"</a>
 					</li>
 				</ul>
 			</nav>
@@ -240,27 +291,42 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_parser_parser_.parser.html" class="tsd-kind-icon">Parser</a>
+						<a href="_render_expression_.expression.html" class="tsd-kind-icon">Expression</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_parser_parser_.parser.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_render_expression_.expression.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_parser_parser_.parser.html#liquid" class="tsd-kind-icon">liquid</a>
+								<a href="_render_expression_.expression.html#operands" class="tsd-kind-icon">operands</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_render_expression_.expression.html#postfix" class="tsd-kind-icon">postfix</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_parser_parser_.parser.html#parse" class="tsd-kind-icon">parse</a>
+								<a href="_render_expression_.expression.html#evaluate" class="tsd-kind-icon">evaluate</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="_render_expression_.expression.html#evaluateonce" class="tsd-kind-icon">evaluate<wbr>Once</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_parser_parser_.parser.html#parsestream" class="tsd-kind-icon">parse<wbr>Stream</a>
+								<a href="_render_expression_.expression.html#evaluatesync" class="tsd-kind-icon">evaluate<wbr>Sync</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_parser_parser_.parser.html#parsetoken" class="tsd-kind-icon">parse<wbr>Token</a>
+								<a href="_render_expression_.expression.html#value" class="tsd-kind-icon">value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_render_expression_.expression.html#valuesync" class="tsd-kind-icon">value<wbr>Sync</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_render_expression_.html#topostfix" class="tsd-kind-icon">to<wbr>Postfix</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_render_expression_.html#tokenize" class="tsd-kind-icon">tokenize</a>
+					</li>
 				</ul>
 			</nav>
 		</div>

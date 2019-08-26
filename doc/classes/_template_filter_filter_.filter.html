@@ -100,6 +100,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_filter_filter_.filter.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_filter_filter_.filter.html#rendersync" class="tsd-kind-icon">render<wbr>Sync</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_template_filter_filter_.filter.html#clear" class="tsd-kind-icon">clear</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_template_filter_filter_.filter.html#register" class="tsd-kind-icon">register</a></li>
 							</ul>
@@ -119,7 +120,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L14">template/filter/filter.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L14">template/filter/filter.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -147,7 +148,7 @@
 					<div class="tsd-signature tsd-kind-icon">args<span class="tsd-signature-symbol">:</span> <a href="../modules/_template_filter_filter_.html#filterargs" class="tsd-signature-type">FilterArgs</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L13">template/filter/filter.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L13">template/filter/filter.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -157,7 +158,7 @@
 					<div class="tsd-signature tsd-kind-icon">impl<span class="tsd-signature-symbol">:</span> <a href="../modules/_template_filter_filter_impl_options_.html#filterimploptions" class="tsd-signature-type">FilterImplOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L12">template/filter/filter.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L12">template/filter/filter.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -167,7 +168,7 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L11">template/filter/filter.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L11">template/filter/filter.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -177,7 +178,7 @@
 					<div class="tsd-signature tsd-kind-icon">impls<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L14">template/filter/filter.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L14">template/filter/filter.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -196,13 +197,39 @@
 					<a name="render" class="tsd-anchor"></a>
 					<h3>render</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, context<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, context<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L24">template/filter/filter.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L24">template/filter/filter.ts:24</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>context: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="rendersync" class="tsd-anchor"></a>
+					<h3>render<wbr>Sync</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">render<wbr>Sync<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, context<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L32">template/filter/filter.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -228,7 +255,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L35">template/filter/filter.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L43">template/filter/filter.ts:43</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -245,7 +272,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/filter/filter.ts#L32">template/filter/filter.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/filter/filter.ts#L40">template/filter/filter.ts:40</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -298,6 +325,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_template_filter_filter_.filter.html#render" class="tsd-kind-icon">render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_template_filter_filter_.filter.html#rendersync" class="tsd-kind-icon">render<wbr>Sync</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 								<a href="_template_filter_filter_.filter.html#clear" class="tsd-kind-icon">clear</a>

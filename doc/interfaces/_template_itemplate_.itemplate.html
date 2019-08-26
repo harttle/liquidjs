@@ -99,6 +99,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_template_itemplate_.itemplate.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="_template_itemplate_.itemplate.html#rendersync" class="tsd-kind-icon">render<wbr>Sync</a></li>
 							</ul>
 						</section>
 					</div>
@@ -112,7 +113,7 @@
 					<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <a href="../classes/_parser_token_.token.html" class="tsd-signature-type">Token</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/itemplate.ts#L6">template/itemplate.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/itemplate.ts#L6">template/itemplate.ts:6</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -123,13 +124,13 @@
 					<a name="render" class="tsd-anchor"></a>
 					<h3>render</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
-						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a>, emitter<span class="tsd-signature-symbol">: </span><a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a>, emitter<span class="tsd-signature-symbol">: </span><a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/template/itemplate.ts#L7">template/itemplate.ts:7</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/itemplate.ts#L7">template/itemplate.ts:7</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -141,10 +142,33 @@
 									<h5>emitter: <a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">void</span>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="rendersync" class="tsd-anchor"></a>
+					<h3>render<wbr>Sync</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">render<wbr>Sync<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a>, emitter<span class="tsd-signature-symbol">: </span><a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/template/itemplate.ts#L8">template/itemplate.ts:8</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ctx: <a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
+								</li>
+								<li>
+									<h5>emitter: <a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -173,6 +197,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
 								<a href="_template_itemplate_.itemplate.html#render" class="tsd-kind-icon">render</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="_template_itemplate_.itemplate.html#rendersync" class="tsd-kind-icon">render<wbr>Sync</a>
 							</li>
 						</ul>
 					</li>

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;render/syntax&quot; | liquidjs</title>
+	<title>&quot;render/operator&quot; | liquidjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="_render_syntax_.html">&quot;render/syntax&quot;</a>
+					<a href="_render_operator_.html">&quot;render/operator&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;render/syntax&quot;</h1>
+			<h1>External module &quot;render/operator&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,201 +70,89 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_render_operator_.html#list" class="tsd-kind-icon">list</a></li>
+							</ul>
+						</section>
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_syntax_.html#evalexp" class="tsd-kind-icon">eval<wbr>Exp</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_syntax_.html#evalvalue" class="tsd-kind-icon">eval<wbr>Value</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_syntax_.html#isfalsy" class="tsd-kind-icon">is<wbr>Falsy</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_syntax_.html#istruthy" class="tsd-kind-icon">is<wbr>Truthy</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_syntax_.html#parseexp" class="tsd-kind-icon">parse<wbr>Exp</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_syntax_.html#parsevalue" class="tsd-kind-icon">parse<wbr>Value</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_render_operator_.html#isoperator" class="tsd-kind-icon">is<wbr>Operator</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Object literals</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported"><a href="_render_syntax_.html#binaryoperators" class="tsd-kind-icon">binary<wbr>Operators</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-external-module"><a href="_render_operator_.html#operatorimpls" class="tsd-kind-icon">operator<wbr>Impls</a></li>
+								<li class="tsd-kind-object-literal tsd-parent-kind-external-module"><a href="_render_operator_.html#precedence" class="tsd-kind-icon">precedence</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="list" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> list</h3>
+					<div class="tsd-signature tsd-kind-icon">list<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;Object.keys(precedence)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L55">render/operator.ts:55</a></li>
+						</ul>
+					</aside>
+				</section>
+			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="evalexp" class="tsd-anchor"></a>
-					<h3>eval<wbr>Exp</h3>
+					<a name="isoperator" class="tsd-anchor"></a>
+					<h3>is<wbr>Operator</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">eval<wbr>Exp<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Operator<span class="tsd-signature-symbol">(</span>token<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L72">render/syntax.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L57">render/operator.ts:57</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>str: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>ctx: <a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="evalvalue" class="tsd-anchor"></a>
-					<h3>eval<wbr>Value</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">eval<wbr>Value<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span>, ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L90">render/syntax.ts:90</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>str: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
-								</li>
-								<li>
-									<h5>ctx: <a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="isfalsy" class="tsd-anchor"></a>
-					<h3>is<wbr>Falsy</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Falsy<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L98">render/syntax.ts:98</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>val: <span class="tsd-signature-type">any</span></h5>
+									<h5>token: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="istruthy" class="tsd-anchor"></a>
-					<h3>is<wbr>Truthy</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Truthy<span class="tsd-signature-symbol">(</span>val<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L94">render/syntax.ts:94</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>val: <span class="tsd-signature-type">any</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="parseexp" class="tsd-anchor"></a>
-					<h3>parse<wbr>Exp</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">parse<wbr>Exp<span class="tsd-signature-symbol">(</span>exp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L48">render/syntax.ts:48</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>exp: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>ctx: <a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="parsevalue" class="tsd-anchor"></a>
-					<h3>parse<wbr>Value</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">parse<wbr>Value<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span>, ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L76">render/syntax.ts:76</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>str: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h5>
-								</li>
-								<li>
-									<h5>ctx: <a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Object literals</h2>
-				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="binaryoperators" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> binary<wbr>Operators</h3>
-					<div class="tsd-signature tsd-kind-icon">binary<wbr>Operators<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-external-module">
+					<a name="operatorimpls" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> operator<wbr>Impls</h3>
+					<div class="tsd-signature tsd-kind-icon">operator<wbr>Impls<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L10">render/syntax.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L17">render/operator.ts:17</a></li>
 						</ul>
 					</aside>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.__" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.__" class="tsd-anchor"></a>
 						<h3>!=</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">!=<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L16">render/syntax.ts:16</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L23">render/operator.ts:23</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -280,17 +168,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators._" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls._" class="tsd-anchor"></a>
 						<h3><</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon"><<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L26">render/syntax.ts:26</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L33">render/operator.ts:33</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -306,17 +194,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.__-1" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.__-1" class="tsd-anchor"></a>
 						<h3><=</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon"><=<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L36">render/syntax.ts:36</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L43">render/operator.ts:43</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -332,17 +220,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.__-2" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.__-2" class="tsd-anchor"></a>
 						<h3>==</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">==<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L11">render/syntax.ts:11</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L18">render/operator.ts:18</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -358,17 +246,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators._-1" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls._-1" class="tsd-anchor"></a>
 						<h3>></h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">><span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L21">render/syntax.ts:21</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L28">render/operator.ts:28</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -384,17 +272,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.__-3" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.__-3" class="tsd-anchor"></a>
 						<h3>>=</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">>=<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L31">render/syntax.ts:31</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L38">render/operator.ts:38</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -410,17 +298,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.and" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.and" class="tsd-anchor"></a>
 						<h3>and</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">and<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L44">render/syntax.ts:44</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L51">render/operator.ts:51</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -436,17 +324,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.contains" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.contains" class="tsd-anchor"></a>
 						<h3>contains</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">contains<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L41">render/syntax.ts:41</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L48">render/operator.ts:48</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -462,17 +350,17 @@
 							</li>
 						</ul>
 					</section>
-					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
-						<a name="binaryoperators.or" class="tsd-anchor"></a>
+					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
+						<a name="operatorimpls.or" class="tsd-anchor"></a>
 						<h3>or</h3>
-						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal tsd-is-not-exported">
+						<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-object-literal">
 							<li class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">(</span>l<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, r<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 						</ul>
 						<ul class="tsd-descriptions">
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/5f7d1d7/src/render/syntax.ts#L45">render/syntax.ts:45</a></li>
+										<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L52">render/operator.ts:52</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -487,6 +375,106 @@
 								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 							</li>
 						</ul>
+					</section>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-object-literal tsd-parent-kind-external-module">
+					<a name="precedence" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> precedence</h3>
+					<div class="tsd-signature tsd-kind-icon">precedence<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L5">render/operator.ts:5</a></li>
+						</ul>
+					</aside>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.__-4" class="tsd-anchor"></a>
+						<h3>!=</h3>
+						<div class="tsd-signature tsd-kind-icon">!=<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L7">render/operator.ts:7</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence._-2" class="tsd-anchor"></a>
+						<h3><</h3>
+						<div class="tsd-signature tsd-kind-icon"><<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L9">render/operator.ts:9</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.__-5" class="tsd-anchor"></a>
+						<h3><=</h3>
+						<div class="tsd-signature tsd-kind-icon"><=<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L11">render/operator.ts:11</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.__-6" class="tsd-anchor"></a>
+						<h3>==</h3>
+						<div class="tsd-signature tsd-kind-icon">==<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L6">render/operator.ts:6</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence._-3" class="tsd-anchor"></a>
+						<h3>></h3>
+						<div class="tsd-signature tsd-kind-icon">><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L8">render/operator.ts:8</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.__-7" class="tsd-anchor"></a>
+						<h3>>=</h3>
+						<div class="tsd-signature tsd-kind-icon">>=<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L10">render/operator.ts:10</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.and-1" class="tsd-anchor"></a>
+						<h3>and</h3>
+						<div class="tsd-signature tsd-kind-icon">and<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L13">render/operator.ts:13</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.contains-1" class="tsd-anchor"></a>
+						<h3>contains</h3>
+						<div class="tsd-signature tsd-kind-icon">contains<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L12">render/operator.ts:12</a></li>
+							</ul>
+						</aside>
+					</section>
+					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
+						<a name="precedence.or-1" class="tsd-anchor"></a>
+						<h3>or</h3>
+						<div class="tsd-signature tsd-kind-icon">or<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></div>
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/render/operator.ts#L14">render/operator.ts:14</a></li>
+							</ul>
+						</aside>
 					</section>
 				</section>
 			</section>
@@ -498,32 +486,23 @@
 						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_render_syntax_.html">"render/syntax"</a>
+						<a href="_render_operator_.html">"render/operator"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_render_syntax_.html#evalexp" class="tsd-kind-icon">eval<wbr>Exp</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_render_operator_.html#list" class="tsd-kind-icon">list</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_render_syntax_.html#evalvalue" class="tsd-kind-icon">eval<wbr>Value</a>
+						<a href="_render_operator_.html#isoperator" class="tsd-kind-icon">is<wbr>Operator</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_render_syntax_.html#isfalsy" class="tsd-kind-icon">is<wbr>Falsy</a>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
+						<a href="_render_operator_.html#operatorimpls" class="tsd-kind-icon">operator<wbr>Impls</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_render_syntax_.html#istruthy" class="tsd-kind-icon">is<wbr>Truthy</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_render_syntax_.html#parseexp" class="tsd-kind-icon">parse<wbr>Exp</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_render_syntax_.html#parsevalue" class="tsd-kind-icon">parse<wbr>Value</a>
-					</li>
-					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_render_syntax_.html#binaryoperators" class="tsd-kind-icon">binary<wbr>Operators</a>
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
+						<a href="_render_operator_.html#precedence" class="tsd-kind-icon">precedence</a>
 					</li>
 				</ul>
 			</nav>

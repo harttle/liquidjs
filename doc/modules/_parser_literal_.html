@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;util/error&quot; | liquidjs</title>
+	<title>&quot;parser/literal&quot; | liquidjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../index.html">Globals</a>
 				</li>
 				<li>
-					<a href="_util_error_.html">&quot;util/error&quot;</a>
+					<a href="_parser_literal_.html">&quot;parser/literal&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;util/error&quot;</h1>
+			<h1>External module &quot;parser/literal&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -70,74 +70,59 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+						<section class="tsd-index-section tsd-is-not-exported">
+							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_util_error_.assertionerror.html" class="tsd-kind-icon">Assertion<wbr>Error</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module tsd-is-not-exported"><a href="../classes/_util_error_.liquiderror.html" class="tsd-kind-icon">Liquid<wbr>Error</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_util_error_.parseerror.html" class="tsd-kind-icon">Parse<wbr>Error</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_util_error_.rendererror.html" class="tsd-kind-icon">Render<wbr>Error</a></li>
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_util_error_.tokenizationerror.html" class="tsd-kind-icon">Tokenization<wbr>Error</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported"><a href="_parser_literal_.html#literal" class="tsd-kind-icon">literal</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-not-exported">
+						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_util_error_.html#mkcontext" class="tsd-kind-icon">mk<wbr>Context</a></li>
-								<li class="tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported"><a href="_util_error_.html#mkmessage" class="tsd-kind-icon">mk<wbr>Message</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_parser_literal_.html#parseliteral" class="tsd-kind-icon">parse<wbr>Literal</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="mkcontext" class="tsd-anchor"></a>
-					<h3>mk<wbr>Context</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">mk<wbr>Context<span class="tsd-signature-symbol">(</span>token<span class="tsd-signature-symbol">: </span><a href="../classes/_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/util/error.ts#L59">util/error.ts:59</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>token: <a href="../classes/_parser_token_.token.html" class="tsd-signature-type">Token</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+					<a name="literal" class="tsd-anchor"></a>
+					<h3>literal</h3>
+					<div class="tsd-signature tsd-kind-icon">literal<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">true</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><a href="../classes/_drop_null_drop_.nulldrop.html" class="tsd-signature-type">NullDrop</a><span class="tsd-signature-symbol"> | </span><a href="../classes/_drop_empty_drop_.emptydrop.html" class="tsd-signature-type">EmptyDrop</a><span class="tsd-signature-symbol"> | </span><a href="../classes/_drop_blank_drop_.blankdrop.html" class="tsd-signature-type">BlankDrop</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/literal.ts#L6">parser/literal.ts:6</a></li>
+						</ul>
+					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-					<a name="mkmessage" class="tsd-anchor"></a>
-					<h3>mk<wbr>Message</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon">mk<wbr>Message<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, token<span class="tsd-signature-symbol">: </span><a href="../classes/_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
+					<a name="parseliteral" class="tsd-anchor"></a>
+					<h3>parse<wbr>Literal</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
+						<li class="tsd-signature tsd-kind-icon">parse<wbr>Literal<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_literal_.html#literal" class="tsd-signature-type">literal</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/util/error.ts#L77">util/error.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/c2ba1e1/src/parser/literal.ts#L8">parser/literal.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>msg: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>token: <a href="../classes/_parser_token_.token.html" class="tsd-signature-type">Token</a></h5>
+									<h5>str: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_parser_literal_.html#literal" class="tsd-signature-type">literal</a>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
 						</li>
 					</ul>
 				</section>
@@ -150,32 +135,17 @@
 						<a href="../index.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="_util_error_.html">"util/error"</a>
+						<a href="_parser_literal_.html">"parser/literal"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_util_error_.assertionerror.html" class="tsd-kind-icon">Assertion<wbr>Error</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="_parser_literal_.html#literal" class="tsd-kind-icon">literal</a>
 					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../classes/_util_error_.liquiderror.html" class="tsd-kind-icon">Liquid<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_util_error_.parseerror.html" class="tsd-kind-icon">Parse<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_util_error_.rendererror.html" class="tsd-kind-icon">Render<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_util_error_.tokenizationerror.html" class="tsd-kind-icon">Tokenization<wbr>Error</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_util_error_.html#mkcontext" class="tsd-kind-icon">mk<wbr>Context</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="_util_error_.html#mkmessage" class="tsd-kind-icon">mk<wbr>Message</a>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="_parser_literal_.html#parseliteral" class="tsd-kind-icon">parse<wbr>Literal</a>
 					</li>
 				</ul>
 			</nav>
