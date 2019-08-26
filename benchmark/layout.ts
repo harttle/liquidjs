@@ -1,5 +1,5 @@
 import * as Benchmark from 'benchmark'
-import Liquid from '../src/liquid'
+import { Liquid } from '../src/liquid'
 
 const engineOptions = {
   root: __dirname,
