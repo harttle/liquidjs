@@ -1,7 +1,7 @@
 import { Drop } from './drop'
 
 export class ForloopDrop extends Drop {
-  protected i: number = 0
+  protected i = 0
   public length: number
   public constructor (length: number) {
     super()

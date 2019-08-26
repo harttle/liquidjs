@@ -9,7 +9,7 @@ export default {
   'floor': (v: number) => Math.floor(v),
   'minus': (v: number, arg: number) => v - arg,
   'modulo': (v: number, arg: number) => v % arg,
-  'round': (v: number, arg: number = 0) => {
+  'round': (v: number, arg = 0) => {
     const amp = Math.pow(10, arg)
     return Math.round(v * amp) / amp
   },

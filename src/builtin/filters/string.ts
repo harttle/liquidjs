@@ -37,13 +37,13 @@ function replaceFirst (v: string, arg1: string, arg2: string) {
   return stringify(v).replace(arg1, arg2)
 }
 
-function truncate (v: string, l: number = 50, o: string = '...') {
+function truncate (v: string, l = 50, o = '...') {
   v = stringify(v)
   if (v.length <= l) return v
   return v.substr(0, l - o.length) + o
 }
 
-function truncateWords (v: string, l: number = 15, o: string = '...') {
+function truncateWords (v: string, l = 15, o = '...') {
   const arr = v.split(/\s+/)
   let ret = arr.slice(0, l).join(' ')
   if (arr.length >= l) ret += o

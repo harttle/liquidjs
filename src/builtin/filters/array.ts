@@ -23,7 +23,7 @@ function concat<T1, T2> (v: T1[], arg: T2[] | T2): (T1 | T2)[] {
   return Array.prototype.concat.call(v, arg)
 }
 
-function slice<T> (v: T[], begin: number, length: number = 1): T[] {
+function slice<T> (v: T[], begin: number, length = 1): T[] {
   begin = begin < 0 ? v.length + begin : begin
   return v.slice(begin, begin + length)
 }

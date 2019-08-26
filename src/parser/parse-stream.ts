@@ -7,7 +7,7 @@ type ParseToken = ((token: Token, remainTokens: Token[]) => ITemplate)
 export class ParseStream {
   private tokens: Token[]
   private handlers: {[key: string]: (arg: any) => void} = {}
-  private stopRequested: boolean = false
+  private stopRequested = false
   private parseToken: ParseToken
 
   public constructor (tokens: Token[], parseToken: ParseToken) {
