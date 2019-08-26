@@ -171,4 +171,39 @@ describe('tags/include', function () {
       return expect(html).to.equal('Xchild with redY')
     })
   })
+  describe('sync support', function () {
+    it('should support quoted string', function () {
+      mock({
+        '/current.html': 'bar{% include "bar/foo.html" %}bar',
+        '/bar/foo.html': 'foo'
+      })
+      const html = liquid.renderFileSync('/current.html')
+      return expect(html).to.equal('barfoobar')
+    })
+    it('should support template string', function () {
+      mock({
+        '/current.html': 'bar{% include name" %}bar',
+        '/bar/foo.html': 'foo'
+      })
+      const html = liquid.renderFileSync('/current.html', { name: '/bar/foo.html' })
+      return expect(html).to.equal('barfoobar')
+    })
+    it('should support include: with', function () {
+      mock({
+        '/with.html': '{% include "color" with "red", shape: "rect" %}',
+        '/color.html': 'color:{{color}}, shape:{{shape}}'
+      })
+      const html = liquid.renderFileSync('with.html')
+      return expect(html).to.equal('color:red, shape:rect')
+    })
+    it('should support filename with extention', function () {
+      mock({
+        '/parent.html': 'X{% include child.html color:"red" %}Y',
+        '/child.html': 'child with {{color}}'
+      })
+      const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
+      const html = staticLiquid.renderFileSync('parent.html')
+      return expect(html).to.equal('Xchild with redY')
+    })
+  })
 })

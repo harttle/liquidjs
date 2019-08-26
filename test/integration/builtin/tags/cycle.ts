@@ -35,4 +35,9 @@ describe('tags/cycle', function () {
     const html = await liquid.parseAndRender(src, ctx)
     return expect(html).to.equal('121')
   })
+  it('should support sync', function () {
+    const src = "{% cycle '1', '2', '3' %}"
+    const html = liquid.parseAndRenderSync(src + src + src + src)
+    return expect(html).to.equal('1231')
+  })
 })

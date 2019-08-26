@@ -37,7 +37,10 @@ export default {
     stream.start()
   },
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    let collection = new Expression(this.collection).value(ctx)
+    const r = this.liquid.renderer
+    let collection = ctx.sync
+      ? new Expression(this.collection).valueSync(ctx)
+      : await new Expression(this.collection).value(ctx)
 
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {
@@ -47,7 +50,9 @@ export default {
       }
     }
     if (!isArray(collection) || !collection.length) {
-      this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)
+      ctx.sync
+        ? r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
+        : await r.renderTemplates(this.elseTemplates, ctx, emitter)
       return
     }
 
@@ -57,17 +62,19 @@ export default {
     collection = collection.slice(offset, offset + limit)
     if (this.reversed) collection.reverse()
 
-    const context = { forloop: new ForloopDrop(collection.length) }
-    ctx.push(context)
+    const scope = { forloop: new ForloopDrop(collection.length) }
+    ctx.push(scope)
     for (const item of collection) {
-      context[this.variable] = item
-      try {
-        await this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
-      } catch (e) {
-        if (e.name !== 'RenderBreakError') throw e
-        if (e.message === 'break') break
+      scope[this.variable] = item
+      ctx.sync
+        ? r.renderTemplatesSync(this.templates, ctx, emitter)
+        : await r.renderTemplates(this.templates, ctx, emitter)
+      if (emitter.break) {
+        emitter.break = false
+        break
       }
-      context.forloop.next()
+      emitter.continue = false
+      scope.forloop.next()
     }
     ctx.pop()
   }

@@ -34,4 +34,16 @@ describe('tags/unless', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('')
   })
+  describe('sync support', function () {
+    it('should render else when predicate yields true', function () {
+      const src = '{% unless 0 %}yes{%else%}no{%endunless%}'
+      const html = liquid.parseAndRenderSync(src)
+      expect(html).to.equal('no')
+    })
+    it('should render unless when predicate yields false', function () {
+      const src = '{% unless false %}yes{%else%}no{%endunless%}'
+      const html = liquid.parseAndRenderSync(src)
+      expect(html).to.equal('yes')
+    })
+  })
 })

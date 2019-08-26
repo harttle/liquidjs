@@ -28,13 +28,28 @@ export default {
   },
 
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+    const r = this.liquid.renderer
+
     for (const branch of this.branches) {
-      const cond = new Expression(branch.cond).value(ctx)
+      const cond = await new Expression(branch.cond).value(ctx)
       if (isTruthy(cond)) {
-        await this.liquid.renderer.renderTemplates(branch.templates, ctx, emitter)
+        await r.renderTemplates(branch.templates, ctx, emitter)
         return
       }
     }
-    await this.liquid.renderer.renderTemplates(this.elseTemplates, ctx, emitter)
+    await r.renderTemplates(this.elseTemplates, ctx, emitter)
+  },
+
+  renderSync: function (ctx: Context, hash: Hash, emitter: Emitter) {
+    const r = this.liquid.renderer
+
+    for (const branch of this.branches) {
+      const cond = new Expression(branch.cond).valueSync(ctx)
+      if (isTruthy(cond)) {
+        r.renderTemplatesSync(branch.templates, ctx, emitter)
+        return
+      }
+    }
+    r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
   }
 } as ITagImplOptions

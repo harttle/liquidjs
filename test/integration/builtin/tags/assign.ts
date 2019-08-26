@@ -81,4 +81,9 @@ describe('tags/assign', function () {
       return expect(html).to.equal('12 2')
     })
   })
+  it('should support sync', function () {
+    const src = '{% assign foo="bar" %}{{foo}}'
+    const html = liquid.parseAndRenderSync(src)
+    return expect(html).to.equal('bar')
+  })
 })

@@ -60,4 +60,14 @@ describe('filter', function () {
       new Filter('/', [], false)
     }).to.not.throw()
   })
+
+  it('should support sync', function () {
+    Filter.register('add', (a, b) => a + b)
+    expect(new Filter('add', ['2'], false).renderSync(3, ctx)).to.equal(5)
+  })
+
+  it('should support key value pairs', function () {
+    Filter.register('add', (a, b) => b[0] + ':' + (a + b[1]))
+    expect(new Filter('add', [['num', '2']], false).renderSync(3, ctx)).to.equal('num:5')
+  })
 })

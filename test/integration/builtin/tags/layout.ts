@@ -133,4 +133,13 @@ describe('tags/layout', function () {
       return expect(html).to.equal('blackA')
     })
   })
+  it('should support sync', function () {
+    mock({
+      '/grand.html': 'X{%block a%}G{%endblock%}Y',
+      '/parent.html': '{%layout "grand" %}{%block a%}P{%endblock%}',
+      '/main.html': '{%layout "parent"%}{%block a%}A{%endblock%}'
+    })
+    const html = liquid.renderFileSync('/main.html')
+    return expect(html).to.equal('XAY')
+  })
 })

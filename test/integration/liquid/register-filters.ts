@@ -1,17 +1,24 @@
-import { test, liquid } from '../../stub/render'
+import { expect } from 'chai'
+import { Liquid } from '../../../src/liquid'
 
 describe('liquid#registerFilter()', function () {
+  const liquid = new Liquid()
+
   describe('object arguments', function () {
-    liquid.registerFilter('obj_test', function () {
-      return JSON.stringify(arguments)
+    liquid.registerFilter('obj_test', function (...args) {
+      return JSON.stringify(args)
     })
-    it('should support object', () => test(
-      `{{ "a" | obj_test: k1: "v1", k2: foo }}`,
-      '{"0":"a","1":["k1","v1"],"2":["k2","bar"]}'
-    ))
-    it('should support mixed object', () => test(
-      `{{ "a" | obj_test: "something", k1: "v1", k2: foo }}`,
-      '{"0":"a","1":"something","2":["k1","v1"],"3":["k2","bar"]}'
-    ))
+    it('should support object', async () => {
+      const src = `{{ "a" | obj_test: k1: "v1", k2: foo }}`,
+      const dst = '["a",["k1","v1"],["k2","bar"]]'
+      const html = await liquid.parseAndRender(src, { foo: 'bar' })
+      return expect(html).to.equal(dst)
+    })
+    it('should support mixed object', async () => {
+      const src = `{{ "a" | obj_test: "something", k1: "v1", k2: foo }}`,
+      const dst = '["a","something",["k1","v1"],["k2","bar"]]'
+      const html = await liquid.parseAndRender(src, { foo: 'bar' })
+      return expect(html).to.equal(dst)
+    })
   })
 })

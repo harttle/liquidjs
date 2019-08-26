@@ -15,7 +15,7 @@ export default {
       })
     stream.start()
   },
-  render: function (ctx: Context, hash: Hash, emitter: Emitter) {
-    emitter.write(this.tokens.map((token: Token) => token.raw).join(''))
+  render: function (ctx: Context) {
+    return this.tokens.map((token: Token) => token.raw).join('')
   }
 } as ITagImplOptions

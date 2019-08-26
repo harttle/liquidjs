@@ -31,4 +31,11 @@ describe('tags/comment', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('')
   })
+  describe('sync support', function () {
+    it('should ignore plain string', function () {
+      const src = 'My name is {% comment %}super{% endcomment %} Shopify.'
+      const html = liquid.parseAndRenderSync(src)
+      return expect(html).to.equal('My name is  Shopify.')
+    })
+  })
 })

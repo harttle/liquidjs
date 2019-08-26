@@ -10,7 +10,10 @@ export class HTML extends Template<HTMLToken> implements ITemplate {
     super(token)
     this.str = token.value
   }
-  public render (ctx: Context, emitter: Emitter) {
+  public renderSync (ctx: Context, emitter: Emitter) {
     emitter.write(this.str)
+  }
+  public async render (ctx: Context, emitter: Emitter) {
+    this.renderSync(ctx, emitter)
   }
 }

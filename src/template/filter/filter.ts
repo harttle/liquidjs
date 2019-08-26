@@ -21,11 +21,19 @@ export class Filter {
     this.impl = impl || (x => x)
     this.args = args
   }
-  public render (value: any, context: Context) {
+  public async render (value: any, context: Context) {
     const argv: any[] = []
     for (const arg of this.args) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], new Expression(arg[1]).evaluate(context)])
-      else argv.push(new Expression(arg).evaluate(context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], await new Expression(arg[1]).evaluate(context)])
+      else argv.push(await new Expression(arg).evaluate(context))
+    }
+    return this.impl.apply({ context }, [value, ...argv])
+  }
+  public renderSync (value: any, context: Context) {
+    const argv: any[] = []
+    for (const arg of this.args) {
+      if (isKeyValuePair(arg)) argv.push([arg[0], new Expression(arg[1]).evaluateSync(context)])
+      else argv.push(new Expression(arg).evaluateSync(context))
     }
     return this.impl.apply({ context }, [value, ...argv])
   }
