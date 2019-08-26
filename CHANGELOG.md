@@ -1,3 +1,36 @@
+# [9.0.0](https://github.com/harttle/liquidjs/compare/v8.5.3...v9.0.0) (2019-08-26)
+
+
+### Bug Fixes
+
+* break/continue omitting output before them, [#123](https://github.com/harttle/liquidjs/issues/123) ([ae45c46](https://github.com/harttle/liquidjs/commit/ae45c46))
+* reactjs demo during yarn install, fixes [#145](https://github.com/harttle/liquidjs/issues/145) ([b65df44](https://github.com/harttle/liquidjs/commit/b65df44))
+
+
+### Code Refactoring
+
+* return value of Tag#render is no longer used ([8028f82](https://github.com/harttle/liquidjs/commit/8028f82))
+
+
+### Features
+
+* renderSync, parseAndRenderSync and renderFileSync, see [#48](https://github.com/harttle/liquidjs/issues/48) ([7fb01ad](https://github.com/harttle/liquidjs/commit/7fb01ad))
+
+
+### Performance Improvements
+
+* target to es6, fixes [#137](https://github.com/harttle/liquidjs/issues/137) ([3b9fc7e](https://github.com/harttle/liquidjs/commit/3b9fc7e))
+
+
+### BREAKING CHANGES
+
+* Tag#render now returns void, use emitter argument
+to write rendered html.
+* ship to Node.js 8, the dist/liquid.cjs.js (main) nolonger
+supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist/liquid.js (ES5 umd) and liquid.min.js (minified ES5 umd)
+* remove default export, now should be used like import
+{Liquid} from 'liquidjs'
+
 ## [8.5.3](https://github.com/harttle/liquidjs/compare/v8.5.2...v8.5.3) (2019-08-25)
 
 
