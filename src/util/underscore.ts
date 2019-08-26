@@ -92,7 +92,7 @@ export function isObject (value: any): value is object {
   return value !== null && (type === 'object' || type === 'function')
 }
 
-export function range (start: number, stop: number, step: number = 1) {
+export function range (start: number, stop: number, step = 1) {
   const arr: number[] = []
   for (let i = start; i < stop; i += step) {
     arr.push(i)
@@ -100,7 +100,7 @@ export function range (start: number, stop: number, step: number = 1) {
   return arr
 }
 
-export function padStart (str: any, length: number, ch: string = ' ') {
+export function padStart (str: any, length: number, ch = ' ') {
   str = String(str)
   let n = length - str.length
   while (n-- > 0) str = ch + str

@@ -6,7 +6,7 @@ describe('drop/drop', function () {
   before(() => (liquid = new Liquid()))
 
   class CustomDrop extends Drop {
-    private name: string = 'NAME'
+    private name = 'NAME'
     public getName () {
       return 'GET NAME'
     }

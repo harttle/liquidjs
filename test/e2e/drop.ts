@@ -5,7 +5,7 @@ import * as chaiAsPromised from 'chai-as-promised'
 use(chaiAsPromised)
 
 class SettingsDrop extends Drop {
-  private foo: string = 'FOO'
+  private foo = 'FOO'
   public bar () {
     return 'BAR'
   }

@@ -1,7 +1,7 @@
 export class Token {
-  public trimLeft: boolean = false
-  public trimRight: boolean = false
-  public type: string = 'notset'
+  public trimLeft = false
+  public trimRight = false
+  public type = 'notset'
   public line: number
   public col: number
   public raw: string
