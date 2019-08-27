@@ -8,7 +8,7 @@
   "types": "dist/liquid.d.ts",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "doc": "typedoc --out doc src --readme none",
+    "doc": "typedoc --out docs src --readme none",
     "unit": "mocha \"test/unit/**/*.ts\"",
     "integration": "mocha \"test/integration/**/*.ts\"",
     "e2e": "npm run build && mocha \"test/e2e/**/*.ts\"",
@@ -30,7 +30,7 @@
   "files": [
     "bin",
     "dist",
-    "doc",
+    "docs",
     "LICENSE",
     "README.md"
   ],

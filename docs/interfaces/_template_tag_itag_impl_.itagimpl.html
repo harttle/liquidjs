@@ -96,6 +96,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_template_tag_itag_impl_.itagimpl.html#liquid" class="tsd-kind-icon">liquid</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_template_tag_itag_impl_.itagimpl.html#parse" class="tsd-kind-icon">parse</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_template_tag_itag_impl_.itagimpl.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_template_tag_itag_impl_.itagimpl.html#rendersync" class="tsd-kind-icon">render<wbr>Sync</a></li>
 							</ul>
 						</section>
 					</div>
@@ -109,7 +110,7 @@
 					<div class="tsd-signature tsd-kind-icon">liquid<span class="tsd-signature-symbol">:</span> <a href="../classes/_liquid_.liquid.html" class="tsd-signature-type">Liquid</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/fc045b5/src/template/tag/itag-impl.ts#L5">template/tag/itag-impl.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/d3f3d81/src/template/tag/itag-impl.ts#L5">template/tag/itag-impl.ts:5</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -120,18 +121,59 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_template_tag_itag_impl_options_.itagimploptions.html">ITagImplOptions</a>.<a href="_template_tag_itag_impl_options_.itagimploptions.html#parse">parse</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/fc045b5/src/template/tag/itag-impl-options.ts#L8">template/tag/itag-impl-options.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/d3f3d81/src/template/tag/itag-impl-options.ts#L9">template/tag/itag-impl-options.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 					<a name="render" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> render</h3>
-					<div class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></div>
+					<h3>render</h3>
+					<div class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_template_tag_itag_impl_options_.itagimploptions.html">ITagImplOptions</a>.<a href="_template_tag_itag_impl_options_.itagimploptions.html#render">render</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/fc045b5/src/template/tag/itag-impl-options.ts#L9">template/tag/itag-impl-options.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/d3f3d81/src/template/tag/itag-impl-options.ts#L10">template/tag/itag-impl-options.ts:10</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="_template_tag_itag_impl_.itagimpl.html" class="tsd-signature-type">ITagImpl</a>, ctx<span class="tsd-signature-symbol">: </span><a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a>, hash<span class="tsd-signature-symbol">: </span><a href="../classes/_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a>, emitter<span class="tsd-signature-symbol">: </span><a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>this: <a href="_template_tag_itag_impl_.itagimpl.html" class="tsd-signature-type">ITagImpl</a></h5>
+											</li>
+											<li>
+												<h5>ctx: <a href="../classes/_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
+											</li>
+											<li>
+												<h5>hash: <a href="../classes/_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a></h5>
+											</li>
+											<li>
+												<h5>emitter: <a href="../classes/_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="rendersync" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> render<wbr>Sync</h3>
+					<div class="tsd-signature tsd-kind-icon">render<wbr>Sync<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_template_tag_itag_impl_options_.itagimploptions.html">ITagImplOptions</a>.<a href="_template_tag_itag_impl_options_.itagimploptions.html#rendersync">renderSync</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/d3f3d81/src/template/tag/itag-impl-options.ts#L11">template/tag/itag-impl-options.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -163,6 +205,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="_template_tag_itag_impl_.itagimpl.html#render" class="tsd-kind-icon">render</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="_template_tag_itag_impl_.itagimpl.html#rendersync" class="tsd-kind-icon">render<wbr>Sync</a>
 							</li>
 						</ul>
 					</li>
