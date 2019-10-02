@@ -31,8 +31,8 @@ export default {
   render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
     const r = this.liquid.renderer
     const cond = await new Expression(this.cond).value(ctx)
-    await isFalsy(cond)
+    await (isFalsy(cond)
       ? r.renderTemplates(this.templates, ctx, emitter)
-      : r.renderTemplates(this.elseTemplates, ctx, emitter)
+      : r.renderTemplates(this.elseTemplates, ctx, emitter))
   }
 } as ITagImplOptions

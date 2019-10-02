@@ -34,6 +34,19 @@ describe('tags/unless', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('')
   })
+
+  it('should output unless contents in order', async function () {
+    const src = `
+      Before {{ location }}
+      {% unless false %}Inside {{ location }}{% endunless %}
+      After {{ location }}`
+    const html = await liquid.parseAndRender(src, { location: 'wonderland' })
+    expect(html).to.equal(`
+      Before wonderland
+      Inside wonderland
+      After wonderland`)
+  })
+
   describe('sync support', function () {
     it('should render else when predicate yields true', function () {
       const src = '{% unless 0 %}yes{%else%}no{%endunless%}'
