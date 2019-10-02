@@ -1,3 +1,10 @@
+## [9.0.1](https://github.com/harttle/liquidjs/compare/v9.0.0...v9.0.1) (2019-10-02)
+
+
+### Bug Fixes
+
+* `unless` content is not waited, fixes [#160](https://github.com/harttle/liquidjs/issues/160) ([d2c8d13](https://github.com/harttle/liquidjs/commit/d2c8d13))
+
 # [9.0.0](https://github.com/harttle/liquidjs/compare/v8.5.3...v9.0.0) (2019-08-26)
 
 
