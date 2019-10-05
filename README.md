@@ -114,6 +114,12 @@ Thanks goes to these wonderful people:
 
 [![donate to liquidjs collective](https://opencollective.com/webpack/donate/button@2x.png?color=blue)](https://opencollective.com/liquidjs/donate)
 
+## Contribute Guidelines
+
+* **Code Style**: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
+* **Testing**: make sure test cases still pass, use `npm test` to check locally.
+* **Commit Message**: align to [The Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially the [Type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), to allow the semantic-release bot do the work.
+
 [shopify/liquid]: https://shopify.github.io/liquid/
 [caniuse-promises]: http://caniuse.com/#feat=promises
 [pp]: https://github.com/taylorhakes/promise-polyfill
