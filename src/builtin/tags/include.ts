@@ -39,7 +39,7 @@ export default {
     if (this.with) {
       hash[filepath] = new Expression(this.with).evaluateSync(ctx)
     }
-    const templates = this.liquid.getTemplateSync(filepath, ctx.opts)
+    const templates = this.liquid.parseFileSync(filepath, ctx.opts)
     ctx.push(hash)
     this.liquid.renderer.renderTemplatesSync(templates, ctx, emitter)
     ctx.pop()
@@ -69,7 +69,7 @@ export default {
     if (this.with) {
       hash[filepath] = await new Expression(this.with).evaluate(ctx)
     }
-    const templates = await this.liquid.getTemplate(filepath, ctx.opts)
+    const templates = await this.liquid.parseFile(filepath, ctx.opts)
     ctx.push(hash)
     await this.liquid.renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()

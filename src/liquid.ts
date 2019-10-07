@@ -15,7 +15,7 @@ import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefaul
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import IFS from './fs/ifs'
 
-type GetTemplateResult = ITemplate[] | undefined
+type nullableTemplates = ITemplate[] | null
 
 export * from './types'
 
@@ -59,40 +59,52 @@ export class Liquid {
     const tpl = this.parse(html)
     return this.renderSync(tpl, scope, opts)
   }
-  public getTemplateSync (file: string, opts?: LiquidOptions): ITemplate[] {
+  public parseFileSync (file: string, opts?: LiquidOptions): ITemplate[] {
     const options = { ...this.options, ...normalize(opts) }
     const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
 
     for (const filepath of paths) {
       const tpl = this.respectCache(filepath, () => {
-        if (!(this.fs.existsSync(filepath))) return
+        if (!(this.fs.existsSync(filepath))) return null
         return this.parse(this.fs.readFileSync(filepath), filepath)
       })
-      if (tpl) return tpl
+      if (tpl !== null) return tpl
     }
 
     throw this.lookupError(file, options.root)
   }
-  public async getTemplate (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
+  public async parseFile (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
     const options = { ...this.options, ...normalize(opts) }
     const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
 
     for (const filepath of paths) {
       const tpl = await this.respectCache(filepath, async () => {
-        if (!(await this.fs.exists(filepath))) return
+        if (!(await this.fs.exists(filepath))) return null
         return this.parse(await this.fs.readFile(filepath), filepath)
       })
-      if (tpl !== undefined) return tpl
+      if (tpl !== null) return tpl
     }
     throw this.lookupError(file, options.root)
   }
+  /**
+   * @deprecated use parseFile instead
+   */
+  public async getTemplate (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
+    return this.parseFile(file, opts)
+  }
+  /**
+   * @deprecated use parseFileSync instead
+   */
+  public getTemplateSync (file: string, opts?: LiquidOptions): ITemplate[] {
+    return this.parseFileSync(file, opts)
+  }
   public async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
-    const templates = await this.getTemplate(file, opts)
+    const templates = await this.parseFile(file, opts)
     return this.render(templates, ctx, opts)
   }
   public renderFileSync (file: string, ctx?: object, opts?: LiquidOptions) {
     const options = normalize(opts)
-    const templates = this.getTemplateSync(file, options)
+    const templates = this.parseFileSync(file, options)
     return this.renderSync(templates, ctx, opts)
   }
   public async evalValue (str: string, ctx: Context): Promise<any> {
@@ -127,21 +139,19 @@ export class Liquid {
     return err
   }
 
-  private setCache<T extends GetTemplateResult> (filepath: string, tpl: T): T {
-    if (tpl === undefined) return tpl
+  private setCache<T extends nullableTemplates> (filepath: string, tpl: T): T {
     this.cache[filepath] = tpl
     return tpl
   }
 
-  private respectCache (filepath: string, resolver: () => GetTemplateResult): GetTemplateResult
-  private respectCache (filepath: string, resolver: () => Promise<GetTemplateResult>): Promise<GetTemplateResult>
-  private respectCache (filepath: string, resolver: () => GetTemplateResult | Promise<GetTemplateResult>): GetTemplateResult | Promise<GetTemplateResult> {
+  private respectCache (filepath: string, resolver: () => nullableTemplates): nullableTemplates
+  private respectCache (filepath: string, resolver: () => Promise<nullableTemplates>): Promise<nullableTemplates>
+  private respectCache (filepath: string, resolver: () => nullableTemplates | Promise<nullableTemplates>): nullableTemplates | Promise<nullableTemplates> {
     if (!this.options.cache) return resolver()
     if (this.cache[filepath]) return this.cache[filepath]
+
     const tpl = resolver()
-    if (tpl instanceof Promise) {
-      return tpl.then(c => this.setCache(filepath, c))
-    }
-    return this.setCache(filepath, tpl)
+    const setCacheIfDefined = (tpl: nullableTemplates) => tpl === null ? null : this.setCache(filepath, tpl)
+    return tpl instanceof Promise ? tpl.then(setCacheIfDefined) : setCacheIfDefined(tpl)
   }
 }

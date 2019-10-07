@@ -39,8 +39,8 @@ export default {
       blocks[''] = html
     }
     const templates = ctx.sync
-      ? this.liquid.getTemplateSync(layout, ctx.opts)
-      : await this.liquid.getTemplate(layout, ctx.opts)
+      ? this.liquid.parseFileSync(layout, ctx.opts)
+      : await this.liquid.parseFile(layout, ctx.opts)
     ctx.push(hash)
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const partial = ctx.sync
