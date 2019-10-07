@@ -1,3 +1,10 @@
+# [9.1.0](https://github.com/harttle/liquidjs/compare/v9.0.1...v9.1.0) (2019-10-07)
+
+
+### Features
+
+* alias getTemplate() to parseFile() ([6b83788](https://github.com/harttle/liquidjs/commit/6b83788))
+
 ## [9.0.1](https://github.com/harttle/liquidjs/compare/v9.0.0...v9.0.1) (2019-10-02)
 
 
