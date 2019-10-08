@@ -5,8 +5,7 @@ import tpl from './views/demo.liquid';
 import Parser from 'html-react-parser';
 import { engine } from './engine';
 
-class App extends Component {
-
+export class App extends Component {
   async componentDidMount() {
     const html = await engine.renderFile(tpl.toString(), {name: 'alice', logo: logo })
     this.setState({ html })  // outputs "Alice"
@@ -22,5 +21,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
