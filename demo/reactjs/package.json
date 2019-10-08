@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "html-react-parser": "^0.4.7",
-    "liquidjs": "*",
+    "liquidjs": "^9.1.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-promise": "^2.0.3",
@@ -15,9 +15,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",

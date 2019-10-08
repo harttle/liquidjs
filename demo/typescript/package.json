@@ -1,5 +1,6 @@
 {
   "name": "liquidjs-demo-typescript",
+  "private": true,
   "description": "TypeScript demo for liquidjs",
   "main": "index.ts",
   "scripts": {

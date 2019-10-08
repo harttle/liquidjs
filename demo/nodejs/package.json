@@ -1,6 +1,7 @@
 {
   "name": "liquidjs-demo-nodejs",
   "description": "Node.js demo for liquidjs",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

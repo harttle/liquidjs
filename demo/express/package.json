@@ -1,6 +1,7 @@
 {
   "name": "express-demo",
   "version": "1.0.0",
+  "private": true,
   "description": "Express Demo Using liquidjs",
   "main": "index.js",
   "scripts": {
