@@ -5,6 +5,7 @@ import { Token } from './token'
 import { OutputToken } from './output-token'
 import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
+import { flatten } from './flatten/node'
 
 enum ParseState { HTML, OUTPUT, TAG }
 
@@ -36,7 +37,7 @@ export class Tokenizer {
       }
       if (state === ParseState.HTML) {
         if (input.substr(p, outputDelimiterLeft.length) === outputDelimiterLeft) {
-          if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
+          if (buffer) tokens.push(new HTMLToken(flatten(buffer), input, line, col, file))
           buffer = outputDelimiterLeft
           line = curLine
           col = p - lineBegin + 1
@@ -44,7 +45,7 @@ export class Tokenizer {
           state = ParseState.OUTPUT
           continue
         } else if (input.substr(p, tagDelimiterLeft.length) === tagDelimiterLeft) {
-          if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
+          if (buffer) tokens.push(new HTMLToken(flatten(buffer), input, line, col, file))
           buffer = tagDelimiterLeft
           line = curLine
           col = p - lineBegin + 1
@@ -57,7 +58,7 @@ export class Tokenizer {
         input.substr(p, outputDelimiterRight.length) === outputDelimiterRight
       ) {
         buffer += outputDelimiterRight
-        tokens.push(new OutputToken(buffer, buffer.slice(outputDelimiterLeft.length, -outputDelimiterRight.length), input, line, col, this.options, file))
+        tokens.push(new OutputToken(flatten(buffer), buffer.slice(outputDelimiterLeft.length, -outputDelimiterRight.length), input, line, col, this.options, file))
         p += outputDelimiterRight.length
         buffer = ''
         line = curLine
@@ -66,7 +67,7 @@ export class Tokenizer {
         continue
       } else if (input.substr(p, tagDelimiterRight.length) === tagDelimiterRight) {
         buffer += tagDelimiterRight
-        tokens.push(new TagToken(buffer, buffer.slice(tagDelimiterLeft.length, -tagDelimiterRight.length), input, line, col, this.options, file))
+        tokens.push(new TagToken(flatten(buffer), buffer.slice(tagDelimiterLeft.length, -tagDelimiterRight.length), input, line, col, this.options, file))
         p += tagDelimiterRight.length
         buffer = ''
         line = curLine
@@ -81,10 +82,10 @@ export class Tokenizer {
       const str = buffer.length > 16 ? buffer.slice(0, 13) + '...' : buffer
       throw new TokenizationError(
         `${t} "${str}" not closed`,
-        new Token(buffer, input, line, col, file)
+        new Token(flatten(buffer), input, line, col, file)
       )
     }
-    if (buffer) tokens.push(new HTMLToken(buffer, input, line, col, file))
+    if (buffer) tokens.push(new HTMLToken(flatten(buffer), input, line, col, file))
 
     whiteSpaceCtrl(tokens, this.options)
     return tokens
