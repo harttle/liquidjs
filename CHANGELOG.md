@@ -1,3 +1,10 @@
+## [9.1.1](https://github.com/harttle/liquidjs/compare/v9.1.0...v9.1.1) (2019-10-10)
+
+
+### Performance Improvements
+
+* add string flattening to reduce retained memory (node only) ([3ad512c](https://github.com/harttle/liquidjs/commit/3ad512c))
+
 # [9.1.0](https://github.com/harttle/liquidjs/compare/v9.0.1...v9.1.0) (2019-10-07)
 
 
