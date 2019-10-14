@@ -38,7 +38,7 @@ engine
     .then(console.log);     // outputs 'Alice'
 ```
 
-Or include the UMD build (You may need a [Promise polyfill][pp] for Node.js &lt; 4 and ES5 browsers like [IE and Android UC][caniuse-promises]):
+Or include the UMD build, a live demo is available on jsfiddle: <https://jsfiddle.net/x43eb0z6/>. You may need a [Promise polyfill][pp] for Node.js &lt; 4 and ES5 browsers like [IE and Android UC][caniuse-promises].
 
 ```html
 <script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>     <!--for production-->
@@ -51,9 +51,10 @@ Also available from CLI:
 echo '{{"hello" | capitalize}}' | npx liquidjs
 ```
 
-* A live demo is available on jsfiddle: <https://jsfiddle.net/x43eb0z6/>
-* For more tutorials and the full API, refer to the [wiki page](https://github.com/harttle/liquidjs/wiki).
-* Typedoc is also available here: <https://harttle.github.io/liquidjs/classes/_liquid_.liquid.html>
+For detailed documents, see:
+
+* The [Wiki Page](https://github.com/harttle/liquidjs/wiki) contains tutorials and advanced topics.
+* The [API Reference](https://harttle.github.io/liquidjs/classes/_liquid_.liquid.html) provides detailed descriptions for classes, methods and properties.
 
 ## Differences and Limitations
 
@@ -64,10 +65,7 @@ echo '{{"hello" | capitalize}}' | npx liquidjs
 * [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 
 Features that available on shopify website but not on shopify/liquid repo will not be implemented in this repo,
-but there're some plugins available (feel free to add yours):
-
-* color filters: https://github.com/harttle/liquidjs-color-filters
-* sections tags (WIP): https://github.com/harttle/liquidjs-section-tags
+but there're some plugins available: <https://github.com/harttle/liquidjs/wiki/Plugins>
 
 ## Contributors ✨
 
