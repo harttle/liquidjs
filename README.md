@@ -67,6 +67,19 @@ For detailed documents, see:
 Features that available on shopify website but not on shopify/liquid repo will not be implemented in this repo,
 but there're some plugins available: <https://github.com/harttle/liquidjs/wiki/Plugins>
 
+## Related Packages
+
+* [gulp-liquidjs](https://www.npmjs.com/package/@tuanpham-dev/gulp-liquidjs): A shopify compatible Liquid template engine for Gulp using liquidjs.
+* [grunt-liquify](https://www.npmjs.com/package/grunt-liquify): A Grunt task to process Liquid using liquidjs. Use it to add Liquid magic to your scripts and css assets.
+* [react-liquid](https://github.com/aquibm/react-liquid#readme): Liquid templating language component for React
+* [@11ty/eleventy](https://www.npmjs.com/package/@11ty/eleventy): A simpler static site generator. An alternative to Jekyll. Written in JavaScript. Transforms a directory of templates (of varying types) into HTML.
+
+## Contribute Guidelines
+
+* **Code Style**: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
+* **Testing**: make sure test cases still pass, use `npm test` to check locally.
+* **Commit Message**: align to [The Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially the [Type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), to allow the semantic-release bot do the work.
+
 ## Contributors ✨
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
@@ -111,12 +124,6 @@ Thanks goes to these wonderful people:
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 [![donate to liquidjs collective](https://opencollective.com/webpack/donate/button@2x.png?color=blue)](https://opencollective.com/liquidjs/donate)
-
-## Contribute Guidelines
-
-* **Code Style**: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
-* **Testing**: make sure test cases still pass, use `npm test` to check locally.
-* **Commit Message**: align to [The Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially the [Type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), to allow the semantic-release bot do the work.
 
 [shopify/liquid]: https://shopify.github.io/liquid/
 [caniuse-promises]: http://caniuse.com/#feat=promises
