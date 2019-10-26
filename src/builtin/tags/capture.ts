@@ -20,11 +20,9 @@ export default {
       })
     stream.start()
   },
-  render: async function (ctx: Context) {
+  render: function * (ctx: Context) {
     const r = this.liquid.renderer
-    const html = ctx.sync
-      ? r.renderTemplatesSync(this.templates, ctx)
-      : await r.renderTemplates(this.templates, ctx)
+    const html = yield r.renderTemplates(this.templates, ctx)
     ctx.front()[this.variable] = html
   }
 } as ITagImplOptions

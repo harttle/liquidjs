@@ -12,12 +12,8 @@ export class Output extends Template<OutputToken> implements ITemplate {
     super(token)
     this.value = new Value(token.value, strictFilters)
   }
-  public renderSync (ctx: Context, emitter: Emitter) {
-    const val = this.value.valueSync(ctx)
-    emitter.write(stringify(toValue(val)))
-  }
-  public async render (ctx: Context, emitter: Emitter) {
-    const val = await this.value.value(ctx)
+  public * render (ctx: Context, emitter: Emitter) {
+    const val = yield this.value.value(ctx)
     emitter.write(stringify(toValue(val)))
   }
 }

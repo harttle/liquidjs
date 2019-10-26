@@ -14,16 +14,13 @@ export default {
       })
     stream.start()
   },
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
     const blocks = ctx.getRegister('blocks')
     const childDefined = blocks[this.block]
     const r = this.liquid.renderer
     const html = childDefined !== undefined
       ? childDefined
-      : (ctx.sync
-        ? r.renderTemplatesSync(this.tpls, ctx)
-        : await r.renderTemplates(this.tpls, ctx)
-      )
+      : yield r.renderTemplates(this.tpls, ctx)
 
     if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
       blocks[this.block] = html

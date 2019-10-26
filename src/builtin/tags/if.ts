@@ -27,29 +27,16 @@ export default {
     stream.start()
   },
 
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
     const r = this.liquid.renderer
 
     for (const branch of this.branches) {
-      const cond = await new Expression(branch.cond).value(ctx)
+      const cond = yield new Expression(branch.cond).value(ctx)
       if (isTruthy(cond)) {
-        await r.renderTemplates(branch.templates, ctx, emitter)
+        yield r.renderTemplates(branch.templates, ctx, emitter)
         return
       }
     }
-    await r.renderTemplates(this.elseTemplates, ctx, emitter)
-  },
-
-  renderSync: function (ctx: Context, hash: Hash, emitter: Emitter) {
-    const r = this.liquid.renderer
-
-    for (const branch of this.branches) {
-      const cond = new Expression(branch.cond).valueSync(ctx)
-      if (isTruthy(cond)) {
-        r.renderTemplatesSync(branch.templates, ctx, emitter)
-        return
-      }
-    }
-    r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
+    yield r.renderTemplates(this.elseTemplates, ctx, emitter)
   }
 } as ITagImplOptions

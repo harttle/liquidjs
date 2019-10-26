@@ -5,6 +5,7 @@ import { Tag } from '../../../src/template/tag/tag'
 import { Filter } from '../../../src/template/filter/filter'
 import { Render } from '../../../src/render/render'
 import { HTML } from '../../../src/template/html'
+import { toThenable } from '../../../src/util/async'
 
 describe('render', function () {
   let render: Render
@@ -15,14 +16,10 @@ describe('render', function () {
   })
 
   describe('.renderTemplates()', function () {
-    it('should throw when scope undefined', function () {
-      expect(render.renderTemplates([], null as any)).to.be.rejectedWith(/scope undefined/)
-    })
-
     it('should render html', async function () {
       const scope = new Context()
       const token = { type: 'html', value: '<p>' } as Token
-      const html = await render.renderTemplates([new HTML(token)], scope)
+      const html = await toThenable(render.renderTemplates([new HTML(token)], scope))
       return expect(html).to.equal('<p>')
     })
   })

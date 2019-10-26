@@ -11,9 +11,7 @@ export default {
     this.key = match[1]
     this.value = match[2]
   },
-  render: async function (ctx: Context) {
-    ctx.front()[this.key] = ctx.sync
-      ? this.liquid.evalValueSync(this.value, ctx)
-      : await this.liquid.evalValue(this.value, ctx)
+  render: function * (ctx: Context) {
+    ctx.front()[this.key] = yield this.liquid._evalValue(this.value, ctx)
   }
 } as ITagImplOptions

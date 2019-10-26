@@ -21,17 +21,10 @@ export class Hash {
     }
     return instance
   }
-  public static createSync (markup: string, ctx: Context) {
+  public static * create (markup: string, ctx: Context) {
     const instance = Hash.parse(markup)
     for (const key of Object.keys(instance)) {
-      instance[key] = new Expression(instance[key]).evaluateSync(ctx)
-    }
-    return instance
-  }
-  public static async create (markup: string, ctx: Context) {
-    const instance = Hash.parse(markup)
-    for (const key of Object.keys(instance)) {
-      instance[key] = await new Expression(instance[key]).evaluate(ctx)
+      instance[key] = yield new Expression(instance[key]).evaluate(ctx)
     }
     return instance
   }
