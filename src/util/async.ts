@@ -34,7 +34,7 @@ function isCustomIterable (val: any): val is IterableIterator<any> {
   return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
 }
 
-export function toThenable (val: IterableIterator<any> | Thenable): Thenable {
+export function toThenable (val: IterableIterator<any> | Thenable | any): Thenable {
   if (isThenable(val)) return val
   if (isCustomIterable(val)) return reduce()
   return mkResolve(val)
@@ -61,7 +61,7 @@ export function toThenable (val: IterableIterator<any> | Thenable): Thenable {
   }
 }
 
-export function toValue (val: IterableIterator<any> | Thenable) {
+export function toValue (val: IterableIterator<any> | Thenable | any) {
   let ret: any
   toThenable(val)
     .then((x: any) => {

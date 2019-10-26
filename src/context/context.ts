@@ -11,10 +11,10 @@ export class Context {
   public environments: Scope
   public sync: boolean
   public opts: NormalizedFullOptions
-  public constructor (ctx: object = {}, opts?: NormalizedFullOptions, sync = false) {
+  public constructor (env: object = {}, opts?: NormalizedFullOptions, sync = false) {
     this.sync = sync
     this.opts = applyDefault(opts)
-    this.environments = ctx
+    this.environments = env
   }
   public getRegister (key: string, defaultValue = {}) {
     return (this.registers[key] = this.registers[key] || defaultValue)

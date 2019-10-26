@@ -1,4 +1,4 @@
-import { Hash, Emitter, TagToken, Token, ITagImplOptions, Context } from '../../types'
+import { TagToken, Token, ITagImplOptions } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -15,7 +15,7 @@ export default {
       })
     stream.start()
   },
-  render: function (ctx: Context, hash: Hash, emitter: Emitter) {
-    emitter.write(this.tokens.map((token: Token) => token.raw).join(''))
+  render: function () {
+    return this.tokens.map((token: Token) => token.raw).join('')
   }
 } as ITagImplOptions

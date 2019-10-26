@@ -16,8 +16,6 @@ import { FilterImplOptions } from './template/filter/filter-impl-options'
 import IFS from './fs/ifs'
 import { toThenable, toValue } from './util/async'
 
-type nullableTemplates = ITemplate[] | null
-
 export * from './types'
 
 export class Liquid {
