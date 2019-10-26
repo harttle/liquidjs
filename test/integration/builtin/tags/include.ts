@@ -33,6 +33,7 @@ describe('tags/include', function () {
       '/parent.html': '{%include%}'
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
+      console.log(e)
       expect(e.name).to.equal('RenderError')
       expect(e.message).to.match(/cannot include with empty filename/)
     })

@@ -36,11 +36,9 @@ export default {
 
     stream.start()
   },
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
     const r = this.liquid.renderer
-    let collection = ctx.sync
-      ? new Expression(this.collection).valueSync(ctx)
-      : await new Expression(this.collection).value(ctx)
+    let collection = yield new Expression(this.collection).value(ctx)
 
     if (!isArray(collection)) {
       if (isString(collection) && collection.length > 0) {
@@ -50,9 +48,7 @@ export default {
       }
     }
     if (!isArray(collection) || !collection.length) {
-      ctx.sync
-        ? r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
-        : await r.renderTemplates(this.elseTemplates, ctx, emitter)
+      yield r.renderTemplates(this.elseTemplates, ctx, emitter)
       return
     }
 
@@ -66,9 +62,7 @@ export default {
     ctx.push(scope)
     for (const item of collection) {
       scope[this.variable] = item
-      ctx.sync
-        ? r.renderTemplatesSync(this.templates, ctx, emitter)
-        : await r.renderTemplates(this.templates, ctx, emitter)
+      yield r.renderTemplates(this.templates, ctx, emitter)
       if (emitter.break) {
         emitter.break = false
         break

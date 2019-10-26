@@ -17,14 +17,14 @@ export default {
     match = withRE.exec(token.args)
     if (match) this.with = match[1]
   },
-  renderSync: function (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
     let filepath
     if (ctx.opts.dynamicPartials) {
       if (quotedLine.exec(this.value)) {
         const template = this.value.slice(1, -1)
-        filepath = this.liquid.parseAndRenderSync(template, ctx.getAll(), ctx.opts)
+        filepath = yield this.liquid._parseAndRender(template, ctx.getAll(), ctx.opts, ctx.sync)
       } else {
-        filepath = new Expression(this.value).valueSync(ctx)
+        filepath = yield new Expression(this.value).value(ctx)
       }
     } else {
       filepath = this.staticValue
@@ -37,41 +37,11 @@ export default {
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     if (this.with) {
-      hash[filepath] = new Expression(this.with).evaluateSync(ctx)
+      hash[filepath] = yield new Expression(this.with).evaluate(ctx)
     }
-    const templates = this.liquid.parseFileSync(filepath, ctx.opts)
+    const templates = yield this.liquid._parseFile(filepath, ctx.opts, ctx.sync)
     ctx.push(hash)
-    this.liquid.renderer.renderTemplatesSync(templates, ctx, emitter)
-    ctx.pop()
-    ctx.setRegister('blocks', originBlocks)
-    ctx.setRegister('blockMode', originBlockMode)
-  },
-
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    let filepath
-    if (ctx.opts.dynamicPartials) {
-      if (quotedLine.exec(this.value)) {
-        const template = this.value.slice(1, -1)
-        filepath = await this.liquid.parseAndRender(template, ctx.getAll(), ctx.opts)
-      } else {
-        filepath = await new Expression(this.value).value(ctx)
-      }
-    } else {
-      filepath = this.staticValue
-    }
-    assert(filepath, `cannot include with empty filename`)
-
-    const originBlocks = ctx.getRegister('blocks')
-    const originBlockMode = ctx.getRegister('blockMode')
-
-    ctx.setRegister('blocks', {})
-    ctx.setRegister('blockMode', BlockMode.OUTPUT)
-    if (this.with) {
-      hash[filepath] = await new Expression(this.with).evaluate(ctx)
-    }
-    const templates = await this.liquid.parseFile(filepath, ctx.opts)
-    ctx.push(hash)
-    await this.liquid.renderer.renderTemplates(templates, ctx, emitter)
+    yield this.liquid.renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.setRegister('blocks', originBlocks)
     ctx.setRegister('blockMode', originBlockMode)

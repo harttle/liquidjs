@@ -1,5 +1,5 @@
 import { assert } from '../util/assert'
-import { isRange, rangeValue, rangeValueSync } from './range'
+import { isRange, rangeValue } from './range'
 import { Value } from './value'
 import { Context } from '../context/context'
 import { toValue } from '../util/underscore'
@@ -12,38 +12,20 @@ export class Expression {
   public constructor (str = '') {
     this.postfix = [...toPostfix(str)]
   }
-  public async evaluate (ctx: Context): Promise<any> {
+  public * evaluate (ctx: Context) {
     assert(ctx, 'unable to evaluate: context not defined')
 
     for (const token of this.postfix) {
       if (isOperator(token)) {
         this.evaluateOnce(token)
       } else if (isRange(token)) {
-        this.operands.push(await rangeValue(token, ctx))
-      } else this.operands.push(await new Value(token).evaluate(ctx))
+        this.operands.push(yield rangeValue(token, ctx))
+      } else this.operands.push(yield new Value(token).evaluate(ctx))
     }
     return this.operands[0]
   }
-  public evaluateSync (ctx: Context): any {
-    assert(ctx, 'unable to evaluate: context not defined')
-
-    for (const token of this.postfix) {
-      if (isOperator(token)) {
-        this.evaluateOnce(token)
-      } else if (isRange(token)) {
-        this.operands.push(rangeValueSync(token, ctx))
-      } else {
-        const val = new Value(token).evaluateSync(ctx)
-        this.operands.push(val)
-      }
-    }
-    return this.operands[0]
-  }
-  public async value (ctx: Context): Promise<any> {
-    return toValue(await this.evaluate(ctx))
-  }
-  public valueSync (ctx: Context): any {
-    return toValue(this.evaluateSync(ctx))
+  public * value (ctx: Context) {
+    return toValue(yield this.evaluate(ctx))
   }
   private evaluateOnce (token: string) {
     const r = this.operands.pop()

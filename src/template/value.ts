@@ -47,17 +47,10 @@ export class Value {
     }
     this.filters.push(new Filter(name, args, this.strictFilters))
   }
-  public async value (ctx: Context) {
-    let val = await new Expression(this.initial).evaluate(ctx)
+  public * value (ctx: Context) {
+    let val = yield new Expression(this.initial).evaluate(ctx)
     for (const filter of this.filters) {
-      val = await filter.render(val, ctx)
-    }
-    return val
-  }
-  public valueSync (ctx: Context) {
-    let val = new Expression(this.initial).evaluateSync(ctx)
-    for (const filter of this.filters) {
-      val = filter.renderSync(val, ctx)
+      val = yield filter.render(val, ctx)
     }
     return val
   }

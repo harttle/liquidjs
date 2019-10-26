@@ -28,10 +28,8 @@ export default {
     stream.start()
   },
 
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    let collection = ctx.sync
-      ? new Expression(this.collection).valueSync(ctx) || []
-      : await new Expression(this.collection).value(ctx) || []
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+    let collection = (yield new Expression(this.collection).value(ctx)) || []
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 
@@ -50,9 +48,7 @@ export default {
         emitter.write(`<tr class="row${tablerowloop.row()}">`)
       }
       emitter.write(`<td class="col${tablerowloop.col()}">`)
-      ctx.sync
-        ? r.renderTemplatesSync(this.templates, ctx, emitter)
-        : await r.renderTemplates(this.templates, ctx, emitter)
+      yield r.renderTemplates(this.templates, ctx, emitter)
       emitter.write('</td>')
     }
     if (collection.length) emitter.write('</tr>')

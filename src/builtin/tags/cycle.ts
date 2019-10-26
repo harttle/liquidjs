@@ -21,10 +21,8 @@ export default {
     assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
   },
 
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    const group = ctx.sync
-      ? this.group.valueSync(ctx)
-      : await this.group.value(ctx)
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+    const group = yield this.group.value(ctx)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle')
     let idx = groups[fingerprint]
@@ -36,9 +34,7 @@ export default {
     const candidate = this.candidates[idx]
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
-    const html = ctx.sync
-      ? new Expression(candidate).valueSync(ctx)
-      : await new Expression(candidate).value(ctx)
+    const html = yield new Expression(candidate).value(ctx)
     emitter.write(html)
   }
 } as ITagImplOptions

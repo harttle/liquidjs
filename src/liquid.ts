@@ -14,6 +14,7 @@ import builtinFilters from './builtin/filters'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import IFS from './fs/ifs'
+import { toThenable, toValue } from './util/async'
 
 type nullableTemplates = ITemplate[] | null
 
@@ -41,62 +42,47 @@ export class Liquid {
     const tokens = this.tokenizer.tokenize(html, filepath)
     return this.parser.parse(tokens)
   }
-  public render (tpl: ITemplate[], scope?: object, opts?: LiquidOptions): Promise<string> {
+
+  public _render (tpl: ITemplate[], scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
     const options = { ...this.options, ...normalize(opts) }
-    const ctx = new Context(scope, options)
+    const ctx = new Context(scope, options, sync)
     return this.renderer.renderTemplates(tpl, ctx)
   }
+  public async render (tpl: ITemplate[], scope?: object, opts?: LiquidOptions): Promise<string> {
+    return toThenable(this._render(tpl, scope, opts, false))
+  }
   public renderSync (tpl: ITemplate[], scope?: object, opts?: LiquidOptions): string {
-    const options = { ...this.options, ...normalize(opts) }
-    const ctx = new Context(scope, options, true)
-    return this.renderer.renderTemplatesSync(tpl, ctx)
+    return toValue(this._render(tpl, scope, opts, true))
+  }
+
+  public _parseAndRender (html: string, scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
+    const tpl = this.parse(html)
+    return this._render(tpl, scope, opts, sync)
   }
   public async parseAndRender (html: string, scope?: object, opts?: LiquidOptions): Promise<string> {
-    const tpl = this.parse(html)
-    return this.render(tpl, scope, opts)
+    return toThenable(this._parseAndRender(html, scope, opts, false))
   }
   public parseAndRenderSync (html: string, scope?: object, opts?: LiquidOptions): string {
-    const tpl = this.parse(html)
-    return this.renderSync(tpl, scope, opts)
+    return toValue(this._parseAndRender(html, scope, opts, true))
   }
-  public parseFileSync (file: string, opts?: LiquidOptions): ITemplate[] {
+
+  public * _parseFile (file: string, opts?: LiquidOptions, sync?: boolean) {
     const options = { ...this.options, ...normalize(opts) }
     const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
 
     for (const filepath of paths) {
-      const tpl = this.respectCache(filepath, () => {
-        if (!(this.fs.existsSync(filepath))) return null
-        return this.parse(this.fs.readFileSync(filepath), filepath)
-      })
-      if (tpl !== null) return tpl
+      if (this.options.cache && this.cache[filepath]) return this.cache[filepath]
+      if (!(sync ? this.fs.existsSync(filepath) : yield this.fs.exists(filepath))) continue
+      const tpl = this.parse(sync ? fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
+      return (this.cache[filepath] = tpl)
     }
-
     throw this.lookupError(file, options.root)
   }
   public async parseFile (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
-    const options = { ...this.options, ...normalize(opts) }
-    const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
-
-    for (const filepath of paths) {
-      const tpl = await this.respectCache(filepath, async () => {
-        if (!(await this.fs.exists(filepath))) return null
-        return this.parse(await this.fs.readFile(filepath), filepath)
-      })
-      if (tpl !== null) return tpl
-    }
-    throw this.lookupError(file, options.root)
+    return toThenable(this._parseFile(file, opts, false))
   }
-  /**
-   * @deprecated use parseFile instead
-   */
-  public async getTemplate (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
-    return this.parseFile(file, opts)
-  }
-  /**
-   * @deprecated use parseFileSync instead
-   */
-  public getTemplateSync (file: string, opts?: LiquidOptions): ITemplate[] {
-    return this.parseFileSync(file, opts)
+  public parseFileSync (file: string, opts?: LiquidOptions): ITemplate[] {
+    return toValue(this._parseFile(file, opts, true))
   }
   public async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
     const templates = await this.parseFile(file, opts)
@@ -107,12 +93,16 @@ export class Liquid {
     const templates = this.parseFileSync(file, options)
     return this.renderSync(templates, ctx, opts)
   }
-  public async evalValue (str: string, ctx: Context): Promise<any> {
-    return new Value(str, this.options.strictFilters).value(ctx)
-  }
 
+  public _evalValue (str: string, ctx: Context): IterableIterator<any> {
+    const value = new Value(str, this.options.strictFilters)
+    return value.value(ctx)
+  }
+  public async evalValue (str: string, ctx: Context): Promise<any> {
+    return toThenable(this._evalValue(str, ctx))
+  }
   public evalValueSync (str: string, ctx: Context): any {
-    return new Value(str, this.options.strictFilters).valueSync(ctx)
+    return toValue(this._evalValue(str, ctx))
   }
 
   public registerFilter (name: string, filter: FilterImplOptions) {
@@ -139,19 +129,16 @@ export class Liquid {
     return err
   }
 
-  private setCache<T extends nullableTemplates> (filepath: string, tpl: T): T {
-    this.cache[filepath] = tpl
-    return tpl
+  /**
+   * @deprecated use parseFile instead
+   */
+  public async getTemplate (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
+    return this.parseFile(file, opts)
   }
-
-  private respectCache (filepath: string, resolver: () => nullableTemplates): nullableTemplates
-  private respectCache (filepath: string, resolver: () => Promise<nullableTemplates>): Promise<nullableTemplates>
-  private respectCache (filepath: string, resolver: () => nullableTemplates | Promise<nullableTemplates>): nullableTemplates | Promise<nullableTemplates> {
-    if (!this.options.cache) return resolver()
-    if (this.cache[filepath]) return this.cache[filepath]
-
-    const tpl = resolver()
-    const setCacheIfDefined = (tpl: nullableTemplates) => tpl === null ? null : this.setCache(filepath, tpl)
-    return tpl instanceof Promise ? tpl.then(setCacheIfDefined) : setCacheIfDefined(tpl)
+  /**
+   * @deprecated use parseFileSync instead
+   */
+  public getTemplateSync (file: string, opts?: LiquidOptions): ITemplate[] {
+    return this.parseFileSync(file, opts)
   }
 }

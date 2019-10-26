@@ -3,6 +3,7 @@ import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { Filter } from '../../../../src/template/filter/filter'
 import { Context } from '../../../../src/context/context'
+import { toThenable } from '../../../../src/util/async'
 
 chai.use(sinonChai)
 const expect = chai.expect
@@ -19,40 +20,40 @@ describe('filter', function () {
   })
 
   it('should render input if filter not registered', async function () {
-    expect(await new Filter('undefined', [], false).render('foo', ctx)).to.equal('foo')
+    expect(await toThenable(new Filter('undefined', [], false).render('foo', ctx))).to.equal('foo')
   })
 
   it('should call filter impl with correct arguments', async function () {
     const spy = sinon.spy()
     Filter.register('foo', spy)
-    await new Filter('foo', ['33'], false).render('foo', ctx)
+    await toThenable(new Filter('foo', ['33'], false).render('foo', ctx))
     expect(spy).to.have.been.calledWith('foo', 33)
   })
   it('should call filter impl with correct this arg', async function () {
     const spy = sinon.spy()
     Filter.register('foo', spy)
-    await new Filter('foo', ['33'], false).render('foo', ctx)
+    await toThenable(new Filter('foo', ['33'], false).render('foo', ctx))
     expect(spy).to.have.been.calledOn(sinon.match.has('context', ctx))
   })
   it('should render a simple filter', async function () {
     Filter.register('upcase', x => x.toUpperCase())
-    expect(await new Filter('upcase', [], false).render('foo', ctx)).to.equal('FOO')
+    expect(await toThenable(new Filter('upcase', [], false).render('foo', ctx))).to.equal('FOO')
   })
 
   it('should render filters with argument', async function () {
     Filter.register('add', (a, b) => a + b)
-    expect(await new Filter('add', ['2'], false).render(3, ctx)).to.equal(5)
+    expect(await toThenable(new Filter('add', ['2'], false).render(3, ctx))).to.equal(5)
   })
 
   it('should render filters with multiple arguments', async function () {
     Filter.register('add', (a, b, c) => a + b + c)
-    expect(await new Filter('add', ['2', '"c"'], false).render(3, ctx)).to.equal('5c')
+    expect(await toThenable(new Filter('add', ['2', '"c"'], false).render(3, ctx))).to.equal('5c')
   })
 
   it('should pass Objects/Drops as it is', async function () {
     Filter.register('name', a => a.constructor.name)
     class Foo {}
-    expect(await new Filter('name', [], false).render(new Foo(), ctx)).to.equal('Foo')
+    expect(await toThenable(new Filter('name', [], false).render(new Foo(), ctx))).to.equal('Foo')
   })
 
   it('should not throw when filter name illegal', function () {
@@ -61,13 +62,8 @@ describe('filter', function () {
     }).to.not.throw()
   })
 
-  it('should support sync', function () {
-    Filter.register('add', (a, b) => a + b)
-    expect(new Filter('add', ['2'], false).renderSync(3, ctx)).to.equal(5)
-  })
-
-  it('should support key value pairs', function () {
+  it('should support key value pairs', async function () {
     Filter.register('add', (a, b) => b[0] + ':' + (a + b[1]))
-    expect(new Filter('add', [['num', '2']], false).renderSync(3, ctx)).to.equal('num:5')
+    expect(await toThenable((new Filter('add', [['num', '2']], false).render(3, ctx)))).to.equal('num:5')
   })
 })

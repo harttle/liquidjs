@@ -20,18 +20,10 @@ export default {
     stream.start()
   },
 
-  renderSync: async function (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
     const r = this.liquid.renderer
-    const cond = new Expression(this.cond).valueSync(ctx)
-    isFalsy(cond)
-      ? r.renderTemplatesSync(this.templates, ctx, emitter)
-      : r.renderTemplatesSync(this.elseTemplates, ctx, emitter)
-  },
-
-  render: async function (ctx: Context, hash: Hash, emitter: Emitter) {
-    const r = this.liquid.renderer
-    const cond = await new Expression(this.cond).value(ctx)
-    await (isFalsy(cond)
+    const cond = yield new Expression(this.cond).value(ctx)
+    yield (isFalsy(cond)
       ? r.renderTemplates(this.templates, ctx, emitter)
       : r.renderTemplates(this.elseTemplates, ctx, emitter))
   }

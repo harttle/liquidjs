@@ -77,4 +77,54 @@ describe('Liquid', function () {
         .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
   })
+  describe('#parseFile', function () {
+    it('should throw with lookup list when file not exist', function () {
+      const engine = new Liquid({
+        root: ['/boo', '/root/'],
+        extname: '.html'
+      })
+      return expect(engine.parseFile('/not/exist.html')).to
+        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+    })
+    it('should throw with lookup list when file not exist', function () {
+      const engine = new Liquid({
+        root: ['/boo', '/root/'],
+        extname: '.html'
+      })
+      return expect(engine.getTemplate('/not/exist.html')).to
+        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+    })
+  })
+  describe('#evalValue', function () {
+    it('should eval string literal', async function () {
+      const engine = new Liquid()
+      const str = await engine.evalValue('"foo"', {} as any)
+      expect(str).to.equal('foo')
+    })
+  })
+  describe('#evalValueSync', function () {
+    it('should eval string literal', function () {
+      const engine = new Liquid()
+      const str = engine.evalValueSync('"foo"', {} as any)
+      expect(str).to.equal('foo')
+    })
+  })
+  describe('#parseFileSync', function () {
+    it('should throw with lookup list when file not exist', function () {
+      const engine = new Liquid({
+        root: ['/boo', '/root/'],
+        extname: '.html'
+      })
+      return expect(() => engine.parseFileSync('/not/exist.html'))
+        .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+    })
+    it('should throw with lookup list when file not exist', function () {
+      const engine = new Liquid({
+        root: ['/boo', '/root/'],
+        extname: '.html'
+      })
+      return expect(() => engine.getTemplateSync('/not/exist.html'))
+        .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+    })
+  })
 })

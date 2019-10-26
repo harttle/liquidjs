@@ -9,11 +9,7 @@ export class Value {
     this.str = str
   }
 
-  public async evaluate (ctx: Context) {
-    return this.evaluateSync(ctx)
-  }
-
-  public evaluateSync (ctx: Context) {
+  public evaluate (ctx: Context) {
     const literalValue = parseLiteral(this.str)
     if (literalValue !== undefined) {
       return literalValue
@@ -21,11 +17,7 @@ export class Value {
     return ctx.get(this.str)
   }
 
-  public async value (ctx: Context) {
-    return toValue(await this.evaluate(ctx))
-  }
-
-  public valueSync (ctx: Context) {
-    return toValue(this.evaluateSync(ctx))
+  public value (ctx: Context) {
+    return toValue(this.evaluate(ctx))
   }
 }
