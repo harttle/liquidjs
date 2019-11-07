@@ -1,3 +1,10 @@
+# [9.3.0](https://github.com/harttle/liquidjs/compare/v9.2.0...v9.3.0) (2019-11-07)
+
+
+### Features
+
+* support require.resolve for lookup, see [#168](https://github.com/harttle/liquidjs/issues/168) ([2dd4355](https://github.com/harttle/liquidjs/commit/2dd4355))
+
 ## [9.1.1](https://github.com/harttle/liquidjs/compare/v9.1.0...v9.1.1) (2019-10-10)
 
 
