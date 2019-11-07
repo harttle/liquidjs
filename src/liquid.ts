@@ -67,6 +67,10 @@ export class Liquid {
   public * _parseFile (file: string, opts?: LiquidOptions, sync?: boolean) {
     const options = { ...this.options, ...normalize(opts) }
     const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
+    if (fs.fallback !== undefined) {
+      const filepath = fs.fallback(file)
+      if (filepath !== undefined) paths.push(filepath)
+    }
 
     for (const filepath of paths) {
       if (this.options.cache && this.cache[filepath]) return this.cache[filepath]

@@ -27,6 +27,11 @@ const fs: IFS = {
   resolve: (root: string, file: string, ext: string) => {
     if (!extname(file)) file += ext
     return resolve(root, file)
+  },
+  fallback: (file: string) => {
+    try {
+      return require.resolve(file)
+    } catch (e) {}
   }
 }
 

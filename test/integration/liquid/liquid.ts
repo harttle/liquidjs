@@ -86,13 +86,14 @@ describe('Liquid', function () {
       return expect(engine.parseFile('/not/exist.html')).to
         .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
-    it('should throw with lookup list when file not exist', function () {
+    it('should fallback to require.resolve in Node.js', async function () {
       const engine = new Liquid({
-        root: ['/boo', '/root/'],
+        root: ['/root/'],
         extname: '.html'
       })
-      return expect(engine.getTemplate('/not/exist.html')).to
-        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+      const tpls = await engine.getTemplate('mocha')
+      expect(tpls.length).to.gte(1)
+      expect(tpls[0].token.raw).to.contain('module.exports')
     })
   })
   describe('#evalValue', function () {
