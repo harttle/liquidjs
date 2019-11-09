@@ -1,3 +1,10 @@
+## [9.3.1](https://github.com/harttle/liquidjs/compare/v9.3.0...v9.3.1) (2019-11-09)
+
+
+### Bug Fixes
+
+* liquidjs command in /bin/liquid.js, fixes [#169](https://github.com/harttle/liquidjs/issues/169) ([0073b90](https://github.com/harttle/liquidjs/commit/0073b90))
+
 # [9.3.0](https://github.com/harttle/liquidjs/compare/v9.2.0...v9.3.0) (2019-11-07)
 
 
