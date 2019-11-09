@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const Liquid = require('..')
+const Liquid = require('..').Liquid
 
 let tpl = ''
 process.stdin.on('data', chunk => (tpl += chunk))
