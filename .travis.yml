@@ -6,7 +6,9 @@ jobs:
   include:
     - stage: test
       name: 'Linting'
-      script: npm run lint
+      script:
+        - npm run lint
+        - commitlint-travis
     - name: 'Coverage'
       script: npm run coverage-coveralls
     - stage: release
