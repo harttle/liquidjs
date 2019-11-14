@@ -1,3 +1,10 @@
+# [9.4.0](https://github.com/harttle/liquidjs/compare/v9.3.1...v9.4.0) (2019-11-14)
+
+
+### Features
+
+* add ability to pass JSON context to CLI ([9504e4e](https://github.com/harttle/liquidjs/commit/9504e4e))
+
 ## [9.3.1](https://github.com/harttle/liquidjs/compare/v9.3.0...v9.3.1) (2019-11-09)
 
 
