@@ -43,16 +43,28 @@ const esm = {
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [typescript({
-    tsconfigOverride: {
-      include: [ 'src' ],
-      exclude: [ 'test', 'benchmark' ],
-      compilerOptions: {
-        target: 'ES2017',
-        module: 'ES2015'
+  plugins: [
+    replace({
+      include: './src/liquid.ts',
+      delimiters: ['', ''],
+      './fs/node': './fs/browser'
+    }),
+    replace({
+      include: './src/parser/tokenizer.ts',
+      delimiters: ['', ''],
+      './flatten/node': './flatten/browser'
+    }),
+    typescript({
+      tsconfigOverride: {
+        include: [ 'src' ],
+        exclude: [ 'test', 'benchmark' ],
+        compilerOptions: {
+          target: 'ES2017',
+          module: 'ES2015'
+        }
       }
-    }
-  })],
+    })
+  ],
   treeshake,
   input
 }
