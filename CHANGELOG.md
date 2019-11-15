@@ -1,3 +1,10 @@
+## [9.4.2](https://github.com/harttle/liquidjs/compare/v9.4.1...v9.4.2) (2019-11-15)
+
+
+### Bug Fixes
+
+* reading .first, .last of Array, closes [#175](https://github.com/harttle/liquidjs/issues/175) ([f82da11](https://github.com/harttle/liquidjs/commit/f82da11))
+
 ## [9.4.1](https://github.com/harttle/liquidjs/compare/v9.4.0...v9.4.1) (2019-11-15)
 
 
