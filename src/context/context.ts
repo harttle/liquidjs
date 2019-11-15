@@ -123,11 +123,23 @@ function readProperty (obj: Scope, key: string) {
     if (obj.hasOwnProperty(key)) return obj[key]
     return obj.liquidMethodMissing(key)
   }
-  return key === 'size' ? readSize(obj) : obj[key]
+  if (key === 'size') return readSize(obj)
+  if (key === 'first') return readFirst(obj)
+  if (key === 'last') return readLast(obj)
+  return obj[key]
+}
+
+function readFirst (obj: Scope) {
+  if (_.isArray(obj)) return obj[0]
+  return obj['first']
+}
+
+function readLast (obj: Scope) {
+  if (_.isArray(obj)) return obj[obj.length - 1]
+  return obj['last']
 }
 
 function readSize (obj: Scope) {
-  if (!_.isNil(obj['size'])) return obj['size']
   if (_.isArray(obj) || _.isString(obj)) return obj.length
   return obj['size']
 }

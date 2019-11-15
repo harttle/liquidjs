@@ -11,6 +11,10 @@ describe('Context', function () {
       foo: 'zoo',
       one: 1,
       zoo: { size: 4 },
+      obj: {
+        first: 'f',
+        last: 'l'
+      },
       bar: {
         zoo: 'coo',
         'Mr.Smith': 'John',
@@ -123,6 +127,18 @@ describe('Context', function () {
     })
     it('should return undefined if do not have size and length', async function () {
       expect(ctx.get('one.size')).to.equal(undefined)
+    })
+    it('should read .first of array', async function () {
+      expect(ctx.get('bar.arr.first')).to.equal('a')
+    })
+    it('should read .first of object', async function () {
+      expect(ctx.get('obj.first')).to.equal('f')
+    })
+    it('should read .last of array', async function () {
+      expect(ctx.get('bar.arr.last')).to.equal('b')
+    })
+    it('should read .last of object', async function () {
+      expect(ctx.get('obj.last')).to.equal('l')
     })
   })
   describe('strictVariables', async function () {
