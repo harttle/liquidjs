@@ -104,6 +104,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_context_context_.context.html#front" class="tsd-kind-icon">front</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_context_context_.context.html#get" class="tsd-kind-icon">get</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_context_context_.context.html#getall" class="tsd-kind-icon">get<wbr>All</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_context_context_.context.html#getfromscope" class="tsd-kind-icon">get<wbr>From<wbr>Scope</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_context_context_.context.html#getregister" class="tsd-kind-icon">get<wbr>Register</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="_context_context_.context.html#parseprop" class="tsd-kind-icon">parse<wbr>Prop</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_context_context_.context.html#pop" class="tsd-kind-icon">pop</a></li>
@@ -216,7 +217,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L49">context/context.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L53">context/context.ts:53</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -244,7 +245,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L46">context/context.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L50">context/context.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_context_scope_.plainobject.html" class="tsd-signature-type">PlainObject</a>
@@ -258,7 +259,7 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_context_scope_.plainobject.html" class="tsd-signature-type">PlainObject</a><span class="tsd-signature-symbol"> | </span><a href="_drop_drop_.drop.html" class="tsd-signature-type">Drop</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -273,10 +274,7 @@
 									<h5>path: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_context_scope_.plainobject.html" class="tsd-signature-type">PlainObject</a>
-								<span class="tsd-signature-symbol"> | </span>
-								<a href="_drop_drop_.drop.html" class="tsd-signature-type">Drop</a>
-							</h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -297,6 +295,32 @@
 								<span class="tsd-signature-symbol"> | </span>
 								<a href="_drop_drop_.drop.html" class="tsd-signature-type">Drop</a>
 							</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getfromscope" class="tsd-anchor"></a>
+					<h3>get<wbr>From<wbr>Scope</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>From<wbr>Scope<span class="tsd-signature-symbol">(</span>scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span>, paths<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L34">context/context.ts:34</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>scope: <span class="tsd-signature-type">object</span></h5>
+								</li>
+								<li>
+									<h5>paths: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">object</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -338,7 +362,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L67">context/context.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L71">context/context.ts:71</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -361,7 +385,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L43">context/context.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L47">context/context.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span>
@@ -383,7 +407,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L40">context/context.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L44">context/context.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -473,6 +497,9 @@
 								<a href="_context_context_.context.html#getall" class="tsd-kind-icon">get<wbr>All</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_context_context_.context.html#getfromscope" class="tsd-kind-icon">get<wbr>From<wbr>Scope</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_context_context_.context.html#getregister" class="tsd-kind-icon">get<wbr>Register</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
@@ -500,7 +527,7 @@
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_context_context_.html#readlast" class="tsd-kind-icon">read<wbr>Last</a>
 					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_context_context_.html#readproperty" class="tsd-kind-icon">read<wbr>Property</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">

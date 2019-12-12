@@ -1,3 +1,10 @@
+# [9.5.0](https://github.com/harttle/liquidjs/compare/v9.4.2...v9.5.0) (2019-12-12)
+
+
+### Features
+
+* nested property for the `where` filter, [#178](https://github.com/harttle/liquidjs/issues/178) ([60ec74f](https://github.com/harttle/liquidjs/commit/60ec74f))
+
 ## [9.4.2](https://github.com/harttle/liquidjs/compare/v9.4.1...v9.4.2) (2019-11-15)
 
 
