@@ -1,9 +1,9 @@
-import * as _ from '../util/underscore'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { assert } from '../util/assert'
 import { NormalizedFullOptions, applyDefault } from '../liquid-options'
 import { Scope } from './scope'
+import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
 
 export class Context {
   private scopes: Scope[] = [{}]
@@ -28,14 +28,18 @@ export class Context {
   }
   public get (path: string) {
     const paths = this.parseProp(path)
-    let ctx = this.findScope(paths[0]) || this.environments
-    for (const path of paths) {
-      ctx = readProperty(ctx, path)
-      if (_.isNil(ctx) && this.opts.strictVariables) {
+    const scope = this.findScope(paths[0]) || this.environments
+    return this.getFromScope(scope, paths)
+  }
+  public getFromScope (scope: object, paths: string[] | string) {
+    if (!isArray(paths)) paths = this.parseProp(paths)
+    return paths.reduce((scope, path) => {
+      scope = readProperty(scope, path)
+      if (isNil(scope) && this.opts.strictVariables) {
         throw new TypeError(`undefined variable: ${path}`)
       }
-    }
-    return ctx
+      return scope
+    }, scope)
   }
   public push (ctx: object) {
     return this.scopes.push(ctx)
@@ -115,11 +119,11 @@ export class Context {
   }
 }
 
-function readProperty (obj: Scope, key: string) {
-  if (_.isNil(obj)) return obj
-  obj = _.toLiquid(obj)
+export function readProperty (obj: Scope, key: string) {
+  if (isNil(obj)) return obj
+  obj = toLiquid(obj)
   if (obj instanceof Drop) {
-    if (_.isFunction(obj[key])) return obj[key]()
+    if (isFunction(obj[key])) return obj[key]()
     if (obj.hasOwnProperty(key)) return obj[key]
     return obj.liquidMethodMissing(key)
   }
@@ -130,17 +134,17 @@ function readProperty (obj: Scope, key: string) {
 }
 
 function readFirst (obj: Scope) {
-  if (_.isArray(obj)) return obj[0]
+  if (isArray(obj)) return obj[0]
   return obj['first']
 }
 
 function readLast (obj: Scope) {
-  if (_.isArray(obj)) return obj[obj.length - 1]
+  if (isArray(obj)) return obj[obj.length - 1]
   return obj['last']
 }
 
 function readSize (obj: Scope) {
-  if (_.isArray(obj) || _.isString(obj)) return obj.length
+  if (isArray(obj) || isString(obj)) return obj.length
   return obj['size']
 }
 

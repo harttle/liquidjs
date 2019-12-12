@@ -3,9 +3,9 @@ import { FilterArgs, Filter } from './filter/filter'
 import { Context } from '../context/context'
 
 export class Value {
+  public readonly filters: Filter[] = []
+  public readonly initial: string
   private strictFilters: boolean
-  private initial: string
-  private filters: Filter[] = []
 
   /**
    * @param str value string, like: "i have a dream | truncate: 3

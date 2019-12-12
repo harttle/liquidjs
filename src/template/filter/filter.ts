@@ -8,9 +8,9 @@ type FilterArg = string|KeyValuePair
 export type FilterArgs = FilterArg[]
 
 export class Filter {
-  private name: string
+  public name: string
+  public args: FilterArgs
   private impl: FilterImplOptions
-  private args: FilterArgs
   private static impls: {[key: string]: FilterImplOptions} = {}
 
   public constructor (name: string, args: FilterArgs, strictFilters: boolean) {

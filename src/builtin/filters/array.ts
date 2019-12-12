@@ -1,5 +1,6 @@
 import { isArray, last } from '../../util/underscore'
 import { isTruthy } from '../../render/boolean'
+import { FilterImpl } from '../../template/filter/filter-impl'
 
 export default {
   'join': (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg),
@@ -28,8 +29,11 @@ function slice<T> (v: T[], begin: number, length = 1): T[] {
   return v.slice(begin, begin + length)
 }
 
-function where<T> (arr: T[], property: string, value?: any): T[] {
-  return arr.filter(obj => value === undefined ? isTruthy(obj[property]) : obj[property] === value)
+function where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): T[] {
+  return arr.filter(obj => {
+    const value = this.context.getFromScope(obj, property)
+    return expected === undefined ? isTruthy(value) : value === expected
+  })
 }
 
 function uniq<T> (arr: T[]): T[] {

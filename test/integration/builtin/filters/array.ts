@@ -169,5 +169,22 @@ Available products:
 - Boring sneakers
 `)
     })
+    it('should support nested property', async function () {
+      const authors = [
+        { name: 'Alice', books: { year: 2019 } },
+        { name: 'Bob', books: { year: 2018 } }
+      ]
+      const html = await liquid.parseAndRender(
+        `{% assign recentAuthors = authors | where: 'books.year', 2019 %}
+Recent Authors:
+{%- for author in recentAuthors %}
+  - {{author.name}}
+{%- endfor %}`,
+        { authors }
+      )
+      expect(html).to.equal(`
+Recent Authors:
+  - Alice`)
+    })
   })
 })
