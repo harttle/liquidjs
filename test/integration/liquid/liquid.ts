@@ -18,8 +18,8 @@ describe('Liquid', function () {
     })
     it('should call plugin with Liquid', async function () {
       const engine = new Liquid()
-      engine.plugin(function (Liquid) {
-        this.registerFilter('t', x => isFalsy(x))
+      engine.plugin(function () {
+        this.registerFilter('t', isFalsy)
       })
       const html = await engine.parseAndRender('{{false|t}}')
       expect(html).to.equal('true')

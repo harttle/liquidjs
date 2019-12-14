@@ -101,8 +101,25 @@ export function range (start: number, stop: number, step = 1) {
 }
 
 export function padStart (str: any, length: number, ch = ' ') {
+  return pad(str, length, ch, (str, ch) => ch + str)
+}
+
+export function padEnd (str: any, length: number, ch = ' ') {
+  return pad(str, length, ch, (str, ch) => str + ch)
+}
+
+export function pad (str: any, length: number, ch: string, add: (str: string, ch: string) => string) {
   str = String(str)
   let n = length - str.length
-  while (n-- > 0) str = ch + str
+  while (n-- > 0) str = add(str, ch)
   return str
+}
+
+export function identify<T> (val: T): T {
+  return val
+}
+
+export function changeCase (str: string): string {
+  const hasLowerCase = [...str].some(ch => ch >= 'a' && ch <= 'z')
+  return hasLowerCase ? str.toUpperCase() : str.toLowerCase()
 }

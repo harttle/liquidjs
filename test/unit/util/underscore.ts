@@ -95,4 +95,17 @@ describe('util/underscore', function () {
       expect(_.isObject(2)).to.be.false
     })
   })
+  describe('.padEnd()', function () {
+    it('should default ch to " "', () => {
+      expect(_.padEnd('foo', 5)).to.equal('foo  ')
+    })
+  })
+  describe('.changeCase()', function () {
+    it('should to upper case if there is one lowercase', () => {
+      expect(_.changeCase('fooA')).to.equal('FOOA')
+    })
+    it('should to lower case if all upper case', () => {
+      expect(_.changeCase('FOOA')).to.equal('fooa')
+    })
+  })
 })

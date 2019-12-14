@@ -1,6 +1,6 @@
 import { Expression } from '../../render/expression'
 import { Context } from '../../context/context'
-import { isArray } from '../../util/underscore'
+import { isArray, identify } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
 
 type KeyValuePair = [string?, string?]
@@ -18,7 +18,7 @@ export class Filter {
     if (!impl && strictFilters) throw new TypeError(`undefined filter: ${name}`)
 
     this.name = name
-    this.impl = impl || (x => x)
+    this.impl = impl || identify
     this.args = args
   }
   public * render (value: any, context: Context) {

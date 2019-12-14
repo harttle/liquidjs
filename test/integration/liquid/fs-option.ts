@@ -12,7 +12,7 @@ describe('LiquidOptions#fs', function () {
     engine = new Liquid({
       root: '/root/',
       fs
-    })
+    } as any)
   })
   it('should be used to read templates', function () {
     return engine.renderFile('files/foo')
