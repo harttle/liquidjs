@@ -4,19 +4,11 @@ import t from '../../../src/util/strftime'
 const expect = chai.expect
 
 describe('util/strftime', function () {
-  let now: Date
-  let then: Date
-  before(function () {
-    mockUTC()
-    now = new Date('2016-01-04T13:15:23.000Z')
-    then = new Date('2016-03-06T03:05:03.000Z')
-  })
-  after(function () {
-    restoreUTC()
-  })
+  const now = new Date('2016-01-04 13:15:23')
+  const then = new Date('2016-03-06 03:05:03')
 
-  it('should format UTC datetime', function () {
-    expect(t(now, '%Y-%m-%dT%H:%M:%S')).to.equal('2016-01-04T13:15:23')
+  it('should format detailed datetime', function () {
+    expect(t(now, '%Y-%m-%d %H:%M:%S')).to.equal('2016-01-04 13:15:23')
   })
   it('should format %A as Monday', function () {
     expect(t(now, '%A')).to.equal('Monday')
@@ -37,7 +29,7 @@ describe('util/strftime', function () {
     expect(t(now, '%I')).to.equal('01')
   })
   it('should format %I as 12 for 00:00', function () {
-    const date = new Date('2016-01-01T00:00:00.000Z')
+    const date = new Date('2016-01-01 00:00:00')
     expect(t(date, '%I')).to.equal('12')
   })
   describe('%j', function () {
@@ -60,7 +52,7 @@ describe('util/strftime', function () {
     expect(t(now, '%l')).to.equal(' 1')
   })
   it('should format %l as 12 for 00:00', function () {
-    const date = new Date('2016-01-01T00:00:00.000Z')
+    const date = new Date('2016-01-01 00:00:00')
     expect(t(date, '%l')).to.equal('12')
   })
   it('should format %L as 0 padded millisecond', function () {
@@ -110,11 +102,13 @@ describe('util/strftime', function () {
     expect(t(now, '%y')).to.equal('16')
   })
   it('should format %z as time zone', function () {
+    const now = new Date('2016-01-04 13:15:23')
+    now.getTimezoneOffset = () => -480  // suppose we're in +8:00
     expect(t(now, '%z')).to.equal('+0800')
   })
   it('should format %z as negative time zone', function () {
     const date = new Date('2016-01-04T13:15:23.000Z')
-    date.getTimezoneOffset = () => 480
+    date.getTimezoneOffset = () => 480  // suppose we're in -8:00
     expect(t(date, '%z')).to.equal('-0800')
   })
   it('should escape %% as %', function () {
@@ -124,23 +118,3 @@ describe('util/strftime', function () {
     expect(t(now, '%o')).to.equal('%o')
   })
 })
-
-function mockUTC () {
-  const p = Date.prototype as any
-
-  p._getHours = p.getHours
-  p.getHours = p.getUTCHours
-
-  p._getDays = p.getDays
-  p.getDays = p.getUTCDays
-
-  p._getTimezoneOffset = p.getTimezoneOffset
-  p.getTimezoneOffset = () => -480
-}
-
-function restoreUTC () {
-  const p = Date.prototype as any
-  p.getHours = p._getHours
-  p.getDays = p._getDays
-  p.getTimezoneOffset = p._getTimezoneOffset
-}
