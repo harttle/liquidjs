@@ -1,3 +1,10 @@
+# [9.6.0](https://github.com/harttle/liquidjs/compare/v9.5.0...v9.6.0) (2019-12-15)
+
+
+### Features
+
+* full syntax for strftime, close [#177](https://github.com/harttle/liquidjs/issues/177) ([ba5ff3f](https://github.com/harttle/liquidjs/commit/ba5ff3f))
+
 # [9.5.0](https://github.com/harttle/liquidjs/compare/v9.4.2...v9.5.0) (2019-12-12)
 
 
