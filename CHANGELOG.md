@@ -1,3 +1,10 @@
+## [9.6.1](https://github.com/harttle/liquidjs/compare/v9.6.0...v9.6.1) (2020-01-04)
+
+
+### Bug Fixes
+
+* add `this` to fs references in parseFile ([4b079c5](https://github.com/harttle/liquidjs/commit/4b079c5))
+
 # [9.6.0](https://github.com/harttle/liquidjs/compare/v9.5.0...v9.6.0) (2019-12-15)
 
 
