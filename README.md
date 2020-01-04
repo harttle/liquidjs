@@ -86,7 +86,8 @@ Contributions of any [kind](https://allcontributors.org/docs/en/emoji-key) are w
 Thanks goes to these wonderful people:
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
 <table>
   <tr>
     <td align="center"><a href="https://harttle.land"><img src="https://avatars3.githubusercontent.com/u/4427974?v=4" width="100px;" alt="Jun Yang"/><br /><sub><b>Jun Yang</b></sub></a><br /><a href="#maintenance-harttle" title="Maintenance">🚧</a> <a href="https://github.com/harttle/liquidjs/commits?author=harttle" title="Code">💻</a></td>
@@ -118,9 +119,12 @@ Thanks goes to these wonderful people:
   <tr>
     <td align="center"><a href="https://github.com/jamelait"><img src="https://avatars1.githubusercontent.com/u/14369255?v=4" width="100px;" alt="Jamel A."/><br /><sub><b>Jamel A.</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jamelait" title="Code">💻</a></td>
     <td align="center"><a href="https://brandonpittman.net"><img src="https://avatars0.githubusercontent.com/u/967145?v=4" width="100px;" alt="Brandon Pittman"/><br /><sub><b>Brandon Pittman</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=brandonpittman" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/tgrandgent"><img src="https://avatars3.githubusercontent.com/u/17069042?v=4" width="100px;" alt="tgrandgent"/><br /><sub><b>tgrandgent</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=tgrandgent" title="Code">💻</a></td>
   </tr>
 </table>
 
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 [![donate to liquidjs collective](https://opencollective.com/webpack/donate/button@2x.png?color=blue)](https://opencollective.com/liquidjs/donate)
