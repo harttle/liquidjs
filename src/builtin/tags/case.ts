@@ -26,10 +26,10 @@ export default {
 
   render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
     const r = this.liquid.renderer
+    const cond = yield new Expression(this.cond).value(ctx)
     for (let i = 0; i < this.cases.length; i++) {
       const branch = this.cases[i]
       const val = yield new Expression(branch.val).value(ctx)
-      const cond = yield new Expression(this.cond).value(ctx)
       if (val === cond) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return
