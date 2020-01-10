@@ -1,3 +1,10 @@
+## [9.6.2](https://github.com/harttle/liquidjs/compare/v9.6.1...v9.6.2) (2020-01-10)
+
+
+### Performance Improvements
+
+* prevent multiple case evaluations ([807e840](https://github.com/harttle/liquidjs/commit/807e840))
+
 ## [9.6.1](https://github.com/harttle/liquidjs/compare/v9.6.0...v9.6.1) (2020-01-04)
 
 

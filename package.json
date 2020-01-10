@@ -1,6 +1,6 @@
 {
   "name": "liquidjs",
-  "version": "9.1.1",
+  "version": "9.6.2",
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "dist/liquid.cjs.js",
   "es2015": "dist/liquid.esm.js",
@@ -131,7 +131,7 @@
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }  
+    }
   },
   "dependencies": {}
 }
