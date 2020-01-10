@@ -232,7 +232,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "mastodon0",
+      "name": "Martin Schuster",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/7924332?v=4",
+      "profile": "https://github.com/mastodon0",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
