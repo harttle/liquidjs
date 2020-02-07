@@ -1,3 +1,15 @@
+# [9.7.0](https://github.com/harttle/liquidjs/compare/v9.6.2...v9.7.0) (2020-02-07)
+
+
+### Bug Fixes
+
+* expression and string literal parser, [#186](https://github.com/harttle/liquidjs/issues/186) ([fc0cf6f](https://github.com/harttle/liquidjs/commit/fc0cf6f))
+
+
+### Features
+
+* globals shared between tags, see [#185](https://github.com/harttle/liquidjs/issues/185) ([870e7ec](https://github.com/harttle/liquidjs/commit/870e7ec))
+
 ## [9.6.2](https://github.com/harttle/liquidjs/compare/v9.6.1...v9.6.2) (2020-01-10)
 
 

@@ -93,6 +93,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#dynamicpartials" class="tsd-kind-icon">dynamic<wbr>Partials</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#extname" class="tsd-kind-icon">extname</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#fs" class="tsd-kind-icon">fs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#globals" class="tsd-kind-icon">globals</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#greedy" class="tsd-kind-icon">greedy</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#outputdelimiterleft" class="tsd-kind-icon">output<wbr>Delimiter<wbr>Left</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_liquid_options_.liquidoptions.html#outputdelimiterright" class="tsd-kind-icon">output<wbr>Delimiter<wbr>Right</a></li>
@@ -169,6 +170,21 @@
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p><code>fs</code> is used to override the default file-system module with a custom implementation.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="globals" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> globals</h3>
+					<div class="tsd-signature tsd-kind-icon">globals<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L38">liquid-options.ts:38</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>the global environment passed down to all partial templates, i.e. templates included by <code>include</code>, <code>layout</code> and <code>render</code> tags.</p>
 						</div>
 					</div>
 				</section>
@@ -385,6 +401,9 @@
 								<a href="_liquid_options_.liquidoptions.html#fs" class="tsd-kind-icon">fs</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_liquid_options_.liquidoptions.html#globals" class="tsd-kind-icon">globals</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_liquid_options_.liquidoptions.html#greedy" class="tsd-kind-icon">greedy</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -439,7 +458,7 @@
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="../modules/_liquid_options_.html#normalizestringarray" class="tsd-kind-icon">normalize<wbr>String<wbr>Array</a>
 					</li>
-					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class=" tsd-kind-object-literal tsd-parent-kind-external-module">
 						<a href="../modules/_liquid_options_.html#defaultoptions" class="tsd-kind-icon">default<wbr>Options</a>
 					</li>
 				</ul>
