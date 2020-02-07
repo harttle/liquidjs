@@ -65,8 +65,18 @@ describe('tags/if', function () {
       const html = await liquid.parseAndRender(src)
       return expect(html).to.equal('')
     })
+    it('should allow no spaces around operator for literal', async function () {
+      const src = `{% if true==true %}success{%else%}fail{% endif %}`
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal('success')
+    })
+    it('should allow no spaces around operator for variables', async function () {
+      const src = `{%assign var = 1%}{%if var ==1%}success{%else%}fail{%endif%}`
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal('success')
+    })
   })
-  describe('comparasion to null', function () {
+  describe('compare to null', function () {
     it('should evaluate false for null < 10', async function () {
       const src = '{% if null < 10 %}yes{% else %}no{% endif %}'
       const html = await liquid.parseAndRender(src, scope)

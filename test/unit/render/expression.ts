@@ -11,9 +11,14 @@ describe('Expression', function () {
       one: 1,
       two: 2,
       empty: '',
+      quote: '"',
+      space: ' ',
       x: 'XXX',
       y: undefined,
-      z: null
+      z: null,
+      obj: {
+        ']': 'right bracket'
+      }
     })
   })
 
@@ -26,6 +31,8 @@ describe('Expression', function () {
   })
 
   it('should eval simple expression', async function () {
+    expect(await toThenable(new Expression('1==2').value(ctx))).to.equal(false)
+    expect(await toThenable(new Expression('1<2').value(ctx))).to.equal(true)
     expect(await toThenable(new Expression('1 < 2').value(ctx))).to.equal(true)
     expect(await toThenable(new Expression('1   <   2').value(ctx))).to.equal(true)
     expect(await toThenable(new Expression('2 <= 2').value(ctx))).to.equal(true)
@@ -38,6 +45,19 @@ describe('Expression', function () {
     expect(await toThenable(new Expression('(1..5) contains 3').value(ctx))).to.equal(true)
     expect(await toThenable(new Expression('(1..5) contains 6').value(ctx))).to.equal(false)
     expect(await toThenable(new Expression('"<=" == "<="').value(ctx))).to.equal(true)
+  })
+
+  it('should allow space in quoted value', async function () {
+    expect(await toThenable(new Expression('" " == space').value(ctx))).to.equal(true)
+  })
+
+  describe('escape', () => {
+    it('should escape quote', async function () {
+      expect(await toThenable(new Expression('"\\"" == quote').value(ctx))).to.equal(true)
+    })
+    it('should escape square bracket', async function () {
+      expect(await toThenable(new Expression('obj["]"] == "right bracket"').value(ctx))).to.equal(true)
+    })
   })
 
   describe('complex expression', function () {
