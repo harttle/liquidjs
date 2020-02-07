@@ -76,6 +76,19 @@ describe('tags/render', function () {
     return expect(html).to.equal('InParent: harttle InChild: ')
   })
 
+  it('should be able to access globals', async function () {
+    mock({
+      '/hash.html': 'InParent: {{name}} {% render "user.html" %}',
+      '/user.html': 'InChild: {{name}}'
+    })
+    const html = await liquid.renderFile('hash.html', {
+      name: 'harttle'
+    }, {
+      globals: { name: 'Harttle' }
+    })
+    return expect(html).to.equal('InParent: harttle InChild: Harttle')
+  })
+
   it('should support render: with', async function () {
     mock({
       '/with.html': '{% render "color" with "red", shape: "rect" %}',

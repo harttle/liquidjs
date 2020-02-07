@@ -34,6 +34,8 @@ export interface LiquidOptions {
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
   fs?: IFS;
+  /** the global environment passed down to all partial templates, i.e. templates included by `include`, `layout` and `render` tags. */
+  globals?: object;
 }
 
 interface NormalizedOptions extends LiquidOptions {
@@ -56,9 +58,10 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   outputDelimiterLeft: string;
   outputDelimiterRight: string;
   greedy: boolean;
+  globals: object;
 }
 
-const defaultOptions: NormalizedFullOptions = {
+export const defaultOptions: NormalizedFullOptions = {
   root: ['.'],
   cache: false,
   extname: '',
@@ -73,7 +76,8 @@ const defaultOptions: NormalizedFullOptions = {
   outputDelimiterLeft: '{{',
   outputDelimiterRight: '}}',
   strictFilters: false,
-  strictVariables: false
+  strictVariables: false,
+  globals: {}
 }
 
 export function normalize (options?: LiquidOptions): NormalizedOptions {

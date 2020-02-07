@@ -1,7 +1,7 @@
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { assert } from '../util/assert'
-import { NormalizedFullOptions, applyDefault } from '../liquid-options'
+import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { Scope } from './scope'
 import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
 
@@ -9,11 +9,13 @@ export class Context {
   private scopes: Scope[] = [{}]
   private registers = {}
   public environments: Scope
+  public globals: Scope
   public sync: boolean
   public opts: NormalizedFullOptions
-  public constructor (env: object = {}, opts?: NormalizedFullOptions, sync = false) {
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, sync = false) {
     this.sync = sync
-    this.opts = applyDefault(opts)
+    this.opts = opts
+    this.globals = opts.globals
     this.environments = env
   }
   public getRegister (key: string, defaultValue = {}) {
@@ -23,12 +25,12 @@ export class Context {
     return (this.registers[key] = value)
   }
   public getAll () {
-    return [this.environments, ...this.scopes]
+    return [this.globals, this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
   public get (path: string) {
     const paths = this.parseProp(path)
-    const scope = this.findScope(paths[0]) || this.environments
+    const scope = this.findScope(paths[0])
     return this.getFromScope(scope, paths)
   }
   public getFromScope (scope: object, paths: string[] | string) {
@@ -57,7 +59,8 @@ export class Context {
         return candidate
       }
     }
-    return null
+    if (key in this.environments) return this.environments
+    return this.globals
   }
 
   /*
