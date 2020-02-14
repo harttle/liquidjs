@@ -27,6 +27,10 @@
     "type": "git",
     "url": "git+https://github.com/harttle/liquidjs.git"
   },
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/liquidjs"
+  },
   "files": [
     "bin",
     "dist",
