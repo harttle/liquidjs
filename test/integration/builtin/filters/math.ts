@@ -99,6 +99,16 @@ describe('filters/math', function () {
       const html = await l.parseAndRender(src, { students })
       expect(html).to.equal('alice bob carol')
     })
+    it('keep orignal order based on specified property', async () => {
+      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
+      const students = [
+        { name: 'bob' },
+        { name: 'alice', age: 2 },
+        { name: 'amber' }
+      ]
+      const html = await l.parseAndRender(src, { students })
+      expect(html).to.equal('alice bob amber')
+    })
     it('should tolerate non array', async () => {
       const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
       const html = await l.parseAndRender(src, { students: {} })

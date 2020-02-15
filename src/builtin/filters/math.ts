@@ -19,8 +19,8 @@ export default {
 }
 
 function caseInsensitiveCmp (a: any, b: any) {
-  if (!b) return -1
   if (!a) return 1
+  if (!b) return -1
   a = toLowerCase.call(a)
   b = toLowerCase.call(b)
   if (a < b) return -1
