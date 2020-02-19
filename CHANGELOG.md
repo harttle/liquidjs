@@ -1,3 +1,10 @@
+## [9.7.1](https://github.com/harttle/liquidjs/compare/v9.7.0...v9.7.1) (2020-02-19)
+
+
+### Bug Fixes
+
+* update index.html ([22386b0](https://github.com/harttle/liquidjs/commit/22386b0))
+
 # [9.7.0](https://github.com/harttle/liquidjs/compare/v9.6.2...v9.7.0) (2020-02-07)
 
 
