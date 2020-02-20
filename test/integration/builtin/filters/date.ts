@@ -14,6 +14,9 @@ describe('filters/date', function () {
   it('should create a new Date when given "now"', function () {
     return test('{{ "now" | date: "%Y"}}', (new Date()).getFullYear().toString())
   })
+  it('should create a new Date when given "today"', function () {
+    return test('{{ "today" | date: "%Y"}}', (new Date()).getFullYear().toString())
+  })
   it('should parse as Date when given UTC string', function () {
     return test('{{ "1991-02-22T00:00:00" | date: "%Y"}}', '1991')
   })

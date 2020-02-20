@@ -4,7 +4,7 @@ import { isString, isNumber } from '../../util/underscore'
 export default {
   'date': (v: string | Date, arg: string) => {
     let date = v
-    if (v === 'now') {
+    if (v === 'now' || v === 'today') {
       date = new Date()
     } else if (isNumber(v)) {
       date = new Date(v * 1000)
