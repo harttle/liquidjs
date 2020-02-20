@@ -1,3 +1,10 @@
+## [9.7.2](https://github.com/harttle/liquidjs/compare/v9.7.1...v9.7.2) (2020-02-20)
+
+
+### Bug Fixes
+
+* add funding entry to show up in npm fund command ([40095a8](https://github.com/harttle/liquidjs/commit/40095a8))
+
 ## [9.7.1](https://github.com/harttle/liquidjs/compare/v9.7.0...v9.7.1) (2020-02-19)
 
 
