@@ -1,3 +1,10 @@
+# [9.8.0](https://github.com/harttle/liquidjs/compare/v9.7.2...v9.8.0) (2020-02-20)
+
+
+### Features
+
+* "today" when using date filter, fixes [#193](https://github.com/harttle/liquidjs/issues/193) ([185312d](https://github.com/harttle/liquidjs/commit/185312d))
+
 ## [9.7.2](https://github.com/harttle/liquidjs/compare/v9.7.1...v9.7.2) (2020-02-20)
 
 
