@@ -13,18 +13,14 @@
       extname: '.html',
       cache: true
     });
-    var src = '<h2>Welcome to {{ name | capitalize}}, ' +
-      'access time: {{date|date: "%Y-%m-%d %H:%M:%S"}}&lt;/h2>';
+    var src = "<h2>Welcome to {{ name | capitalize}}, {% include 'date.html' %}</h2>";
     var ctx = {
       name: 'Liquid',
       date: new Date()
     };
     engine.parseAndRender(src, ctx)
       .then(function(html) {
-        return engine.renderFile('hello', ctx);
-      })
-      .then(function(html) {
-        document.body.innerHTML += html
+        document.body.innerHTML = html
       });
   </script>
 </body>
