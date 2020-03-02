@@ -1,4 +1,4 @@
-import { Emitter, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
+import { Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { isString, isObject, isArray } from '../../util/underscore'
 import { Expression } from '../../render/expression'
 import { assert } from '../../util/assert'
@@ -29,7 +29,7 @@ export default {
       .on('start', () => (p = this.templates))
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endfor', () => stream.stop())
-      .on('template', (tpl: ITemplate) => p.push(tpl))
+      .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -72,4 +72,4 @@ export default {
     }
     ctx.pop()
   }
-} as ITagImplOptions
+} as TagImplOptions

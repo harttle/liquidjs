@@ -66,7 +66,7 @@
     "@types/benchmark": "^1.0.31",
     "@types/chai": "^4.1.7",
     "@types/chai-as-promised": "^7.1.0",
-    "@types/express": "^4.16.1",
+    "@types/express": "^4.17.2",
     "@types/jsdom": "^12.2.2",
     "@types/mocha": "^5.2.6",
     "@types/sinon": "^7.0.6",
@@ -118,6 +118,7 @@
         {
           "assets": [
             "package.json",
+            "package-lock.json",
             "docs",
             "CHANGELOG.md"
           ],

@@ -1,21 +1,19 @@
 import { isFunction } from '../../util/underscore'
-import { assert } from '../../util/assert'
 import { Liquid } from '../../liquid'
-import { Template } from '../../template/template'
-import { Emitter, Hash, Context, ITagImplOptions, TagToken, ITemplate, Token } from '../../types'
-import { ITagImpl } from './itag-impl'
+import { TemplateImpl } from '../../template/template-impl'
+import { Emitter, Hash, Context, TagImplOptions, TagToken, Template, Token } from '../../types'
+import { TagImpl } from './tag-impl'
 
-export class Tag extends Template<TagToken> implements ITemplate {
+export class Tag extends TemplateImpl<TagToken> implements Template {
   public name: string
-  private impl: ITagImpl
-  private static impls: { [key: string]: ITagImplOptions } = {}
+  private impl: TagImpl
+  private static impls: { [key: string]: TagImplOptions } = {}
 
   public constructor (token: TagToken, tokens: Token[], liquid: Liquid) {
     super(token)
     this.name = token.name
 
-    const impl = Tag.impls[token.name]
-    assert(impl, `tag ${token.name} not found`)
+    const impl = liquid.tags.get(token.name)
 
     this.impl = Object.create(impl)
     this.impl.liquid = liquid
@@ -27,11 +25,5 @@ export class Tag extends Template<TagToken> implements ITemplate {
     const hash = yield Hash.create(this.token.args, ctx)
     const impl = this.impl
     if (isFunction(impl.render)) return yield impl.render(ctx, hash, emitter)
-  }
-  public static register (name: string, tag: ITagImplOptions) {
-    Tag.impls[name] = tag
-  }
-  public static clear () {
-    Tag.impls = {}
   }
 }

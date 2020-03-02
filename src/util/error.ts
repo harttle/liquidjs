@@ -1,6 +1,6 @@
 import * as _ from './underscore'
 import { Token } from '../parser/token'
-import { ITemplate } from '../template/itemplate'
+import { Template } from '../template/template'
 
 abstract class LiquidError extends Error {
   private token: Token
@@ -37,7 +37,7 @@ export class ParseError extends LiquidError {
 }
 
 export class RenderError extends LiquidError {
-  public constructor (err: Error, tpl: ITemplate) {
+  public constructor (err: Error, tpl: Template) {
     super(err, tpl.token)
     this.name = 'RenderError'
     this.message = err.message

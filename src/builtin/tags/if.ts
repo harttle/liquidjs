@@ -1,4 +1,4 @@
-import { Hash, Emitter, isTruthy, Expression, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
+import { Hash, Emitter, isTruthy, Expression, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -19,7 +19,7 @@ export default {
       })
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endif', () => stream.stop())
-      .on('template', (tpl: ITemplate) => p.push(tpl))
+      .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -39,4 +39,4 @@ export default {
     }
     yield r.renderTemplates(this.elseTemplates, ctx, emitter)
   }
-} as ITagImplOptions
+} as TagImplOptions

@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { Emitter, Expression, TagToken, Context, ITagImplOptions, Hash } from '../../types'
+import { Emitter, Expression, TagToken, Context, TagImplOptions, Hash } from '../../types'
 
 const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')
@@ -37,4 +37,4 @@ export default {
     const html = yield new Expression(candidate).value(ctx)
     emitter.write(html)
   }
-} as ITagImplOptions
+} as TagImplOptions

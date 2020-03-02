@@ -11,12 +11,8 @@ export class Filter {
   public name: string
   public args: FilterArgs
   private impl: FilterImplOptions
-  private static impls: {[key: string]: FilterImplOptions} = {}
 
-  public constructor (name: string, args: FilterArgs, strictFilters: boolean) {
-    const impl = Filter.impls[name]
-    if (!impl && strictFilters) throw new TypeError(`undefined filter: ${name}`)
-
+  public constructor (name: string, impl: FilterImplOptions, args: FilterArgs) {
     this.name = name
     this.impl = impl || identify
     this.args = args
@@ -28,12 +24,6 @@ export class Filter {
       else argv.push(yield new Expression(arg).evaluate(context))
     }
     return this.impl.apply({ context }, [value, ...argv])
-  }
-  public static register (name: string, filter: FilterImplOptions) {
-    Filter.impls[name] = filter
-  }
-  public static clear () {
-    Filter.impls = {}
   }
 }
 

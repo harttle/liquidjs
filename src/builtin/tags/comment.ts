@@ -1,6 +1,6 @@
 import { TagToken } from '../../parser/tag-token'
 import { Token } from '../../parser/token'
-import { ITagImplOptions } from '../../template/tag/itag-impl-options'
+import { TagImplOptions } from '../../template/tag/tag-impl-options'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -14,4 +14,4 @@ export default {
       })
     stream.start()
   }
-} as ITagImplOptions
+} as TagImplOptions

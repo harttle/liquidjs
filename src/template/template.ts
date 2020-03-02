@@ -1,6 +1,8 @@
-export abstract class Template<T> {
-  public token: T;
-  public constructor (token: T) {
-    this.token = token
-  }
+import { Context } from '../context/context'
+import { Token } from '../parser/token'
+import { Emitter } from '../render/emitter'
+
+export interface Template {
+  token: Token;
+  render(ctx: Context, emitter: Emitter): any;
 }

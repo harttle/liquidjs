@@ -1,8 +1,8 @@
 import { Token } from '../parser/token'
-import { ITemplate } from '../template/itemplate'
+import { Template } from '../template/template'
 import { TagToken } from './tag-token'
 
-type ParseToken = ((token: Token, remainTokens: Token[]) => ITemplate)
+type ParseToken = ((token: Token, remainTokens: Token[]) => Template)
 
 export class ParseStream {
   private tokens: Token[]
@@ -14,11 +14,11 @@ export class ParseStream {
     this.tokens = tokens
     this.parseToken = parseToken
   }
-  public on<T extends ITemplate | Token | undefined> (name: string, cb: (arg: T) => void): ParseStream {
+  public on<T extends Template | Token | undefined> (name: string, cb: (arg: T) => void): ParseStream {
     this.handlers[name] = cb
     return this
   }
-  private trigger <T extends Token | ITemplate> (event: string, arg?: T) {
+  private trigger <T extends Token | Template> (event: string, arg?: T) {
     const h = this.handlers[event]
     return h ? (h(arg), true) : false
   }

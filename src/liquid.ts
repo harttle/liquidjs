@@ -1,16 +1,16 @@
 import { Context } from './context/context'
 import fs from './fs/node'
 import * as _ from './util/underscore'
-import { ITemplate } from './template/itemplate'
+import { Template } from './template/template'
 import { Tokenizer } from './parser/tokenizer'
 import { Render } from './render/render'
-import { Tag } from './template/tag/tag'
-import { Filter } from './template/filter/filter'
 import Parser from './parser/parser'
-import { ITagImplOptions } from './template/tag/itag-impl-options'
+import { TagImplOptions } from './template/tag/tag-impl-options'
 import { Value } from './template/value'
 import builtinTags from './builtin/tags'
 import builtinFilters from './builtin/filters'
+import { TagMap } from './template/tag/tag-map'
+import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import IFS from './fs/ifs'
@@ -22,6 +22,8 @@ export class Liquid {
   public options: NormalizedFullOptions
   public renderer: Render
   public parser: Parser
+  public filters: FilterMap
+  public tags: TagMap
   private cache: object = {}
   private tokenizer: Tokenizer
   private fs: IFS
@@ -32,24 +34,26 @@ export class Liquid {
     this.renderer = new Render()
     this.tokenizer = new Tokenizer(this.options)
     this.fs = opts.fs || fs
+    this.filters = new FilterMap(this.options.strictFilters)
+    this.tags = new TagMap()
 
     _.forOwn(builtinTags, (conf, name) => this.registerTag(name, conf))
     _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
   }
-  public parse (html: string, filepath?: string): ITemplate[] {
+  public parse (html: string, filepath?: string): Template[] {
     const tokens = this.tokenizer.tokenize(html, filepath)
     return this.parser.parse(tokens)
   }
 
-  public _render (tpl: ITemplate[], scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
+  public _render (tpl: Template[], scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
     const options = { ...this.options, ...normalize(opts) }
     const ctx = new Context(scope, options, sync)
     return this.renderer.renderTemplates(tpl, ctx)
   }
-  public async render (tpl: ITemplate[], scope?: object, opts?: LiquidOptions): Promise<string> {
+  public async render (tpl: Template[], scope?: object, opts?: LiquidOptions): Promise<string> {
     return toThenable(this._render(tpl, scope, opts, false))
   }
-  public renderSync (tpl: ITemplate[], scope?: object, opts?: LiquidOptions): string {
+  public renderSync (tpl: Template[], scope?: object, opts?: LiquidOptions): string {
     return toValue(this._render(tpl, scope, opts, true))
   }
 
@@ -80,10 +84,10 @@ export class Liquid {
     }
     throw this.lookupError(file, options.root)
   }
-  public async parseFile (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
+  public async parseFile (file: string, opts?: LiquidOptions): Promise<Template[]> {
     return toThenable(this._parseFile(file, opts, false))
   }
-  public parseFileSync (file: string, opts?: LiquidOptions): ITemplate[] {
+  public parseFileSync (file: string, opts?: LiquidOptions): Template[] {
     return toValue(this._parseFile(file, opts, true))
   }
   public async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
@@ -97,7 +101,7 @@ export class Liquid {
   }
 
   public _evalValue (str: string, ctx: Context): IterableIterator<any> {
-    const value = new Value(str, this.options.strictFilters)
+    const value = new Value(str, this.filters)
     return value.value(ctx)
   }
   public async evalValue (str: string, ctx: Context): Promise<any> {
@@ -108,19 +112,19 @@ export class Liquid {
   }
 
   public registerFilter (name: string, filter: FilterImplOptions) {
-    return Filter.register(name, filter)
+    this.filters.set(name, filter)
   }
-  public registerTag (name: string, tag: ITagImplOptions) {
-    return Tag.register(name, tag)
+  public registerTag (name: string, tag: TagImplOptions) {
+    this.tags.set(name, tag)
   }
   public plugin (plugin: (this: Liquid, L: typeof Liquid) => void) {
     return plugin.call(this, Liquid)
   }
   public express () {
     const self = this // eslint-disable-line
-    return function (this: any, filePath: string, ctx: object, cb: (err: Error | null, html?: string) => void) {
+    return function (this: any, filePath: string, ctx: object, callback: (err: Error | null, rendered: string) => void) {
       const opts = { root: [...normalizeStringArray(this.root), ...self.options.root] }
-      self.renderFile(filePath, ctx, opts).then(html => cb(null, html), cb)
+      self.renderFile(filePath, ctx, opts).then(html => callback(null, html) as any, callback as any)
     }
   }
 
@@ -134,13 +138,13 @@ export class Liquid {
   /**
    * @deprecated use parseFile instead
    */
-  public async getTemplate (file: string, opts?: LiquidOptions): Promise<ITemplate[]> {
+  public async getTemplate (file: string, opts?: LiquidOptions): Promise<Template[]> {
     return this.parseFile(file, opts)
   }
   /**
    * @deprecated use parseFileSync instead
    */
-  public getTemplateSync (file: string, opts?: LiquidOptions): ITemplate[] {
+  public getTemplateSync (file: string, opts?: LiquidOptions): Template[] {
     return this.parseFileSync(file, opts)
   }
 }

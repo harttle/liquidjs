@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { Emitter, Hash, Expression, TagToken, Token, Context, ITagImplOptions } from '../../types'
+import { Emitter, Hash, Expression, TagToken, Token, Context, TagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
 
 const staticFileRE = /\S+/
@@ -40,4 +40,4 @@ export default {
     ctx.pop()
     emitter.write(partial)
   }
-} as ITagImplOptions
+} as TagImplOptions

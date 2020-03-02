@@ -1,7 +1,7 @@
 import { assert } from '../../util/assert'
 import { identifier } from '../../parser/lexical'
 import { isNumber, stringify } from '../../util/underscore'
-import { Emitter, TagToken, Context, ITagImplOptions, Hash } from '../../types'
+import { Emitter, TagToken, Context, TagImplOptions, Hash } from '../../types'
 
 export default {
   parse: function (token: TagToken) {
@@ -18,4 +18,4 @@ export default {
     scope[this.variable]++
     emitter.write(stringify(val))
   }
-} as ITagImplOptions
+} as TagImplOptions

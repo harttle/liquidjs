@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { identifier } from '../../parser/lexical'
-import { ITemplate, Context, ITagImplOptions, TagToken, Token } from '../../types'
+import { Template, Context, TagImplOptions, TagToken, Token } from '../../types'
 
 const re = new RegExp(`(${identifier.source})`)
 
@@ -14,7 +14,7 @@ export default {
 
     const stream = this.liquid.parser.parseStream(remainTokens)
     stream.on('tag:endcapture', () => stream.stop())
-      .on('template', (tpl: ITemplate) => this.templates.push(tpl))
+      .on('template', (tpl: Template) => this.templates.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -25,4 +25,4 @@ export default {
     const html = yield r.renderTemplates(this.templates, ctx)
     ctx.front()[this.variable] = html
   }
-} as ITagImplOptions
+} as TagImplOptions

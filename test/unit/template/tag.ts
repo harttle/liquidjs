@@ -9,10 +9,10 @@ import { toThenable } from '../../../src/util/async'
 
 chai.use(sinonChai)
 const expect = chai.expect
-const liquid = new Liquid()
 
 describe('Tag', function () {
   let ctx: Context
+  let liquid: Liquid
   const emitter: any = { write: (html: string) => (emitter.html += html), html: '' }
   before(function () {
     ctx = new Context({
@@ -22,7 +22,7 @@ describe('Tag', function () {
         coo: 'uoo'
       }
     })
-    Tag.clear()
+    liquid = new Liquid()
   })
   beforeEach(function () {
     emitter.html = ''
@@ -33,24 +33,20 @@ describe('Tag', function () {
       new Tag({ // eslint-disable-line
         type: 'tag',
         value: 'foo',
-        name: 'foo'
+        name: 'not-exist'
       } as TagToken, [], liquid)
-    }).to.throw(/tag foo not found/)
+    }).to.throw(/tag "not-exist" not found/)
   })
 
   it('should register simple tag', function () {
     expect(function () {
-      Tag.register('foo', {
-        render: () => 'bar'
-      })
+      liquid.registerTag('foo', { render: () => 'bar' })
     }).not.throw()
   })
 
   it('should call tag.render', async function () {
     const spy = sinon.spy()
-    Tag.register('foo', {
-      render: spy
-    })
+    liquid.registerTag('foo', { render: spy })
     const token = {
       type: 'tag',
       value: 'foo',
@@ -64,9 +60,7 @@ describe('Tag', function () {
     let spy: sinon.SinonSpy, token: TagToken
     beforeEach(function () {
       spy = sinon.spy()
-      Tag.register('foo', {
-        render: spy
-      })
+      liquid.registerTag('foo', { render: spy })
       token = {
         type: 'tag',
         value: 'foo aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo',

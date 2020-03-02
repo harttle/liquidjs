@@ -1,4 +1,4 @@
-import { Expression, Hash, Emitter, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
+import { Expression, Hash, Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -6,7 +6,7 @@ export default {
     this.cases = []
     this.elseTemplates = []
 
-    let p: ITemplate[] = []
+    let p: Template[] = []
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('tag:when', (token: TagToken) => {
         this.cases.push({
@@ -16,7 +16,7 @@ export default {
       })
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endcase', () => stream.stop())
-      .on('template', (tpl: ITemplate) => p.push(tpl))
+      .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -37,4 +37,4 @@ export default {
     }
     yield r.renderTemplates(this.elseTemplates, ctx, emitter)
   }
-} as ITagImplOptions
+} as TagImplOptions

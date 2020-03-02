@@ -1,4 +1,4 @@
-import { TagToken, Token, ITagImplOptions } from '../../types'
+import { TagToken, Token, TagImplOptions } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -18,4 +18,4 @@ export default {
   render: function () {
     return this.tokens.map((token: Token) => token.raw).join('')
   }
-} as ITagImplOptions
+} as TagImplOptions

@@ -1,18 +1,17 @@
 import { Expression } from '../render/expression'
+import { FilterMap } from '../template/filter/filter-map'
 import { FilterArgs, Filter } from './filter/filter'
 import { Context } from '../context/context'
 
 export class Value {
   public readonly filters: Filter[] = []
   public readonly initial: string
-  private strictFilters: boolean
 
   /**
    * @param str value string, like: "i have a dream | truncate: 3
    */
-  public constructor (str: string, strictFilters: boolean) {
+  public constructor (str: string, private readonly filterMap: FilterMap) {
     const tokens = Value.tokenize(str)
-    this.strictFilters = strictFilters
     this.initial = tokens[0]
     this.parseFilters(tokens, 1)
   }
@@ -45,7 +44,7 @@ export class Value {
         argValue = tokens[i]
       }
     }
-    this.filters.push(new Filter(name, args, this.strictFilters))
+    this.filters.push(new Filter(name, this.filterMap.get(name), args))
   }
   public * value (ctx: Context) {
     let val = yield new Expression(this.initial).evaluate(ctx)

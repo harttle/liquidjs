@@ -1,4 +1,4 @@
-import { Emitter, Expression, isFalsy, ParseStream, Context, ITagImplOptions, Token, Hash, TagToken } from '../../types'
+import { Emitter, Expression, isFalsy, ParseStream, Context, TagImplOptions, Token, Hash, TagToken } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -27,4 +27,4 @@ export default {
       ? r.renderTemplates(this.templates, ctx, emitter)
       : r.renderTemplates(this.elseTemplates, ctx, emitter))
   }
-} as ITagImplOptions
+} as TagImplOptions

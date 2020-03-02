@@ -1,5 +1,5 @@
 import { assert } from '../../util/assert'
-import { Expression, Hash, Emitter, TagToken, Context, ITagImplOptions } from '../../types'
+import { Expression, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 import { value, quotedLine } from '../../parser/lexical'
 import BlockMode from '../../context/block-mode'
 
@@ -47,4 +47,4 @@ export default {
     childCtx.setRegister('blocks', originBlocks)
     childCtx.setRegister('blockMode', originBlockMode)
   }
-} as ITagImplOptions
+} as TagImplOptions

@@ -214,12 +214,12 @@ describe('error', function () {
       const src = '{%if true%}\naaa{%endif%}\n{% -a %}\n3'
       const err = await expect(engine.parseAndRender(src)).be.rejected
       expect(err.name).to.equal('ParseError')
-      expect(err.message).to.contain('tag -a not found')
+      expect(err.message).to.contain('tag "-a" not found')
     })
     it('should throw ParseError when tag not exist', async function () {
       const err = await expect(engine.parseAndRender('{% a %}')).be.rejected
       expect(err.name).to.equal('ParseError')
-      expect(err.message).to.contain('tag a not found')
+      expect(err.message).to.contain('tag "a" not found')
     })
 
     it('should contain template context in err.stack', async function () {
@@ -231,10 +231,10 @@ describe('error', function () {
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
-        'ParseError: tag a not found'
+        'ParseError: tag "a" not found'
       ]
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
-      expect(err.message).to.equal('tag a not found, line:4, col:2')
+      expect(err.message).to.equal('tag "a" not found, line:4, col:2')
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('ParseError')
     })
@@ -246,10 +246,10 @@ describe('error', function () {
         '>> 2| X{% a %} {% enda %} Y',
         '   3| 3rd',
         '   4| 4th',
-        'ParseError: tag a not found'
+        'ParseError: tag "a" not found'
       ]
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
-      expect(err.message).to.equal('tag a not found, line:2, col:2')
+      expect(err.message).to.equal('tag "a" not found, line:2, col:2')
       expect(err.stack).to.contain(message.join('\n'))
     })
 
@@ -261,12 +261,12 @@ describe('error', function () {
 
     it('should contain stack in err.stack', async function () {
       const err = await expect(engine.parseAndRender('{% -a %}')).be.rejected
-      expect(err.stack).to.contain('ParseError: tag -a not found')
+      expect(err.stack).to.contain('ParseError: tag "-a" not found')
       expect(err.stack).to.match(/at .*:\d+:\d+\)/)
     })
   })
   describe('sync support', function () {
-    let engine
+    let engine: Liquid
     beforeEach(function () {
       engine = new Liquid({
         root: '/'

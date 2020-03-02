@@ -1,14 +1,14 @@
 import BlockMode from '../../context/block-mode'
-import { ParseStream, TagToken, Token, ITemplate, Context, ITagImplOptions, Emitter, Hash } from '../../types'
+import { ParseStream, TagToken, Token, Template, Context, TagImplOptions, Emitter, Hash } from '../../types'
 
 export default {
   parse: function (token: TagToken, remainTokens: Token[]) {
     const match = /\w+/.exec(token.args)
     this.block = match ? match[0] : ''
-    this.tpls = [] as ITemplate[]
+    this.tpls = [] as Template[]
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('tag:endblock', () => stream.stop())
-      .on('template', (tpl: ITemplate) => this.tpls.push(tpl))
+      .on('template', (tpl: Template) => this.tpls.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${token.raw} not closed`)
       })
@@ -28,4 +28,4 @@ export default {
     }
     emitter.write(html)
   }
-} as ITagImplOptions
+} as TagImplOptions

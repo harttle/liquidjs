@@ -1,5 +1,5 @@
 import { assert } from '../../util/assert'
-import { Expression, Emitter, Hash, TagToken, Token, Context, ITemplate, ITagImplOptions, ParseStream } from '../../types'
+import { Expression, Emitter, Hash, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { identifier, value, hash } from '../../parser/lexical'
 import { TablerowloopDrop } from '../../drop/tablerowloop-drop'
 
@@ -20,7 +20,7 @@ export default {
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
       .on('tag:endtablerow', () => stream.stop())
-      .on('template', (tpl: ITemplate) => p.push(tpl))
+      .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
         throw new Error(`tag ${tagToken.raw} not closed`)
       })
@@ -54,4 +54,4 @@ export default {
     if (collection.length) emitter.write('</tr>')
     ctx.pop()
   }
-} as ITagImplOptions
+} as TagImplOptions

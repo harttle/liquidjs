@@ -1,10 +1,10 @@
 import { RenderError } from '../util/error'
 import { Context } from '../context/context'
-import { ITemplate } from '../template/itemplate'
+import { Template } from '../template/template'
 import { Emitter } from './emitter'
 
 export class Render {
-  public * renderTemplates (templates: ITemplate[], ctx: Context, emitter = new Emitter()): IterableIterator<string> {
+  public * renderTemplates (templates: Template[], ctx: Context, emitter = new Emitter()): IterableIterator<string> {
     for (const tpl of templates) {
       try {
         const html = yield tpl.render(ctx, emitter)

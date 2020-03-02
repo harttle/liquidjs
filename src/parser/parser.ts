@@ -7,7 +7,7 @@ import { OutputToken } from './output-token'
 import { Tag } from '../template/tag/tag'
 import { Output } from '../template/output'
 import { HTML } from '../template/html'
-import { ITemplate } from '../template/itemplate'
+import { Template } from '../template/template'
 
 export default class Parser {
   private liquid: Liquid
@@ -17,7 +17,7 @@ export default class Parser {
   }
   public parse (tokens: Token[]) {
     let token
-    const templates: ITemplate[] = []
+    const templates: Template[] = []
     while ((token = tokens.shift())) {
       templates.push(this.parseToken(token, tokens))
     }
@@ -29,7 +29,7 @@ export default class Parser {
         return new Tag(token, remainTokens, this.liquid)
       }
       if (OutputToken.is(token)) {
-        return new Output(token as OutputToken, this.liquid.options.strictFilters)
+        return new Output(token as OutputToken, this.liquid.filters)
       }
       return new HTML(token)
     } catch (e) {

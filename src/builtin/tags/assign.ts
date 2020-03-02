@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { identifier } from '../../parser/lexical'
-import { ITagImplOptions, TagToken, Context } from '../../types'
+import { TagImplOptions, TagToken, Context } from '../../types'
 
 const re = new RegExp(`(${identifier.source})\\s*=([^]*)`)
 
@@ -14,4 +14,4 @@ export default {
   render: function * (ctx: Context) {
     ctx.front()[this.key] = yield this.liquid._evalValue(this.value, ctx)
   }
-} as ITagImplOptions
+} as TagImplOptions
