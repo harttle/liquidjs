@@ -1,3 +1,10 @@
+# [9.9.0](https://github.com/harttle/liquidjs/compare/v9.8.0...v9.9.0) (2020-03-02)
+
+
+### Features
+
+* move filters/tags to instances, fixes [#188](https://github.com/harttle/liquidjs/issues/188) ([df8a919](https://github.com/harttle/liquidjs/commit/df8a919))
+
 # [9.8.0](https://github.com/harttle/liquidjs/compare/v9.7.2...v9.8.0) (2020-02-20)
 
 

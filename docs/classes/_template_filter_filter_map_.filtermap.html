@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Tag | liquidjs</title>
+	<title>FilterMap | liquidjs</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_template_tag_tag_.html">&quot;template/tag/tag&quot;</a>
+					<a href="../modules/_template_filter_filter_map_.html">&quot;template/filter/filter-map&quot;</a>
 				</li>
 				<li>
-					<a href="_template_tag_tag_.tag.html">Tag</a>
+					<a href="_template_filter_filter_map_.filtermap.html">FilterMap</a>
 				</li>
 			</ul>
-			<h1>Class Tag</h1>
+			<h1>Class FilterMap</h1>
 		</div>
 	</div>
 </header>
@@ -73,19 +73,8 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="_template_template_impl_.templateimpl.html" class="tsd-signature-type">TemplateImpl</a><span class="tsd-signature-symbol">&lt;</span><a href="_parser_tag_token_.tagtoken.html" class="tsd-signature-type">TagToken</a><span class="tsd-signature-symbol">&gt;</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">Tag</span>
-							</li>
-						</ul>
+						<span class="target">FilterMap</span>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/_template_template_.template.html" class="tsd-signature-type">Template</a></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -95,22 +84,22 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite"><a href="_template_tag_tag_.tag.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_template_filter_filter_map_.filtermap.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_template_tag_tag_.tag.html#impl" class="tsd-kind-icon">impl</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_template_tag_tag_.tag.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_template_tag_tag_.tag.html#token" class="tsd-kind-icon">token</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_template_tag_tag_.tag.html#impls" class="tsd-kind-icon">impls</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_template_filter_filter_map_.filtermap.html#impls" class="tsd-kind-icon">impls</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_template_filter_filter_map_.filtermap.html#strictfilters" class="tsd-kind-icon">strict<wbr>Filters</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_tag_tag_.tag.html#render" class="tsd-kind-icon">render</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_filter_filter_map_.filtermap.html#create" class="tsd-kind-icon">create</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_filter_filter_map_.filtermap.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_filter_filter_map_.filtermap.html#set" class="tsd-kind-icon">set</a></li>
 							</ul>
 						</section>
 					</div>
@@ -118,116 +107,159 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Tag<span class="tsd-signature-symbol">(</span>token<span class="tsd-signature-symbol">: </span><a href="_parser_tag_token_.tagtoken.html" class="tsd-signature-type">TagToken</a>, tokens<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span>, liquid<span class="tsd-signature-symbol">: </span><a href="_liquid_.liquid.html" class="tsd-signature-type">Liquid</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_template_tag_tag_.tag.html" class="tsd-signature-type">Tag</a></li>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Filter<wbr>Map<span class="tsd-signature-symbol">(</span>strictFilters<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_template_filter_filter_map_.filtermap.html" class="tsd-signature-type">FilterMap</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_template_template_impl_.templateimpl.html">TemplateImpl</a>.<a href="_template_template_impl_.templateimpl.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/tag.ts#L10">template/tag/tag.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/filter/filter-map.ts#L6">template/filter/filter-map.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>token: <a href="_parser_tag_token_.tagtoken.html" class="tsd-signature-type">TagToken</a></h5>
-								</li>
-								<li>
-									<h5>tokens: <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h5>
-								</li>
-								<li>
-									<h5>liquid: <a href="_liquid_.liquid.html" class="tsd-signature-type">Liquid</a></h5>
+									<h5>strictFilters: <span class="tsd-signature-type">boolean</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_template_tag_tag_.tag.html" class="tsd-signature-type">Tag</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_template_filter_filter_map_.filtermap.html" class="tsd-signature-type">FilterMap</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="impl" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> impl</h3>
-					<div class="tsd-signature tsd-kind-icon">impl<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_template_tag_tag_impl_.tagimpl.html" class="tsd-signature-type">TagImpl</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/tag.ts#L9">template/tag/tag.ts:9</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/tag.ts#L8">template/tag/tag.ts:8</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="token" class="tsd-anchor"></a>
-					<h3>token</h3>
-					<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <a href="_parser_tag_token_.tagtoken.html" class="tsd-signature-type">TagToken</a></div>
-					<aside class="tsd-sources">
-						<p>Implementation of <a href="../interfaces/_template_template_.template.html">Template</a>.<a href="../interfaces/_template_template_.template.html#token">token</a></p>
-						<p>Inherited from <a href="_template_template_impl_.templateimpl.html">TemplateImpl</a>.<a href="_template_template_impl_.templateimpl.html#token">token</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/template-impl.ts#L2">template/template-impl.ts:2</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static">
 					<a name="impls" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> impls</h3>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> impls</h3>
 					<div class="tsd-signature tsd-kind-icon">impls<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/tag.ts#L10">template/tag/tag.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/filter/filter-map.ts#L6">template/filter/filter-map.ts:6</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-index-signature">
-								<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="../interfaces/_template_tag_tag_impl_options_.tagimploptions.html" class="tsd-signature-type">TagImplOptions</a></h5>
+								<h5><span class="tsd-signature-symbol">[</span>key: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]: </span><a href="../modules/_template_filter_filter_impl_options_.html#filterimploptions" class="tsd-signature-type">FilterImplOptions</a></h5>
 							</li>
 						</ul>
 					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="strictfilters" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> strict<wbr>Filters</h3>
+					<div class="tsd-signature tsd-kind-icon">strict<wbr>Filters<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/filter/filter-map.ts#L8">template/filter/filter-map.ts:8</a></li>
+						</ul>
+					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="render" class="tsd-anchor"></a>
-					<h3>render</h3>
+					<a name="create" class="tsd-anchor"></a>
+					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a>, emitter<span class="tsd-signature-symbol">: </span><a href="_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><a href="../modules/_template_filter_filter_.html#filterargs" class="tsd-signature-type">FilterArgs</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_template_filter_filter_.filter.html" class="tsd-signature-type">Filter</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Implementation of <a href="../interfaces/_template_template_.template.html">Template</a>.<a href="../interfaces/_template_template_.template.html#render">render</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/tag.ts#L24">template/tag/tag.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/filter/filter-map.ts#L20">template/filter/filter-map.ts:20</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>emitter: <a href="_render_emitter_.emitter.html" class="tsd-signature-type">Emitter</a></h5>
+									<h5>args: <a href="../modules/_template_filter_filter_.html#filterargs" class="tsd-signature-type">FilterArgs</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_template_filter_filter_.filter.html" class="tsd-signature-type">Filter</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="get" class="tsd-anchor"></a>
+					<h3>get</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/filter/filter-map.ts#L10">template/filter/filter-map.ts:10</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">function</span></h4>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>this<span class="tsd-signature-symbol">: </span><a href="../interfaces/_template_filter_filter_impl_.filterimpl.html" class="tsd-signature-type">FilterImpl</a>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>this: <a href="../interfaces/_template_filter_filter_impl_.filterimpl.html" class="tsd-signature-type">FilterImpl</a></h5>
+												</li>
+												<li>
+													<h5>value: <span class="tsd-signature-type">any</span></h5>
+												</li>
+												<li>
+													<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="set" class="tsd-anchor"></a>
+					<h3>set</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, impl<span class="tsd-signature-symbol">: </span><a href="../modules/_template_filter_filter_impl_options_.html#filterimploptions" class="tsd-signature-type">FilterImplOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/filter/filter-map.ts#L16">template/filter/filter-map.ts:16</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>name: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>impl: <a href="../modules/_template_filter_filter_impl_options_.html#filterimploptions" class="tsd-signature-type">FilterImplOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -240,7 +272,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_template_tag_tag_.html">"template/tag/tag"</a>
+						<a href="../modules/_template_filter_filter_map_.html">"template/filter/filter-<wbr>map"</a>
 					</li>
 				</ul>
 			</nav>
@@ -249,25 +281,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_template_tag_tag_.tag.html" class="tsd-kind-icon">Tag</a>
+						<a href="_template_filter_filter_map_.filtermap.html" class="tsd-kind-icon">Filter<wbr>Map</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_template_tag_tag_.tag.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="_template_filter_filter_map_.filtermap.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_template_tag_tag_.tag.html#impl" class="tsd-kind-icon">impl</a>
+								<a href="_template_filter_filter_map_.filtermap.html#impls" class="tsd-kind-icon">impls</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_template_tag_tag_.tag.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="_template_tag_tag_.tag.html#token" class="tsd-kind-icon">token</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-static">
-								<a href="_template_tag_tag_.tag.html#impls" class="tsd-kind-icon">impls</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_template_filter_filter_map_.filtermap.html#strictfilters" class="tsd-kind-icon">strict<wbr>Filters</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_template_tag_tag_.tag.html#render" class="tsd-kind-icon">render</a>
+								<a href="_template_filter_filter_map_.filtermap.html#create" class="tsd-kind-icon">create</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_template_filter_filter_map_.filtermap.html#get" class="tsd-kind-icon">get</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_template_filter_filter_map_.filtermap.html#set" class="tsd-kind-icon">set</a>
 							</li>
 						</ul>
 					</li>
