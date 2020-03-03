@@ -74,8 +74,10 @@
 					<div class="lead">
 						<p>Key-Value Pairs Representing Tag Arguments
 							Example:
-							For the markup <code>{% include &#39;head.html&#39; foo=&#39;bar&#39; %}</code>,
-						hash[&#39;foo&#39;] === &#39;bar&#39;</p>
+							For the markup <code>, foo:&#39;bar&#39;, coo:2 reversed %}</code>,
+							hash[&#39;foo&#39;] === &#39;bar&#39;
+							hash[&#39;coo&#39;] === 2
+						hash[&#39;reversed&#39;] === undefined</p>
 					</div>
 				</div>
 			</section>
@@ -94,8 +96,10 @@
 					<div class="lead">
 						<p>Key-Value Pairs Representing Tag Arguments
 							Example:
-							For the markup <code>{% include &#39;head.html&#39; foo=&#39;bar&#39; %}</code>,
-						hash[&#39;foo&#39;] === &#39;bar&#39;</p>
+							For the markup <code>, foo:&#39;bar&#39;, coo:2 reversed %}</code>,
+							hash[&#39;foo&#39;] === &#39;bar&#39;
+							hash[&#39;coo&#39;] === 2
+						hash[&#39;reversed&#39;] === undefined</p>
 					</div>
 				</div>
 			</section>
@@ -104,54 +108,33 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_template_tag_hash_.hash.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_template_tag_hash_.hash.html#create" class="tsd-kind-icon">create</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_template_tag_hash_.hash.html#parse" class="tsd-kind-icon">parse</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_template_tag_hash_.hash.html#render" class="tsd-kind-icon">render</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="create" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> create</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>markup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a><span class="tsd-signature-symbol">&gt;</span></li>
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Hash<span class="tsd-signature-symbol">(</span>markup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/hash.ts#L24">template/tag/hash.ts:24</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>markup: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-					<a name="parse" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> parse</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">parse<span class="tsd-signature-symbol">(</span>markup<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/hash.ts#L13">template/tag/hash.ts:13</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/hash.ts#L14">template/tag/hash.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -161,6 +144,32 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_template_tag_hash_.hash.html" class="tsd-signature-type">Hash</a></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="render" class="tsd-anchor"></a>
+					<h3>render</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">render<span class="tsd-signature-symbol">(</span>ctx<span class="tsd-signature-symbol">: </span><a href="_context_context_.context.html" class="tsd-signature-type">Context</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/template/tag/hash.ts#L21">template/tag/hash.ts:21</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>ctx: <a href="_context_context_.context.html" class="tsd-signature-type">Context</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -184,11 +193,11 @@
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_template_tag_hash_.hash.html" class="tsd-kind-icon">Hash</a>
 						<ul>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_template_tag_hash_.hash.html#create" class="tsd-kind-icon">create</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="_template_tag_hash_.hash.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static">
-								<a href="_template_tag_hash_.hash.html#parse" class="tsd-kind-icon">parse</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_template_tag_hash_.hash.html#render" class="tsd-kind-icon">render</a>
 							</li>
 						</ul>
 					</li>

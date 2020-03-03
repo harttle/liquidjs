@@ -1,3 +1,11 @@
+# [9.10.0](https://github.com/harttle/liquidjs/compare/v9.9.0...v9.10.0) (2020-03-03)
+
+
+### Features
+
+* support json filter, closes [#192](https://github.com/harttle/liquidjs/issues/192) ([aa27a6c](https://github.com/harttle/liquidjs/commit/aa27a6c))
+* with & for in `render` tag, closes [#195](https://github.com/harttle/liquidjs/issues/195) ([6ea6881](https://github.com/harttle/liquidjs/commit/6ea6881))
+
 # [9.9.0](https://github.com/harttle/liquidjs/compare/v9.8.0...v9.9.0) (2020-03-02)
 
 

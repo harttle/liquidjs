@@ -76,13 +76,10 @@
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#bool" class="tsd-kind-icon">bool</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#boolline" class="tsd-kind-icon">bool<wbr>Line</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported"><a href="_parser_lexical_.html#doublequoted" class="tsd-kind-icon">double<wbr>Quoted</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#hash" class="tsd-kind-icon">hash</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#hashcapture" class="tsd-kind-icon">hash<wbr>Capture</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#identifier" class="tsd-kind-icon">identifier</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#literal" class="tsd-kind-icon">literal</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#number" class="tsd-kind-icon">number</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#numberline" class="tsd-kind-icon">number<wbr>Line</a></li>
-								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#operators" class="tsd-kind-icon">operators</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#quotebalanced" class="tsd-kind-icon">quote<wbr>Balanced</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#quoted" class="tsd-kind-icon">quoted</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#quotedline" class="tsd-kind-icon">quoted<wbr>Line</a></li>
@@ -95,12 +92,6 @@
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#tagline" class="tsd-kind-icon">tag<wbr>Line</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#value" class="tsd-kind-icon">value</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-external-module"><a href="_parser_lexical_.html#variable" class="tsd-kind-icon">variable</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Functions</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_parser_lexical_.html#isrange" class="tsd-kind-icon">is<wbr>Range</a></li>
 							</ul>
 						</section>
 					</div>
@@ -124,7 +115,7 @@
 					<div class="tsd-signature tsd-kind-icon">bool<wbr>Line<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;^${bool.source}$&#x60;, &#x27;i&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L31">parser/lexical.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L27">parser/lexical.ts:27</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -135,26 +126,6 @@
 					<aside class="tsd-sources">
 						<ul>
 							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L3">parser/lexical.ts:3</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="hash" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> hash</h3>
-					<div class="tsd-signature tsd-kind-icon">hash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;(?:${identifier.source})\\s*:\\s*(?:${value.source})&#x60;)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L25">parser/lexical.ts:25</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="hashcapture" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> hash<wbr>Capture</h3>
-					<div class="tsd-signature tsd-kind-icon">hash<wbr>Capture<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;(${identifier.source})\\s*:\\s*(${value.source})&#x60;, &#x27;g&#x27;)</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L26">parser/lexical.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -194,17 +165,7 @@
 					<div class="tsd-signature tsd-kind-icon">number<wbr>Line<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;^${number.source}$&#x60;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L30">parser/lexical.ts:30</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-external-module">
-					<a name="operators" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> operators</h3>
-					<div class="tsd-signature tsd-kind-icon">operators<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[/\s+or\s+/,/\s+and\s+/,/&#x3D;&#x3D;|!&#x3D;|&lt;&#x3D;|&gt;&#x3D;|&lt;|&gt;|\s+contains\s+/]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L35">parser/lexical.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L26">parser/lexical.ts:26</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -234,7 +195,7 @@
 					<div class="tsd-signature tsd-kind-icon">quoted<wbr>Line<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;^${quoted.source}$&#x60;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L32">parser/lexical.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L28">parser/lexical.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -274,7 +235,7 @@
 					<div class="tsd-signature tsd-kind-icon">range<wbr>Line<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;^${rangeCapture.source}$&#x60;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L33">parser/lexical.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L29">parser/lexical.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -304,7 +265,7 @@
 					<div class="tsd-signature tsd-kind-icon">tag<wbr>Line<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> =&nbsp;new RegExp(&#x60;^\\s*(${identifier.source})\\s*([\\s\\S]*?)\\s*$&#x60;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L29">parser/lexical.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L25">parser/lexical.ts:25</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -327,32 +288,6 @@
 							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L15">parser/lexical.ts:15</a></li>
 						</ul>
 					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="isrange" class="tsd-anchor"></a>
-					<h3>is<wbr>Range</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Range<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/lexical.ts#L41">parser/lexical.ts:41</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>str: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-						</li>
-					</ul>
 				</section>
 			</section>
 		</div>
@@ -379,12 +314,6 @@
 						<a href="_parser_lexical_.html#doublequoted" class="tsd-kind-icon">double<wbr>Quoted</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="_parser_lexical_.html#hash" class="tsd-kind-icon">hash</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="_parser_lexical_.html#hashcapture" class="tsd-kind-icon">hash<wbr>Capture</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_parser_lexical_.html#identifier" class="tsd-kind-icon">identifier</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
@@ -395,9 +324,6 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_parser_lexical_.html#numberline" class="tsd-kind-icon">number<wbr>Line</a>
-					</li>
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
-						<a href="_parser_lexical_.html#operators" class="tsd-kind-icon">operators</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_parser_lexical_.html#quotebalanced" class="tsd-kind-icon">quote<wbr>Balanced</a>
@@ -434,9 +360,6 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-external-module">
 						<a href="_parser_lexical_.html#variable" class="tsd-kind-icon">variable</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_parser_lexical_.html#isrange" class="tsd-kind-icon">is<wbr>Range</a>
 					</li>
 				</ul>
 			</nav>
