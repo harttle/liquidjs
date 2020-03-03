@@ -1,5 +1,8 @@
 import * as _ from './util/underscore'
-import IFS from './fs/ifs'
+import { Template } from './template/template'
+import { Cache } from './cache/cache'
+import { LRU } from './cache/lru'
+import { FS } from './fs/fs'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -7,7 +10,7 @@ export interface LiquidOptions {
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
-  cache?: boolean;
+  cache?: boolean | number | Cache<Template[]>;
   /** If set, treat the `filepath` parameter in `{%include filepath %}` and `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`. */
   dynamicPartials?: boolean;
   /** Enable strict filter existence. If set to `false`, undefined filters will be rendered as empty string. Otherwise, undefined filters will cause an exception. Defaults to `false`. */
@@ -33,19 +36,20 @@ export interface LiquidOptions {
   /** Whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`. */
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
-  fs?: IFS;
+  fs?: FS;
   /** the global environment passed down to all partial templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
 }
 
 interface NormalizedOptions extends LiquidOptions {
   root?: string[];
+  cache?: Cache<Template[]>;
 }
 
 export interface NormalizedFullOptions extends NormalizedOptions {
   root: string[];
   extname: string;
-  cache: boolean;
+  cache: undefined | Cache<Template[]>;
   dynamicPartials: boolean;
   strictFilters: boolean;
   strictVariables: boolean;
@@ -63,7 +67,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
 
 export const defaultOptions: NormalizedFullOptions = {
   root: ['.'],
-  cache: false,
+  cache: undefined,
   extname: '',
   dynamicPartials: true,
   trimTagRight: false,
@@ -85,10 +89,15 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
   if (options.hasOwnProperty('root')) {
     options.root = normalizeStringArray(options.root)
   }
+  let cache: Cache<Template[]> | undefined
+  if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
+  else if (typeof options.cache === 'object') cache = options.cache
+  else cache = options.cache ? new LRU<Template[]>(1024) : undefined
+  options.cache = cache
   return options as NormalizedOptions
 }
 
-export function applyDefault (options?: NormalizedOptions): NormalizedFullOptions {
+export function applyDefault (options: NormalizedOptions): NormalizedFullOptions {
   return { ...defaultOptions, ...options }
 }
 

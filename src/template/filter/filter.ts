@@ -1,18 +1,15 @@
 import { Expression } from '../../render/expression'
 import { Context } from '../../context/context'
-import { isArray, identify } from '../../util/underscore'
+import { identify } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
-
-type KeyValuePair = [string?, string?]
-type FilterArg = string|KeyValuePair
-export type FilterArgs = FilterArg[]
+import { FilterArg, isKeyValuePair } from '../../parser/filter-arg'
 
 export class Filter {
   public name: string
-  public args: FilterArgs
+  public args: FilterArg[]
   private impl: FilterImplOptions
 
-  public constructor (name: string, impl: FilterImplOptions, args: FilterArgs) {
+  public constructor (name: string, impl: FilterImplOptions, args: FilterArg[]) {
     this.name = name
     this.impl = impl || identify
     this.args = args
@@ -25,8 +22,4 @@ export class Filter {
     }
     return this.impl.apply({ context }, [value, ...argv])
   }
-}
-
-function isKeyValuePair (arr: FilterArg): arr is KeyValuePair {
-  return isArray(arr)
 }

@@ -8,7 +8,7 @@ export class HTML extends TemplateImpl<HTMLToken> implements Template {
   private str: string
   public constructor (token: HTMLToken) {
     super(token)
-    this.str = token.value
+    this.str = token.content
   }
   public * render (ctx: Context, emitter: Emitter): IterableIterator<void> {
     emitter.write(this.str)

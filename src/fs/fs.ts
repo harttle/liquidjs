@@ -1,4 +1,4 @@
-export default interface IFS {
+export interface FS {
   exists: (filepath: string) => Promise<boolean>;
   readFile: (filepath: string) => Promise<string>;
   existsSync: (filepath: string) => boolean;

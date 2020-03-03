@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { value as rValue } from '../../parser/lexical'
-import { Emitter, Expression, TagToken, Context, TagImplOptions, Hash } from '../../types'
+import { Emitter, Expression, TagToken, Context, TagImplOptions } from '../../types'
 
 const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
 const candidatesRE = new RegExp(rValue.source, 'g')
@@ -21,7 +21,7 @@ export default {
     assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
   },
 
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter) {
     const group = yield this.group.value(ctx)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle')

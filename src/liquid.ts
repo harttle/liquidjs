@@ -1,5 +1,5 @@
 import { Context } from './context/context'
-import fs from './fs/node'
+import * as fs from './fs/node'
 import * as _ from './util/underscore'
 import { Template } from './template/template'
 import { Tokenizer } from './parser/tokenizer'
@@ -13,7 +13,7 @@ import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
-import IFS from './fs/ifs'
+import { FS } from './fs/fs'
 import { toThenable, toValue } from './util/async'
 
 export * from './types'
@@ -24,15 +24,12 @@ export class Liquid {
   public parser: Parser
   public filters: FilterMap
   public tags: TagMap
-  private cache: object = {}
-  private tokenizer: Tokenizer
-  private fs: IFS
+  private fs: FS
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
     this.parser = new Parser(this)
     this.renderer = new Render()
-    this.tokenizer = new Tokenizer(this.options)
     this.fs = opts.fs || fs
     this.filters = new FilterMap(this.options.strictFilters)
     this.tags = new TagMap()
@@ -41,7 +38,8 @@ export class Liquid {
     _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
   }
   public parse (html: string, filepath?: string): Template[] {
-    const tokens = this.tokenizer.tokenize(html, filepath)
+    const tokenizer = new Tokenizer(html, filepath, this.options)
+    const tokens = tokenizer.readTokens()
     return this.parser.parse(tokens)
   }
 
@@ -77,10 +75,12 @@ export class Liquid {
     }
 
     for (const filepath of paths) {
-      if (this.options.cache && this.cache[filepath]) return this.cache[filepath]
+      const { cache } = this.options
+      if (cache && cache.has(filepath)) return cache.read(filepath)
       if (!(sync ? this.fs.existsSync(filepath) : yield this.fs.exists(filepath))) continue
       const tpl = this.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
-      return (this.cache[filepath] = tpl)
+      cache && cache.write(filepath, tpl)
+      return tpl
     }
     throw this.lookupError(file, options.root)
   }

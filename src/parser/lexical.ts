@@ -21,23 +21,9 @@ export const rangeCapture = new RegExp(`\\((${rangeLimit.source})\\.\\.(${rangeL
 
 export const value = new RegExp(`(?:${variable.source}|${literal.source}|${range.source})`)
 
-// hash related
-export const hash = new RegExp(`(?:${identifier.source})\\s*:\\s*(?:${value.source})`)
-export const hashCapture = new RegExp(`(${identifier.source})\\s*:\\s*(${value.source})`, 'g')
-
 // full match
 export const tagLine = new RegExp(`^\\s*(${identifier.source})\\s*([\\s\\S]*?)\\s*$`)
 export const numberLine = new RegExp(`^${number.source}$`)
 export const boolLine = new RegExp(`^${bool.source}$`, 'i')
 export const quotedLine = new RegExp(`^${quoted.source}$`)
 export const rangeLine = new RegExp(`^${rangeCapture.source}$`)
-
-export const operators = [
-  /\s+or\s+/,
-  /\s+and\s+/,
-  /==|!=|<=|>=|<|>|\s+contains\s+/
-]
-
-export function isRange (str: string) {
-  return rangeLine.test(str)
-}

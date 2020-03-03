@@ -52,8 +52,6 @@ export const operatorImpls: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   'or': (l: any, r: any) => isTruthy(l) || isTruthy(r)
 }
 
-const list = Object.keys(precedence)
-
 export function isOperator (token: string) {
-  return list.includes(token)
+  return precedence.hasOwnProperty(token)
 }

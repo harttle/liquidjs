@@ -4,7 +4,7 @@ import { last } from '../util/underscore'
 export class DelimitedToken extends Token {
   public constructor (
     raw: string,
-    value: string,
+    content: string,
     input: string,
     line: number,
     pos: number,
@@ -13,12 +13,12 @@ export class DelimitedToken extends Token {
     file?: string
   ) {
     super(raw, input, line, pos, file)
-    const tl = value[0] === '-'
-    const tr = last(value) === '-'
-    this.value = value
+    const tl = content[0] === '-'
+    const tr = last(content) === '-'
+    this.content = content
       .slice(
         tl ? 1 : 0,
-        tr ? -1 : value.length
+        tr ? -1 : content.length
       )
       .trim()
     this.trimLeft = tl || trimLeft

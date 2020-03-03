@@ -17,7 +17,7 @@ describe('tags/render', function () {
       '/bar/foo.html': 'foo'
     })
     const html = await liquid.renderFile('/current.html')
-    return expect(html).to.equal('barfoobar')
+    expect(html).to.equal('barfoobar')
   })
   it('should support template string', async function () {
     mock({
@@ -25,7 +25,7 @@ describe('tags/render', function () {
       '/bar/foo.html': 'foo'
     })
     const html = await liquid.renderFile('/current.html', { name: 'foo.html' })
-    return expect(html).to.equal('barfoobar')
+    expect(html).to.equal('barfoobar')
   })
 
   it('should throw when not specified', function () {
@@ -33,9 +33,8 @@ describe('tags/render', function () {
       '/parent.html': '{%render%}'
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
-      console.log(e)
-      expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/cannot render with empty filename/)
+      expect(e.name).to.equal('ParseError')
+      expect(e.message).to.match(/illegal argument ""/)
     })
   })
 
@@ -45,7 +44,7 @@ describe('tags/render', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/cannot render with empty filename/)
+      expect(e.message).to.match(/illegal filename "not-exist":"undefined"/)
     })
   })
 
@@ -55,7 +54,7 @@ describe('tags/render', function () {
       '/foo/relative.html': 'bar{% render "../bar/foo.html" %}bar'
     })
     const html = await liquid.renderFile('foo/relative.html')
-    return expect(html).to.equal('barfoobar')
+    expect(html).to.equal('barfoobar')
   })
 
   it('should support render: hash list', async function () {
@@ -64,7 +63,7 @@ describe('tags/render', function () {
       '/user.html': '{{role}} : {{alias}}'
     })
     const html = await liquid.renderFile('hash.html')
-    return expect(html).to.equal('admin : harttle')
+    expect(html).to.equal('admin : harttle')
   })
 
   it('should not bleed into child template', async function () {
@@ -73,7 +72,7 @@ describe('tags/render', function () {
       '/user.html': 'InChild: {{name}}'
     })
     const html = await liquid.renderFile('hash.html')
-    return expect(html).to.equal('InParent: harttle InChild: ')
+    expect(html).to.equal('InParent: harttle InChild: ')
   })
 
   it('should be able to access globals', async function () {
@@ -86,16 +85,49 @@ describe('tags/render', function () {
     }, {
       globals: { name: 'Harttle' }
     })
-    return expect(html).to.equal('InParent: harttle InChild: Harttle')
+    expect(html).to.equal('InParent: harttle InChild: Harttle')
   })
 
-  it('should support render: with', async function () {
+  it('should support with', async function () {
     mock({
       '/with.html': '{% render "color" with "red", shape: "rect" %}',
       '/color.html': 'color:{{color}}, shape:{{shape}}'
     })
     const html = await liquid.renderFile('with.html')
-    return expect(html).to.equal('color:red, shape:rect')
+    expect(html).to.equal('color:red, shape:rect')
+  })
+  it('should support with...as', async function () {
+    mock({
+      '/with.html': '{% render "color" with color as c %}',
+      '/color.html': 'color:{{c}}'
+    })
+    const html = await liquid.renderFile('with.html', { color: 'red' })
+    expect(html).to.equal('color:red')
+  })
+  it('should support with...as and other parameters', async function () {
+    mock({
+      '/index.html': '{% render "item" with color as c, s: shape %}',
+      '/item.html': 'color:{{c}}, shape:{{s}}'
+    })
+    const scope = { color: 'red', shape: 'rect' }
+    const html = await liquid.renderFile('index.html', scope)
+    expect(html).to.equal('color:red, shape:rect')
+  })
+  it('should support for...as', async function () {
+    mock({
+      '/index.html': '{% render "item" for colors as color %}',
+      '/item.html': '{{forloop.index}}: {{color}}\n'
+    })
+    const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })
+    expect(html).to.equal('1: red\n2: green\n')
+  })
+  it('should support for...as with other parameters', async function () {
+    mock({
+      '/index.html': '{% render "item" for colors as color with ".\n" as tail, sep: ". "%}',
+      '/item.html': '{{forloop.index}}{{sep}}{{color}}{{tail}}'
+    })
+    const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })
+    expect(html).to.equal('1. red.\n2. green.\n')
   })
   it('should support render: with as Drop', async function () {
     class ColorDrop extends Drop {
@@ -141,7 +173,7 @@ describe('tags/render', function () {
       }
     }
     const html = await liquid.renderFile('personInfo.html', ctx)
-    return expect(html).to.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
+    expect(html).to.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
   })
 
   describe('static partial', function () {
@@ -152,7 +184,7 @@ describe('tags/render', function () {
       })
       const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
-      return expect(html).to.equal('Xchild with redY')
+      expect(html).to.equal('Xchild with redY')
     })
 
     it('should support parent paths', async function () {
@@ -162,7 +194,7 @@ describe('tags/render', function () {
       })
       const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
-      return expect(html).to.equal('XchildY')
+      expect(html).to.equal('XchildY')
     })
 
     it('should support subpaths', async function () {
@@ -172,7 +204,7 @@ describe('tags/render', function () {
       })
       const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
-      return expect(html).to.equal('XchildY')
+      expect(html).to.equal('XchildY')
     })
 
     it('should support comma separated arguments', async function () {
@@ -182,7 +214,7 @@ describe('tags/render', function () {
       })
       const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
-      return expect(html).to.equal('Xchild with redY')
+      expect(html).to.equal('Xchild with redY')
     })
   })
   describe('sync support', function () {
@@ -192,23 +224,31 @@ describe('tags/render', function () {
         '/bar/foo.html': 'foo'
       })
       const html = liquid.renderFileSync('/current.html')
-      return expect(html).to.equal('barfoobar')
+      expect(html).to.equal('barfoobar')
     })
-    it('should support template string', function () {
+    it('should support value string', function () {
       mock({
-        '/current.html': 'bar{% render name" %}bar',
+        '/current.html': 'bar{% render name %}bar',
         '/bar/foo.html': 'foo'
       })
       const html = liquid.renderFileSync('/current.html', { name: '/bar/foo.html' })
-      return expect(html).to.equal('barfoobar')
+      expect(html).to.equal('barfoobar')
     })
-    it('should support render: with', function () {
+    it('should support template string', function () {
+      mock({
+        '/current.html': 'bar{% render "/bar/{{name}}" %}bar',
+        '/bar/foo.html': 'foo'
+      })
+      const html = liquid.renderFileSync('/current.html', { name: '/foo.html' })
+      expect(html).to.equal('barfoobar')
+    })
+    it('should support with', function () {
       mock({
         '/with.html': '{% render "color" with "red", shape: "rect" %}',
         '/color.html': 'color:{{color}}, shape:{{shape}}'
       })
       const html = liquid.renderFileSync('with.html')
-      return expect(html).to.equal('color:red, shape:rect')
+      expect(html).to.equal('color:red, shape:rect')
     })
     it('should support filename with extention', function () {
       mock({
@@ -217,7 +257,7 @@ describe('tags/render', function () {
       })
       const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = staticLiquid.renderFileSync('parent.html')
-      return expect(html).to.equal('Xchild with redY')
+      expect(html).to.equal('Xchild with redY')
     })
   })
 })

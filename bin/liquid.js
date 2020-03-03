@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 const Liquid = require('..').Liquid
-var contextArg = process.argv.slice(2)[0]
-var context = {}
+const contextArg = process.argv.slice(2)[0]
+let context = {}
 
 if (contextArg) {
   if (contextArg.endsWith('.json')) {
@@ -20,5 +20,5 @@ process.stdin.on('end', () => render(tpl))
 async function render (tpl) {
   const liquid = new Liquid()
   const html = await liquid.parseAndRender(tpl, context)
-  console.log(html)
+  process.stdout.write(html)
 }

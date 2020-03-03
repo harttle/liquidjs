@@ -30,12 +30,11 @@ describe('tags/include', function () {
 
   it('should throw when not specified', function () {
     mock({
-      '/parent.html': '{%include%}'
+      '/parent.html': '{%include , %}'
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
-      console.log(e)
-      expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/cannot include with empty filename/)
+      expect(e.name).to.equal('ParseError')
+      expect(e.message).to.match(/illegal argument ","/)
     })
   })
 
@@ -45,7 +44,7 @@ describe('tags/include', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/cannot include with empty filename/)
+      expect(e.message).to.match(/illegal filename/)
     })
   })
 
@@ -183,7 +182,7 @@ describe('tags/include', function () {
     })
     it('should support template string', function () {
       mock({
-        '/current.html': 'bar{% include name" %}bar',
+        '/current.html': 'bar{% include name %}bar',
         '/bar/foo.html': 'foo'
       })
       const html = liquid.renderFileSync('/current.html', { name: '/bar/foo.html' })

@@ -23,6 +23,6 @@ export default {
   render: function * (ctx: Context) {
     const r = this.liquid.renderer
     const html = yield r.renderTemplates(this.templates, ctx)
-    ctx.front()[this.variable] = html
+    ctx.bottom()[this.variable] = html
   }
 } as TagImplOptions

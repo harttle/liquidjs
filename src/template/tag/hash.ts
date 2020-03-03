@@ -1,31 +1,28 @@
-import { hashCapture } from '../../parser/lexical'
 import { Expression } from '../../render/expression'
 import { Context } from '../../context/context'
+import { Tokenizer } from '../../parser/tokenizer'
 
 /**
  * Key-Value Pairs Representing Tag Arguments
  * Example:
- *    For the markup `{% include 'head.html' foo='bar' %}`,
+ *    For the markup `, foo:'bar', coo:2 reversed %}`,
  *    hash['foo'] === 'bar'
+ *    hash['coo'] === 2
+ *    hash['reversed'] === undefined
  */
 export class Hash {
   [key: string]: any
-  private static parse (markup: string) {
-    const instance = new Hash()
-    let match
-    hashCapture.lastIndex = 0
-    while ((match = hashCapture.exec(markup))) {
-      const k = match[1]
-      const v = match[2]
-      instance[k] = v
+  constructor (markup: string) {
+    const tokenizer = new Tokenizer(markup)
+    for (const [name, value] of tokenizer.readHashes()) {
+      this[name] = value
     }
-    return instance
   }
-  public static * create (markup: string, ctx: Context) {
-    const instance = Hash.parse(markup)
-    for (const key of Object.keys(instance)) {
-      instance[key] = yield new Expression(instance[key]).evaluate(ctx)
+  * render (ctx: Context) {
+    const hash = {}
+    for (const key of Object.keys(this)) {
+      hash[key] = yield new Expression(this[key]).evaluate(ctx)
     }
-    return instance
+    return hash
   }
 }

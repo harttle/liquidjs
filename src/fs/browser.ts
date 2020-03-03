@@ -1,5 +1,4 @@
 import { last } from '../util/underscore'
-import IFS from './ifs'
 
 function domResolve (root: string, path: string) {
   const base = document.createElement('base')
@@ -16,7 +15,7 @@ function domResolve (root: string, path: string) {
   return resolved
 }
 
-function resolve (root: string, filepath: string, ext: string) {
+export function resolve (root: string, filepath: string, ext: string) {
   if (root.length && last(root) !== '/') root += '/'
   const url = domResolve(root, filepath)
   return url.replace(/^(\w+:\/\/[^/]+)(\/[^?]+)/, (str, origin, path) => {
@@ -26,7 +25,7 @@ function resolve (root: string, filepath: string, ext: string) {
   })
 }
 
-async function readFile (url: string): Promise<string> {
+export async function readFile (url: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
     xhr.onload = () => {
@@ -44,7 +43,7 @@ async function readFile (url: string): Promise<string> {
   })
 }
 
-function readFileSync (url: string): string {
+export function readFileSync (url: string): string {
   const xhr = new XMLHttpRequest()
   xhr.open('GET', url, false)
   xhr.send()
@@ -54,12 +53,10 @@ function readFileSync (url: string): string {
   return xhr.responseText as string
 }
 
-async function exists () {
+export async function exists (filepath: string) {
   return true
 }
 
-function existsSync () {
+export function existsSync (filepath: string) {
   return true
 }
-
-export default { readFile, resolve, exists, existsSync, readFileSync } as IFS

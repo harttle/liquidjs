@@ -1,16 +1,12 @@
 import { Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
-import { isString, isObject, isArray } from '../../util/underscore'
+import { toCollection } from '../../util/collection'
 import { Expression } from '../../render/expression'
 import { assert } from '../../util/assert'
-import { identifier, value, hash } from '../../parser/lexical'
+import { identifier, value } from '../../parser/lexical'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { Hash } from '../../template/tag/hash'
 
-const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
-  `(${value.source})` +
-  `(?:\\s+${hash.source})*` +
-  `(?:\\s+(reversed))?` +
-  `(?:\\s+${hash.source})*$`)
+const re = new RegExp(`^(${identifier.source})\\s+in\\s+(${value.source})`)
 
 export default {
   type: 'block',
@@ -19,8 +15,7 @@ export default {
     assert(match, `illegal tag: ${tagToken.raw}`)
     this.variable = match[1]
     this.collection = match[2]
-    this.reversed = !!match[3]
-
+    this.hash = new Hash(tagToken.args.slice(match[0].length))
     this.templates = []
     this.elseTemplates = []
 
@@ -36,27 +31,22 @@ export default {
 
     stream.start()
   },
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
     let collection = yield new Expression(this.collection).value(ctx)
+    collection = toCollection(collection)
 
-    if (!isArray(collection)) {
-      if (isString(collection) && collection.length > 0) {
-        collection = [collection] as string[]
-      } else if (isObject(collection)) {
-        collection = Object.keys(collection).map((key) => [key, collection[key]])
-      }
-    }
-    if (!isArray(collection) || !collection.length) {
+    if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)
       return
     }
 
+    const hash = yield this.hash.render(ctx)
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 
     collection = collection.slice(offset, offset + limit)
-    if (this.reversed) collection.reverse()
+    if ('reversed' in hash) collection.reverse()
 
     const scope = { forloop: new ForloopDrop(collection.length) }
     ctx.push(scope)

@@ -11,7 +11,7 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   private value: Value
   public constructor (token: OutputToken, filters: FilterMap) {
     super(token)
-    this.value = new Value(token.value, filters)
+    this.value = new Value(token.content, filters)
   }
   public * render (ctx: Context, emitter: Emitter) {
     const val = yield this.value.value(ctx)

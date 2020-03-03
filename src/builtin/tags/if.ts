@@ -1,4 +1,4 @@
-import { Hash, Emitter, isTruthy, Expression, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Emitter, isTruthy, Expression, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -27,7 +27,7 @@ export default {
     stream.start()
   },
 
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
 
     for (const branch of this.branches) {

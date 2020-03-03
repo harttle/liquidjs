@@ -1,49 +1,39 @@
 import { assert } from '../../util/assert'
 import { Expression, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
-import { value, quotedLine } from '../../parser/lexical'
+import { quoted, value, quotedLine } from '../../parser/lexical'
 import BlockMode from '../../context/block-mode'
 
-const staticFileRE = /[^\s,]+/
-const withRE = new RegExp(`with\\s+(${value.source})`)
+const rFile = new RegExp(`^(${quoted.source}|[^\\s,]+)(?:\\s+with\\s+(${value.source}))?`)
 
 export default {
   parse: function (token: TagToken) {
-    let match = staticFileRE.exec(token.args)
-    if (match) this.staticValue = match[0]
-
-    match = value.exec(token.args)
-    if (match) this.value = match[0]
-
-    match = withRE.exec(token.args)
-    if (match) this.with = match[1]
-  },
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
-    let filepath
-    if (ctx.opts.dynamicPartials) {
-      if (quotedLine.exec(this.value)) {
-        const template = this.value.slice(1, -1)
-        filepath = yield this.liquid._parseAndRender(template, ctx.getAll(), ctx.opts, ctx.sync)
-      } else {
-        filepath = yield new Expression(this.value).value(ctx)
-      }
-    } else {
-      filepath = this.staticValue
+    const match = rFile.exec(token.args)
+    if (!match) {
+      throw new Error(`illegal argument "${token.args}"`)
     }
-    assert(filepath, `cannot include with empty filename`)
+    this.file = match[1]
+    this.hash = new Hash(token.args.slice(match[0].length))
+    this.withVar = match[2]
+  },
+  render: function * (ctx: Context, emitter: Emitter) {
+    const { liquid, hash, withVar, file } = this
+    const { renderer } = liquid
+    const filepath = ctx.opts.dynamicPartials
+      ? (quotedLine.exec(file)
+        ? yield renderer.renderTemplates(liquid.parse(file.slice(1, -1)), ctx)
+        : yield new Expression(file).value(ctx))
+      : file
+    assert(filepath, `illegal filename "${file}":"${filepath}"`)
 
-    const originBlocks = ctx.getRegister('blocks')
-    const originBlockMode = ctx.getRegister('blockMode')
-
+    const saved = ctx.saveRegister('blocks', 'blockMode')
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
-    if (this.with) {
-      hash[filepath] = yield new Expression(this.with).evaluate(ctx)
-    }
-    const templates = yield this.liquid._parseFile(filepath, ctx.opts, ctx.sync)
-    ctx.push(hash)
-    yield this.liquid.renderer.renderTemplates(templates, ctx, emitter)
+    const scope = yield hash.render(ctx)
+    if (withVar) scope[filepath] = yield new Expression(withVar).evaluate(ctx)
+    const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
+    ctx.push(scope)
+    yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
-    ctx.setRegister('blocks', originBlocks)
-    ctx.setRegister('blockMode', originBlockMode)
+    ctx.restoreRegister(saved)
   }
 } as TagImplOptions

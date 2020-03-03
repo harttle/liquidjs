@@ -1,4 +1,4 @@
-import { Expression, Hash, Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Expression, Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -24,7 +24,7 @@ export default {
     stream.start()
   },
 
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
     const cond = yield new Expression(this.cond).value(ctx)
     for (let i = 0; i < this.cases.length; i++) {

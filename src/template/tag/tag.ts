@@ -22,8 +22,8 @@ export class Tag extends TemplateImpl<TagToken> implements Template {
     }
   }
   public * render (ctx: Context, emitter: Emitter) {
-    const hash = yield Hash.create(this.token.args, ctx)
+    const hash = yield new Hash(this.token.args).render(ctx)
     const impl = this.impl
-    if (isFunction(impl.render)) return yield impl.render(ctx, hash, emitter)
+    if (isFunction(impl.render)) return yield impl.render(ctx, emitter, hash)
   }
 }

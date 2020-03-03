@@ -7,5 +7,5 @@ import { Emitter } from '../../render/emitter'
 
 export interface TagImplOptions {
   parse?: (this: TagImpl, token: TagToken, remainingTokens: Token[]) => void;
-  render: (this: TagImpl, ctx: Context, hash: Hash, emitter: Emitter) => any;
+  render: (this: TagImpl, ctx: Context, emitter: Emitter, hash: Hash) => any;
 }

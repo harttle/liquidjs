@@ -4,14 +4,15 @@ import { Value } from './value'
 import { Context } from '../context/context'
 import { toValue } from '../util/underscore'
 import { isOperator, precedence, operatorImpls } from './operator'
-import { tokenize } from '../parser/expression-tokenizer'
+import { Tokenizer } from '../parser/tokenizer'
 
 export class Expression {
   private operands: any[] = []
   private postfix: string[]
 
   public constructor (str = '') {
-    this.postfix = [...toPostfix(tokenize(str))]
+    const tokenizer = new Tokenizer(str)
+    this.postfix = [...toPostfix(tokenizer.readExpression())]
   }
   public * evaluate (ctx: Context) {
     assert(ctx, 'unable to evaluate: context not defined')

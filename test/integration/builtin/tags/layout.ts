@@ -25,8 +25,8 @@ describe('tags/layout', function () {
       '/parent.html': '{%layout%}'
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
-      expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/cannot apply layout with empty filename/)
+      expect(e.name).to.equal('ParseError')
+      expect(e.message).to.match(/illegal argument ""/)
     })
   })
   describe('anonymous block', function () {
@@ -57,6 +57,14 @@ describe('tags/layout', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('XAYBZ')
   })
+  it('should support variable as layout name', async function () {
+    mock({
+      '/parent.html': 'X{% block "a"%}{% endblock %}Y'
+    })
+    const src = '{% layout parent %}{%block a%}A{%endblock%}'
+    const html = await liquid.parseAndRender(src, { parent: 'parent.html' })
+    return expect(html).to.equal('XAY')
+  })
   it('should support default block content', async function () {
     mock({
       '/parent.html': 'X{% block "a"%}A{% endblock %}Y{% block b%}B{%endblock%}Z'
@@ -74,12 +82,23 @@ describe('tags/layout', function () {
     const html = await liquid.renderFile('/main.html')
     return expect(html).to.equal('XAY')
   })
-  it('should not bleed scope into included layout', async function () {
+  it('should not bleed scope into `include` layout', async function () {
     mock({
       '/parent.html': 'X{%block a%}{%endblock%}Y{%block b%}{%endblock%}Z',
       '/main.html': '{%layout "parent"%}' +
         '{%block a%}A{%endblock%}' +
         '{%block b%}I{%include "included"%}J{%endblock%}',
+      '/included.html': '{%layout "parent"%}{%block a%}a{%endblock%}'
+    })
+    const html = await liquid.renderFile('main')
+    return expect(html).to.equal('XAYIXaYZJZ')
+  })
+  it('should not bleed scope into `render` layout', async function () {
+    mock({
+      '/parent.html': 'X{%block a%}{%endblock%}Y{%block b%}{%endblock%}Z',
+      '/main.html': '{%layout "parent"%}' +
+        '{%block a%}A{%endblock%}' +
+        '{%block b%}I{%render "included"%}J{%endblock%}',
       '/included.html': '{%layout "parent"%}{%block a%}a{%endblock%}'
     })
     const html = await liquid.renderFile('main')

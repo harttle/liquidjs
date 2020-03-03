@@ -1,4 +1,4 @@
-import fs from '../../../src/fs/node'
+import * as fs from '../../../src/fs/node'
 import * as path from 'path'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'

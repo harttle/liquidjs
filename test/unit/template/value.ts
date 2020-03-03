@@ -83,33 +83,6 @@ describe('Value', function () {
     })
   })
 
-  describe('#tokenize()', function () {
-    it('should tokenize a simple value', function () {
-      expect(Value.tokenize('foo')).to.eql(['foo'])
-    })
-    it('should tokenize a value with spaces', function () {
-      expect(Value.tokenize(' foo \t')).to.eql(['foo'])
-    })
-    it('should tokenize a simple filter', function () {
-      expect(Value.tokenize('foo | add')).to.eql(['foo', '|', 'add'])
-    })
-    it('should tokenize a filter with a single argument', function () {
-      expect(Value.tokenize('foo | add: 1')).to.eql(['foo', '|', 'add', ':', '1'])
-    })
-    it('should tokenize array indexing', function () {
-      expect(Value.tokenize('arr[0]')).to.eql(['arr[0]'])
-    })
-    it('should tokenize simple object access', function () {
-      expect(Value.tokenize('obj["foo"]')).to.eql(['obj["foo"]'])
-    })
-    it('should tokenize simple dot syntax object access', function () {
-      expect(Value.tokenize('obj.foo')).to.eql(['obj.foo'])
-    })
-    it('should tokenize complex object property access', function () {
-      expect(Value.tokenize('obj["complex:string here"]')).to.eql(['obj["complex:string here"]'])
-    })
-  })
-
   describe('#value()', function () {
     it('should call chained filters correctly', async function () {
       const date = sinon.stub().returns('y')

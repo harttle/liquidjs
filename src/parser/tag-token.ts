@@ -18,7 +18,7 @@ export class TagToken extends DelimitedToken {
   ) {
     super(raw, value, input, line, pos, options.trimTagLeft, options.trimTagRight, file)
     this.type = 'tag'
-    const match = this.value.match(lexical.tagLine)
+    const match = this.content.match(lexical.tagLine)
     if (!match) {
       throw new TokenizationError(`illegal tag syntax`, this)
     }

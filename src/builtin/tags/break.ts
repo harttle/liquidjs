@@ -1,7 +1,7 @@
-import { Emitter, Context, Hash } from '../../types'
+import { Emitter, Context } from '../../types'
 
 export default {
-  render: function (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function (ctx: Context, emitter: Emitter) {
     emitter.break = true
   }
 }

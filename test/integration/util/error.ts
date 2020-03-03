@@ -1,8 +1,11 @@
-import { expect } from 'chai'
+import { expect, use } from 'chai'
 import { RenderError } from '../../../src/util/error'
 import { Liquid } from '../../../src/liquid'
 import * as path from 'path'
 import { mock, restore } from '../../stub/mockfs'
+import * as chaiAsPromised from 'chai-as-promised'
+
+use(chaiAsPromised)
 
 let engine = new Liquid()
 const strictEngine = new Liquid({

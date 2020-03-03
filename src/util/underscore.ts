@@ -123,3 +123,7 @@ export function changeCase (str: string): string {
   const hasLowerCase = [...str].some(ch => ch >= 'a' && ch <= 'z')
   return hasLowerCase ? str.toUpperCase() : str.toLowerCase()
 }
+
+export function ellipsis (str: string, N: number): string {
+  return str.length > N ? str.substr(0, N - 3) + '...' : str
+}

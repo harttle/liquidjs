@@ -1,4 +1,4 @@
-import { Emitter, Expression, isFalsy, ParseStream, Context, TagImplOptions, Token, Hash, TagToken } from '../../types'
+import { Emitter, Expression, isFalsy, ParseStream, Context, TagImplOptions, Token, TagToken } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -20,7 +20,7 @@ export default {
     stream.start()
   },
 
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
     const cond = yield new Expression(this.cond).value(ctx)
     yield (isFalsy(cond)

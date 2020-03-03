@@ -24,6 +24,12 @@ export class Context {
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)
   }
+  public saveRegister (...keys: string[]): [string, any][] {
+    return keys.map(key => [key, this.getRegister(key)])
+  }
+  public restoreRegister (keyValues: [string, any][]) {
+    return keyValues.forEach(([key, value]) => this.setRegister(key, value))
+  }
   public getAll () {
     return [this.globals, this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
@@ -49,7 +55,7 @@ export class Context {
   public pop () {
     return this.scopes.pop()
   }
-  public front () {
+  public bottom () {
     return this.scopes[0]
   }
   private findScope (key: string) {

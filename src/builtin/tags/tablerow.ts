@@ -1,11 +1,11 @@
 import { assert } from '../../util/assert'
+import { toCollection } from '../../util/collection'
 import { Expression, Emitter, Hash, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
-import { identifier, value, hash } from '../../parser/lexical'
+import { identifier, value } from '../../parser/lexical'
 import { TablerowloopDrop } from '../../drop/tablerowloop-drop'
 
 const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
-  `(${value.source})` +
-  `(?:\\s+${hash.source})*$`)
+  `(${value.source})`)
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: Token[]) {
@@ -15,6 +15,7 @@ export default {
     this.variable = match[1]
     this.collection = match[2]
     this.templates = []
+    this.hash = new Hash(tagToken.args.slice(match[0].length))
 
     let p
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
@@ -28,8 +29,9 @@ export default {
     stream.start()
   },
 
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
-    let collection = (yield new Expression(this.collection).value(ctx)) || []
+  render: function * (ctx: Context, emitter: Emitter) {
+    let collection = toCollection(yield new Expression(this.collection).value(ctx))
+    const hash = yield this.hash.render(ctx)
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 

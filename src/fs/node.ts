@@ -1,38 +1,33 @@
 import * as _ from '../util/underscore'
-import { resolve, extname } from 'path'
-import { stat, statSync, readFile, readFileSync } from 'fs'
-import IFS from './ifs'
+import { resolve as nodeResolve, extname } from 'path'
+import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
 
 const statAsync = _.promisify(stat)
-const readFileAsync = _.promisify<string, string, string>(readFile)
+const readFileAsync = _.promisify<string, string, string>(nodeReadFile)
 
-const fs: IFS = {
-  exists: (filepath: string) => {
-    return statAsync(filepath).then(() => true).catch(() => false)
-  },
-  readFile: filepath => {
-    return readFileAsync(filepath, 'utf8')
-  },
-  existsSync: (filepath: string) => {
-    try {
-      statSync(filepath)
-      return true
-    } catch (err) {
-      return false
-    }
-  },
-  readFileSync: filepath => {
-    return readFileSync(filepath, 'utf8')
-  },
-  resolve: (root: string, file: string, ext: string) => {
-    if (!extname(file)) file += ext
-    return resolve(root, file)
-  },
-  fallback: (file: string) => {
-    try {
-      return require.resolve(file)
-    } catch (e) {}
+export function exists (filepath: string) {
+  return statAsync(filepath).then(() => true).catch(() => false)
+}
+export function readFile (filepath: string) {
+  return readFileAsync(filepath, 'utf8')
+}
+export function existsSync (filepath: string) {
+  try {
+    statSync(filepath)
+    return true
+  } catch (err) {
+    return false
   }
 }
-
-export default fs
+export function readFileSync (filepath: string) {
+  return nodeReadFileSync(filepath, 'utf8')
+}
+export function resolve (root: string, file: string, ext: string) {
+  if (!extname(file)) file += ext
+  return nodeResolve(root, file)
+}
+export function fallback (file: string) {
+  try {
+    return require.resolve(file)
+  } catch (e) {}
+}

@@ -1,42 +1,39 @@
 import { assert } from '../../util/assert'
-import { value as rValue } from '../../parser/lexical'
+import { quotedLine, quoted } from '../../parser/lexical'
 import { Emitter, Hash, Expression, TagToken, Token, Context, TagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
 
-const staticFileRE = /\S+/
+const rFile = new RegExp(`^(${quoted.source}|[^\\s,]+)`)
 
 export default {
   parse: function (token: TagToken, remainTokens: Token[]) {
-    let match = staticFileRE.exec(token.args)
-    if (match) {
-      this.staticLayout = match[0]
+    const match = rFile.exec(token.args)
+    if (!match) {
+      throw new Error(`illegal argument "${token.args}"`)
     }
-
-    match = rValue.exec(token.args)
-    if (match) {
-      this.layout = match[0]
-    }
-
+    this.file = match[1]
+    this.hash = new Hash(token.args.slice(match[0].length))
     this.tpls = this.liquid.parser.parse(remainTokens)
   },
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
-    const layout = ctx.opts.dynamicPartials
-      ? yield new Expression(this.layout).value(ctx)
-      : this.staticLayout
-    assert(layout, `cannot apply layout with empty filename`)
+  render: function * (ctx: Context, emitter: Emitter) {
+    const { liquid, hash, file } = this
+    const { renderer } = liquid
+    const filepath = ctx.opts.dynamicPartials
+      ? (quotedLine.exec(file)
+        ? yield renderer.renderTemplates(liquid.parse(file.slice(1, -1)), ctx)
+        : yield new Expression(file).value(ctx))
+      : this.file
+    assert(filepath, `illegal filename "${file}":"${filepath}"`)
 
     // render the remaining tokens immediately
     ctx.setRegister('blockMode', BlockMode.STORE)
     const blocks = ctx.getRegister('blocks')
-    const r = this.liquid.renderer
-    const html = yield r.renderTemplates(this.tpls, ctx)
-    if (blocks[''] === undefined) {
-      blocks[''] = html
-    }
-    const templates = yield this.liquid._parseFile(layout, ctx.opts, ctx.sync)
-    ctx.push(hash)
+    const html = yield renderer.renderTemplates(this.tpls, ctx)
+    if (blocks[''] === undefined) blocks[''] = html
+    const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
+    ctx.push(yield hash.render(ctx))
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
-    const partial = yield r.renderTemplates(templates, ctx)
+    const partial = yield renderer.renderTemplates(templates, ctx)
     ctx.pop()
     emitter.write(partial)
   }

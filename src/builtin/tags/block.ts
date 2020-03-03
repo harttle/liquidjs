@@ -1,5 +1,5 @@
 import BlockMode from '../../context/block-mode'
-import { ParseStream, TagToken, Token, Template, Context, TagImplOptions, Emitter, Hash } from '../../types'
+import { ParseStream, TagToken, Token, Template, Context, TagImplOptions, Emitter } from '../../types'
 
 export default {
   parse: function (token: TagToken, remainTokens: Token[]) {
@@ -14,7 +14,7 @@ export default {
       })
     stream.start()
   },
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter) {
     const blocks = ctx.getRegister('blocks')
     const childDefined = blocks[this.block]
     const r = this.liquid.renderer

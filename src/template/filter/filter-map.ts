@@ -1,5 +1,6 @@
 import { FilterImplOptions } from './filter-impl-options'
-import { Filter, FilterArgs } from './filter'
+import { Filter } from './filter'
+import { FilterArg } from '../../parser/filter-arg'
 import { assert } from '../../util/assert'
 
 export class FilterMap {
@@ -17,7 +18,7 @@ export class FilterMap {
     this.impls[name] = impl
   }
 
-  create (name: string, args: FilterArgs) {
+  create (name: string, args: FilterArg[]) {
     return new Filter(name, this.get(name), args)
   }
 }

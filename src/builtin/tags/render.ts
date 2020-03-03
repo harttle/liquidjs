@@ -1,50 +1,63 @@
 import { assert } from '../../util/assert'
+import { ForloopDrop } from '../../drop/forloop-drop'
+import { toCollection } from '../../util/collection'
 import { Expression, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
-import { value, quotedLine } from '../../parser/lexical'
-import BlockMode from '../../context/block-mode'
+import { identifier, value, quoted, quotedLine } from '../../parser/lexical'
 
-const staticFileRE = /[^\s,]+/
-const withRE = new RegExp(`with\\s+(${value.source})`)
+const rFile = new RegExp(`^(${quoted.source}|[^\\s,]+)`)
+const rWith = new RegExp(`^\\s+with\\s+(${value.source})(?:\\s+as\\s+(${identifier.source}))?`)
+const rFor = new RegExp(`^\\s+for\\s+(${value.source})\\s+as\\s+(${identifier.source})`)
 
 export default {
   parse: function (token: TagToken) {
-    let match = staticFileRE.exec(token.args)
-    if (match) this.staticValue = match[0]
+    let args = token.args
+    let match = rFile.exec(args)
 
-    match = value.exec(token.args)
-    if (match) this.value = match[0]
+    assert(match, `illegal argument "${token.args}"`)
+    this.file = match![1]
+    args = args.substr(match![0].length)
 
-    match = withRE.exec(token.args)
-    if (match) this.with = match[1]
-  },
-  render: function * (ctx: Context, hash: Hash, emitter: Emitter) {
-    let filepath
-    if (ctx.opts.dynamicPartials) {
-      if (quotedLine.exec(this.value)) {
-        const template = this.value.slice(1, -1)
-        filepath = yield this.liquid._parseAndRender(template, ctx.getAll(), ctx.opts, ctx.sync)
-      } else {
-        filepath = yield new Expression(this.value).value(ctx)
-      }
-    } else {
-      filepath = this.staticValue
+    while (true) {
+      if ((match = rWith.exec(args))) {
+        this.withVar = match[1]
+        this.withAs = match[2]
+        args = args.substr(match[0].length)
+      } else if ((match = rFor.exec(args))) {
+        this.forVar = match[1]
+        this.forAs = match[2]
+        args = args.substr(match[0].length)
+      } else break
     }
-    assert(filepath, `cannot render with empty filename`)
-
-    const originBlocks = ctx.getRegister('blocks')
-    const originBlockMode = ctx.getRegister('blockMode')
+    this.hash = new Hash(args)
+  },
+  render: function * (ctx: Context, emitter: Emitter) {
+    const { liquid, withVar, withAs, forVar, forAs, file, hash } = this
+    const { renderer } = liquid
+    const filepath = ctx.opts.dynamicPartials
+      ? (quotedLine.exec(file)
+        ? yield renderer.renderTemplates(liquid.parse(file.slice(1, -1)), ctx)
+        : yield new Expression(file).value(ctx))
+      : this.file
+    assert(filepath, `illegal filename "${file}":"${filepath}"`)
 
     const childCtx = new Context({}, ctx.opts, ctx.sync)
-    childCtx.setRegister('blocks', {})
-    childCtx.setRegister('blockMode', BlockMode.OUTPUT)
-    if (this.with) {
-      hash[filepath] = yield new Expression(this.with).evaluate(ctx)
-    }
-    childCtx.push(hash)
-    const templates = yield this.liquid._parseFile(filepath, childCtx.opts, childCtx.sync)
-    yield this.liquid.renderer.renderTemplates(templates, childCtx, emitter)
+    const scope = yield hash.render(ctx)
+    if (withVar) scope[withAs || filepath] = yield new Expression(withVar).evaluate(ctx)
+    childCtx.push(scope)
 
-    childCtx.setRegister('blocks', originBlocks)
-    childCtx.setRegister('blockMode', originBlockMode)
+    if (forVar) {
+      let collection = yield new Expression(forVar).value(ctx)
+      collection = toCollection(collection)
+      scope['forloop'] = new ForloopDrop(collection.length)
+      for (const item of collection) {
+        scope[forAs] = item
+        const templates = yield liquid._parseFile(filepath, childCtx.opts, childCtx.sync)
+        yield renderer.renderTemplates(templates, childCtx, emitter)
+        scope.forloop.next()
+      }
+    } else {
+      const templates = yield liquid._parseFile(filepath, childCtx.opts, childCtx.sync)
+      yield renderer.renderTemplates(templates, childCtx, emitter)
+    }
   }
 } as TagImplOptions

@@ -32,7 +32,8 @@ describe('Tag', function () {
     expect(function () {
       new Tag({ // eslint-disable-line
         type: 'tag',
-        value: 'foo',
+        content: 'foo',
+        args: '',
         name: 'not-exist'
       } as TagToken, [], liquid)
     }).to.throw(/tag "not-exist" not found/)
@@ -49,52 +50,11 @@ describe('Tag', function () {
     liquid.registerTag('foo', { render: spy })
     const token = {
       type: 'tag',
-      value: 'foo',
+      content: 'foo',
+      args: '',
       name: 'foo'
     } as TagToken
     await toThenable(new Tag(token, [], liquid).render(ctx, emitter))
     expect(spy).to.have.been.called
-  })
-
-  describe('hash', function () {
-    let spy: sinon.SinonSpy, token: TagToken
-    beforeEach(function () {
-      spy = sinon.spy()
-      liquid.registerTag('foo', { render: spy })
-      token = {
-        type: 'tag',
-        value: 'foo aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo',
-        name: 'foo',
-        args: 'aa:foo bb: arr[0] cc: 2.3\ndd:bar.coo'
-      } as TagToken
-    })
-    it('should call tag.render with scope', async function () {
-      await toThenable(new Tag(token, [], liquid).render(ctx, emitter))
-      expect(spy).to.have.been.calledWithMatch(ctx)
-    })
-    it('should resolve identifier hash', async function () {
-      await toThenable(new Tag(token, [], liquid).render(ctx, emitter))
-      expect(spy).to.have.been.calledWithMatch({}, {
-        aa: 'bar'
-      })
-    })
-    it('should accept space between key/value', async function () {
-      await toThenable(new Tag(token, [], liquid).render(ctx, emitter))
-      expect(spy).to.have.been.calledWithMatch({}, {
-        bb: 2
-      })
-    })
-    it('should resolve number value hash', async function () {
-      await toThenable(new Tag(token, [], liquid).render(ctx, emitter))
-      expect(spy).to.have.been.calledWithMatch(ctx, {
-        cc: 2.3
-      })
-    })
-    it('should resolve property access hash', async function () {
-      await toThenable(new Tag(token, [], liquid).render(ctx, emitter))
-      expect(spy).to.have.been.calledWithMatch(ctx, {
-        dd: 'uoo'
-      })
-    })
   })
 })

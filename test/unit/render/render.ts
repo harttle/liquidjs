@@ -14,7 +14,7 @@ describe('render', function () {
   describe('.renderTemplates()', function () {
     it('should render html', async function () {
       const scope = new Context()
-      const token = { type: 'html', value: '<p>' } as Token
+      const token = { type: 'html', content: '<p>' } as Token
       const html = await toThenable(render.renderTemplates([new HTML(token)], scope))
       return expect(html).to.equal('<p>')
     })

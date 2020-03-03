@@ -1,5 +1,5 @@
 import { isString, forOwn } from '../../src/util/underscore'
-import fs from '../../src/fs/node'
+import * as fs from '../../src/fs/node'
 import { resolve } from 'path'
 
 interface FileDescriptor {
@@ -15,28 +15,28 @@ export function mock (options: { [path: string]: (string | FileDescriptor) }) {
     files[resolve(key)] = isString(val)
       ? { mode: '33188', content: val }
       : val as FileDescriptor
-  })
-  fs.readFile = async function (path) {
+  });
+  (fs as any).readFile = async function (path: string) {
     return fs.readFileSync(path)
-  }
-  fs.readFileSync = function (path) {
+  };
+  (fs as any).readFileSync = function (path: string) {
     const file = files[path]
     if (file === undefined) throw new Error('ENOENT')
     if (file.mode === '0000') throw new Error('EACCES')
     return file.content
-  }
-  fs.exists = async function (path: string) {
+  };
+  (fs as any).exists = async function (path: string) {
     return fs.existsSync(path)
-  }
-  fs.existsSync = function (path: string) {
+  };
+  (fs as any).existsSync = function (path: string) {
     return !!files[path]
   }
 }
 
 export function restore () {
-  files = {}
-  fs.readFileSync = readFileSync
-  fs.existsSync = existsSync
-  fs.readFile = readFile
-  fs.exists = exists
+  files = {};
+  (fs as any).readFileSync = readFileSync;
+  (fs as any).existsSync = existsSync;
+  (fs as any).readFile = readFile;
+  (fs as any).exists = exists
 }

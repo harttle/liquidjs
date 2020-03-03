@@ -12,6 +12,6 @@ export default {
     this.value = match[2]
   },
   render: function * (ctx: Context) {
-    ctx.front()[this.key] = yield this.liquid._evalValue(this.value, ctx)
+    ctx.bottom()[this.key] = yield this.liquid._evalValue(this.value, ctx)
   }
 } as TagImplOptions

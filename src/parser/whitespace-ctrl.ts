@@ -28,12 +28,12 @@ function trimLeft (token: Token, greedy: boolean) {
   if (!token || !HTMLToken.is(token)) return
 
   const rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
-  token.value = token.value.replace(rLeft, '')
+  token.content = token.content.replace(rLeft, '')
 }
 
 function trimRight (token: Token, greedy: boolean) {
   if (!token || !HTMLToken.is(token)) return
 
   const rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g
-  token.value = token.value.replace(rRight, '')
+  token.content = token.content.replace(rRight, '')
 }
