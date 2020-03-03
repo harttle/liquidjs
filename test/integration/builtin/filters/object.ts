@@ -10,4 +10,10 @@ describe('filters/object', function () {
     it('true should not use default', () => test('{{true | default: "a"}}', 'true'))
     it('0 should not use default', () => test('{{0 | default: "a"}}', '0'))
   })
+  describe('json', function () {
+    it('should stringify string', () => test('{{"foo" | json}}', '"foo"'))
+    it('should stringify number', () => test('{{2 | json}}', '2'))
+    it('should stringify object', () => test('{{obj | json}}', '{"foo":"bar"}'))
+    it('should stringify array', () => test('{{arr | json}}', '[-2,"a"]'))
+  })
 })
