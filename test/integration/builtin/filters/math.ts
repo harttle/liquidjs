@@ -89,6 +89,19 @@ describe('filters/math', function () {
       const html = await l.parseAndRender(src, { students })
       expect(html).to.equal('bob alice carol')
     })
+    it('should be stable when it comes to undefined props', async () => {
+      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
+      const students = [
+        { name: 'bob' },
+        { name: 'alice', age: 2 },
+        { name: 'amber' },
+        { name: 'watson' },
+        { name: 'michael' },
+        { name: 'charlie' }
+      ]
+      const html = await l.parseAndRender(src, { students })
+      expect(html).to.equal('alice bob amber watson michael charlie')
+    })
     it('should tolerate undefined props', async () => {
       const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
       const students = [

@@ -108,4 +108,21 @@ describe('util/underscore', function () {
       expect(_.changeCase('FOOA')).to.equal('fooa')
     })
   })
+  describe('.caseInsensitiveCompare()', function () {
+    it('should "foo" > "bar"', () => {
+      expect(_.caseInsensitiveCompare('foo', 'bar')).to.equal(1)
+    })
+    it('should "foo" < null', () => {
+      expect(_.caseInsensitiveCompare('foo', null)).to.equal(-1)
+    })
+    it('should null > "foo"', () => {
+      expect(_.caseInsensitiveCompare(null, 'foo')).to.equal(1)
+    })
+    it('should -1 < 0', () => {
+      expect(_.caseInsensitiveCompare(-1, 0)).to.equal(-1)
+    })
+    it('should 1 > 0', () => {
+      expect(_.caseInsensitiveCompare(1, 0)).to.equal(1)
+    })
+  })
 })

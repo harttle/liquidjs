@@ -1,4 +1,4 @@
-const toLowerCase = String.prototype.toLowerCase
+import { caseInsensitiveCompare } from '../../util/underscore'
 
 export default {
   'abs': (v: number) => Math.abs(v),
@@ -18,22 +18,12 @@ export default {
   'times': (v: number, arg: number) => v * arg
 }
 
-function caseInsensitiveCmp (a: any, b: any) {
-  if (!b) return -1
-  if (!a) return 1
-  a = toLowerCase.call(a)
-  b = toLowerCase.call(b)
-  if (a < b) return -1
-  if (a > b) return 1
-  return 0
-}
-
 function sortNatural (input: any[], property?: string) {
   if (!input || !input.sort) return []
   if (property !== undefined) {
     return [...input].sort(
-      (lhs, rhs) => caseInsensitiveCmp(lhs[property], rhs[property])
+      (lhs, rhs) => caseInsensitiveCompare(lhs[property], rhs[property])
     )
   }
-  return [...input].sort(caseInsensitiveCmp)
+  return [...input].sort(caseInsensitiveCompare)
 }

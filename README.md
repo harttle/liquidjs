@@ -62,6 +62,8 @@ For detailed documents, see:
 * Number. In JavaScript we cannot distinguish or convert between `float` and `integer`, see [#59](https://github.com/harttle/liquidjs/issues/59). And when applied `size` filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a `length` property.
 * [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
 * [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
+* Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.
+* Sort stability. The [sort](https://shopify.github.io/liquid/filters/sort/) stability is also not defined in both shopify/liquid and LiquidJS, but it's [considered stable](https://v8.dev/features/stable-sort) for LiquidJS in Node.js 12+ and Google Chrome 70+.
 
 Features that available on shopify website but not on shopify/liquid repo will not be implemented in this repo,
 but there're some plugins available: <https://github.com/harttle/liquidjs/wiki/Plugins>
