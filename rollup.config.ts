@@ -50,7 +50,7 @@ const esm = {
       './fs/node': './fs/browser'
     }),
     replace({
-      include: './src/parser/tokenizer.ts',
+      include: './src/parser/token.ts',
       delimiters: ['', ''],
       './flatten/node': './flatten/browser'
     }),
@@ -84,7 +84,7 @@ const umd = {
       './fs/node': './fs/browser'
     }),
     replace({
-      include: './src/parser/tokenizer.ts',
+      include: './src/parser/token.ts',
       delimiters: ['', ''],
       './flatten/node': './flatten/browser'
     }),
@@ -117,7 +117,7 @@ const min = {
       './fs/node': './fs/browser'
     }),
     replace({
-      include: './src/parser/tokenizer.ts',
+      include: './src/parser/token.ts',
       delimiters: ['', ''],
       './flatten/node': './flatten/browser'
     }),
