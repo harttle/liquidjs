@@ -76,10 +76,13 @@ export class Liquid {
 
     for (const filepath of paths) {
       const { cache } = this.options
-      if (cache && cache.has(filepath)) return cache.read(filepath)
+      if (cache) {
+        const tpls = yield cache.read(filepath)
+        if (tpls) return tpls
+      }
       if (!(sync ? this.fs.existsSync(filepath) : yield this.fs.exists(filepath))) continue
       const tpl = this.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
-      cache && cache.write(filepath, tpl)
+      if (cache) cache.write(filepath, tpl)
       return tpl
     }
     throw this.lookupError(file, options.root)

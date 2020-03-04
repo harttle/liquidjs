@@ -42,10 +42,6 @@ export class LRU<T> implements Cache<T> {
     return value
   }
 
-  has (key: string): boolean {
-    return !!this.cache[key]
-  }
-
   remove (key: string) {
     const node = this.cache[key]
     node.prev.next = node.next

@@ -71,7 +71,6 @@ describe('LiquidOptions#cache', function () {
         extname: '.html',
         cache: {
           read: (): Template[] | undefined => last,
-          has: (): boolean => !!last,
           write: (key: string, value: Template[]) => { last = value }
         }
       })
@@ -81,6 +80,25 @@ describe('LiquidOptions#cache', function () {
       expect(await engine.renderFile('files/foo')).to.equal('foo')
       expect(await engine.renderFile('files/bar')).to.equal('foo')
       expect(await engine.renderFile('files/coo')).to.equal('foo')
+    })
+    it('should respect cache={} option (async)', async function () {
+      const cached: { [key: string]: Template[] | undefined } = {}
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: {
+          read: (key: string) => Promise.resolve(cached[key]),
+          write: (key: string, value: Template[]) => { cached[key] = value; Promise.resolve() }
+        }
+      })
+      mock({ '/root/files/foo.html': 'foo' })
+      mock({ '/root/files/bar.html': 'bar' })
+      mock({ '/root/files/coo.html': 'coo' })
+      expect(await engine.renderFile('files/foo')).to.equal('foo')
+      expect(await engine.renderFile('files/bar')).to.equal('bar')
+      expect(await engine.renderFile('files/coo')).to.equal('coo')
+      mock({ '/root/files/coo.html': 'COO' })
+      expect(await engine.renderFile('files/coo')).to.equal('coo')
     })
     it('should not cache not exist file', async function () {
       const engine = new Liquid({
