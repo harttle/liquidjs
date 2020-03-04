@@ -241,6 +241,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "richardo2016",
+      "name": "Ray",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6339390?v=4",
+      "profile": "http://js.chenlei.me",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
