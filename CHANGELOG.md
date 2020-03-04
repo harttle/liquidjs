@@ -1,3 +1,16 @@
+# [9.11.0](https://github.com/harttle/liquidjs/compare/v9.10.0...v9.11.0) (2020-03-04)
+
+
+### Bug Fixes
+
+* `Buffer not defined` for browser bundles, fixes [#197](https://github.com/harttle/liquidjs/issues/197) ([65b849c](https://github.com/harttle/liquidjs/commit/65b849c))
+* stable sort for undefined keys, fixes [#191](https://github.com/harttle/liquidjs/issues/191) ([f57156b](https://github.com/harttle/liquidjs/commit/f57156b))
+
+
+### Features
+
+* async cache.read()/write(), remove .has() ([61dac49](https://github.com/harttle/liquidjs/commit/61dac49))
+
 # [9.10.0](https://github.com/harttle/liquidjs/compare/v9.9.0...v9.10.0) (2020-03-03)
 
 
