@@ -13,6 +13,7 @@
     "integration": "mocha \"test/integration/**/*.ts\"",
     "e2e": "npm run build && mocha \"test/e2e/**/*.ts\"",
     "test": "cross-env BUNDLES=cjs,umd npm run build && mocha \"test/**/*.ts\"",
+    "check": "npm test && npm run lint",
     "benchmark": "node --expose-gc benchmark/index",
     "coverage": "nyc --reporter=html mocha \"test/{unit,integration}/**/*.ts\"",
     "coverage-coveralls": "nyc mocha \"test/{unit,integration}/**/*.ts\" && nyc report --reporter=text-lcov | coveralls",
