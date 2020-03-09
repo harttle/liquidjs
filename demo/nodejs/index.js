@@ -10,7 +10,7 @@ engine.registerTag('header', {
     const [key, val] = token.args.split(':')
     this[key] = val
   },
-  render: async function (scope, hash, emitter) {
+  render: async function (scope, emitter) {
     const title = await this.liquid.evalValue(this.content, scope)
     emitter.write(`<h1>${title}</h1>`)
   }

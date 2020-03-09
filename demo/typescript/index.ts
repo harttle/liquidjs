@@ -1,4 +1,4 @@
-import { Liquid, TagToken, Hash, Context, Emitter } from 'liquidjs'
+import { Liquid, TagToken, Context, Emitter } from 'liquidjs'
 
 const engine = new Liquid({
   root: __dirname,
@@ -10,7 +10,7 @@ engine.registerTag('header', {
     const [key, val] = token.args.split(':')
     this[key] = val
   },
-  render: async function (context: Context, hash: Hash, emitter: Emitter) {
+  render: async function (context: Context, emitter: Emitter) {
     const title = await this.liquid.evalValue(this['content'], context)
     emitter.write(`<h1>${title}</h1>`)
   }
