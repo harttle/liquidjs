@@ -49,11 +49,6 @@ const esm = {
       delimiters: ['', ''],
       './fs/node': './fs/browser'
     }),
-    replace({
-      include: './src/parser/token.ts',
-      delimiters: ['', ''],
-      './flatten/node': './flatten/browser'
-    }),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
@@ -83,11 +78,6 @@ const umd = {
       delimiters: ['', ''],
       './fs/node': './fs/browser'
     }),
-    replace({
-      include: './src/parser/token.ts',
-      delimiters: ['', ''],
-      './flatten/node': './flatten/browser'
-    }),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
@@ -115,11 +105,6 @@ const min = {
       include: './src/liquid.ts',
       delimiters: ['', ''],
       './fs/node': './fs/browser'
-    }),
-    replace({
-      include: './src/parser/token.ts',
-      delimiters: ['', ''],
-      './flatten/node': './flatten/browser'
     }),
     typescript({
       tsconfigOverride: {

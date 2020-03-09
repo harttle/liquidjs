@@ -13,7 +13,7 @@ export class Value {
    */
   public constructor (str: string, private readonly filterMap: FilterMap) {
     const tokenizer = new Tokenizer(str)
-    this.initial = tokenizer.readValue()
+    this.initial = tokenizer.readValue().toString()
     this.filters = tokenizer.readFilterTokens().map(({ name, args }) => new Filter(name, this.filterMap.get(name), args))
   }
   public * value (ctx: Context) {

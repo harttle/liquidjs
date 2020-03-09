@@ -80,6 +80,7 @@ export class Context {
   private parseProp (str: string) {
     str = String(str)
     const seq: string[] = []
+    const push = () => name.length && (seq.push(name), (name = ''))
     let name = ''
     let j
     let i = 0
@@ -120,11 +121,6 @@ export class Context {
       throw new TypeError(`invalid path:"${str}"`)
     }
     return seq
-
-    function push () {
-      if (name.length) seq.push(name)
-      name = ''
-    }
   }
 }
 

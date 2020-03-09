@@ -16,7 +16,6 @@ describe('Tag', function () {
   it('should call tag.render', async function () {
     const spy = sinon.spy()
     const token = {
-      type: 'tag',
       content: 'foo',
       args: '',
       name: 'foo'

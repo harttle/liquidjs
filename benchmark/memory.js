@@ -28,10 +28,12 @@ function html () {
   for (let i = 0; i < SAMPLE_COUNT; i++) {
     templates.push(engine.parse(str))
   }
-  global.gc()
+  const diff1 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
+  console.log(`${h(str.length)} lorem-html before GC x ${h(diff1)}/tpl (${SAMPLE_COUNT} instances sampled)`)
 
-  const diff = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
-  console.log(`${h(str.length)} HTML template x ${h(diff)}/instance (${SAMPLE_COUNT} instances sampled)`)
+  global.gc()
+  const diff2 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
+  console.log(`${h(str.length)} lorem-html after GC x ${h(diff2)}/tpl (${SAMPLE_COUNT} instances sampled)`)
 }
 
 function todolist () {
@@ -44,10 +46,12 @@ function todolist () {
   for (let i = 0; i < SAMPLE_COUNT; i++) {
     templates.push(engine.parse(str))
   }
-  global.gc()
+  const diff1 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
+  console.log(`${h(str.length)} todolist before GC x ${h(diff1)}/tpl (${SAMPLE_COUNT} instances sampled)`)
 
-  const diff = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
-  console.log(`${h(str.length)} Todo template x ${h(diff)}/instance (${SAMPLE_COUNT} instances sampled)`)
+  global.gc()
+  const diff2 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
+  console.log(`${h(str.length)} todolist after GC x ${h(diff2)}/tpl (${SAMPLE_COUNT} instances sampled)`)
 }
 
 function h (size) {

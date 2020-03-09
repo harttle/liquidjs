@@ -6,21 +6,21 @@ import { HTMLToken } from '../../../src/parser/html-token'
 
 describe('Tokenize', function () {
   it('should read quoted', () => {
-    expect(new Tokenizer('"foo" ff').readQuoted()).to.equal('"foo"')
-    expect(new Tokenizer(' "foo"ff').readQuoted()).to.equal('"foo"')
+    expect(new Tokenizer('"foo" ff').readQuoted().toString()).to.equal('"foo"')
+    expect(new Tokenizer(' "foo"ff').readQuoted().toString()).to.equal('"foo"')
   })
   it('should read property access', () => {
-    expect(new Tokenizer('a[ b][ "c d" ]').readPropertyAccess()).to.equal('a[b]["c d"]')
-    expect(new Tokenizer('a.b[c[d.e]]').readPropertyAccess()).to.equal('a.b[c[d.e]]')
+    expect(new Tokenizer('a[ b][ "c d" ]').readPropertyAccess().toString()).to.equal('a[ b][ "c d" ]')
+    expect(new Tokenizer('a.b[c[d.e]]').readPropertyAccess().toString()).to.equal('a.b[c[d.e]]')
   })
   it('should read value', () => {
-    expect(new Tokenizer('2.33.2').readValue()).to.equal('2.33.2')
-    expect(new Tokenizer('"foo"a').readValue()).to.equal('"foo"')
-    expect(new Tokenizer('a[b]["c d"]').readValue()).to.equal('a[b]["c d"]')
+    expect(new Tokenizer('2.33.2').readValue().toString()).to.equal('2.33.2')
+    expect(new Tokenizer('"foo"a').readValue().toString()).to.equal('"foo"')
+    expect(new Tokenizer('a[b]["c d"]').readValue().toString()).to.equal('a[b]["c d"]')
   })
   it('should read hash', () => {
     expect(new Tokenizer('foo: 3').readHash()).to.deep.equal(['foo', '3'])
-    expect(new Tokenizer(', foo: a[ "bar"]').readHash()).to.deep.equal(['foo', 'a["bar"]'])
+    expect(new Tokenizer(', foo: a[ "bar"]').readHash()).to.deep.equal(['foo', 'a[ "bar"]'])
   })
   it('should read hashs', () => {
     expect(new Tokenizer(', limit: 3 reverse offset:off').readHashes())
