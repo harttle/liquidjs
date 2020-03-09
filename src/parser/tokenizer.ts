@@ -1,4 +1,5 @@
 import { whiteSpaceCtrl } from './whitespace-ctrl'
+import { Substr } from './substr'
 import { FilterArg } from './filter-arg'
 import { FilterToken } from './filter-token'
 import { ellipsis } from '../util/underscore'
@@ -32,15 +33,16 @@ export class Tokenizer {
 
   * readExpression (): IterableIterator<string> {
     while (this.p < this.N) {
-      let val = this.readValue()
-      if (val) {
-        yield val
+      const operand = this.readValue()
+      if (operand.size()) {
+        yield operand.toString()
         continue
       }
       this.readBlank()
-      while (OPERATOR & this.peekType()) val += this.read()
-      if (val) {
-        yield val
+      const operator = new Substr(this.input, this.p)
+      while (OPERATOR & this.peekType()) operator.end = this.read()
+      if (operator.size()) {
+        yield operator.toString()
         continue
       }
       this.read()
@@ -63,7 +65,7 @@ export class Tokenizer {
   readFilterToken (): FilterToken | null {
     this.readTo('|')
     const begin = this.p
-    const name = this.readVariable()
+    const name = this.readVariable().toString()
     if (!name) return null
     const args = []
     this.readBlank()
@@ -85,9 +87,9 @@ export class Tokenizer {
     this.readBlank()
     if (this.peek() === ':') {
       this.read()
-      return [key, this.readValue()]
+      return [key.toString(), this.readValue().toString()]
     }
-    return key
+    return key.toString()
   }
 
   readTokens (): Token[] {
@@ -102,27 +104,27 @@ export class Tokenizer {
 
   readToken (): Token {
     const { tagDelimiterLeft, outputDelimiterLeft } = this.options
-    if (this.peekWord(tagDelimiterLeft.length) === tagDelimiterLeft) return this.readTagToken()
-    if (this.peekWord(outputDelimiterLeft.length) === outputDelimiterLeft) return this.readOutputToken()
+    if (this.matchWord(tagDelimiterLeft)) return this.readTagToken()
+    if (this.matchWord(outputDelimiterLeft)) return this.readOutputToken()
     return this.readHTMLToken()
   }
 
   readHTMLToken (): HTMLToken {
-    let html = ''
+    const html = new Substr(this.input, this.p)
     while (this.p < this.N) {
       const { tagDelimiterLeft, outputDelimiterLeft } = this.options
-      if (this.peekWord(tagDelimiterLeft.length) === tagDelimiterLeft) break
-      if (this.peekWord(outputDelimiterLeft.length) === outputDelimiterLeft) break
-      html += this.read()
+      if (this.matchWord(tagDelimiterLeft)) break
+      if (this.matchWord(outputDelimiterLeft)) break
+      html.end = this.read()
     }
-    return new HTMLToken(html, this.input, this.line, this.col, this.file)
+    return new HTMLToken(html.toString(), this.input, this.line, this.col, this.file)
   }
 
   readTagToken (): TagToken {
     const { line, col, file, input, options } = this
     const { tagDelimiterLeft, tagDelimiterRight } = options
-    const buffer = this.readTo(tagDelimiterRight)
-    if (buffer.slice(-tagDelimiterRight.length) !== tagDelimiterRight) {
+    const buffer = this.readTo(tagDelimiterRight).toString()
+    if (!this.reverseMatchWord(tagDelimiterRight, buffer)) {
       throw new TokenizationError(
         `tag "${ellipsis(buffer, 16)}" not closed`,
         new Token(buffer, input, line, col, file)
@@ -135,8 +137,8 @@ export class Tokenizer {
   readOutputToken (): OutputToken {
     const { line, col, file, input, options } = this
     const { outputDelimiterLeft, outputDelimiterRight } = options
-    const buffer = this.readTo(outputDelimiterRight)
-    if (buffer.slice(-outputDelimiterRight.length) !== outputDelimiterRight) {
+    const buffer = this.readTo(outputDelimiterRight).toString()
+    if (!this.reverseMatchWord(outputDelimiterRight, buffer)) {
       throw new TokenizationError(
         `output "${ellipsis(buffer, 16)}" not closed`,
         new Token(buffer, input, line, col, file)
@@ -146,10 +148,10 @@ export class Tokenizer {
     return new OutputToken(buffer, value, input, line, col, options, file)
   }
 
-  readVariable () {
+  readVariable (): Substr {
     this.readBlank()
-    let ans = ''
-    while (this.peekType() & VARIABLE) ans += this.read()
+    const ans = new Substr(this.input, this.p)
+    while (this.peekType() & VARIABLE) ans.end = this.read()
     return ans
   }
 
@@ -165,39 +167,40 @@ export class Tokenizer {
   readHash () {
     this.readBlank()
     if (this.peek() === ',') this.read()
-    const name = this.readVariable()
+    const name = this.readVariable().toString()
     if (!name) return null
 
     this.readBlank()
     let value = ''
     if (this.peek() === ':') {
       this.read()
-      value = this.readValue()
+      value = this.readValue().toString()
     }
     return [name, value]
   }
 
-  readPropertyAccess () {
+  readPropertyAccess (): Substr {
     this.readBlank()
-    let ans = ''
+    const ans = new Substr(this.input, this.p)
     let nested = 0
     while (this.p < this.N) {
       const c = this.peek()
       const code = this.peekType()
       if (c === '[') {
-        ans += this.read() + this.readValue()
+        this.read()
+        ans.end = this.readValue().end
         nested++
       } else if (c === ']') {
         if (!nested) break
-        ans += this.read()
+        ans.end = this.read()
         nested--
       } else if (c === '.') {
         if (this.peekType(1) & VARIABLE) {
-          ans += this.read()
-          ans += this.readVariable()
+          this.read()
+          ans.end = this.readVariable().end
         } else break
       } else if (code & VARIABLE) {
-        ans += this.read()
+        ans.end = this.read()
       } else {
         if (nested) this.read()
         else break
@@ -205,54 +208,57 @@ export class Tokenizer {
     }
     return ans
   }
-  readTo (end: string) {
-    let ans = ''
+  readTo (end: string): Substr {
+    const ans = new Substr(this.input, this.p)
     while (this.p < this.N) {
-      ans += this.read()
-      if (ans.slice(-end.length) === end) break
+      ans.end = this.read()
+      if (this.reverseMatchWord(end)) break
     }
     return ans
   }
-  readValue () {
+  readValue (): Substr {
     let val = this.readQuoted()
-    if (val) return val
+    if (val.size()) return val
     val = this.readBoolean()
-    if (val) return val
+    if (val.size()) return val
     val = this.readPropertyAccess()
-    if (val) return val
+    if (val.size()) return val
     return this.readRange()
   }
-  readRange () {
+  readRange (): Substr {
     this.readBlank()
-    if (this.peek() !== '(') return ''
-    let ans = this.read()
-    ans += this.readValue()
-    ans += this.read(2)
-    ans += this.readValue()
-    ans += this.read()
+    const ans = new Substr(this.input, this.p)
+    if (this.peek() !== '(') return ans
+    this.read()
+    this.readValue()
+    this.read(2)
+    this.readValue()
+    ans.end = this.read()
     return ans
   }
-  readBoolean () {
+  readBoolean (): Substr {
     this.readBlank()
-    if (this.peekWord(4) === 'true' && !(this.peekType(4) & VARIABLE)) return this.read(4)
-    if (this.peekWord(5) === 'false' && !(this.peekType(5) & VARIABLE)) return this.read(5)
-    return ''
+    const ans = new Substr(this.input, this.p)
+    if (this.matchWord('true') && !(this.peekType(4) & VARIABLE)) ans.end = this.read(4)
+    else if (this.matchWord('false') && !(this.peekType(5) & VARIABLE)) ans.end = this.read(5)
+    return ans
   }
-  readQuoted () {
+  readQuoted (): Substr {
     this.readBlank()
-    if (!(this.peekType() & QUOTE)) return ''
-    let ans = this.read()
+    const ans = new Substr(this.input, this.p)
+    if (!(this.peekType() & QUOTE)) return ans
+    ans.end = this.read()
     let escaped = false
     while (this.p < this.N) {
-      const c = this.read()
-      ans += c
-      if (c === ans[0] && !escaped) break
+      ans.end = this.read()
+      if (ans.last() === ans.first() && !escaped) break
       if (escaped) escaped = false
-      else if (c === '\\') escaped = true
+      else if (ans.last() === '\\') escaped = true
     }
     return ans
   }
-  read (n = 1): string {
+  read (n = 1): number {
+    if (n > 1) this.read(n - 1)
     const c = this.input[this.p++]
     if (c === '\n') {
       this.line++
@@ -260,10 +266,21 @@ export class Tokenizer {
     } else {
       this.col++
     }
-    return n === 1 ? c : c + this.read(n - 1)
+    return this.p
   }
-  peekWord (n: number) {
-    return this.input.substr(this.p, n)
+  matchWord (word: string) {
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] !== this.input[this.p + i]) return false
+    }
+    return true
+  }
+  reverseMatchWord (word: string, buffer?: string) {
+    const str = buffer || this.input
+    const end = buffer === undefined ? this.p : buffer.length
+    for (let i = 0; i < word.length; i++) {
+      if (word[word.length - 1 - i] !== str[end - 1 - i]) return false
+    }
+    return true
   }
   peekType (n = 0) {
     return +TYPES[this.input.charCodeAt(this.p + n)]

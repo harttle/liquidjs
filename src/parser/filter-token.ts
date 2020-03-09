@@ -12,6 +12,5 @@ export class FilterToken extends Token {
     file?: string
   ) {
     super(raw, input, line, col, file)
-    this.type = 'filter'
   }
 }

@@ -13,9 +13,8 @@ export class OutputToken extends DelimitedToken {
     file?: string
   ) {
     super(raw, value, input, line, pos, options.trimOutputLeft, options.trimOutputRight, file)
-    this.type = 'output'
   }
   public static is (token: Token): token is OutputToken {
-    return token.type === 'output'
+    return token instanceof OutputToken
   }
 }
