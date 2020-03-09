@@ -1,3 +1,10 @@
+## [9.11.1](https://github.com/harttle/liquidjs/compare/v9.11.0...v9.11.1) (2020-03-09)
+
+
+### Bug Fixes
+
+* concurrent write on LRU cache ([#200](https://github.com/harttle/liquidjs/issues/200)) ([6de9338](https://github.com/harttle/liquidjs/commit/6de9338))
+
 # [9.11.0](https://github.com/harttle/liquidjs/compare/v9.10.0...v9.11.0) (2020-03-04)
 
 
