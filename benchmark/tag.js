@@ -1,9 +1,9 @@
-import * as Benchmark from 'benchmark'
-import { Liquid } from '../src/liquid'
+const Benchmark = require('benchmark')
+const { Liquid } = require('..')
 
 const liquid = new Liquid()
 
-export function tag () {
+function tag () {
   console.log('--- tag ---')
   return new Promise(resolve => {
     new Benchmark.Suite('tag')
@@ -16,15 +16,17 @@ export function tag () {
       .add('increment', test('{%increment a%}'))
       .add('decrement', test('{%decrement a%}'))
       .add('tablerow', test('{%tablerow i in (1..10) cols:3%}{%endtablerow%}'))
-      .on('cycle', (event: any) => console.log(String(event.target)))
+      .on('cycle', (event) => console.log(String(event.target)))
       .on('complete', resolve)
       .run({ 'async': true })
   })
 }
 
-function test (str: string) {
+function test (str) {
   return {
     defer: true,
-    fn: (d: any) => liquid.parseAndRender(str).then((x: any) => d.resolve(x))
+    fn: d => liquid.parseAndRender(str).then(x => d.resolve(x))
   }
 }
+
+module.exports = { tag }

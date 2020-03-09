@@ -1,5 +1,5 @@
-import * as Benchmark from 'benchmark'
-import { Liquid } from '../src/liquid'
+const Benchmark = require('benchmark')
+const { Liquid } = require('..')
 
 const engineOptions = {
   root: __dirname,
@@ -17,20 +17,22 @@ const template = `
 {% block body %}a small body{% endblock %}
 `
 
-export function layout () {
+function layout () {
   console.log('--- layout ---')
   return new Promise(resolve => {
     new Benchmark.Suite('layout')
       .add('cache=false', {
         defer: true,
-        fn: (d: any) => engine.parseAndRender(template, {}).then((x: any) => d.resolve(x))
+        fn: d => engine.parseAndRender(template, {}).then(x => d.resolve(x))
       })
       .add('cache=true', {
         defer: true,
-        fn: (d: any) => cachingEngine.parseAndRender(template, {}).then((x: any) => d.resolve(x))
+        fn: d => cachingEngine.parseAndRender(template, {}).then(x => d.resolve(x))
       })
-      .on('cycle', (event: any) => console.log(String(event.target)))
+      .on('cycle', event => console.log(String(event.target)))
       .on('complete', resolve)
       .run({ 'async': true })
   })
 }
+
+module.exports = { layout }
