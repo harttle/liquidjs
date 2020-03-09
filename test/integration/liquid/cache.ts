@@ -64,7 +64,7 @@ describe('LiquidOptions#cache', function () {
       const y = await engine.renderFile('files/foo')
       expect(y).to.equal('FOO')
     })
-    it('should respect cache={} option', async function () {
+    it('should respect cache={read, write} option', async function () {
       let last: Template[] | undefined
       const engine = new Liquid({
         root: '/root/',
@@ -81,7 +81,7 @@ describe('LiquidOptions#cache', function () {
       expect(await engine.renderFile('files/bar')).to.equal('foo')
       expect(await engine.renderFile('files/coo')).to.equal('foo')
     })
-    it('should respect cache={} option (async)', async function () {
+    it('should respect cache={ async read, async write } option', async function () {
       const cached: { [key: string]: Template[] | undefined } = {}
       const engine = new Liquid({
         root: '/root/',
@@ -99,6 +99,26 @@ describe('LiquidOptions#cache', function () {
       expect(await engine.renderFile('files/coo')).to.equal('coo')
       mock({ '/root/files/coo.html': 'COO' })
       expect(await engine.renderFile('files/coo')).to.equal('coo')
+    })
+    it('should handle concurrent cache read/write', async function () {
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: 1
+      })
+      mock({ '/root/files/foo.html': 'foo' })
+      mock({ '/root/files/bar.html': 'bar' })
+      mock({ '/root/files/coo.html': 'coo' })
+      const [foo1, foo2, bar, coo] = await Promise.all([
+        engine.renderFile('files/foo'),
+        engine.renderFile('files/foo'),
+        engine.renderFile('files/bar'),
+        engine.renderFile('files/coo')
+      ])
+      expect(foo1).to.equal('foo')
+      expect(foo2).to.equal('foo')
+      expect(bar).to.equal('bar')
+      expect(coo).to.equal('coo')
     })
     it('should not cache not exist file', async function () {
       const engine = new Liquid({
@@ -135,12 +155,12 @@ describe('LiquidOptions#cache', function () {
         cache: true
       })
       mock({ '/root/foo.html': 'foo' })
-      const x = engine.renderFileSync('foo')
-      expect(x).to.equal('foo')
+      mock({ '/root/bar.html': 'bar' })
 
+      expect(engine.renderFileSync('foo')).to.equal('foo')
+      expect(engine.renderFileSync('bar')).to.equal('bar')
       mock({ '/root/foo.html': 'bar' })
-      const y = engine.renderFileSync('foo')
-      expect(y).to.equal('foo')
+      expect(engine.renderFileSync('foo')).to.equal('foo')
     })
     it('should not cache not exist file', async function () {
       const engine = new Liquid({

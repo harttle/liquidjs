@@ -25,13 +25,17 @@ export class LRU<T> implements Cache<T> {
   }
 
   write (key: string, value: T) {
-    const node = new Node(key, value, this.head.next, this.head)
-    this.head.next.prev = node
-    this.head.next = node
+    if (this.cache[key]) {
+      this.cache[key].value = value
+    } else {
+      const node = new Node(key, value, this.head.next, this.head)
+      this.head.next.prev = node
+      this.head.next = node
 
-    this.cache[key] = node
-    this.size++
-    this.ensureLimit()
+      this.cache[key] = node
+      this.size++
+      this.ensureLimit()
+    }
   }
 
   read (key: string): T | undefined {
