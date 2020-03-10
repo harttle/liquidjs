@@ -1,8 +1,8 @@
 import { assert } from '../util/assert'
-import { isRange, rangeValue } from './range'
-import { Value } from './value'
+import { rangeLine } from '../parser/lexical'
+import { parseLiteral } from '../parser/literal'
 import { Context } from '../context/context'
-import { toValue } from '../util/underscore'
+import { range, toValue } from '../util/underscore'
 import { isOperator, precedence, operatorImpls } from './operator'
 import { Tokenizer } from '../parser/tokenizer'
 
@@ -14,7 +14,7 @@ export class Expression {
     const tokenizer = new Tokenizer(str)
     this.postfix = [...toPostfix(tokenizer.readExpression())]
   }
-  public * evaluate (ctx: Context) {
+  public * evaluate (ctx: Context): any {
     assert(ctx, 'unable to evaluate: context not defined')
 
     for (const token of this.postfix) {
@@ -25,7 +25,10 @@ export class Expression {
         this.operands.push(result)
       } else if (isRange(token)) {
         this.operands.push(yield rangeValue(token, ctx))
-      } else this.operands.push(yield new Value(token).evaluate(ctx))
+      } else {
+        const literal = parseLiteral(token)
+        this.operands.push(literal !== undefined ? literal : yield ctx.get(token))
+      }
     }
     return this.operands[0]
   }
@@ -47,4 +50,17 @@ function * toPostfix (tokens: IterableIterator<string>): IterableIterator<string
   while (ops.length) {
     yield ops.pop()!
   }
+}
+
+function * rangeValue (token: string, ctx: Context) {
+  let match
+  if ((match = token.match(rangeLine))) {
+    const low = yield new Expression(match[1]).value(ctx)
+    const high = yield new Expression(match[2]).value(ctx)
+    return range(+low, +high + 1)
+  }
+}
+
+function isRange (str: string) {
+  return rangeLine.test(str)
 }
