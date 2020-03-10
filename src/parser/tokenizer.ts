@@ -83,7 +83,7 @@ export class Tokenizer {
 
   readFilterArg (): FilterArg | null {
     const key = this.readValue()
-    if (!key) return null
+    if (!key.size()) return null
     this.readBlank()
     if (this.peek() === ':') {
       this.read()
