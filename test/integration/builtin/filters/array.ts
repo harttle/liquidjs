@@ -7,6 +7,13 @@ describe('filters/array', function () {
   beforeEach(function () {
     liquid = new Liquid()
   })
+  describe('index', function () {
+    it('should support index', function () {
+      const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
+        '{{ beatles[1] }}'
+      return test(src, 'Paul')
+    })
+  })
   describe('join', function () {
     it('should support join', function () {
       const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
