@@ -1,13 +1,10 @@
-import { assert } from '../../util/assert'
-import { identifier } from '../../parser/lexical'
-import { Emitter, TagToken, Context, TagImplOptions } from '../../types'
+import { Tokenizer, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 import { isNumber, stringify } from '../../util/underscore'
 
 export default {
   parse: function (token: TagToken) {
-    const match = token.args.match(identifier) as RegExpMatchArray
-    assert(match, `illegal identifier ${token.args}`)
-    this.variable = match[0]
+    const tokenizer = new Tokenizer(token.args)
+    this.variable = tokenizer.readWord().content
   },
   render: function (context: Context, emitter: Emitter) {
     const scope = context.environments

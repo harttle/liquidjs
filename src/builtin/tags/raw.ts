@@ -1,7 +1,7 @@
-import { TagToken, Token, TagImplOptions } from '../../types'
+import { TagToken, TopLevelToken, TagImplOptions } from '../../types'
 
 export default {
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
+  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
     this.tokens = []
 
     const stream = this.liquid.parser.parseStream(remainTokens)
@@ -11,11 +11,11 @@ export default {
         else this.tokens.push(token)
       })
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${tagToken.getText()} not closed`)
       })
     stream.start()
   },
   render: function () {
-    return this.tokens.map((token: Token) => token.raw).join('')
+    return this.tokens.map((token: TopLevelToken) => token.getText()).join('')
   }
 } as TagImplOptions

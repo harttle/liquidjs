@@ -1,7 +1,7 @@
 import { isFunction } from '../../util/underscore'
 import { Liquid } from '../../liquid'
 import { TemplateImpl } from '../../template/template-impl'
-import { Emitter, Hash, Context, TagImplOptions, TagToken, Template, Token } from '../../types'
+import { Emitter, Hash, Context, TagImplOptions, TagToken, Template, TopLevelToken } from '../../types'
 import { TagImpl } from './tag-impl'
 
 export class Tag extends TemplateImpl<TagToken> implements Template {
@@ -9,7 +9,7 @@ export class Tag extends TemplateImpl<TagToken> implements Template {
   private impl: TagImpl
   private static impls: { [key: string]: TagImplOptions } = {}
 
-  public constructor (token: TagToken, tokens: Token[], liquid: Liquid) {
+  public constructor (token: TagToken, tokens: TopLevelToken[], liquid: Liquid) {
     super(token)
     this.name = token.name
 

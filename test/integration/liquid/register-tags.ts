@@ -21,7 +21,7 @@ describe('liquid#registerTag()', function () {
   it('should have access to ctx in render()', async () => {
     const liquid = new Liquid()
     liquid.registerTag('dynamic-string', {
-      render: async (ctx) => ctx.get('c')
+      render: async (ctx) => ctx.get(['c'])
     })
     const html = await liquid.parseAndRender(`A{% dynamic-string %}C`, {
       c: 'B'

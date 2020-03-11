@@ -6,11 +6,6 @@ use(chaiAsPromised)
 
 describe('tags/decrement', function () {
   const liquid = new Liquid()
-  it('should throw when variable expression illegal', function () {
-    const src = '{% decrement / %}{{var}}'
-    const ctx = {}
-    return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(/illegal/)
-  })
 
   it('should decrement undefined variable', async function () {
     const src = '{% decrement var %}{% decrement var %}{% decrement var %}'

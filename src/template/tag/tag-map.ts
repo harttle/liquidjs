@@ -6,7 +6,7 @@ export class TagMap {
 
   get (name: string) {
     const impl = this.impls[name]
-    assert(impl, `tag "${name}" not found`)
+    assert(impl, () => `tag "${name}" not found`)
     return impl
   }
 

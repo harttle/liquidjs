@@ -1,16 +1,16 @@
 import { Token } from './token'
-import { FilterArg } from './filter-arg'
+import { FilterArg } from '../parser/filter-arg'
+import { TokenKind } from '../parser/token-kind'
 
 export class FilterToken extends Token {
   public constructor (
     public name: string,
     public args: FilterArg[],
-    raw: string,
     input: string,
-    line: number,
-    col: number,
+    begin: number,
+    end: number,
     file?: string
   ) {
-    super(raw, input, line, col, file)
+    super(TokenKind.Filter, input, begin, end, file)
   }
 }

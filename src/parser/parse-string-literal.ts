@@ -1,10 +1,3 @@
-import { last } from '../util/underscore'
-import { NullDrop } from '../drop/null-drop'
-import { EmptyDrop } from '../drop/empty-drop'
-import { BlankDrop } from '../drop/blank-drop'
-
-type literal = true | false | NullDrop | EmptyDrop | BlankDrop | number | string
-
 const rHex = /[\da-fA-F]/
 const rOct = /[0-7]/
 const escapeChar = {
@@ -21,18 +14,6 @@ function hexVal (c: string) {
   if (code >= 97) return code - 87
   if (code >= 65) return code - 55
   return code - 48
-}
-
-export function parseLiteral (str: string): literal | undefined {
-  str = str.trim()
-
-  if (str === 'true') return true
-  if (str === 'false') return false
-  if (str === 'nil' || str === 'null') return new NullDrop()
-  if (str === 'empty') return new EmptyDrop()
-  if (str === 'blank') return new BlankDrop()
-  if (!isNaN(Number(str))) return Number(str)
-  if ((str[0] === '"' || str[0] === "'") && str[0] === last(str)) return parseStringLiteral(str)
 }
 
 export function parseStringLiteral (str: string): string {
@@ -66,3 +47,4 @@ export function parseStringLiteral (str: string): string {
   }
   return ret
 }
+

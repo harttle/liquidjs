@@ -1,21 +1,24 @@
-import { Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { assert, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { toCollection } from '../../util/collection'
-import { Expression } from '../../render/expression'
-import { assert } from '../../util/assert'
-import { identifier, value } from '../../parser/lexical'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { Hash } from '../../template/tag/hash'
 
-const re = new RegExp(`^(${identifier.source})\\s+in\\s+(${value.source})`)
-
 export default {
   type: 'block',
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
-    const match = re.exec(tagToken.args) as RegExpExecArray
-    assert(match, `illegal tag: ${tagToken.raw}`)
-    this.variable = match[1]
-    this.collection = match[2]
-    this.hash = new Hash(tagToken.args.slice(match[0].length))
+  parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
+    const toknenizer = new Tokenizer(token.args)
+
+    const variable = toknenizer.readWord()
+    const inStr = toknenizer.readWord()
+    const collection = toknenizer.readValue()
+    assert(
+      variable.size() && inStr.content === 'in' && collection,
+      () => `illegal tag: ${token.getText()}`
+    )
+
+    this.variable = variable.content
+    this.collection = collection
+    this.hash = new Hash(toknenizer.remaining())
     this.templates = []
     this.elseTemplates = []
 
@@ -26,15 +29,14 @@ export default {
       .on('tag:endfor', () => stream.stop())
       .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${token.getText()} not closed`)
       })
 
     stream.start()
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    let collection = yield new Expression(this.collection).value(ctx)
-    collection = toCollection(collection)
+    let collection = toCollection(evalToken(this.collection, ctx))
 
     if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)

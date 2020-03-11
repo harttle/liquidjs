@@ -1,5 +1,5 @@
 import * as _ from './underscore'
-import { Token } from '../parser/token'
+import { Token } from '../tokens/token'
 import { Template } from '../template/template'
 
 abstract class LiquidError extends Error {
@@ -57,14 +57,15 @@ export class AssertionError extends Error {
 }
 
 function mkContext (token: Token) {
+  const [line] = token.getPosition()
   const lines = token.input.split('\n')
-  const begin = Math.max(token.line - 2, 1)
-  const end = Math.min(token.line + 3, lines.length)
+  const begin = Math.max(line - 2, 1)
+  const end = Math.min(line + 3, lines.length)
 
   const context = _
     .range(begin, end + 1)
     .map(lineNumber => {
-      const indicator = (lineNumber === token.line) ? '>> ' : '   '
+      const indicator = (lineNumber === line) ? '>> ' : '   '
       const num = _.padStart(String(lineNumber), String(end).length)
       const text = lines[lineNumber - 1]
       return `${indicator}${num}| ${text}`
@@ -76,6 +77,7 @@ function mkContext (token: Token) {
 
 function mkMessage (msg: string, token: Token) {
   if (token.file) msg += `, file:${token.file}`
-  msg += `, line:${token.line}, col:${token.col}`
+  const [line, col] = token.getPosition()
+  msg += `, line:${line}, col:${col}`
   return msg
 }

@@ -1,6 +1,9 @@
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import { expect, use } from 'chai'
 import { mock, restore } from '../../../stub/mockfs'
+import * as chaiAsPromised from 'chai-as-promised'
+
+use(chaiAsPromised)
 
 describe('tags/layout', function () {
   let liquid: Liquid
@@ -27,6 +30,15 @@ describe('tags/layout', function () {
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('ParseError')
       expect(e.message).to.match(/illegal argument ""/)
+    })
+  })
+  it('should throw when filename resolved to falsy', function () {
+    mock({
+      '/parent.html': '{%layout foo%}'
+    })
+    return liquid.renderFile('/parent.html').catch(function (e) {
+      expect(e.name).to.equal('RenderError')
+      expect(e.message).to.match(/illegal filename "foo":"undefined"/)
     })
   })
   describe('anonymous block', function () {

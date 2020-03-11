@@ -1,7 +1,7 @@
-import { Emitter, Expression, isFalsy, ParseStream, Context, TagImplOptions, Token, TagToken } from '../../types'
+import { TopLevelToken, Template, Emitter, Expression, isFalsy, ParseStream, Context, TagImplOptions, Token, TagToken } from '../../types'
 
 export default {
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
+  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
     this.templates = []
     this.elseTemplates = []
     let p
@@ -12,9 +12,9 @@ export default {
       })
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endunless', () => stream.stop())
-      .on('template', tpl => p.push(tpl))
+      .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${tagToken.getText()} not closed`)
       })
 
     stream.start()

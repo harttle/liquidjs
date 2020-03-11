@@ -2,18 +2,6 @@ import { isComparable } from '../drop/icomparable'
 import { isFunction } from '../util/underscore'
 import { isTruthy } from '../render/boolean'
 
-export const precedence = {
-  '==': 1,
-  '!=': 1,
-  '>': 1,
-  '<': 1,
-  '>=': 1,
-  '<=': 1,
-  'contains': 1,
-  'and': 0,
-  'or': 0
-}
-
 export const operatorImpls: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   '==': (l: any, r: any) => {
     if (isComparable(l)) return l.equals(r)
@@ -50,8 +38,4 @@ export const operatorImpls: {[key: string]: (lhs: any, rhs: any) => boolean} = {
   },
   'and': (l: any, r: any) => isTruthy(l) && isTruthy(r),
   'or': (l: any, r: any) => isTruthy(l) || isTruthy(r)
-}
-
-export function isOperator (token: string) {
-  return precedence.hasOwnProperty(token)
 }

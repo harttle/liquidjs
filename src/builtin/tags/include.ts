@@ -1,35 +1,41 @@
-import { assert } from '../../util/assert'
-import { Expression, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
-import { quoted, value, quotedLine } from '../../parser/lexical'
+import { assert, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
-
-const rFile = new RegExp(`^(${quoted.source}|[^\\s,]+)(?:\\s+with\\s+(${value.source}))?`)
 
 export default {
   parse: function (token: TagToken) {
-    const match = rFile.exec(token.args)
-    if (!match) {
-      throw new Error(`illegal argument "${token.args}"`)
-    }
-    this.file = match[1]
-    this.hash = new Hash(token.args.slice(match[0].length))
-    this.withVar = match[2]
+    const args = token.args
+    const tokenizer = new Tokenizer(args)
+    this.file = this.liquid.options.dynamicPartials
+      ? tokenizer.readValue()
+      : tokenizer.readFileName()
+    assert(this.file, () => `illegal argument "${token.args}"`)
+
+    const begin = tokenizer.p
+    const withStr = tokenizer.readWord()
+    if (withStr.content === 'with') {
+      tokenizer.skipBlank()
+      if (tokenizer.peek() !== ':') {
+        this.withVar = tokenizer.readValue()
+      } else tokenizer.p = begin
+    } else tokenizer.p = begin
+
+    this.hash = new Hash(tokenizer.remaining())
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const { liquid, hash, withVar, file } = this
     const { renderer } = liquid
     const filepath = ctx.opts.dynamicPartials
-      ? (quotedLine.exec(file)
-        ? yield renderer.renderTemplates(liquid.parse(file.slice(1, -1)), ctx)
-        : yield new Expression(file).value(ctx))
-      : file
-    assert(filepath, `illegal filename "${file}":"${filepath}"`)
+      ? (TypeGuards.isQuotedToken(file)
+        ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
+        : yield evalToken(file, ctx))
+      : file.getText()
+    assert(filepath, () => `illegal filename "${file}":"${filepath}"`)
 
     const saved = ctx.saveRegister('blocks', 'blockMode')
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const scope = yield hash.render(ctx)
-    if (withVar) scope[filepath] = yield new Expression(withVar).evaluate(ctx)
+    if (withVar) scope[filepath] = evalToken(withVar, ctx)
     const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
     ctx.push(scope)
     yield renderer.renderTemplates(templates, ctx, emitter)

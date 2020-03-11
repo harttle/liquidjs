@@ -1,28 +1,32 @@
 import { assert } from '../../util/assert'
-import { value as rValue } from '../../parser/lexical'
-import { Emitter, Expression, TagToken, Context, TagImplOptions } from '../../types'
-
-const groupRE = new RegExp(`^(?:(${rValue.source})\\s*:\\s*)?(.*)$`)
-const candidatesRE = new RegExp(rValue.source, 'g')
+import { evalToken, Emitter, TagToken, Context, TagImplOptions } from '../../types'
+import { Tokenizer } from '../../parser/tokenizer'
 
 export default {
   parse: function (tagToken: TagToken) {
-    let match: RegExpExecArray | null = groupRE.exec(tagToken.args) as RegExpExecArray
-    assert(match, `illegal tag: ${tagToken.raw}`)
-
-    this.group = new Expression(match[1])
-    const candidates = match[2]
+    const tokenizer = new Tokenizer(tagToken.args)
+    const group = tokenizer.readValue()
+    tokenizer.skipBlank()
 
     this.candidates = []
 
-    while ((match = candidatesRE.exec(candidates))) {
-      this.candidates.push(match[0])
+    if (group) {
+      if (tokenizer.peek() === ':') {
+        this.group = group
+        tokenizer.advance()
+      } else this.candidates.push(group)
     }
-    assert(this.candidates.length, `empty candidates: ${tagToken.raw}`)
+
+    while (!tokenizer.end()) {
+      const value = tokenizer.readValue()
+      if (value) this.candidates.push(value)
+      tokenizer.readTo(',')
+    }
+    assert(this.candidates.length, () => `empty candidates: ${tagToken.getText()}`)
   },
 
-  render: function * (ctx: Context, emitter: Emitter) {
-    const group = yield this.group.value(ctx)
+  render: function (ctx: Context, emitter: Emitter) {
+    const group = evalToken(this.group, ctx)
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle')
     let idx = groups[fingerprint]
@@ -34,7 +38,7 @@ export default {
     const candidate = this.candidates[idx]
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
-    const html = yield new Expression(candidate).value(ctx)
+    const html = evalToken(candidate, ctx)
     emitter.write(html)
   }
 } as TagImplOptions

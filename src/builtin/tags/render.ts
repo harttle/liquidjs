@@ -1,56 +1,69 @@
 import { assert } from '../../util/assert'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { toCollection } from '../../util/collection'
-import { Expression, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
-import { identifier, value, quoted, quotedLine } from '../../parser/lexical'
-
-const rFile = new RegExp(`^(${quoted.source}|[^\\s,]+)`)
-const rWith = new RegExp(`^\\s+with\\s+(${value.source})(?:\\s+as\\s+(${identifier.source}))?`)
-const rFor = new RegExp(`^\\s+for\\s+(${value.source})\\s+as\\s+(${identifier.source})`)
+import { evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 
 export default {
   parse: function (token: TagToken) {
-    let args = token.args
-    let match = rFile.exec(args)
+    const args = token.args
+    const tokenizer = new Tokenizer(args)
+    this.file = this.liquid.options.dynamicPartials
+      ? tokenizer.readValue()
+      : tokenizer.readFileName()
+    assert(this.file, () => `illegal argument "${token.args}"`)
 
-    assert(match, `illegal argument "${token.args}"`)
-    this.file = match![1]
-    args = args.substr(match![0].length)
+    while (!tokenizer.end()) {
+      tokenizer.skipBlank()
+      const begin = tokenizer.p
+      const keyword = tokenizer.readWord()
+      if (keyword.content === 'with' || keyword.content === 'for') {
+        tokenizer.skipBlank()
+        if (tokenizer.peek() !== ':') {
+          const value = tokenizer.readValue()
+          if (value) {
+            const beforeAs = tokenizer.p
+            const asStr = tokenizer.readWord()
+            let alias
+            if (asStr.content === 'as') alias = tokenizer.readWord()
+            else tokenizer.p = beforeAs
 
-    while (true) {
-      if ((match = rWith.exec(args))) {
-        this.withVar = match[1]
-        this.withAs = match[2]
-        args = args.substr(match[0].length)
-      } else if ((match = rFor.exec(args))) {
-        this.forVar = match[1]
-        this.forAs = match[2]
-        args = args.substr(match[0].length)
-      } else break
+            this[keyword.content] = { value, alias: alias && alias.content }
+            tokenizer.skipBlank()
+            if (tokenizer.peek() === ',') tokenizer.advance()
+            continue
+          }
+        }
+      }
+      tokenizer.p = begin
+      break
     }
-    this.hash = new Hash(args)
+    this.hash = new Hash(tokenizer.remaining())
   },
   render: function * (ctx: Context, emitter: Emitter) {
-    const { liquid, withVar, withAs, forVar, forAs, file, hash } = this
+    const { liquid, file, hash } = this
     const { renderer } = liquid
     const filepath = ctx.opts.dynamicPartials
-      ? (quotedLine.exec(file)
-        ? yield renderer.renderTemplates(liquid.parse(file.slice(1, -1)), ctx)
-        : yield new Expression(file).value(ctx))
-      : this.file
-    assert(filepath, `illegal filename "${file}":"${filepath}"`)
+      ? (TypeGuards.isQuotedToken(file)
+        ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
+        : evalToken(file, ctx))
+      : file.getText()
+    assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
 
     const childCtx = new Context({}, ctx.opts, ctx.sync)
     const scope = yield hash.render(ctx)
-    if (withVar) scope[withAs || filepath] = yield new Expression(withVar).evaluate(ctx)
+    if (this['with']) {
+      const { value, alias } = this['with']
+      scope[alias || filepath] = evalToken(value, ctx)
+    }
     childCtx.push(scope)
 
-    if (forVar) {
-      let collection = yield new Expression(forVar).value(ctx)
+    if (this['for']) {
+      const { value, alias } = this['for']
+      let collection = evalToken(value, ctx)
       collection = toCollection(collection)
       scope['forloop'] = new ForloopDrop(collection.length)
       for (const item of collection) {
-        scope[forAs] = item
+        scope[alias] = item
         const templates = yield liquid._parseFile(filepath, childCtx.opts, childCtx.sync)
         yield renderer.renderTemplates(templates, childCtx, emitter)
         scope.forloop.next()

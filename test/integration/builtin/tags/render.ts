@@ -121,9 +121,33 @@ describe('tags/render', function () {
     const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })
     expect(html).to.equal('1: red\n2: green\n')
   })
+  it('should support for <non-array> as', async function () {
+    mock({
+      '/index.html': '{% render "item" for "green" as color %}',
+      '/item.html': '{{forloop.index}}: {{color}}\n'
+    })
+    const html = await liquid.renderFile('index.html')
+    expect(html).to.equal('1: green\n')
+  })
+  it('should support for without as', async function () {
+    mock({
+      '/index.html': '{% render "item" for colors %}',
+      '/item.html': '{{forloop.index}}: {{color}}\n'
+    })
+    const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })
+    expect(html).to.equal('1: \n2: \n')
+  })
   it('should support for...as with other parameters', async function () {
     mock({
-      '/index.html': '{% render "item" for colors as color with ".\n" as tail, sep: ". "%}',
+      '/index.html': '{% render "item" for colors as color with ".\n" as tail sep: ". "%}',
+      '/item.html': '{{forloop.index}}{{sep}}{{color}}{{tail}}'
+    })
+    const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })
+    expect(html).to.equal('1. red.\n2. green.\n')
+  })
+  it('should support for...as with other parameters (comma separated)', async function () {
+    mock({
+      '/index.html': '{% render "item" for colors as color, with ".\n" as tail, sep: ". "%}',
       '/item.html': '{{forloop.index}}{{sep}}{{color}}{{tail}}'
     })
     const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })

@@ -83,6 +83,22 @@ describe('tags/include', function () {
     const html = await liquid.renderFile('with.html')
     return expect(html).to.equal('color:red, shape:rect')
   })
+  it('should ignore if with value not specified', async function () {
+    mock({
+      '/with.html': '{% include "color" with, shape: "rect" %}',
+      '/color.html': 'color:{{color}}, shape:{{shape}}'
+    })
+    const html = await liquid.renderFile('with.html')
+    return expect(html).to.equal('color:, shape:rect')
+  })
+  it('should treat with as a valid key', async function () {
+    mock({
+      '/with.html': '{% include "color" with: "foo" %}',
+      '/color.html': 'with:{{with}}'
+    })
+    const html = await liquid.renderFile('with.html')
+    return expect(html).to.equal('with:foo')
+  })
   it('should support include: with as Drop', async function () {
     class ColorDrop extends Drop {
       public valueOf (): string {

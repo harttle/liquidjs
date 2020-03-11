@@ -1,4 +1,4 @@
-import { Expression } from '../../render/expression'
+import { evalToken } from '../../render/expression'
 import { Context } from '../../context/context'
 import { identify } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
@@ -16,9 +16,9 @@ export class Filter {
   }
   public * render (value: any, context: Context) {
     const argv: any[] = []
-    for (const arg of this.args) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], yield new Expression(arg[1]).evaluate(context)])
-      else argv.push(yield new Expression(arg).evaluate(context))
+    for (const arg of this.args as FilterArg[]) {
+      if (isKeyValuePair(arg)) argv.push([arg[0], yield evalToken(arg[1], context)])
+      else argv.push(yield evalToken(arg, context))
     }
     return this.impl.apply({ context }, [value, ...argv])
   }

@@ -1,18 +1,23 @@
 import { Token } from './token'
+import { TokenKind } from '../parser/token-kind'
 import { last } from '../util/underscore'
 
-export class DelimitedToken extends Token {
+export abstract class DelimitedToken extends Token {
+  public trimLeft = false
+  public trimRight = false
+  public content: string
   public constructor (
-    raw: string,
+    kind: TokenKind,
     content: string,
     input: string,
-    line: number,
-    pos: number,
+    begin: number,
+    end: number,
     trimLeft: boolean,
     trimRight: boolean,
     file?: string
   ) {
-    super(raw, input, line, pos, file)
+    super(kind, input, begin, end, file)
+    this.content = this.getText()
     const tl = content[0] === '-'
     const tr = last(content) === '-'
     this.content = content

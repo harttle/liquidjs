@@ -1,21 +1,21 @@
-import { assert } from '../../util/assert'
 import { toCollection } from '../../util/collection'
-import { Expression, Emitter, Hash, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
-import { identifier, value } from '../../parser/lexical'
+import { assert, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { TablerowloopDrop } from '../../drop/tablerowloop-drop'
-
-const re = new RegExp(`^(${identifier.source})\\s+in\\s+` +
-  `(${value.source})`)
+import { Tokenizer } from '../../parser/tokenizer'
 
 export default {
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
-    const match = re.exec(tagToken.args) as RegExpExecArray
-    assert(match, `illegal tag: ${tagToken.raw}`)
+  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
+    const tokenizer = new Tokenizer(tagToken.args)
 
-    this.variable = match[1]
-    this.collection = match[2]
+    this.variable = tokenizer.readWord()
+    tokenizer.skipBlank()
+
+    const tmp = tokenizer.readWord()
+    assert(tmp && tmp.content === 'in', () => `illegal tag: ${tagToken.getText()}`)
+
+    this.collection = tokenizer.readValue()
+    this.hash = new Hash(tokenizer.remaining())
     this.templates = []
-    this.hash = new Hash(tagToken.args.slice(match[0].length))
 
     let p
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
@@ -23,14 +23,14 @@ export default {
       .on('tag:endtablerow', () => stream.stop())
       .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${tagToken.getText()} not closed`)
       })
 
     stream.start()
   },
 
   render: function * (ctx: Context, emitter: Emitter) {
-    let collection = toCollection(yield new Expression(this.collection).value(ctx))
+    let collection = toCollection(evalToken(this.collection, ctx))
     const hash = yield this.hash.render(ctx)
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
@@ -44,7 +44,7 @@ export default {
     ctx.push(scope)
 
     for (let idx = 0; idx < collection.length; idx++, tablerowloop.next()) {
-      scope[this.variable] = collection[idx]
+      scope[this.variable.content] = collection[idx]
       if (tablerowloop.col0() === 0) {
         if (tablerowloop.row() !== 1) emitter.write('</tr>')
         emitter.write(`<tr class="row${tablerowloop.row()}">`)

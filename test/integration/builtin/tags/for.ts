@@ -46,6 +46,12 @@ describe('tags/for', function () {
         .to.be.rejectedWith(/tag .* not closed/)
     })
 
+    it('should reject when for in not found', function () {
+      const src = '{%for c alpha%}{{c}}'
+      return expect(liquid.parseAndRender(src, scope))
+        .to.be.rejectedWith('illegal tag: {%for c alpha%}, line:1, col:1')
+    })
+
     it('should reject when inner templates rejected', function () {
       const src = '{%for c in alpha%}{%throwingTag%}{%endfor%}'
       return expect(liquid.parseAndRender(src, scope))
