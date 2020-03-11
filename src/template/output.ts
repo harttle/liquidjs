@@ -5,7 +5,7 @@ import { TemplateImpl } from '../template/template-impl'
 import { Template } from '../template/template'
 import { Context } from '../context/context'
 import { Emitter } from '../render/emitter'
-import { OutputToken } from '../parser/output-token'
+import { OutputToken } from '../tokens/output-token'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
   private value: Value

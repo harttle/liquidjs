@@ -1,5 +1,8 @@
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+use(chaiAsPromised)
 
 describe('tags/tablerow', function () {
   const liquid = new Liquid()
@@ -48,6 +51,12 @@ describe('tags/tablerow', function () {
     const src = '{% tablerow i in (1..0) cols:2 %}{{ i }}'
     return expect(liquid.parseAndRender(src))
       .to.be.rejectedWith(/tag .* not closed/)
+  })
+
+  it('should throw when x in y not found', function () {
+    const src = '{% tablerow i (1..3) %}{{ i }}'
+    return expect(liquid.parseAndRender(src))
+      .to.be.rejectedWith('illegal tag: {% tablerow i (1..3) %}, line:1, col:1')
   })
 
   it('should support tablerow with range', async function () {

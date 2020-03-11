@@ -1,7 +1,7 @@
 import { normalize } from '../../../src/liquid-options'
 import { expect } from 'chai'
 
-describe('LiquidOptions', function () {
+describe('LiquidOptions#root', function () {
   describe('#normalize ()', function () {
     it('should normalize string typed root array', function () {
       const options = normalize({ root: 'foo' })

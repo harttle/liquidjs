@@ -1,7 +1,7 @@
-import { Expression, Emitter, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Expression, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
+  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
     this.cond = tagToken.args
     this.cases = []
     this.elseTemplates = []
@@ -18,7 +18,7 @@ export default {
       .on('tag:endcase', () => stream.stop())
       .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${tagToken.getText()} not closed`)
       })
 
     stream.start()

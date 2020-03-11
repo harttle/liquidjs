@@ -41,11 +41,6 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender(html)).be.rejected
       expect(err.token.input).to.equal(html)
     })
-    it('should contain line number in err.token.line', async function () {
-      const err = await expect(engine.parseAndRender('1\n2\n{% . a %}\n4')).be.rejected
-      expect(err.name).to.equal('TokenizationError')
-      expect(err.token.line).to.equal(3)
-    })
     it('should contain stack in err.stack', async function () {
       const err = await expect(engine.parseAndRender('{% . a %}')).be.rejected
       expect(err.message).to.contain('illegal tag syntax')
@@ -58,11 +53,11 @@ describe('error', function () {
         expect(err.stack).to.not.contain('at Object.parse')
       })
     })
-    it('should throw error with line and pos if tag unmatched', async function () {
+    it('should throw error with [line, col] if tag unmatched', async function () {
       const err = await expect(engine.parseAndRender('1\n2\nfoo{% assign a = 4 }\n4')).be.rejected
+      console.log(err.stack)
       expect(err.name).to.equal('TokenizationError')
-      expect(err.token.line).to.equal(3)
-      expect(err.token.col).to.equal(4)
+      expect(err.message).to.equal('tag "{% assign a =..." not closed, line:3, col:4')
     })
   })
 
@@ -175,12 +170,6 @@ describe('error', function () {
       expect(err.stack).to.contain(message.join('\n'))
       expect(err.name).to.equal('RenderError')
     })
-    it('should contain line number in err.token.line', async function () {
-      const src = '1\n2\n{{1|throwingFilter}}\n4'
-      const err = await expect(engine.parseAndRender(src)).be.rejected
-      expect(err.token.line).to.equal(3)
-      expect(err.name).to.equal('RenderError')
-    })
     it('should contain stack in err.stack', async function () {
       const err = await expect(engine.parseAndRender('{%rejectingTag%}')).be.rejected
       expect(err.message).to.contain('intended render reject')
@@ -254,12 +243,6 @@ describe('error', function () {
       const err = await expect(engine.parseAndRender(html.join('\n'))).be.rejected
       expect(err.message).to.equal('tag "a" not found, line:2, col:2')
       expect(err.stack).to.contain(message.join('\n'))
-    })
-
-    it('should contain line number in err.token.line', async function () {
-      const html = '<html>\n<head>\n\n{% raw %}\n\n'
-      const err = await expect(engine.parseAndRender(html)).be.rejected
-      expect(err.token.line).to.equal(4)
     })
 
     it('should contain stack in err.stack', async function () {

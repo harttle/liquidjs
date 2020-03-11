@@ -2,7 +2,7 @@ import * as chai from 'chai'
 import { toThenable } from '../../../src/util/async'
 import { Context } from '../../../src/context/context'
 import { Output } from '../../../src/template/output'
-import { OutputToken } from '../../../src/parser/output-token'
+import { OutputToken } from '../../../src/tokens/output-token'
 import { FilterMap } from '../../../src/template/filter/filter-map'
 
 const expect = chai.expect

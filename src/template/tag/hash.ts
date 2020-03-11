@@ -1,4 +1,4 @@
-import { Expression } from '../../render/expression'
+import { evalToken } from '../../render/expression'
 import { Context } from '../../context/context'
 import { Tokenizer } from '../../parser/tokenizer'
 
@@ -11,17 +11,17 @@ import { Tokenizer } from '../../parser/tokenizer'
  *    hash['reversed'] === undefined
  */
 export class Hash {
-  [key: string]: any
+  hash: { [key: string]: any } = {}
   constructor (markup: string) {
     const tokenizer = new Tokenizer(markup)
-    for (const [name, value] of tokenizer.readHashes()) {
-      this[name] = value
+    for (const hash of tokenizer.readHashes()) {
+      this.hash[hash.name.content] = hash.value
     }
   }
   * render (ctx: Context) {
     const hash = {}
-    for (const key of Object.keys(this)) {
-      hash[key] = yield new Expression(this[key]).evaluate(ctx)
+    for (const key of Object.keys(this.hash)) {
+      hash[key] = evalToken(this.hash[key], ctx)
     }
     return hash
   }

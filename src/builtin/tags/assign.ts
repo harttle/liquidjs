@@ -1,15 +1,13 @@
-import { assert } from '../../util/assert'
-import { identifier } from '../../parser/lexical'
-import { TagImplOptions, TagToken, Context } from '../../types'
-
-const re = new RegExp(`(${identifier.source})\\s*=([^]*)`)
+import { Tokenizer, assert, TagImplOptions, TagToken, Context } from '../../types'
 
 export default {
   parse: function (token: TagToken) {
-    const match = token.args.match(re) as RegExpMatchArray
-    assert(match, `illegal token ${token.raw}`)
-    this.key = match[1]
-    this.value = match[2]
+    const tokenizer = new Tokenizer(token.args)
+    this.key = tokenizer.readWord().content
+    tokenizer.skipBlank()
+    assert(tokenizer.peek() === '=', () => `illegal token ${token.getText()}`)
+    tokenizer.advance()
+    this.value = tokenizer.remaining()
   },
   render: function * (ctx: Context) {
     ctx.bottom()[this.key] = yield this.liquid._evalValue(this.value, ctx)

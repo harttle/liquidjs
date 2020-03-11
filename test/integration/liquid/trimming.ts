@@ -45,7 +45,7 @@ describe('LiquidOptions#trimming', function () {
       const html = await engine.parseAndRender(src, ctx)
       return expect(html).to.equal('aharttle')
     })
-    it('should respect to greedy:false by default', async function () {
+    it('should allow greedy:false', async function () {
       const engine = new Liquid({ greedy: false } as any)
       const html = await engine.parseAndRender(src, ctx)
       return expect(html).to.equal('\n a \nharttle ')

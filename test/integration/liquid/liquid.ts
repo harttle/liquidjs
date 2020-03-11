@@ -93,7 +93,7 @@ describe('Liquid', function () {
       })
       const tpls = await engine.getTemplate('mocha')
       expect(tpls.length).to.gte(1)
-      expect(tpls[0].token.raw).to.contain('module.exports')
+      expect(tpls[0].token.getText()).to.contain('module.exports')
     })
   })
   describe('#evalValue', function () {

@@ -1,7 +1,8 @@
-import { Token } from '../parser/token'
-import { TagToken } from '../parser/tag-token'
-import { HTMLToken } from '../parser/html-token'
+import { Token } from '../tokens/token'
+import { DelimitedToken } from '../tokens/delimited-token'
+import { isTagToken, isHTMLToken } from '../util/type-guards'
 import { NormalizedFullOptions } from '../liquid-options'
+import { TYPES, INLINE_BLANK, BLANK } from '../util/character'
 
 export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
   options = { greedy: true, ...options }
@@ -9,11 +10,12 @@ export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions)
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i]
+    if (!(token instanceof DelimitedToken)) continue
     if (!inRaw && token.trimLeft) {
       trimLeft(tokens[i - 1], options.greedy)
     }
 
-    if (TagToken.is(token)) {
+    if (isTagToken(token)) {
       if (token.name === 'raw') inRaw = true
       else if (token.name === 'endraw') inRaw = false
     }
@@ -25,15 +27,16 @@ export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions)
 }
 
 function trimLeft (token: Token, greedy: boolean) {
-  if (!token || !HTMLToken.is(token)) return
+  if (!token || !isHTMLToken(token)) return
 
-  const rLeft = greedy ? /\s+$/g : /[\t\r ]*$/g
-  token.content = token.content.replace(rLeft, '')
+  const mask = greedy ? BLANK : INLINE_BLANK
+  while (TYPES[token.input.charCodeAt(token.end - 1 - token.trimRight)] & mask) token.trimRight++
 }
 
 function trimRight (token: Token, greedy: boolean) {
-  if (!token || !HTMLToken.is(token)) return
+  if (!token || !isHTMLToken(token)) return
 
-  const rRight = greedy ? /^\s+/g : /^[\t\r ]*\n?/g
-  token.content = token.content.replace(rRight, '')
+  const mask = greedy ? BLANK : INLINE_BLANK
+  while (TYPES[token.input.charCodeAt(token.begin + token.trimLeft)] & mask) token.trimLeft++
+  if (token.input.charAt(token.begin + token.trimLeft) === '\n') token.trimLeft++
 }

@@ -28,7 +28,8 @@ describe('Hash', function () {
     expect(hash.num).to.equal(2.3)
   })
   it('should parse "num:bar.coo"', async function () {
-    const hash = await toThenable(new Hash('num:bar.coo').render(new Context({ bar: { coo: 3 } })))
+    const pending = new Hash('num:bar.coo').render(new Context({ bar: { coo: 3 } }))
+    const hash = await toThenable(pending)
     expect(hash.num).to.equal(3)
   })
   it('should parse "num1:2.3 reverse,num2:bar.coo\n num3: arr[0]"', async function () {

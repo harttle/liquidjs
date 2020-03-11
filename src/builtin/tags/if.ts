@@ -1,7 +1,7 @@
-import { Emitter, isTruthy, Expression, TagToken, Token, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Emitter, isTruthy, Expression, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
+  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
     this.branches = []
     this.elseTemplates = []
 
@@ -21,7 +21,7 @@ export default {
       .on('tag:endif', () => stream.stop())
       .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${tagToken.getText()} not closed`)
       })
 
     stream.start()

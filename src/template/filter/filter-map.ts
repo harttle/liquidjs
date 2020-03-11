@@ -10,7 +10,7 @@ export class FilterMap {
 
   get (name: string) {
     const impl = this.impls[name]
-    assert(impl || !this.strictFilters, `undefined filter: ${name}`)
+    assert(impl || !this.strictFilters, () => `undefined filter: ${name}`)
     return impl
   }
 

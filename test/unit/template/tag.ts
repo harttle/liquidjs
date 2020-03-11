@@ -3,7 +3,7 @@ import { Tag } from '../../../src/template/tag/tag'
 import { Context } from '../../../src/context/context'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
-import { TagToken } from '../../../src/parser/tag-token'
+import { TagToken } from '../../../src/tokens/tag-token'
 import { toThenable } from '../../../src/util/async'
 
 chai.use(sinonChai)

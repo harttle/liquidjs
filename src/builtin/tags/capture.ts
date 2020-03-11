@@ -1,22 +1,18 @@
-import { assert } from '../../util/assert'
-import { identifier } from '../../parser/lexical'
-import { Template, Context, TagImplOptions, TagToken, Token } from '../../types'
-
-const re = new RegExp(`(${identifier.source})`)
+import { Tokenizer, assert, Template, Context, TagImplOptions, TagToken, TopLevelToken } from '../../types'
 
 export default {
-  parse: function (tagToken: TagToken, remainTokens: Token[]) {
-    const match = tagToken.args.match(re) as RegExpMatchArray
-    assert(match, `${tagToken.args} not valid identifier`)
+  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
+    const tokenizer = new Tokenizer(tagToken.args)
+    this.variable = tokenizer.readWord().content
+    assert(this.variable, () => `${tagToken.args} not valid identifier`)
 
-    this.variable = match[1]
     this.templates = []
 
     const stream = this.liquid.parser.parseStream(remainTokens)
     stream.on('tag:endcapture', () => stream.stop())
       .on('template', (tpl: Template) => this.templates.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${tagToken.raw} not closed`)
+        throw new Error(`tag ${tagToken.getText()} not closed`)
       })
     stream.start()
   },

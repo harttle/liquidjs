@@ -1,6 +1,6 @@
 import { isFunction } from './underscore'
 
-type resolver = (x?: any) => Thenable
+type resolver = (x?: any) => any
 
 interface Thenable {
   then (resolve: resolver, reject?: resolver): Thenable;

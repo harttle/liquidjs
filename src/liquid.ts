@@ -38,8 +38,8 @@ export class Liquid {
     _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
   }
   public parse (html: string, filepath?: string): Template[] {
-    const tokenizer = new Tokenizer(html, filepath, this.options)
-    const tokens = tokenizer.readTokens()
+    const tokenizer = new Tokenizer(html, filepath)
+    const tokens = tokenizer.readTopLevelTokens(this.options)
     return this.parser.parse(tokens)
   }
 

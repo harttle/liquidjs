@@ -1,8 +1,8 @@
 import BlockMode from '../../context/block-mode'
-import { ParseStream, TagToken, Token, Template, Context, TagImplOptions, Emitter } from '../../types'
+import { ParseStream, TagToken, TopLevelToken, Template, Context, TagImplOptions, Emitter } from '../../types'
 
 export default {
-  parse: function (token: TagToken, remainTokens: Token[]) {
+  parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
     const match = /\w+/.exec(token.args)
     this.block = match ? match[0] : ''
     this.tpls = [] as Template[]
@@ -10,7 +10,7 @@ export default {
       .on('tag:endblock', () => stream.stop())
       .on('template', (tpl: Template) => this.tpls.push(tpl))
       .on('end', () => {
-        throw new Error(`tag ${token.raw} not closed`)
+        throw new Error(`tag ${token.getText()} not closed`)
       })
     stream.start()
   },
