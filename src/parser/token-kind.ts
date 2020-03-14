@@ -1,14 +1,15 @@
 export enum TokenKind {
-  Number,
-  Literal,
-  Tag,
-  Output,
-  HTML,
-  Filter,
-  Hash,
-  PropertyAccess,
-  Word,
-  Range,
-  Quoted,
-  Operator
+  Number = 1,
+  Literal = 2,
+  Tag = 4,
+  Output = 8,
+  HTML = 16,
+  Filter = 32,
+  Hash = 64,
+  PropertyAccess = 128,
+  Word = 256,
+  Range = 512,
+  Quoted = 1024,
+  Operator = 2048,
+  Delimited = Tag | Output
 }
