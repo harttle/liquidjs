@@ -1,6 +1,5 @@
 import { Token } from '../tokens/token'
-import { DelimitedToken } from '../tokens/delimited-token'
-import { isTagToken, isHTMLToken } from '../util/type-guards'
+import { isTagToken, isHTMLToken, isDelimitedToken } from '../util/type-guards'
 import { NormalizedFullOptions } from '../liquid-options'
 import { TYPES, INLINE_BLANK, BLANK } from '../util/character'
 
@@ -10,7 +9,7 @@ export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions)
 
   for (let i = 0; i < tokens.length; i++) {
     const token = tokens[i]
-    if (!(token instanceof DelimitedToken)) continue
+    if (!isDelimitedToken(token)) continue
     if (!inRaw && token.trimLeft) {
       trimLeft(tokens[i - 1], options.greedy)
     }

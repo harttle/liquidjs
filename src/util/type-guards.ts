@@ -1,4 +1,5 @@
 import { OperatorToken } from '../tokens/operator-token'
+import { DelimitedToken } from '../tokens/delimited-token'
 import { WordToken } from '../tokens/word-token'
 import { TagToken } from '../tokens/tag-token'
 import { HTMLToken } from '../tokens/html-token'
@@ -9,6 +10,10 @@ import { QuotedToken } from '../tokens/quoted-token'
 import { NumberToken } from '../tokens/number-token'
 import { RangeToken } from '../tokens/range-token'
 import { TokenKind } from '../parser/token-kind'
+
+export function isDelimitedToken (val: any): val is DelimitedToken {
+  return !!(getKind(val) & TokenKind.Delimited)
+}
 
 export function isOperatorToken (val: any): val is OperatorToken {
   return getKind(val) === TokenKind.Operator
