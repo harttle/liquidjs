@@ -62,13 +62,21 @@
 					<a href="_parser_parse_stream_.parsestream.html">ParseStream</a>
 				</li>
 			</ul>
-			<h1>Class ParseStream</h1>
+			<h1>Class ParseStream&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T<span class="tsd-signature-symbol">: </span><a href="_tokens_token_.token.html" class="tsd-signature-type">Token</a></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -114,22 +122,22 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Parse<wbr>Stream<span class="tsd-signature-symbol">(</span>tokens<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span>, parseToken<span class="tsd-signature-symbol">: </span><a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-signature-type">ParseToken</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Parse<wbr>Stream<span class="tsd-signature-symbol">(</span>tokens<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, parseToken<span class="tsd-signature-symbol">: </span><a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-signature-type">ParseToken</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L11">parser/parse-stream.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L12">parser/parse-stream.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>tokens: <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></h5>
+									<h5>tokens: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
 								</li>
 								<li>
-									<h5>parseToken: <a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-signature-type">ParseToken</a></h5>
+									<h5>parseToken: <a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-signature-type">ParseToken</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></h4>
@@ -145,7 +153,7 @@
 					<div class="tsd-signature tsd-kind-icon">handlers<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L9">parser/parse-stream.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L10">parser/parse-stream.ts:10</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -178,10 +186,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="parsetoken" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> parse<wbr>Token</h3>
-					<div class="tsd-signature tsd-kind-icon">parse<wbr>Token<span class="tsd-signature-symbol">:</span> <a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-signature-type">ParseToken</a></div>
+					<div class="tsd-signature tsd-kind-icon">parse<wbr>Token<span class="tsd-signature-symbol">:</span> <a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-signature-type">ParseToken</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L11">parser/parse-stream.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L12">parser/parse-stream.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -191,17 +199,17 @@
 					<div class="tsd-signature tsd-kind-icon">stop<wbr>Requested<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L10">parser/parse-stream.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L11">parser/parse-stream.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="tokens" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> tokens</h3>
-					<div class="tsd-signature tsd-kind-icon">tokens<span class="tsd-signature-symbol">:</span> <a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">tokens<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L8">parser/parse-stream.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L9">parser/parse-stream.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -212,19 +220,19 @@
 					<a name="on" class="tsd-anchor"></a>
 					<h3>on</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">on&lt;T&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></li>
+						<li class="tsd-signature tsd-kind-icon">on&lt;T2&gt;<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, cb<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L17">parser/parse-stream.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L18">parser/parse-stream.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="../interfaces/_template_template_.template.html" class="tsd-signature-type">Template</a><span class="tsd-signature-symbol"> | </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+									<h4>T2<span class="tsd-signature-symbol">: </span><a href="../interfaces/_template_template_.template.html" class="tsd-signature-type">Template</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -237,14 +245,14 @@
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>arg<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T2</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>arg: <span class="tsd-signature-type">T</span></h5>
+															<h5>arg: <span class="tsd-signature-type">T2</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -254,7 +262,7 @@
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_parser_parse_stream_.parsestream.html" class="tsd-signature-type">ParseStream</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -268,7 +276,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L25">parser/parse-stream.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L26">parser/parse-stream.ts:26</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -285,7 +293,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L39">parser/parse-stream.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L40">parser/parse-stream.ts:40</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -302,13 +310,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L21">parser/parse-stream.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L22">parser/parse-stream.ts:22</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>T<span class="tsd-signature-symbol">: </span><a href="_parser_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_template_template_.template.html" class="tsd-signature-type">Template</a></h4>
+									<h4>T<span class="tsd-signature-symbol">: </span><a href="_tokens_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/_template_template_.template.html" class="tsd-signature-type">Template</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -341,7 +349,7 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter">
 						<a href="_parser_parse_stream_.parsestream.html" class="tsd-kind-icon">Parse<wbr>Stream</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
@@ -375,7 +383,7 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-not-exported">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="../modules/_parser_parse_stream_.html#parsetoken" class="tsd-kind-icon">Parse<wbr>Token</a>
 					</li>
 				</ul>

@@ -1,3 +1,11 @@
+## [9.11.3](https://github.com/harttle/liquidjs/compare/v9.11.2...v9.11.3) (2020-03-14)
+
+
+### Performance Improvements
+
+* introduce AST to avoid reparse ([d2d6a38](https://github.com/harttle/liquidjs/commit/d2d6a38))
+* remove instanceof DelimitedToken ([1673e84](https://github.com/harttle/liquidjs/commit/1673e84))
+
 ## [9.11.2](https://github.com/harttle/liquidjs/compare/v9.11.1...v9.11.2) (2020-03-14)
 
 

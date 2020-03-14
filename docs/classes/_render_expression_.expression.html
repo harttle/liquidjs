@@ -110,19 +110,19 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Expression<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_render_expression_.expression.html" class="tsd-signature-type">Expression</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Expression<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_render_expression_.expression.html" class="tsd-signature-type">Expression</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L11">render/expression.ts:11</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L18">render/expression.ts:18</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> str: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;&quot;</span></h5>
+									<h5>str: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_render_expression_.expression.html" class="tsd-signature-type">Expression</a></h4>
@@ -138,17 +138,17 @@
 					<div class="tsd-signature tsd-kind-icon">operands<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L10">render/expression.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L17">render/expression.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="postfix" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> postfix</h3>
-					<div class="tsd-signature tsd-kind-icon">postfix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">postfix<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_tokens_token_.token.html" class="tsd-signature-type">Token</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L11">render/expression.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L18">render/expression.ts:18</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -165,7 +165,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L17">render/expression.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L24">render/expression.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -188,7 +188,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L35">render/expression.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/render/expression.ts#L37">render/expression.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -241,10 +241,22 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_render_expression_.html#isrange" class="tsd-kind-icon">is<wbr>Range</a>
+						<a href="../modules/_render_expression_.html#evalliteraltoken" class="tsd-kind-icon">eval<wbr>Literal<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_render_expression_.html#rangevalue" class="tsd-kind-icon">range<wbr>Value</a>
+						<a href="../modules/_render_expression_.html#evalnumbertoken" class="tsd-kind-icon">eval<wbr>Number<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_render_expression_.html#evaloperatortoken" class="tsd-kind-icon">eval<wbr>Operator<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_render_expression_.html#evalquotedtoken" class="tsd-kind-icon">eval<wbr>Quoted<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
+						<a href="../modules/_render_expression_.html#evalrangetoken" class="tsd-kind-icon">eval<wbr>Range<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-external-module">
+						<a href="../modules/_render_expression_.html#evaltoken" class="tsd-kind-icon">eval<wbr>Token</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-is-not-exported">
 						<a href="../modules/_render_expression_.html#topostfix" class="tsd-kind-icon">to<wbr>Postfix</a>
