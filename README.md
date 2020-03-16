@@ -75,11 +75,11 @@ but there're some plugins available: <https://github.com/harttle/liquidjs/wiki/P
 * [react-liquid](https://github.com/aquibm/react-liquid#readme): Liquid templating language component for React
 * [@11ty/eleventy](https://www.npmjs.com/package/@11ty/eleventy): A simpler static site generator. An alternative to Jekyll. Written in JavaScript. Transforms a directory of templates (of varying types) into HTML.
 
-## Contribute Guidelines
+## Backers
 
-* **Code Style**: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
-* **Testing**: make sure test cases still pass, use `npm test` to check locally.
-* **Commit Message**: align to [The Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially the [Type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), to allow the semantic-release bot do the work.
+Love LiquidJS and want to contribute? [Become a backer](https://opencollective.com/liquidjs).
+
+![backers from open-collective](https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=97)
 
 ## Contributors ✨
 
@@ -131,7 +131,11 @@ Thanks goes to these wonderful people:
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-[![donate to liquidjs collective](https://opencollective.com/webpack/donate/button@2x.png?color=blue)](https://opencollective.com/liquidjs/donate)
+## Contribute Guideline
+
+* **Code Style**: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
+* **Testing**: make sure test cases still pass, use `npm test` to check locally.
+* **Commit Message**: align to [The Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially the [Type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), to allow the semantic-release bot do the work.
 
 [shopify/liquid]: https://shopify.github.io/liquid/
 [caniuse-promises]: http://caniuse.com/#feat=promises
