@@ -1,3 +1,10 @@
+## [9.11.4](https://github.com/harttle/liquidjs/compare/v9.11.3...v9.11.4) (2020-03-23)
+
+
+### Bug Fixes
+
+* return variable name in include error ([93433a8](https://github.com/harttle/liquidjs/commit/93433a8))
+
 ## [9.11.3](https://github.com/harttle/liquidjs/compare/v9.11.2...v9.11.3) (2020-03-14)
 
 
