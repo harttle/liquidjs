@@ -12,10 +12,11 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/harttle/liquidjs)
 
-A [shopify][shopify/liquid] compatible [Liquid][tutorial] template engine in pure JavaScript.
+A simple, expressive, safe and [shopify][shopify/liquid] compatible template engine in pure JavaScript.
 **The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community.
-All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be built in LiquidJS,
-though there are still some differences and limitations (see below).
+
+* [Jekyll sites](https://jekyllrb.com), [Github Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
+* All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be built in LiquidJS, though there are still some differences and limitations (see below).
 
 > Version 9 has published, [see how to migrate to 9.0.0](https://github.com/harttle/liquidjs/wiki/Migrate-to-9)!
 
