@@ -29,7 +29,7 @@ export default {
         ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
         : yield evalToken(file, ctx))
       : file.getText()
-    assert(filepath, () => `illegal filename "${file}":"${filepath}"`)
+    assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
 
     const saved = ctx.saveRegister('blocks', 'blockMode')
     ctx.setRegister('blocks', {})

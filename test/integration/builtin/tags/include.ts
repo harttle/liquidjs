@@ -44,7 +44,7 @@ describe('tags/include', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/illegal filename/)
+      expect(e.message).to.match(/illegal filename "not-exist"/)
     })
   })
 
