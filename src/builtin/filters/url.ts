@@ -1,4 +1,2 @@
-export default {
-  'url_decode': (x: string) => x.split('+').map(decodeURIComponent).join(' '),
-  'url_encode': (x: string) => x.split(' ').map(encodeURIComponent).join('+')
-}
+export const urlDecode = (x: string) => x.split('+').map(decodeURIComponent).join(' ')
+export const urlEncode = (x: string) => x.split(' ').map(encodeURIComponent).join('+')

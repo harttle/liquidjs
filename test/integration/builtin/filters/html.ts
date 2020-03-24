@@ -22,6 +22,19 @@ describe('filters/html', function () {
     it('should not escape twice',
       () => test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3'))
   })
+  describe('newline_to_br', function () {
+    it('should support string_with_newlines', function () {
+      const src = '{% capture string_with_newlines %}\n' +
+              'Hello\n' +
+              'there\n' +
+              '{% endcapture %}' +
+              '{{ string_with_newlines | newline_to_br }}'
+      const dst = '<br />' +
+              'Hello<br />' +
+              'there<br />'
+      return test(src, dst)
+    })
+  })
   describe('strip_html', function () {
     it('should strip all tags', function () {
       return test('{{ "Have <em>you</em> read <cite><a href=&quot;https://en.wikipedia.org/wiki/Ulysses_(novel)&quot;>Ulysses</a></cite>?" | strip_html }}',

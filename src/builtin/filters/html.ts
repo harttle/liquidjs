@@ -15,7 +15,7 @@ const unescapeMap = {
   '&#39;': "'"
 }
 
-function escape (str: string) {
+export function escape (str: string) {
   return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m])
 }
 
@@ -23,9 +23,14 @@ function unescape (str: string) {
   return String(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m])
 }
 
-export default {
-  'escape': escape,
-  'escape_once': (str: string) => escape(unescape(str)),
-  'newline_to_br': (v: string) => v.replace(/\n/g, '<br />'),
-  'strip_html': (v: string) => v.replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
+export function escapeOnce (str: string) {
+  return escape(unescape(str))
+}
+
+export function newlineToBr (v: string) {
+  return v.replace(/\n/g, '<br />')
+}
+
+export function stripHtml (v: string) {
+  return v.replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
 }

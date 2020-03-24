@@ -1,42 +1,35 @@
-import { isArray, last } from '../../util/underscore'
+import { isArray, last as arrayLast } from '../../util/underscore'
 import { isTruthy } from '../../render/boolean'
 import { FilterImpl } from '../../template/filter/filter-impl'
 
-export default {
-  'join': (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg),
-  'last': (v: any) => isArray(v) ? last(v) : '',
-  'first': (v: any) => isArray(v) ? v[0] : '',
-  'map': map,
-  'reverse': (v: any[]) => [...v].reverse(),
-  'sort': <T>(v: T[], arg: (lhs: T, rhs: T) => number) => v.sort(arg),
-  'size': (v: string | any[]) => (v && v.length) || 0,
-  'concat': concat,
-  'slice': slice,
-  'uniq': uniq,
-  'where': where
-}
+export const join = (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg)
+export const last = (v: any) => isArray(v) ? arrayLast(v) : ''
+export const first = (v: any) => isArray(v) ? v[0] : ''
+export const reverse = (v: any[]) => [...v].reverse()
+export const sort = <T>(v: T[], arg: (lhs: T, rhs: T) => number) => v.sort(arg)
+export const size = (v: string | any[]) => (v && v.length) || 0
 
-function map<T1, T2> (arr: {[key: string]: T1}[], arg: string): T1[] {
+export function map<T1, T2> (arr: {[key: string]: T1}[], arg: string): T1[] {
   return arr.map(v => v[arg])
 }
 
-function concat<T1, T2> (v: T1[], arg: T2[] | T2): (T1 | T2)[] {
+export function concat<T1, T2> (v: T1[], arg: T2[] | T2): (T1 | T2)[] {
   return Array.prototype.concat.call(v, arg)
 }
 
-function slice<T> (v: T[], begin: number, length = 1): T[] {
+export function slice<T> (v: T[], begin: number, length = 1): T[] {
   begin = begin < 0 ? v.length + begin : begin
   return v.slice(begin, begin + length)
 }
 
-function where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): T[] {
+export function where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): T[] {
   return arr.filter(obj => {
     const value = this.context.getFromScope(obj, property.split('.'))
     return expected === undefined ? isTruthy(value) : value === expected
   })
 }
 
-function uniq<T> (arr: T[]): T[] {
+export function uniq<T> (arr: T[]): T[] {
   const u = {}
   return (arr || []).filter(val => {
     if (u.hasOwnProperty(String(val))) return false

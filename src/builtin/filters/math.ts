@@ -1,24 +1,25 @@
 import { caseInsensitiveCompare } from '../../util/underscore'
 
-export default {
-  'abs': (v: number) => Math.abs(v),
-  'at_least': (v: number, n: number) => Math.max(v, n),
-  'at_most': (v: number, n: number) => Math.min(v, n),
-  'ceil': (v: number) => Math.ceil(v),
-  'divided_by': (v: number, arg: number) => v / arg,
-  'floor': (v: number) => Math.floor(v),
-  'minus': (v: number, arg: number) => v - arg,
-  'modulo': (v: number, arg: number) => v % arg,
-  'round': (v: number, arg = 0) => {
-    const amp = Math.pow(10, arg)
-    return Math.round(v * amp) / amp
-  },
-  'plus': (v: number, arg: number) => Number(v) + Number(arg),
-  'sort_natural': sortNatural,
-  'times': (v: number, arg: number) => v * arg
+export const abs = Math.abs
+export const atLeast = Math.max
+export const atMost = Math.min
+export const ceil = Math.ceil
+export const dividedBy = (v: number, arg: number) => v / arg
+export const floor = Math.floor
+export const minus = (v: number, arg: number) => v - arg
+export const modulo = (v: number, arg: number) => v % arg
+export const times = (v: number, arg: number) => v * arg
+
+export function round (v: number, arg = 0) {
+  const amp = Math.pow(10, arg)
+  return Math.round(v * amp) / amp
 }
 
-function sortNatural (input: any[], property?: string) {
+export function plus (v: number, arg: number) {
+  return Number(v) + Number(arg)
+}
+
+export function sortNatural (input: any[], property?: string) {
   if (!input || !input.sort) return []
   if (property !== undefined) {
     return [...input].sort(

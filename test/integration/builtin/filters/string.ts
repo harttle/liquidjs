@@ -1,6 +1,9 @@
 import { test } from '../../../stub/render'
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+use(chaiAsPromised)
 
 describe('filters/string', function () {
   let liquid: Liquid
@@ -11,14 +14,24 @@ describe('filters/string', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
     it('should return "abar" for "a", foo', () => test('{{ "a" | append: foo }}', 'abar'))
-    it('should return "abc" for "abc", undefined', () => test('{{ "abc" | append: undefinedVar }}', 'abc'))
+    it('should throw if second argument undefined', () => {
+      return expect(test('{{ "abc" | append: undefinedVar }}', 'abc')).to.be.rejectedWith(/2 arguments/)
+    })
+    it('should throw if second argument not set', () => {
+      return expect(test('{{ "abc" | append }}', 'abc')).to.be.rejectedWith(/2 arguments/)
+    })
     it('should return "abcfalse" for "abc", false', () => test('{{ "abc" | append: false }}', 'abcfalse'))
   })
   describe('prepend', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | prepend: "abc" }}', 'abc-3'))
     it('should return "abar" for "a", foo', () => test('{{ "a" | prepend: foo }}', 'bara'))
-    it('should return "abc" for "abc", undefined', () => test('{{ "abc" | prepend: undefinedVar }}', 'abc'))
+    it('should throw if second argument undefined', () => {
+      return expect(test('{{ "abc" | prepend: undefinedVar }}', 'abc')).to.be.rejectedWith(/2 arguments/)
+    })
+    it('should throw if second argument not set', () => {
+      return expect(test('{{ "abc" | prepend }}', 'abc')).to.be.rejectedWith(/2 arguments/)
+    })
     it('should return "falseabc" for "abc", false', () => test('{{ "abc" | prepend: false }}', 'falseabc'))
   })
   describe('capitalize', function () {
@@ -104,17 +117,6 @@ describe('filters/string', function () {
   it('should support lstrip', function () {
     const src = '{{ "          So much room for activities!          " | lstrip }}'
     return test(src, 'So much room for activities!          ')
-  })
-  it('should support string_with_newlines', function () {
-    const src = '{% capture string_with_newlines %}\n' +
-            'Hello\n' +
-            'there\n' +
-            '{% endcapture %}' +
-            '{{ string_with_newlines | newline_to_br }}'
-    const dst = '<br />' +
-            'Hello<br />' +
-            'there<br />'
-    return test(src, dst)
   })
   it('should support prepend', function () {
     return test('{% assign url = "liquidmarkup.com" %}' +

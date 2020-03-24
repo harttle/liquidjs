@@ -1,6 +1,6 @@
 import { Context } from './context/context'
 import * as fs from './fs/node'
-import * as _ from './util/underscore'
+import { forOwn, snakeCase } from './util/underscore'
 import { Template } from './template/template'
 import { Tokenizer } from './parser/tokenizer'
 import { Render } from './render/render'
@@ -8,7 +8,7 @@ import Parser from './parser/parser'
 import { TagImplOptions } from './template/tag/tag-impl-options'
 import { Value } from './template/value'
 import builtinTags from './builtin/tags'
-import builtinFilters from './builtin/filters'
+import * as builtinFilters from './builtin/filters'
 import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
@@ -34,8 +34,8 @@ export class Liquid {
     this.filters = new FilterMap(this.options.strictFilters)
     this.tags = new TagMap()
 
-    _.forOwn(builtinTags, (conf, name) => this.registerTag(name, conf))
-    _.forOwn(builtinFilters, (handler, name) => this.registerFilter(name, handler))
+    forOwn(builtinTags, (conf, name) => this.registerTag(snakeCase(name), conf))
+    forOwn(builtinFilters, (handler, name) => this.registerFilter(snakeCase(name), handler))
   }
   public parse (html: string, filepath?: string): Template[] {
     const tokenizer = new Tokenizer(html, filepath)
