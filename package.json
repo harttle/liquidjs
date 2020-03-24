@@ -1,6 +1,6 @@
 {
   "name": "liquidjs",
-  "version": "9.11.4",
+  "version": "9.11.5",
   "description": "A simple, expressive, safe and shopify compatible template engine in pure JavaScript.",
   "main": "dist/liquid.cjs.js",
   "es2015": "dist/liquid.esm.js",
@@ -9,12 +9,11 @@
   "scripts": {
     "lint": "eslint .",
     "docs": "rm docs -rf && typedoc --gitRevision master --out docs src && cp -r website/. docs/",
-    "check": "npm run lint && npm test && npm run docs && git checkout origin/master docs",
+    "check": "npm test && npm run lint",
     "unit": "mocha \"test/unit/**/*.ts\"",
     "integration": "mocha \"test/integration/**/*.ts\"",
     "e2e": "npm run build && mocha \"test/e2e/**/*.ts\"",
     "test": "cross-env BUNDLES=cjs,umd npm run build && mocha \"test/**/*.ts\"",
-    "check": "npm test && npm run lint",
     "benchmark": "node --expose-gc benchmark/index",
     "coverage": "nyc --reporter=html mocha \"test/{unit,integration}/**/*.ts\"",
     "coverage-coveralls": "nyc mocha \"test/{unit,integration}/**/*.ts\" && nyc report --reporter=text-lcov | coveralls",

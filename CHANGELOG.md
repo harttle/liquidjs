@@ -1,3 +1,10 @@
+## [9.11.5](https://github.com/harttle/liquidjs/compare/v9.11.4...v9.11.5) (2020-03-24)
+
+
+### Bug Fixes
+
+* throws on invalid arguments for prepend/append, fixes [#208](https://github.com/harttle/liquidjs/issues/208) ([479c633](https://github.com/harttle/liquidjs/commit/479c633))
+
 ## [9.11.4](https://github.com/harttle/liquidjs/compare/v9.11.3...v9.11.4) (2020-03-23)
 
 
