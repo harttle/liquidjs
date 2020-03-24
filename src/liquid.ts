@@ -34,8 +34,8 @@ export class Liquid {
     this.filters = new FilterMap(this.options.strictFilters)
     this.tags = new TagMap()
 
-    forOwn(builtinTags, (conf, name) => this.registerTag(snakeCase(name), conf))
-    forOwn(builtinFilters, (handler, name) => this.registerFilter(snakeCase(name), handler))
+    forOwn(builtinTags, (conf: TagImplOptions, name: string) => this.registerTag(snakeCase(name), conf))
+    forOwn(builtinFilters, (handler: FilterImplOptions, name: string) => this.registerFilter(snakeCase(name), handler))
   }
   public parse (html: string, filepath?: string): Template[] {
     const tokenizer = new Tokenizer(html, filepath)

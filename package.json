@@ -9,6 +9,7 @@
   "scripts": {
     "lint": "eslint .",
     "docs": "rm docs -rf && typedoc --gitRevision master --out docs src && cp -r website/. docs/",
+    "check": "npm run lint && npm test && npm run docs && git checkout origin/master docs",
     "unit": "mocha \"test/unit/**/*.ts\"",
     "integration": "mocha \"test/integration/**/*.ts\"",
     "e2e": "npm run build && mocha \"test/e2e/**/*.ts\"",
