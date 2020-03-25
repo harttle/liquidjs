@@ -1,19 +1,22 @@
-import { test } from '../../../stub/render'
+import { Liquid } from '../../../../src/liquid'
+import { expect } from 'chai'
 
 describe('filters/object', function () {
+  const liquid = new Liquid()
   describe('default', function () {
-    it('false should use default', () => test('{{false | default: "a"}}', 'a'))
-    it('empty string should use default', () => test('{{"" | default: "a"}}', 'a'))
-    it('non-empty string should not use default', () => test('{{" " | default: "a"}}', ' '))
-    it('nil should use default', () => test('{{nil | default: "a"}}', 'a'))
-    it('undefined should use default', () => test('{{not_defined | default: "a"}}', 'a'))
-    it('true should not use default', () => test('{{true | default: "a"}}', 'true'))
-    it('0 should not use default', () => test('{{0 | default: "a"}}', '0'))
+    it('false should use default', async () => expect(await liquid.parseAndRender('{{false | default: "a"}}')).to.equal('a'))
+    it('empty string should use default', async () => expect(await liquid.parseAndRender('{{"" | default: "a"}}')).to.equal('a'))
+    it('empty array should use default', async () => expect(await liquid.parseAndRender('{{arr | default: "a"}}', { arr: [] })).to.equal('a'))
+    it('non-empty string should not use default', async () => expect(await liquid.parseAndRender('{{" " | default: "a"}}')).to.equal(' '))
+    it('nil should use default', async () => expect(await liquid.parseAndRender('{{nil | default: "a"}}')).to.equal('a'))
+    it('undefined should use default', async () => expect(await liquid.parseAndRender('{{not_defined | default: "a"}}')).to.equal('a'))
+    it('true should not use default', async () => expect(await liquid.parseAndRender('{{true | default: "a"}}')).to.equal('true'))
+    it('0 should not use default', async () => expect(await liquid.parseAndRender('{{0 | default: "a"}}')).to.equal('0'))
   })
   describe('json', function () {
-    it('should stringify string', () => test('{{"foo" | json}}', '"foo"'))
-    it('should stringify number', () => test('{{2 | json}}', '2'))
-    it('should stringify object', () => test('{{obj | json}}', '{"foo":"bar"}'))
-    it('should stringify array', () => test('{{arr | json}}', '[-2,"a"]'))
+    it('should stringify string', async () => expect(await liquid.parseAndRender('{{"foo" | json}}')).to.equal('"foo"'))
+    it('should stringify number', async () => expect(await liquid.parseAndRender('{{2 | json}}')).to.equal('2'))
+    it('should stringify object', async () => expect(await liquid.parseAndRender('{{obj | json}}', { obj: { foo: 'bar' } })).to.equal('{"foo":"bar"}'))
+    it('should stringify array', async () => expect(await liquid.parseAndRender('{{arr | json}}', { arr: [-2, 'a'] })).to.equal('[-2,"a"]'))
   })
 })
