@@ -1,3 +1,10 @@
+## [9.11.6](https://github.com/harttle/liquidjs/compare/v9.11.5...v9.11.6) (2020-03-25)
+
+
+### Bug Fixes
+
+* default filter not applied for empty array ([c371762](https://github.com/harttle/liquidjs/commit/c371762))
+
 ## [9.11.5](https://github.com/harttle/liquidjs/compare/v9.11.4...v9.11.5) (2020-03-24)
 
 
