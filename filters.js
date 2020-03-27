@@ -1,6 +1,7 @@
 const strftime = require("./src/util/strftime.js");
 const _ = require("./src/util/underscore.js");
 const isTruthy = require("./src/syntax.js").isTruthy;
+const moment = require('moment');
 
 var escapeMap = {
   "&": "&amp;",
@@ -99,7 +100,9 @@ var filters = {
     });
   },
   upcase: str => stringify(str).toUpperCase(),
-  url_encode: encodeURIComponent
+  url_encode: encodeURIComponent,
+  findDatePeriod: (v, arg) => datePeriod(v, arg),
+  findDateDuration: (v, arg) => dateDuration(v, arg)
 };
 
 function escape(str) {
@@ -155,6 +158,11 @@ function getObjectValues(obj) {
   return resultObj;
 }
 
+function calculateDurationInDays(date1, date2) {
+  const durationInMiliSeconds = date1.getTime() - date2.getTime();
+  return durationInMiliSeconds/(1000*3600*24);
+}
+
 function subtract(v, arg) {
   return performOperations(v, arg, "SUBTRACT");
 }
@@ -167,8 +175,28 @@ function add(v, arg) {
   return performOperations(v, arg, "ADD");
 }
 
+function datePeriod(v, arg) {
+  return performOperations(v, arg);
+}
+
+function dateDuration(v, arg) {
+  return performOperations(v, arg);
+}
+
 function performOperations(v, arg, operation) {
-  if (typeof v === "object" && typeof arg === "object") {
+  /**
+   * Check Date and add period.
+   */
+  if(Object.prototype.toString.call(v) === '[object Date]' && typeof arg === "number") {
+    return `${moment(v).format("MMMM DD YYYY")} + ${arg} days`;
+  }
+  /**
+   * Check Date and calculate duration.
+   */
+  else if(Object.prototype.toString.call(v) === '[object Date]' && Object.prototype.toString.call(arg) === '[object Date]') {
+    calculateDurationInDays(v, arg);
+  }
+  else if (typeof v === "object" && typeof arg === "object") {
     result = Object.assign(getObjectValues(arg), getObjectValues(v));
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
     const numberKeysOfV = filterNumericKeysFromObject(v);
