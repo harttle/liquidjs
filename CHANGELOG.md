@@ -1,3 +1,10 @@
+## [9.11.7](https://github.com/harttle/liquidjs/compare/v9.11.6...v9.11.7) (2020-03-28)
+
+
+### Bug Fixes
+
+* try fix travis ([b3db412](https://github.com/harttle/liquidjs/commit/b3db412))
+
 ## [9.11.6](https://github.com/harttle/liquidjs/compare/v9.11.5...v9.11.6) (2020-03-25)
 
 
