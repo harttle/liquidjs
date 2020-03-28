@@ -30,7 +30,7 @@ page:
 sidebar:
   tutorials:
     getting_started: Getting Started
-    overview: Overview
+    setup: Setup
     syntax: Basic Syntax
     render_file: Render Files
     partials: Includes and Layouts

@@ -30,7 +30,7 @@ page:
 sidebar:
   tutorials:
     getting_started: 开始使用
-    overview: 概述
+    setup: 安装和引入
     syntax: 基本语法
     render_file: 渲染一个文件
     partials: 引用和继承

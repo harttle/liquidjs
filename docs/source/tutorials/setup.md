@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: Setup
 ---
 
 LiquidJS is a simple, expressive, safe and shopify compatible template engine in pure JavaScript. The purpose of this repo is to provide a standard Liquid implementation for the JavaScript community.
@@ -38,16 +38,7 @@ engine
 
 ## LiquidJS in Browsers
 
-Pre-built UMD bundles are also available and included in the npm package:
-
-```html
-<!--for production-->
-<script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>
-<!--for development-->
-<script src="//unpkg.com/liquidjs/dist/liquid.js"></script>
-```
-
-Or from jsDelivr CDN:
+Pre-built UMD bundles are also available:
 
 ```html
 <!--for production-->

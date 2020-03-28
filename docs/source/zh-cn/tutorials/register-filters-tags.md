@@ -5,7 +5,7 @@ title: 注册标签和过滤器
 ## 注册标签
 
 ```javascript
-// 使用方式: {% upper name%}
+// 使用方式: {% upper name %}
 engine.registerTag('upper', {
     parse: function(tagToken, remainTokens) {
         this.str = tagToken.args; // name

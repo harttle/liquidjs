@@ -1,6 +1,6 @@
 tutorials:
   getting_started:
-    overview: overview.html
+    setup: setup.html
     syntax: syntax.html
     render_file: render-file.html
     partials: partials-and-layouts.html

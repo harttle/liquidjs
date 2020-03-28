@@ -2,7 +2,7 @@
   <div class="inner">
     <h2 id="banner-title">{{ page.subtitle }}</h2>
     <div id="banner-start">
-      <code id="banner-start-command">npm install liquidjs</code><a id="banner-start-link" href="./tutorials/overview.html"><i class="icon-arrow-right"></i></a>
+      <code id="banner-start-command">npm install liquidjs</code><a id="banner-start-link" href="./tutorials/setup.html"><i class="icon-arrow-right"></i></a>
     </div>
     <div id="banner-share">{{ partial('partial/share') }}</div>
   </div>
@@ -33,7 +33,7 @@
         <li class="intro-code-item"><span class="hl-comment">// html === "Welcome to Liquid!"</span></li>
       </ul>
       <div id="intro-get-started-wrap">
-        <a href="tutorials/overview.html" id="intro-get-started-link">{{ __('index.get_started') }}</a>
+        <a href="tutorials/setup.html" id="intro-get-started-link">{{ __('index.get_started') }}</a>
       </div>
     </div>
   </div>

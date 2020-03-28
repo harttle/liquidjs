@@ -1,5 +1,5 @@
 ---
-title: 概述
+title: 安装和使用
 ---
 
 LiquidJS 是一个简单的、安全的、兼容 Shopify 的、纯 JavaScript 编写的模板引擎。这个项目的目的是为 JavaScript 社区提供一个 Liquid 模板引擎的实现。
@@ -38,14 +38,7 @@ engine
 
 ## 在浏览器里使用
 
-LiquidJS 预先构建了 UMD 打包（包括压缩版和未压缩版），可以通过 NPM 包来使用：
-
-```html
-<script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>     <!--生产环境-->
-<script src="//unpkg.com/liquidjs/dist/liquid.js"></script>         <!--开发环境t-->
-```
-
-或者直接引用 jsDelivr CDN 上的版本：
+LiquidJS 预先构建了 UMD Bundle，可以通过 jsDelivr CDN 来引用：
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>     <!--生产环境-->

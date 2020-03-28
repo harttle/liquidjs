@@ -5,14 +5,12 @@
 
 {{ js('js/main') }}
 
-{% if config.algolia[page.lang] %}
 <script src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
 <script>
 document.getElementById('search-input-wrap').classList.add('on');
 docsearch({
-  apiKey: '{{ config.algolia[page.lang].api_key }}',
-  indexName: '{{ config.algolia[page.lang].index_name }}',
+  apiKey: '{{ config.algolia.apiKey }}',
+  indexName: '{{ config.algolia.indexName }}',
   inputSelector: '#search-input'
 });
 </script>
-{% endif %}

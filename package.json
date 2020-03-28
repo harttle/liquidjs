@@ -1,16 +1,13 @@
 {
   "name": "liquidjs",
   "version": "9.11.7",
-  "description": "A simple, expressive, safe and shopify compatible template engine in pure JavaScript.",
+  "description": "A simple, expressive, safe and Shopify compatible template engine in pure JavaScript.",
   "main": "dist/liquid.cjs.js",
   "es2015": "dist/liquid.esm.js",
   "browser": "dist/liquid.js",
   "types": "dist/liquid.d.ts",
   "scripts": {
     "lint": "eslint .",
-    "build-docs": "bin/build-docs.sh",
-    "index-docs": "bin/index-docs.sh",
-    "serve-docs": "cd docs && hexo serve",
     "check": "npm test && npm run lint",
     "unit": "mocha \"test/unit/**/*.ts\"",
     "integration": "mocha \"test/integration/**/*.ts\"",
@@ -20,6 +17,7 @@
     "coverage": "nyc --reporter=html mocha \"test/{unit,integration}/**/*.ts\"",
     "coverage-coveralls": "nyc mocha \"test/{unit,integration}/**/*.ts\" && nyc report --reporter=text-lcov | coveralls",
     "build": "rollup -c rollup.config.ts && ls -lh dist",
+    "build-docs": "bin/build-docs.sh",
     "watch": "tsc --watch"
   },
   "bin": {

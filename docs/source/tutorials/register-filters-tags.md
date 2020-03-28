@@ -5,7 +5,7 @@ title: Register Filters/Tags
 ## Register Tags
 
 ```javascript
-// Usage: {% upper name%}
+// Usage: {% upper name %}
 engine.registerTag('upper', {
     parse: function(tagToken, remainTokens) {
         this.str = tagToken.args; // name

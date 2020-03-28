@@ -8,7 +8,8 @@
   "scripts": {
     "build": "hexo generate",
     "start": "hexo serve",
-    "eslint": "eslint ."
+    "lint": "eslint .",
+    "index": "hexo algolia"
   },
   "dependencies": {
     "cheerio": "^0.22.0",

@@ -12,50 +12,32 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/harttle/liquidjs)
 
-A simple, expressive, safe and [shopify][shopify/liquid] compatible template engine in pure JavaScript.
-**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community.
+A simple, expressive, safe and [Shopify][shopify/liquid] compatible template engine in pure JavaScript.
+**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community so that [Jekyll sites](https://jekyllrb.com), [Github Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
 
-* [Jekyll sites](https://jekyllrb.com), [Github Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
-* All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be built in LiquidJS, though there are still some differences and limitations (see below).
+* [Documentation][doc]
+* Please star [LiquidJS on GitHub][github]!
+* Support [LiquidJS on Open Collective][oc] or [Patreon][patreon]
 
-> Version 9 has published, [see how to migrate to 9.0.0](https://github.com/harttle/liquidjs/wiki/Migrate-to-9)!
+## Installation
 
-## Get Started
-
-Install via npm:
+Install from npm in Node.js:
 
 ```bash
 npm install --save liquidjs
 ```
 
-```javascript
-var { Liquid } = require('liquidjs');
-var engine = new Liquid();
-
-engine
-    .parseAndRender('{{name | capitalize}}', {name: 'alice'})
-    .then(console.log);     // outputs 'Alice'
-```
-
-Or include the UMD build, a live demo is available on jsfiddle: <https://jsfiddle.net/x43eb0z6/>. You may need a [Promise polyfill][pp] for Node.js &lt; 4 and ES5 browsers like [IE and Android UC][caniuse-promises].
+Or use the UMD bundle from jsDelivr:
 
 ```html
-<script src="//unpkg.com/liquidjs/dist/liquid.min.js"></script>     <!--for production-->
-<script src="//unpkg.com/liquidjs/dist/liquid.js"></script>         <!--for development-->
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
 ```
 
-Also available from CLI:
+More details, refer to [The Setup Guide][setup].
 
-```bash
-echo '{{"hello" | capitalize}}' | npx liquidjs
-```
+## Differences with Shopify/liquid
 
-For detailed documents, see:
-
-* The [Wiki Page](https://github.com/harttle/liquidjs/wiki) contains tutorials and advanced topics.
-* The [API Reference](https://harttle.github.io/liquidjs/classes/_liquid_.liquid.html) provides detailed descriptions for classes, methods and properties.
-
-## Differences and Limitations
+All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be built in LiquidJS, but not those business-logic specific filters/tags which are typically from Shopify themes (see [Plugins List][plugins] in case you're looking for them and feel free to add yours to the list). Though being compatible the Ruby version is one of our priorities, there are still some differences:
 
 * Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
 * Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
@@ -64,9 +46,6 @@ For detailed documents, see:
 * [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 * Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.
 * Sort stability. The [sort](https://shopify.github.io/liquid/filters/sort/) stability is also not defined in both shopify/liquid and LiquidJS, but it's [considered stable](https://v8.dev/features/stable-sort) for LiquidJS in Node.js 12+ and Google Chrome 70+.
-
-Features that available on shopify website but not on shopify/liquid repo will not be implemented in this repo,
-but there're some plugins available: <https://github.com/harttle/liquidjs/wiki/Plugins>
 
 ## Related Packages
 
@@ -77,15 +56,13 @@ but there're some plugins available: <https://github.com/harttle/liquidjs/wiki/P
 
 ## Backers
 
-Love LiquidJS and want to contribute? [Become a backer](https://opencollective.com/liquidjs).
+If you love LiquidJS or your company is using LiquidJS? Please consider [support us on Open Collective or Patreon][financial-support].
 
 ![backers from open-collective](https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=97)
 
 ## Contributors ✨
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
-Contributions of any [kind](https://allcontributors.org/docs/en/emoji-key) are welcome!
-Thanks goes to these wonderful people:
+Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to these wonderful people:
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -132,13 +109,12 @@ Thanks goes to these wonderful people:
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## Contribute Guideline
-
-* **Code Style**: <https://github.com/standard/eslint-config-standard>, `npm run lint` to check locally.
-* **Testing**: make sure test cases still pass, use `npm test` to check locally.
-* **Commit Message**: align to [The Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially the [Type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), to allow the semantic-release bot do the work.
-
 [shopify/liquid]: https://shopify.github.io/liquid/
-[caniuse-promises]: http://caniuse.com/#feat=promises
-[pp]: https://github.com/taylorhakes/promise-polyfill
-[tutorial]: https://shopify.github.io/liquid/basics/introduction/
+[plugins]: https://liquidjs.com/tutorials/plugins.html#Plugin-List
+[setup]: https://liquidjs.com/tutorials/setup.html
+[doc]: https://liquidjs.com
+[github]: https://github.com/harttle/liquidjs
+[patreon]: https://www.patreon.com/harttle
+[oc]: https://opencollective.com/liquidjs/
+[contribution]: https://liquidjs.com/tutorials/contribution-guidelines.html
+[financial-support]: https://liquidjs.com/tutorials/contribution-guidelines.html#Financial-Support
