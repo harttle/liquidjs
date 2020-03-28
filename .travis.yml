@@ -11,21 +11,16 @@ jobs:
         - commitlint-travis
     - name: 'Coverage'
       script: npm run coverage-coveralls
-    - name: 'Build'
-      script:
-        - npm run build
-        - npm run build-docs
     - stage: release
       name: 'Publish'
       if: branch = master
-      script: skip
+      script: npm run build
       deploy:
         provider: script
-        skip_cleanup: true
         script: npx semantic-release
     - name: 'Document'
       if: branch = master
+      script: npm run build-docs
       provider: pages
-      skip_cleanup: true
       github_token: $GITHUB_TOKEN
       local_dir: docs/public
