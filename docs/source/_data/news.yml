@@ -1,0 +1,24 @@
+-
+  url: https://github.com/harttle/liquidjs/pull/5
+  date: '2016-09-12'
+  title:
+    zh-cn: '异步化：重写了解析器和渲染器，使 LiquidJS 可以提供 Promise API 并支持异步的自定义 Tag 实现。'
+    en: 'Async spike: rewrite the parser and render to support Promise, which enables async tags.'
+-
+  url: https://opencollective.com/liquidjs/#section-contribute
+  date: '2020-02-26'
+  title:
+    zh-cn: '赞助人：第一个 backer 通过 Open Collective 贡献于 LiquidJS。'
+    en: 'Backers: the first backer contributed to LiquidJS via Open Collective.'
+-
+  url: https://github.com/harttle/liquidjs/pull/202
+  date: '2020-03-11'
+  title:
+    zh-cn: '内存优化：用更精细的手法重写了解析器，来避免临时字符串的生成，内存占用降低 57.7% 以上。'
+    en: 'Memory Optimization: a more elaborate parser reducing the memory footprint by 57.7%.'
+-
+  url: https://github.com/harttle/liquidjs/pull/205
+  date: '2016-09-15'
+  title:
+    zh-cn: '性能提升：引入 AST 并重新设计 Token 类型系统，使渲染性能平均提升 100.3%。'
+    en: 'Performance Boost: a simple AST to improve render performance by 100.3%.'

@@ -1,0 +1,28 @@
+#playground
+  background: white
+  overflow: hidden
+  h1
+    font-size: 36px
+    font-weight: 300
+    margin: 40px 0 24px
+
+  .row
+    display: flex
+    flex-wrap: wrap;
+    justify-content: space-between
+    margin-bottom: 30px
+    > div
+      flex: 0 0 100%
+      height: 400px
+      margin-bottom: 30px
+
+  @media mq-normal
+    .row
+      flex-wrap: nowrap;
+      > div
+        flex: 0 1 49%
+
+  #editorEl, #previewEl
+    font-size: 1em
+    .ace_scroller, .ace_gutter
+      padding: 15px 0px;

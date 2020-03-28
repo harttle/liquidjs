@@ -1,0 +1,233 @@
+note-tip = hsl(40, 100%, 50%)
+note-info = hsl(200, 100%, 50%)
+note-warn = hsl(0, 100%, 50%)
+
+#content
+  position: relative
+
+#content-inner
+  display: flex
+
+  #sidebar
+    flex: 0 0 sidebar-width
+  .article-container
+    flex: 1 100%
+
+.article-inner
+  display: flex
+  .article
+    width: 0
+    flex: 1 1 100%
+    padding: 40px 0
+    overflow: hidden;
+    text-overflow: ellipsis;
+    @media print
+      padding: 0
+  #article-toc
+    display: none
+    width: sidebar-width
+    opacity: 0.8
+    @media mq-normal
+      display: block
+
+#article-toc-inner
+  @extend .inner
+  width: sidebar-width
+  position: sticky
+  top: 0
+  margin: 40px auto
+  .sidebar-title
+    border-top: none
+
+.toc-link
+  @extend .sidebar-link
+
+.toc-child
+  padding-left: 1em
+  font-size: 0.9em
+
+#article-toc-inner-list
+  overflow-y: auto
+
+#article-toc-top
+  margin-top: 10px
+  font-size: 0.9em
+  text-decoration: none
+  color: color-default
+  display: block
+  &:hover
+    color: color-link-hover
+
+.article-header
+  padding-bottom: 20px
+  overflow: hidden;
+
+.article-title
+  float: left
+  font-size: 36px
+  font-weight: 300
+  text-decoration: none
+  color: color-default
+  transition: 0.2s
+  a&:hover
+    color: color-link-hover
+  .post &
+    float: none
+
+.article-date
+  color: color-gray
+  text-decoration: none
+  display: inline-block
+  margin-top: 1em
+  &:hover
+    color: color-link-hover
+
+.article-edit-link
+  float: right
+  text-decoration: none;
+  color: #bbb
+  font-size: 24px
+  line-height: 36px
+  transition: 0.2s
+  display: none
+  &:hover
+    color: color-link-hover
+  @media mq-normal
+    display: block
+
+.article-anchor
+  margin-left: 10px
+  display: none
+  &:before
+    content: "#"
+  @media print
+    display: none !important
+  .article-heading:hover &
+    display: inline-block
+
+.article-content
+  line-height: line-height
+  color: color-default
+  @media print
+    font-size: 12pt
+  p, ol, ul, dl, table, blockquote, iframe, .highlight
+    margin: 1em 0
+  h1
+    font-size: 2em
+  h2
+    font-size: 1.5em
+  h3
+    font-size: 1.3em
+  h1, h2, h3, h4, h5, h6
+    line-height: 1em
+    font-weight: bold
+    margin: 1em 0
+  a
+    color: color-link
+    text-decoration: none
+    &:hover
+      color: color-link-hover
+      text-decoration: underline
+    @media print
+      color: color-default
+      text-decoration: underline
+      &:after
+        content: " (" attr(href) ")"
+        font-size: 80%
+  strong
+    font-weight: bold
+  em
+    font-style: italic
+  ul, ol, dl
+    margin-left: 20px
+    ul, ol, dl
+      margin-top: 0
+      margin-bottom: 0
+  ul
+    list-style: disc
+  ol
+    list-style: decimal
+  dl
+    list-style: square
+  li
+    p
+      margin: 0
+    table, blockquote, iframe, .highlight
+      margin: 1em 0
+  img, video
+    max-width: 100%
+  img[src*="@2x"]
+    zoom: 50%
+  blockquote
+    padding: 0 20px
+    position: relative
+    border: 1px solid color-border
+    border-left: 5px solid #ddd
+    footer
+      margin: 1em 0
+      font-style: italic
+      cite
+        &:before
+          content: "—"
+          padding: 0 0.3em
+        a
+          color: color-grey
+  .note
+    &.tip
+      border-left-color: note-tip
+    &.info
+      border-left-color: note-info
+    &.warn
+      border-left-color: note-warn
+  .note-title
+    margin: 1em 0
+    display: block
+    font-size: 1.3em
+    font-weight: bold
+  table
+    max-width: 100%
+    border: 1px solid color-border
+    th
+      font-weight: bold
+    th, td
+      padding: 5px 15px
+    tr
+      &:nth-child(2n)
+        background: #eee
+
+.article-footer
+  margin: 30px 0 0
+  border-top: 1px solid color-border
+  text-align: center
+  color: color-gray
+  line-height: 1em
+  padding-top: 1em
+  position: relative
+  @media print
+    display: none
+
+$article-footer-link
+  color: color-link
+  text-decoration: none
+  font-weight: bold
+  text-transform: uppercase
+  position: absolute
+  &:hover
+    color: color-link-hover
+  @media print
+    display: none
+  span
+    padding: 0 6px
+  span, i
+    vertical-align: middle
+
+.article-footer-prev
+  @extend $article-footer-link
+  left: 0
+
+.article-footer-next
+  @extend $article-footer-link
+  right: 0
+
+.article-footer-updated
+  font-size: 0.9em

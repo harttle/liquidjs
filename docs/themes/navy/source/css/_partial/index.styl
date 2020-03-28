@@ -1,0 +1,240 @@
+#banner
+  color: rgba(255, 255, 255, 0.8)
+  text-align: center
+
+#banner-title,
+.theme-intro-title
+  line-height: 1.15
+  font-weight: 300
+  font-size: 40px
+  @media mq-normal
+    font-size: 50px
+
+#banner-title
+  padding-top: 20px
+  @media mq-normal
+    padding-top: 100px
+
+.theme-intro-title
+  margin-bottom: 24px
+  padding-top: 24px
+  @media mq-normal
+    padding-top: 0
+
+#banner-start
+  text-align: center
+  padding: 40px 0
+  line-height: 47px;
+  @media mq-normal
+    padding: 60px 0
+    font-size: 18px
+
+#banner-start-command
+  background: lighten(color-navy, 10%)
+  padding: 0 15px
+  color: #fff
+  display: inline-block
+  &:before
+    content: "$"
+    opacity: 0.5
+    padding-right: 10px
+
+#banner-start-link
+  color: #fff
+  background: color-link
+  display: inline-block
+  padding: 0 15px
+  text-decoration: none
+  transition: 0.2s
+  &:hover
+    background: color-link-hover
+
+#banner-share
+  display: none
+  padding-bottom: 60px
+  @media mq-normal
+    display: block
+
+#intro-news-list
+  background-color: darken(color-navy, 10%)
+  margin: -1px 0
+
+#intro-news-flex
+  display: flex
+  flex-flow: column
+  @media mq-normal
+    flex-flow: row wrap
+
+.intro-news-wrap
+  padding: 24px 30px
+  text-decoration: none
+  &:hover
+    background-color: color-link-hover
+  @media mq-normal
+    flex: 0 0 50%
+    padding: 36px 30px
+  @media screen and (min-width: 960px)
+    flex: 0 0 25%
+
+.intro-news-time
+  font-size: 14px
+  color: rgba(255,255,255,.6)
+
+.intro-news-wrap:hover .intro-news-time
+  color: rgba(255,255,255,.8)
+
+.intro-news-title
+  padding-top: 4px
+  font-size: 15px
+  line-height: 1.2;
+  color: #fff
+
+#intro-feature-list
+  display: flex
+  flex-flow: column
+  margin: 30px 0
+  @media mq-normal
+    flex-flow: row wrap
+
+.intro-feature-wrap
+  margin-top: 20px
+  @media mq-normal
+    flex: 0 0 50%
+    margin-top: 50px
+
+.intro-feature
+  position: relative
+  text-align: center
+  @media mq-normal
+    text-align: left
+    padding-left: 70px
+
+.intro-feature-icon
+  color: color-link
+  font-size: 36px
+  margin-bottom: 6px;
+  text-align: center
+  @media mq-normal
+    margin-bottom: 26px
+    position: absolute
+    top: 0
+    left: 20px
+    font-size: 24px
+    width: @font-size
+
+.intro-feature-title
+  color: color-link
+  font-size: 24px
+
+.intro-feature-desc
+  margin-top: 1em
+  @media mq-normal
+    margin-top: line-height
+  line-height: line-height
+  a
+    text-decoration: none
+    color: black
+    &:visited, &:hover
+      color: black
+    &:hover
+      text-decoration: underline
+
+#intro-cmd-wrap
+  max-width: 700px
+  background: #eee
+  padding: 15px 0
+  overflow: auto
+  margin: 50px auto 0;
+  @media mq-normal
+    margin: 70px auto 0;
+  li
+    font-size: 16px
+    font-family: font-mono
+    line-height: 2
+    padding: 0 30px
+
+.intro-code-item
+  white-space: pre
+  .hl
+    color: color-link
+  .hl-str
+    color: #9e0001ad
+  .hl-comment
+    color: #056d05b5
+
+#intro-get-started-wrap
+  text-align: center
+  margin: 20px 0 50px
+  @media mq-normal
+    margin: 30px 0 70px
+
+#intro-get-started-link
+  font-size: 18px
+  display: inline-block
+  text-decoration: none
+  border: 3px solid lighten(color-link, 20%)
+  padding: 12px 24px
+  position: relative
+  transition: 0.2s
+  color: color-link
+  &:hover
+    background: @border-color
+    color: #fff
+
+#sponsors-wrap, #contributors-wrap
+  background: lighten(color-navy, 10%)
+  border-top: 1px solid #161d24
+  border-bottom: 1px solid #161d24
+  margin: -1px 0
+  .inner
+    margin: 48px 16px
+    @media mq-tablet
+      margin: 64px 32px
+    h3
+      color: #fff
+      font-size: 32px
+    p
+      color: #ccc
+      margin: 36px 0 24px
+      font-size: 20px
+      line-height: 1.5
+    .description a
+      text-decoration: none
+
+#contributors-wrap
+  .all-contributors
+    tr
+      display: flex
+      flex-wrap: wrap
+    td
+      margin: 10px 2px 0
+      a img
+        display: inline-block
+        height: 72px
+        width: 72px
+        background: color-gray
+        border-radius: 50%
+        margin-bottom: 10px
+  .description a
+    color: #fff
+    &:hover
+      background: #fff
+      color: lighten(color-navy, 10%)
+
+#sponsors-wrap
+  background: #fff
+  border: none
+  text-align: right
+  overflow: hidden;
+  .inner
+    h3
+      color: color-default
+    p
+      color: color-gray
+    .open-collective
+      margin: 0 auto
+    .description a
+      color: #333
+      &:hover
+        background: color-navy
+        color: #fff

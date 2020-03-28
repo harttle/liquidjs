@@ -1,0 +1,29 @@
+layout: index
+description: LiquidJS is a simple, expressive and safe template engine.
+subtitle: 简单安全的 Liquid 模板引擎
+---
+ul#intro-feature-list
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-shield
+      h3.intro-feature-title 安全渲染
+      p.intro-feature-desc 所有输出都默认经过转义，可以安全地开放给客户使用。运算符和表达式都先解析到 AST 再去渲染，避免了 #[code eval] 和 #[code new Function]。
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-javascript
+      h3.intro-feature-title 纯 JavaScript
+      p.intro-feature-desc 零 NPM 依赖且没有 Native 绑定的 Liquid 实现，Node.js 和浏览器通用。同时提供了 CDN 可用的 CMD, ESM 和 CJS 打包。
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-shopify
+      h3.intro-feature-title Shopify 兼容
+      p.intro-feature-desc 支持 #[a(href="https://github.com/shopify/liquid") shopify/liquid] 的所有标签和过滤器，#[a(href="https://jekyllrb.com/") Jekyll 站点], #[a(href="https://pages.github.com/") Github Pages] 和 #[a(href="https://themes.shopify.com/") Shopify 模板] 都可以轻松迁移到 Node.js。
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-cog
+      h3.intro-feature-title Extensibility
+      p.intro-feature-desc 整个项目在 TypeScript strict 模式下重写，确保了一致的 API 和实时更新的文档。除了 60+ 内置标签和过滤器之外，LiquidJS 还提供了 API 来注册你自己的插件。

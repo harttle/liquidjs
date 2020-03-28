@@ -1,0 +1,14 @@
+{
+  "extends": "hexo",
+  "root": true,
+  // IE compatibility
+  "rules": {
+    "prefer-arrow-callback": "off",
+    "no-var": "off",
+    "prefer-const": "off",
+    "strict": "off"
+  },
+  "env": {
+    "browser": true
+  }
+}

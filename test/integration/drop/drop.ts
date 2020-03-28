@@ -25,9 +25,13 @@ describe('drop/drop', function () {
       return key.toUpperCase()
     }
   }
-  it('should call corresponding method', async function () {
+  it('should call corresponding method when output', async function () {
     const html = await liquid.parseAndRender(`{{obj.getName}}`, { obj: new CustomDrop() })
     expect(html).to.equal('GET NAME')
+  })
+  it('should call corresponding method when expression evaluates', async function () {
+    const html = await liquid.parseAndRender(`{% if obj.getName == "GET NAME" %}true{% endif %}`, { obj: new CustomDrop() })
+    expect(html).to.equal('true')
   })
   it('should read corresponding property', async function () {
     const html = await liquid.parseAndRender(`{{obj.name}}`, { obj: new CustomDrop() })

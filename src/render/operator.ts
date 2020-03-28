@@ -1,4 +1,4 @@
-import { isComparable } from '../drop/icomparable'
+import { isComparable } from '../drop/comparable'
 import { isFunction } from '../util/underscore'
 import { isTruthy } from '../render/boolean'
 

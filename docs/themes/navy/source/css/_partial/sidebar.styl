@@ -1,0 +1,32 @@
+#sidebar
+  width: sidebar-width
+  padding-bottom: 40px
+  opacity: 0.8
+  display: none
+  @media mq-normal
+    display: block
+  padding-top: 40px
+
+.sidebar-title
+  margin-top: 40px
+  padding: 10px 0
+  font-weight: bold
+  color: color-link
+  display: inline-block
+  border-top: 1px solid color-border
+  line-height: 1
+.sidebar-title:first-child
+  margin-top: 0
+
+.sidebar-link
+  display: block
+  color: color-default
+  text-decoration: none
+  padding: 7px 0
+  line-height: 1
+  position: relative
+  width: 100%
+  &.current
+    color: color-link
+  &:hover
+    color: color-link-hover

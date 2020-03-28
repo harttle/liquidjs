@@ -1,0 +1,201 @@
+---
+title: For
+---
+
+Iteration tags run blocks of code repeatedly.
+
+## Basic Usage
+
+### for...in
+
+Repeatedly executes a block of code. For a full list of attributes available within a `for` loop.
+
+Input
+```liquid
+{% for product in collection.products %}
+  {{ product.title }}
+{% endfor %}
+```
+
+Output
+```text
+hat shirt pants
+```
+
+### else
+
+Specifies a fallback case for a `for` loop which will run if the loop has zero length.
+
+Input
+```liquid
+{% for product in collection.products %}
+  {{ product.title }}
+{% else %}
+  The collection is empty.
+{% endfor %}
+```
+
+Output
+```text
+The collection is empty.
+```
+
+### break
+
+Causes the loop to stop iterating when it encounters the `break` tag.
+
+Input
+```liquid
+{% for i in (1..5) %}
+  {% if i == 4 %}
+    {% break %}
+  {% else %}
+    {{ i }}
+  {% endif %}
+{% endfor %}
+```
+
+Output
+```text
+1 2 3
+```
+
+### continue
+
+Causes the loop to skip the current iteration when it encounters the `continue` tag.
+
+Input
+```liquid
+{% for i in (1..5) %}
+  {% if i == 4 %}
+    {% continue %}
+  {% else %}
+    {{ i }}
+  {% endif %}
+{% endfor %}
+```
+
+Output
+```text
+1 2 3   5
+```
+
+### forloop
+
+There's a `forloop` object available inside `for` loops. It's used to indicate the current state of `for` loop.
+
+The `forloop.first`, `forloop.last` and `forloop.length` property:
+
+Input
+```
+{% for i in (1..5) %}
+  {%- if forloop.first == true -%} First
+  {%- elsif forloop.last == true -%} Last
+  {%- else -%} {{ forloop.length }}
+  {%- endif %}
+{% endfor -%}
+```
+
+Output
+```
+First
+5
+5
+5
+Last
+```
+
+The `forloop.index`, `forloop.index0`, `forloop.rindex` and `forloop.rindex0` property:
+
+Input
+```
+index index0 rindex rindex0
+{% for i in (1..5) %}
+  {{- forloop.index }}     {{ forloop.index0 }}      {{ forloop.rindex }}      {{ forloop.rindex0 }}
+{% endfor -%}
+```
+
+Output
+```
+index index0 rindex rindex0
+1     0      5      4
+2     1      4      3
+3     2      3      2
+4     3      2      1
+5     4      1      0
+```
+
+## Parameters
+
+### limit
+
+Limits the loop to the specified number of iterations.
+
+Input
+```liquid
+<!-- if array = [1,2,3,4,5,6] -->
+{% for item in array limit:2 %}
+  {{ item }}
+{% endfor %}
+```
+
+Output
+```text
+1 2
+```
+
+### offset
+
+Begins the loop at the specified index.
+
+Input
+```liquid
+<!-- if array = [1,2,3,4,5,6] -->
+{% for item in array offset:2 %}
+  {{ item }}
+{% endfor %}
+```
+
+Output
+```text
+3 4 5 6
+```
+
+### range
+
+Defines a range of numbers to loop through. The range can be defined by both literal and variable numbers.
+
+Input
+```liquid
+{% for i in (3..5) %}
+  {{ i }}
+{% endfor %}
+
+{% assign num = 4 %}
+{% for i in (1..num) %}
+  {{ i }}
+{% endfor %}
+```
+
+Output
+```text
+3 4 5
+1 2 3 4
+```
+
+### reversed
+
+Reverses the order of the loop. Note that this flag's spelling is different from the filter `reverse`.
+
+Input
+```liquid
+<!-- if array = [1,2,3,4,5,6] -->
+{% for item in array reversed %}
+  {{ item }}
+{% endfor %}
+```
+
+Output
+```text
+6 5 4 3 2 1
+```

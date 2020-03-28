@@ -27,6 +27,14 @@ describe('tags/cycle', function () {
     return expect(html).to.equal('1e1e1')
   })
 
+  it('should considered different groups for different arguments', async function () {
+    const src = "{% cycle '1', '2', '3'%}" +
+            "{% cycle '1', '2'%}" +
+            "{% cycle '1', '2', '3'%}"
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('112')
+  })
+
   it('should support cycle group', async function () {
     const src = "{% cycle one: '1', '2', '3'%}" +
             "{% cycle 1: '1', '2', '3'%}" +

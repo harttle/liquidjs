@@ -1,0 +1,55 @@
+#footer
+  clearfix()
+  padding: 24px 0
+  color: rgba(255, 255, 255, 0.6)
+  position: relative
+  background: color-navy
+  text-align: center
+  @media mq-normal
+    padding: 40px 0
+    text-align: left
+  @media print
+    display: none
+  a
+    color: inherit
+    text-decoration: none
+    transition: 0.2s
+    &:hover
+      color: #fff
+  .icon-twitter:hover
+      color: #1da1f2
+  .icon-patreon:hover
+      color: #f96854
+  .icon-opencollective:hover
+      color: #3384ff
+
+#footer-copyright
+  line-height: 1.4
+  @media mq-normal
+    float: left
+  a
+    font-weight: bold
+
+#footer-links
+  margin-top: 1em
+  @media mq-normal
+    float: right
+    margin-top: 0
+
+.footer-link
+  font-size: 20px
+  margin-left: 10px
+  &:first-child
+    margin-left: 0
+  @media mq-normal
+    font-size: 30px
+
+.icon-oc
+  height: 36px
+  width: 30px
+  display: inline-block
+  background-size: contain
+  background-repeat: no-repeat
+  vertical-align: text-bottom
+  fill: #a2a5a8
+  transition: 0.2s

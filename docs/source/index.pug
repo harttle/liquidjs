@@ -1,0 +1,29 @@
+layout: index
+description: LiquidJS is a simple, expressive and safe template engine.
+subtitle: A simple, expressive and safe template engine.
+---
+ul#intro-feature-list
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-shield
+      h3.intro-feature-title Safe Rendering
+      p.intro-feature-desc All outputs are automatically escaped for safe and customer facing HTML rendering. Operators and expressions are parsed to AST and no #[code eval] or #[code new Function] are used. 
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-javascript
+      h3.intro-feature-title Pure JavaScript
+      p.intro-feature-desc Written with zero npm dependencies and no native bindings, available for both Node.js and the browsers. All of the CMD, ESM and CJS bundles are available on CDN.
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-shopify
+      h3.intro-feature-title Shopify Compatible
+      p.intro-feature-desc Almost all features, filters and tags from Ruby #[a(href="https://github.com/shopify/liquid") shopify/liquid] are also supported by LiquidJS. #[a(href="https://jekyllrb.com/") Jekyll sites], #[a(href="https://pages.github.com/") Github Pages] and #[a(href="https://themes.shopify.com/") Shopify templates] can be ported to Node.js without pain.
+  li.intro-feature-wrap
+    .intro-feature
+      .intro-feature-icon
+        i.icon-cog
+      h3.intro-feature-title Extensibility
+      p.intro-feature-desc The whole repo is re-written in TypeScript strict mode to ensure the APIs are consistent and the documentation is always up to date. Apart from 60+ builtin tags and filters, LiquidJS provides APIs to register yours.

@@ -1,0 +1,34 @@
+title: LiquidJS
+subtitle: "A simple, expressive and safe template engine."
+description: "LiquidJS is a simple, expressive and safe template engine."
+author: Harttle
+language: en
+timezone: UTC
+
+url: https://harttle.land/liquidjs
+root: /
+permalink: news/:year/:month/:day/:title/
+archive_dir: news
+code_dir: downloads/code
+relative_link: true
+new_post_name: :year-:month-:day-:title.md # File name of new posts
+post_asset_folder: true
+per_page: 0
+pretty_urls:
+  trailing_index: false
+  trailing_html: false
+
+theme: navy
+
+highlight:
+  enable: true
+  line_number: false
+
+algolia:
+  applicationID: 0X19J927JZ
+  apiKey: 533161d821384919672e4ce8a39451b3
+  indexName: liquidjs
+twitter: harttleharttle
+github: harttle/liquidjs
+patreon: harttle
+oc: liquidjs

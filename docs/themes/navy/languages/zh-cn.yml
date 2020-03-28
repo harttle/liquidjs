@@ -1,0 +1,61 @@
+menu:
+  tutorials: 教程
+  tags: 标签
+  filters: 过滤器
+  playground: 演示
+  api: API
+  search: 搜索
+
+index:
+  get_started: 开始使用
+  contributors:
+    title: 贡献
+    description: 'LiquidJS 欢迎任何形式的贡献，可以从 <a href="tutorials/contribution-guidelines.html">阅读贡献指南</a> 开始！感谢这些参与过 LiquidJS 项目的人：'
+  sponsors:
+    title: 赞助
+    description: '如果你喜欢 LiquidJS 或你的公司在使用 LiquidJS，请考虑 <a href="tutorials/contribution-guidelines.html#成为赞助者！">赞助 LiquidJS</a>！'
+
+playground:
+  title: 演示
+  loading: 加载中...
+
+page:
+  contents: 目录
+  back_to_top: 回到顶部
+  improve: 改进本文
+  prev: 上一页
+  next: 下一页
+  last_updated: 上次更新：%s
+
+sidebar:
+  tutorials:
+    getting_started: 开始使用
+    overview: 概述
+    syntax: 基本语法
+    render_file: 渲染一个文件
+    partials: 引用和继承
+    express: 在 Express.js 里使用
+
+    advanced: 高级主题
+    caching: 缓存
+    registeration: 注册标签/过滤器
+    whitespace: 空白字符控制
+    plugins: 插件
+    operators: 运算符
+    truth: 真和假
+
+    miscellaneous: 其他
+    migration9: '迁移到 LiquidJS 9'
+    contribution_guidelines: '贡献指南'
+  filters:
+    overview: 概述
+  tags:
+    overview: 概述
+  api:
+    quick_entry: 快速入口
+    classes: 类
+    enums: 枚举
+    interfaces: 接口
+
+footer:
+  license: '本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a> 授权。'

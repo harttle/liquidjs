@@ -1,0 +1,36 @@
+{
+  "name": "liquidjs-website",
+  "version": "0.0.0",
+  "private": true,
+  "hexo": {
+    "version": "4.2.0"
+  },
+  "scripts": {
+    "build": "hexo generate",
+    "start": "hexo serve",
+    "eslint": "eslint ."
+  },
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "hexo": "hexojs/hexo",
+    "hexo-algolia": "^1.3.1",
+    "hexo-clean-css": "^1.0.0",
+    "hexo-filter-nofollow": "^2.0.2",
+    "hexo-generator-archive": "^1.0.0",
+    "hexo-generator-feed": "^2.0.0",
+    "hexo-generator-sitemap": "^2.0.0",
+    "hexo-renderer-marked": "^2.0.0",
+    "hexo-renderer-pug": "^1.0.0",
+    "hexo-renderer-stylus": "^1.0.0",
+    "hexo-server": "^1.0.0",
+    "hexo-uglify": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-hexo": "^4.0.0",
+    "all-contributors-cli": "^6.8.1"
+  },
+  "engines": {
+    "node": ">=8.10.0"
+  }
+}

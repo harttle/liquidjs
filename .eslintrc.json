@@ -30,5 +30,11 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "import/export": "off",
     "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }]
-  }
+  },
+  "overrides": [{
+    "files": ["**/*.js", "*.js"],
+    "rules": {
+      "@typescript-eslint/no-var-requires": "off"
+    }
+  }]
 }

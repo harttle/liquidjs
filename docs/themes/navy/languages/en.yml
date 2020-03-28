@@ -1,0 +1,60 @@
+menu:
+  tutorials: Tutorials
+  tags: Tags
+  filters: Filters
+  playground: Playground
+  api: API
+  search: Search
+
+index:
+  get_started: Get Started
+  contributors:
+    title: Contributors
+    description: 'LiquidJS follows the <a href="https://github.com/all-contributors/all-contributors">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guildelines here</a>! Thanks goes to these wonderful people:'
+  sponsors:
+    title: Backers
+    description: 'Love LiquidJS and want to contribute? <a href="https://opencollective.com/liquidjs">Become a backer</a>. Find out more <a href="tutorials/contribution-guidelines.html#Financial-Support">how to contribute</a>!'
+
+playground:
+  title: Playground
+  loading: Loading...
+
+page:
+  contents: Contents
+  back_to_top: Back to Top
+  improve: Improve this doc
+  prev: Prev
+  next: Next
+  last_updated: "Last updated: %s"
+
+sidebar:
+  tutorials:
+    getting_started: Getting Started
+    overview: Overview
+    syntax: Basic Syntax
+    render_file: Render Files
+    partials: Includes and Layouts
+    express: Use in Express.js
+
+    advanced: Advanced
+    caching: Caching
+    registeration: Register Filters/Tags
+    whitespace: Whitespace Control
+    plugins: Plugins
+    operators: Operators
+    truth: Truthy and Falsy
+
+    miscellaneous: Miscellaneous
+    migration9: 'Migrate to LiquidJS 9'
+    contribution_guidelines: 'Contribution Guidelines'
+  filters:
+    overview: Overview
+  tags:
+    overview: Overview
+  api:
+    quick_entry: Quick Entry
+    classes: Classes
+    enums: Enums
+    interfaces: Interfaces
+footer:
+  license: 'Documentation licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.'

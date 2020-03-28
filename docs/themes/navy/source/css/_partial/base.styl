@@ -1,0 +1,53 @@
+global-reset()
+
+html
+  box-sizing: border-box
+
+*, *:before, *:after
+  box-sizing: inherit
+
+button
+input[type="reset"]
+input[type="button"]
+input[type="submit"]
+  &::-moz-focus-inner
+    padding: 0
+    margin: 0
+    border: 0
+
+input, button, select
+  margin: 0
+  padding: 0
+  border: 0
+
+body
+  background: color-navy
+  font-size: font-size
+  font-family: font-sans
+  color: color-default
+  text-rendering: optimizeLegibility
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  overflow-x: hidden
+
+@media screen and (max-device-width: 480px)
+  body
+    -webkit-text-size-adjust: none;
+
+.wrapper
+  @media screen
+    max-width: max-width
+    margin: 0 auto
+
+.inner
+  @media screen
+    padding: 0 gutter-width
+
+#content-wrap
+  background: #fff
+  border-top: 1px solid darken(color-navy, 5%)
+  border-bottom: 1px solid darken(color-navy, 5%)
+  margin: -1px 0
+  
+.video-container
+  text-align: center
