@@ -17,10 +17,12 @@ jobs:
       script: npm run build
       deploy:
         provider: script
+        skip_cleanup: true
         script: npx semantic-release
     - name: 'Document'
       if: branch = master
       script: npm run build-docs
-      provider: pages
-      github_token: $GITHUB_TOKEN
-      local_dir: docs/public
+      deploy:
+        skip_cleanup: true
+        provider: pages
+        local_dir: docs/public
