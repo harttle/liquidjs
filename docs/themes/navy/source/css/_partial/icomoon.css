@@ -31,9 +31,6 @@ i {
 .icon-network:before {
   content: "\e902";
 }
-.icon-javascript:before {
-  content: "\e901";
-}
 .icon-opencollective:before {
   content: "\e903";
 }
@@ -42,9 +39,6 @@ i {
 }
 .icon-search:before {
   content: "\f002";
-}
-.icon-cog:before {
-  content: "\f013";
 }
 .icon-gear:before {
   content: "\f013";
@@ -69,4 +63,10 @@ i {
 }
 .icon-shield:before {
   content: "\f132";
+}
+.icon-rocket:before {
+  content: "\e9a5";
+}
+.icon-typescript:before {
+  content: "\e900";
 }

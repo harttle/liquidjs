@@ -30,16 +30,17 @@ page:
 sidebar:
   tutorials:
     getting_started: 开始使用
-    setup: 安装和引入
-    syntax: 基本语法
-    render_file: 渲染一个文件
-    partials: 引用和继承
-    express: 在 Express.js 里使用
+    intro: Liquid 简介
+    setup: 安装
+    options: 选项
+    render_file: 文件渲染
+    partials: 引用/继承
+    express: Express.js 中使用
 
     advanced: 高级主题
     caching: 缓存
     registeration: 注册标签/过滤器
-    whitespace: 空白字符控制
+    whitespace: 换行和缩进
     plugins: 插件
     operators: 运算符
     truth: 真和假
@@ -47,6 +48,7 @@ sidebar:
     miscellaneous: 其他
     migration9: '迁移到 LiquidJS 9'
     contribution_guidelines: '贡献指南'
+    changelog: '更新日志'
   filters:
     overview: 概述
   tags:

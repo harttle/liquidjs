@@ -4,3 +4,4 @@ source/zh-cn/api/
 .vuepress
 db.json
 public
+changelog.md

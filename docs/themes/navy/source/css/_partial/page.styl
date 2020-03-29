@@ -50,7 +50,7 @@ note-warn = hsl(0, 100%, 50%)
   overflow-y: auto
 
 #article-toc-top
-  margin-top: 10px
+  margin-top: 13px
   font-size: 0.9em
   text-decoration: none
   color: color-default
@@ -134,6 +134,14 @@ note-warn = hsl(0, 100%, 50%)
       &:after
         content: " (" attr(href) ")"
         font-size: 80%
+    &[target="_blank"]
+      position: relative
+      &::after
+        content: '\00f08e'
+        font-family: 'icomoon'
+        padding-left: 3px;
+        vertical-align: super;
+        zoom: .7
   strong
     font-weight: bold
   em
@@ -180,10 +188,12 @@ note-warn = hsl(0, 100%, 50%)
     &.warn
       border-left-color: note-warn
   .note-title
-    margin: 1em 0
+    margin: 1em 0 0.5em
     display: block
     font-size: 1.3em
     font-weight: bold
+    + *
+      margin-top: 0
   table
     max-width: 100%
     border: 1px solid color-border

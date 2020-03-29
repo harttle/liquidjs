@@ -1,7 +1,8 @@
 tutorials:
   getting_started:
+    intro: intro-to-liquid.html
     setup: setup.html
-    syntax: syntax.html
+    options: options.html
     render_file: render-file.html
     partials: partials-and-layouts.html
     express: use-in-expressjs.html
@@ -14,6 +15,7 @@ tutorials:
     truth: truthy-and-falsy.html
   miscellaneous:
     migration9: migrate-to-9.html
+    changelog: changelog.html
     contribution_guidelines: contribution-guidelines.html
 
 filters:
