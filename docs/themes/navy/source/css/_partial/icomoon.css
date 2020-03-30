@@ -70,3 +70,6 @@ i {
 .icon-typescript:before {
   content: "\e900";
 }
+.icon-chat-bubble-dots:before {
+  content: "\e901";
+}

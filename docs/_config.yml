@@ -5,7 +5,7 @@ author: Harttle
 language: en
 timezone: UTC
 
-url: https://harttle.land/liquidjs
+url: https://liquidjs.com
 root: /
 permalink: news/:year/:month/:day/:title/
 archive_dir: news

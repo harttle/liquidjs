@@ -8,7 +8,11 @@
             <div class="inner">
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">{{ page.title }}</h1>
+                {% if page.auto %}
+                <a href="https://github.com/harttle/liquidjs/issues/new?title=docs:&body={{"URL: " + url | url_encode}}&labels=docs" class="article-edit-link" title="{{ __('page.report') }}"><i class="icon-chat-bubble-dots"></i></a>
+                {% else %}
                 <a href="{{ raw_link(page.source) }}" class="article-edit-link" title="{{ __('page.improve') }}"><i class="icon-pencil"></i></a>
+                {% endif %}
               </header>
               <div class="article-content" itemprop="articleBody">
                 {{ page_anchor(page.content) }}

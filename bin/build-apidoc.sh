@@ -15,7 +15,7 @@ for file in $(find docs/source/api -name "*.md"); do
         -e '1 s/</\&lt;/g' \
         -e '1 s/>/\&gt;/g' \
         -e '1 s/\*//g' \
-        -e '1 s/^# \(.*\)/---\ntitle: "\1"\n---/' \
+        -e '1 s/^# \(.*\)/---\ntitle: "\1"\nauto: true\n---/' \
         $file
     target=${file/\/_/\/}
     if [ "$file" != "$target" ]; then

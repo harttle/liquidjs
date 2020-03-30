@@ -23,6 +23,7 @@ page:
   contents: Contents
   back_to_top: Back to Top
   improve: Improve this doc
+  report: Report problems
   prev: Prev
   next: Next
   last_updated: "Last updated: %s"

@@ -79,6 +79,7 @@
       tabSize: 2,
       useSoftTabs: true
     });
+    editor.renderer.setScrollMargin(15);
     return editor;
   }
 
