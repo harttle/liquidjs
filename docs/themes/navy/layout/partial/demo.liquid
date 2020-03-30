@@ -4,7 +4,7 @@
 {%- for person in people %}
   <li>
     <a href="{{person | prepend: "http://example.com/"}}">
-      {{ person | captilize }}
+      {{ person | capitalize }}
     </a>
   </li>
 {%- endfor%}
