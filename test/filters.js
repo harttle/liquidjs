@@ -20,10 +20,10 @@ var ctx = {
     category: 'bar'
   }],
 
-  duration_10_weeks: {value: 10, type: "weeks"},
-  duration_20_days: {value: 20, type: "days"},
-  duration_2_months: {value: 2, type: "months"},
-  duration_3_years: {value: 3, type: "years"},
+  duration_10_weeks: {value: 10, type: "WEEKS", days: 70},
+  duration_20_days: {value: 20, type: "DAYS", days: 20},
+  duration_2_months: {value: 2, type: "MONTHS", days: 60},
+  duration_3_years: {value: 3, type: "YEARS", days: 1095},
 
   from_date: new Date("March 17, 2020"),
   to_date: new Date("March 17, 2022")
@@ -194,10 +194,10 @@ describe('filters', function () {
       () => test('{{ 183.357 | minus: 12 }}', '171.357'))
     it('should convert first arg as number', () => test('{{ "4" | minus: 1 }}', '3'))
     it('should convert both args as number', () => test('{{ "4" | minus: "1" }}', '3'))
-    it('should return {"type":"days","value":730}', () => {
+    it('should return {"type":"days","value":730,"days": 730}', () => {
       try {
-        const dst = {type: "days", value: 730};
-        return test('{% assign duration = from_date | minus: to_date %}{{duration}}', JSON.stringify(dst))
+        const dst = {type: "DAYS", value: 730, days: 730};
+        return test('{% assign duration = to_date | minus: from_date %}{{duration}}', JSON.stringify(dst))
       } catch(e) {
         console.error(e.message)
       }
@@ -247,12 +247,12 @@ describe('filters', function () {
       const dst = new Date(moment(new Date()).add(3, "years")).toDateString()
       return test('{{ date | plus: duration_3_years | date: "%a %b %d %Y"}}', dst)
     })
-    it('should return {type: "days", value: 80};', () => {
-      const dst = {type: "days", value: 80};
+    it('should return {type: "days", value: 80, days: 80};', () => {
+      const dst = {type: "DAYS", value: 80, days: 80};
       return test('{{ duration_20_days | plus: duration_2_months }}', JSON.stringify(dst))
     })
-    it('should return {type: "days", value: 130};', () => {
-      const dst = {type: "days", value: 130};
+    it('should return {type: "days", value: 130, days: 130};', () => {
+      const dst = {type: "DAYS", value: 130, days: 130};
       return test('{{ duration_10_weeks | plus: duration_2_months }}', JSON.stringify(dst))
     })
   })
