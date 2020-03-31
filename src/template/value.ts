@@ -16,7 +16,6 @@ export class Value {
     const tokenizer = new Tokenizer(str)
     this.initial = tokenizer.readValue()
     this.filters = tokenizer.readFilters().map(({ name, args }) => new Filter(name, this.filterMap.get(name), args))
-    tokenizer.skipBlank()
   }
   public * value (ctx: Context) {
     let val = yield evalToken(this.initial, ctx)

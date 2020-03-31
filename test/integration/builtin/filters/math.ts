@@ -1,13 +1,10 @@
 import { expect } from 'chai'
 import { test, liquid } from '../../../stub/render'
-import { Liquid } from '../../../../src/liquid'
 
 describe('filters/math', function () {
-  const l = new Liquid()
-
   describe('abs', function () {
     it('should return 3 for -3', () => test('{{ -3 | abs }}', '3'))
-    it('should return 2 for arr[0]', () => test('{{ arr[0] | abs }}', '2'))
+    it('should return 2 for arr[0]', () => test('{{ arr[0] | abs }}', { arr: [-2, 'a'] }, '2'))
     it('should return convert string', () => test('{{ "-3" | abs }}', '3'))
   })
   describe('at_least', function () {
@@ -60,10 +57,7 @@ describe('filters/math', function () {
       () => test('{{ 183.357 | plus: 12 }}', '195.357'))
     it('should convert first arg as number', () => test('{{ "4" | plus: 2 }}', '6'))
     it('should convert both args as number', () => test('{{ "4" | plus: "2" }}', '6'))
-    it('should support variable', async () => {
-      const html = await l.parseAndRender('{{ 4 | plus: b }}', { b: 2 })
-      expect(html).to.equal('6')
-    })
+    it('should support variable', () => test('{{ 4 | plus: b }}', { b: 2 }, '6'))
   })
 
   describe('sort_natural', function () {
@@ -73,55 +67,36 @@ describe('filters/math', function () {
         'giraffe, octopus, Sally Snake, zebra'
       )
     })
-    it('should sort with specified property', async () => {
-      const src = '{{ students | sort_natural: "name" | map: "name" | join }}'
-      const students = [{ name: 'bob' }, { name: 'alice' }, { name: 'carol' }]
-      const html = await l.parseAndRender(src, { students })
-      expect(html).to.equal('alice bob carol')
-    })
-    it('should be stable', async () => {
-      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
-      const students = [
-        { name: 'bob', age: 1 },
-        { name: 'alice', age: 1 },
-        { name: 'carol', age: 1 }
-      ]
-      const html = await l.parseAndRender(src, { students })
-      expect(html).to.equal('bob alice carol')
-    })
-    it('should be stable when it comes to undefined props', async () => {
-      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
-      const students = [
-        { name: 'bob' },
-        { name: 'alice', age: 2 },
-        { name: 'amber' },
-        { name: 'watson' },
-        { name: 'michael' },
-        { name: 'charlie' }
-      ]
-      const html = await l.parseAndRender(src, { students })
-      expect(html).to.equal('alice bob amber watson michael charlie')
-    })
-    it('should tolerate undefined props', async () => {
-      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
-      const students = [
-        { name: 'bob' },
-        { name: 'alice', age: 2 },
-        { name: 'carol' }
-      ]
-      const html = await l.parseAndRender(src, { students })
-      expect(html).to.equal('alice bob carol')
-    })
-    it('should tolerate non array', async () => {
-      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
-      const html = await l.parseAndRender(src, { students: {} })
-      expect(html).to.equal('')
-    })
-    it('should tolerate falsy input', async () => {
-      const src = '{{ students | sort_natural: "age" | map: "name" | join }}'
-      const html = await l.parseAndRender(src, { students: undefined })
-      expect(html).to.equal('')
-    })
+    it('should sort with specified property', () => test(
+      '{{ students | sort_natural: "name" | map: "name" | join }}',
+      { students: [{ name: 'bob' }, { name: 'alice' }, { name: 'carol' }] },
+      'alice bob carol'
+    ))
+    it('should be stable', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: [{ name: 'bob', age: 1 }, { name: 'alice', age: 1 }, { name: 'carol', age: 1 }] },
+      'bob alice carol'
+    ))
+    it('should be stable when it comes to undefined props', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: [{ name: 'bob' }, { name: 'alice', age: 2 }, { name: 'amber' }, { name: 'watson' }, { name: 'michael' }, { name: 'charlie' }] },
+      'alice bob amber watson michael charlie'
+    ))
+    it('should tolerate undefined props', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: [{ name: 'bob' }, { name: 'alice', age: 2 }, { name: 'carol' }] },
+      'alice bob carol'
+    ))
+    it('should tolerate non array', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: {} },
+      ''
+    ))
+    it('should tolerate falsy input', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: undefined },
+      ''
+    ))
   })
   describe('round', function () {
     it('should return "1" for 1.2', () => test('{{1.2|round}}', '1'))

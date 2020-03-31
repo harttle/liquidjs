@@ -10,7 +10,7 @@ describe('filters/html', function () {
       return test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara')
     })
     it('should escape function', function () {
-      return test('{{ func | escape }}', 'function () { }')
+      return test('{{ func | escape }}', { func: function () {} }, 'function () { }')
     })
     it('should escape undefined', function () {
       return test('{{ nonExistent.value | escape }}', '')

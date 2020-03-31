@@ -1,19 +1,14 @@
 import { test } from '../../../stub/render'
-import { Liquid } from '../../../../src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
 use(chaiAsPromised)
 
 describe('filters/string', function () {
-  let liquid: Liquid
-  beforeEach(function () {
-    liquid = new Liquid()
-  })
   describe('append', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
-    it('should return "abar" for "a", foo', () => test('{{ "a" | append: foo }}', 'abar'))
+    it('should return "abar" for "a", foo', () => test('{{ "a" | append: foo }}', { foo: 'bar' }, 'abar'))
     it('should throw if second argument undefined', () => {
       return expect(test('{{ "abc" | append: undefinedVar }}', 'abc')).to.be.rejectedWith(/2 arguments/)
     })
@@ -25,7 +20,7 @@ describe('filters/string', function () {
   describe('prepend', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | prepend: "abc" }}', 'abc-3'))
-    it('should return "abar" for "a", foo', () => test('{{ "a" | prepend: foo }}', 'bara'))
+    it('should return "abar" for "a", foo', () => test('{{ "a" | prepend: foo }}', { foo: 'bar' }, 'bara'))
     it('should throw if second argument undefined', () => {
       return expect(test('{{ "abc" | prepend: undefinedVar }}', 'abc')).to.be.rejectedWith(/2 arguments/)
     })
@@ -35,18 +30,9 @@ describe('filters/string', function () {
     it('should return "falseabc" for "abc", false', () => test('{{ "abc" | prepend: false }}', 'falseabc'))
   })
   describe('capitalize', function () {
-    it('should capitalize first', async () => {
-      const html = await liquid.parseAndRender('{{ "i am good" | capitalize }}')
-      expect(html).to.equal('I am good')
-    })
-    it('should return empty for nil', async () => {
-      const html = await liquid.parseAndRender('{{ nil | capitalize }}')
-      expect(html).to.equal('')
-    })
-    it('should return empty for undefined', async () => {
-      const html = await liquid.parseAndRender('{{ foo | capitalize }}')
-      expect(html).to.equal('')
-    })
+    it('should capitalize first', () => test('{{ "i am good" | capitalize }}', 'I am good'))
+    it('should return empty for nil', () => test('{{ nil | capitalize }}', ''))
+    it('should return empty for undefined', async () => test('{{ foo | capitalize }}', ''))
   })
   describe('concat', function () {
     it('should concat arrays', () => test(`
@@ -84,18 +70,13 @@ describe('filters/string', function () {
       `))
   })
   describe('downcase', function () {
-    it('should return "parker moore" for "Parker Moore"', async () => {
-      const html = await liquid.parseAndRender('{{ "Parker Moore" | downcase }}')
-      expect(html).to.equal('parker moore')
-    })
-    it('should return "apple" for "apple"', async () => {
-      const html = await liquid.parseAndRender('{{ "apple" | downcase }}')
-      expect(html).to.equal('apple')
-    })
-    it('should return empty for undefined', async () => {
-      const html = await liquid.parseAndRender('{{ foo | downcase }}')
-      expect(html).to.equal('')
-    })
+    it('should return "parker moore" for "Parker Moore"', () =>
+      test('{{ "Parker Moore" | downcase }}', 'parker moore')
+    )
+    it('should return "apple" for "apple"', () =>
+      test('{{ "apple" | downcase }}', 'apple')
+    )
+    it('should return empty for undefined', () => test('{{ foo | downcase }}', ''))
   })
   describe('split', function () {
     it('should support split/first', function () {
@@ -105,14 +86,8 @@ describe('filters/string', function () {
     })
   })
   describe('upcase', function () {
-    it('should support upcase', async () => {
-      const html = await liquid.parseAndRender('{{ "Parker Moore" | upcase }}')
-      expect(html).to.equal('PARKER MOORE')
-    })
-    it('should return empty for undefined', async () => {
-      const html = await liquid.parseAndRender('{{ foo | upcase }}')
-      expect(html).to.equal('')
-    })
+    it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
+    it('should return empty for undefined', () => test('{{ foo | upcase }}', ''))
   })
   it('should support lstrip', function () {
     const src = '{{ "          So much room for activities!          " | lstrip }}'
@@ -124,24 +99,15 @@ describe('filters/string', function () {
     'liquidmarkup.com/index.html')
   })
   describe('remove', function () {
-    it('should support remove', async () => {
-      const html = await liquid.parseAndRender('{{ "I strained to see the train through the rain" | remove: "rain" }}')
-      expect(html).to.equal('I sted to see the t through the ')
-    })
-    it('should return empty for undefined', async () => {
-      const html = await liquid.parseAndRender('{{ foo | remove: "rain" }}')
-      expect(html).to.equal('')
-    })
+    it('should support remove', () => test(
+      '{{ "I strained to see the train through the rain" | remove: "rain" }}',
+      'I sted to see the t through the '
+    ))
+    it('should return empty for undefined', () => test('{{ foo | remove: "rain" }}', ''))
   })
   describe('remove_first', function () {
-    it('should support remove_first', async () => {
-      const html = await liquid.parseAndRender('{{ "I strained to see the train through the rain" | remove_first: "rain" }}')
-      expect(html).to.equal('I sted to see the train through the rain')
-    })
-    it('should return empty for undefined', async () => {
-      const html = await liquid.parseAndRender('{{ foo | remove_first: "r" }}')
-      expect(html).to.equal('')
-    })
+    it('should support remove_first', () => test('{{ "I strained to see the train through the rain" | remove_first: "rain" }}', 'I sted to see the train through the rain'))
+    it('should return empty for undefined', () => test('{{ foo | remove_first: "r" }}', ''))
   })
   it('should support replace', function () {
     return test('{{ "Take my protein pills and put my helmet on" | replace: "my", "your" }}',

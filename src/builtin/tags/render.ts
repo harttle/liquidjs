@@ -1,6 +1,6 @@
 import { assert } from '../../util/assert'
 import { ForloopDrop } from '../../drop/forloop-drop'
-import { toCollection } from '../../util/collection'
+import { toEnumerable } from '../../util/collection'
 import { evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 
 export default {
@@ -60,7 +60,7 @@ export default {
     if (this['for']) {
       const { value, alias } = this['for']
       let collection = evalToken(value, ctx)
-      collection = toCollection(collection)
+      collection = toEnumerable(collection)
       scope['forloop'] = new ForloopDrop(collection.length)
       for (const item of collection) {
         scope[alias] = item

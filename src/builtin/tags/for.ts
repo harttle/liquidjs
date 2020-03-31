@@ -1,5 +1,5 @@
 import { assert, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
-import { toCollection } from '../../util/collection'
+import { toEnumerable } from '../../util/collection'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { Hash } from '../../template/tag/hash'
 
@@ -36,7 +36,7 @@ export default {
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    let collection = toCollection(evalToken(this.collection, ctx))
+    let collection = toEnumerable(evalToken(this.collection, ctx))
 
     if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)
