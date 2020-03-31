@@ -1,3 +1,10 @@
+## [9.11.9](https://github.com/harttle/liquidjs/compare/v9.11.8...v9.11.9) (2020-03-31)
+
+
+### Bug Fixes
+
+* coerce to Array in `map` and `where` filter ([c923598](https://github.com/harttle/liquidjs/commit/c923598))
+
 ## [9.11.8](https://github.com/harttle/liquidjs/compare/v9.11.7...v9.11.8) (2020-03-31)
 
 
