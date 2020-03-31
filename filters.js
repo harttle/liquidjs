@@ -155,28 +155,21 @@ function getObjectValues(obj = {}) {
   });
   return resultObj;
 }
-function calculateDurationInDays(fromDate, toDate) {
+function calculateDurationInDays(toDate, fromDate) {
   const durationInMilliSeconds = toDate.getTime() - fromDate.getTime();
   const durationInDays = durationInMilliSeconds/(1000*3600*24);
   if(durationInDays < 0) {
     throw new Error("toDate should be greater than fromDate");
   }
   return {
-    type: "days",
-    value: durationInDays
+    type: "DAYS",
+    value: durationInDays,
+    days: durationInDays
   }
 }
-function addDuration(v, arg) {
-  const v_days = computeDaysFromUnit(v.value, v.type);
-  const arg_days = computeDaysFromUnit(arg.value, arg.type);
-  const total_days = v_days + arg_days;
-  return {
-    type: "days",
-    value: total_days
-  }
-}
+
 function checkIfDurationObjects(v, arg) {
-  const units = ['days', 'weeks', 'months', 'years'];
+  const units = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
   if(units.indexOf(v.type) != -1 && units.indexOf(arg.type) != -1) {
     return true;
   }
@@ -200,7 +193,7 @@ function performOperations(v, arg, operation) {
     return operationOnDate(v, arg, operation);
   }
   if (Object.prototype.toString.call(v) === '[object Date]' && typeof arg === "object") {
-    const addType = ['days', 'weeks', 'months', 'years'];
+    const addType = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
     const {value, type} = arg;
     if (value && addType.indexOf(type) != -1) {
       return operationOnDate(v, arg, operation);
@@ -211,8 +204,12 @@ function performOperations(v, arg, operation) {
   if (typeof v === "object" && typeof arg === "object") {
     const isDurationObjects = checkIfDurationObjects(v, arg)
     if(isDurationObjects) {
-      const result = addDuration(v, arg);
-      return result;
+      const total_days = operationOnItem(v.days, arg.days, operation);
+      return {
+        type: "DAYS",
+        value: total_days,
+        days: total_days
+      }
     }
     result = Object.assign(getObjectValues(arg), getObjectValues(v));
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
@@ -272,21 +269,6 @@ function operationOnDate(v, arg, operation) {
       return calculateDurationInDays(v, arg);
     default:
       throw new Error(`${operation}, not supported`)
-  }
-}
-
-function computeDaysFromUnit(value, type) {
-  switch(type) {
-    case "days":
-      return value;
-    case "weeks":
-      return value * 7;
-    case "months":
-      return value * 30;
-    case "years":
-      return value * 365;
-    default:
-      return 0;
   }
 }
 
