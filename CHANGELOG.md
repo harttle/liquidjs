@@ -1,3 +1,10 @@
+## [9.11.8](https://github.com/harttle/liquidjs/compare/v9.11.7...v9.11.8) (2020-03-31)
+
+
+### Bug Fixes
+
+* throw an error if : omitted unintentionally, [#212](https://github.com/harttle/liquidjs/issues/212), [#208](https://github.com/harttle/liquidjs/issues/208) ([8daf281](https://github.com/harttle/liquidjs/commit/8daf281))
+
 ## [9.11.7](https://github.com/harttle/liquidjs/compare/v9.11.6...v9.11.7) (2020-03-28)
 
 
