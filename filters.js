@@ -1,6 +1,7 @@
 const strftime = require("./src/util/strftime.js");
 const _ = require("./src/util/underscore.js");
 const isTruthy = require("./src/syntax.js").isTruthy;
+const moment = require("moment");
 
 var escapeMap = {
   "&": "&amp;",
@@ -9,6 +10,7 @@ var escapeMap = {
   '"': "&#34;",
   "'": "&#39;"
 };
+
 var unescapeMap = {
   "&amp;": "&",
   "&lt;": "<",
@@ -39,7 +41,6 @@ var filters = {
   divided_by: (v, arg) => divide(v, arg),
   downcase: v => v.toLowerCase(),
   escape: escape,
-
   escape_once: str => escape(unescape(str)),
   first: v => v[0],
   floor: v => Math.floor(v),
@@ -146,7 +147,7 @@ function filterNumericKeysFromObject(obj) {
   return Object.keys(obj).filter(key => !Number.isNaN(parseInt(obj[key])));
 }
 
-function getObjectValues(obj) {
+function getObjectValues(obj = {}) {
   let resultObj = {};
   keys = Object.keys(obj);
   keys.forEach(key => {
@@ -154,7 +155,33 @@ function getObjectValues(obj) {
   });
   return resultObj;
 }
-
+function calculateDurationInDays(fromDate, toDate) {
+  const durationInMilliSeconds = toDate.getTime() - fromDate.getTime();
+  const durationInDays = durationInMilliSeconds/(1000*3600*24);
+  if(durationInDays < 0) {
+    throw new Error("toDate should be greater than fromDate");
+  }
+  return {
+    type: "days",
+    value: durationInDays
+  }
+}
+function addDuration(v, arg) {
+  const v_days = computeDaysFromUnit(v.value, v.type);
+  const arg_days = computeDaysFromUnit(arg.value, arg.type);
+  const total_days = v_days + arg_days;
+  return {
+    type: "days",
+    value: total_days
+  }
+}
+function checkIfDurationObjects(v, arg) {
+  const units = ['days', 'weeks', 'months', 'years'];
+  if(units.indexOf(v.type) != -1 && units.indexOf(arg.type) != -1) {
+    return true;
+  }
+  return false;
+}
 function subtract(v, arg) {
   return performOperations(v, arg, "SUBTRACT");
 }
@@ -167,8 +194,26 @@ function add(v, arg) {
   return performOperations(v, arg, "ADD");
 }
 
+
 function performOperations(v, arg, operation) {
+  if(Object.prototype.toString.call(v) === '[object Date]' && Object.prototype.toString.call(arg) === '[object Date]') {
+    return operationOnDate(v, arg, operation);
+  }
+  if (Object.prototype.toString.call(v) === '[object Date]' && typeof arg === "object") {
+    const addType = ['days', 'weeks', 'months', 'years'];
+    const {value, type} = arg;
+    if (value && addType.indexOf(type) != -1) {
+      return operationOnDate(v, arg, operation);
+    }else {
+      throw new Error("value or type is incorrect.")
+    }
+  } 
   if (typeof v === "object" && typeof arg === "object") {
+    const isDurationObjects = checkIfDurationObjects(v, arg)
+    if(isDurationObjects) {
+      const result = addDuration(v, arg);
+      return result;
+    }
     result = Object.assign(getObjectValues(arg), getObjectValues(v));
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
     const numberKeysOfV = filterNumericKeysFromObject(v);
@@ -182,24 +227,28 @@ function performOperations(v, arg, operation) {
       return result;
     } else {
       console.warn("The objects don't have any common numeric attributes");
+      return;
     }
-  } else if (typeof v === "number" && typeof arg === "object") {
+  } 
+  if (typeof v === "number" && typeof arg === "object") {
     result = getObjectValues(arg);
     const numberKeys = filterNumericKeysFromObject(arg);
     numberKeys.forEach(key => {
       result[key] = operationOnItem(v, arg[key], operation);
     });
     return result;
-  } else if (typeof v === "object" && typeof arg === "number") {
+  } 
+  if (typeof v === "object" && typeof arg === "number") {
     result = getObjectValues(v);
     const numberKeys = filterNumericKeysFromObject(v);
     numberKeys.forEach(key => {
       result[key] = operationOnItem(v[key], arg, operation);
     });
     return result;
-  } else {
-    return operationOnItem(v, arg, operation);
-  }
+  } 
+    
+  return operationOnItem(v, arg, operation);
+  
 }
 
 function operationOnItem(v, arg, operation) {
@@ -214,6 +263,33 @@ function operationOnItem(v, arg, operation) {
       return v * arg;
   }
 }
+
+function operationOnDate(v, arg, operation) {
+  switch(operation) {
+    case "ADD":
+      return new Date(moment(v).add(arg.value, arg.type));
+    case "SUBTRACT":
+      return calculateDurationInDays(v, arg);
+    default:
+      throw new Error(`${operation}, not supported`)
+  }
+}
+
+function computeDaysFromUnit(value, type) {
+  switch(type) {
+    case "days":
+      return value;
+    case "weeks":
+      return value * 7;
+    case "months":
+      return value * 30;
+    case "years":
+      return value * 365;
+    default:
+      return 0;
+  }
+}
+
 
 registerAll.filters = filters;
 module.exports = registerAll;

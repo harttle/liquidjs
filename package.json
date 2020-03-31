@@ -35,6 +35,7 @@
   "homepage": "https://github.com/harttle/liquidjs#readme",
   "dependencies": {
     "any-promise": "^1.3.0",
+    "moment": "^2.24.0",
     "resolve-url": "^0.2.1"
   },
   "browser": {
