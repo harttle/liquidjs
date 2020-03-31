@@ -1,6 +1,8 @@
 ---
-title: Basic Syntax
+title: Introduction to Liquid Template Language
 ---
+
+LiquidJS is a simple, expressive, safe and shopify compatible template engine in pure JavaScript. The purpose of this repo is to provide a standard Liquid implementation for the JavaScript community. Liquid is originally implemented in Ruby and used by Github Pages, Jekyll and Shopify, see [Differences with Shopify/liquid][diff].
 
 LiquidJS syntax is relatively simple. There're 2 types of markups in LiquidJS:
 
@@ -50,3 +52,4 @@ Typically tags appear in pairs with a start tag and a corresponding end tag. For
 A complete list of tags supported by LiquidJS can be found [here](../tags/overview.html).
 
 [shopify/liquid]: https://github.com/Shopify/liquid
+[diff]: ./differences.html

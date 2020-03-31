@@ -2,7 +2,7 @@
 title: Setup
 ---
 
-LiquidJS is a simple, expressive, safe and shopify compatible template engine in pure JavaScript. The purpose of this repo is to provide a standard Liquid implementation for the JavaScript community.
+In case you're not familiar with Liquid Template Language, see [Introduction to Liquid Template Language][intro].
 
 ## LiquidJS in Node.js
 
@@ -68,3 +68,5 @@ echo 'Hello, {{ name }}.' | npx liquidjs '{"name": "Snake"}'
 ## Miscellaneous
 
 A ReactJS demo is also added by [@stevenanthonyrevo](https://github.com/stevenanthonyrevo), see [liquidjs/demo/reactjs/](https://github.com/harttle/liquidjs/blob/master/demo/reactjs/).
+
+[intro]: ./intro-to-liquid.html

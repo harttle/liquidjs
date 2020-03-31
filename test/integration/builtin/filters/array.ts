@@ -1,6 +1,8 @@
 import { test } from '../../../stub/render'
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+use(chaiAsPromised)
 
 describe('filters/array', function () {
   let liquid: Liquid
@@ -24,6 +26,11 @@ describe('filters/array', function () {
       const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
         '{{ beatles | join }}'
       return test(src, 'John Paul George Ringo')
+    })
+    it('should throw when comma missing', async () => {
+      const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
+        '{{ beatles | join " and " }}'
+      return expect(liquid.parseAndRender(src)).to.be.rejectedWith('unexpected token at "\\" and \\"", line:1, col:65')
     })
   })
   it('should support split/last', function () {

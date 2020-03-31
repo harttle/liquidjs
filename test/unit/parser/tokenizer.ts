@@ -207,6 +207,11 @@ describe('Tokenize', function () {
       expect(token).to.have.property('name', 'plus')
       expect(token).to.have.property('args').to.deep.equal([])
     })
+    it('should read null if name not found', function () {
+      const tokenizer = new Tokenizer('|')
+      const token = tokenizer.readFilter()
+      expect(token).to.be.null
+    })
     it('should read a filter with k/v argument', function () {
       const tokenizer = new Tokenizer(' | plus: a:1')
       const token = tokenizer.readFilter()

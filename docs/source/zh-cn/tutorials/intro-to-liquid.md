@@ -1,6 +1,8 @@
 ---
-title: 基本语法
+title: Liquid 模板语言简介
 ---
+
+LiquidJS 是一个简单的、安全的、兼容 Shopify 的、纯 JavaScript 编写的模板引擎。这个项目的目的是为 JavaScript 社区提供一个 Liquid 模板引擎的实现。Liquid 最初用 Ruby 实现并用于 Github Pages, Jekyll 和 Shopify，参考 [和 Shopify/liquid 的区别][diff]。
 
 LiquidJS 语法相对简单。LiquidJS 中有两种标记：
 
@@ -50,3 +52,4 @@ LiquidJS 语法相对简单。LiquidJS 中有两种标记：
 [这里](../tags/overview.html) 是 LiquidJS 支持的完整的标签列表。
 
 [shopify/liquid]: https://github.com/Shopify/liquid
+[diff]: ./differences.html

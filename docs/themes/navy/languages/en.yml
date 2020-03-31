@@ -50,6 +50,7 @@ sidebar:
     migration9: 'Migrate to LiquidJS 9'
     contribution_guidelines: 'Contribution Guidelines'
     changelog: 'Changelog'
+    differences: Differences with Shopify/liquid
   filters:
     overview: Overview
   tags:

@@ -19,6 +19,8 @@ A simple, expressive, safe and [Shopify][shopify/liquid] compatible template eng
 * Please star [LiquidJS on GitHub][github]!
 * Support [LiquidJS on Open Collective][oc] or [Patreon][patreon]
 
+<p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
+
 ## Installation
 
 Install from npm in Node.js:
@@ -34,18 +36,6 @@ Or use the UMD bundle from jsDelivr:
 ```
 
 More details, refer to [The Setup Guide][setup].
-
-## Differences with Shopify/liquid
-
-All features, filters and tags in [shopify/liquid](https://github.com/Shopify/liquid) are supposed to be built in LiquidJS, but not those business-logic specific filters/tags which are typically from Shopify themes (see [Plugins List][plugins] in case you're looking for them and feel free to add yours to the list). Though being compatible the Ruby version is one of our priorities, there are still some differences:
-
-* Dynamic file locating (enabled by default), that means layout/partial names are treated as variables in liquidjs. See [#51](https://github.com/harttle/liquidjs/issues/51).
-* Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26](https://github.com/harttle/liquidjs/pull/26).
-* Number. In JavaScript we cannot distinguish or convert between `float` and `integer`, see [#59](https://github.com/harttle/liquidjs/issues/59). And when applied `size` filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a `length` property.
-* [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
-* [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
-* Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.
-* Sort stability. The [sort](https://shopify.github.io/liquid/filters/sort/) stability is also not defined in both shopify/liquid and LiquidJS, but it's [considered stable](https://v8.dev/features/stable-sort) for LiquidJS in Node.js 12+ and Google Chrome 70+.
 
 ## Related Packages
 

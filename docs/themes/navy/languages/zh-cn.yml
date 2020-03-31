@@ -49,6 +49,7 @@ sidebar:
     miscellaneous: 其他
     migration9: '迁移到 LiquidJS 9'
     contribution_guidelines: '贡献指南'
+    differences: 与 Shopify/liquid 的不同
     changelog: '更新日志'
   filters:
     overview: 概述

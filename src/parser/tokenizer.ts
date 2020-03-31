@@ -65,7 +65,10 @@ export class Tokenizer {
     }
   }
   readFilter (): FilterToken | null {
-    this.readTo('|')
+    this.skipBlank()
+    if (this.end()) return null
+    assert(this.peek() === '|', () => `unexpected token at ${this.snapshot()}`)
+    this.p++
     const begin = this.p
     const name = this.readWord()
     if (!name.size()) return null
@@ -125,7 +128,7 @@ export class Tokenizer {
     const { tagDelimiterRight } = options
     const begin = this.p
     if (this.readTo(tagDelimiterRight) === -1) {
-      this.mkError(`tag "${this.ellipsis(begin)}" not closed`, begin)
+      this.mkError(`tag ${this.snapshot(begin)} not closed`, begin)
     }
     return new TagToken(input, begin, this.p, options, file)
   }
@@ -135,7 +138,7 @@ export class Tokenizer {
     const { outputDelimiterRight } = options
     const begin = this.p
     if (this.readTo(outputDelimiterRight) === -1) {
-      this.mkError(`output "${this.ellipsis(begin)}" not closed`, begin)
+      this.mkError(`output ${this.snapshot(begin)} not closed`, begin)
     }
     return new OutputToken(input, begin, this.p, options, file)
   }
@@ -144,8 +147,8 @@ export class Tokenizer {
     throw new TokenizationError(msg, new WordToken(this.input, begin, this.N, this.file))
   }
 
-  ellipsis (begin: number = this.p) {
-    return ellipsis(this.input.slice(begin), 16)
+  snapshot (begin: number = this.p) {
+    return JSON.stringify(ellipsis(this.input.slice(begin), 16))
   }
 
   readWord (): WordToken { // rename to identifier
@@ -245,7 +248,7 @@ export class Tokenizer {
 
   readValueOrThrow (): ValueToken {
     const value = this.readValue()
-    assert(value, () => `unexpected token "${this.ellipsis()}", value expected`)
+    assert(value, () => `unexpected token ${this.snapshot()}, value expected`)
     return value!
   }
 

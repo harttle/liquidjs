@@ -2,7 +2,7 @@
 title: 安装和使用
 ---
 
-LiquidJS 是一个简单的、安全的、兼容 Shopify 的、纯 JavaScript 编写的模板引擎。这个项目的目的是为 JavaScript 社区提供一个 Liquid 模板引擎的实现。
+如果你还不了解 Liquid 模板语言，请参考 [Liquid 模板语言简介][intro]。
 
 ## 在 Node.js 里使用
 
@@ -66,3 +66,5 @@ echo 'Hello, {{ name }}.' | npx liquidjs '{"name": "Snake"}'
 ## 其他
 
 [@stevenanthonyrevo](https://github.com/stevenanthonyrevo) 还提供了一个 ReactJS demo，请参考 [liquidjs/demo/reactjs/](https://github.com/harttle/liquidjs/blob/master/demo/reactjs/)。
+
+[intro]: ./intro-to-liquid.html

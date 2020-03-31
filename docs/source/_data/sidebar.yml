@@ -16,6 +16,7 @@ tutorials:
   miscellaneous:
     migration9: migrate-to-9.html
     changelog: changelog.html
+    differences: differences.html
     contribution_guidelines: contribution-guidelines.html
 
 filters:
