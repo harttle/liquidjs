@@ -92,6 +92,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://github.com/mastodon0"><img src="https://avatars1.githubusercontent.com/u/7924332?v=4" width="100px;" alt="Martin Schuster"/><br /><sub><b>Martin Schuster</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=mastodon0" title="Code">💻</a></td>
     <td align="center"><a href="http://js.chenlei.me"><img src="https://avatars0.githubusercontent.com/u/6339390?v=4" width="100px;" alt="Ray"/><br /><sub><b>Ray</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=richardo2016" title="Tests">⚠️</a> <a href="https://github.com/harttle/liquidjs/commits?author=richardo2016" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/CriGoT"><img src="https://avatars0.githubusercontent.com/u/1936786?v=4" width="100px;" alt="Cristofer Gonzales"/><br /><sub><b>Cristofer Gonzales</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=CriGoT" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.raymondcamden.com"><img src="https://avatars3.githubusercontent.com/u/393660?v=4" width="100px;" alt="Raymond Camden"/><br /><sub><b>Raymond Camden</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=cfjedimaster" title="Documentation">📖</a></td>
   </tr>
 </table>
 

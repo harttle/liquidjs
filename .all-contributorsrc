@@ -260,6 +260,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cfjedimaster",
+      "name": "Raymond Camden",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/393660?v=4",
+      "profile": "https://www.raymondcamden.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
