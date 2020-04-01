@@ -147,9 +147,12 @@ function filterNumericKeysFromObject(obj) {
   return Object.keys(obj).filter(key => !Number.isNaN(parseInt(obj[key])));
 }
 
-function getObjectValues(obj = {}) {
+function getObjectValues(obj) {
+  if(obj == null || obj == undefined || isNaN(obj)) {
+    return {};
+  }
   let resultObj = {};
-  keys = Object.keys(obj);
+  let keys = Object.keys(obj);
   keys.forEach(key => {
     resultObj[key] = obj[key];
   });
@@ -211,41 +214,51 @@ function performOperations(v, arg, operation) {
         days: total_days
       }
     }
-    result = Object.assign(getObjectValues(arg), getObjectValues(v));
-    const numberKeysOfArg = filterNumericKeysFromObject(arg);
-    const numberKeysOfV = filterNumericKeysFromObject(v);
-    const commonNumericKeys = numberKeysOfV.filter(
-      elem => numberKeysOfArg.indexOf(elem) !== -1
-    );
-    if (commonNumericKeys.length > 0) {
-      numberKeysOfArg.forEach(key => {
-        result[key] = operationOnItem(v[key], arg[key], operation);
-      });
-      return result;
-    } else {
-      console.warn("The objects don't have any common numeric attributes");
-      return;
+    let result = Object.assign(getObjectValues(arg), getObjectValues(v));
+    if(Object.keys(result).length) {
+      const numberKeysOfArg = filterNumericKeysFromObject(arg);
+      const numberKeysOfV = filterNumericKeysFromObject(v);
+      const commonNumericKeys = numberKeysOfV.filter(
+        elem => numberKeysOfArg.indexOf(elem) !== -1
+      );
+      if (commonNumericKeys.length > 0) {
+        numberKeysOfArg.forEach(key => {
+          result[key] = operationOnItem(v[key], arg[key], operation);
+        });
+        return result;
+      } else {
+        console.warn("The objects don't have any common numeric attributes");
+        return;
+      }
+    }else {
+      return {}
     }
   } 
   if (typeof v === "number" && typeof arg === "object") {
-    result = getObjectValues(arg);
-    const numberKeys = filterNumericKeysFromObject(arg);
-    numberKeys.forEach(key => {
-      result[key] = operationOnItem(v, arg[key], operation);
-    });
-    return result;
+    let result = getObjectValues(arg);
+    if(Object.keys(result).length) {
+      const numberKeys = filterNumericKeysFromObject(arg);
+      numberKeys.forEach(key => {
+        result[key] = operationOnItem(v, arg[key], operation);
+      });
+      return result;
+    }else {
+      return {}
+    }
   } 
   if (typeof v === "object" && typeof arg === "number") {
-    result = getObjectValues(v);
-    const numberKeys = filterNumericKeysFromObject(v);
+    let result = getObjectValues(v);
+    if(Object.keys(result).length) {
+      const numberKeys = filterNumericKeysFromObject(v);
     numberKeys.forEach(key => {
       result[key] = operationOnItem(v[key], arg, operation);
     });
     return result;
-  } 
-    
+    }else {
+      return {};
+    }
+  }  
   return operationOnItem(v, arg, operation);
-  
 }
 
 function operationOnItem(v, arg, operation) {
