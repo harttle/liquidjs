@@ -200,6 +200,15 @@ function performOperations(v, arg, operation) {
       throw new Error("value or type is incorrect.")
     }
   } else if (typeof(v) === "object" && typeof(arg) === "object") {
+    const isDurationObjects = checkIfDurationObjects(v, arg)
+    if(isDurationObjects) {
+      const total_days = operationOnItem(v.days, arg.days, operation);
+      return {
+        type: "DAYS",
+        value: total_days,
+        days: total_days
+      }
+    }
     let result = Object.assign(getObjectValues(arg),getObjectValues(v))
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
     const numberKeysOfV = filterNumericKeysFromObject(v);
