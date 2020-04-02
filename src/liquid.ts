@@ -75,7 +75,7 @@ export class Liquid {
     }
 
     for (const filepath of paths) {
-      const { cache } = this.options
+      const { cache } = options
       if (cache) {
         const tpls = yield cache.read(filepath)
         if (tpls) return tpls

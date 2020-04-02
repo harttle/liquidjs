@@ -89,11 +89,13 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
   if (options.hasOwnProperty('root')) {
     options.root = normalizeStringArray(options.root)
   }
-  let cache: Cache<Template[]> | undefined
-  if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
-  else if (typeof options.cache === 'object') cache = options.cache
-  else cache = options.cache ? new LRU<Template[]>(1024) : undefined
-  options.cache = cache
+  if (options.hasOwnProperty('cache')) {
+    let cache: Cache<Template[]> | undefined
+    if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
+    else if (typeof options.cache === 'object') cache = options.cache
+    else cache = options.cache ? new LRU<Template[]>(1024) : undefined
+    options.cache = cache
+  }
   return options as NormalizedOptions
 }
 
