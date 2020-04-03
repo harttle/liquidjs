@@ -45,8 +45,8 @@ LiquidJS defaults this option to <code>true</code> to be compatible with shopify
 **extname** defines the default extname to be appended into filenames if the filename has no extname. Defaults to `''` which means it's disabled by default. By setting it to `.liquid`:
 
 ```liquid
-{% render "foo" %}  loads foo.liquid
-{% render "foo.html" %}  loads foo.html
+{% render "foo" %}  there's no extname, adds `.liquid` and loads foo.liquid
+{% render "foo.html" %}  there is an extname already, loads foo.html directly
 ```
 
 {% note info Legacy Versions %}

@@ -43,11 +43,11 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 **extname** 定义了默认的文件后缀，当传入文件名不包含后缀时自动追加。默认值是 `''` 也就是说默认是禁用的。如果设置为 `.liquid`：
 
 ```liquid
-{% render "foo" %}  会加载 foo.liquid
-{% render "foo.html" %} 会加载 foo.html
+{% render "foo" %}  没有后缀，添加 ".liquid" 并加载 foo.liquid
+{% render "foo.html" %} 已经有后缀了，直接加载 foo.html
 ```
 
-{% note info Legacy Versions %}
+{% note info 旧版行为 %}
 在 2.0.1 之前，<code>extname</code> 默认值为 `.liquid`。要禁用它需要明确设置为 <code>extname: ''</code>。详情参考 <a href="https://github.com/harttle/liquidjs/issues/41" target="_blank">#41</a>。
 {% endnote %}
 

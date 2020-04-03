@@ -25,6 +25,10 @@ color: 'red' shape: 'circle'
 color: 'yellow' shape: 'square'
 ```
 
+{% note tip &quot;.liquid&quot; 文件扩展名 %}
+如果设置了 `extname: ".liquid"` 选项，就可以省略 <code>layout</code>, <code>render</code> 和 <code>include</code> 里面文件名的 ".liquid" 后缀。详情请参考 <a href="./options.html#extname">extname 选项</a>。
+{% endnote %}
+
 ## 布局模板（模板继承）
 
 对于如下两个模板文件：
