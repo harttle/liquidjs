@@ -1,3 +1,10 @@
+## [9.11.10](https://github.com/harttle/liquidjs/compare/v9.11.9...v9.11.10) (2020-04-03)
+
+
+### Bug Fixes
+
+* respect cache render options ([a93f11d](https://github.com/harttle/liquidjs/commit/a93f11d))
+
 ## [9.11.9](https://github.com/harttle/liquidjs/compare/v9.11.8...v9.11.9) (2020-03-31)
 
 
