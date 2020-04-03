@@ -232,24 +232,24 @@ function performOperations(v, arg, operation) {
     let result = getObjectValues(v)
     const numberKeys = filterNumericKeysFromObject(v);
     numberKeys.forEach(key => {
-      result[key] = operationOnItem(arg,v[key], operation)
+      result[key] = operationOnItem(v[key], arg, operation)
     })
     return result
   } else {
-    return operationOnItem(arg,v, operation);
+    return operationOnItem(v,arg, operation);
   }
 }
 
 function operationOnItem(v, arg, operation) {
   switch (operation) {
     case "ADD":
-      return v + arg;
+      return Number(v) + Number(arg);
     case "SUBTRACT":
-      return v - arg;
+      return Number(v) - Number(arg);
     case "DIVIDE":
-      return parseFloat((v / arg).toFixed(3));
+      return parseFloat((Number(v)/ Number(arg) ).toFixed(3));
     case "MULTIPLY":
-      return v * arg;
+      return Number(v) * Number(arg);
   }
 }
 
