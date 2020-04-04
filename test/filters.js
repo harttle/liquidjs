@@ -27,7 +27,8 @@ var ctx = {
   currency_thousand: {value: 1000, type: "INR"},
   currency_hundred: {value: 100, type: "INR"},
   currency_ten: {value: 10, type: "INR"},
-
+  duration_val_null: {value: null, type: null, days: null},
+  duration_empty_obj: {},
   from_date: new Date("March 17, 2020"),
   to_date: new Date("March 17, 2022")
 }
@@ -281,6 +282,15 @@ describe('filters', function () {
       const dst = {type: "DAYS", value: 130, days: 130};
       return test('{{ duration_10_weeks | plus: duration_2_months }}', JSON.stringify(dst))
     })
+    it('should return current date when duration obj has null values', () => {
+      const dst = new Date().toDateString()
+      return test('{% assign term = date | plus: duration_val_null | date: "%a %b %d %Y"%}{{ term }}', dst)
+    })
+    it('should return current date when duration is an empty object', () => {
+      const dst = new Date().toDateString()
+      return test('{% assign term = date | plus: duration_empty_obj | date: "%a %b %d %Y"%}{{ term }}', dst)
+    })
+
   })
 
   it('should support prepend', function () {

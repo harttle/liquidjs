@@ -197,17 +197,26 @@ function performOperations(v, arg, operation) {
     if (value && addType.indexOf(type) != -1) {
       return operationOnDate(v, arg, operation);
     }else {
-      throw new Error("value or type is incorrect.")
+      console.warn("duration obj is incorrect")
+      return v;
     }
   } else if (typeof(v) === "object" && typeof(arg) === "object") {
     const isDurationObjects = checkIfDurationObjects(v, arg)
     if(isDurationObjects) {
-      const total_days = operationOnItem(v.days, arg.days, operation);
-      return {
-        type: "DAYS",
-        value: total_days,
-        days: total_days
-      }
+      if(v.days != null && arg.days != null) {
+        const total_days = operationOnItem(v.days, arg.days, operation);
+        return {
+          type: "DAYS",
+          value: total_days,
+          days: total_days
+        }
+      }else {
+        return {
+          type: "DAYS",
+          value: 0,
+          days: 0
+        }
+      }  
     }
     let result = Object.assign(getObjectValues(arg),getObjectValues(v))
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
