@@ -157,9 +157,14 @@ function getObjectValues(obj) {
 }
 
 function calculateDurationInDays(toDate, fromDate) {
-  const durationInDays = moment(toDate).diff(moment(fromDate), "days")
+  const durationInDays = moment(toDate).diff(moment(fromDate), "days");
   if(durationInDays < 0) {
-    throw new Error("toDate should be greater than fromDate");
+    console.warn("toDate should be greater than fromDate");
+    return {
+      type: "DAYS",
+      value: 0,
+      days: 0
+    }
   }
   return {
     type: "DAYS",

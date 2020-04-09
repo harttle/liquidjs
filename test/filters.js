@@ -27,10 +27,10 @@ var ctx = {
   currency_thousand: {value: 1000, type: "INR"},
   currency_hundred: {value: 100, type: "INR"},
   currency_ten: {value: 10, type: "INR"},
-  duration_val_null: {value: null, type: null, days: null},
+  duration_val_null: {value: null, type: "MONTHS", days: null},
   duration_empty_obj: {},
-  from_date: new Date("March 17, 2020"),
-  to_date: new Date("March 17, 2022")
+  from_date: new Date("January 1, 2020"),
+  to_date: new Date("March 1, 2020")
 }
 
 function test (src, dst) {
@@ -213,9 +213,9 @@ describe('filters', function () {
     })
     it('should convert first arg as number', () => test('{{ "4" | minus: 1 }}', '3'))
     it('should convert both args as number', () => test('{{ "4" | minus: "1" }}', '3'))
-    it('should return {"type":"days","value":730,"days": 730}', () => {
+    it('should return {"type":"days","value":6,"days": 6}', () => {
       try {
-        const dst = {type: "DAYS", value: 730, days: 730};
+        const dst = {type: "DAYS", value: 60, days: 60};
         return test('{% assign duration = to_date | minus: from_date %}{{duration}}', JSON.stringify(dst))
       } catch(e) {
         console.error(e.message)
@@ -290,7 +290,14 @@ describe('filters', function () {
       const dst = new Date().toDateString()
       return test('{% assign term = date | plus: duration_empty_obj | date: "%a %b %d %Y"%}{{ term }}', dst)
     })
-
+    it('should return {type: "DAYS", value: 0, days: 0};', () => {
+      const dst = {type: "DAYS", value: 0, days: 0};
+      return test('{{ duration_val_null | plus: duration_val_null }}', JSON.stringify(dst))
+    })
+    it('should return {type: "DAYS", value: 0, days: 0};', () => {
+      const dst = {type: "DAYS", value: 0, days: 0};
+      return test('{{ duration_2_months | plus: duration_val_null }}', JSON.stringify(dst))
+    })
   })
 
   it('should support prepend', function () {
