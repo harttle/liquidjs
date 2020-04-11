@@ -5,12 +5,11 @@
 
 {{ js('js/main') }}
 
-<script src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
-<script>
-document.getElementById('search-input-wrap').classList.add('on');
-docsearch({
-  apiKey: '{{ config.algolia.apiKey }}',
-  indexName: '{{ config.algolia.indexName }}',
-  inputSelector: '#search-input'
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script> docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
 });
 </script>
