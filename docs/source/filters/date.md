@@ -2,7 +2,7 @@
 title: date
 ---
 
-Converts a timestamp into another date format. The format for this syntax is the same as [`strftime`](http://strftime.net). The input is first converted to Date object by [new Date()][newDate].
+Converts a timestamp into another date format. LiquidJS tries to be conformant with Shopify/Liquid which is using Ruby's core [Time#strftime(string)](http://www.ruby-doc.org/core/Time.html#method-i-strftime). The input is firstly converted to `Date` object via [new Date()][newDate].
 
 Input
 ```liquid

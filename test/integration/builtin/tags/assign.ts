@@ -75,10 +75,16 @@ describe('tags/assign', function () {
       const html = await liquid.parseAndRender(src, { num: 1 })
       return expect(html).to.equal('11')
     })
-    it('should write to the belonging scope', async function () {
+    it('should write to the root scope', async function () {
       const src = '{%for a in (1..2)%}{%assign num = a%}{{a}}{%endfor%} {{num}}'
       const html = await liquid.parseAndRender(src, { num: 1 })
       return expect(html).to.equal('12 2')
+    })
+    it('should not change input scope', async function () {
+      const src = '{%for a in (1..2)%}{%assign num = a%}{{a}}{%endfor%} {{num}}'
+      const ctx = { num: 1 }
+      await liquid.parseAndRender(src, ctx)
+      return expect(ctx.num).to.equal(1)
     })
   })
   it('should support sync', function () {
