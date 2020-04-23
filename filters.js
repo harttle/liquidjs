@@ -157,7 +157,10 @@ function getObjectValues(obj) {
 }
 
 function calculateDurationInDays(toDate, fromDate) {
-  const durationInDays = moment(toDate).diff(moment(fromDate), "days");
+  /* Added moments to set time to start of Day (12 am) to avoid any discrepencies in calculation*/
+  const acutaltoDateMoment = moment(toDate).startOf('date');
+  const actualFromDateMoment = moment(fromDate).startOf('date');
+  const durationInDays = moment(acutaltoDateMoment).diff(moment(actualFromDateMoment), "days");
   if(durationInDays < 0) {
     console.warn("toDate should be greater than fromDate");
     return {
@@ -274,7 +277,8 @@ function operationOnDate(v, arg, operation) {
     case "SUBTRACT":
       return calculateDurationInDays(v, arg);
     default:
-      throw new Error(`${operation}, not supported`)
+      console.warn(`${operation}, not supported`);
+      return null
   }
 }
 
