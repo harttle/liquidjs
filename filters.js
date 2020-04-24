@@ -195,15 +195,26 @@ function add(v, arg) {
   return performOperations(v, arg, "ADD");
 }
 
+function isValidDateString(dateString) {
+  return typeof dateString === "string" && moment(dateString, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+}
+
+function isBothArgsValidDateOrDateString(v, arg) {
+  return (Object.prototype.toString.call(v) === '[object Date]' 
+  && Object.prototype.toString.call(arg) === '[object Date]') || 
+  ((Object.prototype.toString.call(v) === '[object Date]'  && isValidDateString(arg)) ||
+  (isValidDateString(v) && Object.prototype.toString.call(arg) === '[object Date]')) ||
+  (isValidDateString(v) && isValidDateString(arg))
+}
 
 function performOperations(v, arg, operation) {
-  if(Object.prototype.toString.call(v) === '[object Date]' && Object.prototype.toString.call(arg) === '[object Date]') {
-    return operationOnDate(v, arg, operation);
-  } else if (Object.prototype.toString.call(v) === '[object Date]' && typeof arg === "object") {
+  if(isBothArgsValidDateOrDateString(v,arg)) {
+    return operationOnDates(v, arg, operation);
+  } else if ((Object.prototype.toString.call(v) === '[object Date]' || isValidDateString(v)) && typeof arg === "object") {
     const addType = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
     const {value, type} = arg;
     if (value && addType.indexOf(type) != -1) {
-      return operationOnDate(v, arg, operation);
+      return operationOnDateDuration(v, arg, operation);
     }else {
       console.warn("duration obj is incorrect")
       return v;
@@ -270,10 +281,20 @@ function operationOnItem(v, arg, operation) {
   }
 }
 
-function operationOnDate(v, arg, operation) {
+function operationOnDateDuration(v, arg, operation) {
   switch(operation) {
     case "ADD":
       return new Date(moment(v).add(arg.value, arg.type));
+    case "SUBTRACT":
+      return new Date(moment(v).subtract(arg.value, arg.type));
+    default:
+      console.warn(`${operation}, not supported`);
+      return null
+  }
+}
+
+function operationOnDates(v, arg, operation) {
+  switch(operation) {
     case "SUBTRACT":
       return calculateDurationInDays(v, arg);
     default:
