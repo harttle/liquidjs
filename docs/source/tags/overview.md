@@ -9,7 +9,7 @@ There're a dozen of tags supported by LiquidJS, with all tags in [shopify/liquid
 Category | Purpose | Tags
 --- | --- | ---
 Iteration | iterate over a collection | for, cycle, tablerow
-Control Flow | control the execution branch of template rendering | if, unless, elif, else, case, when
+Control Flow | control the execution branch of template rendering | if, unless, elsif, else, case, when
 Variable | define and alter variables | assign, increment, decrement
 File | include another template or extend a layout template | render, include, layout
 Language | temporarily disable LiquidJS syntax | raw, comment
