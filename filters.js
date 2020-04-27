@@ -199,6 +199,10 @@ function isValidDateString(dateString) {
   return typeof dateString === "string" && moment(dateString, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
 }
 
+function isValidNumber(argument) {
+  return argument !== null && argument !== undefined && !isNaN(argument)
+}
+
 function isBothArgsValidDateOrDateString(v, arg) {
   return (Object.prototype.toString.call(v) === '[object Date]' 
   && Object.prototype.toString.call(arg) === '[object Date]') || 
@@ -268,16 +272,49 @@ function performOperations(v, arg, operation) {
   }
 }
 
+function addOrSubtractOperationOnItem(v, arg, operation) {
+  if(!isValidNumber(v) && !isValidNumber(arg)) {
+    return 0
+  } else if(isValidNumber(v) && !isValidNumber(arg)) {
+    return v;
+  } else if(!isValidNumber(v) && isValidNumber(arg)) {
+    switch(operation) {
+      case "ADD":
+        return arg
+      case "SUBTRACT":
+        return -arg
+    }
+  } else {
+    switch (operation) {
+      case "ADD":
+        return Number(v) + Number(arg);
+      case "SUBTRACT":
+        return Number(v) - Number(arg);
+    }
+  }
+}
+
+function divideOrMultiplyOperationOnItem(v, arg, operation) {
+  if(!isValidNumber(v) || !isValidNumber(arg)) {
+    return 0
+  } else {
+    switch (operation) {
+      case "DIVIDE":
+        return parseFloat((Number(v)/ Number(arg) ).toFixed(3));
+      case "MULTIPLY":
+        return Number(v) * Number(arg);
+    }
+  }
+}
+
 function operationOnItem(v, arg, operation) {
   switch (operation) {
     case "ADD":
-      return Number(v) + Number(arg);
     case "SUBTRACT":
-      return Number(v) - Number(arg);
+      return addOrSubtractOperationOnItem(v, arg, operation)
     case "DIVIDE":
-      return parseFloat((Number(v)/ Number(arg) ).toFixed(3));
     case "MULTIPLY":
-      return Number(v) * Number(arg);
+      return divideOrMultiplyOperationOnItem(v, arg, operation)
   }
 }
 

@@ -137,6 +137,10 @@ describe('filters', function () {
       return test('{{ currency_thousand | divided_by: currency_ten }}', JSON.stringify(dst))
     })
     it('should convert string to number', () => test('{{"5" | divided_by: "3"}}', '1.667'))
+    /* Test for null argument */
+    it('should return "0" for 24,null', () => test('{{ 24 | divided_by: null }}', "0"))
+    it('should return "0" for null, 24', () => test('{{ null | divided_by: 24 }}', "0"))
+    it('should return "0" for null,null', () => test('{{ null | divided_by: null }}', "0"))
   })
 
   describe('downcase', function () {
@@ -205,6 +209,10 @@ describe('filters', function () {
     it('should return "12" for 16,4', () => test('{{ 16 | minus: 4 }}', '12'))
     it('should return "171.357" for 183.357,12',
       () => test('{{ 183.357 | minus: 12 }}', '171.357'))
+    /* Test for null argument */
+    it('should return "24" for 24,null', () => test('{{ 24 | minus: null }}', "24"))
+    it('should return "-24" for null, 24', () => test('{{ null | minus: 24 }}', "-24"))
+    it('should return "0" for null,null', () => test('{{ null | minus: null }}', "0"))
     it('should support currency minus number', () => {
       const dst = {value: 900, type: "INR"};
       return test('{{ currency_thousand | minus: 100.0 }}', JSON.stringify(dst))
@@ -302,6 +310,10 @@ describe('filters', function () {
       () => test('{{ 183.357 | plus: 12 }}', '195.357'))
     it('should convert first arg as number', () => test('{{ "4" | plus: 2 }}', '6'))
     it('should convert both args as number', () => test('{{ "4" | plus: "2" }}', '6'))
+    /* Test for null argument */
+    it('should return "24" for 24,null', () => test('{{ 24 | plus: null }}', "24"))
+    it('should return "24" for null, 24', () => test('{{ null | plus: 24 }}', "24"))
+    it('should return "0" for null,null', () => test('{{ null | plus: null }}', "0"))
     it('should support currency adding number', () => {
       const dst = {value: 1100, type: "INR"};
       return test('{{ currency_thousand | plus: 100.0 }}', JSON.stringify(dst))
@@ -483,6 +495,10 @@ describe('filters', function () {
       const dst = {value: 1000, type: "INR"};
       return test('{{ currency_hundred | times: currency_ten }}', JSON.stringify(dst))
     })
+    /* Test for null argument */
+    it('should return "0" for 24,null', () => test('{{ 24 | times: null }}', "0"))
+    it('should return "0" for null, 24', () => test('{{ null | times: 24 }}', "0"))
+    it('should return "0" for null,null', () => test('{{ null | times: null }}', "0"))
   })
 
   describe('truncate', function () {
