@@ -1,3 +1,10 @@
+## [9.11.11](https://github.com/harttle/liquidjs/compare/v9.11.10...v9.11.11) (2020-05-01)
+
+
+### Bug Fixes
+
+* properly treat unicode blanks, fixes [#221](https://github.com/harttle/liquidjs/issues/221) ([673b015](https://github.com/harttle/liquidjs/commit/673b015))
+
 ## [9.11.10](https://github.com/harttle/liquidjs/compare/v9.11.9...v9.11.10) (2020-04-03)
 
 
