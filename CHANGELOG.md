@@ -1,3 +1,10 @@
+# [9.12.0](https://github.com/harttle/liquidjs/compare/v9.11.11...v9.12.0) (2020-05-15)
+
+
+### Features
+
+* sort by key, see [#227](https://github.com/harttle/liquidjs/issues/227) ([4f17c94](https://github.com/harttle/liquidjs/commit/4f17c94))
+
 ## [9.11.11](https://github.com/harttle/liquidjs/compare/v9.11.10...v9.11.11) (2020-05-01)
 
 
