@@ -42,6 +42,13 @@ describe('filters/array', function () {
       const post = { category: 'foo' }
       return test('{{post | map: "category"}}', { post }, 'foo')
     })
+    it('should support nested property', function () {
+      const tpl = '{{ arr | map: "name.first" | join }}'
+      const a = { name: { first: 'Alice' } }
+      const b = { name: { first: 'Bob' } }
+      const c = { name: { first: 'Carol' } }
+      return test(tpl, { arr: [a, b, c] }, 'Alice Bob Carol')
+    })
   })
   describe('reverse', function () {
     it('should support reverse', () => test(
@@ -106,11 +113,25 @@ describe('filters/array', function () {
     it('should slice substr by -2,2', () => test('{{ "abc" | slice: -2, 2 }}', 'bc'))
     it('should support array', () => test('{{ "1,2,3,4" | split: "," | slice: 1,2 | join }}', '2 3'))
   })
-  it('should support sort', function () {
-    return test('{% assign my_array = "zebra, octopus, giraffe, Sally Snake"' +
-            ' | split: ", " %}' +
-            '{{ my_array | sort | join: ", " }}',
-    'Sally Snake, giraffe, octopus, zebra')
+  describe('sort', function () {
+    it('should support sort', function () {
+      return test('{% assign my_array = "zebra, octopus, giraffe, Sally Snake"' +
+              ' | split: ", " %}' +
+              '{{ my_array | sort | join: ", " }}',
+      'Sally Snake, giraffe, octopus, zebra')
+    })
+    it('should support sort by key', function () {
+      const tpl = '{{ arr | sort: "name" | map: "name" | join }}'
+      const arr = [{ name: 'Bob' }, { name: 'Carol' }, { name: 'Alice' }]
+      return test(tpl, { arr }, 'Alice Bob Carol')
+    })
+    it('should support sort by nested property', function () {
+      const tpl = '{{ arr | sort: "name.first" | map: "name.first" | join }}'
+      const a = { name: { first: 'Alice' } }
+      const b = { name: { first: 'Bob' } }
+      const c = { name: { first: 'Carol' } }
+      return test(tpl, { arr: [b, c, a, c] }, 'Alice Bob Carol Carol')
+    })
   })
   describe('uniq', function () {
     it('should uniq string list', function () {

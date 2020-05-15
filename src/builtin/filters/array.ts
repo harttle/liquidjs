@@ -2,16 +2,26 @@ import { isArray, last as arrayLast } from '../../util/underscore'
 import { toArray } from '../../util/collection'
 import { isTruthy } from '../../render/boolean'
 import { FilterImpl } from '../../template/filter/filter-impl'
+import { Scope } from '../../context/scope'
 
 export const join = (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg)
 export const last = (v: any) => isArray(v) ? arrayLast(v) : ''
 export const first = (v: any) => isArray(v) ? v[0] : ''
 export const reverse = (v: any[]) => [...v].reverse()
-export const sort = <T>(v: T[], arg: (lhs: T, rhs: T) => number) => v.sort(arg)
+
+export function sort<T> (this: FilterImpl, arr: T[], property?: string) {
+  const getValue = (obj: Scope) => property ? this.context.getFromScope(obj, property.split('.')) : obj
+  return toArray(arr).sort((lhs, rhs) => {
+    lhs = getValue(lhs)
+    rhs = getValue(rhs)
+    return lhs < rhs ? -1 : (lhs > rhs ? 1 : 0)
+  })
+}
+
 export const size = (v: string | any[]) => (v && v.length) || 0
 
-export function map<T1, T2> (arr: {[key: string]: T1}[], arg: string): T1[] {
-  return toArray(arr).map(v => v[arg])
+export function map<T1, T2> (this: FilterImpl, arr: Scope[], property: string) {
+  return toArray(arr).map(obj => this.context.getFromScope(obj, property.split('.')))
 }
 
 export function concat<T1, T2> (v: T1[], arg: T2[] | T2): (T1 | T2)[] {
