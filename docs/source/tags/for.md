@@ -8,7 +8,7 @@ Iteration tags run blocks of code repeatedly.
 
 ### for...in
 
-Repeatedly executes a block of code. For a full list of attributes available within a `for` loop.
+Repeatedly executes a block of code. For a full list of attributes available within a `for` loop, see [forloop](#forloop).
 
 Input
 ```liquid
@@ -20,6 +20,23 @@ Input
 Output
 ```text
 hat shirt pants
+```
+
+For loops can iterate over arrays, hashes, and [ranges of integers](#range).
+
+When iterating a hash, item[0] contains the key, and item[1] contains the value:
+
+Input
+```liquid
+{% for item in hash %}
+  * {{ item[0] }}: {{ item[1] }}
+{% endfor %}
+```
+
+Output
+```text
+  * key1: value1
+  * key2: value2
 ```
 
 ### else
