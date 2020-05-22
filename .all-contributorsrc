@@ -7,8 +7,8 @@
     "README.md"
   ],
   "imageSize": 100,
-  "commit": true,
-  "commitConvention": "eslint",
+  "commit": false,
+  "commitConvention": "angular",
   "contributors": [
     {
       "login": "harttle",
@@ -266,6 +266,24 @@
       "name": "Raymond Camden",
       "avatar_url": "https://avatars3.githubusercontent.com/u/393660?v=4",
       "profile": "https://www.raymondcamden.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "stedman",
+      "name": "Steve Stedman",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/183122?v=4",
+      "profile": "https://stedman.dev",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "aciccarello",
+      "name": "Anthony Ciccarello",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/11273838?v=4",
+      "profile": "https://ciccarello.me",
       "contributions": [
         "doc"
       ]
