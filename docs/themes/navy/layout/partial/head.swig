@@ -4,6 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
   <!-- Canonical links -->
   <link rel="canonical" href="{{ url }}">
   <!-- Alternative links -->
