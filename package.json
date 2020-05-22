@@ -57,7 +57,6 @@
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
-    "@commitlint/travis-cli": "^8.2.0",
     "@semantic-release/changelog": "^3.0.2",
     "@semantic-release/commit-analyzer": "^6.1.0",
     "@semantic-release/git": "^7.0.8",
@@ -88,7 +87,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "express": "^4.16.4",
-    "husky": "^3.0.9",
+    "husky": "^4.2.5",
     "jsdom": "^13.2.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
@@ -135,6 +134,7 @@
   },
   "husky": {
     "hooks": {
+      "pre-commit": "npm run check",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
