@@ -8,6 +8,7 @@ const moment = require("moment");
 var ctx = {
   date: new Date(),
   date_string: new Date().toISOString(),
+  formatted_date_string: moment().format("YYYY-MM-DD"),
   foo: 'bar',
   arr: [-2, 'a'],
   obj: {
@@ -32,7 +33,9 @@ var ctx = {
   from_date: new Date("January 1, 2020"),
   to_date: new Date("March 1, 2020"),
   from_date_string: new Date("January 1, 2020").toISOString(),
-  to_date_string: new Date("March 1, 2020").toISOString()
+  to_date_string: new Date("March 1, 2020").toISOString(),
+  from_date_formatted_string: moment(new Date("January 1, 2020")).format("YYYY-MM-DD"),
+  to_date_formatted_string: moment(new Date("March 1, 2020")).format("YYYY-MM-DD")
 }
 
 function test (src, dst) {
@@ -256,7 +259,48 @@ describe('filters', function () {
         console.error(e.message)
       }
     })
+    it('should return {"type":"days","value":6,"days": 6} for date and formatted-string', () => {
+      try {
+        const dst = {type: "DAYS", value: 60, days: 60};
+        return test('{% assign duration = to_date | minus: from_date_formatted_string %}{{duration}}', JSON.stringify(dst))
+      } catch(e) {
+        console.error(e.message)
+      }
+    })
+    it('should return {"type":"days","value":6,"days": 6} for ISOstring and formatted-string', () => {
+      try {
+        const dst = {type: "DAYS", value: 60, days: 60};
+        return test('{% assign duration = to_date_string | minus: from_date_formatted_string %}{{duration}}', JSON.stringify(dst))
+      } catch(e) {
+        console.error(e.message)
+      }
+    })
+    it('should return {"type":"days","value":6,"days": 6} for formatted-string and formatted-string', () => {
+      try {
+        const dst = {type: "DAYS", value: 60, days: 60};
+        return test('{% assign duration = to_date_formatted_string | minus: from_date_formatted_string %}{{duration}}', JSON.stringify(dst))
+      } catch(e) {
+        console.error(e.message)
+      }
+    })
+    it('should return {"type":"days","value":6,"days": 6} for formatted-string and date', () => {
+      try {
+        const dst = {type: "DAYS", value: 60, days: 60};
+        return test('{% assign duration = to_date_formatted_string | minus: from_date %}{{duration}}', JSON.stringify(dst))
+      } catch(e) {
+        console.error(e.message)
+      }
+    })
+    it('should return {"type":"days","value":6,"days": 6} for formatted-string and ISOstring', () => {
+      try {
+        const dst = {type: "DAYS", value: 60, days: 60};
+        return test('{% assign duration = to_date_formatted_string | minus: from_date_string %}{{duration}}', JSON.stringify(dst))
+      } catch(e) {
+        console.error(e.message)
+      }
+    })
     /* Tests for date minus duration */
+    /* Tests for ISO string */
     it('should minus 3 years to current date when date in string', () => {
       const dst = new Date(moment(new Date()).subtract(3, "years")).toDateString()
       return test('{{ date_string | minus: duration_3_years | date: "%a %b %d %Y"}}', dst)
@@ -269,6 +313,7 @@ describe('filters', function () {
       const dst = new Date(moment(new Date()).subtract(20, "days")).toDateString()
       return test('{{ date_string | minus: duration_20_days | date: "%a %b %d %Y"}}', dst)
     })
+    /* Tests for date */
     it('should minus 3 years to current date', () => {
       const dst = new Date(moment(new Date()).subtract(3, "years")).toDateString()
       return test('{{ date | minus: duration_3_years | date: "%a %b %d %Y"}}', dst)
@@ -280,6 +325,19 @@ describe('filters', function () {
     it('should subtract 20 days to current date', () => {
       const dst = new Date(moment(new Date()).subtract(20, "days")).toDateString()
       return test('{{ date | minus: duration_20_days | date: "%a %b %d %Y"}}', dst)
+    })
+    /* Tests for formatted strings */
+    it('should minus 3 years to current date when date is formatted string', () => {
+      const dst = new Date(moment(new Date()).subtract(3, "years")).toDateString()
+      return test('{{ formatted_date_string | minus: duration_3_years | date: "%a %b %d %Y"}}', dst)
+    })
+    it('should subtract 2 months to current date when date is formatted string', () => {
+      const dst = new Date(moment(new Date()).subtract(2, "months")).toDateString()
+      return test('{{ formatted_date_string | minus: duration_2_months | date: "%a %b %d %Y"}}', dst)
+    })
+    it('should subtract 20 days to current date when date is formatted string', () => {
+      const dst = new Date(moment(new Date()).subtract(20, "days")).toDateString()
+      return test('{{ formatted_date_string | minus: duration_20_days | date: "%a %b %d %Y"}}', dst)
     })
   })
 

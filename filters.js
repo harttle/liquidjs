@@ -103,6 +103,9 @@ var filters = {
   url_encode: encodeURIComponent
 };
 
+const CF_DATE_FORMAT = "YYYY-MM-DD"
+const ISO_STRING_FORMAT = "YYYY-MM-DDTHH:mm:ss.SSSZ"
+
 function escape(str) {
   return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m]);
 }
@@ -196,7 +199,9 @@ function add(v, arg) {
 }
 
 function isValidDateString(dateString) {
-  return typeof dateString === "string" && moment(dateString, "YYYY-MM-DDTHH:mm:ss.SSSZ", true).isValid();
+  return typeof dateString === "string" && 
+  (moment(dateString, moment.ISO_8601, true).isValid() || 
+  moment(dateString, CF_DATE_FORMAT, true).isValid());
 }
 
 function isValidNumber(argument) {
