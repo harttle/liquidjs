@@ -47,4 +47,3 @@ export function parseStringLiteral (str: string): string {
   }
   return ret
 }
-

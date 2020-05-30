@@ -13,7 +13,7 @@ for size in "${apple[@]}"; do
 done
 cp logo.png apple-touch-icon.png
 convert logo.png \
-     \( +clone  -alpha extract \
+     \( +clone -alpha extract \
         -draw 'fill black polygon 0,0 0,80 80,0 fill white circle 80,80 80,0' \
         \( +clone -flip \) -compose Multiply -composite \
         \( +clone -flop \) -compose Multiply -composite \
