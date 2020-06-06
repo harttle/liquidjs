@@ -104,7 +104,7 @@ There's a `forloop` object available inside `for` loops. It's used to indicate t
 The `forloop.first`, `forloop.last` and `forloop.length` property:
 
 Input
-```
+```liquid
 {% for i in (1..5) %}
   {%- if forloop.first == true -%} First
   {%- elsif forloop.last == true -%} Last
@@ -114,7 +114,7 @@ Input
 ```
 
 Output
-```
+```text
 First
 5
 5
@@ -215,4 +215,30 @@ Input
 Output
 ```text
 6 5 4 3 2 1
+```
+
+When used with additional parameters, order is important. Leading with `reversed` reverses the order of the loop before executing the other parameters.
+
+Input
+```liquid
+{% for i in (1..8) reversed limit: 4 %}
+  {{ i }}
+{% endfor %}
+```
+
+Output
+```text
+8 7 6 5
+```
+
+Input
+```liquid
+{% for i in (1..8) limit: 4 reversed %}
+  {{ i }}
+{% endfor %}
+```
+
+Output
+```text
+4 3 2 1
 ```
