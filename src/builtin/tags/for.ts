@@ -6,11 +6,11 @@ import { Hash } from '../../template/tag/hash'
 export default {
   type: 'block',
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const toknenizer = new Tokenizer(token.args)
+    const tokenizer = new Tokenizer(token.args)
 
-    const variable = toknenizer.readWord()
-    const inStr = toknenizer.readWord()
-    const collection = toknenizer.readValue()
+    const variable = tokenizer.readWord()
+    const inStr = tokenizer.readWord()
+    const collection = tokenizer.readValue()
     assert(
       variable.size() && inStr.content === 'in' && collection,
       () => `illegal tag: ${token.getText()}`
@@ -18,7 +18,7 @@ export default {
 
     this.variable = variable.content
     this.collection = collection
-    this.hash = new Hash(toknenizer.remaining())
+    this.hash = new Hash(tokenizer.remaining())
     this.templates = []
     this.elseTemplates = []
 
