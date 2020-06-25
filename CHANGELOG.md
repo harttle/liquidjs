@@ -1,3 +1,10 @@
+# [9.13.0](https://github.com/harttle/liquidjs/compare/v9.12.0...v9.13.0) (2020-06-25)
+
+
+### Features
+
+* async filters, closes [#232](https://github.com/harttle/liquidjs/issues/232) ([e36f3ff](https://github.com/harttle/liquidjs/commit/e36f3ff))
+
 # [9.12.0](https://github.com/harttle/liquidjs/compare/v9.11.11...v9.12.0) (2020-05-15)
 
 
