@@ -20,6 +20,6 @@ export class Filter {
       if (isKeyValuePair(arg)) argv.push([arg[0], yield evalToken(arg[1], context)])
       else argv.push(yield evalToken(arg, context))
     }
-    return this.impl.apply({ context }, [value, ...argv])
+    return yield this.impl.apply({ context }, [value, ...argv])
   }
 }

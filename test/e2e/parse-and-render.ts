@@ -45,13 +45,13 @@ describe('.parseAndRender()', function () {
     const result2 = await engine.render(template, ctx)
     expect(result2).to.equal('1,2')
   })
-  it('should render filters', async function () {
+  it('should support the "join" filter', async function () {
     var ctx = { names: ['alice', 'bob'] }
     var template = engine.parse('<p>{{names | join: ","}}</p>')
     const html = await engine.render(template, ctx)
     return expect(html).to.equal('<p>alice,bob</p>')
   })
-  it('should render accessive filters', async function () {
+  it('should support the "first" filter', async function () {
     var src = '{% assign my_array = "apples, oranges, peaches, plums" | split: ", " %}' +
       '{{ my_array | first }}'
     const html = await engine.parseAndRender(src)
