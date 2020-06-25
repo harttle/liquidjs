@@ -1,3 +1,10 @@
+# [9.14.0](https://github.com/harttle/liquidjs/compare/v9.13.0...v9.14.0) (2020-06-25)
+
+
+### Features
+
+* setup universal browser and node builds ([6cf6ffa](https://github.com/harttle/liquidjs/commit/6cf6ffa))
+
 # [9.13.0](https://github.com/harttle/liquidjs/compare/v9.12.0...v9.13.0) (2020-06-25)
 
 
