@@ -15,9 +15,9 @@ const treeshake = {
 }
 const input = './src/liquid.ts'
 
-const cjs = {
+const nodeCjs = {
   output: [{
-    file: 'dist/liquid.cjs.js',
+    file: 'dist/liquid.node.cjs.js',
     format: 'cjs',
     banner
   }],
@@ -36,9 +36,31 @@ const cjs = {
   input
 }
 
-const esm = {
+const nodeEsm = {
   output: [{
-    file: 'dist/liquid.esm.js',
+    file: 'dist/liquid.node.esm.js',
+    format: 'esm',
+    banner
+  }],
+  external: ['path', 'fs'],
+  plugins: [typescript({
+    tsconfigOverride: {
+      include: [ 'src' ],
+      exclude: [ 'test', 'benchmark' ],
+      compilerOptions: {
+        target: 'ES2017',
+        module: 'ES2015'
+      }
+    }
+  })],
+  treeshake,
+  input
+}
+
+
+const browserEsm = {
+  output: [{
+    file: 'dist/liquid.browser.esm.js',
     format: 'esm',
     banner
   }],
@@ -64,9 +86,9 @@ const esm = {
   input
 }
 
-const umd = {
+const browserUmd = {
   output: [{
-    file: 'dist/liquid.js',
+    file: 'dist/liquid.browser.umd.js',
     name: 'liquidjs',
     format: 'umd',
     sourcemap,
@@ -93,9 +115,9 @@ const umd = {
   input
 }
 
-const min = {
+const browserMin = {
   output: [{
-    file: 'dist/liquid.min.js',
+    file: 'dist/liquid.browser.min.js',
     name: 'liquidjs',
     format: 'umd',
     sourcemap
@@ -124,10 +146,10 @@ const min = {
 
 const bundles = []
 const env = process.env.BUNDLES || ''
-if (env.includes('cjs')) bundles.push(cjs)
-if (env.includes('esm')) bundles.push(esm)
-if (env.includes('umd')) bundles.push(umd)
-if (env.includes('min')) bundles.push(min)
-if (bundles.length === 0) bundles.push(cjs, umd, min, esm)
+if (env.includes('cjs')) bundles.push(nodeCjs)
+if (env.includes('esm')) bundles.push(nodeEsm, browserEsm)
+if (env.includes('umd')) bundles.push(browserUmd)
+if (env.includes('min')) bundles.push(browserMin)
+if (bundles.length === 0) bundles.push(nodeCjs, nodeEsm, browserEsm, browserUmd, browserMin)
 
 export default bundles

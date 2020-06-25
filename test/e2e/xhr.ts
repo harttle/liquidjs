@@ -1,4 +1,4 @@
-import { Liquid } from '../../dist/liquid.js'
+import { Liquid } from '../../dist/liquid.browser.umd.js'
 import * as sinon from 'sinon'
 import { expect, use } from 'chai'
 import { JSDOM } from 'jsdom'
