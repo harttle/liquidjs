@@ -26,7 +26,7 @@ function mkReject (err: Error) {
   return ret
 }
 
-function isThenable (val: any): val is Thenable {
+export function isThenable (val: any): val is Thenable {
   return val && isFunction(val.then)
 }
 

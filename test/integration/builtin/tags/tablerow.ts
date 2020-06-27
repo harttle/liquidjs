@@ -14,6 +14,16 @@ describe('tags/tablerow', function () {
     return expect(html).to.equal(dst)
   })
 
+  it('should support promises', async function () {
+    const src = '{% tablerow i in promiseNumbers %}{{ i }}{% endtablerow %}'
+    const ctx = {
+      promiseNumbers: Promise.resolve([1,2,3])
+    }
+    const dst = '<tr class="row1"><td class="col1">1</td><td class="col2">2</td><td class="col3">3</td></tr>'
+    const html = await liquid.parseAndRender(src, ctx)
+    return expect(html).to.equal(dst)
+  })
+
   it('should support cols', async function () {
     const src = '{% tablerow i in alpha cols:2 %}{{ i }}{% endtablerow %}'
     const ctx = {
