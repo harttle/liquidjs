@@ -61,7 +61,7 @@ export function toThenable (val: IterableIterator<any> | Thenable | any): Thenab
   }
 }
 
-export function toValue (val: IterableIterator<any> | Thenable | any) {
+function toValue (val: IterableIterator<any> | Thenable | any) {
   let ret: any
   toThenable(val)
     .then((x: any) => {
