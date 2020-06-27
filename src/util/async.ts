@@ -26,7 +26,7 @@ function mkReject (err: Error) {
   return ret
 }
 
-export function isThenable (val: any): val is Thenable {
+function isThenable (val: any): val is Thenable {
   return val && isFunction(val.then)
 }
 
@@ -61,7 +61,7 @@ export function toThenable (val: IterableIterator<any> | Thenable | any): Thenab
   }
 }
 
-function toValue (val: IterableIterator<any> | Thenable | any) {
+export function toValue (val: IterableIterator<any> | Thenable | any) {
   let ret: any
   toThenable(val)
     .then((x: any) => {
