@@ -60,7 +60,7 @@ export default {
     if (this['for']) {
       const { value, alias } = this['for']
       let collection = evalToken(value, ctx)
-      collection = yield toEnumerable(collection)
+      collection = toEnumerable(collection)
       scope['forloop'] = new ForloopDrop(collection.length)
       for (const item of collection) {
         scope[alias] = item
