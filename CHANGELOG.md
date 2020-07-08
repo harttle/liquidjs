@@ -1,3 +1,10 @@
+## [9.14.1](https://github.com/harttle/liquidjs/compare/v9.14.0...v9.14.1) (2020-07-08)
+
+
+### Bug Fixes
+
+* enumerate Promises (e.g. in for & tablerow) ([#237](https://github.com/harttle/liquidjs/issues/237)) ([941dd66](https://github.com/harttle/liquidjs/commit/941dd66))
+
 # [9.14.0](https://github.com/harttle/liquidjs/compare/v9.13.0...v9.14.0) (2020-06-25)
 
 
