@@ -66,9 +66,8 @@
   preview.renderer.setShowGutter(false);
   preview.renderer.setPadding(20);
 
-  editor.setValue(sourceEl.textContent, 1);
+  editor.setValue(getInitialValue(), 1);
   editor.on('change', update);
-  editor.focus();
   update();
 
   function createEditor(id, lang) {
@@ -83,8 +82,16 @@
     return editor;
   }
 
+  function getInitialValue() {
+    try {
+      return atou(location.hash.slice(1)) || sourceEl.textContent
+    } catch (e) {}
+    return sourceEl.textContent
+  }
+
   async function update() {
     const tpl = editor.getValue();
+    history.replaceState({}, '', '#' + utoa(tpl));
     try {
       const html = await engine.parseAndRender(tpl);
       preview.setValue(html, 1);
@@ -92,6 +99,14 @@
       preview.setValue(err.stack, 1);
       throw err;
     }
+  }
+
+  function atou(str) {
+    return decodeURIComponent(escape(atob(str)))
+  }
+
+  function utoa(str) {
+    return btoa(unescape(encodeURIComponent(str)))
   }
 }());
 
