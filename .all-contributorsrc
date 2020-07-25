@@ -305,6 +305,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pdehaan",
+      "name": "Peter deHaan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/557895?v=4",
+      "profile": "http://about.me/peterdehaan",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
