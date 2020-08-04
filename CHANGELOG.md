@@ -1,3 +1,10 @@
+# [9.15.0](https://github.com/harttle/liquidjs/compare/v9.14.1...v9.15.0) (2020-08-04)
+
+
+### Features
+
+* export toPromise and toValue, see [#158](https://github.com/harttle/liquidjs/issues/158) ([2e5ab98](https://github.com/harttle/liquidjs/commit/2e5ab98))
+
 ## [9.14.1](https://github.com/harttle/liquidjs/compare/v9.14.0...v9.14.1) (2020-07-08)
 
 
