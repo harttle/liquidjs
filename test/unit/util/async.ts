@@ -1,10 +1,19 @@
-import { toThenable, toValue } from '../../../src/util/async'
+import { toThenable, toPromise, toValue } from '../../../src/util/async'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
 use(chaiAsPromised)
 
 describe('utils/async', () => {
+  describe('#toPromise()', function () {
+    it('should return a promise', async () => {
+      function * foo () {
+        return 'foo'
+      }
+      const result = await toPromise(foo())
+      expect(result).to.equal('foo')
+    })
+  })
   describe('#toThenable()', function () {
     it('should support iterable with single return statement', async () => {
       function * foo () {

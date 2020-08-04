@@ -14,7 +14,7 @@ import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import { FS } from './fs/fs'
-import { toThenable, toValue } from './util/async'
+import { toPromise, toValue } from './util/async'
 
 export * from './types'
 
@@ -49,7 +49,7 @@ export class Liquid {
     return this.renderer.renderTemplates(tpl, ctx)
   }
   public async render (tpl: Template[], scope?: object, opts?: LiquidOptions): Promise<string> {
-    return toThenable(this._render(tpl, scope, opts, false))
+    return toPromise(this._render(tpl, scope, opts, false))
   }
   public renderSync (tpl: Template[], scope?: object, opts?: LiquidOptions): string {
     return toValue(this._render(tpl, scope, opts, true))
@@ -60,7 +60,7 @@ export class Liquid {
     return this._render(tpl, scope, opts, sync)
   }
   public async parseAndRender (html: string, scope?: object, opts?: LiquidOptions): Promise<string> {
-    return toThenable(this._parseAndRender(html, scope, opts, false))
+    return toPromise(this._parseAndRender(html, scope, opts, false))
   }
   public parseAndRenderSync (html: string, scope?: object, opts?: LiquidOptions): string {
     return toValue(this._parseAndRender(html, scope, opts, true))
@@ -88,7 +88,7 @@ export class Liquid {
     throw this.lookupError(file, options.root)
   }
   public async parseFile (file: string, opts?: LiquidOptions): Promise<Template[]> {
-    return toThenable(this._parseFile(file, opts, false))
+    return toPromise(this._parseFile(file, opts, false))
   }
   public parseFileSync (file: string, opts?: LiquidOptions): Template[] {
     return toValue(this._parseFile(file, opts, true))
@@ -108,7 +108,7 @@ export class Liquid {
     return value.value(ctx)
   }
   public async evalValue (str: string, ctx: Context): Promise<any> {
-    return toThenable(this._evalValue(str, ctx))
+    return toPromise(this._evalValue(str, ctx))
   }
   public evalValueSync (str: string, ctx: Context): any {
     return toValue(this._evalValue(str, ctx))

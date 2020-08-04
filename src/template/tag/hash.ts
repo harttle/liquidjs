@@ -21,7 +21,7 @@ export class Hash {
   * render (ctx: Context) {
     const hash = {}
     for (const key of Object.keys(this.hash)) {
-      hash[key] = evalToken(this.hash[key], ctx)
+      hash[key] = yield evalToken(this.hash[key], ctx)
     }
     return hash
   }
