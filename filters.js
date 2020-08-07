@@ -204,8 +204,12 @@ function isValidDateString(dateString) {
   moment(dateString, CF_DATE_FORMAT, true).isValid());
 }
 
+function isDefinedAndNotNullArg(argument) {
+  return argument !== null && argument !== undefined
+}
+
 function isValidNumber(argument) {
-  return argument !== null && argument !== undefined && !isNaN(argument)
+  return isDefinedAndNotNullArg(argument) && !isNaN(argument)
 }
 
 function isBothArgsValidDateOrDateString(v, arg) {
@@ -272,7 +276,12 @@ function performOperations(v, arg, operation) {
       result[key] = operationOnItem(v[key], arg, operation)
     })
     return result
-  } else {
+  } else if((typeof(v) === "object" && !isDefinedAndNotNullArg(arg)) || 
+    ((typeof(arg) === "object" && !isDefinedAndNotNullArg(v)))){
+       /*Added this for cases where one arg is undefined but another is object such as date empty and duration present */
+      return null
+  } 
+  else {
     return operationOnItem(v,arg, operation);
   }
 }

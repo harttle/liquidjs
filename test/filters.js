@@ -35,7 +35,8 @@ var ctx = {
   from_date_string: new Date("January 1, 2020").toISOString(),
   to_date_string: new Date("March 1, 2020").toISOString(),
   from_date_formatted_string: moment(new Date("January 1, 2020")).format("YYYY-MM-DD"),
-  to_date_formatted_string: moment(new Date("March 1, 2020")).format("YYYY-MM-DD")
+  to_date_formatted_string: moment(new Date("March 1, 2020")).format("YYYY-MM-DD"),
+  variable_undefined: undefined
 }
 
 function test (src, dst) {
@@ -380,11 +381,11 @@ describe('filters', function () {
       const dst = {value: 110, type: "INR"};
       return test('{{ currency_hundred | plus: currency_ten }}', JSON.stringify(dst))
     })
+    /* Tests for date and duration */
     it('should add 10 weeks to current date', () => {
       const dst = new Date(moment(ctx.date).add(10, "weeks")).toDateString()
       return test('{% assign term = date | plus: duration_10_weeks | date: "%a %b %d %Y" %}{{ term }}', dst)
     })
-    /* Tests for date and duration */
     it('should add 20 days to current date', () => {
       const dst = new Date(moment(new Date()).add(20, "days")).toDateString()
       return test('{% assign term = date | plus: duration_20_days | date: "%a %b %d %Y"%}{{ term }}', dst)
@@ -392,6 +393,10 @@ describe('filters', function () {
     it('should add 20 days to current date when date in string', () => {
       const dst = new Date(moment(new Date()).add(20, "days")).toDateString()
       return test('{% assign term = date_string | plus: duration_20_days | date: "%a %b %d %Y"%}{{ term }}', dst)
+    })
+    it('should return undefined when date is undefined', () => {
+      const dst = "null"
+      return test('{% assign term = variable_undefined | plus: duration_20_days "%}{{ term }}', dst)
     })
     it('should add 2 months to current date', () => {
       const dst = new Date(moment(new Date()).add(2, "months")).toDateString()
