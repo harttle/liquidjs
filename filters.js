@@ -100,6 +100,8 @@ var filters = {
     });
   },
   upcase: str => stringify(str).toUpperCase(),
+  updateAttribute: (v, attr, arg) => updateAttribute(v, attr, arg),
+  updateTypeAttribute: (v, arg) => updateTypeAttribute(v, arg),
   url_encode: encodeURIComponent
 };
 
@@ -210,6 +212,22 @@ function isDefinedAndNotNullArg(argument) {
 
 function isValidNumber(argument) {
   return isDefinedAndNotNullArg(argument) && !isNaN(argument)
+}
+
+function updateTypeAttribute(v, arg) {
+  return updateAttribute(v, "type", arg)
+}
+
+function updateAttribute(v, attr, arg) {
+  if(isDefinedAndNotNullArg(v)) {
+    if(typeof(v) === "object") {
+      return {...v, [`${attr}`]: arg}
+    }
+    console.warn("Not valid arguments for operation")
+    return null
+  } else {
+    return {[`${attr}`]: arg}
+  }
 }
 
 function isBothArgsValidDateOrDateString(v, arg) {

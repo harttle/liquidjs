@@ -28,6 +28,7 @@ var ctx = {
   currency_thousand: {value: 1000, type: "INR"},
   currency_hundred: {value: 100, type: "INR"},
   currency_ten: {value: 10, type: "INR"},
+  currency_val_null: {value: null, type: "INR"},
   duration_val_null: {value: null, type: "MONTHS", days: null},
   duration_empty_obj: {},
   from_date: new Date("January 1, 2020"),
@@ -605,6 +606,42 @@ describe('filters', function () {
     it('should truncate with empty custom ellipsis', function () {
       return test('{{ "Ground control to Major Tom." | truncatewords: 3, "" }}',
         'Ground control to')
+    })
+  })
+
+  describe('updateAttribute', function () {
+    it('should update currency value ', function () {
+      const dst = {value: 1000, type: "EUR"};
+      return test('{% assign updatedCurrency = currency_thousand | updateAttribute: "type", "EUR" %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
+    })
+    it('should update currency value when value is null ', function () {
+      const dst = {value: null, type: "EUR"};
+      return test('{% assign updatedCurrency = currency_val_null | updateAttribute: "type", "EUR" %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
+    })
+    it('should update currency var is undefined ', function () {
+      const dst = {type: "EUR"};
+      return test('{% assign updatedCurrency = variable_undefined | updateAttribute: "type", "EUR" %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
+    })
+  })
+
+  describe('updateTypeAttribute', function () {
+    it('should update currency value ', function () {
+      const dst = {value: 1000, type: "EUR"};
+      return test('{% assign updatedCurrency = currency_thousand | updateTypeAttribute: "EUR" %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
+    })
+    it('should update currency value when value is null ', function () {
+      const dst = {value: null, type: "EUR"};
+      return test('{% assign updatedCurrency = currency_val_null | updateTypeAttribute: "EUR" %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
+    })
+    it('should update currency var is undefined ', function () {
+      const dst = {type: "EUR"};
+      return test('{% assign updatedCurrency = variable_undefined | updateTypeAttribute: "EUR" %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
     })
   })
 
