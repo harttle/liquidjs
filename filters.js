@@ -152,6 +152,7 @@ function filterNumericKeysFromObject(obj) {
   return Object.keys(obj).filter(key => !Number.isNaN(parseInt(obj[key])));
 }
 
+/* Cloning function required to avoid memory leak when performning functions on objects */
 function getObjectValues(obj) {
   let resultObj = {};
   let keys = Object.keys(obj);
@@ -159,6 +160,10 @@ function getObjectValues(obj) {
     resultObj[key] = obj[key];
   });
   return resultObj;
+}
+
+function isObject(arg) {
+  return typeof(arg) === "object" && arg !== null
 }
 
 function calculateDurationInDays(toDate, fromDate) {
@@ -220,8 +225,8 @@ function updateTypeAttribute(v, arg) {
 
 function updateAttribute(v, attr, arg) {
   if(isDefinedAndNotNullArg(v)) {
-    if(typeof(v) === "object") {
-      return {...v, [`${attr}`]: arg}
+    if(isObject(v)) {
+      return Object.assign(v, {[`${attr}`]: arg})
     }
     console.warn("Not valid arguments for operation")
     return null
@@ -241,7 +246,7 @@ function isBothArgsValidDateOrDateString(v, arg) {
 function performOperations(v, arg, operation) {
   if(isBothArgsValidDateOrDateString(v,arg)) {
     return operationOnDates(v, arg, operation);
-  } else if ((Object.prototype.toString.call(v) === '[object Date]' || isValidDateString(v)) && typeof arg === "object") {
+  } else if ((Object.prototype.toString.call(v) === '[object Date]' || isValidDateString(v)) && isObject(arg)) {
     const addType = ['DAYS', 'WEEKS', 'MONTHS', 'YEARS'];
     const {value, type} = arg;
     if (value && addType.indexOf(type) != -1) {
@@ -250,7 +255,7 @@ function performOperations(v, arg, operation) {
       console.warn("duration obj is incorrect")
       return v;
     }
-  } else if (typeof(v) === "object" && typeof(arg) === "object") {
+  } else if (isObject(v) && isObject(arg)) {
     const isDurationObjects = checkIfDurationObjects(v, arg)
     if(isDurationObjects) {
       if(v.days != null && arg.days != null) {
@@ -280,14 +285,14 @@ function performOperations(v, arg, operation) {
     } else {
       console.warn("The objects don't have any common numeric attributes")
     }
-  } else if (typeof(v) === "number" && typeof(arg) === "object") {
+  } else if (typeof(v) === "number" && isObject(arg)) {
     let result = getObjectValues(arg)
     const numberKeys = filterNumericKeysFromObject(arg);
     numberKeys.forEach(key => {
       result[key] = operationOnItem(v, arg[key], operation);
     })
     return result
-  } else if (typeof(v) === "object" && typeof(arg) === "number") {
+  } else if (isObject(v) && typeof(arg) === "number") {
     let result = getObjectValues(v)
     const numberKeys = filterNumericKeysFromObject(v);
     numberKeys.forEach(key => {

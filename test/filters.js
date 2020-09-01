@@ -37,7 +37,8 @@ var ctx = {
   to_date_string: new Date("March 1, 2020").toISOString(),
   from_date_formatted_string: moment(new Date("January 1, 2020")).format("YYYY-MM-DD"),
   to_date_formatted_string: moment(new Date("March 1, 2020")).format("YYYY-MM-DD"),
-  variable_undefined: undefined
+  variable_undefined: undefined,
+  variable_null: null
 }
 
 function test (src, dst) {
@@ -560,9 +561,11 @@ describe('filters', function () {
       return test('{{ currency_hundred | times: currency_ten }}', JSON.stringify(dst))
     })
     /* Test for null argument */
+    it('should return "0" for 24,variable null', () => test('{{ 24 | times: variable_null }}', "0"))
     it('should return "0" for 24,null', () => test('{{ 24 | times: null }}', "0"))
     it('should return "0" for null, 24', () => test('{{ null | times: 24 }}', "0"))
-    it('should return "0" for null,null', () => test('{{ null | times: null }}', "0"))
+    it('should return "0" for variable null, 24', () => test('{{ variable_null | times: 24 }}', "0"))
+    it('should return "0" for variable_null, variable null', () => test('{{ variable_null | times: variable_null }}', "null"))
   })
 
   describe('truncate', function () {

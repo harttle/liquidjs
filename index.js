@@ -49,9 +49,10 @@ var _engine = {
       .then(tpl => this.render(tpl, ctx, opts))
   },
   renderFile: function (filepath, ctx, opts) {
-    opts = _.assign({}, opts)
-    return this.getTemplate(filepath, opts.root)
-      .then(templates => this.render(templates, ctx, opts))
+    opts = _.assign({}, opts);
+    return Promise.resolve(null);
+    // return this.getTemplate(filepath, opts.root)
+    //   .then(templates => this.render(templates, ctx, opts))
   },
   evalValue: function (str, scope) {
     var tpl = this.parser.parseValue(str.trim())
@@ -73,11 +74,11 @@ var _engine = {
   //       throw e
   //     })
   // },
-  getTemplate: function (filepath, root) {
-    return typeof XMLHttpRequest === 'undefined'
-      ? this.getTemplateFromFile(filepath, root)
-      : this.getTemplateFromUrl(filepath, root)
-  },
+  // getTemplate: function (filepath, root) {
+  //   return typeof XMLHttpRequest === 'undefined'
+  //     ? this.getTemplateFromFile(filepath, root)
+  //     : this.getTemplateFromUrl(filepath, root)
+  // },
   // getTemplateFromFile: function (filepath, root) {
   //   if (!path.extname(filepath)) {
   //     filepath += this.options.extname
