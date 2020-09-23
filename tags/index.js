@@ -1,5 +1,6 @@
 module.exports = function (engine) {
   require('./assign.js')(engine)
+  require('./assignVar.js')(engine)
   require('./capture.js')(engine)
   require('./case.js')(engine)
   require('./comment.js')(engine)

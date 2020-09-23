@@ -38,7 +38,11 @@ var ctx = {
   from_date_formatted_string: moment(new Date("January 1, 2020")).format("YYYY-MM-DD"),
   to_date_formatted_string: moment(new Date("March 1, 2020")).format("YYYY-MM-DD"),
   variable_undefined: undefined,
-  variable_null: null
+  variable_null: null,
+  currency_loop_1: {value: 1000, type: "INR"},
+  currency_loop_2: {value: 100, type: "INR"},
+  loop_counter: 2,
+  loop_i: 1
 }
 
 function test (src, dst) {
@@ -56,6 +60,16 @@ describe('filters', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
     it('should return "abar" for "a",foo', () => test('{{ "a" | append: foo }}', 'abar'))
+    it('should get value from ctx appending variable and loop counter', function () {
+      const dst = {value: 1000, type: "INR"};
+      return test('{% assignVar updatedCurrency = "currency_loop_" | append: loop_i %}{{updatedCurrency}}', 
+      JSON.stringify(dst))
+    })
+    it('should get value from ctx appending variable and loop counter with conditions', function () {
+      const dst = {value: 1000, type: "INR"};
+      return test(`{% for i in (1..loop_counter) %}{% assignVar updatedCurrency = "currency_loop_" | append: i %}{% if updatedCurrency.value > 500 %}{{updatedCurrency}}{% endif %}{% endfor %}`, 
+      JSON.stringify(dst))
+    })
   })
 
   it('should support capitalize', () => test('{{ "i am good" | capitalize }}', 'I am good'))
@@ -103,6 +117,7 @@ describe('filters', function () {
       - tables
       - shelves
       `))
+    
   })
 
   describe('date', function () {
