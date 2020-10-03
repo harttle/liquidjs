@@ -1,3 +1,10 @@
+## [9.15.1](https://github.com/harttle/liquidjs/compare/v9.15.0...v9.15.1) (2020-10-03)
+
+
+### Bug Fixes
+
+* allow quoted variable name in capture, fixes [#252](https://github.com/harttle/liquidjs/issues/252) ([5b3f419](https://github.com/harttle/liquidjs/commit/5b3f419))
+
 # [9.15.0](https://github.com/harttle/liquidjs/compare/v9.14.1...v9.15.0) (2020-08-04)
 
 
