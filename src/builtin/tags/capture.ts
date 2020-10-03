@@ -1,9 +1,10 @@
 import { Tokenizer, assert, Template, Context, TagImplOptions, TagToken, TopLevelToken } from '../../types'
+import { evalQuotedToken } from '../../render/expression'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
     const tokenizer = new Tokenizer(tagToken.args)
-    this.variable = tokenizer.readWord().content
+    this.variable = readVariableName(tokenizer)
     assert(this.variable, () => `${tagToken.args} not valid identifier`)
 
     this.templates = []
@@ -22,3 +23,10 @@ export default {
     ctx.bottom()[this.variable] = html
   }
 } as TagImplOptions
+
+function readVariableName (tokenizer: Tokenizer) {
+  const word = tokenizer.readWord().content
+  if (word) return word
+  const quoted = tokenizer.readQuoted()
+  if (quoted) return evalQuotedToken(quoted)
+}
