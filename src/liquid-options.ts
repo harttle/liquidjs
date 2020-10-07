@@ -11,6 +11,8 @@ export interface LiquidOptions {
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
   cache?: boolean | number | Cache<Template[]>;
+  /** Use Javascript Truthiness.Defaults to `false`. */
+  jsTruthy?: boolean;
   /** If set, treat the `filepath` parameter in `{%include filepath %}` and `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`. */
   dynamicPartials?: boolean;
   /** Whether or not to assert filter existence. If set to `false`, undefined filters will be skipped. Otherwise, undefined filters will cause an exception. Defaults to `false`. */
@@ -50,6 +52,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   root: string[];
   extname: string;
   cache: undefined | Cache<Template[]>;
+  jsTruthy: boolean;
   dynamicPartials: boolean;
   strictFilters: boolean;
   strictVariables: boolean;
@@ -70,6 +73,7 @@ export const defaultOptions: NormalizedFullOptions = {
   cache: undefined,
   extname: '',
   dynamicPartials: true,
+  jsTruthy: false,
   trimTagRight: false,
   trimTagLeft: false,
   trimOutputRight: false,

@@ -36,7 +36,7 @@ export function slice<T> (v: T[], begin: number, length = 1): T[] {
 export function where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): T[] {
   return toArray(arr).filter(obj => {
     const value = this.context.getFromScope(obj, String(property).split('.'))
-    return expected === undefined ? isTruthy(value) : value === expected
+    return expected === undefined ? isTruthy(value, this.context) : value === expected
   })
 }
 

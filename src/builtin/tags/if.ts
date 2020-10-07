@@ -32,7 +32,7 @@ export default {
 
     for (const branch of this.branches) {
       const cond = yield new Expression(branch.cond).value(ctx)
-      if (isTruthy(cond)) {
+      if (isTruthy(cond, ctx)) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return
       }
