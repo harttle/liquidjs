@@ -26,7 +26,7 @@ export class Expression {
       if (TypeGuards.isOperatorToken(token)) {
         const r = this.operands.pop()
         const l = this.operands.pop()
-        const result = evalOperatorToken(token, l, r)
+        const result = evalOperatorToken(token, l, r, ctx)
         this.operands.push(result)
       } else {
         this.operands.push(evalToken(token, ctx))
@@ -62,9 +62,9 @@ export function evalQuotedToken (token: QuotedToken) {
   return parseStringLiteral(token.getText())
 }
 
-function evalOperatorToken (token: OperatorToken, lhs: any, rhs: any) {
+function evalOperatorToken (token: OperatorToken, lhs: any, rhs: any, ctx: Context) {
   const impl = operatorImpls[token.operator]
-  return impl(lhs, rhs)
+  return impl(lhs, rhs, ctx)
 }
 
 function evalLiteralToken (token: LiteralToken) {

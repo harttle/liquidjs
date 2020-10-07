@@ -23,7 +23,7 @@ export default {
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
     const cond = yield new Expression(this.cond).value(ctx)
-    yield (isFalsy(cond)
+    yield (isFalsy(cond, ctx)
       ? r.renderTemplates(this.templates, ctx, emitter)
       : r.renderTemplates(this.elseTemplates, ctx, emitter))
   }

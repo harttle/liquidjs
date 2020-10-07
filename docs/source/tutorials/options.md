@@ -65,6 +65,12 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 **globals** is used to define global variables available to all templates even in cases of [render tag][render]. See [3185][185] for details.
 
+## jsTruthy
+
+**jsTruthy** is used to use standard Javascript truthiness rather than the Shopify. 
+
+it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
+
 ## Trimming
 
 **greedy**, **trimOutputLeft**, **trimOutputRight**, **trimTagLeft**, **trimTagRight** options are used to eliminate extra newlines and indents in templates arround Liquid Constructs. See [Whitespace Control][wc] for details.
