@@ -22,6 +22,25 @@ value          | truthy | falsy
 `array`        | ✔️      |
 `empty array`  | ✔️      |
 
+## Use JavaScript Truthy
+
+Note that liquidjs use Shopify's truthiness by default. But it can be toggled to used standard JavaScript truthiness by setting the **jsTruthy** option to `true`.
+
+value          | truthy | falsy
+---            | ---    | ---
+`true`         | ✔️      | 
+`false`        |        | ✔️
+`null`         |        | ✔️
+`undefined`    |        | ✔️
+`string`       | ✔️      |	 
+`empty string` |        | ✔️
+`0`            |        | ✔️
+`integer`	   | ✔️      |
+`float`	       | ✔️      |
+`array`        | ✔️      |
+`empty array`  | ✔️      |
+
+
 [ruby]: https://shopify.github.io/liquid
 [sl]: https://www.npmjs.com/package/liquidjs
 [diff]: https://github.com/harttle/liquidjs#differences-and-limitations
