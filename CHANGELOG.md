@@ -1,3 +1,10 @@
+# [9.16.0](https://github.com/harttle/liquidjs/compare/v9.15.1...v9.16.0) (2020-10-08)
+
+
+### Features
+
+* support jsTruthy, [#255](https://github.com/harttle/liquidjs/issues/255) [#257](https://github.com/harttle/liquidjs/issues/257) ([72ee7b4](https://github.com/harttle/liquidjs/commit/72ee7b4))
+
 ## [9.15.1](https://github.com/harttle/liquidjs/compare/v9.15.0...v9.15.1) (2020-10-03)
 
 
