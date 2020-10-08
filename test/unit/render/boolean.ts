@@ -58,7 +58,7 @@ describe('boolean jsTruthy', async function () {
       expect(isTruthy(false, ctx)).to.be.false
     })
     it('null is always falsy', function () {
-      expect(isTruthy(null, ctx)).to.be.false
+      expect(isTruthy(null, ctx)).to.be.true
     })
     it('null is always falsy', function () {
       expect(isTruthy(null, ctx)).to.be.false
