@@ -17,7 +17,7 @@ value          | truthy | falsy
 `string`       | ✔️      |	 
 `empty string` | ✔️      |
 `0`            | ✔️      |
-`integer`	   | ✔️      |
+`integer`      | ✔️      |
 `float`	       | ✔️      |
 `array`        | ✔️      |
 `empty array`  | ✔️      |
@@ -35,8 +35,8 @@ value          | truthy | falsy
 `string`       | ✔️      |	 
 `empty string` |        | ✔️
 `0`            |        | ✔️
-`integer`	   | ✔️      |
-`float`	       | ✔️      |
+`integer`      | ✔️      |
+`float`        | ✔️      |
 `array`        | ✔️      |
 `empty array`  | ✔️      |
 
