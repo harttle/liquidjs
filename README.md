@@ -100,6 +100,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://twitter.com/IAmTrySound"><img src="https://avatars0.githubusercontent.com/u/5635476?v=4" width="100px;" alt=""/><br /><sub><b>Bogdan Chadkin</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=TrySound" title="Code">💻</a></td>
     <td align="center"><a href="https://hightouch.io"><img src="https://avatars0.githubusercontent.com/u/5959235?v=4" width="100px;" alt=""/><br /><sub><b>Tejas Manohar</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=tejasmanohar" title="Code">💻</a></td>
     <td align="center"><a href="http://about.me/peterdehaan"><img src="https://avatars2.githubusercontent.com/u/557895?v=4" width="100px;" alt=""/><br /><sub><b>Peter deHaan</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=pdehaan" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/amit777"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4" width="100px;" alt=""/><br /><sub><b>amit777</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=amit777" title="Code">💻</a> <a href="#financial-amit777" title="Financial">💵</a></td>
   </tr>
 </table>
 
