@@ -25,18 +25,18 @@ describe('util/strftime', function () {
         expect(t(then, '%j')).to.equal('066')
       })
       it('should take count of leap years', function () {
-        const date = new Date('2001-03-01')
+        const date = new Date('2001 03 01')
         expect(t(date, '%j')).to.equal('060')
       })
       it('should take count of leap years', function () {
-        const date = new Date('2000-03-01')
+        const date = new Date('2000 03 01')
         expect(t(date, '%j')).to.equal('061')
       })
     })
     it('should format %q as date suffix', function () {
-      const st = new Date('2016-03-01T03:05:03.000Z')
-      const nd = new Date('2016-03-02T03:05:03.000Z')
-      const rd = new Date('2016-03-03T03:05:03.000Z')
+      const st = new Date('2016-03-01 03:05:03')
+      const nd = new Date('2016-03-02 03:05:03')
+      const rd = new Date('2016-03-03 03:05:03')
       expect(t(st, '%q')).to.equal('st')
       expect(t(nd, '%q')).to.equal('nd')
       expect(t(rd, '%q')).to.equal('rd')
