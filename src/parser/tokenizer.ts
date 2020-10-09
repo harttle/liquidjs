@@ -207,6 +207,14 @@ export class Tokenizer {
     const value = this.readQuoted() || this.readRange()
     if (value) return value
 
+    if (this.peek() === '[') {
+      this.p++
+      const prop = this.readQuoted()
+      if (!prop) return
+      this.readTo(']')
+      return new PropertyAccessToken(prop, [], this.p)
+    }
+
     const variable = this.readWord()
     if (!variable.size()) return
 
