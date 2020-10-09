@@ -211,7 +211,8 @@ export class Tokenizer {
       this.p++
       const prop = this.readQuoted()
       if (!prop) return
-      this.readTo(']')
+      if (this.peek() !== ']') return
+      this.p++
       return new PropertyAccessToken(prop, [], this.p)
     }
 
