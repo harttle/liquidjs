@@ -18,4 +18,9 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(template)
     expect(html).to.equal('foo')
   })
+  it('#259 complex property access with braces is not supported', async () => {
+    const engine = new Liquid()
+    const html = engine.parseAndRenderSync('{{ ["complex key"] }}', { 'complex key': 'foo' })
+    expect(html).to.equal('foo')
+  })
 })

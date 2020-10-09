@@ -42,7 +42,7 @@ export class Expression {
 export function evalToken (token: Token | undefined, ctx: Context): any {
   assert(ctx, () => 'unable to evaluate: context not defined')
   if (TypeGuards.isPropertyAccessToken(token)) {
-    const variable = token.variable.getText()
+    const variable = token.getVariableAsText()
     const props: string[] = token.props.map(prop => evalToken(prop, ctx))
     return ctx.get([variable, ...props])
   }
