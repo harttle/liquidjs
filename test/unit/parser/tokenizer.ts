@@ -39,6 +39,10 @@ describe('Tokenize', function () {
     expect(value).to.be.instanceOf(PropertyAccessToken)
     expect((value as PropertyAccessToken).variable.getText()).to.equal('"a prop"')
   })
+  it('should throw for broken quoted property access', () => {
+    const tokenizer = new Tokenizer('[5]')
+    expect(() => tokenizer.readValueOrThrow()).to.throw()
+  })
   it('should throw for incomplete quoted property access', () => {
     const tokenizer = new Tokenizer('["a prop"')
     expect(() => tokenizer.readValueOrThrow()).to.throw()
