@@ -1,3 +1,10 @@
+## [9.16.1](https://github.com/harttle/liquidjs/compare/v9.16.0...v9.16.1) (2020-10-09)
+
+
+### Bug Fixes
+
+* braced property access ([18a807e](https://github.com/harttle/liquidjs/commit/18a807e))
+
 # [9.16.0](https://github.com/harttle/liquidjs/compare/v9.15.1...v9.16.0) (2020-10-08)
 
 
