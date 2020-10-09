@@ -34,6 +34,11 @@ describe('Tokenize', function () {
   it('should read property access value', () => {
     expect(new Tokenizer('a[b]["c d"]').readValueOrThrow().getText()).to.equal('a[b]["c d"]')
   })
+  it('should read quoted property access value', () => {
+    const value = new Tokenizer('["a prop"]').readValue()
+    expect(value).to.be.instanceOf(PropertyAccessToken)
+    expect((value as PropertyAccessToken).variable.getText()).to.equal('"a prop"')
+  })
   it('should read hash', () => {
     const hash1 = new Tokenizer('foo: 3').readHash()
     expect(hash1!.name.content).to.equal('foo')
