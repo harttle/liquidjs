@@ -28,6 +28,9 @@ var ctx = {
   currency_thousand: {value: 1000, type: "INR"},
   currency_hundred: {value: 100, type: "INR"},
   currency_ten: {value: 10, type: "INR"},
+  currency_decimal: {value: 13.456, type:"USD"},
+  currency_decimal_2: {value: 14.567, type:"USD"},
+  currency_decimal_3: {value: 14.5674, type:"USD"},
   currency_val_null: {value: null, type: "INR"},
   duration_val_null: {value: null, type: "MONTHS", days: null},
   duration_empty_obj: {},
@@ -157,6 +160,22 @@ describe('filters', function () {
       const dst = {value: 100, type: "INR"};
       return test('{{ currency_thousand | divided_by: currency_ten }}', JSON.stringify(dst))
     })
+    it('should support currency divided_by currency with decimals', () => {
+      const dst = {value: 0.924, type: "USD"};
+      return test('{{ currency_decimal | divided_by: currency_decimal_2 }}', JSON.stringify(dst))
+    })
+    it('should support currency divided_by currency with decimals', () => {
+      const dst = {value: 0.9237, type: "USD"};
+      return test('{{ currency_decimal | divided_by: currency_decimal_3 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals divided_by number', () => {
+      const dst = {value: 6.728, type: "USD"};
+      return test('{{ currency_decimal | divided_by: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals divided_by number with decimal', () => {
+      const dst = {value: 1.094, type: "USD"};
+      return test('{{ currency_decimal | divided_by: 12.3 }}', JSON.stringify(dst))
+    })
     it('should convert string to number', () => test('{{"5" | divided_by: "3"}}', '1.667'))
     /* Test for null argument */
     it('should return "0" for 24,null', () => test('{{ 24 | divided_by: null }}', "0"))
@@ -241,6 +260,18 @@ describe('filters', function () {
     it('should support currency minus currency', () => {
       const dst = {value: 990, type: "INR"};
       return test('{{ currency_thousand | minus: currency_ten }}', JSON.stringify(dst))
+    })
+    it('should support currency minus currency with decimals', () => {
+      const dst = {value: -1.111, type: "USD"};
+      return test('{{ currency_decimal | minus: currency_decimal_2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals minus number', () => {
+      const dst = {value: 11.456, type: "USD"};
+      return test('{{ currency_decimal | minus: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals minus number with decimal', () => {
+      const dst = {value: 1.156, type: "USD"};
+      return test('{{ currency_decimal | minus: 12.3 }}', JSON.stringify(dst))
     })
     it('should convert first arg as number', () => test('{{ "4" | minus: 1 }}', '3'))
     it('should convert both args as number', () => test('{{ "4" | minus: "1" }}', '3'))
@@ -397,6 +428,18 @@ describe('filters', function () {
     it('should support currency adding currency', () => {
       const dst = {value: 110, type: "INR"};
       return test('{{ currency_hundred | plus: currency_ten }}', JSON.stringify(dst))
+    })
+    it('should support currency adding currency with decimals', () => {
+      const dst = {value: 28.023, type: "USD"};
+      return test('{{ currency_decimal | plus: currency_decimal_2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals add number', () => {
+      const dst = {value: 15.456, type: "USD"};
+      return test('{{ currency_decimal | plus: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals add number with decimal', () => {
+      const dst = {value: 25.756, type: "USD"};
+      return test('{{ currency_decimal | plus: 12.3 }}', JSON.stringify(dst))
     })
     /* Tests for date and duration */
     it('should add 10 weeks to current date', () => {
@@ -574,6 +617,18 @@ describe('filters', function () {
     it('should support currency times currency', () => {
       const dst = {value: 1000, type: "INR"};
       return test('{{ currency_hundred | times: currency_ten }}', JSON.stringify(dst))
+    })
+    it('should support currency multiply currency with decimals', () => {
+      const dst = {value: 196.014, type: "USD"};
+      return test('{{ currency_decimal | times: currency_decimal_2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals multiply number', () => {
+      const dst = {value: 26.912, type: "USD"};
+      return test('{{ currency_decimal | times: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency with decimals multiply number with decimal', () => {
+      const dst = {value: 165.509, type: "USD"};
+      return test('{{ currency_decimal | times: 12.3 }}', JSON.stringify(dst))
     })
     /* Test for null argument */
     it('should return "0" for 24,variable null', () => test('{{ 24 | times: variable_null }}', "0"))

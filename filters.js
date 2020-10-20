@@ -309,7 +309,7 @@ function performOperations(v, arg, operation) {
   }
 }
 
-function addOrSubtractOperationOnItem(v, arg, operation) {
+function addOrSubtractOperationOnItem(v, arg, operation, precision) {
   if(!isValidNumber(v) && !isValidNumber(arg)) {
     return 0
   } else if(isValidNumber(v) && !isValidNumber(arg)) {
@@ -324,34 +324,50 @@ function addOrSubtractOperationOnItem(v, arg, operation) {
   } else {
     switch (operation) {
       case "ADD":
-        return Number(v) + Number(arg);
+        return Number((Number(v) + Number(arg)).toFixed(precision));
       case "SUBTRACT":
-        return Number(v) - Number(arg);
+        return Number((Number(v) - Number(arg)).toFixed(precision));
     }
   }
 }
 
-function divideOrMultiplyOperationOnItem(v, arg, operation) {
+function divideOrMultiplyOperationOnItem(v, arg, operation, precision) {
   if(!isValidNumber(v) || !isValidNumber(arg)) {
     return 0
   } else {
     switch (operation) {
       case "DIVIDE":
-        return parseFloat((Number(v)/ Number(arg) ).toFixed(3));
+        /* Special case for divide where precision cannot be based on input values */
+        const dividePrecision = precision > 3 ? precision : 3
+        return Number((Number(v)/ Number(arg)).toFixed(dividePrecision));
       case "MULTIPLY":
-        return Number(v) * Number(arg);
+        return Number((Number(v) * Number(arg)).toFixed(precision));
     }
   }
 }
 
+function getItemPrecision(arg) {
+  if(isValidNumber(arg)) {
+    const argArray = arg.toString().split("");
+    const decimalIndex = argArray.findIndex(i => i === ".");
+    return decimalIndex === -1 ? 0 : (argArray.length - (decimalIndex + 1))
+  }
+  return 0;
+}
+
+function getOperationPrecision(v, arg) {
+  return Math.max(getItemPrecision(v), getItemPrecision(arg))
+}
+
 function operationOnItem(v, arg, operation) {
+  const precision = getOperationPrecision(v, arg)
   switch (operation) {
     case "ADD":
     case "SUBTRACT":
-      return addOrSubtractOperationOnItem(v, arg, operation)
+      return addOrSubtractOperationOnItem(v, arg, operation, precision)
     case "DIVIDE":
     case "MULTIPLY":
-      return divideOrMultiplyOperationOnItem(v, arg, operation)
+      return divideOrMultiplyOperationOnItem(v, arg, operation, precision)
   }
 }
 
