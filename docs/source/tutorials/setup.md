@@ -42,12 +42,12 @@ Pre-built UMD bundles are also available:
 
 ```html
 <!--for production-->
-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
 <!--for development-->
-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.umd.js"></script>
 ```
 
-{% note info Working Demo %} Here's a living demo on jsFiddle: <a href="https://jsfiddle.net/x43eb0z6/" target="_blank">jsfiddle.net/x43eb0z6</a>, and the source code is also available in <a href="https://github.com/harttle/liquidjs/blob/master/demo/browser/" target="_blank">liquidjs/demo/browser/</a>.{% endnote %}
+{% note info Working Demo %} Here's a living demo on jsFiddle: <a href="https://jsfiddle.net/pd4jhzLs/1/" target="_blank">jsfiddle.net/pd4jhzLs/1/</a>, and the source code is also available in <a href="https://github.com/harttle/liquidjs/blob/master/demo/browser/" target="_blank">liquidjs/demo/browser/</a>.{% endnote %}
 
 {% note warn Compatibility %} You may need a <a href="https://github.com/taylorhakes/promise-polyfill" target="_blank">Promise polyfill</a> for legacy browsers like IE and Android UC, see <a href="http://caniuse.com/#feat=promises" target="_blank">caniuse statistics</a>. {% endnote %}
 
