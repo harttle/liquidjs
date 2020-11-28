@@ -1,4 +1,4 @@
-import { Liquid, isFalsy } from '../../../src/liquid'
+import { Liquid, Context, isFalsy } from '../../../src/liquid'
 import * as chai from 'chai'
 import { mock, restore } from '../../stub/mockfs'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -99,14 +99,16 @@ describe('Liquid', function () {
   describe('#evalValue', function () {
     it('should eval string literal', async function () {
       const engine = new Liquid()
-      const str = await engine.evalValue('"foo"', {} as any)
+      const ctx = new Context()
+      const str = await engine.evalValue('"foo"', ctx)
       expect(str).to.equal('foo')
     })
   })
   describe('#evalValueSync', function () {
     it('should eval string literal', function () {
       const engine = new Liquid()
-      const str = engine.evalValueSync('"foo"', {} as any)
+      const ctx = new Context()
+      const str = engine.evalValueSync('"foo"', ctx)
       expect(str).to.equal('foo')
     })
   })
