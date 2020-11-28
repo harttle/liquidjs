@@ -67,7 +67,7 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 ## jsTruthy
 
-**jsTruthy** is used to use standard Javascript truthiness rather than the Shopify. 
+**jsTruthy** is used to use standard Javascript truthiness rather than the Shopify.
 
 it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
 
@@ -88,6 +88,8 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 **strictFilters** is used to assert filter existence. If set to `false`, undefined filters will be skipped. Otherwise, undefined filters will cause a parse exception. Defaults to `false`.
 
 **strictVariables** is used to assert variable existence.  If set to `false`, undefined variables will be rendered as empty string.  Otherwise, undefined variables will cause a render exception. Defaults to `false`.
+
+**lenientIf** modifies the behavior of `strictVariables` to allow handling optional variables. If set to `true`, an undefined variable will *not* cause an exception in the following two situations: a) it is the condition to an `if` or `elsif` tag; b) it occurs right before a `default` filter. Irrelevant if `strictVariables` is not set. Defaults to `false`.
 
 {% note info Non-existent Tags %}
 Non-existent tags always throw errors during pasrsing and this behaviour can not be customized.
