@@ -30,4 +30,30 @@ describe('LiquidOptions#strict*', function () {
     return expect(engine.parseAndRender(html, ctx, opts)).to
       .be.rejectedWith(/undefined variable: notdefined/)
   })
+  describe('with strictVariables and lenientIf', function() {
+    const strictLenientOpts = {
+      strictVariables: true,
+      lenientIf: true
+    }
+    it('should not throw in `if` with a single variable', async function () {
+      const tpl = engine.parse('before{% if notdefined %}{{notdefined}}{% endif %}after')
+      const html = await engine.render(tpl, ctx, strictLenientOpts)
+      return expect(html).to.equal('beforeafter')
+    })
+    it('should support elsif with undefined variables', async function () {
+      const tpl = engine.parse('{% if notdefined1 %}a{% elsif notdefined2 %}b{% elsif defined3 %}{{defined3}}{% else %}d{% endif %}')
+      const html = await engine.render(tpl, {'defined3': 'bla'}, strictLenientOpts)
+      return expect(html).to.equal('bla')
+    })
+    it('should still throw with an undefined variable in an expression', function () {
+      const tpl = engine.parse('{% if notdefined == 15 %}a{% endif %}')
+      const fhtml = engine.render(tpl, ctx, strictLenientOpts)
+      return expect(fhtml).to.be.rejectedWith(/undefined variable: notdefined/)
+    })
+    it('should allow an undefined variable when before the `default` filter', async function () {
+      const tpl = engine.parse('{{notdefined | default: "a" | tolower}}')
+      const html = await engine.render(tpl, ctx, strictLenientOpts)
+      return expect(html).to.equal('a')
+    })
+  })
 })

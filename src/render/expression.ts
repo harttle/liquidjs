@@ -16,21 +16,32 @@ import { operatorImpls } from '../render/operator'
 export class Expression {
   private operands: any[] = []
   private postfix: IterableIterator<Token>
+  private lenient: boolean
 
-  public constructor (str: string) {
+  public constructor (str: string, lenient: boolean = false) {
     const tokenizer = new Tokenizer(str)
     this.postfix = toPostfix(tokenizer.readExpression())
+    this.lenient = lenient
   }
   public evaluate (ctx: Context): any {
-    for (const token of this.postfix) {
+    // we manually loop over the iterator to tell if it's a single variable, for lenient.
+    let iterResult = this.postfix.next()
+    let isFirstToken = true
+    while (!iterResult.done) {
+      const token = iterResult.value
+      iterResult = this.postfix.next()
+      const isLastToken = iterResult.done
+
       if (TypeGuards.isOperatorToken(token)) {
         const r = this.operands.pop()
         const l = this.operands.pop()
         const result = evalOperatorToken(token, l, r, ctx)
         this.operands.push(result)
       } else {
-        this.operands.push(evalToken(token, ctx))
+        this.operands.push(evalToken(token, ctx, this.lenient && isFirstToken && isLastToken))
       }
+
+      isFirstToken = false
     }
     return this.operands[0]
   }
@@ -39,12 +50,22 @@ export class Expression {
   }
 }
 
-export function evalToken (token: Token | undefined, ctx: Context): any {
+export function evalToken (token: Token | undefined, ctx: Context, lenient: boolean = false): any {
   assert(ctx, () => 'unable to evaluate: context not defined')
   if (TypeGuards.isPropertyAccessToken(token)) {
     const variable = token.getVariableAsText()
     const props: string[] = token.props.map(prop => evalToken(prop, ctx))
-    return ctx.get([variable, ...props])
+    try {
+      return ctx.get([variable, ...props])
+    } catch (e) {
+      // we catch the error thrown by Context.getFromScope() for undefined vars.
+      // Alt, we could make this more robust by setting a flag or using a separate error class.
+      if (lenient && e instanceof TypeError && e.message.startsWith("undefined variable:")) {
+        return null
+      } else {
+        throw(e)
+      }
+    }
   }
   if (TypeGuards.isRangeToken(token)) return evalRangeToken(token, ctx)
   if (TypeGuards.isLiteralToken(token)) return evalLiteralToken(token)
