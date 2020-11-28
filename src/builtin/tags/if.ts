@@ -31,7 +31,7 @@ export default {
     const r = this.liquid.renderer
 
     for (const branch of this.branches) {
-      const cond = yield new Expression(branch.cond).value(ctx)
+      const cond = yield new Expression(branch.cond, ctx.opts.lenientIf).value(ctx)
       if (isTruthy(cond, ctx)) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return
