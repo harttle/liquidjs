@@ -12,6 +12,7 @@ import { Context } from '../context/context'
 import { range, toValue } from '../util/underscore'
 import { Tokenizer } from '../parser/tokenizer'
 import { operatorImpls } from '../render/operator'
+import { UndefinedVariableError, InternalUndefinedVariableError } from '../util/error'
 
 export class Expression {
   private operands: any[] = []
@@ -49,12 +50,10 @@ export function evalToken (token: Token | undefined, ctx: Context, lenient: bool
     try {
       return ctx.get([variable, ...props])
     } catch (e) {
-      // for lenient, we catch the error thrown by Context.getFromScope() for undefined vars.
-      // Alt, we could make this more robust by setting a flag or using a separate error class.
-      if (lenient && e instanceof TypeError && e.message.startsWith("undefined variable:")) {
+      if (lenient && e instanceof InternalUndefinedVariableError) {
         return null
       } else {
-        throw(e)
+        throw(new UndefinedVariableError(e, token))
       }
     }
   }
