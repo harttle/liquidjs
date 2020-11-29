@@ -48,6 +48,27 @@ export class RenderError extends LiquidError {
   }
 }
 
+export class UndefinedVariableError extends LiquidError {
+  public constructor (err: Error, token: Token) {
+    super(err, token)
+    this.name = 'UndefinedVariableError'
+    this.message = err.message
+    super.update()
+  }
+}
+
+// only used internally; raised where we don't have token information,
+// so it can't be an UndefinedVariableError.
+export class InternalUndefinedVariableError extends Error {
+  variableName: string
+
+  public constructor (variableName: string) {
+    super(`undefined variable: ${variableName}`)
+    this.name = 'InternalUndefinedVariableError'
+    this.variableName = variableName
+  }
+}
+
 export class AssertionError extends Error {
   public constructor (message: string) {
     super(message)
