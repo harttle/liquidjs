@@ -15,33 +15,24 @@ import { operatorImpls } from '../render/operator'
 
 export class Expression {
   private operands: any[] = []
-  private postfix: IterableIterator<Token>
+  private postfix: Token[]
   private lenient: boolean
 
   public constructor (str: string, lenient: boolean = false) {
     const tokenizer = new Tokenizer(str)
-    this.postfix = toPostfix(tokenizer.readExpression())
+    this.postfix = [...toPostfix(tokenizer.readExpression())]
     this.lenient = lenient
   }
   public evaluate (ctx: Context): any {
-    // we manually loop over the iterator to tell if it's a single variable, for lenient.
-    let iterResult = this.postfix.next()
-    let isFirstToken = true
-    while (!iterResult.done) {
-      const token = iterResult.value
-      iterResult = this.postfix.next()
-      const isLastToken = iterResult.done
-
+    for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {
         const r = this.operands.pop()
         const l = this.operands.pop()
         const result = evalOperatorToken(token, l, r, ctx)
         this.operands.push(result)
       } else {
-        this.operands.push(evalToken(token, ctx, this.lenient && isFirstToken && isLastToken))
+        this.operands.push(evalToken(token, ctx, this.lenient && this.postfix.length == 1))
       }
-
-      isFirstToken = false
     }
     return this.operands[0]
   }
@@ -58,7 +49,7 @@ export function evalToken (token: Token | undefined, ctx: Context, lenient: bool
     try {
       return ctx.get([variable, ...props])
     } catch (e) {
-      // we catch the error thrown by Context.getFromScope() for undefined vars.
+      // for lenient, we catch the error thrown by Context.getFromScope() for undefined vars.
       // Alt, we could make this more robust by setting a flag or using a separate error class.
       if (lenient && e instanceof TypeError && e.message.startsWith("undefined variable:")) {
         return null
