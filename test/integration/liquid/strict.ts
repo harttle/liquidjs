@@ -45,7 +45,12 @@ describe('LiquidOptions#strict*', function () {
       const html = await engine.render(tpl, {'defined3': 'bla'}, strictLenientOpts)
       return expect(html).to.equal('bla')
     })
-    it('should still throw with an undefined variable in an expression', function () {
+    it('should not throw in `unless` with a single variable', async function () {
+      const tpl = engine.parse('before{% unless notdefined %}X{% else %}{{notdefined}}{% endunless %}after')
+      const html = await engine.render(tpl, ctx, strictLenientOpts)
+      return expect(html).to.equal('beforeXafter')
+    })
+    it('should still throw with an undefined variable in a compound `if` expression', function () {
       const tpl = engine.parse('{% if notdefined == 15 %}a{% endif %}')
       const fhtml = engine.render(tpl, ctx, strictLenientOpts)
       return expect(fhtml).to.be.rejectedWith(/undefined variable: notdefined/)
