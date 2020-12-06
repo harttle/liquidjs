@@ -29,11 +29,11 @@ export function upcase (str: string) {
 }
 
 export function remove (v: string, arg: string) {
-  return stringify(v).split(arg).join('')
+  return stringify(v).split(String(arg)).join('')
 }
 
 export function removeFirst (v: string, l: string) {
-  return stringify(v).replace(l, '')
+  return stringify(v).replace(String(l), '')
 }
 
 export function rstrip (str: string) {
@@ -41,7 +41,7 @@ export function rstrip (str: string) {
 }
 
 export function split (v: string, arg: string) {
-  return stringify(v).split(arg)
+  return stringify(v).split(String(arg))
 }
 
 export function strip (v: string) {
@@ -58,11 +58,11 @@ export function capitalize (str: string) {
 }
 
 export function replace (v: string, pattern: string, replacement: string) {
-  return stringify(v).split(pattern).join(replacement)
+  return stringify(v).split(String(pattern)).join(replacement)
 }
 
 export function replaceFirst (v: string, arg1: string, arg2: string) {
-  return stringify(v).replace(arg1, arg2)
+  return stringify(v).replace(String(arg1), arg2)
 }
 
 export function truncate (v: string, l = 50, o = '...') {

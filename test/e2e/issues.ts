@@ -23,4 +23,17 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync('{{ ["complex key"] }}', { 'complex key': 'foo' })
     expect(html).to.equal('foo')
   })
+  it('#243 Potential for ReDoS through string replace function', async () => {
+    const engine = new Liquid()
+    const INPUT = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa!'
+    const BROKEN_REGEX = /([a-z]+)+$/
+
+    // string filters vulnerable to regexp parameter: split, replace, replace_first, remove_first
+    const parameters = { input: INPUT, regex: BROKEN_REGEX }
+    const template = `{{ input | replace:regex,'' }}`
+    const html = engine.parseAndRenderSync(template, parameters)
+
+    // should stringify the regexp rather than execute it
+    expect(html).to.equal(INPUT)
+  })
 })
