@@ -19,7 +19,7 @@ export class Expression {
   private postfix: Token[]
   private lenient: boolean
 
-  public constructor (str: string, lenient: boolean = false) {
+  public constructor (str: string, lenient = false) {
     const tokenizer = new Tokenizer(str)
     this.postfix = [...toPostfix(tokenizer.readExpression())]
     this.lenient = lenient
@@ -32,7 +32,7 @@ export class Expression {
         const result = evalOperatorToken(token, l, r, ctx)
         this.operands.push(result)
       } else {
-        this.operands.push(evalToken(token, ctx, this.lenient && this.postfix.length == 1))
+        this.operands.push(evalToken(token, ctx, this.lenient && this.postfix.length === 1))
       }
     }
     return this.operands[0]
@@ -42,7 +42,7 @@ export class Expression {
   }
 }
 
-export function evalToken (token: Token | undefined, ctx: Context, lenient: boolean = false): any {
+export function evalToken (token: Token | undefined, ctx: Context, lenient = false): any {
   assert(ctx, () => 'unable to evaluate: context not defined')
   if (TypeGuards.isPropertyAccessToken(token)) {
     const variable = token.getVariableAsText()
@@ -53,7 +53,7 @@ export function evalToken (token: Token | undefined, ctx: Context, lenient: bool
       if (lenient && e instanceof InternalUndefinedVariableError) {
         return null
       } else {
-        throw(new UndefinedVariableError(e, token))
+        throw (new UndefinedVariableError(e, token))
       }
     }
   }

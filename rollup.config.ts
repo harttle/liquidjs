@@ -57,7 +57,6 @@ const nodeEsm = {
   input
 }
 
-
 const browserEsm = {
   output: [{
     file: 'dist/liquid.browser.esm.js',

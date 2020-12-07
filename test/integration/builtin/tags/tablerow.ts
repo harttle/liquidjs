@@ -17,7 +17,7 @@ describe('tags/tablerow', function () {
   it('should support promises', async function () {
     const src = '{% tablerow i in promiseNumbers %}{{ i }}{% endtablerow %}'
     const ctx = {
-      promiseNumbers: Promise.resolve([1,2,3])
+      promiseNumbers: Promise.resolve([1, 2, 3])
     }
     const dst = '<tr class="row1"><td class="col1">1</td><td class="col2">2</td><td class="col3">3</td></tr>'
     const html = await liquid.parseAndRender(src, ctx)

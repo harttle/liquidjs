@@ -3,7 +3,6 @@ import { Context } from '../context/context'
 import { isFunction } from '../util/underscore'
 import { isTruthy } from '../render/boolean'
 
-
 export const operatorImpls: {[key: string]: (lhs: any, rhs: any, ctx: Context) => boolean} = {
   '==': (l: any, r: any) => {
     if (isComparable(l)) return l.equals(r)

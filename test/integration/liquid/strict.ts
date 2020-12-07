@@ -30,7 +30,7 @@ describe('LiquidOptions#strict*', function () {
     return expect(engine.parseAndRender(html, ctx, opts)).to
       .be.rejectedWith(/undefined variable: notdefined/)
   })
-  describe('with strictVariables and lenientIf', function() {
+  describe('with strictVariables and lenientIf', function () {
     const strictLenientOpts = {
       strictVariables: true,
       lenientIf: true
@@ -42,7 +42,7 @@ describe('LiquidOptions#strict*', function () {
     })
     it('should support elsif with undefined variables', async function () {
       const tpl = engine.parse('{% if notdefined1 %}a{% elsif notdefined2 %}b{% elsif defined3 %}{{defined3}}{% else %}d{% endif %}')
-      const html = await engine.render(tpl, {'defined3': 'bla'}, strictLenientOpts)
+      const html = await engine.render(tpl, { 'defined3': 'bla' }, strictLenientOpts)
       return expect(html).to.equal('bla')
     })
     it('should not throw in `unless` with a single variable', async function () {
