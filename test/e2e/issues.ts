@@ -54,4 +54,15 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync(template, { condition1: true, condition2: true })
     expect(html).to.equal('<div>Y</div>')
   })
+  it('#277 Passing liquid in FilterImpl', () => {
+    const engine = new Liquid()
+    engine.registerFilter('render', function (template: string, name: string) {
+      return this.liquid.parseAndRenderSync(decodeURIComponent(template), { name })
+    })
+    const html = engine.parseAndRenderSync(
+      `{{ subtemplate | render: "foo" }}`,
+      { subtemplate: encodeURIComponent('hello {{ name }}') }
+    )
+    expect(html).to.equal('hello foo')
+  })
 })

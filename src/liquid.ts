@@ -31,7 +31,7 @@ export class Liquid {
     this.parser = new Parser(this)
     this.renderer = new Render()
     this.fs = opts.fs || fs
-    this.filters = new FilterMap(this.options.strictFilters)
+    this.filters = new FilterMap(this.options.strictFilters, this)
     this.tags = new TagMap()
 
     forOwn(builtinTags, (conf: TagImplOptions, name: string) => this.registerTag(snakeCase(name), conf))
@@ -104,7 +104,7 @@ export class Liquid {
   }
 
   public _evalValue (str: string, ctx: Context): IterableIterator<any> {
-    const value = new Value(str, this.filters)
+    const value = new Value(str, this.filters, this)
     return value.value(ctx)
   }
   public async evalValue (str: string, ctx: Context): Promise<any> {

@@ -14,8 +14,9 @@ const expect = chai.expect
 describe('filter', function () {
   let ctx: Context
   let filters: FilterMap
+  const liquid = {} as any
   beforeEach(function () {
-    filters = new FilterMap(false)
+    filters = new FilterMap(false, liquid)
     ctx = new Context()
   })
   it('should create default filter if not registered', async function () {
@@ -34,12 +35,13 @@ describe('filter', function () {
     await toThenable(filters.create('foo', [thirty]).render('foo', ctx))
     expect(spy).to.have.been.calledWith('foo', 30)
   })
-  it('should call filter impl with correct this arg', async function () {
+  it('should call filter impl with correct this', async function () {
     const spy = sinon.spy()
     filters.set('foo', spy)
     const thirty = new NumberToken(new IdentifierToken('33', 0, 2), undefined)
     await toThenable(filters.create('foo', [thirty]).render('foo', ctx))
     expect(spy).to.have.been.calledOn(sinon.match.has('context', ctx))
+    expect(spy).to.have.been.calledOn(sinon.match.has('liquid', liquid))
   })
   it('should render a simple filter', async function () {
     filters.set('upcase', x => x.toUpperCase())
