@@ -5,10 +5,9 @@ export function isTruthy (val: any, ctx: Context): boolean {
 }
 
 export function isFalsy (val: any, ctx: Context): boolean {
-  if(ctx.opts.jsTruthy) {
+  if (ctx.opts.jsTruthy) {
     return !val
-  }
-  else {
+  } else {
     return val === false || undefined === val || val === null
   }
 }

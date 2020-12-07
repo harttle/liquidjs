@@ -42,4 +42,16 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync(template)
     expect(html).to.equal('This is a code snippet showing how {% breaks the raw block.')
   })
+  it('#268 elsif is not supported for unless', () => {
+    const template = `{%- unless condition1 -%}
+    <div>X</div>
+    {%- elsif condition2 -%}
+        <div>Y</div>
+    {%- else %}
+        <div>Z</div>
+    {% endunless %}`
+    const engine = new Liquid()
+    const html = engine.parseAndRenderSync(template, { condition1: true, condition2: true })
+    expect(html).to.equal('<div>Y</div>')
+  })
 })

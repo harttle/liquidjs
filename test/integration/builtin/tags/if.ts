@@ -1,5 +1,9 @@
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import * as chai from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+const expect = chai.expect
+chai.use(chaiAsPromised)
 
 describe('tags/if', function () {
   const liquid = new Liquid()
