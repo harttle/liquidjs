@@ -5,7 +5,7 @@ describe('#evalValueSync()', function () {
   var engine: Liquid
   beforeEach(() => { engine = new Liquid() })
 
-  it('should throw when scope undefined', async function () {
-    return expect(() => engine.evalValueSync('foo', null as any)).to.throw(/context not defined/)
+  it('should eval value syncly', async function () {
+    return expect(engine.evalValueSync('true', { opts: {} } as any)).to.equal(true)
   })
 })

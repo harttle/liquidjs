@@ -5,7 +5,8 @@ describe('#evalValue()', function () {
   var engine: Liquid
   beforeEach(() => { engine = new Liquid() })
 
-  it('should throw when scope undefined', async function () {
-    return expect(engine.evalValue('"foo"', null as any)).to.be.rejectedWith(/context not defined/)
+  it('should eval value', async function () {
+    const val = await engine.evalValue('true', { opts: {} } as any)
+    expect(val).to.equal(true)
   })
 })
