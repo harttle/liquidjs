@@ -4,7 +4,6 @@ import { FilterMap } from '../template/filter/filter-map'
 import { Filter } from './filter/filter'
 import { Context } from '../context/context'
 import { ValueToken } from '../tokens/value-token'
-import { assert } from '../util/assert'
 import { Liquid } from '../liquid'
 
 export class Value {
@@ -20,7 +19,6 @@ export class Value {
     this.filters = tokenizer.readFilters().map(({ name, args }) => new Filter(name, this.filterMap.get(name), args, liquid))
   }
   public * value (ctx: Context) {
-    assert(ctx, () => 'unable to evaluate: context not defined')
     const lenient = ctx.opts.lenientIf && this.filters.length > 0 && this.filters[0].name === 'default'
 
     let val = yield evalToken(this.initial, ctx, lenient)
