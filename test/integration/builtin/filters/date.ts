@@ -12,7 +12,19 @@ describe('filters/date', function () {
     return test('{{ "today" | date: "%Y"}}', (new Date()).getFullYear().toString())
   })
   it('should parse as Date when given UTC string', function () {
-    return test('{{ "1991-02-22T00:00:00" | date: "%Y"}}', '1991')
+    return test('{{ "1991-02-22T00:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1991-02-22T00:00:00')
+  })
+  it('should not change the timezone between input and output', function () {
+    return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
+  })
+  it('should apply numeric offset', function () {
+    return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
+  })
+  it('should apply numeric offset', function () {
+    return test('{{ "1990-12-31T23:00:00-01:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
+  })
+  it('should apply numeric offset', function () {
+    return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
   })
   it('should render string as string if not valid', function () {
     return test('{{ "foo" | date: "%Y"}}', 'foo')

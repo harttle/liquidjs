@@ -1,4 +1,4 @@
-import strftime from '../../util/strftime'
+import strftime, { TimezoneDate } from '../../util/strftime'
 import { isString, isNumber } from '../../util/underscore'
 
 export function date (v: string | Date, arg: string) {
@@ -8,7 +8,7 @@ export function date (v: string | Date, arg: string) {
   } else if (isNumber(v)) {
     date = new Date(v * 1000)
   } else if (isString(v)) {
-    date = /^\d+$/.test(v) ? new Date(+v * 1000) : new Date(v)
+    date = /^\d+$/.test(v) ? new Date(+v * 1000) : new TimezoneDate(v)
   }
   return isValidDate(date) ? strftime(date, arg) : v
 }
