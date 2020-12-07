@@ -1,3 +1,17 @@
+# [9.17.0](https://github.com/harttle/liquidjs/compare/v9.16.1...v9.17.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* elsif is not supported for unless, fixes [#268](https://github.com/harttle/liquidjs/issues/268) ([2bbf501](https://github.com/harttle/liquidjs/commit/2bbf501))
+* enforce string-type pattern in `replace`, fixes [#243](https://github.com/harttle/liquidjs/issues/243) ([c8afa39](https://github.com/harttle/liquidjs/commit/c8afa39))
+* raw block not ignoring {% characters, fixes [#263](https://github.com/harttle/liquidjs/issues/263) ([a492d8e](https://github.com/harttle/liquidjs/commit/a492d8e))
+
+
+### Features
+
+* passing liquid to FilterImpl, closes [#277](https://github.com/harttle/liquidjs/issues/277) ([f9f595f](https://github.com/harttle/liquidjs/commit/f9f595f))
+
 ## [9.16.1](https://github.com/harttle/liquidjs/compare/v9.16.0...v9.16.1) (2020-10-09)
 
 
