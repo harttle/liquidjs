@@ -1,6 +1,6 @@
 import { whiteSpaceCtrl } from './whitespace-ctrl'
 import { NumberToken } from '../tokens/number-token'
-import { WordToken } from '../tokens/word-token'
+import { IdentifierToken } from '../tokens/identifier-token'
 import { literalValues } from '../util/literal'
 import { LiteralToken } from '../tokens/literal-token'
 import { OperatorToken } from '../tokens/operator-token'
@@ -20,12 +20,14 @@ import { ValueToken } from '../tokens/value-token'
 import { OutputToken } from '../tokens/output-token'
 import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
-import { TYPES, QUOTE, BLANK, VARIABLE } from '../util/character'
+import { TYPES, QUOTE, BLANK, IDENTIFIER } from '../util/character'
 import { matchOperator } from './match-operator'
 
 export class Tokenizer {
   p = 0
   N: number
+  private rawBeginAt = -1
+
   constructor (
     private input: string,
     private file: string = ''
@@ -70,7 +72,7 @@ export class Tokenizer {
     assert(this.peek() === '|', () => `unexpected token at ${this.snapshot()}`)
     this.p++
     const begin = this.p
-    const name = this.readWord()
+    const name = this.readIdentifier()
     if (!name.size()) return null
     const args = []
     this.skipBlank()
@@ -107,8 +109,9 @@ export class Tokenizer {
 
   readTopLevelToken (options: NormalizedFullOptions): TopLevelToken {
     const { tagDelimiterLeft, outputDelimiterLeft } = options
-    if (this.matchWord(tagDelimiterLeft)) return this.readTagToken(options)
-    if (this.matchWord(outputDelimiterLeft)) return this.readOutputToken(options)
+    if (this.rawBeginAt > -1) return this.readEndrawOrRawContent(options)
+    if (this.match(tagDelimiterLeft)) return this.readTagToken(options)
+    if (this.match(outputDelimiterLeft)) return this.readOutputToken(options)
     return this.readHTMLToken(options)
   }
 
@@ -116,8 +119,8 @@ export class Tokenizer {
     const begin = this.p
     while (this.p < this.N) {
       const { tagDelimiterLeft, outputDelimiterLeft } = options
-      if (this.matchWord(tagDelimiterLeft)) break
-      if (this.matchWord(outputDelimiterLeft)) break
+      if (this.match(tagDelimiterLeft)) break
+      if (this.match(outputDelimiterLeft)) break
       ++this.p
     }
     return new HTMLToken(this.input, begin, this.p, this.file)
@@ -128,9 +131,11 @@ export class Tokenizer {
     const { tagDelimiterRight } = options
     const begin = this.p
     if (this.readTo(tagDelimiterRight) === -1) {
-      this.mkError(`tag ${this.snapshot(begin)} not closed`, begin)
+      throw this.mkError(`tag ${this.snapshot(begin)} not closed`, begin)
     }
-    return new TagToken(input, begin, this.p, options, file)
+    const token = new TagToken(input, begin, this.p, options, file)
+    if (token.name === 'raw') this.rawBeginAt = begin
+    return token
   }
 
   readOutputToken (options: NormalizedFullOptions): OutputToken {
@@ -138,24 +143,59 @@ export class Tokenizer {
     const { outputDelimiterRight } = options
     const begin = this.p
     if (this.readTo(outputDelimiterRight) === -1) {
-      this.mkError(`output ${this.snapshot(begin)} not closed`, begin)
+      throw this.mkError(`output ${this.snapshot(begin)} not closed`, begin)
     }
     return new OutputToken(input, begin, this.p, options, file)
   }
 
+  readEndrawOrRawContent (options: NormalizedFullOptions): HTMLToken | TagToken {
+    const { tagDelimiterLeft, tagDelimiterRight } = options
+    const begin = this.p
+    let leftPos = this.readTo(tagDelimiterLeft) - tagDelimiterLeft.length
+    while (this.p < this.N) {
+      if (this.readIdentifier().getText() !== 'endraw') {
+        leftPos = this.readTo(tagDelimiterLeft) - tagDelimiterLeft.length
+        continue
+      }
+      while (this.p <= this.N) {
+        if (this.rmatch(tagDelimiterRight)) {
+          const end = this.p
+          if (begin === leftPos) {
+            this.rawBeginAt = -1
+            return new TagToken(this.input, begin, end, options, this.file)
+          } else {
+            this.p = leftPos
+            return new HTMLToken(this.input, begin, leftPos, this.file)
+          }
+        }
+        if (this.rmatch(tagDelimiterLeft)) break
+        this.p++
+      }
+    }
+    throw this.mkError(`raw ${this.snapshot(this.rawBeginAt)} not closed`, begin)
+  }
+
   mkError (msg: string, begin: number) {
-    throw new TokenizationError(msg, new WordToken(this.input, begin, this.N, this.file))
+    return new TokenizationError(msg, new IdentifierToken(this.input, begin, this.N, this.file))
   }
 
   snapshot (begin: number = this.p) {
     return JSON.stringify(ellipsis(this.input.slice(begin), 16))
   }
 
-  readWord (): WordToken { // rename to identifier
+  /**
+   * @deprecated
+   */
+  readWord () {
+    console.warn('Tokenizer#readWord() will be removed, use #readIdentifier instead')
+    return this.readIdentifier()
+  }
+
+  readIdentifier (): IdentifierToken {
     this.skipBlank()
     const begin = this.p
-    while (this.peekType() & VARIABLE) ++this.p
-    return new WordToken(this.input, begin, this.p, this.file)
+    while (this.peekType() & IDENTIFIER) ++this.p
+    return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
   readHashes () {
@@ -171,7 +211,7 @@ export class Tokenizer {
     this.skipBlank()
     if (this.peek() === ',') ++this.p
     const begin = this.p
-    const name = this.readWord()
+    const name = this.readIdentifier()
     if (!name.size()) return
     let value
 
@@ -198,7 +238,7 @@ export class Tokenizer {
   readTo (end: string): number {
     while (this.p < this.N) {
       ++this.p
-      if (this.reverseMatchWord(end)) return this.p
+      if (this.rmatch(end)) return this.p
     }
     return -1
   }
@@ -216,21 +256,21 @@ export class Tokenizer {
       return new PropertyAccessToken(prop, [], this.p)
     }
 
-    const variable = this.readWord()
+    const variable = this.readIdentifier()
     if (!variable.size()) return
 
     let isNumber = variable.isNumber(true)
-    const props: (QuotedToken | WordToken)[] = []
+    const props: (QuotedToken | IdentifierToken)[] = []
     while (true) {
       if (this.peek() === '[') {
         isNumber = false
         this.p++
-        const prop = this.readValue() || new WordToken(this.input, this.p, this.p, this.file)
+        const prop = this.readValue() || new IdentifierToken(this.input, this.p, this.p, this.file)
         this.readTo(']')
         props.push(prop)
       } else if (this.peek() === '.' && this.peek(1) !== '.') { // skip range syntax
         this.p++
-        const prop = this.readWord()
+        const prop = this.readIdentifier()
         if (!prop.size()) break
         if (!prop.isNumber()) isNumber = false
         props.push(prop)
@@ -239,7 +279,7 @@ export class Tokenizer {
     if (!props.length && literalValues.hasOwnProperty(variable.content)) {
       return new LiteralToken(this.input, variable.begin, variable.end, this.file)
     }
-    if (isNumber) return new NumberToken(variable, props[0] as WordToken)
+    if (isNumber) return new NumberToken(variable, props[0] as IdentifierToken)
     return new PropertyAccessToken(variable, props, this.p)
   }
 
@@ -276,22 +316,22 @@ export class Tokenizer {
     return new QuotedToken(this.input, begin, this.p, this.file)
   }
 
-  readFileName (): WordToken {
+  readFileName (): IdentifierToken {
     const begin = this.p
     while (!(this.peekType() & BLANK) && this.peek() !== ',' && this.p < this.N) this.p++
-    return new WordToken(this.input, begin, this.p, this.file)
+    return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
-  matchWord (word: string) {
+  match (word: string) {
     for (let i = 0; i < word.length; i++) {
       if (word[i] !== this.input[this.p + i]) return false
     }
     return true
   }
 
-  reverseMatchWord (word: string) {
-    for (let i = 0; i < word.length; i++) {
-      if (word[word.length - 1 - i] !== this.input[this.p - 1 - i]) return false
+  rmatch (pattern: string) {
+    for (let i = 0; i < pattern.length; i++) {
+      if (pattern[pattern.length - 1 - i] !== this.input[this.p - 1 - i]) return false
     }
     return true
   }

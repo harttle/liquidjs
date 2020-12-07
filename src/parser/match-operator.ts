@@ -1,4 +1,4 @@
-import { VARIABLE } from '../util/character'
+import { IDENTIFIER } from '../util/character'
 
 const trie = {
   a: { n: { d: { end: true, needBoundary: true } } },
@@ -19,6 +19,6 @@ export function matchOperator (str: string, begin: number, end = str.length) {
     if (node['end']) info = node
   }
   if (!info) return -1
-  if (info['needBoundary'] && str.charCodeAt(i) & VARIABLE) return -1
+  if (info['needBoundary'] && str.charCodeAt(i) & IDENTIFIER) return -1
   return i
 }

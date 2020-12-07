@@ -2,8 +2,7 @@ import { Token } from './token'
 import { NUMBER, TYPES, SIGN } from '../util/character'
 import { TokenKind } from '../parser/token-kind'
 
-// a word can be an identifier, a number, a keyword or a single-word-literal
-export class WordToken extends Token {
+export class IdentifierToken extends Token {
   public content: string
   constructor (
     public input: string,

@@ -36,4 +36,10 @@ describe('Issues', function () {
     // should stringify the regexp rather than execute it
     expect(html).to.equal(INPUT)
   })
+  it('#263 raw/endraw block not ignoring {% characters', () => {
+    const template = `{% raw %}This is a code snippet showing how {% breaks the raw block.{% endraw %}`
+    const engine = new Liquid()
+    const html = engine.parseAndRenderSync(template)
+    expect(html).to.equal('This is a code snippet showing how {% breaks the raw block.')
+  })
 })

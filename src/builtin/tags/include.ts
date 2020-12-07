@@ -11,7 +11,7 @@ export default {
     assert(this.file, () => `illegal argument "${token.args}"`)
 
     const begin = tokenizer.p
-    const withStr = tokenizer.readWord()
+    const withStr = tokenizer.readIdentifier()
     if (withStr.content === 'with') {
       tokenizer.skipBlank()
       if (tokenizer.peek() !== ':') {

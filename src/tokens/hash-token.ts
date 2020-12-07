@@ -1,6 +1,6 @@
 import { Token } from './token'
 import { ValueToken } from './value-token'
-import { WordToken } from './word-token'
+import { IdentifierToken } from './identifier-token'
 import { TokenKind } from '../parser/token-kind'
 
 export class HashToken extends Token {
@@ -8,7 +8,7 @@ export class HashToken extends Token {
     public input: string,
     public begin: number,
     public end: number,
-    public name: WordToken,
+    public name: IdentifierToken,
     public value?: ValueToken,
     public file?: string
   ) {

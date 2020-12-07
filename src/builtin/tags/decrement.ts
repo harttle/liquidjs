@@ -4,7 +4,7 @@ import { isNumber, stringify } from '../../util/underscore'
 export default {
   parse: function (token: TagToken) {
     const tokenizer = new Tokenizer(token.args)
-    this.variable = tokenizer.readWord().content
+    this.variable = tokenizer.readIdentifier().content
   },
   render: function (context: Context, emitter: Emitter) {
     const scope = context.environments

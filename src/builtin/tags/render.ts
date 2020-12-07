@@ -15,16 +15,16 @@ export default {
     while (!tokenizer.end()) {
       tokenizer.skipBlank()
       const begin = tokenizer.p
-      const keyword = tokenizer.readWord()
+      const keyword = tokenizer.readIdentifier()
       if (keyword.content === 'with' || keyword.content === 'for') {
         tokenizer.skipBlank()
         if (tokenizer.peek() !== ':') {
           const value = tokenizer.readValue()
           if (value) {
             const beforeAs = tokenizer.p
-            const asStr = tokenizer.readWord()
+            const asStr = tokenizer.readIdentifier()
             let alias
-            if (asStr.content === 'as') alias = tokenizer.readWord()
+            if (asStr.content === 'as') alias = tokenizer.readIdentifier()
             else tokenizer.p = beforeAs
 
             this[keyword.content] = { value, alias: alias && alias.content }

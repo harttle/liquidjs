@@ -1,6 +1,6 @@
 import { OperatorToken } from '../tokens/operator-token'
 import { DelimitedToken } from '../tokens/delimited-token'
-import { WordToken } from '../tokens/word-token'
+import { IdentifierToken } from '../tokens/identifier-token'
 import { TagToken } from '../tokens/tag-token'
 import { HTMLToken } from '../tokens/html-token'
 import { OutputToken } from '../tokens/output-token'
@@ -47,7 +47,7 @@ export function isPropertyAccessToken (val: any): val is PropertyAccessToken {
   return getKind(val) === TokenKind.PropertyAccess
 }
 
-export function isWordToken (val: any): val is WordToken {
+export function isWordToken (val: any): val is IdentifierToken {
   return getKind(val) === TokenKind.Word
 }
 

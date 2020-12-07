@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { WordToken } from '../../../src/tokens/word-token'
+import { IdentifierToken } from '../../../src/tokens/identifier-token'
 import { NumberToken } from '../../../src/tokens/number-token'
 import { PropertyAccessToken } from '../../../src/tokens/property-access-token'
 import { RangeToken } from '../../../src/tokens/range-token'
@@ -18,6 +18,10 @@ describe('Tokenize', function () {
   it('should read value', () => {
     expect(new Tokenizer('a[ b][ "c d" ]').readValueOrThrow().getText()).to.equal('a[ b][ "c d" ]')
     expect(new Tokenizer('a.b[c[d.e]]').readValueOrThrow().getText()).to.equal('a.b[c[d.e]]')
+  })
+  it('should read identifier', () => {
+    expect(new Tokenizer('foo bar').readIdentifier()).to.haveOwnProperty('content', 'foo')
+    expect(new Tokenizer('foo bar').readWord()).to.haveOwnProperty('content', 'foo')
   })
   it('should read number value', () => {
     const token: NumberToken = new Tokenizer('2.33.2').readValueOrThrow() as any
@@ -99,6 +103,29 @@ describe('Tokenize', function () {
     expect(tag).instanceOf(TagToken)
     expect(tag.name).to.equal('for')
     expect(tag.args).to.equal('p in a[1]')
+  })
+  it('should allow unclosed tag inside {% raw %}', function () {
+    const html = '{%raw%} {%if%} {%else {%endraw%}'
+    const tokenizer = new Tokenizer(html)
+    const tokens = tokenizer.readTopLevelTokens()
+
+    expect(tokens.length).to.equal(3)
+    expect(tokens[0]).to.haveOwnProperty('name', 'raw')
+    expect((tokens[1] as any).getContent()).to.equal(' {%if%} {%else ')
+  })
+  it('should allow unclosed endraw tag inside {% raw %}', function () {
+    const html = '{%raw%} {%endraw {%raw%} {%endraw%}'
+    const tokenizer = new Tokenizer(html)
+    const tokens = tokenizer.readTopLevelTokens()
+
+    expect(tokens.length).to.equal(3)
+    expect(tokens[0]).to.haveOwnProperty('name', 'raw')
+    expect((tokens[1] as any).getContent()).to.equal(' {%endraw {%raw%} ')
+  })
+  it('should throw when {% raw %} not closed', function () {
+    const html = '{%raw%} {%endraw {%raw%}'
+    const tokenizer = new Tokenizer(html)
+    expect(() => tokenizer.readTopLevelTokens()).to.throw('raw "{%raw%} {%end..." not closed, line:1, col:8')
   })
   it('should read output token', function () {
     const html = '<p>{{foo | date: "%Y-%m-%d"}}</p>'
@@ -259,7 +286,7 @@ describe('Tokenize', function () {
       expect(token!.args[0]).to.be.instanceOf(PropertyAccessToken)
       expect(pa.variable.content).to.equal('obj')
       expect(pa.props).to.have.lengthOf(1)
-      expect(pa.props[0]).to.be.instanceOf(WordToken)
+      expect(pa.props[0]).to.be.instanceOf(IdentifierToken)
       expect(pa.props[0].getText()).to.equal('foo')
     })
     it('should read a filter with obj["foo"] argument', function () {
@@ -329,7 +356,7 @@ describe('Tokenize', function () {
       expect(pa.props).to.have.lengthOf(2)
 
       const [p1, p2] = pa.props
-      expect(p1).to.be.instanceOf(WordToken)
+      expect(p1).to.be.instanceOf(IdentifierToken)
       expect(p1.getText()).to.equal('')
       expect(p2).to.be.instanceOf(PropertyAccessToken)
       expect(p2.getText()).to.equal('b')

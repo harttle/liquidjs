@@ -25,7 +25,7 @@ export default {
 } as TagImplOptions
 
 function readVariableName (tokenizer: Tokenizer) {
-  const word = tokenizer.readWord().content
+  const word = tokenizer.readIdentifier().content
   if (word) return word
   const quoted = tokenizer.readQuoted()
   if (quoted) return evalQuotedToken(quoted)
