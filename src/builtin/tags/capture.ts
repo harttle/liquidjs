@@ -1,5 +1,6 @@
 import { Tokenizer, assert, Template, Context, TagImplOptions, TagToken, TopLevelToken } from '../../types'
 import { evalQuotedToken } from '../../render/expression'
+import { Emitter } from '../../render/emitter'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
@@ -19,7 +20,7 @@ export default {
   },
   render: function * (ctx: Context) {
     const r = this.liquid.renderer
-    const html = yield r.renderTemplates(this.templates, ctx)
+    const html = yield r.renderTemplates(this.templates, ctx, new Emitter(ctx.opts.keepOutputType))
     ctx.bottom()[this.variable] = html
   }
 } as TagImplOptions

@@ -16,6 +16,10 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   }
   public * render (ctx: Context, emitter: Emitter) {
     const val = yield this.value.value(ctx)
-    emitter.write(stringify(toValue(val)))
+    if (ctx.opts.keepOutputType) {
+      emitter.write(toValue(val))
+    } else {
+      emitter.write(stringify(toValue(val)))
+    }
   }
 }

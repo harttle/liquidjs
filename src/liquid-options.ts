@@ -43,6 +43,8 @@ export interface LiquidOptions {
   fs?: FS;
   /** the global environment passed down to all partial templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
+  /** Whether or not to keep value type when writing the Output. Defaults to `false`. */
+  keepOutputType?: boolean;
 }
 
 interface NormalizedOptions extends LiquidOptions {
@@ -69,6 +71,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   outputDelimiterRight: string;
   greedy: boolean;
   globals: object;
+  keepOutputType: boolean;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -89,7 +92,8 @@ export const defaultOptions: NormalizedFullOptions = {
   strictFilters: false,
   strictVariables: false,
   lenientIf: false,
-  globals: {}
+  globals: {},
+  keepOutputType: false
 }
 
 export function normalize (options?: LiquidOptions): NormalizedOptions {
