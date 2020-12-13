@@ -15,6 +15,7 @@ import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefaul
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import { FS } from './fs/fs'
 import { toPromise, toValue } from './util/async'
+import { Emitter } from './render/emitter'
 
 export * from './types'
 
@@ -43,26 +44,27 @@ export class Liquid {
     return this.parser.parse(tokens)
   }
 
-  public _render (tpl: Template[], scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
+  public _render (tpl: Template[], scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<any> {
     const options = { ...this.options, ...normalize(opts) }
     const ctx = new Context(scope, options, sync)
-    return this.renderer.renderTemplates(tpl, ctx)
+    const emitter = new Emitter(options.keepOutputType)
+    return this.renderer.renderTemplates(tpl, ctx, emitter)
   }
-  public async render (tpl: Template[], scope?: object, opts?: LiquidOptions): Promise<string> {
+  public async render (tpl: Template[], scope?: object, opts?: LiquidOptions): Promise<any> {
     return toPromise(this._render(tpl, scope, opts, false))
   }
-  public renderSync (tpl: Template[], scope?: object, opts?: LiquidOptions): string {
+  public renderSync (tpl: Template[], scope?: object, opts?: LiquidOptions): any {
     return toValue(this._render(tpl, scope, opts, true))
   }
 
-  public _parseAndRender (html: string, scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
+  public _parseAndRender (html: string, scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<any> {
     const tpl = this.parse(html)
     return this._render(tpl, scope, opts, sync)
   }
-  public async parseAndRender (html: string, scope?: object, opts?: LiquidOptions): Promise<string> {
+  public async parseAndRender (html: string, scope?: object, opts?: LiquidOptions): Promise<any> {
     return toPromise(this._parseAndRender(html, scope, opts, false))
   }
-  public parseAndRenderSync (html: string, scope?: object, opts?: LiquidOptions): string {
+  public parseAndRenderSync (html: string, scope?: object, opts?: LiquidOptions): any {
     return toValue(this._parseAndRender(html, scope, opts, true))
   }
 
