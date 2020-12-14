@@ -1,3 +1,5 @@
+import { stringify, toValue } from '../util/underscore'
+
 export class Emitter {
   public html: any = '';
   public break = false;
@@ -9,6 +11,11 @@ export class Emitter {
   }
 
   public write (html: any) {
+    if (this.keepOutputType === true) {
+      html = toValue(html)
+    } else {
+      html = stringify(toValue(html))
+    }
     // This will only preserve the type if the value is isolated.
     // I.E:
     // {{ my-port }} -> 42

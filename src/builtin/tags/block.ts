@@ -20,7 +20,7 @@ export default {
     const r = this.liquid.renderer
     const html = childDefined !== undefined
       ? childDefined
-      : yield r.renderTemplates(this.tpls, ctx, new Emitter(ctx.opts.keepOutputType))
+      : yield r.renderTemplates(this.tpls, ctx)
 
     if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
       blocks[this.block] = html
