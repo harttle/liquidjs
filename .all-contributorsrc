@@ -324,6 +324,15 @@
         "code",
         "financial"
       ]
+    },
+    {
+      "login": "sschuldenzucker",
+      "name": "Steffen Schuldenzucker",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1100776?v=4",
+      "profile": "http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
