@@ -16,7 +16,7 @@ export default {
     const { renderer } = liquid
     const filepath = ctx.opts.dynamicPartials
       ? (TypeGuards.isQuotedToken(file)
-        ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx, new Emitter(ctx.opts.keepOutputType))
+        ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
         : evalToken(this.file, ctx))
       : file.getText()
     assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
@@ -24,12 +24,12 @@ export default {
     // render the remaining tokens immediately
     ctx.setRegister('blockMode', BlockMode.STORE)
     const blocks = ctx.getRegister('blocks')
-    const html = yield renderer.renderTemplates(this.tpls, ctx, new Emitter(ctx.opts.keepOutputType))
+    const html = yield renderer.renderTemplates(this.tpls, ctx)
     if (blocks[''] === undefined) blocks[''] = html
     const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
     ctx.push(yield hash.render(ctx))
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
-    const partial = yield renderer.renderTemplates(templates, ctx, new Emitter(ctx.opts.keepOutputType))
+    const partial = yield renderer.renderTemplates(templates, ctx)
     ctx.pop()
     emitter.write(partial)
   }

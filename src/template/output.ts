@@ -1,6 +1,5 @@
 import { Value } from './value'
 import { FilterMap } from './filter/filter-map'
-import { stringify, toValue } from '../util/underscore'
 import { TemplateImpl } from '../template/template-impl'
 import { Template } from '../template/template'
 import { Context } from '../context/context'
@@ -16,10 +15,6 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   }
   public * render (ctx: Context, emitter: Emitter) {
     const val = yield this.value.value(ctx)
-    if (ctx.opts.keepOutputType) {
-      emitter.write(toValue(val))
-    } else {
-      emitter.write(stringify(toValue(val)))
-    }
+    emitter.write(val)
   }
 }
