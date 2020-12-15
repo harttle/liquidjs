@@ -23,7 +23,7 @@ export class Emitter {
     if (this.keepOutputType === true && typeof html !== 'string' && this.html === '') {
       this.html = html
     } else {
-      this.html += html as string
+      this.html = stringify(this.html) + stringify(html)
     }
   }
 }
