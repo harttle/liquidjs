@@ -11,19 +11,19 @@ describe('filters/date', function () {
   it('should create a new Date when given "today"', function () {
     return test('{{ "today" | date: "%Y"}}', (new Date()).getFullYear().toString())
   })
-  it('should parse as Date when given UTC string', function () {
+  it('should parse as Date when given a timezoneless string', function () {
     return test('{{ "1991-02-22T00:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1991-02-22T00:00:00')
   })
   it('should not change the timezone between input and output', function () {
     return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
   })
-  it('should apply numeric offset', function () {
+  it('should apply numeric timezone offset (0)', function () {
     return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
   })
-  it('should apply numeric offset', function () {
+  it('should apply numeric timezone offset (-1)', function () {
     return test('{{ "1990-12-31T23:00:00-01:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
   })
-  it('should apply numeric offset', function () {
+  it('should apply numeric timezone offset (+2.30)', function () {
     return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00')
   })
   it('should render string as string if not valid', function () {

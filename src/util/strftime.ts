@@ -142,8 +142,8 @@ const formatCodes = {
 
 export default function (inputDate: Date, formatStr: string) {
   let d = inputDate
-  if (d instanceof TimezoneDate && d.timezoneOffset !== null) {
-    d = new Date((+d) + new Date().getTimezoneOffset() * 60 * 1000 + d.timezoneOffset * 60 * 1000)
+  if (d instanceof TimezoneDate) {
+    d = new Date((+d) + d.inputTimezoneOffset * 60 * 1000)
   }
 
   let output = ''
@@ -175,24 +175,19 @@ function format (d: Date, match: RegExpExecArray) {
 }
 
 export class TimezoneDate extends Date {
-  ISO8601_PATTERN = /^([+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([.,]\d+(?!:))?)?(\17[0-5]\d([.,]\d+)?)?([zZ]|([+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
-  ISO8601_OFFSET_PATTERN = /^([+-])(\d{2}):(\d{2})$/;
+  ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/;
 
-  timezoneOffset: number | null = null;
+  inputTimezoneOffset: number = 0;
 
   constructor (public dateString: string) {
     super(dateString)
-    const m = dateString.match(this.ISO8601_PATTERN)
-    const tzString = m && m[21]
-    if (tzString) {
-      if (tzString === 'Z') {
-        this.timezoneOffset = 0
-      } else {
-        const m2 = tzString.match(this.ISO8601_OFFSET_PATTERN)
-        if (m2) {
-          this.timezoneOffset = (m2[1] === '+' ? 1 : -1) * (parseInt(m2[2], 10) * 60 + parseInt(m2[3], 10))
-        }
-      }
+    const m = dateString.match(this.ISO8601_TIMEZONE_PATTERN)
+    if (m && m[1] === 'Z') {
+      this.inputTimezoneOffset = this.getTimezoneOffset()
+    } else if (m && m[2] && m[3] && m[4]) {
+      const [, , sign, hours, minutes] = m;
+      const delta = (sign === '+' ? 1 : -1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
+      this.inputTimezoneOffset = this.getTimezoneOffset() + delta
     }
   }
 }
