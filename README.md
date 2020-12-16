@@ -103,6 +103,9 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://github.com/amit777"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4" width="100px;" alt=""/><br /><sub><b>amit777</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=amit777" title="Code">💻</a> <a href="#financial-amit777" title="Financial">💵</a></td>
     <td align="center"><a href="http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html"><img src="https://avatars3.githubusercontent.com/u/1100776?v=4" width="100px;" alt=""/><br /><sub><b>Steffen Schuldenzucker</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=sschuldenzucker" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/Pixcell"><img src="https://avatars0.githubusercontent.com/u/4005291?v=4" width="100px;" alt=""/><br /><sub><b>Pixcell</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=Pixcell" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
