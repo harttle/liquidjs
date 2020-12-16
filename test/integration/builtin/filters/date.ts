@@ -16,7 +16,7 @@ describe('filters/date', function () {
     return test('{{ "1991-02-22T00:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1991-02-22T00:00:00')
   })
   describe('when preserveTimezones is enabled', function () {
-    const opts: LiquidOptions = { preserveTimezones: true };
+    const opts: LiquidOptions = { preserveTimezones: true }
 
     it('should not change the timezone between input and output', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)

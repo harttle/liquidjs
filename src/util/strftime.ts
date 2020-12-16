@@ -177,7 +177,7 @@ function format (d: Date, match: RegExpExecArray) {
 export class TimezoneDate extends Date {
   ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/;
 
-  inputTimezoneOffset: number = 0;
+  inputTimezoneOffset = 0;
 
   constructor (public dateString: string) {
     super(dateString)
@@ -185,13 +185,13 @@ export class TimezoneDate extends Date {
     if (m && m[1] === 'Z') {
       this.inputTimezoneOffset = this.getTimezoneOffset()
     } else if (m && m[2] && m[3] && m[4]) {
-      const [, , sign, hours, minutes] = m;
+      const [, , sign, hours, minutes] = m
       const delta = (sign === '+' ? 1 : -1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
       this.inputTimezoneOffset = this.getTimezoneOffset() + delta
     }
   }
 
-  getDisplayDate(): Date {
+  getDisplayDate (): Date {
     return new Date((+this) + this.inputTimezoneOffset * 60 * 1000)
   }
 }
