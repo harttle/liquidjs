@@ -143,7 +143,7 @@ const formatCodes = {
 export default function (inputDate: Date, formatStr: string) {
   let d = inputDate
   if (d instanceof TimezoneDate) {
-    d = new Date((+d) + d.inputTimezoneOffset * 60 * 1000)
+    d = d.getDisplayDate()
   }
 
   let output = ''
@@ -189,5 +189,9 @@ export class TimezoneDate extends Date {
       const delta = (sign === '+' ? 1 : -1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
       this.inputTimezoneOffset = this.getTimezoneOffset() + delta
     }
+  }
+
+  getDisplayDate(): Date {
+    return new Date((+this) + this.inputTimezoneOffset * 60 * 1000)
   }
 }
