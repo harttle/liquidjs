@@ -67,7 +67,7 @@ export class Context {
   }
 }
 
-export function readProperty (obj: Scope, key: string) : any {
+export function readProperty (obj: Scope, key: string): any {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
   if (obj instanceof Promise) {
