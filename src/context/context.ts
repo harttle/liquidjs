@@ -67,9 +67,12 @@ export class Context {
   }
 }
 
-export function readProperty (obj: Scope, key: string) {
+export function readProperty (obj: Scope, key: string) : any {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
+  if (obj instanceof Promise) {
+    return obj.then(resolvedObj=>readProperty(resolvedObj, key))
+  }
   if (obj instanceof Drop) {
     if (isFunction(obj[key])) return obj[key]()
     if (obj.hasOwnProperty(key)) return obj[key]
