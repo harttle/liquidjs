@@ -3,7 +3,7 @@ export abstract class Drop {
     return undefined
   }
 
-  public liquidMethodMissing (key: string): Promise<any | undefined> | string | undefined {
+  public liquidMethodMissing (key: string): Promise<any | undefined> | any | undefined {
     return undefined
   }
 }
