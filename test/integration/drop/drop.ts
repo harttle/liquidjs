@@ -25,6 +25,11 @@ describe('drop/drop', function () {
       return key.toUpperCase()
     }
   }
+  class PromiseDropWithPromiseMethodMissing extends Drop {
+    public async liquidMethodMissing (key: string) {
+      return Promise.resolve(key.toUpperCase())
+    }
+  }
   it('should call corresponding method when output', async function () {
     const html = await liquid.parseAndRender(`{{obj.getName}}`, { obj: new CustomDrop() })
     expect(html).to.equal('GET NAME')
@@ -51,6 +56,10 @@ describe('drop/drop', function () {
   })
   it('should read corresponding promise property', async function () {
     const html = await liquid.parseAndRender(`{{obj.name}}`, { obj: new PromiseDrop() })
+    expect(html).to.equal('NAME')
+  })
+  it('should read corresponding liquidMethodMissing promise', async function () {
+    const html = await liquid.parseAndRender(`{{obj.name}}`, { obj: new PromiseDropWithPromiseMethodMissing() })
     expect(html).to.equal('NAME')
   })
   it('should resolve before calling filters', async function () {
