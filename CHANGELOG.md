@@ -1,3 +1,15 @@
+# [9.18.0](https://github.com/harttle/liquidjs/compare/v9.17.0...v9.18.0) (2020-12-17)
+
+
+### Bug Fixes
+
+* address refactor comments ([6a0ad10](https://github.com/harttle/liquidjs/commit/6a0ad10))
+
+
+### Features
+
+* add option for keeping variable type in output ([cd92e77](https://github.com/harttle/liquidjs/commit/cd92e77))
+
 # [9.17.0](https://github.com/harttle/liquidjs/compare/v9.16.1...v9.17.0) (2020-12-07)
 
 
