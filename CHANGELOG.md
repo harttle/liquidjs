@@ -1,3 +1,18 @@
+# [9.19.0](https://github.com/harttle/liquidjs/compare/v9.18.0...v9.19.0) (2020-12-18)
+
+
+### Bug Fixes
+
+* lint ([de32259](https://github.com/harttle/liquidjs/commit/de32259))
+* move offset adding complexity inside TimezoneDate ([26b2175](https://github.com/harttle/liquidjs/commit/26b2175))
+* simpler timezone regex and non-null offset ([e3ecfe3](https://github.com/harttle/liquidjs/commit/e3ecfe3))
+
+
+### Features
+
+* add preserveTimezones option ([d70cd2a](https://github.com/harttle/liquidjs/commit/d70cd2a))
+* parse and handle date timezone offsets ([c16c787](https://github.com/harttle/liquidjs/commit/c16c787))
+
 # [9.18.0](https://github.com/harttle/liquidjs/compare/v9.17.0...v9.18.0) (2020-12-17)
 
 
