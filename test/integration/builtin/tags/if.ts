@@ -64,6 +64,12 @@ describe('tags/if', function () {
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).to.equal('XY')
     })
+    it('should evaluate promise', async function () {
+      const src = `{%if var == 'var' %}success{%endif%}`
+      const scope = { 'var': Promise.resolve('var') }
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('success')
+    })
     it('should evaluate right to left', async function () {
       const src = `{% if false and false or true %}true{%endif%}`
       const html = await liquid.parseAndRender(src)

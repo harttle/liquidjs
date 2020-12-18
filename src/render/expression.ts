@@ -24,11 +24,11 @@ export class Expression {
     this.postfix = [...toPostfix(tokenizer.readExpression())]
     this.lenient = lenient
   }
-  public evaluate (ctx: Context): any {
+  public * evaluate (ctx: Context): any {
     for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {
-        const r = this.operands.pop()
-        const l = this.operands.pop()
+        const r = yield this.operands.pop()
+        const l = yield this.operands.pop()
         const result = evalOperatorToken(token, l, r, ctx)
         this.operands.push(result)
       } else {
@@ -38,7 +38,7 @@ export class Expression {
     return this.operands[0]
   }
   public * value (ctx: Context) {
-    return toValue(this.evaluate(ctx))
+    return toValue(yield this.evaluate(ctx))
   }
 }
 
