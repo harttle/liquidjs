@@ -1,5 +1,5 @@
-{%header content: "welcome to liquid" | capitalize%}
-
+{% layout 'html.liquid' %}
+{%header content: title | capitalize%}
 <ul>
   {% for todo in todos %}
   <li>{{forloop.index}} - {{todo}}</li>

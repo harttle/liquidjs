@@ -2,7 +2,8 @@ const { Liquid } = require('liquidjs')
 
 const engine = new Liquid({
   root: __dirname,
-  extname: '.liquid'
+  extname: '.liquid',
+  globals: {title: 'LiquidJS Demo'}
 })
 
 engine.registerTag('header', {
@@ -17,8 +18,7 @@ engine.registerTag('header', {
 })
 
 const ctx = {
-  todos: ['fork and clone', 'make it better', 'make a pull request'],
-  title: 'Welcome to liquidjs!'
+  todos: ['fork and clone', 'make it better', 'make a pull request']
 }
 
 engine.renderFile('todolist', ctx)
