@@ -151,3 +151,92 @@ describe("dependency-graph: Affected Variables", function () {
     expect(affectedVars.length).to.equal(7);
   });
 });
+
+describe("dependency-graph: Cyclic Dependency", function() {
+
+  it('Should handle checks with no cyclic dependency', () => {
+    const expression = `
+    {% assign x = a | plus: t %}
+    {% assign y = a | times: t %}   
+    {% assign z = t | times: 3 %}
+    {% assign z = p | times: 3 %}
+    {% assign p = q | times: 3 %}
+    {% assign q = r | times: x %}
+    `;
+    const graph = depGraph.createDependencyTree(expression);
+    const cycle = depGraph.checkForCyclicDependency(graph);
+    expect(cycle).to.deep.equal([]);
+  });
+  
+  it('Should handle simple cyclic dependency check', () => {
+    // First line ceates cyclicity in the following expression
+    const expression = `
+    {% assign x = a | plus: z %}
+    {% assign y = a | times: t %}   
+    {% assign z = t | times: 3 %}
+    {% assign z = p | times: 3 %}
+    {% assign p = q | times: 3 %}
+    {% assign q = r | times: x %}
+    `;
+    const graph = depGraph.createDependencyTree(expression);
+    const cycle = depGraph.checkForCyclicDependency(graph);
+    expect(cycle).to.deep.equal([
+      'a',
+      'x',
+      'q',
+      'p',
+      'z',
+      'x'
+    ]);
+  });
+
+  it('Should handle self cyclic dependency check', () => {
+    const expression = `
+    {% assign x = x | plus:z %}
+    `;
+    const graph = depGraph.createDependencyTree(expression);
+    const cycle = depGraph.checkForCyclicDependency(graph);
+    expect(cycle).to.deep.equal([
+      'x',
+      'x'
+    ]);
+  });
+
+  it("Should handle complex cyclic dependency check", () => {
+    const expression = `
+    {% if private_seats %}
+    {% if yes_discounts_private_seats %}
+    {% if p_s_p %}
+        {% assign m_f_p_s_p_o = m_f_p_s | times: d_p_s_p %}
+        {% assign m_f_p_s_p_t = m_f_p_s_p_o | divided_by: 100.00 %}
+        {% assign m_f_p_s_p = m_f_p_s | minus: m_f_p_s_p_t %} 
+        {% assign t_m_f_p_s = m_f_p_s_p | times: c_p_s %}
+    {% else %}
+        {% assign m_f_p_s_a_o = m_f_p_s | minus: d_s_p_s_a %}
+        {% assign t_m_f_p_s = m_f_p_s_a_o | times: c_p_s %}
+    {% endif %}
+    {% else %}
+    {% assign t_m_f_p_s = m_f_p_s | times: c_p_s %}
+    {% endif %}
+    {% else %}
+    {% assign t_m_f = t_m_f_d_d | plus: t_m_f_h_d %}
+    {% endif %}
+    {% assign t_m_f_c = t_m_f | plus: t_m_f_p_s %}
+    {% assign m_f_p_s_p_o = t_m_f_c | plus: t_m_f_p_s %}
+    {% assign s_d = t_m_f_c| times: n_m %}
+    {% assign s_f = s_f_v | times: t_sea %}
+    `;
+    const graph = depGraph.createDependencyTree(expression);
+    const cycle = depGraph.checkForCyclicDependency(graph);
+    expect(cycle.length).to.equal(7);
+    expect(cycle).to.deep.equal([
+      'm_f_p_s',
+      'm_f_p_s_p_o',
+      'm_f_p_s_p_t',
+      'm_f_p_s_p',
+      't_m_f_p_s',
+      't_m_f_c',
+      'm_f_p_s_p_o',
+    ]);
+  });
+})

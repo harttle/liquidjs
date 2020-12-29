@@ -179,10 +179,64 @@ function getAffectedVariables(tree, inputVar) {
   return Array.from(new Set(values));
 }
 
+/**
+ * Checks for cyclic dependency in the input graph.
+ * Returns the cyclic path if found otherwise returns `[]`
+ *
+ * @param {*} graph The dependency tree created using `createDependencyTree`
+ * @return {*} 
+ */
+function checkForCyclicDependency(graph) {
+  const cycle = [];
+  const UNVISITED = 0;
+  const VISITING = 1;
+  const VISITED = 2;
+  const statusMap = new Map(Object.keys(graph).map(key => [key, UNVISITED]));
+
+  // Utility function for depth first search
+  // Throw error if a cycle is found
+  function dfs(node, neighbours){
+    if(statusMap.get(node) === VISITED){
+      return;
+    }
+
+    if(statusMap.get(node) === VISITING){
+      throw new Error('The graph contains cyclic dependency for ' + node);
+    }
+
+    statusMap.set(node, VISITING);
+
+    neighbours.forEach(neighbour => {
+      cycle.push(neighbour);
+      dfs(neighbour, graph[neighbour] || []);
+      cycle.pop();
+    });
+
+    statusMap.set(node, VISITED);
+  }
+
+  // Iterate over all keys in the graph and run dfs
+  // If cycle is found, error will be thrown and further execution stop
+  // In case of error, .pop() won't be called after any dfs, so cycle will have the cyclic path
+  // By using try-catch, we stop error from going up the chain any more and return cycle array 
+  const entries = Object.entries(graph);
+  try {
+    entries.forEach(([node, neighbours]) => {
+      if(statusMap.get(node) === UNVISITED){
+        cycle.push(node);
+        dfs(node, neighbours);
+        cycle.pop();
+      }
+    });
+  } catch (error) {}
+  return cycle;
+}
+
 module.exports = {
   parseAssign,
   getTemplates,
   createEngine,
   createDependencyTree,
   getAffectedVariables,
+  checkForCyclicDependency
 };
