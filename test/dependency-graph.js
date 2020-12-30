@@ -181,13 +181,17 @@ describe("dependency-graph: Cyclic Dependency", function() {
     const graph = depGraph.createDependencyTree(expression);
     const cycle = depGraph.checkForCyclicDependency(graph);
     expect(cycle).to.deep.equal([
-      'a',
       'x',
-      'q',
-      'p',
       'z',
-      'x'
+      'p',
+      'q',
+      'x',
     ]);
+    // Explanation
+    // x depends on z -> (x = a | plus: z)
+    // z depends on p -> (z = p | times: 3)
+    // p depends on q -> (p = q | times: 3)
+    // q depends on x -> (q = r | times: x)
   });
 
   it('Should handle self cyclic dependency check', () => {
@@ -228,15 +232,19 @@ describe("dependency-graph: Cyclic Dependency", function() {
     `;
     const graph = depGraph.createDependencyTree(expression);
     const cycle = depGraph.checkForCyclicDependency(graph);
-    expect(cycle.length).to.equal(7);
     expect(cycle).to.deep.equal([
-      'm_f_p_s',
       'm_f_p_s_p_o',
-      'm_f_p_s_p_t',
-      'm_f_p_s_p',
-      't_m_f_p_s',
       't_m_f_c',
+      't_m_f_p_s',
+      'm_f_p_s_p',
+      'm_f_p_s_p_t',
       'm_f_p_s_p_o',
     ]);
+    // Explanation
+    // m_f_p_s_p_o depends on t_m_f_c -> (m_f_p_s_p_o = t_m_f_c | plus: t_m_f_p_s)
+    // t_m_f_c depends on t_m_f_p_s -> (t_m_f_c = t_m_f | plus: t_m_f_p_s)
+    // t_m_f_p_s depends on m_f_p_s_p -> (t_m_f_p_s = m_f_p_s_p | times: c_p_s)
+    // m_f_p_s_p depends on m_f_p_s_p_t -> (m_f_p_s_p = m_f_p_s | minus: m_f_p_s_p_t)
+    // m_f_p_s_p_t depends on m_f_p_s_p_o -> (m_f_p_s_p_t = m_f_p_s_p_o | divided_by: 100.00)
   });
 })
