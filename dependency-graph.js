@@ -179,10 +179,81 @@ function getAffectedVariables(tree, inputVar) {
   return Array.from(new Set(values));
 }
 
+/**
+ * Checks for cyclic dependency in the input graph.
+ * Returns the cyclic path if found otherwise returns `[]`
+ * 
+ * Iterate over all keys in the graph and run `dfs()`.
+ * If a cycle is found, error will be thrown and further execution stop.
+ * In case of error, `.pop()` won't be called after any `dfs()`, so `cycle` array will have the cyclic path.
+ *
+ * @param {*} graph The dependency tree created using `createDependencyTree`
+ * @return {*} 
+ */
+function checkForCyclicDependency(graph) {
+  let cycle = [];
+  const UNVISITED = 0;
+  const VISITING = 1;
+  const VISITED = 2;
+  const statusMap = new Map(Object.keys(graph).map(key => [key, UNVISITED]));
+  
+  /**
+   * Utility function for depth first search.
+   * Updates `cycle` to keep track of potential circular dependency.
+   *
+   * @param {unknown} node The node to visit
+   * @param {*} neighbours The neighbours of the node being visited
+   * @return {undefined} Nothing is returned
+   * @throws {Error} If a cycle is encountered while doing DFS
+   */
+  function dfs(node, neighbours){
+    if(statusMap.get(node) === VISITED){
+      return;
+    }
+
+    if(statusMap.get(node) === VISITING){
+      throw new Error('The graph contains cyclic dependency for ' + node);
+    }
+
+    statusMap.set(node, VISITING);
+
+    neighbours.forEach(neighbour => {
+      cycle.push(neighbour);
+      dfs(neighbour, graph[neighbour] || []);
+      cycle.pop();
+    });
+
+    statusMap.set(node, VISITED);
+  }
+
+  // By using try-catch, we stop error from going up the chain any more and return cycle array 
+  const entries = Object.entries(graph);
+  try {
+    entries.forEach(([node, neighbours]) => {
+      if(statusMap.get(node) === UNVISITED){
+        cycle.push(node);
+        dfs(node, neighbours);
+        cycle.pop();
+      }
+    });
+  } catch (error) {
+    if (cycle.length) {
+      // currently cycle contains the entire dfs path
+      // we need to extract only the cyclic path
+      const cyclicityStartIndex = cycle.indexOf(cycle[cycle.length - 1]);
+      cycle = cycle.slice(cyclicityStartIndex);
+    }
+  }
+  // since dependency graph is of format baseVar -> [vars affected by baseVar]
+  // we need to reverse the cycle array to get a more intuitive cylclic path
+  return cycle.reverse();
+}
+
 module.exports = {
   parseAssign,
   getTemplates,
   createEngine,
   createDependencyTree,
   getAffectedVariables,
+  checkForCyclicDependency
 };
