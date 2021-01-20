@@ -226,7 +226,7 @@ function updateTypeAttribute(v, arg) {
 function updateAttribute(v, attr, arg) {
   if(isDefinedAndNotNullArg(v)) {
     if(isObject(v)) {
-      return Object.assign(v, {[`${attr}`]: arg})
+      return Object.assign({}, v, {[`${attr}`]: arg})
     }
     console.warn("Not valid arguments for operation")
     return null
