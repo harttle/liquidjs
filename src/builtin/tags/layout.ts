@@ -20,15 +20,17 @@ export default {
         : evalToken(this.file, ctx))
       : file.getText()
     assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
-
-    // render the remaining tokens immediately
-    ctx.setRegister('blockMode', BlockMode.STORE)
-    const blocks = ctx.getRegister('blocks')
-    const html = yield renderer.renderTemplates(this.tpls, ctx)
-    if (blocks[''] === undefined) blocks[''] = html
     const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
-    ctx.push(yield hash.render(ctx))
+
+    // render remaining contents and store rendered results
+    ctx.setRegister('blockMode', BlockMode.STORE)
+    const html = yield renderer.renderTemplates(this.tpls, ctx)
+    const blocks = ctx.getRegister('blocks')
+    if (blocks[''] === undefined) blocks[''] = () => html
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
+
+    // render the layout file use stored blocks
+    ctx.push(yield hash.render(ctx))
     const partial = yield renderer.renderTemplates(templates, ctx)
     ctx.pop()
     emitter.write(partial)
