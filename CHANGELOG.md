@@ -1,3 +1,10 @@
+# [9.20.0](https://github.com/harttle/liquidjs/compare/v9.19.0...v9.20.0) (2021-01-23)
+
+
+### Features
+
+* support `{{block.super}}`, see [#38](https://github.com/harttle/liquidjs/issues/38) ([a3af44d](https://github.com/harttle/liquidjs/commit/a3af44d))
+
 # [9.19.0](https://github.com/harttle/liquidjs/compare/v9.18.0...v9.19.0) (2020-12-18)
 
 
