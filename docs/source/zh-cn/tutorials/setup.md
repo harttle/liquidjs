@@ -41,8 +41,8 @@ engine
 LiquidJS 预先构建了 UMD Bundle，可以通过 jsDelivr CDN 来引用：
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>     <!--生产环境-->
-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.js"></script>         <!--开发环境t-->
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>     <!--生产环境-->
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.umd.js"></script>         <!--开发环境-->
 ```
 
 {% note info 示例 %} 这里有一个 jsFiddle 上的在线例子：<a href="https://jsfiddle.net/x43eb0z6/" target="_blank">jsfiddle.net/x43eb0z6</a>，其源码也可以在 <a href="https://github.com/harttle/liquidjs/blob/master/demo/browser/" target="_blank">liquidjs/demo/browser/</a> 找到。{% endnote %}

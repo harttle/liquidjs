@@ -32,7 +32,7 @@ npm install --save liquidjs
 Or use the UMD bundle from jsDelivr:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
 ```
 
 More details, refer to [The Setup Guide][setup].

@@ -26,4 +26,4 @@ LiquidJS 9 有一些基础性的改进，包括一些缺陷修复、新特性、
 
 * LiquidJS 不再有默认导出了，以后要使用 `import {Liquid} from 'liquidjs'` 语法。使用 UMD 包里的 `window.Liquid` 也需要改为 `window.liquidjs.Liquid`；
 * 移除了重复的静态方法 `Liquid.evalValue`，统一使用示例方法 `liquid.evalValue`；
-* 支持的最低目标平台为 Node.js 8，CJS 包（Node.js 下的主入口）不再支持 Node.js &leq; 6 了，ESM（dist/liquid.esm.js）和 UMD（dist/liquid.js, dist/liquid.min.js）包不受影响。
+* 支持的最低目标平台为 Node.js 8，CJS 包（Node.js 下的主入口）不再支持 Node.js &leq; 6 了，ESM（dist/liquid.browser.esm.js）和 UMD（dist/liquid.browser.umd.js, dist/liquid.browser.min.js）包不受影响。
