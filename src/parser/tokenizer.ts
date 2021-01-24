@@ -126,11 +126,10 @@ export class Tokenizer {
     return new HTMLToken(this.input, begin, this.p, this.file)
   }
 
-  readTagToken (options: NormalizedFullOptions): TagToken {
+  readTagToken (options: NormalizedFullOptions = defaultOptions): TagToken {
     const { file, input } = this
-    const { tagDelimiterRight } = options
     const begin = this.p
-    if (this.readTo(tagDelimiterRight) === -1) {
+    if (this.readToDelimiter(options.tagDelimiterRight) === -1) {
       throw this.mkError(`tag ${this.snapshot(begin)} not closed`, begin)
     }
     const token = new TagToken(input, begin, this.p, options, file)
@@ -138,11 +137,23 @@ export class Tokenizer {
     return token
   }
 
-  readOutputToken (options: NormalizedFullOptions): OutputToken {
+  readToDelimiter (delimiter: string) {
+    while (this.p < this.N) {
+      if ((this.peekType() & QUOTE)) {
+        this.readQuoted()
+        continue
+      }
+      ++this.p
+      if (this.rmatch(delimiter)) return this.p
+    }
+    return -1
+  }
+
+  readOutputToken (options: NormalizedFullOptions = defaultOptions): OutputToken {
     const { file, input } = this
     const { outputDelimiterRight } = options
     const begin = this.p
-    if (this.readTo(outputDelimiterRight) === -1) {
+    if (this.readToDelimiter(outputDelimiterRight) === -1) {
       throw this.mkError(`output ${this.snapshot(begin)} not closed`, begin)
     }
     return new OutputToken(input, begin, this.p, options, file)

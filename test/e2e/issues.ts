@@ -56,7 +56,7 @@ describe('Issues', function () {
   })
   it('#277 Passing liquid in FilterImpl', () => {
     const engine = new Liquid()
-    engine.registerFilter('render', function (template: string, name: string) {
+    engine.registerFilter('render', function (this: any, template: string, name: string) {
       return this.liquid.parseAndRenderSync(decodeURIComponent(template), { name })
     })
     const html = engine.parseAndRenderSync(
@@ -64,5 +64,10 @@ describe('Issues', function () {
       { subtemplate: encodeURIComponent('hello {{ name }}') }
     )
     expect(html).to.equal('hello foo')
+  })
+  it('#288 Unexpected behavior when string literals contain }}', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(`{{ '{{' }}{{ '}}' }}`)
+    expect(html).to.equal('{{}}')
   })
 })

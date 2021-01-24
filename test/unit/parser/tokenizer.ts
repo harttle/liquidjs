@@ -10,7 +10,7 @@ import { QuotedToken } from '../../../src/tokens/quoted-token'
 import { OutputToken } from '../../../src/tokens/output-token'
 import { HTMLToken } from '../../../src/tokens/html-token'
 
-describe('Tokenize', function () {
+describe('Tokenizer', function () {
   it('should read quoted', () => {
     expect(new Tokenizer('"foo" ff').readQuoted()!.getText()).to.equal('"foo"')
     expect(new Tokenizer(' "foo"ff').readQuoted()!.getText()).to.equal('"foo"')
@@ -84,125 +84,149 @@ describe('Tokenize', function () {
     expect(rols.name.content).to.equal('rows')
     expect(rols.value!.getText()).to.equal('data["rows"]')
   })
-  it('should read HTML token', function () {
-    const html = '<html><body><p>Lorem Ipsum</p></body></html>'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
+  describe('#readTopLevelTokens()', () => {
+    it('should read HTML token', function () {
+      const html = '<html><body><p>Lorem Ipsum</p></body></html>'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
 
-    expect(tokens.length).to.equal(1)
-    expect(tokens[0]).instanceOf(HTMLToken)
-    expect((tokens[0] as HTMLToken).getContent()).to.equal(html)
-  })
-  it('should read tag token', function () {
-    const html = '<p>{% for p in a[1]%}</p>'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      expect(tokens[0]).instanceOf(HTMLToken)
+      expect((tokens[0] as HTMLToken).getContent()).to.equal(html)
+    })
+    it('should read tag token', function () {
+      const html = '<p>{% for p in a[1]%}</p>'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
 
-    expect(tokens.length).to.equal(3)
-    const tag = tokens[1] as TagToken
-    expect(tag).instanceOf(TagToken)
-    expect(tag.name).to.equal('for')
-    expect(tag.args).to.equal('p in a[1]')
-  })
-  it('should allow unclosed tag inside {% raw %}', function () {
-    const html = '{%raw%} {%if%} {%else {%endraw%}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(3)
+      const tag = tokens[1] as TagToken
+      expect(tag).instanceOf(TagToken)
+      expect(tag.name).to.equal('for')
+      expect(tag.args).to.equal('p in a[1]')
+    })
+    it('should allow unclosed tag inside {% raw %}', function () {
+      const html = '{%raw%} {%if%} {%else {%endraw%}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
 
-    expect(tokens.length).to.equal(3)
-    expect(tokens[0]).to.haveOwnProperty('name', 'raw')
-    expect((tokens[1] as any).getContent()).to.equal(' {%if%} {%else ')
-  })
-  it('should allow unclosed endraw tag inside {% raw %}', function () {
-    const html = '{%raw%} {%endraw {%raw%} {%endraw%}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(3)
+      expect(tokens[0]).to.haveOwnProperty('name', 'raw')
+      expect((tokens[1] as any).getContent()).to.equal(' {%if%} {%else ')
+    })
+    it('should allow unclosed endraw tag inside {% raw %}', function () {
+      const html = '{%raw%} {%endraw {%raw%} {%endraw%}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
 
-    expect(tokens.length).to.equal(3)
-    expect(tokens[0]).to.haveOwnProperty('name', 'raw')
-    expect((tokens[1] as any).getContent()).to.equal(' {%endraw {%raw%} ')
-  })
-  it('should throw when {% raw %} not closed', function () {
-    const html = '{%raw%} {%endraw {%raw%}'
-    const tokenizer = new Tokenizer(html)
-    expect(() => tokenizer.readTopLevelTokens()).to.throw('raw "{%raw%} {%end..." not closed, line:1, col:8')
-  })
-  it('should read output token', function () {
-    const html = '<p>{{foo | date: "%Y-%m-%d"}}</p>'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(3)
+      expect(tokens[0]).to.haveOwnProperty('name', 'raw')
+      expect((tokens[1] as any).getContent()).to.equal(' {%endraw {%raw%} ')
+    })
+    it('should throw when {% raw %} not closed', function () {
+      const html = '{%raw%} {%endraw {%raw%}'
+      const tokenizer = new Tokenizer(html)
+      expect(() => tokenizer.readTopLevelTokens()).to.throw('raw "{%raw%} {%end..." not closed, line:1, col:8')
+    })
+    it('should read output token', function () {
+      const html = '<p>{{foo | date: "%Y-%m-%d"}}</p>'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
 
-    expect(tokens.length).to.equal(3)
-    const output = tokens[1] as OutputToken
-    expect(output).instanceOf(OutputToken)
-    expect(output.content).to.equal('foo | date: "%Y-%m-%d"')
-  })
-  it('should handle consecutive value and tags', function () {
-    const html = '{{foo}}{{bar}}{%foo%}{%bar%}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(3)
+      const output = tokens[1] as OutputToken
+      expect(output).instanceOf(OutputToken)
+      expect(output.content).to.equal('foo | date: "%Y-%m-%d"')
+    })
+    it('should handle consecutive value and tags', function () {
+      const html = '{{foo}}{{bar}}{%foo%}{%bar%}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
 
-    expect(tokens.length).to.equal(4)
-    const o1 = tokens[0] as OutputToken
-    const o2 = tokens[1] as OutputToken
-    const t1 = tokens[2] as TagToken
-    const t2 = tokens[3] as TagToken
-    expect(o1).instanceOf(OutputToken)
-    expect(o2).instanceOf(OutputToken)
-    expect(t1).instanceOf(TagToken)
-    expect(t2).instanceOf(TagToken)
+      expect(tokens.length).to.equal(4)
+      const o1 = tokens[0] as OutputToken
+      const o2 = tokens[1] as OutputToken
+      const t1 = tokens[2] as TagToken
+      const t2 = tokens[3] as TagToken
+      expect(o1).instanceOf(OutputToken)
+      expect(o2).instanceOf(OutputToken)
+      expect(t1).instanceOf(TagToken)
+      expect(t2).instanceOf(TagToken)
 
-    expect(o1.content).to.equal('foo')
-    expect(o2.content).to.equal('bar')
-    expect(t1.name).to.equal('foo')
-    expect(t1.args).to.equal('')
-    expect(t2.name).to.equal('bar')
-    expect(t2.args).to.equal('')
+      expect(o1.content).to.equal('foo')
+      expect(o2.content).to.equal('bar')
+      expect(t1.name).to.equal('foo')
+      expect(t1.args).to.equal('')
+      expect(t2.name).to.equal('bar')
+      expect(t2.args).to.equal('')
+    })
+    it('should keep white spaces and newlines', function () {
+      const html = '{%foo%}\n{%bar %}  \n {%alice%}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(5)
+      expect(tokens[1]).instanceOf(HTMLToken)
+      expect(tokens[1].getText()).to.equal('\n')
+      expect(tokens[3]).instanceOf(HTMLToken)
+      expect(tokens[3].getText()).to.equal('  \n ')
+    })
+    it('should handle multiple lines tag', function () {
+      const html = '{%foo\na:a\nb:1.23\n%}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      expect(tokens[0]).instanceOf(TagToken)
+      expect((tokens[0] as TagToken).args).to.equal('a:a\nb:1.23')
+      expect(tokens[0].getText()).to.equal('{%foo\na:a\nb:1.23\n%}')
+    })
+    it('should handle multiple lines value', function () {
+      const html = '{{foo\n|date:\n"%Y-%m-%d"\n}}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      expect(tokens[0]).instanceOf(OutputToken)
+      expect(tokens[0].getText()).to.equal('{{foo\n|date:\n"%Y-%m-%d"\n}}')
+    })
+    it('should handle complex object property access', function () {
+      const html = '{{ obj["my:property with anything"] }}'
+      const tokenizer = new Tokenizer(html)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      const output = tokens[0] as OutputToken
+      expect(output).instanceOf(OutputToken)
+      expect(output.content).to.equal('obj["my:property with anything"]')
+    })
+    it('should throw if tag not closed', function () {
+      const html = '{% assign foo = bar {{foo}}'
+      const tokenizer = new Tokenizer(html)
+      expect(() => tokenizer.readTopLevelTokens()).to.throw(/tag "{% assign foo..." not closed/)
+    })
+    it('should throw if output not closed', function () {
+      const tokenizer = new Tokenizer('{{name}')
+      expect(() => tokenizer.readTopLevelTokens()).to.throw(/output "{{name}" not closed/)
+    })
   })
-  it('should keep white spaces and newlines', function () {
-    const html = '{%foo%}\n{%bar %}  \n {%alice%}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
-    expect(tokens.length).to.equal(5)
-    expect(tokens[1]).instanceOf(HTMLToken)
-    expect(tokens[1].getText()).to.equal('\n')
-    expect(tokens[3]).instanceOf(HTMLToken)
-    expect(tokens[3].getText()).to.equal('  \n ')
+  describe('#readTagToken()', () => {
+    it('should skip quoted delimiters', function () {
+      const html = '{% assign a = "%} {% }} {{" %}'
+      const tokenizer = new Tokenizer(html)
+      const token = tokenizer.readTagToken()
+
+      expect(token).instanceOf(TagToken)
+      expect(token.name).to.equal('assign')
+      expect(token.args).to.equal('a = "%} {% }} {{"')
+    })
   })
-  it('should handle multiple lines tag', function () {
-    const html = '{%foo\na:a\nb:1.23\n%}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
-    expect(tokens.length).to.equal(1)
-    expect(tokens[0]).instanceOf(TagToken)
-    expect((tokens[0] as TagToken).args).to.equal('a:a\nb:1.23')
-    expect(tokens[0].getText()).to.equal('{%foo\na:a\nb:1.23\n%}')
-  })
-  it('should handle multiple lines value', function () {
-    const html = '{{foo\n|date:\n"%Y-%m-%d"\n}}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
-    expect(tokens.length).to.equal(1)
-    expect(tokens[0]).instanceOf(OutputToken)
-    expect(tokens[0].getText()).to.equal('{{foo\n|date:\n"%Y-%m-%d"\n}}')
-  })
-  it('should handle complex object property access', function () {
-    const html = '{{ obj["my:property with anything"] }}'
-    const tokenizer = new Tokenizer(html)
-    const tokens = tokenizer.readTopLevelTokens()
-    expect(tokens.length).to.equal(1)
-    const output = tokens[0] as OutputToken
-    expect(output).instanceOf(OutputToken)
-    expect(output.content).to.equal('obj["my:property with anything"]')
-  })
-  it('should throw if tag not closed', function () {
-    const html = '{% assign foo = bar {{foo}}'
-    const tokenizer = new Tokenizer(html)
-    expect(() => tokenizer.readTopLevelTokens()).to.throw(/tag "{% assign foo..." not closed/)
-  })
-  it('should throw if output not closed', function () {
-    const tokenizer = new Tokenizer('{{name}')
-    expect(() => tokenizer.readTopLevelTokens()).to.throw(/output "{{name}" not closed/)
+  describe('#readOutputToken()', () => {
+    it('should skip quoted delimiters', function () {
+      const html = '{{ "%} {%" | append: "}} {{" }}'
+      const tokenizer = new Tokenizer(html)
+      const token = tokenizer.readOutputToken()
+
+      console.log(token)
+      expect(token).instanceOf(OutputToken)
+      expect(token.content).to.equal('"%} {%" | append: "}} {{"')
+    })
   })
   describe('#readRange()', () => {
     it('should read `(1..3)`', () => {
