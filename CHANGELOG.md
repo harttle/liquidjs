@@ -1,3 +1,10 @@
+## [9.20.1](https://github.com/harttle/liquidjs/compare/v9.20.0...v9.20.1) (2021-01-24)
+
+
+### Bug Fixes
+
+* allow string literals contain delimiters, fixes [#288](https://github.com/harttle/liquidjs/issues/288) ([9c40da7](https://github.com/harttle/liquidjs/commit/9c40da7))
+
 # [9.20.0](https://github.com/harttle/liquidjs/compare/v9.19.0...v9.20.0) (2021-01-23)
 
 
