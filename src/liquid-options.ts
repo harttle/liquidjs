@@ -3,6 +3,7 @@ import { Template } from './template/template'
 import { Cache } from './cache/cache'
 import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
+import { operatorImpls, OperatorMap } from './render/operator'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -47,6 +48,8 @@ export interface LiquidOptions {
   globals?: object;
   /** Whether or not to keep value type when writing the Output. Defaults to `false`. */
   keepOutputType?: boolean;
+  /** An object of operators for conditional statements. Defaults to the regular Liquid operators. */
+  operators?: OperatorMap;
 }
 
 interface NormalizedOptions extends LiquidOptions {
@@ -75,6 +78,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   greedy: boolean;
   globals: object;
   keepOutputType: boolean;
+  operators: OperatorMap;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -97,7 +101,8 @@ export const defaultOptions: NormalizedFullOptions = {
   strictVariables: false,
   lenientIf: false,
   globals: {},
-  keepOutputType: false
+  keepOutputType: false,
+  operators: operatorImpls
 }
 
 export function normalize (options?: LiquidOptions): NormalizedOptions {

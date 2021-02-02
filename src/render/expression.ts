@@ -11,25 +11,27 @@ import { parseStringLiteral } from '../parser/parse-string-literal'
 import { Context } from '../context/context'
 import { range, toValue } from '../util/underscore'
 import { Tokenizer } from '../parser/tokenizer'
-import { operatorImpls } from '../render/operator'
+import { OperatorMap } from '../render/operator'
 import { UndefinedVariableError, InternalUndefinedVariableError } from '../util/error'
 
 export class Expression {
   private operands: any[] = []
   private postfix: Token[]
   private lenient: boolean
+  private operators: OperatorMap
 
-  public constructor (str: string, lenient = false) {
+  public constructor (str: string, operators: OperatorMap, lenient = false) {
     const tokenizer = new Tokenizer(str)
     this.postfix = [...toPostfix(tokenizer.readExpression())]
     this.lenient = lenient
+    this.operators = operators
   }
   public evaluate (ctx: Context): any {
     for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {
         const r = this.operands.pop()
         const l = this.operands.pop()
-        const result = evalOperatorToken(token, l, r, ctx)
+        const result = evalOperatorToken(this.operators, token, l, r, ctx)
         this.operands.push(result)
       } else {
         this.operands.push(evalToken(token, ctx, this.lenient && this.postfix.length === 1))
@@ -73,8 +75,8 @@ export function evalQuotedToken (token: QuotedToken) {
   return parseStringLiteral(token.getText())
 }
 
-function evalOperatorToken (token: OperatorToken, lhs: any, rhs: any, ctx: Context) {
-  const impl = operatorImpls[token.operator]
+function evalOperatorToken (operators: OperatorMap, token: OperatorToken, lhs: any, rhs: any, ctx: Context) {
+  const impl = operators[token.operator]
   return impl(lhs, rhs, ctx)
 }
 
