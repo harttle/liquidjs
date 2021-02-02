@@ -7,7 +7,7 @@ export interface OperatorMap {
   [key: string]: (lhs: any, rhs: any, ctx: Context) => boolean;
 }
 
-export const operatorImpls: OperatorMap = {
+export const Operators: OperatorMap = {
   '==': (l: any, r: any) => {
     if (isComparable(l)) return l.equals(r)
     if (isComparable(r)) return r.equals(l)
