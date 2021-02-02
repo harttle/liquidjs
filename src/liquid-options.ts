@@ -3,7 +3,7 @@ import { Template } from './template/template'
 import { Cache } from './cache/cache'
 import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
-import { operatorImpls, OperatorMap } from './render/operator'
+import { Operators, OperatorMap } from './render/operator'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -102,7 +102,7 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   keepOutputType: false,
-  operators: operatorImpls
+  operators: Operators
 }
 
 export function normalize (options?: LiquidOptions): NormalizedOptions {
