@@ -3,11 +3,11 @@ import { Context } from '../context/context'
 import { isFunction } from '../util/underscore'
 import { isTruthy } from '../render/boolean'
 
-export interface OperatorMap {
+export interface Operators {
   [key: string]: (lhs: any, rhs: any, ctx: Context) => boolean;
 }
 
-export const Operators: OperatorMap = {
+export const defaultOperators: Operators = {
   '==': (l: any, r: any) => {
     if (isComparable(l)) return l.equals(r)
     if (isComparable(r)) return r.equals(l)

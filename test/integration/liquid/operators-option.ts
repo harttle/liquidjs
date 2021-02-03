@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Liquid, Operators } from '../../../src/liquid'
+import { Liquid, defaultOperators } from '../../../src/liquid'
 
 describe('LiquidOptions#operators', function () {
   let engine: Liquid
@@ -7,7 +7,7 @@ describe('LiquidOptions#operators', function () {
   beforeEach(function () {
     engine = new Liquid({
       operators: {
-        ...Operators,
+        ...defaultOperators,
         isFooBar: (l, r) => l === 'foo' && r === 'bar'
       }
     })
