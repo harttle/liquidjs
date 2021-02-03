@@ -22,6 +22,7 @@ import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { TYPES, QUOTE, BLANK, IDENTIFIER } from '../util/character'
 import { matchOperator } from './match-operator'
+import { Trie } from '../util/operator-trie'
 
 export class Tokenizer {
   p = 0
@@ -30,6 +31,7 @@ export class Tokenizer {
 
   constructor (
     private input: string,
+    private trie: Trie,
     private file: string = ''
   ) {
     this.N = input.length
@@ -54,7 +56,7 @@ export class Tokenizer {
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
-    const end = matchOperator(this.input, this.p, this.p + 8)
+    const end = matchOperator(this.input, this.p, this.trie, this.p + 8)
     if (end === -1) return
     return new OperatorToken(this.input, this.p, (this.p = end), this.file)
   }

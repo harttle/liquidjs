@@ -14,7 +14,7 @@ export class Value {
    * @param str the value to be valuated, eg.: "foobar" | truncate: 3
    */
   public constructor (str: string, private readonly filterMap: FilterMap, liquid: Liquid) {
-    const tokenizer = new Tokenizer(str)
+    const tokenizer = new Tokenizer(str, liquid.options.operatorsTrie)
     this.initial = tokenizer.readValue()
     this.filters = tokenizer.readFilters().map(({ name, args }) => new Filter(name, this.filterMap.get(name), args, liquid))
   }

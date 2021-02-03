@@ -29,7 +29,8 @@ export default {
 
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    const cond = yield new Expression(this.cond, this.liquid.options.operators, ctx.opts.lenientIf).value(ctx)
+    const { operators, operatorsTrie } = this.liquid.options
+    const cond = yield new Expression(this.cond, operators, operatorsTrie, ctx.opts.lenientIf).value(ctx)
 
     if (isFalsy(cond, ctx)) {
       yield r.renderTemplates(this.templates, ctx, emitter)
@@ -37,7 +38,7 @@ export default {
     }
 
     for (const branch of this.branches) {
-      const cond = yield new Expression(branch.cond, this.liquid.options.operators, ctx.opts.lenientIf).value(ctx)
+      const cond = yield new Expression(branch.cond, operators, operatorsTrie, ctx.opts.lenientIf).value(ctx)
       if (isTruthy(cond, ctx)) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return

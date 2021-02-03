@@ -4,6 +4,7 @@ import { Cache } from './cache/cache'
 import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
 import { defaultOperators, Operators } from './render/operator'
+import { createTrie, Trie } from './util/operator-trie'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -55,6 +56,7 @@ export interface LiquidOptions {
 interface NormalizedOptions extends LiquidOptions {
   root?: string[];
   cache?: Cache<Template[]>;
+  operatorsTrie?: Trie;
 }
 
 export interface NormalizedFullOptions extends NormalizedOptions {
@@ -79,6 +81,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   globals: object;
   keepOutputType: boolean;
   operators: Operators;
+  operatorsTrie: Trie;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -102,7 +105,8 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   keepOutputType: false,
-  operators: defaultOperators
+  operators: defaultOperators,
+  operatorsTrie: createTrie(defaultOperators)
 }
 
 export function normalize (options?: LiquidOptions): NormalizedOptions {
@@ -116,6 +120,9 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
     else if (typeof options.cache === 'object') cache = options.cache
     else cache = options.cache ? new LRU<Template[]>(1024) : undefined
     options.cache = cache
+  }
+  if (options.hasOwnProperty('operators')) {
+    (options as NormalizedOptions).operatorsTrie = createTrie(options.operators!)
   }
   return options as NormalizedOptions
 }
