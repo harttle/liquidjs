@@ -3,7 +3,7 @@ import { evalQuotedToken } from '../../render/expression'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(tagToken.args)
+    const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operatorsTrie)
     this.variable = readVariableName(tokenizer)
     assert(this.variable, () => `${tagToken.args} not valid identifier`)
 

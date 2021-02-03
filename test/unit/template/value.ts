@@ -6,13 +6,17 @@ import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
 import { Context } from '../../../src/context/context'
 import { Value } from '../../../src/template/value'
+import { createTrie } from '../../../src/util/operator-trie'
+import { defaultOperators } from '../../../src/types'
 
 chai.use(sinonChai)
 
 const expect = chai.expect
 
 describe('Value', function () {
-  const liquid = {} as any
+  const liquid = {
+    options: { operatorsTrie: createTrie(defaultOperators) }
+  } as any
 
   describe('#constructor()', function () {
     const filterMap = new FilterMap(false, liquid)

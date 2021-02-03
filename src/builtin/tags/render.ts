@@ -6,7 +6,7 @@ import { evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagTo
 export default {
   parse: function (token: TagToken) {
     const args = token.args
-    const tokenizer = new Tokenizer(args)
+    const tokenizer = new Tokenizer(args, this.liquid.options.operatorsTrie)
     this.file = this.liquid.options.dynamicPartials
       ? tokenizer.readValue()
       : tokenizer.readFileName()

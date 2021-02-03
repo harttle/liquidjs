@@ -13,7 +13,7 @@ import { Tokenizer } from '../../parser/tokenizer'
 export class Hash {
   hash: { [key: string]: any } = {}
   constructor (markup: string) {
-    const tokenizer = new Tokenizer(markup)
+    const tokenizer = new Tokenizer(markup, {})
     for (const hash of tokenizer.readHashes()) {
       this.hash[hash.name.content] = hash.value
     }

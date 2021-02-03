@@ -3,7 +3,7 @@ import { isNumber, stringify } from '../../util/underscore'
 
 export default {
   parse: function (token: TagToken) {
-    const tokenizer = new Tokenizer(token.args)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
     this.variable = tokenizer.readIdentifier().content
   },
   render: function (context: Context, emitter: Emitter) {

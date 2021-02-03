@@ -39,7 +39,7 @@ export class Liquid {
     forOwn(builtinFilters, (handler: FilterImplOptions, name: string) => this.registerFilter(snakeCase(name), handler))
   }
   public parse (html: string, filepath?: string): Template[] {
-    const tokenizer = new Tokenizer(html, filepath)
+    const tokenizer = new Tokenizer(html, this.options.operatorsTrie, filepath)
     const tokens = tokenizer.readTopLevelTokens(this.options)
     return this.parser.parse(tokens)
   }

@@ -19,7 +19,9 @@ describe('LiquidOptions#operators', function () {
   })
 
   it('should evaluate a custom operator', async function () {
-    const result = await engine.parseAndRender('{% if "foo" isFooBar "bar" %}True{% endif %}')
-    expect(result).to.equal('True')
+    const first = await engine.parseAndRender('{% if "foo" isFooBar "bar" %}True{% else %}False{% endif %}')
+    expect(first).to.equal('True')
+    const second = await engine.parseAndRender('{% if "foo" isFooBar "foo" %}True{% else %}False{% endif %}')
+    expect(second).to.equal('False')
   })
 })

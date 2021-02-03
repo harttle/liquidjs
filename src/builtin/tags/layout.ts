@@ -3,7 +3,7 @@ import BlockMode from '../../context/block-mode'
 
 export default {
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(token.args)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
     const file = this.liquid.options.dynamicPartials ? tokenizer.readValue() : tokenizer.readFileName()
     assert(file, () => `illegal argument "${token.args}"`)
 

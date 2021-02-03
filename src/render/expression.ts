@@ -13,6 +13,7 @@ import { range, toValue } from '../util/underscore'
 import { Tokenizer } from '../parser/tokenizer'
 import { Operators } from '../render/operator'
 import { UndefinedVariableError, InternalUndefinedVariableError } from '../util/error'
+import { Trie } from '../util/operator-trie'
 
 export class Expression {
   private operands: any[] = []
@@ -20,8 +21,8 @@ export class Expression {
   private lenient: boolean
   private operators: Operators
 
-  public constructor (str: string, operators: Operators, lenient = false) {
-    const tokenizer = new Tokenizer(str)
+  public constructor (str: string, operators: Operators, operatorsTrie: Trie, lenient = false) {
+    const tokenizer = new Tokenizer(str, operatorsTrie)
     this.postfix = [...toPostfix(tokenizer.readExpression())]
     this.lenient = lenient
     this.operators = operators
