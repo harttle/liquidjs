@@ -11,7 +11,7 @@ Categories | Filters
 Math | plus, minus, modulo, times, floor, ceil, round, divided_by, abs
 String | append, prepend, capitalize, upcase, downcase, strip, lstrip, rstrip, strip_newlines, split, replace, replace_first, remove, remove_first, truncate, truncatewords
 HTML/URI | escape, escape_once, url_encode, url_decode, strip_html, newline_to_br
-Array | slice, map, sort, sort_natural, uniq, wheres, first, last, join, reverse
+Array | slice, map, sort, sort_natural, uniq, where, first, last, join, reverse
 Date | date
 
 [shopify/liquid]: https://github.com/Shopify/liquid
