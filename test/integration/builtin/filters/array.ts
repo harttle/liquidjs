@@ -50,6 +50,12 @@ describe('filters/array', function () {
       return test(tpl, { arr: [a, b, c] }, 'Alice Bob Carol')
     })
   })
+  describe('compact', () => {
+    it('should compact array', function () {
+      const posts = [{ category: 'foo' }, { category: 'bar' }, { foo: 'bar' }]
+      return test('{{posts | map: "category" | compact}}', { posts }, 'foo,bar')
+    })
+  })
   describe('reverse', function () {
     it('should support reverse', () => test(
       '{{ "Ground control to Major Tom." | split: "" | reverse | join: "" }}',

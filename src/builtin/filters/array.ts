@@ -1,4 +1,4 @@
-import { isArray, last as arrayLast } from '../../util/underscore'
+import { isArray, isNil, last as arrayLast } from '../../util/underscore'
 import { toArray } from '../../util/collection'
 import { isTruthy } from '../../render/boolean'
 import { FilterImpl } from '../../template/filter/filter-impl'
@@ -22,6 +22,10 @@ export const size = (v: string | any[]) => (v && v.length) || 0
 
 export function map<T1, T2> (this: FilterImpl, arr: Scope[], property: string) {
   return toArray(arr).map(obj => this.context.getFromScope(obj, property.split('.')))
+}
+
+export function compact<T> (this: FilterImpl, arr: T[]) {
+  return toArray(arr).filter(x => !isNil(x))
 }
 
 export function concat<T1, T2> (v: T1[], arg: T2[] | T2): (T1 | T2)[] {
