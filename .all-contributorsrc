@@ -342,6 +342,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "JasonEtco",
+      "name": "Jason Etcovitch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10660468?v=4",
+      "profile": "https://jasonet.co",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
