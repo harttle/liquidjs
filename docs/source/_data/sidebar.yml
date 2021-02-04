@@ -27,6 +27,7 @@ filters:
   at_most: at_most.html
   capitalize: capitalize.html
   ceil: ceil.html
+  compact: compact.html
   date: date.html
   default: default.html
   divided_by: divided_by.html
