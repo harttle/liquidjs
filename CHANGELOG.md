@@ -1,3 +1,14 @@
+# [9.21.0](https://github.com/harttle/liquidjs/compare/v9.20.1...v9.21.0) (2021-02-04)
+
+
+### Features
+
+* add `operators` option for custom operators ([75591cd](https://github.com/harttle/liquidjs/commit/75591cd))
+* create trie programmatically in options ([befc33c](https://github.com/harttle/liquidjs/commit/befc33c))
+* export OperatorMap type ([bc87e19](https://github.com/harttle/liquidjs/commit/bc87e19))
+* export Operators from operator.ts ([6a7c280](https://github.com/harttle/liquidjs/commit/6a7c280))
+* rename to defaultOperators and Operators ([8734e2e](https://github.com/harttle/liquidjs/commit/8734e2e))
+
 ## [9.20.1](https://github.com/harttle/liquidjs/compare/v9.20.0...v9.20.1) (2021-01-24)
 
 
