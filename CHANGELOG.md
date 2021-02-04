@@ -1,3 +1,10 @@
+# [9.22.0](https://github.com/harttle/liquidjs/compare/v9.21.0...v9.22.0) (2021-02-04)
+
+
+### Features
+
+* compact filter ([f42c217](https://github.com/harttle/liquidjs/commit/f42c217))
+
 # [9.21.0](https://github.com/harttle/liquidjs/compare/v9.20.1...v9.21.0) (2021-02-04)
 
 
