@@ -1,3 +1,10 @@
+## [9.22.1](https://github.com/harttle/liquidjs/compare/v9.22.0...v9.22.1) (2021-02-05)
+
+
+### Bug Fixes
+
+* default to precedence 1 for custom operators ([20f559e](https://github.com/harttle/liquidjs/commit/20f559e))
+
 # [9.22.0](https://github.com/harttle/liquidjs/compare/v9.21.0...v9.22.0) (2021-02-04)
 
 
