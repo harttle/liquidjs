@@ -24,4 +24,11 @@ describe('LiquidOptions#operators', function () {
     const second = await engine.parseAndRender('{% if "foo" isFooBar "foo" %}True{% else %}False{% endif %}')
     expect(second).to.equal('False')
   })
+
+  it('should evaluate a custom operator with the correct precedence', async function () {
+    const first = await engine.parseAndRender('{% if "foo" isFooBar "bar" or "foo" == "bar" %}True{% else %}False{% endif %}')
+    expect(first).to.equal('True')
+    const second = await engine.parseAndRender('{% if "foo" isFooBar "foo" or "foo" == "bar" %}True{% else %}False{% endif %}')
+    expect(second).to.equal('False')
+  })
 })
