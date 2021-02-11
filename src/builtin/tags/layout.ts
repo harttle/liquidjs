@@ -14,12 +14,18 @@ export default {
   render: function * (ctx: Context, emitter: Emitter) {
     const { liquid, hash, file } = this
     const { renderer } = liquid
+    if (file.getText() === 'none') {
+      ctx.setRegister('blockMode', BlockMode.OUTPUT)
+      const html = yield renderer.renderTemplates(this.tpls, ctx)
+      emitter.write(html)
+      return
+    }
     const filepath = ctx.opts.dynamicPartials
       ? (TypeGuards.isQuotedToken(file)
         ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
         : evalToken(this.file, ctx))
       : file.getText()
-    assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
+    assert(filepath, () => `file "${file.getText()}"("${filepath}") not available`)
     const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
 
     // render remaining contents and store rendered results

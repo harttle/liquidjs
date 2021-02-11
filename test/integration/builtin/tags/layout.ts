@@ -38,8 +38,15 @@ describe('tags/layout', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/illegal filename "foo":"undefined"/)
+      expect(e.message).to.contain('file "foo"("undefined") not available')
     })
+  })
+  it('should handle layout none', async function () {
+    const src = '{% layout none %}' +
+      '{%block a%}A{%endblock%}' +
+      'B'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('AB')
   })
   describe('anonymous block', function () {
     it('should handle anonymous block', async function () {
