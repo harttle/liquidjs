@@ -15,6 +15,8 @@ describe('Context', function () {
         first: 'f',
         last: 'l'
       },
+      func: () => 'FUNC',
+      objFunc: () => ({ prop: 'PROP' }),
       bar: {
         zoo: 'coo',
         'Mr.Smith': 'John',
@@ -58,6 +60,12 @@ describe('Context', function () {
     })
     it('should read .last of array', async function () {
       expect(ctx.get(['bar', 'arr', 'last'])).to.equal('b')
+    })
+    it('should call function', async function () {
+      expect(ctx.get(['func'])).to.equal('FUNC')
+    })
+    it('should call function before read nested property', async function () {
+      expect(ctx.get(['objFunc', 'prop'])).to.equal('PROP')
     })
   })
 

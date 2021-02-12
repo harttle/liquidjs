@@ -70,4 +70,12 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(`{{ '{{' }}{{ '}}' }}`)
     expect(html).to.equal('{{}}')
   })
+  it('#222 Support function calls', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(
+      `{{ obj.property }}`,
+      { obj: { property: () => 'BAR' } }
+    )
+    expect(html).to.equal('BAR')
+  })
 })

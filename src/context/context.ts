@@ -70,8 +70,8 @@ export class Context {
 export function readProperty (obj: Scope, key: string) {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
+  if (isFunction(obj[key])) return obj[key]()
   if (obj instanceof Drop) {
-    if (isFunction(obj[key])) return obj[key]()
     if (obj.hasOwnProperty(key)) return obj[key]
     return obj.liquidMethodMissing(key)
   }
