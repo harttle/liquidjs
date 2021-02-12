@@ -1,3 +1,17 @@
+# [9.23.0](https://github.com/harttle/liquidjs/compare/v9.22.1...v9.23.0) (2021-02-12)
+
+
+### Bug Fixes
+
+* respect `fs` in parser options, for [#233](https://github.com/harttle/liquidjs/issues/233) ([4e82da6](https://github.com/harttle/liquidjs/commit/4e82da6))
+
+
+### Features
+
+* support filters in if/unless/case, see [#287](https://github.com/harttle/liquidjs/issues/287) ([2f059f6](https://github.com/harttle/liquidjs/commit/2f059f6))
+* support function calls, closes [#222](https://github.com/harttle/liquidjs/issues/222) ([e37824f](https://github.com/harttle/liquidjs/commit/e37824f))
+* support layout none, closes [#299](https://github.com/harttle/liquidjs/issues/299) ([81e11bb](https://github.com/harttle/liquidjs/commit/81e11bb))
+
 ## [9.22.1](https://github.com/harttle/liquidjs/compare/v9.22.0...v9.22.1) (2021-02-05)
 
 
