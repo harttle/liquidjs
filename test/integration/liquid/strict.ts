@@ -1,5 +1,9 @@
 import { Liquid } from '../../../src/liquid'
-import { expect } from 'chai'
+import * as chai from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+chai.use(chaiAsPromised)
+const expect = chai.expect
 
 describe('LiquidOptions#strict*', function () {
   let engine: Liquid
@@ -59,6 +63,10 @@ describe('LiquidOptions#strict*', function () {
       const tpl = engine.parse('{{notdefined | default: "a" | tolower}}')
       const html = await engine.render(tpl, ctx, strictLenientOpts)
       return expect(html).to.equal('a')
+    })
+    it('should not allow undefined variable even if `lenientIf` set', async function () {
+      const tpl = engine.parse('{{notdefined | tolower}}')
+      return expect(() => engine.renderSync(tpl, ctx, strictLenientOpts)).to.throw('undefined variable: notdefined')
     })
   })
 })

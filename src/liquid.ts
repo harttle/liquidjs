@@ -101,8 +101,8 @@ export class Liquid {
   }
 
   public _evalValue (str: string, ctx: Context): IterableIterator<any> {
-    const value = new Value(str, this.filters, this)
-    return value.value(ctx)
+    const value = new Value(str, this)
+    return value.value(ctx, false)
   }
   public async evalValue (str: string, ctx: Context): Promise<any> {
     return toPromise(this._evalValue(str, ctx))

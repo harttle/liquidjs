@@ -1,4 +1,4 @@
-import { TopLevelToken, Template, Emitter, Expression, isTruthy, isFalsy, ParseStream, Context, TagImplOptions, TagToken } from '../../types'
+import { Value, TopLevelToken, Template, Emitter, isTruthy, isFalsy, ParseStream, Context, TagImplOptions, TagToken } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
@@ -9,11 +9,11 @@ export default {
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => {
         p = this.templates
-        this.cond = tagToken.args
+        this.cond = new Value(tagToken.args, this.liquid)
       })
       .on('tag:elsif', (token: TagToken) => {
         this.branches.push({
-          cond: token.args,
+          cond: new Value(token.args, this.liquid),
           templates: p = []
         })
       })
@@ -29,8 +29,7 @@ export default {
 
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    const { operators, operatorsTrie } = this.liquid.options
-    const cond = yield new Expression(this.cond, operators, operatorsTrie, ctx.opts.lenientIf).value(ctx)
+    const cond = yield this.cond.value(ctx, ctx.opts.lenientIf)
 
     if (isFalsy(cond, ctx)) {
       yield r.renderTemplates(this.templates, ctx, emitter)
@@ -38,7 +37,7 @@ export default {
     }
 
     for (const branch of this.branches) {
-      const cond = yield new Expression(branch.cond, operators, operatorsTrie, ctx.opts.lenientIf).value(ctx)
+      const cond = yield branch.cond.value(ctx, ctx.opts.lenientIf)
       if (isTruthy(cond, ctx)) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return

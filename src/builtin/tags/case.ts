@@ -1,8 +1,8 @@
-import { Expression, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { toValue, Value, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-    this.cond = tagToken.args
+    this.cond = new Value(tagToken.args, this.liquid)
     this.cases = []
     this.elseTemplates = []
 
@@ -10,7 +10,7 @@ export default {
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('tag:when', (token: TagToken) => {
         this.cases.push({
-          val: token.args,
+          val: new Value(token.args, this.liquid),
           templates: p = []
         })
       })
@@ -26,11 +26,9 @@ export default {
 
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    const { operators, operatorsTrie } = this.liquid.options
-    const cond = yield new Expression(this.cond, operators, operatorsTrie).value(ctx)
-    for (let i = 0; i < this.cases.length; i++) {
-      const branch = this.cases[i]
-      const val = yield new Expression(branch.val, operators, operatorsTrie).value(ctx)
+    const cond = toValue(yield this.cond.value(ctx, ctx.opts.lenientIf))
+    for (const branch of this.cases) {
+      const val = toValue(yield branch.val.value(ctx, ctx.opts.lenientIf))
       if (val === cond) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return

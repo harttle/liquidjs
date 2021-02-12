@@ -76,9 +76,9 @@ describe('tags/assign', function () {
       return expect(html).to.equal('11')
     })
     it('should write to the root scope', async function () {
-      const src = '{%for a in (1..2)%}{%assign num = a%}{{a}}{%endfor%} {{num}}'
+      const src = '{%for a in (1..2)%}{%assign num = a%}{{a}}{%endfor%}'
       const html = await liquid.parseAndRender(src, { num: 1 })
-      return expect(html).to.equal('12 2')
+      return expect(html).to.equal('12')
     })
     it('should not change input scope', async function () {
       const src = '{%for a in (1..2)%}{%assign num = a%}{{a}}{%endfor%} {{num}}'

@@ -227,7 +227,6 @@ describe('Tokenizer', function () {
       const tokenizer = new Tokenizer(html, trie)
       const token = tokenizer.readOutputToken()
 
-      console.log(token)
       expect(token).instanceOf(OutputToken)
       expect(token.content).to.equal('"%} {%" | append: "}} {{"')
     })
@@ -299,7 +298,7 @@ describe('Tokenizer', function () {
 
       const pa: PropertyAccessToken = token!.args[0] as any
       expect(token!.args[0]).to.be.instanceOf(PropertyAccessToken)
-      expect(pa.variable.content).to.equal('arr')
+      expect((pa.variable as any).content).to.equal('arr')
       expect(pa.props).to.have.lengthOf(1)
       expect(pa.props[0]).to.be.instanceOf(NumberToken)
       expect(pa.props[0].getText()).to.equal('0')
@@ -312,7 +311,7 @@ describe('Tokenizer', function () {
 
       const pa: PropertyAccessToken = token!.args[0] as any
       expect(token!.args[0]).to.be.instanceOf(PropertyAccessToken)
-      expect(pa.variable.content).to.equal('obj')
+      expect((pa.variable as any).content).to.equal('obj')
       expect(pa.props).to.have.lengthOf(1)
       expect(pa.props[0]).to.be.instanceOf(IdentifierToken)
       expect(pa.props[0].getText()).to.equal('foo')
@@ -326,7 +325,7 @@ describe('Tokenizer', function () {
       const pa: PropertyAccessToken = token!.args[0] as any
       expect(token!.args[0]).to.be.instanceOf(PropertyAccessToken)
       expect(pa.getText()).to.equal('obj["good luck"]')
-      expect(pa.variable.content).to.equal('obj')
+      expect((pa.variable as any).content).to.equal('obj')
       expect(pa.props[0].getText()).to.equal('"good luck"')
     })
   })
@@ -368,19 +367,19 @@ describe('Tokenizer', function () {
   })
   describe('#readExpression()', () => {
     it('should read expression `a `', () => {
-      const exp = [...new Tokenizer('a ', trie).readExpression()]
+      const exp = [...new Tokenizer('a ', trie).readExpressionTokens()]
 
       expect(exp).to.have.lengthOf(1)
       expect(exp[0]).to.be.instanceOf(PropertyAccessToken)
       expect(exp[0].getText()).to.deep.equal('a')
     })
     it('should read expression `a[][b]`', () => {
-      const exp = [...new Tokenizer('a[][b]', trie).readExpression()]
+      const exp = [...new Tokenizer('a[][b]', trie).readExpressionTokens()]
 
       expect(exp).to.have.lengthOf(1)
       const pa = exp[0] as PropertyAccessToken
       expect(pa).to.be.instanceOf(PropertyAccessToken)
-      expect(pa.variable.content).to.deep.equal('a')
+      expect((pa.variable as any).content).to.deep.equal('a')
       expect(pa.props).to.have.lengthOf(2)
 
       const [p1, p2] = pa.props
@@ -390,23 +389,23 @@ describe('Tokenizer', function () {
       expect(p2.getText()).to.equal('b')
     })
     it('should read expression `a.`', () => {
-      const exp = [...new Tokenizer('a.', trie).readExpression()]
+      const exp = [...new Tokenizer('a.', trie).readExpressionTokens()]
 
       expect(exp).to.have.lengthOf(1)
       const pa = exp[0] as PropertyAccessToken
       expect(pa).to.be.instanceOf(PropertyAccessToken)
-      expect(pa.variable.content).to.deep.equal('a')
+      expect((pa.variable as any).content).to.deep.equal('a')
       expect(pa.props).to.have.lengthOf(0)
     })
     it('should read expression `a ==`', () => {
-      const exp = [...new Tokenizer('a ==', trie).readExpression()]
+      const exp = [...new Tokenizer('a ==', trie).readExpressionTokens()]
 
       expect(exp).to.have.lengthOf(1)
       expect(exp[0]).to.be.instanceOf(PropertyAccessToken)
       expect(exp[0].getText()).to.deep.equal('a')
     })
     it('should read expression `a==b`', () => {
-      const exp = new Tokenizer('a==b', trie).readExpression()
+      const exp = new Tokenizer('a==b', trie).readExpressionTokens()
       const [a, equals, b] = exp
 
       expect(a).to.be.instanceOf(PropertyAccessToken)
@@ -419,11 +418,11 @@ describe('Tokenizer', function () {
       expect(b.getText()).to.deep.equal('b')
     })
     it('should read expression `^`', () => {
-      const exp = new Tokenizer('^', trie).readExpression()
+      const exp = new Tokenizer('^', trie).readExpressionTokens()
       expect([...exp]).to.deep.equal([])
     })
     it('should read expression `a == b`', () => {
-      const exp = new Tokenizer('a == b', trie).readExpression()
+      const exp = new Tokenizer('a == b', trie).readExpressionTokens()
       const [a, equals, b] = exp
 
       expect(a).to.be.instanceOf(PropertyAccessToken)
@@ -436,7 +435,7 @@ describe('Tokenizer', function () {
       expect(b.getText()).to.deep.equal('b')
     })
     it('should read expression `(1..3) contains 3`', () => {
-      const exp = new Tokenizer('(1..3) contains 3', trie).readExpression()
+      const exp = new Tokenizer('(1..3) contains 3', trie).readExpressionTokens()
       const [range, contains, rhs] = exp
 
       expect(range).to.be.instanceOf(RangeToken)
@@ -449,7 +448,7 @@ describe('Tokenizer', function () {
       expect(rhs.getText()).to.deep.equal('3')
     })
     it('should read expression `a[b] == c`', () => {
-      const exp = new Tokenizer('a[b] == c', trie).readExpression()
+      const exp = new Tokenizer('a[b] == c', trie).readExpressionTokens()
       const [lhs, contains, rhs] = exp
 
       expect(lhs).to.be.instanceOf(PropertyAccessToken)
@@ -462,7 +461,7 @@ describe('Tokenizer', function () {
       expect(rhs.getText()).to.deep.equal('c')
     })
     it('should read expression `c[a["b"]] >= c`', () => {
-      const exp = new Tokenizer('c[a["b"]] >= c', trie).readExpression()
+      const exp = new Tokenizer('c[a["b"]] >= c', trie).readExpressionTokens()
       const [lhs, op, rhs] = exp
 
       expect(lhs).to.be.instanceOf(PropertyAccessToken)
@@ -475,7 +474,7 @@ describe('Tokenizer', function () {
       expect(rhs.getText()).to.deep.equal('c')
     })
     it('should read expression `"][" == var`', () => {
-      const exp = new Tokenizer('"][" == var', trie).readExpression()
+      const exp = new Tokenizer('"][" == var', trie).readExpressionTokens()
       const [lhs, equals, rhs] = exp
 
       expect(lhs).to.be.instanceOf(QuotedToken)
@@ -488,7 +487,7 @@ describe('Tokenizer', function () {
       expect(rhs.getText()).to.deep.equal('var')
     })
     it('should read expression `"\\\'" == "\\""`', () => {
-      const exp = new Tokenizer('"\\\'" == "\\""', trie).readExpression()
+      const exp = new Tokenizer('"\\\'" == "\\""', trie).readExpressionTokens()
       const [lhs, equals, rhs] = exp
 
       expect(lhs).to.be.instanceOf(QuotedToken)

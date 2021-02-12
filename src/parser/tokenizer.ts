@@ -23,6 +23,7 @@ import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { TYPES, QUOTE, BLANK, IDENTIFIER } from '../util/character'
 import { matchOperator } from './match-operator'
 import { Trie } from '../util/operator-trie'
+import { Expression } from '../render/expression'
 
 export class Tokenizer {
   p = 0
@@ -37,7 +38,11 @@ export class Tokenizer {
     this.N = input.length
   }
 
-  * readExpression (): IterableIterator<Token> {
+  readExpression () {
+    return new Expression(this.readExpressionTokens())
+  }
+
+  * readExpressionTokens (): IterableIterator<Token> {
     const operand = this.readValue()
     if (!operand) return
 
