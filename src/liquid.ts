@@ -1,5 +1,4 @@
 import { Context } from './context/context'
-import * as fs from './fs/node'
 import { forOwn, snakeCase } from './util/underscore'
 import { Template } from './template/template'
 import { Tokenizer } from './parser/tokenizer'
@@ -13,7 +12,6 @@ import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
-import { FS } from './fs/fs'
 import { toPromise, toValue } from './util/async'
 import { Emitter } from './render/emitter'
 
@@ -25,13 +23,11 @@ export class Liquid {
   public parser: Parser
   public filters: FilterMap
   public tags: TagMap
-  private fs: FS
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
     this.parser = new Parser(this)
     this.renderer = new Render()
-    this.fs = opts.fs || fs
     this.filters = new FilterMap(this.options.strictFilters, this)
     this.tags = new TagMap()
 
@@ -70,9 +66,9 @@ export class Liquid {
 
   public * _parseFile (file: string, opts?: LiquidOptions, sync?: boolean) {
     const options = { ...this.options, ...normalize(opts) }
-    const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
-    if (this.fs.fallback !== undefined) {
-      const filepath = this.fs.fallback(file)
+    const paths = options.root.map(root => options.fs.resolve(root, file, options.extname))
+    if (options.fs.fallback !== undefined) {
+      const filepath = options.fs.fallback(file)
       if (filepath !== undefined) paths.push(filepath)
     }
 
@@ -82,8 +78,8 @@ export class Liquid {
         const tpls = yield cache.read(filepath)
         if (tpls) return tpls
       }
-      if (!(sync ? this.fs.existsSync(filepath) : yield this.fs.exists(filepath))) continue
-      const tpl = this.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
+      if (!(sync ? options.fs.existsSync(filepath) : yield options.fs.exists(filepath))) continue
+      const tpl = this.parse(sync ? options.fs.readFileSync(filepath) : yield options.fs.readFile(filepath), filepath)
       if (cache) cache.write(filepath, tpl)
       return tpl
     }
@@ -100,8 +96,7 @@ export class Liquid {
     return this.render(templates, ctx, opts)
   }
   public renderFileSync (file: string, ctx?: object, opts?: LiquidOptions) {
-    const options = normalize(opts)
-    const templates = this.parseFileSync(file, options)
+    const templates = this.parseFileSync(file, opts)
     return this.renderSync(templates, ctx, opts)
   }
 

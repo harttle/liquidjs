@@ -3,6 +3,7 @@ import { Template } from './template/template'
 import { Cache } from './cache/cache'
 import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
+import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
 
@@ -65,6 +66,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   cache: undefined | Cache<Template[]>;
   jsTruthy: boolean;
   dynamicPartials: boolean;
+  fs: FS;
   strictFilters: boolean;
   strictVariables: boolean;
   lenientIf: boolean;
@@ -88,6 +90,7 @@ export const defaultOptions: NormalizedFullOptions = {
   root: ['.'],
   cache: undefined,
   extname: '',
+  fs: fs,
   dynamicPartials: true,
   jsTruthy: false,
   trimTagRight: false,
