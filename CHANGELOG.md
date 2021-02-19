@@ -1,3 +1,10 @@
+## [9.23.1](https://github.com/harttle/liquidjs/compare/v9.23.0...v9.23.1) (2021-02-19)
+
+
+### Bug Fixes
+
+* lenientIf not working for the umd bundle, closes [#313](https://github.com/harttle/liquidjs/issues/313) ([2e66e8b](https://github.com/harttle/liquidjs/commit/2e66e8b))
+
 # [9.23.0](https://github.com/harttle/liquidjs/compare/v9.22.1...v9.23.0) (2021-02-12)
 
 
