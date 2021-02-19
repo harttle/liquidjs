@@ -44,7 +44,7 @@ export class RenderError extends LiquidError {
     super.update()
   }
   public static is (obj: any): obj is RenderError {
-    return obj instanceof RenderError
+    return obj.name === 'RenderError'
   }
 }
 

@@ -12,7 +12,7 @@ import { parseStringLiteral } from '../parser/parse-string-literal'
 import { Context } from '../context/context'
 import { range } from '../util/underscore'
 import { Operators } from '../render/operator'
-import { UndefinedVariableError, InternalUndefinedVariableError } from '../util/error'
+import { UndefinedVariableError } from '../util/error'
 
 export class Expression {
   private postfix: Token[]
@@ -52,7 +52,7 @@ function evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, leni
   try {
     return ctx.get([variable, ...props])
   } catch (e) {
-    if (lenient && e instanceof InternalUndefinedVariableError) return null
+    if (lenient && e.name === 'InternalUndefinedVariableError') return null
     throw (new UndefinedVariableError(e, token))
   }
 }

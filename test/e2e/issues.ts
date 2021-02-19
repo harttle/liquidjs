@@ -1,4 +1,5 @@
 import { Liquid } from '../..'
+import { Liquid as LiquidUMD } from '../../dist/liquid.browser.umd.js'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
@@ -77,5 +78,13 @@ describe('Issues', function () {
       { obj: { property: () => 'BAR' } }
     )
     expect(html).to.equal('BAR')
+  })
+  it('#313 lenientIf not working as expected in umd', async () => {
+    const engine = new LiquidUMD({
+      strictVariables: true,
+      lenientIf: true
+    })
+    const html = await engine.parseAndRender(`{{ name | default: "default name" }}`)
+    expect(html).to.equal('default name')
   })
 })
