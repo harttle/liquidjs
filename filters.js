@@ -172,7 +172,7 @@ function calculateDurationInDays(toDate, fromDate) {
   const actualFromDateMoment = moment(fromDate).startOf('date');
   const durationInDays = moment(acutaltoDateMoment).diff(moment(actualFromDateMoment), "days");
   if(durationInDays < 0) {
-    console.warn("toDate should be greater than fromDate");
+    console.info("toDate should be greater than fromDate");
     return {
       type: "DAYS",
       value: 0,
@@ -228,7 +228,7 @@ function updateAttribute(v, attr, arg) {
     if(isObject(v)) {
       return Object.assign({}, v, {[`${attr}`]: arg})
     }
-    console.warn("Not valid arguments for operation")
+    console.info("Not valid arguments for operation")
     return null
   } else {
     return {[`${attr}`]: arg}
@@ -252,7 +252,7 @@ function performOperations(v, arg, operation) {
     if (value && addType.indexOf(type) != -1) {
       return operationOnDateDuration(v, arg, operation);
     }else {
-      console.warn("duration obj is incorrect")
+      console.info("duration obj is incorrect")
       return v;
     }
   } else if (isObject(v) && isObject(arg)) {
@@ -283,7 +283,7 @@ function performOperations(v, arg, operation) {
       })
       return result;
     } else {
-      console.warn("The objects don't have any common numeric attributes")
+      console.info("The objects don't have any common numeric attributes")
     }
   } else if (typeof(v) === "number" && isObject(arg)) {
     let result = getObjectValues(arg)
@@ -378,7 +378,7 @@ function operationOnDateDuration(v, arg, operation) {
     case "SUBTRACT":
       return new Date(moment(v).subtract(arg.value, arg.type));
     default:
-      console.warn(`${operation}, not supported`);
+      console.info(`${operation}, not supported`);
       return null
   }
 }
@@ -388,7 +388,7 @@ function operationOnDates(v, arg, operation) {
     case "SUBTRACT":
       return calculateDurationInDays(v, arg);
     default:
-      console.warn(`${operation}, not supported`);
+      console.info(`${operation}, not supported`);
       return null
   }
 }
