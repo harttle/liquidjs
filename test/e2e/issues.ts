@@ -1,4 +1,4 @@
-import { Liquid } from '../..'
+import { Liquid } from '../../src/liquid'
 import { Liquid as LiquidUMD } from '../../dist/liquid.browser.umd.js'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -94,5 +94,12 @@ describe('Issues', function () {
       '{% if nil == empty %}true{%else%}false{%endif%}'
     )
     expect(html).to.equal('falsefalse')
+  })
+  it('#321 comparison for empty/nil', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(
+      `{{ 'a \n b \n c' | newline_to_br | split: '<br />' }}`
+    )
+    expect(html).to.equal('a ,\n b ,\n c')
   })
 })

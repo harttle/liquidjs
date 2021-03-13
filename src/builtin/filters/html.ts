@@ -28,7 +28,7 @@ export function escapeOnce (str: string) {
 }
 
 export function newlineToBr (v: string) {
-  return v.replace(/\n/g, '<br/>')
+  return v.replace(/\n/g, '<br />\n')
 }
 
 export function stripHtml (v: string) {
