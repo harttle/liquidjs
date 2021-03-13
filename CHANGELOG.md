@@ -1,3 +1,11 @@
+## [9.23.2](https://github.com/harttle/liquidjs/compare/v9.23.1...v9.23.2) (2021-03-13)
+
+
+### Bug Fixes
+
+* comparison for empty/nil, fixes [#321](https://github.com/harttle/liquidjs/issues/321) ([99d14e7](https://github.com/harttle/liquidjs/commit/99d14e7))
+* newline_to_br filter should output <br /> instead of <br/>, fixes [#320](https://github.com/harttle/liquidjs/issues/320) ([9a9b792](https://github.com/harttle/liquidjs/commit/9a9b792))
+
 ## [9.23.1](https://github.com/harttle/liquidjs/compare/v9.23.0...v9.23.1) (2021-02-19)
 
 
