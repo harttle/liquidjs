@@ -87,4 +87,12 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(`{{ name | default: "default name" }}`)
     expect(html).to.equal('default name')
   })
+  it('#321 comparison for empty/nil', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(
+      '{% if empty == nil %}true{%else%}false{%endif%}' +
+      '{% if nil == empty %}true{%else%}false{%endif%}'
+    )
+    expect(html).to.equal('falsefalse')
+  })
 })

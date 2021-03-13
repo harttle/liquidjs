@@ -79,4 +79,14 @@ describe('drop/empty-drop', function () {
     const html = await liquid.parseAndRender(src)
     expect(html).to.equal('true')
   })
+  it('empty != empty', async function () {
+    const src = '{%if empty == empty %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
+  it('empty != nil', async function () {
+    const src = '{%if empty == nil %}true{%else%}false{% endif %}'
+    const html = await liquid.parseAndRender(src)
+    expect(html).to.equal('false')
+  })
 })
