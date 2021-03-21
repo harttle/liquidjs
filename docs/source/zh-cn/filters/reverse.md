@@ -2,6 +2,8 @@
 title: reverse
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 反转数组的所有元素，不可用于字符串。
 
 输入

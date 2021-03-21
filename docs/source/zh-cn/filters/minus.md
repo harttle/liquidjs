@@ -2,6 +2,8 @@
 title: minus
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 两数相减。
 
 输入

@@ -2,6 +2,8 @@
 title: at_most
 ---
 
+{% since %}v8.4.0{% endsince %}
+
 限制数字到某个最大值。
 
 输入

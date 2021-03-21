@@ -2,6 +2,8 @@
 title: strip_newlines
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 移除字符串中的换行符。
 
 输入

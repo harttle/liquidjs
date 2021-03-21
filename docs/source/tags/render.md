@@ -2,6 +2,8 @@
 title: Render
 ---
 
+{% since %}v9.2.0{% endsince %}
+
 ## Basic Usage
 
 ### Render a Template

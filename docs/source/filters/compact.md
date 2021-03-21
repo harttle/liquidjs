@@ -2,6 +2,8 @@
 title: compact
 ---
 
+{% since %}v9.22.0{% endsince %}
+
 Removes any `nil` values from an array.
 
 For this example, assume `site.pages` is an array of content pages for a website, and some of these pages have an attribute called `category` that specifies their content category. If we `map` those categories to an array, some of the array items might be `nil` if any pages do not have a `category` attribute.

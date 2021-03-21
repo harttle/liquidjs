@@ -2,6 +2,8 @@
 title: ceil
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 向上取整，取整前 LiquidJS 会首先把输入转换为数字。
 
 输入

@@ -2,6 +2,8 @@
 title: append
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 连接两个字符串并返回结果。
 
 输入

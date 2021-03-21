@@ -2,6 +2,8 @@
 title: divided_by
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Divides a number by another number. The result is the string obtained by JavaScript `.toString()` of the result number.
 
 Input

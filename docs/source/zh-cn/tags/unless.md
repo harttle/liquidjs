@@ -2,6 +2,8 @@
 title: Unless
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 和 `if` 相反 —— 条件 **不满足** 时执行代码块。
 
 输入

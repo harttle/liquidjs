@@ -2,6 +2,8 @@
 title: round
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Rounds a number to the nearest integer or, if a number is passed as an argument, to that number of decimal places.
 
 Input

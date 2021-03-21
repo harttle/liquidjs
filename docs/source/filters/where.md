@@ -2,6 +2,8 @@
 title: where
 ---
 
+{% since %}v8.1.0{% endsince %}
+
 Creates an array including only the objects with a given property value, or any [truthy][truthy] value by default.
 
 In this example, assume you have a list of products and you want to show your kitchen products separately. Using `where`, you can create an array containing only the products that have a `"type"` of `"kitchen"`.

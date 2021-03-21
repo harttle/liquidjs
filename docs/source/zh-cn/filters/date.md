@@ -2,6 +2,8 @@
 title: date
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 把时间戳转换为字符串。LiquidJS 尝试跟 Shopify/Liquid 保持一致，它用的是 Ruby 核心的 [Time#strftime(string)](http://www.ruby-doc.org/core/Time.html#method-i-strftime)。此外 LiquidJS 会先通过 [new Date()][newDate] 尝试把输入转换为 Date 对象。
 
 输入

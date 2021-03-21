@@ -2,6 +2,8 @@
 title: uniq
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 移除数组中的重复元素。
 
 输入

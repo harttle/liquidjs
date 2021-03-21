@@ -2,6 +2,8 @@
 title: abs
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Liquid filter that returns the absolute value of a number.
 
 Input

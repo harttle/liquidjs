@@ -2,6 +2,8 @@
 title: first
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Returns the first item of an array.
 
 Input

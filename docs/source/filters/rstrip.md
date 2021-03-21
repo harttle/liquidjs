@@ -2,6 +2,8 @@
 title: rstrip
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Removes all whitespace (tabs, spaces, and newlines) from the right side of a string. It does not affect spaces between words.
 
 Input

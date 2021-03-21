@@ -2,6 +2,8 @@
 title: capture
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 把 `capture` 开闭标签之间的内容渲染后赋值给一个变量，这个变量的类型总是字符串。
 
 输入

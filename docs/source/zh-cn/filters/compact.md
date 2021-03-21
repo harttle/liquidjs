@@ -2,6 +2,8 @@
 title: compact
 ---
 
+{% since %}v9.22.0{% endsince %}
+
 从数组里移除任何 `null` 和 `undefined` 值。
 
 假设 `site.pages` 是网页列表，有些网页包含 `category` 属性用来标明类别。如果把它们 `map` 到数组里，那么对于没有 `category` 属性的元素就会是 `undefined`。

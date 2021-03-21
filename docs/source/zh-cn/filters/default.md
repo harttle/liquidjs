@@ -2,6 +2,8 @@
 title: default
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 在值不存在时给一个默认值，如果左侧是 [falsy][falsy] 或空（`string` 或 `Array`）就会使用这个默认值。下面的例子中 `product_price` 没有定义，因此使用了默认值。
 
 输入

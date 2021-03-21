@@ -2,6 +2,8 @@
 title: json
 ---
 
+{% since %}v9.10.0{% endsince %}
+
 Convert values to string via `JSON.stringify()`, for debug purpose.
 
 Input

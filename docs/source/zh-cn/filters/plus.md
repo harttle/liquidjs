@@ -2,6 +2,8 @@
 title: plus
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 两数相加。
 
 输入

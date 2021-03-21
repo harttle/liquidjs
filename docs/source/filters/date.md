@@ -2,6 +2,8 @@
 title: date
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Converts a timestamp into another date format. LiquidJS tries to be conformant with Shopify/Liquid which is using Ruby's core [Time#strftime(string)](http://www.ruby-doc.org/core/Time.html#method-i-strftime). The input is firstly converted to `Date` object via [new Date()][newDate].
 
 Input

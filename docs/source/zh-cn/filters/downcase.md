@@ -2,6 +2,8 @@
 title: downcase
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 字符串中每个字符都转为小写，对已经是小写的字符没有影响。
 
 输入

@@ -2,6 +2,8 @@
 title: prepend
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Adds the specified string to the beginning of another string.
 
 Input

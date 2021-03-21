@@ -2,6 +2,8 @@
 title: uniq
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Removes any duplicate elements in an array.
 
 Input

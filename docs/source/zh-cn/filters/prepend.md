@@ -2,6 +2,8 @@
 title: prepend
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 在字符串开头添加另一个字符串。
 
 输入

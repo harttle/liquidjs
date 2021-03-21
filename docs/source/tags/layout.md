@@ -2,6 +2,8 @@
 title: Layout
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 ## Using a Layout Template
 
 Renders current template inside a layout template from the template [roots][root].

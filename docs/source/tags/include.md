@@ -2,6 +2,8 @@
 title: Include
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 {% note warn Deprecated %}
 This tag is deprecated, use <a href="./render.html">render</a> tag instead for better encapsulation.
 {% endnote %}

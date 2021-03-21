@@ -2,6 +2,8 @@
 title: modulo
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Returns the remainder of a division operation.
 
 Input
