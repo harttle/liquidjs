@@ -1,3 +1,10 @@
+## [9.23.3](https://github.com/harttle/liquidjs/compare/v9.23.2...v9.23.3) (2021-03-21)
+
+
+### Bug Fixes
+
+* expose TokenKind ([dbc23e8](https://github.com/harttle/liquidjs/commit/dbc23e8))
+
 ## [9.23.2](https://github.com/harttle/liquidjs/compare/v9.23.1...v9.23.2) (2021-03-13)
 
 
