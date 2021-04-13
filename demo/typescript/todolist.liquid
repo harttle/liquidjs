@@ -1,4 +1,5 @@
-{%header content: "welcome to liquid" | capitalize%}
+{%assign title = title%}
+{%header content: title | capitalize%}
 
 <ul>
   {% for todo in todos %}
