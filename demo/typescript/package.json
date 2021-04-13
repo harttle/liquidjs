@@ -7,7 +7,11 @@
     "start": "ts-node index.ts"
   },
   "dependencies": {
-    "ts-node": "^8.0.2",
-    "liquidjs": "*"
+    "liquidjs": "*",
+    "ts-node": "^8.10.2",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37"
   }
 }
