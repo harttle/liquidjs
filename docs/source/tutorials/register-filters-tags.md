@@ -6,13 +6,15 @@ title: Register Filters/Tags
 
 ```javascript
 // Usage: {% upper name %}
+import { TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
+
 engine.registerTag('upper', {
-    parse: function(tagToken, remainTokens) {
+    parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
         this.str = tagToken.args; // name
     },
-    render: async function(scope, hash) {
-        var str = await this.liquid.evalValue(this.str, scope); // 'alice'
-        return str.toUpperCase()  // 'Alice'
+    render: async function(ctx: Context, emitter: Emitter) {
+        var str = await this.liquid.evalValue(this.str, ctx); // 'alice'
+        emitter.write(`<span>${str.toUpperCase()}</span>`) // 'Alice'
     }
 });
 ```
@@ -21,6 +23,7 @@ engine.registerTag('upper', {
 * `render`: Combine scope data with your parsed tokens into HTML string.
 
 See existing tag implementations here: <https://github.com/harttle/liquidjs/tree/master/src/builtin/tags>
+See demo example here: https://github.com/harttle/liquidjs/blob/master/demo/typescript/index.ts
 
 ## Register Filters
 
