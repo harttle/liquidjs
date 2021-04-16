@@ -4,7 +4,7 @@ title: Register Filters/Tags
 
 ## Register Tags
 
-```javascript
+```typescript
 // Usage: {% upper name %}
 import { TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
 
