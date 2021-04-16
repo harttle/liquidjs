@@ -12,9 +12,9 @@ engine.registerTag('upper', {
     parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
         this.str = tagToken.args; // name
     },
-    render: async function(ctx: Context, emitter: Emitter) {
+    render: async function(ctx: Context) {
         var str = await this.liquid.evalValue(this.str, ctx); // 'alice'
-        emitter.write(`<span>${str.toUpperCase()}</span>`) // 'Alice'
+        return str.toUpperCase() // 'ALICE'
     }
 });
 ```
