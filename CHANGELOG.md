@@ -1,3 +1,10 @@
+## [9.23.4](https://github.com/harttle/liquidjs/compare/v9.23.3...v9.23.4) (2021-04-17)
+
+
+### Bug Fixes
+
+* capitalize filter not lower case trailing string, fixes [#326](https://github.com/harttle/liquidjs/issues/326) ([6548765](https://github.com/harttle/liquidjs/commit/6548765))
+
 ## [9.23.3](https://github.com/harttle/liquidjs/compare/v9.23.2...v9.23.3) (2021-03-21)
 
 
