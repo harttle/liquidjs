@@ -54,7 +54,7 @@ export function stripNewlines (v: string) {
 
 export function capitalize (str: string) {
   str = stringify(str)
-  return str.charAt(0).toUpperCase() + str.slice(1)
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
 }
 
 export function replace (v: string, pattern: string, replacement: string) {

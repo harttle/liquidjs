@@ -33,6 +33,9 @@ describe('filters/string', function () {
     it('should capitalize first', () => test('{{ "i am good" | capitalize }}', 'I am good'))
     it('should return empty for nil', () => test('{{ nil | capitalize }}', ''))
     it('should return empty for undefined', async () => test('{{ foo | capitalize }}', ''))
+    it('should capitalize only first word', async () => test('{{"foo bar" | capitalize}}', 'Foo bar'))
+    it('should to lower case if prefixed by spaces', async () => test('{{" foo BaR" | capitalize}}', ' foo bar'))
+    it('should to lower case trailing words', async () => test('{{"foo BaR" | capitalize}}', 'Foo bar'))
   })
   describe('concat', function () {
     it('should concat arrays', () => test(`
