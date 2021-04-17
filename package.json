@@ -11,7 +11,7 @@
   },
   "types": "dist/liquid.d.ts",
   "scripts": {
-    "lint": "eslint '**/*.ts' .",
+    "lint": "eslint \"**/*.ts\" .",
     "check": "npm test && npm run lint",
     "unit": "mocha \"test/unit/**/*.ts\"",
     "integration": "mocha \"test/integration/**/*.ts\"",

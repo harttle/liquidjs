@@ -1,7 +1,7 @@
 import { Liquid } from '../../src/liquid'
-import { Liquid as LiquidUMD } from '../../dist/liquid.browser.umd.js'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
+const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
 
 use(chaiAsPromised)
 
