@@ -4,7 +4,7 @@ import { Template } from '../template/template'
 
 export abstract class LiquidError extends Error {
   private token: Token
-  private context: string
+  public context: string
   private originalError: Error
   public constructor (err: Error, token: Token) {
     super(err.message)
