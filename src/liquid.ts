@@ -15,6 +15,7 @@ import { FilterImplOptions } from './template/filter/filter-impl-options'
 import { toPromise, toValue } from './util/async'
 import { Emitter } from './render/emitter'
 
+export * from './util/error'
 export * from './types'
 
 export class Liquid {

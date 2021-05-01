@@ -2,7 +2,7 @@ import * as _ from './underscore'
 import { Token } from '../tokens/token'
 import { Template } from '../template/template'
 
-abstract class LiquidError extends Error {
+export abstract class LiquidError extends Error {
   private token: Token
   private originalError: Error
   public constructor (err: Error, token: Token) {
