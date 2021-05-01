@@ -1,3 +1,10 @@
+## [9.24.1](https://github.com/harttle/liquidjs/compare/v9.24.0...v9.24.1) (2021-05-01)
+
+
+### Bug Fixes
+
+* make LiquidError context property public ([1fd76ac](https://github.com/harttle/liquidjs/commit/1fd76ac))
+
 # [9.24.0](https://github.com/harttle/liquidjs/compare/v9.23.4...v9.24.0) (2021-05-01)
 
 
