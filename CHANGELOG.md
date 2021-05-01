@@ -1,3 +1,11 @@
+# [9.24.0](https://github.com/harttle/liquidjs/compare/v9.23.4...v9.24.0) (2021-05-01)
+
+
+### Features
+
+* add context as a property on the LiquidError error ([9c7cb57](https://github.com/harttle/liquidjs/commit/9c7cb57))
+* export errors for better error handling in user-land ([4e394b9](https://github.com/harttle/liquidjs/commit/4e394b9))
+
 ## [9.23.4](https://github.com/harttle/liquidjs/compare/v9.23.3...v9.23.4) (2021-04-17)
 
 
