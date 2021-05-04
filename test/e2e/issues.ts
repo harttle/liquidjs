@@ -95,11 +95,17 @@ describe('Issues', function () {
     )
     expect(html).to.equal('falsefalse')
   })
-  it('#321 comparison for empty/nil', async () => {
+  it('#320 newline_to_br filter should output <br /> instead of <br/>', async () => {
     const engine = new Liquid()
     const html = await engine.parseAndRender(
       `{{ 'a \n b \n c' | newline_to_br | split: '<br />' }}`
     )
     expect(html).to.equal('a ,\n b ,\n c')
+  })
+  it('#342 New lines in logical operator', async () => {
+    const engine = new Liquid()
+    const tpl = `{%\r\nif\r\ntrue\r\nor\r\nfalse\r\n%}\r\ntrue\r\n{%\r\nendif\r\n%}`
+    const html = await engine.parseAndRender(tpl)
+    expect(html).to.equal('\r\ntrue\r\n')
   })
 })
