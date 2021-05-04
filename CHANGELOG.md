@@ -1,3 +1,10 @@
+## [9.24.2](https://github.com/harttle/liquidjs/compare/v9.24.1...v9.24.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* operator boundary not correctly recognized, fixes [#342](https://github.com/harttle/liquidjs/issues/342) ([3e3d84a](https://github.com/harttle/liquidjs/commit/3e3d84a))
+
 ## [9.24.1](https://github.com/harttle/liquidjs/compare/v9.24.0...v9.24.1) (2021-05-01)
 
 
