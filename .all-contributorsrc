@@ -360,6 +360,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mems",
+      "name": "Memmie Lenglet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/729275?v=4",
+      "profile": "https://memmie.lenglet.name",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
