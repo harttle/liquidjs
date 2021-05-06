@@ -64,4 +64,11 @@ describe('tags/case', function () {
       return expect(html).to.equal('d')
     })
   })
+  it('should support case with multiple values', async function () {
+    const src = '{% case "b" %}' +
+            '{% when "a", "b" %}foo' +
+            '{%endcase%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('foo')
+  })
 })
