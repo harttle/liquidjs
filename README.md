@@ -107,6 +107,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://github.com/Pixcell"><img src="https://avatars0.githubusercontent.com/u/4005291?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Pixcell</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=Pixcell" title="Code">💻</a></td>
     <td align="center"><a href="https://jasonet.co"><img src="https://avatars.githubusercontent.com/u/10660468?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jason Etcovitch</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=JasonEtco" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/kayuapi"><img src="https://avatars.githubusercontent.com/u/10304328?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ZC</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=kayuapi" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://memmie.lenglet.name"><img src="https://avatars.githubusercontent.com/u/729275?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Memmie Lenglet</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=mems" title="Code">💻</a></td>
   </tr>
 </table>
 
