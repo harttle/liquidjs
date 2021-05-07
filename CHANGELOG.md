@@ -1,3 +1,10 @@
+# [9.25.0](https://github.com/harttle/liquidjs/compare/v9.24.2...v9.25.0) (2021-05-07)
+
+
+### Features
+
+* when tag with multiple values ([8f9639f](https://github.com/harttle/liquidjs/commit/8f9639f))
+
 ## [9.24.2](https://github.com/harttle/liquidjs/compare/v9.24.1...v9.24.2) (2021-05-04)
 
 
