@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>Render | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/tags/render.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/zh-cn/tags/render">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/zh-cn/tags/render">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../../css/navy.css">
+
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS">
+</head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="../tutorials/setup.html" class="main-nav-link">教程</a><a href="overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div id="lang-select-wrap" class="main-nav-link">
+      <label><i class="icon-network"></i>简体中文</label>
+      <select id="lang-select" data-canonical="tags/render.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <a href="overview.html" class="sidebar-link">概述</a><a href="assign.html" class="sidebar-link">assign</a><a href="capture.html" class="sidebar-link">capture</a><a href="case.html" class="sidebar-link">case</a><a href="comment.html" class="sidebar-link">comment</a><a href="cycle.html" class="sidebar-link">cycle</a><a href="decrement.html" class="sidebar-link">decrement</a><a href="for.html" class="sidebar-link">for</a><a href="if.html" class="sidebar-link">if</a><a href="include.html" class="sidebar-link">include</a><a href="increment.html" class="sidebar-link">increment</a><a href="layout.html" class="sidebar-link">layout</a><a href="raw.html" class="sidebar-link">raw</a><a href="render.html" class="sidebar-link current">render</a><a href="tablerow.html" class="sidebar-link">tablerow</a><a href="unless.html" class="sidebar-link">unless</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">Render</h1>
+                
+                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tags/render.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <p class="since">Added in: v9.2.0</p>
+
+<h2 id="基本使用" class="article-heading"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用<a class="article-anchor" href="#基本使用" aria-hidden="true"></a></h2><h3 id="渲染一个模板" class="article-heading"><a href="#渲染一个模板" class="headerlink" title="渲染一个模板"></a>渲染一个模板<a class="article-anchor" href="#渲染一个模板" aria-hidden="true"></a></h3><p>从模板 <a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">根路径</a> 引入一个模板：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% render &#39;footer.liquid&#39; %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>设置 <a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> 选项为 <code>&quot;.liquid&quot;</code> 后上面的 <code>.liquid</code> 后缀就可以省略了，等价于：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% render &#39;footer&#39; %&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote class="note info"><strong class="note-title">变量作用域</strong><p>通过 <code>render</code> 渲染一个子模板时，它内部的代码不能访问父模板的变量，父模板中也不能访问它里面定义的变量。这个封装会让模板代码更容易理解和维护。</p>
+</blockquote>
+
+<h3 id="变量传递" class="article-heading"><a href="#变量传递" class="headerlink" title="变量传递"></a>变量传递<a class="article-anchor" href="#变量传递" aria-hidden="true"></a></h3><p>父模板里定义的变量可以通过 <code>render</code> 标签的参数列表传递给子模板：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% assign my_variable &#x3D; &#39;apples&#39; %&#125;</span><br><span class="line">&#123;% render &#39;name&#39;, my_variable: my_variable, my_other_variable: &#39;oranges&#39; %&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-globals">全局变量</a> 不需要传递，所有文件都可以访问它们。</p>
+<h2 id="参数" class="article-heading"><a href="#参数" class="headerlink" title="参数"></a>参数<a class="article-anchor" href="#参数" aria-hidden="true"></a></h2><h3 id="with-参数" class="article-heading"><a href="#with-参数" class="headerlink" title="with 参数"></a><code>with</code> 参数<a class="article-anchor" href="#with-参数" aria-hidden="true"></a></h3><p>使用 <code>with...as</code> 语法可以给子模板传递一个变量：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% assign featured_product &#x3D; all_products[&#39;product_handle&#39;] %&#125;</span><br><span class="line">&#123;% render &#39;product&#39; with featured_product as product %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子中，子模板中 <code>product</code> 会保有父模板中的 <code>featured_product</code> 变量的值。</p>
+<h3 id="for-参数" class="article-heading"><a href="#for-参数" class="headerlink" title="for 参数"></a><code>for</code> 参数<a class="article-anchor" href="#for-参数" aria-hidden="true"></a></h3><p>用 <code>for...as</code> 语法可以对可枚举对象的每一个值渲染一次子模板：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% assign variants &#x3D; product.variants %&#125;</span><br><span class="line">&#123;% render &#39;variant&#39; for variants as variant %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子中，对 <code>product</code> 的每个 <code>variants</code> 是指都会渲染一次子模板。子模板中 <code>variant</code> 变量会保有父模板中的 <code>product.variants</code> 中对应元素的值。</p>
+<blockquote class="note tip"><strong class="note-title">forloop 对象</strong><p>使用 for 参数时，在子模板中可以访问 <a href="./for.html#forloop">forloop</a> 对象。</p>
+</blockquote>
+
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2021-05-09T12:18:44.949Z" itemprop="dateModified">上次更新：2021-05-09</time>
+                <a href="raw.html" class="article-footer-prev" title="sidebar.tags.raw"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="tablerow.html" class="article-footer-next" title="sidebar.tags.tablerow"><span>下一页</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本使用"><span class="toc-text">基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#渲染一个模板"><span class="toc-text">渲染一个模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量传递"><span class="toc-text">变量传递</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参数"><span class="toc-text">参数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#with-参数"><span class="toc-text">with 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#for-参数"><span class="toc-text">for 参数</span></a></li></ol></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">回到顶部</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2021 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="../tutorials/setup.html" class="mobile-nav-link">教程</a><a href="overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <a href="overview.html" class="mobile-nav-link">概述</a><a href="assign.html" class="mobile-nav-link">assign</a><a href="capture.html" class="mobile-nav-link">capture</a><a href="case.html" class="mobile-nav-link">case</a><a href="comment.html" class="mobile-nav-link">comment</a><a href="cycle.html" class="mobile-nav-link">cycle</a><a href="decrement.html" class="mobile-nav-link">decrement</a><a href="for.html" class="mobile-nav-link">for</a><a href="if.html" class="mobile-nav-link">if</a><a href="include.html" class="mobile-nav-link">include</a><a href="increment.html" class="mobile-nav-link">increment</a><a href="layout.html" class="mobile-nav-link">layout</a><a href="raw.html" class="mobile-nav-link">raw</a><a href="render.html" class="mobile-nav-link current">render</a><a href="tablerow.html" class="mobile-nav-link">tablerow</a><a href="unless.html" class="mobile-nav-link">unless</a>
+    </div>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
+    <select id="mobile-lang-select" data-canonical="tags/render.html">
+      
+        <option value="en">English</option>
+      
+        <option value="zh-cn" selected>简体中文</option>
+      
+    </select>
+  </div>
+</nav>
+  
+
+
+<script src="../../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>

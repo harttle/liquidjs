@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/playground.html">
+  <!-- Alternative links -->
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../css/navy.css">
+
+  <link rel="alternate" href="../atom.xml" title="LiquidJS">
+</head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="tutorials/setup.html" class="main-nav-link">教程</a><a href="tags/overview.html" class="main-nav-link">标签</a><a href="filters/overview.html" class="main-nav-link">过滤器</a><a href="" class="main-nav-link active">演示</a><a href="api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div id="lang-select-wrap" class="main-nav-link">
+      <label><i class="icon-network"></i>简体中文</label>
+      <select id="lang-select" data-canonical="playground.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="playground" role="main">
+  <div class="wrapper">
+    <h1 class="inner">演示</h1>
+    <div class="row inner">
+      <div id="editorEl">加载中...</div>
+      <div id="previewEl">加载中...</div>
+    </div>
+    <script id="sourceEl" type="text/plain">{% assign people = "alice, bob, carol" | split: ", " -%}
+
+<ul>
+{%- for person in people %}
+  <li>
+    <a href="{{person | prepend: "http://example.com/"}}">
+      {{ person | capitalize }}
+    </a>
+  </li>
+{%- endfor%}
+</ul>
+</script>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2021 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="tutorials/setup.html" class="mobile-nav-link">教程</a><a href="tags/overview.html" class="mobile-nav-link">标签</a><a href="filters/overview.html" class="mobile-nav-link">过滤器</a><a href="" class="mobile-nav-link active">演示</a><a href="api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
+    <select id="mobile-lang-select" data-canonical="playground.html">
+      
+        <option value="en">English</option>
+      
+        <option value="zh-cn" selected>简体中文</option>
+      
+    </select>
+  </div>
+</nav>
+  
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.4.8/src-min/ace.js"></script>
+
+
+
+<script src="../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>
