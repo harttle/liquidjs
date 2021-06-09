@@ -176,6 +176,24 @@ describe('filters', function () {
       const dst = {value: 1.094, type: "USD"};
       return test('{{ currency_decimal | divided_by: 12.3 }}', JSON.stringify(dst))
     })
+    // Null variable tests for currency
+    it('should support currency handling with one currency variable with value null in middle', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ currency_thousand | divided_by: currency_val_null | divided_by: currency_hundred }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null at last', () => {
+      // It is null because last variable is null
+      const dst = {value: null, type: "INR"};
+      return test('{{ currency_thousand | divided_by: currency_hundred | divided_by: currency_val_null}}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null and a number', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ currency_val_null | divided_by: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null, a number and another currency', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ 2 | divided_by: currency_val_null | divided_by: currency_thousand}}', JSON.stringify(dst))
+    })
     it('should convert string to number', () => test('{{"5" | divided_by: "3"}}', '1.667'))
     /* Test for null argument */
     it('should return "0" for 24,null', () => test('{{ 24 | divided_by: null }}', "0"))
@@ -272,6 +290,23 @@ describe('filters', function () {
     it('should support currency with decimals minus number with decimal', () => {
       const dst = {value: 1.156, type: "USD"};
       return test('{{ currency_decimal | minus: 12.3 }}', JSON.stringify(dst))
+    })
+    // Null variable tests for currency
+    it('should support currency handling with one currency variable with value null in middle', () => {
+      const dst = {value: 90, type: "INR"};
+      return test('{{ currency_hundred | minus: currency_val_null | minus: currency_ten }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null at last', () => {
+      const dst = {value: 90, type: "INR"};
+      return test('{{ currency_hundred | minus: currency_ten | minus: currency_val_null}}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null and a number', () => {
+      const dst = {value: -2, type: "INR"};
+      return test('{{ currency_val_null | minus: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null, a number and another currency', () => {
+      const dst = {value: -998, type: "INR"};
+      return test('{{ 2 | minus: currency_val_null | minus: currency_thousand}}', JSON.stringify(dst))
     })
     it('should convert first arg as number', () => test('{{ "4" | minus: 1 }}', '3'))
     it('should convert both args as number', () => test('{{ "4" | minus: "1" }}', '3'))
@@ -440,6 +475,23 @@ describe('filters', function () {
     it('should support currency with decimals add number with decimal', () => {
       const dst = {value: 25.756, type: "USD"};
       return test('{{ currency_decimal | plus: 12.3 }}', JSON.stringify(dst))
+    })
+    // Null variable tests for currency
+    it('should support currency handling with one currency variable with value null in middle', () => {
+      const dst = {value: 1100, type: "INR"};
+      return test('{{ currency_thousand | plus: currency_val_null | plus: currency_hundred }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null at last', () => {
+      const dst = {value: 1100, type: "INR"};
+      return test('{{ currency_thousand | plus: currency_hundred | plus: currency_val_null}}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null and a number', () => {
+      const dst = {value: 2, type: "INR"};
+      return test('{{ currency_val_null | plus: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null, a number and another currency', () => {
+      const dst = {value: 1002, type: "INR"};
+      return test('{{ 2 | plus: currency_val_null | plus: currency_thousand}}', JSON.stringify(dst))
     })
     /* Tests for date and duration */
     it('should add 10 weeks to current date', () => {
@@ -635,7 +687,24 @@ describe('filters', function () {
     it('should return "0" for 24,null', () => test('{{ 24 | times: null }}', "0"))
     it('should return "0" for null, 24', () => test('{{ null | times: 24 }}', "0"))
     it('should return "0" for variable null, 24', () => test('{{ variable_null | times: 24 }}', "0"))
-    it('should return "0" for variable_null, variable null', () => test('{{ variable_null | times: variable_null }}', "null"))
+    it('should return "null" for variable_null, variable null', () => test('{{ variable_null | times: variable_null }}', "null"))
+    // Null variable tests for currency
+    it('should support currency handling with one currency variable with value null in middle', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ currency_hundred | times: currency_val_null | times: currency_ten }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null at last', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ currency_hundred | times: currency_ten | times: currency_val_null}}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null and a number', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ currency_val_null | times: 2 }}', JSON.stringify(dst))
+    })
+    it('should support currency handling with one currency variable with value null, a number and another currency', () => {
+      const dst = {value: 0, type: "INR"};
+      return test('{{ 2 | times: currency_val_null | times: currency_thousand}}', JSON.stringify(dst))
+    })
   })
 
   describe('truncate', function () {

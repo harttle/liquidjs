@@ -106,7 +106,13 @@ var filters = {
 };
 
 const CF_DATE_FORMAT = "YYYY-MM-DD"
-const ISO_STRING_FORMAT = "YYYY-MM-DDTHH:mm:ss.SSSZ"
+/**
+ * MAP for numeric key for a CF object
+ * For ex: Cf currency object has "value" key which holds the numeric info
+ */
+const CF_OBJECT_NUMERIC_KEY_MAP = {
+  CURRENCY: "value"
+}
 
 function escape(str) {
   return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m]);
@@ -164,6 +170,10 @@ function getObjectValues(obj) {
 
 function isObject(arg) {
   return typeof(arg) === "object" && arg !== null
+}
+
+function getNumericValueBasedOnCfType(cfType) {
+  return CF_OBJECT_NUMERIC_KEY_MAP[cfType] ? CF_OBJECT_NUMERIC_KEY_MAP[cfType] : "value"
 }
 
 function calculateDurationInDays(toDate, fromDate) {
@@ -243,6 +253,22 @@ function isBothArgsValidDateOrDateString(v, arg) {
   (isValidDateString(v) && isValidDateString(arg))
 }
 
+/**
+ * Gets default value for Cf objects operations in case numeric keys absent
+ * Currently only supports Cf currency objects
+ * @param {*} result 
+ * @param {*} v 
+ * @param {*} arg 
+ * @param {*} operation 
+ * @returns 
+ */
+function getDefaultNumericResult(result, v, arg, operation) {
+  console.info("The objects don't have any common numeric attributes")
+  const numericKey = getNumericValueBasedOnCfType("CURRENCY")
+  result[numericKey] = operationOnItem(v, arg, operation);
+  return result
+}
+
 function performOperations(v, arg, operation) {
   if(isBothArgsValidDateOrDateString(v,arg)) {
     return operationOnDates(v, arg, operation);
@@ -277,27 +303,45 @@ function performOperations(v, arg, operation) {
     const numberKeysOfArg = filterNumericKeysFromObject(arg);
     const numberKeysOfV = filterNumericKeysFromObject(v);
     const commonNumericKeys = numberKeysOfV.filter(elem => numberKeysOfArg.indexOf(elem) !== -1)
+    // If common numeric keys are present for objects, update all of them in result with op value 
+    // otherwise get default result sending both value as 0
+
     if(commonNumericKeys.length > 0) {
       numberKeysOfArg.forEach(key => {
         result[key] = operationOnItem(v[key],arg[key], operation);
       })
-      return result;
     } else {
-      console.info("The objects don't have any common numeric attributes")
+      // Assumes that only one numeric key to be used to calculate default value
+      const defaulArg1Value = numberKeysOfV.length > 0 ? v[`${numberKeysOfV[0]}`] : 0
+      const defaulArg2Value = numberKeysOfArg.length > 0 ? arg[`${numberKeysOfArg[0]}`] : 0
+      result = getDefaultNumericResult(result, defaulArg1Value, defaulArg2Value, operation)
     }
+    return result;
   } else if (typeof(v) === "number" && isObject(arg)) {
     let result = getObjectValues(arg)
     const numberKeys = filterNumericKeysFromObject(arg);
-    numberKeys.forEach(key => {
-      result[key] = operationOnItem(v, arg[key], operation);
-    })
+    // If numeric keys are present for arg, update all of them in result with op value with number
+    // otherwise get default result sending arg's value as 0
+    if(numberKeys.length > 0) {
+      numberKeys.forEach(key => {
+        result[key] = operationOnItem(v, arg[key], operation);
+      })
+    } else {
+      result = getDefaultNumericResult(result, v, 0, operation)
+    }
     return result
   } else if (isObject(v) && typeof(arg) === "number") {
     let result = getObjectValues(v)
     const numberKeys = filterNumericKeysFromObject(v);
-    numberKeys.forEach(key => {
-      result[key] = operationOnItem(v[key], arg, operation)
-    })
+    // If numeric keys are present for v, update all of them in result with op value with number
+    // otherwise get default result sending v's value as 0
+    if(numberKeys.length > 0) {
+      numberKeys.forEach(key => {
+        result[key] = operationOnItem(v[key], arg, operation)
+      })
+    } else {
+      result = getDefaultNumericResult(result, 0, arg, operation)
+    }
     return result
   } else if((typeof(v) === "object" && !isDefinedAndNotNullArg(arg)) || 
     ((typeof(arg) === "object" && !isDefinedAndNotNullArg(v)))){
@@ -331,20 +375,30 @@ function addOrSubtractOperationOnItem(v, arg, operation, precision) {
   }
 }
 
+function getDivideOperationOnItem(v, arg, precision) {
+  if(arg === 0) {
+    console.info("Denominator is zero in division")
+    return null
+  }
+   /* Special case for divide where precision cannot be based on input values */
+   const dividePrecision = precision > 3 ? precision : 3
+   return Number((Number(v)/ Number(arg)).toFixed(dividePrecision));
+}
+
 function divideOrMultiplyOperationOnItem(v, arg, operation, precision) {
   if(!isValidNumber(v) || !isValidNumber(arg)) {
     return 0
   } else {
     switch (operation) {
       case "DIVIDE":
-        /* Special case for divide where precision cannot be based on input values */
-        const dividePrecision = precision > 3 ? precision : 3
-        return Number((Number(v)/ Number(arg)).toFixed(dividePrecision));
+        return getDivideOperationOnItem(v, arg, precision)
       case "MULTIPLY":
         return Number((Number(v) * Number(arg)).toFixed(precision));
     }
   }
 }
+
+
 
 function getItemPrecision(arg) {
   if(isValidNumber(arg)) {
