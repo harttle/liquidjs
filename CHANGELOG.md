@@ -1,3 +1,10 @@
+## [9.25.1](https://github.com/harttle/liquidjs/compare/v9.25.0...v9.25.1) (2021-06-20)
+
+
+### Performance Improvements
+
+* add cross-engines benchmark ([cdceb25](https://github.com/harttle/liquidjs/commit/cdceb25d007b3d30a85e51ac538e12297c73bfcf))
+
 # [9.25.0](https://github.com/harttle/liquidjs/compare/v9.24.2...v9.25.0) (2021-05-07)
 
 
