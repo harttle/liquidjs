@@ -57,17 +57,23 @@
 
 (function() {
   // playground
-  /* global liquidjs, sourceEl, ace */
+  /* global liquidjs, ace */
   if (!location.pathname.match(/playground.html$/)) return;
   const engine = new liquidjs.Liquid();
   const editor = createEditor('editorEl', 'liquid');
+  const dataEditor = createEditor('dataEl', 'json');
   const preview = createEditor('previewEl', 'html');
   preview.setReadOnly(true);
   preview.renderer.setShowGutter(false);
   preview.renderer.setPadding(20);
 
-  editor.setValue(getInitialValue(), 1);
+  const init = parseArgs(location.hash.slice(1));
+  if (init) {
+    editor.setValue(init.tpl, 1);
+    dataEditor.setValue(init.data, 1);
+  }
   editor.on('change', update);
+  dataEditor.on('change', update);
   update();
 
   function createEditor(id, lang) {
@@ -82,18 +88,25 @@
     return editor;
   }
 
-  function getInitialValue() {
+  function parseArgs(hash) {
+    if (!hash) return;
     try {
-      return atou(location.hash.slice(1)) || sourceEl.textContent
+      let [tpl, data] = hash.split(',').map(atou);
+      data = data || '{}';
+      return { tpl, data };
     } catch (e) {}
-    return sourceEl.textContent
+  }
+
+  function serializeArgs(obj) {
+    return utoa(obj.tpl) + ',' + utoa(obj.data);
   }
 
   async function update() {
     const tpl = editor.getValue();
-    history.replaceState({}, '', '#' + utoa(tpl));
+    const data = dataEditor.getValue();
+    history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
     try {
-      const html = await engine.parseAndRender(tpl);
+      const html = await engine.parseAndRender(tpl, JSON.parse(data));
       preview.setValue(html, 1);
     } catch (err) {
       preview.setValue(err.stack, 1);
@@ -102,11 +115,11 @@
   }
 
   function atou(str) {
-    return decodeURIComponent(escape(atob(str)))
+    return decodeURIComponent(escape(atob(str)));
   }
 
   function utoa(str) {
-    return btoa(unescape(encodeURIComponent(str)))
+    return btoa(unescape(encodeURIComponent(str)));
   }
 }());
 

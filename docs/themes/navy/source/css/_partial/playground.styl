@@ -11,16 +11,21 @@
     flex-wrap: wrap;
     justify-content: space-between
     margin-bottom: 30px
-    > div
-      flex: 0 0 100%
-      height: 400px
+    font-size: 1em
+    .col
+      flex: 1 1 100%
       margin-bottom: 30px
 
   @media mq-normal
     .row
       flex-wrap: nowrap;
-      > div
-        flex: 0 1 49%
+    .col:first-child
+      margin-right: 15px
 
-  #editorEl, #previewEl
-    font-size: 1em
+  #editorEl
+    height: 40vh
+  #dataEl
+    height: 28vh
+    margin-top: 2vh
+  #previewEl
+    height: 70vh
