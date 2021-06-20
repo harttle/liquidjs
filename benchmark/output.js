@@ -4,7 +4,8 @@ const { Liquid } = require('..')
 const liquid = new Liquid()
 
 function output () {
-  console.log('--- output ---')
+  console.log('         output')
+  console.log('------------------------')
   return new Promise(resolve => {
     new Benchmark.Suite('output')
       .add('literal', test('{{false}}{{"foo"}}{{32.322}}'))

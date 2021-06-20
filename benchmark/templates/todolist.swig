@@ -16,12 +16,12 @@
     {% for todo in todos %}
     <div>
         <h2>
-            Todo {{ forloop.index }}:
-            <span class="todo-item content" data-todo-index="{{ forloop.index0 }}">
-                {{ todo.title | prepend: 'TODO: ' | upcase }}
+            Todo {{ loop.index }}:
+            <span class="todo-item content" data-todo-index="{{ loop.index0 }}">
+                {{ todo.title | prepend('TODO: ') | upcase }}
             </span>
         </h2>
-        {% render "todo-icon", id:todo.id %}
+        {% include "todo-icon.swig" %}
 
         <p class="description">
             Purus eu mi. Proin commodo, massa commodo dapibus elementum,
@@ -33,12 +33,12 @@
 
         <div class="todo-meta">
             {% if todo.category %}
-                <span>{{  todo.category | capitalize }}</span>
+                <span>{{ todo.category | capitalize }}</span>
             {% endif %}
         </div>
-        <a class="btn btn-primary" href={{"/edit/" | append: todo.id | url }}><i class="fa fa-pencil"></i> Edit</a>
+        <a class="btn btn-primary" href={{"/edit/" | append(todo.id) | url }}><i class="fa fa-pencil"></i> Edit</a>
         <a class="btn btn-default"><i class="fa fa-check"></i> Check</a>
-        <a class="btn ben-danger" href={{"/delete/" | append: todo.id | url }}><i class="fa fa-trash-o"</i> Trash</a>
+        <a class="btn ben-danger" href={{"/delete/" | append(todo.id) | url }}><i class="fa fa-trash-o"</i> Trash</a>
     </div>
     {% endfor %}
 </section>

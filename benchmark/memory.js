@@ -13,7 +13,8 @@ const engine = new Liquid(engineOptions)
 const SAMPLE_COUNT = 1024
 
 function memory () {
-  console.log('--- memory ---')
+  console.log('         memory')
+  console.log('------------------------')
   html()
   todolist()
 }
@@ -29,11 +30,11 @@ function html () {
     templates.push(engine.parse(str))
   }
   const diff1 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
-  console.log(`${h(str.length)} lorem-html before GC x ${h(diff1)}/tpl (${SAMPLE_COUNT} instances sampled)`)
+  console.log(`[lorem-html ${h(str.length)}][before GC] ${h(diff1)}/tpl (${SAMPLE_COUNT} runs sampled)`)
 
   global.gc()
   const diff2 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
-  console.log(`${h(str.length)} lorem-html after GC x ${h(diff2)}/tpl (${SAMPLE_COUNT} instances sampled)`)
+  console.log(`[lorem-html ${h(str.length)}][after GC] ${h(diff2)}/tpl (${SAMPLE_COUNT} runs sampled)`)
 }
 
 function todolist () {
@@ -47,15 +48,15 @@ function todolist () {
     templates.push(engine.parse(str))
   }
   const diff1 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
-  console.log(`${h(str.length)} todolist before GC x ${h(diff1)}/tpl (${SAMPLE_COUNT} instances sampled)`)
+  console.log(`[todolist ${h(str.length)}][before GC] ${h(diff1)}/tpl (${SAMPLE_COUNT} runs sampled)`)
 
   global.gc()
   const diff2 = (getHeapStatistics().used_heap_size - base) / SAMPLE_COUNT
-  console.log(`${h(str.length)} todolist after GC x ${h(diff2)}/tpl (${SAMPLE_COUNT} instances sampled)`)
+  console.log(`[todolist ${h(str.length)}][after GC] ${h(diff2)}/tpl (${SAMPLE_COUNT} runs sampled)`)
 }
 
 function h (size) {
-  return (size / 1024).toFixed(3) + ' kB'
+  return (size / 1024).toFixed(3) + ' KB'
 }
 
 module.exports = { memory }

@@ -5,23 +5,23 @@
         neque luctus tincidunt. Duis interdum tempus elit.
         <small>Aenean metus. Vestibulum ac lacus. Vivamus porttitor, massa ut.</small>
     </h1>
-    <a href={{"/add" | url}} class="todo-add"><i class="fa fa-plus-square"></i>Add Todo</a>
+    <a href={{url "/add"}} class="todo-add"><i class="fa fa-plus-square"></i>Add Todo</a>
     <ul class="filter-category">
-        {% for item in categories %}
-        <li style="background: {{ item.color }}">
-            <a href="/todos/category/{{ item.id }}">{{ item.title }}</a>
+        {{#each categories }}
+        <li style="background: {{ color }}">
+            <a href="/todos/category/{{ id }}">{{ title }}</a>
         </li>
-        {% endfor %}
+        {{/each}}
     </ul>
-    {% for todo in todos %}
+    {{#each todos }}
     <div>
         <h2>
-            Todo {{ forloop.index }}:
-            <span class="todo-item content" data-todo-index="{{ forloop.index0 }}">
-                {{ todo.title | prepend: 'TODO: ' | upcase }}
+            Todo {{inc @index}}:
+            <span class="todo-item content" data-todo-index="{{@index}}">
+                {{ upcase (concat 'TODO: ' title) }}
             </span>
         </h2>
-        {% render "todo-icon", id:todo.id %}
+        {{> todo-icon id=id }}
 
         <p class="description">
             Purus eu mi. Proin commodo, massa commodo dapibus elementum,
@@ -32,13 +32,13 @@
         </p>
 
         <div class="todo-meta">
-            {% if todo.category %}
-                <span>{{  todo.category | capitalize }}</span>
-            {% endif %}
+            {{# if category }}
+                <span>{{ capitalize category }}</span>
+            {{/if}}
         </div>
-        <a class="btn btn-primary" href={{"/edit/" | append: todo.id | url }}><i class="fa fa-pencil"></i> Edit</a>
+        <a class="btn btn-primary" href={{ url (concat "/edit/" id) }}><i class="fa fa-pencil"></i> Edit</a>
         <a class="btn btn-default"><i class="fa fa-check"></i> Check</a>
-        <a class="btn ben-danger" href={{"/delete/" | append: todo.id | url }}><i class="fa fa-trash-o"</i> Trash</a>
+        <a class="btn ben-danger" href={{ url (concat "/delete/" id) }}><i class="fa fa-trash-o"</i> Trash</a>
     </div>
-    {% endfor %}
+    {{/each}}
 </section>
