@@ -1,0 +1,4 @@
+{
+  "exclude": ["dist", "test"],
+  "reporter": ["html", "lcov"]
+}

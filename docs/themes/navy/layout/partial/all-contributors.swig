@@ -40,6 +40,8 @@
     <td align="center"><a href="http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html"><img src="https://avatars3.githubusercontent.com/u/1100776?v=4" width="100px;" alt="Steffen Schuldenzucker"/></a></td>
     <td align="center"><a href="https://github.com/Pixcell"><img src="https://avatars0.githubusercontent.com/u/4005291?v=4" width="100px;" alt="Pixcell"/></a></td>
     <td align="center"><a href="https://jasonet.co"><img src="https://avatars.githubusercontent.com/u/10660468?v=4" width="100px;" alt="Jason Etcovitch"/></a></td>
+    <td align="center"><a href="https://github.com/kayuapi"><img src="https://avatars.githubusercontent.com/u/10304328?v=4" width="100px;" alt="ZC"/></a></td>
+    <td align="center"><a href="https://memmie.lenglet.name"><img src="https://avatars.githubusercontent.com/u/729275?v=4" width="100px;" alt="Memmie Lenglet"/></a></td>
   </tr>
 </table>
 

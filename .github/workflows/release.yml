@@ -1,0 +1,40 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+      - name: Test
+        run: |
+          npm run lint
+          npm run test
+      - name: Coverage
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
+      - name: Publish Docs
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with: 
+          branch: gh-pages
+          folder: docs/public
