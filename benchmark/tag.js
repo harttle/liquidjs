@@ -4,7 +4,8 @@ const { Liquid } = require('..')
 const liquid = new Liquid()
 
 function tag () {
-  console.log('--- tag ---')
+  console.log('         tag')
+  console.log('------------------------')
   return new Promise(resolve => {
     new Benchmark.Suite('tag')
       .add('if', test('{% if "foobar" %}foo{% endif %}'))

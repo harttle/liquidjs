@@ -24,6 +24,7 @@ export default {
   render: function * (ctx: Context, emitter: Emitter) {
     const { liquid, hash, withVar, file } = this
     const { renderer } = liquid
+    // TODO try move all liquid.parse calls into parse() section
     const filepath = ctx.opts.dynamicPartials
       ? (TypeGuards.isQuotedToken(file)
         ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
