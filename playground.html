@@ -70,21 +70,23 @@
   <div class="wrapper">
     <h1 class="inner">Playground</h1>
     <div class="row inner">
-      <div id="editorEl">Loading...</div>
-      <div id="previewEl">Loading...</div>
-    </div>
-    <script id="sourceEl" type="text/plain">{% assign people = "alice, bob, carol" | split: ", " -%}
+      <div class="col">
+        <div id="editorEl">{% assign people = &quot;alice, bob, carol&quot; | split: &quot;, &quot; -%}
 
-<ul>
+&lt;ul&gt;
 {%- for person in people %}
-  <li>
-    <a href="{{person | prepend: "http://example.com/"}}">
+  &lt;li&gt;
+    &lt;a href=&quot;{{person | prepend: &quot;http://example.com/&quot;}}&quot;&gt;
       {{ person | capitalize }}
-    </a>
-  </li>
+    &lt;/a&gt;
+  &lt;/li&gt;
 {%- endfor%}
-</ul>
-</script>
+&lt;/ul&gt;
+</div>
+        <div id="dataEl">{}</div>
+      </div>
+      <div class="col" id="previewEl">Loading...</div>
+    </div>
   </div>
 </div>
 
