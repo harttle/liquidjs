@@ -22,6 +22,8 @@ npm test
 
 **提交消息**：请遵守 [Angular 提交消息规范](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits)，尤其注意 [type 标识](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type)，semantic-release 机器人依赖这个标识自动发布。
 
+**向后兼容**：请考虑向后（之前的旧的版本）兼容。LiquidJS 被用于很多层的软件，包括底层库、编译器、站点生成器、 Web 服务器。对多数最终用户来说，驱动或请求整个系统做一次主版本升级是很难办到的。
+
 ## 成为赞助者！
 
 LiquidJS 是开源的、免费的，并且 **没有** 商业支持，也 **没有** 任何广告。如果你喜欢 LiquidJS 或你的公司在使用 LiquidJS，请考虑通过 [Open Collective][oc] 或 [Patreon][pt] 赞助，作为感谢你的名字和头像（或 Logo）会展示在这里和 [Github README][liquidjs]。

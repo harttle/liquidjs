@@ -76,15 +76,12 @@ describe('tags/render', function () {
   })
 
   it('should be able to access globals', async function () {
+    liquid = new Liquid({ root: '/', extname: '.html', globals: { name: 'Harttle' } })
     mock({
       '/hash.html': 'InParent: {{name}} {% render "user.html" %}',
       '/user.html': 'InChild: {{name}}'
     })
-    const html = await liquid.renderFile('hash.html', {
-      name: 'harttle'
-    }, {
-      globals: { name: 'Harttle' }
-    })
+    const html = await liquid.renderFile('hash', { name: 'harttle' })
     expect(html).to.equal('InParent: harttle InChild: Harttle')
   })
 

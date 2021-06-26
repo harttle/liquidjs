@@ -4,6 +4,7 @@ const { join } = require('path')
 
 const liquid = new Liquid({
   root: join(__dirname, '../templates'),
+  cache: true,
   extname: '.liquid'
 })
 

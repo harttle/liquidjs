@@ -4,7 +4,7 @@ title: Contribution Guideline
 
 ## Star on Github 👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
 
-Staring us is the most important and easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
+Staring LiquidJS is the most important and easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
 
 ## Show Me Your Code
 
@@ -21,6 +21,8 @@ npm test
 ```
 
 **Commit Message**: Please align to [the Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially note the [type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), on which semantic-release bot depends.
+
+**Backward-Compatibility**: please be backward-compatible. LiquidJS is used by multiple layers of softwares, including underlying libraries, compilers, site generators and Web servers. It's not easy to do a major upgrade for most of them.
 
 ## Financial Support
 

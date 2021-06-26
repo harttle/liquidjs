@@ -37,7 +37,7 @@ export default {
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const scope = yield hash.render(ctx)
     if (withVar) scope[filepath] = evalToken(withVar, ctx)
-    const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
+    const templates = yield liquid.parseFileImpl(filepath, ctx.sync)
     ctx.push(scope)
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()

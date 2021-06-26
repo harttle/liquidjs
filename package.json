@@ -13,13 +13,8 @@
   "scripts": {
     "lint": "eslint \"**/*.ts\" .",
     "check": "npm test && npm run lint",
-    "unit": "mocha \"test/unit/**/*.ts\"",
-    "integration": "mocha \"test/integration/**/*.ts\"",
-    "e2e": "mocha \"test/e2e/**/*.ts\"",
     "test": "nyc mocha \"test/**/*.ts\"",
-    "benchmark:prepare": "cd benchmark && npm ci",
-    "benchmark": "cd benchmark && npm start",
-    "benchmark:engines": "cd benchmark && npm run engines",
+    "benchmark": "cd benchmark && npm ci && npm start",
     "build": "npm run build:dist && npm run build:docs",
     "build:dist": "rm -rf dist && rollup -c rollup.config.ts && ls -lh dist",
     "build:docs": "bin/build-docs.sh"
