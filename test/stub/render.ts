@@ -4,8 +4,8 @@ import { expect } from 'chai'
 
 export const liquid = new Liquid()
 
-export function render (src: string, ctx?: object, opts?: LiquidOptions) {
-  return liquid.parseAndRender(src, ctx, opts)
+export function render (src: string, ctx?: object) {
+  return liquid.parseAndRender(src, ctx)
 }
 
 export async function test (src: string, ctx: object | string, dst?: string, opts?: LiquidOptions) {
@@ -13,5 +13,6 @@ export async function test (src: string, ctx: object | string, dst?: string, opt
     dst = ctx as string
     ctx = {}
   }
-  return expect(await render(src, ctx as object, opts)).to.equal(dst)
+  const engine = opts ? new Liquid(opts) : liquid
+  return expect(await engine.parseAndRender(src, ctx as object)).to.equal(dst)
 }

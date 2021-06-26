@@ -26,7 +26,7 @@ export default {
         : evalToken(this.file, ctx))
       : file.getText()
     assert(filepath, () => `file "${file.getText()}"("${filepath}") not available`)
-    const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
+    const templates = yield liquid.parseFileImpl(filepath, ctx.sync)
 
     // render remaining contents and store rendered results
     ctx.setRegister('blockMode', BlockMode.STORE)

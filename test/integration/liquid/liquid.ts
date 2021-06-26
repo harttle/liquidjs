@@ -91,7 +91,7 @@ describe('Liquid', function () {
         root: ['/root/'],
         extname: '.html'
       })
-      const tpls = await engine.getTemplate('mocha')
+      const tpls = await engine.parseFileSync('mocha')
       expect(tpls.length).to.gte(1)
       expect(tpls[0].token.getText()).to.contain('module.exports')
     })
@@ -126,7 +126,7 @@ describe('Liquid', function () {
         root: ['/boo', '/root/'],
         extname: '.html'
       })
-      return expect(() => engine.getTemplateSync('/not/exist.html'))
+      return expect(() => engine.parseFileSync('/not/exist.html'))
         .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
   })

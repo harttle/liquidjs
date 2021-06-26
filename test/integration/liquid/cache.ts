@@ -132,34 +132,6 @@ describe('LiquidOptions#cache', function () {
       const y = await engine.renderFile('foo')
       expect(y).to.equal('foo')
     })
-    it('should respect passed in cache=false option', async function () {
-      const engine = new Liquid({
-        root: '/root/',
-        extname: '.html',
-        cache: true
-      })
-      mock({ '/root/files/foo.html': 'foo' })
-      const x = await engine.renderFile('files/foo')
-      expect(x).to.equal('foo')
-      mock({ '/root/files/foo.html': 'bar' })
-      const y = await engine.renderFile('files/foo')
-      expect(y).to.equal('foo')
-      const z = await engine.renderFile('files/foo', undefined, { cache: false })
-      expect(z).to.equal('bar')
-    })
-    it('should use cache when passing in other options', async function () {
-      const engine = new Liquid({
-        root: '/root/',
-        extname: '.html',
-        cache: true
-      })
-      mock({ '/root/files/foo.html': 'foo' })
-      const x = await engine.renderFile('files/foo')
-      expect(x).to.equal('foo')
-      mock({ '/root/files/foo.html': 'bar' })
-      const y = await engine.renderFile('files/foo', undefined, { greedy: true })
-      expect(y).to.equal('foo')
-    })
   })
 
   describe('#renderFileSync', function () {
@@ -200,34 +172,6 @@ describe('LiquidOptions#cache', function () {
 
       mock({ '/root/foo.html': 'foo' })
       const y = await engine.renderFile('foo')
-      expect(y).to.equal('foo')
-    })
-    it('should respect passed in cache=false option', async function () {
-      const engine = new Liquid({
-        root: '/root/',
-        extname: '.html',
-        cache: true
-      })
-      mock({ '/root/files/foo.html': 'foo' })
-      const x = engine.renderFileSync('files/foo')
-      expect(x).to.equal('foo')
-      mock({ '/root/files/foo.html': 'bar' })
-      const y = engine.renderFileSync('files/foo')
-      expect(y).to.equal('foo')
-      const z = engine.renderFileSync('files/foo', undefined, { cache: false })
-      expect(z).to.equal('bar')
-    })
-    it('should use cache when passing in other options', async function () {
-      const engine = new Liquid({
-        root: '/root/',
-        extname: '.html',
-        cache: true
-      })
-      mock({ '/root/files/foo.html': 'foo' })
-      const x = engine.renderFileSync('files/foo')
-      expect(x).to.equal('foo')
-      mock({ '/root/files/foo.html': 'bar' })
-      const y = engine.renderFileSync('files/foo', undefined, { greedy: true })
       expect(y).to.equal('foo')
     })
   })
