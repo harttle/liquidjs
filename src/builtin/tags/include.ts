@@ -1,14 +1,14 @@
-import { assert, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
+import { assert, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
+import { parseFilePath, renderFilePath } from './render'
 
 export default {
+  parseFilePath,
+  renderFilePath,
   parse: function (token: TagToken) {
     const args = token.args
     const tokenizer = new Tokenizer(args, this.liquid.options.operatorsTrie)
-    this.file = this.liquid.options.dynamicPartials
-      ? tokenizer.readValue()
-      : tokenizer.readFileName()
-    assert(this.file, () => `illegal argument "${token.args}"`)
+    this['file'] = this.parseFilePath(tokenizer, this.liquid)
 
     const begin = tokenizer.p
     const withStr = tokenizer.readIdentifier()
@@ -22,15 +22,10 @@ export default {
     this.hash = new Hash(tokenizer.remaining())
   },
   render: function * (ctx: Context, emitter: Emitter) {
-    const { liquid, hash, withVar, file } = this
+    const { liquid, hash, withVar } = this
     const { renderer } = liquid
-    // TODO try move all liquid.parse calls into parse() section
-    const filepath = ctx.opts.dynamicPartials
-      ? (TypeGuards.isQuotedToken(file)
-        ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
-        : yield evalToken(file, ctx))
-      : file.getText()
-    assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
+    const filepath = yield this.renderFilePath(this['file'], ctx, liquid)
+    assert(filepath, () => `illegal filename "${filepath}"`)
 
     const saved = ctx.saveRegister('blocks', 'blockMode')
     ctx.setRegister('blocks', {})
