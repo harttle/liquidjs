@@ -31,7 +31,7 @@ export class Tokenizer {
   private rawBeginAt = -1
 
   constructor (
-    private input: string,
+    public input: string,
     private trie: Trie,
     private file: string = ''
   ) {

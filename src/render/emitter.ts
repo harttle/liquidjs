@@ -14,7 +14,7 @@ export class Emitter {
     if (this.keepOutputType === true) {
       html = toValue(html)
     } else {
-      html = stringify(toValue(html))
+      html = stringify(html)
     }
     // This will only preserve the type if the value is isolated.
     // I.E:
