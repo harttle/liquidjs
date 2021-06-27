@@ -47,10 +47,9 @@ export function evalToken (token: Token | undefined, ctx: Context, lenient = fal
 }
 
 function evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean) {
-  const variable = token.getVariableAsText()
   const props: string[] = token.props.map(prop => evalToken(prop, ctx, false))
   try {
-    return ctx.get([variable, ...props])
+    return ctx.get([token.propertyName, ...props])
   } catch (e) {
     if (lenient && e.name === 'InternalUndefinedVariableError') return null
     throw (new UndefinedVariableError(e, token))

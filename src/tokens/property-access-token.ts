@@ -5,19 +5,15 @@ import { TokenKind } from '../parser/token-kind'
 import { parseStringLiteral } from '../parser/parse-string-literal'
 
 export class PropertyAccessToken extends Token {
+  public propertyName: string
   constructor (
     public variable: IdentifierToken | QuotedToken,
     public props: (IdentifierToken | QuotedToken | PropertyAccessToken)[],
     end: number
   ) {
     super(TokenKind.PropertyAccess, variable.input, variable.begin, end, variable.file)
-  }
-
-  getVariableAsText () {
-    if (this.variable instanceof IdentifierToken) {
-      return this.variable.getText()
-    } else {
-      return parseStringLiteral(this.variable.getText())
-    }
+    this.propertyName = this.variable instanceof IdentifierToken
+      ? this.variable.getText()
+      : parseStringLiteral(this.variable.getText())
   }
 }

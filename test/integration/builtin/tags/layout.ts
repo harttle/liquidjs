@@ -38,7 +38,7 @@ describe('tags/layout', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.contain('file "foo"("undefined") not available')
+      expect(e.message).to.contain('illegal filename "undefined"')
     })
   })
   it('should handle layout none', async function () {
