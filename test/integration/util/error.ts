@@ -269,9 +269,8 @@ describe('error', function () {
         .to.throw(RenderError, /intended render error/)
     })
     it('should contain original error info for {% include %}', function () {
-      const origin = ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th']
       mock({
-        '/throwing-tag.html': origin.join('\n')
+        '/throwing-tag.html': ['1st', '2nd', '3rd', 'X{%throwingTag%} Y', '5th', '6th', '7th'].join('\n')
       })
       const html = '{%include "throwing-tag.html"%}'
       const message = [
