@@ -92,7 +92,7 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 **lenientIf** modifies the behavior of `strictVariables` to allow handling optional variables. If set to `true`, an undefined variable will *not* cause an exception in the following two situations: a) it is the condition to an `if`, `elsif`, or `unless` tag; b) it occurs right before a `default` filter. Irrelevant if `strictVariables` is not set. Defaults to `false`.
 
 {% note info Non-existent Tags %}
-Non-existent tags always throw errors during pasrsing and this behaviour can not be customized.
+Non-existent tags always throw errors during parsing and this behaviour can not be customized.
 {% endnote %}
 
 [liquid]: ../api/classes/liquid_.liquid.html
