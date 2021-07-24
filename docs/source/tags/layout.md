@@ -31,7 +31,7 @@ Variables defined in current template can be passed to a the layout template by 
 
 ## Blocks
 
-The layout file can contain multiple `blocks` which will be populated by the child template (the caller). For example we have a `default-layout.liquid` file with the following contents:
+The layout file can contain multiple `block`s which will be populated by the child template (the caller). For example we have a `default-layout.liquid` file with the following contents:
 
 ```
 Header
