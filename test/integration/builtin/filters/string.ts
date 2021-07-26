@@ -9,9 +9,6 @@ describe('filters/string', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
     it('should return "abar" for "a", foo', () => test('{{ "a" | append: foo }}', { foo: 'bar' }, 'abar'))
-    it('should throw if second argument undefined', () => {
-      return expect(test('{{ "abc" | append: undefinedVar }}', 'abc')).to.be.rejectedWith(/2 arguments/)
-    })
     it('should throw if second argument not set', () => {
       return expect(test('{{ "abc" | append }}', 'abc')).to.be.rejectedWith(/2 arguments/)
     })
@@ -21,9 +18,6 @@ describe('filters/string', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | prepend: "abc" }}', 'abc-3'))
     it('should return "abar" for "a", foo', () => test('{{ "a" | prepend: foo }}', { foo: 'bar' }, 'bara'))
-    it('should throw if second argument undefined', () => {
-      return expect(test('{{ "abc" | prepend: undefinedVar }}', 'abc')).to.be.rejectedWith(/2 arguments/)
-    })
     it('should throw if second argument not set', () => {
       return expect(test('{{ "abc" | prepend }}', 'abc')).to.be.rejectedWith(/2 arguments/)
     })
@@ -33,6 +27,9 @@ describe('filters/string', function () {
     it('should capitalize first', () => test('{{ "i am good" | capitalize }}', 'I am good'))
     it('should return empty for nil', () => test('{{ nil | capitalize }}', ''))
     it('should return empty for undefined', async () => test('{{ foo | capitalize }}', ''))
+    it('should capitalize only first word', async () => test('{{"foo bar" | capitalize}}', 'Foo bar'))
+    it('should to lower case if prefixed by spaces', async () => test('{{" foo BaR" | capitalize}}', ' foo bar'))
+    it('should to lower case trailing words', async () => test('{{"foo BaR" | capitalize}}', 'Foo bar'))
   })
   describe('concat', function () {
     it('should concat arrays', () => test(`

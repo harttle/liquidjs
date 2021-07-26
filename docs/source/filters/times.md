@@ -2,6 +2,8 @@
 title: times
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Multiplies a number by another number.
 
 Input

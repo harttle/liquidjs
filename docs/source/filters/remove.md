@@ -2,6 +2,8 @@
 title: remove
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Removes every occurrence of the specified substring from a string.
 
 Input

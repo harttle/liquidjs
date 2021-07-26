@@ -2,6 +2,8 @@
 title: modulo
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 返回两数相除的余数。
 
 输入

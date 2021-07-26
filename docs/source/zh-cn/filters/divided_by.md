@@ -2,6 +2,8 @@
 title: divided_by
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 两数相除返回商，返回结果数字在 JavaScript 中 `.toString()` 得到的字符串。
 
 输入

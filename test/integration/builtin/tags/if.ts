@@ -1,5 +1,9 @@
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import * as chai from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+const expect = chai.expect
+chai.use(chaiAsPromised)
 
 describe('tags/if', function () {
   const liquid = new Liquid()
@@ -74,6 +78,14 @@ describe('tags/if', function () {
       const src = `{%assign var = 1%}{%if var ==1%}success{%else%}fail{%endif%}`
       const html = await liquid.parseAndRender(src)
       return expect(html).to.equal('success')
+    })
+  })
+  describe('filters as condition', function () {
+    it('should support filter on expression', async function () {
+      liquid.registerFilter('negate', (val) => !val)
+      const src = '{% if 2 == 3 | negate %}yes{%else%}no{%endif%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('yes')
     })
   })
   describe('compare to null', function () {

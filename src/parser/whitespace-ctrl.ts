@@ -4,7 +4,6 @@ import { NormalizedFullOptions } from '../liquid-options'
 import { TYPES, INLINE_BLANK, BLANK } from '../util/character'
 
 export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
-  options = { greedy: true, ...options }
   let inRaw = false
 
   for (let i = 0; i < tokens.length; i++) {

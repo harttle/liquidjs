@@ -2,6 +2,8 @@
 title: If
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 条件为 `true` 时执行某个代码块。
 
 ## if

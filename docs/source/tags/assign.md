@@ -2,6 +2,8 @@
 title: Assign
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Creates a new variable.
 
 Input

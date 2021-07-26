@@ -1,0 +1,44 @@
+<section class="todo-list">
+    <h1>
+        posuere cubilia Curae; Vestibulum hendrerit malesuada odio. Fusce ut elit
+        ut augue sollicitudin blandit. Phasellus volutpat lorem. Duis non pede et
+        neque luctus tincidunt. Duis interdum tempus elit.
+        <small>Aenean metus. Vestibulum ac lacus. Vivamus porttitor, massa ut.</small>
+    </h1>
+    <a href={{url "/add"}} class="todo-add"><i class="fa fa-plus-square"></i>Add Todo</a>
+    <ul class="filter-category">
+        {{#each categories }}
+        <li style="background: {{ color }}">
+            <a href="/todos/category/{{ id }}">{{ title }}</a>
+        </li>
+        {{/each}}
+    </ul>
+    {{#each todos }}
+    <div>
+        <h2>
+            Todo {{inc @index}}:
+            <span class="todo-item content" data-todo-index="{{@index}}">
+                {{ upcase (concat 'TODO: ' title) }}
+            </span>
+        </h2>
+        {{> todo-icon id=id }}
+
+        <p class="description">
+            Purus eu mi. Proin commodo, massa commodo dapibus elementum,
+            libero lacus pulvinar eros, ut tincidunt nisl elit ut velit. Cras rutrum
+            porta purus. Vivamus lorem. Sed turpis enim, faucibus quis, pharetra in,
+            sagittis sed, magna. Curabitur ultricies felis ut libero. Nullam tincidunt
+            enim eu nibh. Nunc eget ipsum in sem facilisis convallis. Proin fermentum
+        </p>
+
+        <div class="todo-meta">
+            {{# if category }}
+                <span>{{ capitalize category }}</span>
+            {{/if}}
+        </div>
+        <a class="btn btn-primary" href={{ url (concat "/edit/" id) }}><i class="fa fa-pencil"></i> Edit</a>
+        <a class="btn btn-default"><i class="fa fa-check"></i> Check</a>
+        <a class="btn ben-danger" href={{ url (concat "/delete/" id) }}><i class="fa fa-trash-o"</i> Trash</a>
+    </div>
+    {{/each}}
+</section>

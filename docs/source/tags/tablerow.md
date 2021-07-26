@@ -2,6 +2,8 @@
 title: Table Row
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Generates an HTML table. Must be wrapped in opening `<table>` and closing `</table>` HTML tags.
 
 ## Basic Usage

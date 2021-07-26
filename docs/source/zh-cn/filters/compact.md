@@ -2,9 +2,11 @@
 title: compact
 ---
 
-Removes any `nil` values from an array.
+{% since %}v9.22.0{% endsince %}
 
-For this example, assume `site.pages` is an array of content pages for a website, and some of these pages have an attribute called `category` that specifies their content category. If we `map` those categories to an array, some of the array items might be `nil` if any pages do not have a `category` attribute.
+从数组里移除任何 `null` 和 `undefined` 值。
+
+假设 `site.pages` 是网页列表，有些网页包含 `category` 属性用来标明类别。如果把它们 `map` 到数组里，那么对于没有 `category` 属性的元素就会是 `undefined`。
 
 输入
 ```liquid
@@ -26,7 +28,7 @@ For this example, assume `site.pages` is an array of content pages for a website
 - technology
 ```
 
-By using `compact` when we create our `site_categories` array, we can remove all the `nil` values in the array.
+使用 `compact` 创建 `site_categories` 数组，可以移除所有 `null` 和 `undefined` 值。
 
 输入
 ```liquid

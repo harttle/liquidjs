@@ -37,7 +37,12 @@ hexo.extend.helper.register('page_nav', function () {
 })
 
 hexo.extend.helper.register('raw', function (filepath) {
-  const content = readFileSync(resolve(this.view_dir, filepath))
+  const content = readFileSync(resolve(this.view_dir, filepath), 'utf8')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
   return content
 })
 

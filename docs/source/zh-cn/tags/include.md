@@ -2,6 +2,8 @@
 title: Include
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 {% note warn 已废弃 %}
 这个标签已经废弃，请使用封装更好的 <a href="./render.html">render</a> 标签。
 {% endnote %}

@@ -2,6 +2,8 @@
 title: newline_to_br
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 把字符串里的所有换行符（`\n`）替换为 HTML 换行（`<br />`）。
 
 输入

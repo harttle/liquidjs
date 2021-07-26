@@ -2,6 +2,8 @@
 title: remove_first
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 移除字符串中出现的第一个指定子字符串。
 
 输入

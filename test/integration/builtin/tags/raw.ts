@@ -1,11 +1,15 @@
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import * as chai from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+const expect = chai.expect
+chai.use(chaiAsPromised)
 
 describe('tags/raw', function () {
   const liquid = new Liquid()
   it('should throw when not closed', async function () {
-    const p = liquid.parseAndRender('{% raw%}')
-    return expect(p).be.rejectedWith(/{% raw%} not closed/)
+    const p = liquid.parseAndRender('{% raw %}')
+    return expect(p).be.rejectedWith(/{% raw %} not closed/)
   })
   it('should output filters as it is', async function () {
     const src = '{% raw %}{{ 5 | plus: 6 }}{% endraw %} is equal to 11.'

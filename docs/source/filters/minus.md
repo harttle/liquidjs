@@ -2,6 +2,8 @@
 title: minus
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Subtracts a number from another number.
 
 Input

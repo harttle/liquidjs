@@ -25,6 +25,7 @@ export class OperatorToken extends Token {
     this.operator = this.getText()
   }
   getPrecedence () {
-    return precedence[this.getText()]
+    const key = this.getText()
+    return key in precedence ? precedence[key] : 1
   }
 }

@@ -2,19 +2,21 @@ import * as _ from './underscore'
 import { Token } from '../tokens/token'
 import { Template } from '../template/template'
 
-abstract class LiquidError extends Error {
+export abstract class LiquidError extends Error {
   private token: Token
+  public context: string
   private originalError: Error
   public constructor (err: Error, token: Token) {
     super(err.message)
     this.originalError = err
     this.token = token
+    this.context = ''
   }
   protected update () {
     const err = this.originalError
-    const context = mkContext(this.token)
+    this.context = mkContext(this.token)
     this.message = mkMessage(err.message, this.token)
-    this.stack = this.message + '\n' + context +
+    this.stack = this.message + '\n' + this.context +
       '\n' + this.stack + '\nFrom ' + err.stack
   }
 }
@@ -44,7 +46,28 @@ export class RenderError extends LiquidError {
     super.update()
   }
   public static is (obj: any): obj is RenderError {
-    return obj instanceof RenderError
+    return obj.name === 'RenderError'
+  }
+}
+
+export class UndefinedVariableError extends LiquidError {
+  public constructor (err: Error, token: Token) {
+    super(err, token)
+    this.name = 'UndefinedVariableError'
+    this.message = err.message
+    super.update()
+  }
+}
+
+// only used internally; raised where we don't have token information,
+// so it can't be an UndefinedVariableError.
+export class InternalUndefinedVariableError extends Error {
+  variableName: string
+
+  public constructor (variableName: string) {
+    super(`undefined variable: ${variableName}`)
+    this.name = 'InternalUndefinedVariableError'
+    this.variableName = variableName
   }
 }
 

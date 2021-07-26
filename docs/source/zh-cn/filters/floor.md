@@ -2,6 +2,8 @@
 title: floor
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 数字下取整，LiquidJS 会尝试把输入转换为数字再做下取整操作。
 
 输入

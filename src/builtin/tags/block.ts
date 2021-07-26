@@ -1,8 +1,9 @@
 import BlockMode from '../../context/block-mode'
-import { ParseStream, TagToken, TopLevelToken, Template, Context, TagImplOptions, Emitter } from '../../types'
+import { BlockDrop } from '../../drop/block-drop'
+import { ParseStream, TagToken, TopLevelToken, Template, Context, TagImpl, Emitter } from '../../types'
 
 export default {
-  parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
+  parse (this: TagImpl, token: TagToken, remainTokens: TopLevelToken[]) {
     const match = /\w+/.exec(token.args)
     this.block = match ? match[0] : ''
     this.tpls = [] as Template[]
@@ -14,18 +15,31 @@ export default {
       })
     stream.start()
   },
-  render: function * (ctx: Context, emitter: Emitter) {
-    const blocks = ctx.getRegister('blocks')
-    const childDefined = blocks[this.block]
-    const r = this.liquid.renderer
-    const html = childDefined !== undefined
-      ? childDefined
-      : yield r.renderTemplates(this.tpls, ctx)
 
-    if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
-      blocks[this.block] = html
-      return
+  * render (this: TagImpl, ctx: Context, emitter: Emitter) {
+    const blockRender = this.getBlockRender(ctx)
+    yield this.emitHTML(ctx, emitter, blockRender)
+  },
+
+  getBlockRender (this: TagImpl, ctx: Context) {
+    const { liquid, tpls } = this
+    const extendedBlockRender = ctx.getRegister('blocks')[this.block]
+    const defaultBlockRender = function * (superBlock: BlockDrop) {
+      ctx.push({ block: superBlock })
+      const result = yield liquid.renderer.renderTemplates(tpls, ctx)
+      ctx.pop()
+      return result
     }
-    emitter.write(html)
+    return extendedBlockRender
+      ? (superBlock: BlockDrop) => extendedBlockRender(new BlockDrop(() => defaultBlockRender(superBlock)))
+      : defaultBlockRender
+  },
+
+  * emitHTML (this: TagImpl, ctx: Context, emitter: Emitter, blockRender: (block: BlockDrop) => string) {
+    if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
+      ctx.getRegister('blocks')[this.block] = blockRender
+    } else {
+      emitter.write(yield blockRender(new BlockDrop()))
+    }
   }
-} as TagImplOptions
+}

@@ -2,6 +2,8 @@
 title: sort_natural
 ---
 
+{% since %}v8.4.0{% endsince %}
+
 大小写不敏感地对数组元素排序。
 
 输入

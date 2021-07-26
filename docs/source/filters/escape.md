@@ -2,6 +2,8 @@
 title: escape
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Escapes a string by replacing HTML special characters with escape sequences. It doesn't change strings that don't have anything to escape.
 
 Input

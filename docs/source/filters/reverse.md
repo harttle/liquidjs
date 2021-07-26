@@ -2,6 +2,8 @@
 title: reverse
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Reverses the order of the items in an array. `reverse` cannot reverse a string.
 
 Input

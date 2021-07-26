@@ -3,8 +3,8 @@ import { Tokenizer, Emitter, TagToken, Context, TagImplOptions } from '../../typ
 
 export default {
   parse: function (token: TagToken) {
-    const tokenizer = new Tokenizer(token.args)
-    this.variable = tokenizer.readWord().content
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    this.variable = tokenizer.readIdentifier().content
   },
   render: function (context: Context, emitter: Emitter) {
     const scope = context.environments

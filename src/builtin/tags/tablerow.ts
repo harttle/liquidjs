@@ -5,12 +5,12 @@ import { Tokenizer } from '../../parser/tokenizer'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(tagToken.args)
+    const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operatorsTrie)
 
-    this.variable = tokenizer.readWord()
+    this.variable = tokenizer.readIdentifier()
     tokenizer.skipBlank()
 
-    const tmp = tokenizer.readWord()
+    const tmp = tokenizer.readIdentifier()
     assert(tmp && tmp.content === 'in', () => `illegal tag: ${tagToken.getText()}`)
 
     this.collection = tokenizer.readValue()
@@ -30,7 +30,7 @@ export default {
   },
 
   render: function * (ctx: Context, emitter: Emitter) {
-    let collection = toEnumerable(evalToken(this.collection, ctx))
+    let collection = toEnumerable(yield evalToken(this.collection, ctx))
     const hash = yield this.hash.render(ctx)
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit

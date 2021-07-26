@@ -2,6 +2,8 @@
 title: Layout
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 ## 使用布局模板
 
 套用模板 [根路径][root] 下的某个布局模板中。

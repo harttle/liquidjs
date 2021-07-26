@@ -1,3 +1,211 @@
+## [9.25.1](https://github.com/harttle/liquidjs/compare/v9.25.0...v9.25.1) (2021-06-20)
+
+
+### Performance Improvements
+
+* add cross-engines benchmark ([cdceb25](https://github.com/harttle/liquidjs/commit/cdceb25d007b3d30a85e51ac538e12297c73bfcf))
+
+# [9.25.0](https://github.com/harttle/liquidjs/compare/v9.24.2...v9.25.0) (2021-05-07)
+
+
+### Features
+
+* when tag with multiple values ([8f9639f](https://github.com/harttle/liquidjs/commit/8f9639f))
+
+## [9.24.2](https://github.com/harttle/liquidjs/compare/v9.24.1...v9.24.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* operator boundary not correctly recognized, fixes [#342](https://github.com/harttle/liquidjs/issues/342) ([3e3d84a](https://github.com/harttle/liquidjs/commit/3e3d84a))
+
+## [9.24.1](https://github.com/harttle/liquidjs/compare/v9.24.0...v9.24.1) (2021-05-01)
+
+
+### Bug Fixes
+
+* make LiquidError context property public ([1fd76ac](https://github.com/harttle/liquidjs/commit/1fd76ac))
+
+# [9.24.0](https://github.com/harttle/liquidjs/compare/v9.23.4...v9.24.0) (2021-05-01)
+
+
+### Features
+
+* add context as a property on the LiquidError error ([9c7cb57](https://github.com/harttle/liquidjs/commit/9c7cb57))
+* export errors for better error handling in user-land ([4e394b9](https://github.com/harttle/liquidjs/commit/4e394b9))
+
+## [9.23.4](https://github.com/harttle/liquidjs/compare/v9.23.3...v9.23.4) (2021-04-17)
+
+
+### Bug Fixes
+
+* capitalize filter not lower case trailing string, fixes [#326](https://github.com/harttle/liquidjs/issues/326) ([6548765](https://github.com/harttle/liquidjs/commit/6548765))
+
+## [9.23.3](https://github.com/harttle/liquidjs/compare/v9.23.2...v9.23.3) (2021-03-21)
+
+
+### Bug Fixes
+
+* expose TokenKind ([dbc23e8](https://github.com/harttle/liquidjs/commit/dbc23e8))
+
+## [9.23.2](https://github.com/harttle/liquidjs/compare/v9.23.1...v9.23.2) (2021-03-13)
+
+
+### Bug Fixes
+
+* comparison for empty/nil, fixes [#321](https://github.com/harttle/liquidjs/issues/321) ([99d14e7](https://github.com/harttle/liquidjs/commit/99d14e7))
+* newline_to_br filter should output <br /> instead of <br/>, fixes [#320](https://github.com/harttle/liquidjs/issues/320) ([9a9b792](https://github.com/harttle/liquidjs/commit/9a9b792))
+
+## [9.23.1](https://github.com/harttle/liquidjs/compare/v9.23.0...v9.23.1) (2021-02-19)
+
+
+### Bug Fixes
+
+* lenientIf not working for the umd bundle, closes [#313](https://github.com/harttle/liquidjs/issues/313) ([2e66e8b](https://github.com/harttle/liquidjs/commit/2e66e8b))
+
+# [9.23.0](https://github.com/harttle/liquidjs/compare/v9.22.1...v9.23.0) (2021-02-12)
+
+
+### Bug Fixes
+
+* respect `fs` in parser options, for [#233](https://github.com/harttle/liquidjs/issues/233) ([4e82da6](https://github.com/harttle/liquidjs/commit/4e82da6))
+
+
+### Features
+
+* support filters in if/unless/case, see [#287](https://github.com/harttle/liquidjs/issues/287) ([2f059f6](https://github.com/harttle/liquidjs/commit/2f059f6))
+* support function calls, closes [#222](https://github.com/harttle/liquidjs/issues/222) ([e37824f](https://github.com/harttle/liquidjs/commit/e37824f))
+* support layout none, closes [#299](https://github.com/harttle/liquidjs/issues/299) ([81e11bb](https://github.com/harttle/liquidjs/commit/81e11bb))
+
+## [9.22.1](https://github.com/harttle/liquidjs/compare/v9.22.0...v9.22.1) (2021-02-05)
+
+
+### Bug Fixes
+
+* default to precedence 1 for custom operators ([20f559e](https://github.com/harttle/liquidjs/commit/20f559e))
+
+# [9.22.0](https://github.com/harttle/liquidjs/compare/v9.21.0...v9.22.0) (2021-02-04)
+
+
+### Features
+
+* compact filter ([f42c217](https://github.com/harttle/liquidjs/commit/f42c217))
+
+# [9.21.0](https://github.com/harttle/liquidjs/compare/v9.20.1...v9.21.0) (2021-02-04)
+
+
+### Features
+
+* add `operators` option for custom operators ([75591cd](https://github.com/harttle/liquidjs/commit/75591cd))
+* create trie programmatically in options ([befc33c](https://github.com/harttle/liquidjs/commit/befc33c))
+* export OperatorMap type ([bc87e19](https://github.com/harttle/liquidjs/commit/bc87e19))
+* export Operators from operator.ts ([6a7c280](https://github.com/harttle/liquidjs/commit/6a7c280))
+* rename to defaultOperators and Operators ([8734e2e](https://github.com/harttle/liquidjs/commit/8734e2e))
+
+## [9.20.1](https://github.com/harttle/liquidjs/compare/v9.20.0...v9.20.1) (2021-01-24)
+
+
+### Bug Fixes
+
+* allow string literals contain delimiters, fixes [#288](https://github.com/harttle/liquidjs/issues/288) ([9c40da7](https://github.com/harttle/liquidjs/commit/9c40da7))
+
+# [9.20.0](https://github.com/harttle/liquidjs/compare/v9.19.0...v9.20.0) (2021-01-23)
+
+
+### Features
+
+* support `{{block.super}}`, see [#38](https://github.com/harttle/liquidjs/issues/38) ([a3af44d](https://github.com/harttle/liquidjs/commit/a3af44d))
+
+# [9.19.0](https://github.com/harttle/liquidjs/compare/v9.18.0...v9.19.0) (2020-12-18)
+
+
+### Bug Fixes
+
+* lint ([de32259](https://github.com/harttle/liquidjs/commit/de32259))
+* move offset adding complexity inside TimezoneDate ([26b2175](https://github.com/harttle/liquidjs/commit/26b2175))
+* simpler timezone regex and non-null offset ([e3ecfe3](https://github.com/harttle/liquidjs/commit/e3ecfe3))
+
+
+### Features
+
+* add preserveTimezones option ([d70cd2a](https://github.com/harttle/liquidjs/commit/d70cd2a))
+* parse and handle date timezone offsets ([c16c787](https://github.com/harttle/liquidjs/commit/c16c787))
+
+# [9.18.0](https://github.com/harttle/liquidjs/compare/v9.17.0...v9.18.0) (2020-12-17)
+
+
+### Bug Fixes
+
+* address refactor comments ([6a0ad10](https://github.com/harttle/liquidjs/commit/6a0ad10))
+
+
+### Features
+
+* add option for keeping variable type in output ([cd92e77](https://github.com/harttle/liquidjs/commit/cd92e77))
+
+# [9.17.0](https://github.com/harttle/liquidjs/compare/v9.16.1...v9.17.0) (2020-12-07)
+
+
+### Bug Fixes
+
+* elsif is not supported for unless, fixes [#268](https://github.com/harttle/liquidjs/issues/268) ([2bbf501](https://github.com/harttle/liquidjs/commit/2bbf501))
+* enforce string-type pattern in `replace`, fixes [#243](https://github.com/harttle/liquidjs/issues/243) ([c8afa39](https://github.com/harttle/liquidjs/commit/c8afa39))
+* raw block not ignoring {% characters, fixes [#263](https://github.com/harttle/liquidjs/issues/263) ([a492d8e](https://github.com/harttle/liquidjs/commit/a492d8e))
+
+
+### Features
+
+* passing liquid to FilterImpl, closes [#277](https://github.com/harttle/liquidjs/issues/277) ([f9f595f](https://github.com/harttle/liquidjs/commit/f9f595f))
+
+## [9.16.1](https://github.com/harttle/liquidjs/compare/v9.16.0...v9.16.1) (2020-10-09)
+
+
+### Bug Fixes
+
+* braced property access ([18a807e](https://github.com/harttle/liquidjs/commit/18a807e))
+
+# [9.16.0](https://github.com/harttle/liquidjs/compare/v9.15.1...v9.16.0) (2020-10-08)
+
+
+### Features
+
+* support jsTruthy, [#255](https://github.com/harttle/liquidjs/issues/255) [#257](https://github.com/harttle/liquidjs/issues/257) ([72ee7b4](https://github.com/harttle/liquidjs/commit/72ee7b4))
+
+## [9.15.1](https://github.com/harttle/liquidjs/compare/v9.15.0...v9.15.1) (2020-10-03)
+
+
+### Bug Fixes
+
+* allow quoted variable name in capture, fixes [#252](https://github.com/harttle/liquidjs/issues/252) ([5b3f419](https://github.com/harttle/liquidjs/commit/5b3f419))
+
+# [9.15.0](https://github.com/harttle/liquidjs/compare/v9.14.1...v9.15.0) (2020-08-04)
+
+
+### Features
+
+* export toPromise and toValue, see [#158](https://github.com/harttle/liquidjs/issues/158) ([2e5ab98](https://github.com/harttle/liquidjs/commit/2e5ab98))
+
+## [9.14.1](https://github.com/harttle/liquidjs/compare/v9.14.0...v9.14.1) (2020-07-08)
+
+
+### Bug Fixes
+
+* enumerate Promises (e.g. in for & tablerow) ([#237](https://github.com/harttle/liquidjs/issues/237)) ([941dd66](https://github.com/harttle/liquidjs/commit/941dd66))
+
+# [9.14.0](https://github.com/harttle/liquidjs/compare/v9.13.0...v9.14.0) (2020-06-25)
+
+
+### Features
+
+* setup universal browser and node builds ([6cf6ffa](https://github.com/harttle/liquidjs/commit/6cf6ffa))
+
+# [9.13.0](https://github.com/harttle/liquidjs/compare/v9.12.0...v9.13.0) (2020-06-25)
+
+
+### Features
+
+* async filters, closes [#232](https://github.com/harttle/liquidjs/issues/232) ([e36f3ff](https://github.com/harttle/liquidjs/commit/e36f3ff))
+
 # [9.12.0](https://github.com/harttle/liquidjs/compare/v9.11.11...v9.12.0) (2020-05-15)
 
 

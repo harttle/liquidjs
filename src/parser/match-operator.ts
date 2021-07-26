@@ -1,16 +1,7 @@
-import { VARIABLE } from '../util/character'
+import { IDENTIFIER, TYPES } from '../util/character'
+import { Trie } from '../util/operator-trie'
 
-const trie = {
-  a: { n: { d: { end: true, needBoundary: true } } },
-  o: { r: { end: true, needBoundary: true } },
-  c: { o: { n: { t: { a: { i: { n: { s: { end: true, needBoundary: true } } } } } } } },
-  '=': { '=': { end: true } },
-  '!': { '=': { end: true } },
-  '>': { end: true, '=': { end: true } },
-  '<': { end: true, '=': { end: true } }
-}
-
-export function matchOperator (str: string, begin: number, end = str.length) {
+export function matchOperator (str: string, begin: number, trie: Trie, end = str.length) {
   let node = trie
   let i = begin
   let info
@@ -19,6 +10,6 @@ export function matchOperator (str: string, begin: number, end = str.length) {
     if (node['end']) info = node
   }
   if (!info) return -1
-  if (info['needBoundary'] && str.charCodeAt(i) & VARIABLE) return -1
+  if (info['needBoundary'] && (TYPES[str.charCodeAt(i)] & IDENTIFIER)) return -1
   return i
 }

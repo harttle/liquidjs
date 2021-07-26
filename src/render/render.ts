@@ -4,7 +4,10 @@ import { Template } from '../template/template'
 import { Emitter } from './emitter'
 
 export class Render {
-  public * renderTemplates (templates: Template[], ctx: Context, emitter = new Emitter()): IterableIterator<string> {
+  public * renderTemplates (templates: Template[], ctx: Context, emitter?: Emitter): IterableIterator<any> {
+    if (!emitter) {
+      emitter = new Emitter(ctx.opts.keepOutputType)
+    }
     for (const tpl of templates) {
       try {
         const html = yield tpl.render(ctx, emitter)

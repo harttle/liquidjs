@@ -1,0 +1,27 @@
+name: Check
+on: [push, pull_request]
+jobs:
+  release:
+    name: Check
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+      - name: Test
+        run: |
+          npm run lint
+          npm run test
+      - name: Coverage
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

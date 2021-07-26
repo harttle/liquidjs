@@ -2,6 +2,8 @@
 title: last
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 返回数组的最后一个元素。
 
 输入

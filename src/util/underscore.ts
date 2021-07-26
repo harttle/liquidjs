@@ -3,13 +3,8 @@ import { Drop } from '../drop/drop'
 const toStr = Object.prototype.toString
 const toLowerCase = String.prototype.toLowerCase
 
-/*
- * Checks if value is classified as a String primitive or object.
- * @param {any} value The value to check.
- * @return {Boolean} Returns true if value is a string, else false.
- */
 export function isString (value: any): value is string {
-  return toStr.call(value) === '[object String]'
+  return typeof value === 'string'
 }
 
 export function isFunction (value: any): value is Function {
@@ -30,7 +25,9 @@ export function promisify (fn: any) {
 
 export function stringify (value: any): string {
   value = toValue(value)
-  return isNil(value) ? '' : String(value)
+  if (isString(value)) return value
+  if (isNil(value)) return ''
+  return String(value)
 }
 
 export function toValue (value: any): any {
@@ -47,7 +44,7 @@ export function toLiquid (value: any): any {
 }
 
 export function isNil (value: any): boolean {
-  return value === null || value === undefined
+  return value == null
 }
 
 export function isArray (value: any): value is any[] {

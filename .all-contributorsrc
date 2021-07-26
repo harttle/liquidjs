@@ -287,6 +287,88 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "TrySound",
+      "name": "Bogdan Chadkin",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5635476?v=4",
+      "profile": "https://twitter.com/IAmTrySound",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tejasmanohar",
+      "name": "Tejas Manohar",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5959235?v=4",
+      "profile": "https://hightouch.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "pdehaan",
+      "name": "Peter deHaan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/557895?v=4",
+      "profile": "http://about.me/peterdehaan",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "amit777",
+      "name": "amit777",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2703309?v=4",
+      "profile": "https://github.com/amit777",
+      "contributions": [
+        "code",
+        "financial"
+      ]
+    },
+    {
+      "login": "sschuldenzucker",
+      "name": "Steffen Schuldenzucker",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1100776?v=4",
+      "profile": "http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Pixcell",
+      "name": "Pixcell",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4005291?v=4",
+      "profile": "https://github.com/Pixcell",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "JasonEtco",
+      "name": "Jason Etcovitch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10660468?v=4",
+      "profile": "https://jasonet.co",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kayuapi",
+      "name": "ZC",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10304328?v=4",
+      "profile": "https://github.com/kayuapi",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "mems",
+      "name": "Memmie Lenglet",
+      "avatar_url": "https://avatars.githubusercontent.com/u/729275?v=4",
+      "profile": "https://memmie.lenglet.name",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

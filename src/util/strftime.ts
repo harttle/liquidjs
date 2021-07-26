@@ -140,7 +140,12 @@ const formatCodes = {
 };
 (formatCodes as any).h = formatCodes.b
 
-export default function (d: Date, formatStr: string) {
+export default function (inputDate: Date, formatStr: string) {
+  let d = inputDate
+  if (d instanceof TimezoneDate) {
+    d = d.getDisplayDate()
+  }
+
   let output = ''
   let remaining = formatStr
   let match
@@ -167,4 +172,26 @@ function format (d: Date, match: RegExpExecArray) {
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
   return padStart(ret, padWidth, padChar)
+}
+
+export class TimezoneDate extends Date {
+  ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/;
+
+  inputTimezoneOffset = 0;
+
+  constructor (public dateString: string) {
+    super(dateString)
+    const m = dateString.match(this.ISO8601_TIMEZONE_PATTERN)
+    if (m && m[1] === 'Z') {
+      this.inputTimezoneOffset = this.getTimezoneOffset()
+    } else if (m && m[2] && m[3] && m[4]) {
+      const [, , sign, hours, minutes] = m
+      const delta = (sign === '+' ? 1 : -1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
+      this.inputTimezoneOffset = this.getTimezoneOffset() + delta
+    }
+  }
+
+  getDisplayDate (): Date {
+    return new Date((+this) + this.inputTimezoneOffset * 60 * 1000)
+  }
 }

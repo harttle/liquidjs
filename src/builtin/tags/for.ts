@@ -6,11 +6,11 @@ import { Hash } from '../../template/tag/hash'
 export default {
   type: 'block',
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(token.args)
+    const toknenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
 
-    const variable = tokenizer.readWord()
-    const inStr = tokenizer.readWord()
-    const collection = tokenizer.readValue()
+    const variable = toknenizer.readIdentifier()
+    const inStr = toknenizer.readIdentifier()
+    const collection = toknenizer.readValue()
     assert(
       variable.size() && inStr.content === 'in' && collection,
       () => `illegal tag: ${token.getText()}`
@@ -36,7 +36,7 @@ export default {
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    let collection = toEnumerable(evalToken(this.collection, ctx))
+    let collection = toEnumerable(yield evalToken(this.collection, ctx))
 
     if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)

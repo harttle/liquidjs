@@ -1,4 +1,4 @@
-import { Emitter, isTruthy, Expression, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
@@ -8,12 +8,12 @@ export default {
     let p
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
-        cond: tagToken.args,
+        cond: new Value(tagToken.args, this.liquid),
         templates: (p = [])
       }))
       .on('tag:elsif', (token: TagToken) => {
         this.branches.push({
-          cond: token.args,
+          cond: new Value(token.args, this.liquid),
           templates: p = []
         })
       })
@@ -31,8 +31,8 @@ export default {
     const r = this.liquid.renderer
 
     for (const branch of this.branches) {
-      const cond = yield new Expression(branch.cond).value(ctx)
-      if (isTruthy(cond)) {
+      const cond = yield branch.cond.value(ctx, ctx.opts.lenientIf)
+      if (isTruthy(cond, ctx)) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return
       }

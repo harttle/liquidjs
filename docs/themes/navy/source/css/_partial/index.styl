@@ -50,10 +50,8 @@
     background: color-link-hover
 
 #banner-share
-  display: none
+  display: block
   padding-bottom: 60px
-  @media mq-normal
-    display: block
 
 #intro-news-list
   background-color: darken(color-navy, 10%)
@@ -178,7 +176,7 @@
   transition: 0.2s
   color: color-link
   &:hover
-    background: @border-color
+    background: lighten(color-link, 20%)
     color: #fff
 
 #sponsors-wrap, #contributors-wrap

@@ -1,34 +1,38 @@
-import { assert, evalQuotedToken, TypeGuards, evalToken, Tokenizer, Emitter, Hash, TagToken, TopLevelToken, Context, TagImplOptions } from '../../types'
+import { assert, Tokenizer, Emitter, Hash, TagToken, TopLevelToken, Context, TagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
+import { parseFilePath, renderFilePath } from './render'
 
 export default {
+  parseFilePath,
+  renderFilePath,
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(token.args)
-    const file = this.liquid.options.dynamicPartials ? tokenizer.readValue() : tokenizer.readFileName()
-    assert(file, () => `illegal argument "${token.args}"`)
-
-    this.file = file
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    this['file'] = this.parseFilePath(tokenizer, this.liquid)
     this.hash = new Hash(tokenizer.remaining())
     this.tpls = this.liquid.parser.parse(remainTokens)
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const { liquid, hash, file } = this
     const { renderer } = liquid
-    const filepath = ctx.opts.dynamicPartials
-      ? (TypeGuards.isQuotedToken(file)
-        ? yield renderer.renderTemplates(liquid.parse(evalQuotedToken(file)), ctx)
-        : evalToken(this.file, ctx))
-      : file.getText()
-    assert(filepath, () => `illegal filename "${file.getText()}":"${filepath}"`)
+    if (file === null) {
+      ctx.setRegister('blockMode', BlockMode.OUTPUT)
+      const html = yield renderer.renderTemplates(this.tpls, ctx)
+      emitter.write(html)
+      return
+    }
+    const filepath = yield this.renderFilePath(this['file'], ctx, liquid)
+    assert(filepath, () => `illegal filename "${filepath}"`)
+    const templates = yield liquid.parseFileImpl(filepath, ctx.sync)
 
-    // render the remaining tokens immediately
+    // render remaining contents and store rendered results
     ctx.setRegister('blockMode', BlockMode.STORE)
-    const blocks = ctx.getRegister('blocks')
     const html = yield renderer.renderTemplates(this.tpls, ctx)
-    if (blocks[''] === undefined) blocks[''] = html
-    const templates = yield liquid._parseFile(filepath, ctx.opts, ctx.sync)
-    ctx.push(yield hash.render(ctx))
+    const blocks = ctx.getRegister('blocks')
+    if (blocks[''] === undefined) blocks[''] = () => html
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
+
+    // render the layout file use stored blocks
+    ctx.push(yield hash.render(ctx))
     const partial = yield renderer.renderTemplates(templates, ctx)
     ctx.pop()
     emitter.write(partial)

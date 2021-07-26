@@ -2,6 +2,8 @@
 title: capitalize
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Makes the first character of a string capitalized.
 
 Input

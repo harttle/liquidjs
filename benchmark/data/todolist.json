@@ -1,0 +1,28 @@
+{
+  "categories": [{
+    "color": "red",
+    "id": "CAT1",
+    "title": "work"
+  }, {
+    "color": "red",
+    "id": "CAT2",
+    "title": "emergency"
+  }, {
+    "color": "green",
+    "id": "CAT3",
+    "title": "sport"
+  }],
+  "todos": [{
+    "title": "fork and clone",
+    "id": "TODO1",
+    "category": "work"
+  }, {
+    "title": "make it better",
+    "id": "TODO2",
+    "category": "sport"
+  }, {
+    "title": "make a pull request",
+    "id": "TODO3",
+    "category": "work"
+  }]
+}

@@ -28,9 +28,9 @@
       <ul id="intro-cmd-wrap">
         <li class="intro-code-item"><span class="hl">import</span> { Liquid } <span class="hl">from</span> 'liquidjs'</li>
         <li class="intro-code-item"><span class="hl">const</span> engine = <span class="hl">new</span> Liquid()</li>
-        <li class="intro-code-item"><span class="hl">const</span> tpl = engine.parse(<span class="hl-str">'Welcome to &#x7b;&#x7b;v}}!'</span>))</li>
-        <li class="intro-code-item"><span class="hl">const</span> html = <span class="hl">await</span> engine.render(tpl, {v: "Liquid"})</li>
-        <li class="intro-code-item"><span class="hl-comment">// html === "Welcome to Liquid!"</span></li>
+        <li class="intro-code-item"><span class="hl">const</span> tpl = engine.parse(<span class="hl-str">'Welcome to &#x7b;&#x7b;v}}!'</span>)</li>
+        <li class="intro-code-item">engine.render(tpl, {v: "Liquid"}).then(console.log)</li>
+        <li class="intro-code-item"><span class="hl-comment">// Outputs "Welcome to Liquid!"</span></li>
       </ul>
       <div id="intro-get-started-wrap">
         <a href="tutorials/setup.html" id="intro-get-started-link">{{ __('index.get_started') }}</a>

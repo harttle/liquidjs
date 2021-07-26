@@ -2,6 +2,8 @@
 title: strip_html
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 移除字符串中的 HTML 标签。
 
 输入

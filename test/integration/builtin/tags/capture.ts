@@ -13,6 +13,12 @@ describe('tags/capture', function () {
     return expect(html).to.equal('A')
   })
 
+  it('should support quoted variable name', async function () {
+    const src = '{% capture "f" %}{{"a" | capitalize}}{%endcapture%}{{f}}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('A')
+  })
+
   it('should shading rather than overwriting', async function () {
     const src = '{% capture var %}10{% endcapture %}{{var}}'
     const ctx = { 'var': 20 }

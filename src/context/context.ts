@@ -3,6 +3,7 @@ import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { Scope } from './scope'
 import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
+import { InternalUndefinedVariableError } from '../util/error'
 
 export class Context {
   private scopes: Scope[] = [{}]
@@ -42,7 +43,7 @@ export class Context {
     return paths.reduce((scope, path) => {
       scope = readProperty(scope, path)
       if (isNil(scope) && this.opts.strictVariables) {
-        throw new TypeError(`undefined variable: ${path}`)
+        throw new InternalUndefinedVariableError(path)
       }
       return scope
     }, scope)
@@ -69,8 +70,8 @@ export class Context {
 export function readProperty (obj: Scope, key: string) {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
+  if (isFunction(obj[key])) return obj[key]()
   if (obj instanceof Drop) {
-    if (isFunction(obj[key])) return obj[key]()
     if (obj.hasOwnProperty(key)) return obj[key]
     return obj.liquidMethodMissing(key)
   }

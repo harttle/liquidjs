@@ -2,6 +2,8 @@
 title: capitalize
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 把字符串首字母改为大写。
 
 输入

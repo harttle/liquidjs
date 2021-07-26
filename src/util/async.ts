@@ -7,7 +7,7 @@ interface Thenable {
   catch (reject: resolver): Thenable;
 }
 
-function mkResolve (value: any) {
+function createResolvedThenable (value: any): Thenable {
   const ret = {
     then: (resolve: resolver) => resolve(value),
     catch: () => ret
@@ -15,7 +15,7 @@ function mkResolve (value: any) {
   return ret
 }
 
-function mkReject (err: Error) {
+function createRejectedThenable (err: Error): Thenable {
   const ret = {
     then: (resolve: resolver, reject?: resolver) => {
       if (reject) return reject(err)
@@ -30,43 +30,49 @@ function isThenable (val: any): val is Thenable {
   return val && isFunction(val.then)
 }
 
-function isCustomIterable (val: any): val is IterableIterator<any> {
+function isAsyncIterator (val: any): val is IterableIterator<any> {
   return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
 }
 
+// convert an async iterator to a thenable (Promise compatible)
 export function toThenable (val: IterableIterator<any> | Thenable | any): Thenable {
   if (isThenable(val)) return val
-  if (isCustomIterable(val)) return reduce()
-  return mkResolve(val)
+  if (isAsyncIterator(val)) return reduce()
+  return createResolvedThenable(val)
 
   function reduce (prev?: any): Thenable {
     let state
     try {
       state = (val as IterableIterator<any>).next(prev)
     } catch (err) {
-      return mkReject(err)
+      return createRejectedThenable(err)
     }
 
-    if (state.done) return mkResolve(state.value)
+    if (state.done) return createResolvedThenable(state.value)
     return toThenable(state.value!).then(reduce, err => {
       let state
       try {
         state = (val as IterableIterator<any>).throw!(err)
       } catch (e) {
-        return mkReject(e)
+        return createRejectedThenable(e)
       }
-      if (state.done) return mkResolve(state.value)
+      if (state.done) return createResolvedThenable(state.value)
       return reduce(state.value)
     })
   }
 }
 
+export function toPromise (val: IterableIterator<any> | Thenable | any): Promise<any> {
+  return Promise.resolve(toThenable(val))
+}
+
+// get the value of async iterator in synchronous manner
 export function toValue (val: IterableIterator<any> | Thenable | any) {
   let ret: any
   toThenable(val)
     .then((x: any) => {
       ret = x
-      return mkResolve(ret)
+      return createResolvedThenable(ret)
     })
     .catch((err: Error) => {
       throw err

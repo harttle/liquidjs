@@ -5,7 +5,7 @@ import { Context } from '../../../../src/context/context'
 import { toThenable } from '../../../../src/util/async'
 import { NumberToken } from '../../../../src/tokens/number-token'
 import { QuotedToken } from '../../../../src/tokens/quoted-token'
-import { WordToken } from '../../../../src/tokens/word-token'
+import { IdentifierToken } from '../../../../src/tokens/identifier-token'
 import { FilterMap } from '../../../../src/template/filter/filter-map'
 
 chai.use(sinonChai)
@@ -14,8 +14,9 @@ const expect = chai.expect
 describe('filter', function () {
   let ctx: Context
   let filters: FilterMap
+  const liquid = {} as any
   beforeEach(function () {
-    filters = new FilterMap(false)
+    filters = new FilterMap(false, liquid)
     ctx = new Context()
   })
   it('should create default filter if not registered', async function () {
@@ -30,16 +31,17 @@ describe('filter', function () {
   it('should call filter impl with correct arguments', async function () {
     const spy = sinon.spy()
     filters.set('foo', spy)
-    const thirty = new NumberToken(new WordToken('30', 0, 2), undefined)
+    const thirty = new NumberToken(new IdentifierToken('30', 0, 2), undefined)
     await toThenable(filters.create('foo', [thirty]).render('foo', ctx))
     expect(spy).to.have.been.calledWith('foo', 30)
   })
-  it('should call filter impl with correct this arg', async function () {
+  it('should call filter impl with correct this', async function () {
     const spy = sinon.spy()
     filters.set('foo', spy)
-    const thirty = new NumberToken(new WordToken('33', 0, 2), undefined)
+    const thirty = new NumberToken(new IdentifierToken('33', 0, 2), undefined)
     await toThenable(filters.create('foo', [thirty]).render('foo', ctx))
     expect(spy).to.have.been.calledOn(sinon.match.has('context', ctx))
+    expect(spy).to.have.been.calledOn(sinon.match.has('liquid', liquid))
   })
   it('should render a simple filter', async function () {
     filters.set('upcase', x => x.toUpperCase())
@@ -48,13 +50,13 @@ describe('filter', function () {
 
   it('should render filters with argument', async function () {
     filters.set('add', (a, b) => a + b)
-    const two = new NumberToken(new WordToken('2', 0, 1), undefined)
+    const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
     expect(await toThenable(filters.create('add', [two]).render(3, ctx))).to.equal(5)
   })
 
   it('should render filters with multiple arguments', async function () {
     filters.set('add', (a, b, c) => a + b + c)
-    const two = new NumberToken(new WordToken('2', 0, 1), undefined)
+    const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
     const c = new QuotedToken('"c"', 0, 3)
     expect(await toThenable(filters.create('add', [two, c]).render(3, ctx))).to.equal('5c')
   })
@@ -73,7 +75,7 @@ describe('filter', function () {
 
   it('should support key value pairs', async function () {
     filters.set('add', (a, b) => b[0] + ':' + (a + b[1]))
-    const two = new NumberToken(new WordToken('2', 0, 1), undefined)
+    const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
     expect(await toThenable((filters.create('add', [['num', two]]).render(3, ctx)))).to.equal('num:5')
   })
 })

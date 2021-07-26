@@ -20,11 +20,19 @@ describe('tags/for', function () {
       nullProtoObj: Object.create(null),
       obj: { foo: 'bar', coo: 'haa' },
       alpha: ['a', 'b', 'c'],
+      promiseArray: Promise.resolve(['a', 'b', 'c']),
       emptyArray: []
     }
   })
+
   it('should support array', async function () {
     const src = '{%for c in alpha%}{{c}}{%endfor%}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).to.equal('abc')
+  })
+
+  it('should support promise of array', async function () {
+    const src = '{%for c in promiseArray%}{{c}}{%endfor%}'
     const html = await liquid.parseAndRender(src, scope)
     return expect(html).to.equal('abc')
   })

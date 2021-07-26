@@ -29,7 +29,7 @@ export default class Parser {
         return new Tag(token, remainTokens, this.liquid)
       }
       if (isOutputToken(token)) {
-        return new Output(token as OutputToken, this.liquid.filters)
+        return new Output(token as OutputToken, this.liquid)
       }
       return new HTML(token)
     } catch (e) {

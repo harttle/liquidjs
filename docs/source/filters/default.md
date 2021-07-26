@@ -2,6 +2,8 @@
 title: default
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Allows you to specify a fallback in case a value doesn't exist. `default` will show its value if the left side is [falsy][falsy] or empty (`string` or `Array`).
 
 In this example, `product_price` is not defined, so the default value is used.

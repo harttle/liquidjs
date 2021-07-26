@@ -2,6 +2,8 @@
 title: Render
 ---
 
+{% since %}v9.2.0{% endsince %}
+
 ## 基本使用
 
 ### 渲染一个模板

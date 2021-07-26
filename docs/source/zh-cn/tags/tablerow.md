@@ -2,6 +2,8 @@
 title: Table Row
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 生成一个 HTML 表示，上下必须用 `<table>` 和 `</table>` HTML 标签包裹起来。
 
 ## 基本使用

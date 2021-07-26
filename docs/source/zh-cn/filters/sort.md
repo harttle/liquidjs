@@ -2,6 +2,8 @@
 title: sort
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 对数组中的元素排序，排序方式为 JavaScript `Array.prototype.sort()`。
 
 输入

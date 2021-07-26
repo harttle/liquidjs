@@ -1,8 +1,8 @@
 import { DelimitedToken } from './delimited-token'
-import { BLANK, TYPES, VARIABLE } from '../util/character'
 import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions } from '../liquid-options'
 import { TokenKind } from '../parser/token-kind'
+import { Tokenizer } from '../parser/tokenizer'
 
 export class TagToken extends DelimitedToken {
   public name: string
@@ -18,13 +18,11 @@ export class TagToken extends DelimitedToken {
     const value = input.slice(begin + tagDelimiterLeft.length, end - tagDelimiterRight.length)
     super(TokenKind.Tag, value, input, begin, end, trimTagLeft, trimTagRight, file)
 
-    let nameEnd = 0
-    while (TYPES[this.content.charCodeAt(nameEnd)] & VARIABLE) nameEnd++
-    this.name = this.content.slice(0, nameEnd)
+    const tokenizer = new Tokenizer(this.content, options.operatorsTrie)
+    this.name = tokenizer.readIdentifier().getText()
     if (!this.name) throw new TokenizationError(`illegal tag syntax`, this)
 
-    let argsBegin = nameEnd
-    while (TYPES[this.content.charCodeAt(argsBegin)] & BLANK) argsBegin++
-    this.args = this.content.slice(argsBegin)
+    tokenizer.skipBlank()
+    this.args = tokenizer.remaining()
   }
 }

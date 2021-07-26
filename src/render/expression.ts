@@ -1,4 +1,5 @@
 import { QuotedToken } from '../tokens/quoted-token'
+import { PropertyAccessToken } from '../tokens/property-access-token'
 import { NumberToken } from '../tokens/number-token'
 import { assert } from '../util/assert'
 import { literalValues } from '../util/literal'
@@ -9,48 +10,50 @@ import { OperatorToken } from '../tokens/operator-token'
 import { RangeToken } from '../tokens/range-token'
 import { parseStringLiteral } from '../parser/parse-string-literal'
 import { Context } from '../context/context'
-import { range, toValue } from '../util/underscore'
-import { Tokenizer } from '../parser/tokenizer'
-import { operatorImpls } from '../render/operator'
+import { range } from '../util/underscore'
+import { Operators } from '../render/operator'
+import { UndefinedVariableError } from '../util/error'
 
 export class Expression {
-  private operands: any[] = []
-  private postfix: IterableIterator<Token>
+  private postfix: Token[]
 
-  public constructor (str: string) {
-    const tokenizer = new Tokenizer(str)
-    this.postfix = toPostfix(tokenizer.readExpression())
+  public constructor (tokens: IterableIterator<Token>) {
+    this.postfix = [...toPostfix(tokens)]
   }
-  public evaluate (ctx: Context): any {
+  public * evaluate (ctx: Context, lenient: boolean): any {
+    assert(ctx, () => 'unable to evaluate: context not defined')
+    const operands: any[] = []
     for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {
-        const r = this.operands.pop()
-        const l = this.operands.pop()
-        const result = evalOperatorToken(token, l, r)
-        this.operands.push(result)
+        const r = yield operands.pop()
+        const l = yield operands.pop()
+        const result = evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
+        operands.push(result)
       } else {
-        this.operands.push(evalToken(token, ctx))
+        operands.push(yield evalToken(token, ctx, lenient && this.postfix.length === 1))
       }
     }
-    return this.operands[0]
-  }
-  public * value (ctx: Context) {
-    return toValue(this.evaluate(ctx))
+    return operands[0]
   }
 }
 
-export function evalToken (token: Token | undefined, ctx: Context): any {
-  assert(ctx, () => 'unable to evaluate: context not defined')
-  if (TypeGuards.isPropertyAccessToken(token)) {
-    const variable = token.variable.getText()
-    const props: string[] = token.props.map(prop => evalToken(prop, ctx))
-    return ctx.get([variable, ...props])
-  }
+export function evalToken (token: Token | undefined, ctx: Context, lenient = false): any {
+  if (TypeGuards.isPropertyAccessToken(token)) return evalPropertyAccessToken(token, ctx, lenient)
   if (TypeGuards.isRangeToken(token)) return evalRangeToken(token, ctx)
   if (TypeGuards.isLiteralToken(token)) return evalLiteralToken(token)
   if (TypeGuards.isNumberToken(token)) return evalNumberToken(token)
   if (TypeGuards.isWordToken(token)) return token.getText()
   if (TypeGuards.isQuotedToken(token)) return evalQuotedToken(token)
+}
+
+function evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean) {
+  const props: string[] = token.props.map(prop => evalToken(prop, ctx, false))
+  try {
+    return ctx.get([token.propertyName, ...props])
+  } catch (e) {
+    if (lenient && e.name === 'InternalUndefinedVariableError') return null
+    throw (new UndefinedVariableError(e, token))
+  }
 }
 
 function evalNumberToken (token: NumberToken) {
@@ -62,9 +65,9 @@ export function evalQuotedToken (token: QuotedToken) {
   return parseStringLiteral(token.getText())
 }
 
-function evalOperatorToken (token: OperatorToken, lhs: any, rhs: any) {
-  const impl = operatorImpls[token.operator]
-  return impl(lhs, rhs)
+function evalOperatorToken (operators: Operators, token: OperatorToken, lhs: any, rhs: any, ctx: Context) {
+  const impl = operators[token.operator]
+  return impl(lhs, rhs, ctx)
 }
 
 function evalLiteralToken (token: LiteralToken) {

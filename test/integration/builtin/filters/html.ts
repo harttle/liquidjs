@@ -9,9 +9,6 @@ describe('filters/html', function () {
     it('should escape normal string', function () {
       return test('{{ "Tetsuro Takara" | escape }}', 'Tetsuro Takara')
     })
-    it('should escape function', function () {
-      return test('{{ func | escape }}', { func: function () {} }, 'function () { }')
-    })
     it('should escape undefined', function () {
       return test('{{ nonExistent.value | escape }}', '')
     })
@@ -29,9 +26,9 @@ describe('filters/html', function () {
               'there\n' +
               '{% endcapture %}' +
               '{{ string_with_newlines | newline_to_br }}'
-      const dst = '<br/>' +
-              'Hello<br/>' +
-              'there<br/>'
+      const dst = '<br />\n' +
+              'Hello<br />\n' +
+              'there<br />\n'
       return test(src, dst)
     })
   })

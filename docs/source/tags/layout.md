@@ -2,6 +2,8 @@
 title: Layout
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 ## Using a Layout Template
 
 Renders current template inside a layout template from the template [roots][root].
@@ -10,7 +12,7 @@ Renders current template inside a layout template from the template [roots][root
 {% layout 'footer.liquid' %}
 ```
 
-Whe the [extname][extname] option is set, the above `.liquid` extension can be omitted and writes:
+When the [extname][extname] option is set, the above `.liquid` extension can be omitted and writes:
 
 ```liquid
 {% layout 'footer' %}

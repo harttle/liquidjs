@@ -2,6 +2,8 @@
 title: replace
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Replaces every occurrence of the first argument in a string with the second argument.
 
 Input

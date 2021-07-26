@@ -1,5 +1,4 @@
 import { Context } from './context/context'
-import * as fs from './fs/node'
 import { forOwn, snakeCase } from './util/underscore'
 import { Template } from './template/template'
 import { Tokenizer } from './parser/tokenizer'
@@ -13,9 +12,10 @@ import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
-import { FS } from './fs/fs'
-import { toThenable, toValue } from './util/async'
+import { toPromise, toValue } from './util/async'
+import { Emitter } from './render/emitter'
 
+export * from './util/error'
 export * from './types'
 
 export class Liquid {
@@ -24,91 +24,88 @@ export class Liquid {
   public parser: Parser
   public filters: FilterMap
   public tags: TagMap
-  private fs: FS
+  public parseFileImpl: (file: string, sync?: boolean) => Iterator<Template[]>
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
     this.parser = new Parser(this)
     this.renderer = new Render()
-    this.fs = opts.fs || fs
-    this.filters = new FilterMap(this.options.strictFilters)
+    this.filters = new FilterMap(this.options.strictFilters, this)
     this.tags = new TagMap()
+    this.parseFileImpl = this.options.cache ? this._parseFileCached : this._parseFile
 
     forOwn(builtinTags, (conf: TagImplOptions, name: string) => this.registerTag(snakeCase(name), conf))
     forOwn(builtinFilters, (handler: FilterImplOptions, name: string) => this.registerFilter(snakeCase(name), handler))
   }
   public parse (html: string, filepath?: string): Template[] {
-    const tokenizer = new Tokenizer(html, filepath)
+    const tokenizer = new Tokenizer(html, this.options.operatorsTrie, filepath)
     const tokens = tokenizer.readTopLevelTokens(this.options)
     return this.parser.parse(tokens)
   }
 
-  public _render (tpl: Template[], scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
-    const options = { ...this.options, ...normalize(opts) }
-    const ctx = new Context(scope, options, sync)
-    return this.renderer.renderTemplates(tpl, ctx)
+  public _render (tpl: Template[], scope?: object, sync?: boolean): IterableIterator<any> {
+    const ctx = new Context(scope, this.options, sync)
+    const emitter = new Emitter(this.options.keepOutputType)
+    return this.renderer.renderTemplates(tpl, ctx, emitter)
   }
-  public async render (tpl: Template[], scope?: object, opts?: LiquidOptions): Promise<string> {
-    return toThenable(this._render(tpl, scope, opts, false))
+  public async render (tpl: Template[], scope?: object): Promise<any> {
+    return toPromise(this._render(tpl, scope, false))
   }
-  public renderSync (tpl: Template[], scope?: object, opts?: LiquidOptions): string {
-    return toValue(this._render(tpl, scope, opts, true))
+  public renderSync (tpl: Template[], scope?: object): any {
+    return toValue(this._render(tpl, scope, true))
   }
 
-  public _parseAndRender (html: string, scope?: object, opts?: LiquidOptions, sync?: boolean): IterableIterator<string> {
+  public _parseAndRender (html: string, scope?: object, sync?: boolean): IterableIterator<any> {
     const tpl = this.parse(html)
-    return this._render(tpl, scope, opts, sync)
+    return this._render(tpl, scope, sync)
   }
-  public async parseAndRender (html: string, scope?: object, opts?: LiquidOptions): Promise<string> {
-    return toThenable(this._parseAndRender(html, scope, opts, false))
+  public async parseAndRender (html: string, scope?: object): Promise<any> {
+    return toPromise(this._parseAndRender(html, scope, false))
   }
-  public parseAndRenderSync (html: string, scope?: object, opts?: LiquidOptions): string {
-    return toValue(this._parseAndRender(html, scope, opts, true))
+  public parseAndRenderSync (html: string, scope?: object): any {
+    return toValue(this._parseAndRender(html, scope, true))
   }
 
-  public * _parseFile (file: string, opts?: LiquidOptions, sync?: boolean) {
-    const options = { ...this.options, ...normalize(opts) }
-    const paths = options.root.map(root => this.fs.resolve(root, file, options.extname))
-    if (this.fs.fallback !== undefined) {
-      const filepath = this.fs.fallback(file)
-      if (filepath !== undefined) paths.push(filepath)
-    }
+  private * _parseFileCached (file: string, sync?: boolean) {
+    const cache = this.options.cache!
+    let tpls = yield cache.read(file)
+    if (tpls) return tpls
 
-    for (const filepath of paths) {
-      const { cache } = options
-      if (cache) {
-        const tpls = yield cache.read(filepath)
-        if (tpls) return tpls
-      }
-      if (!(sync ? this.fs.existsSync(filepath) : yield this.fs.exists(filepath))) continue
-      const tpl = this.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
-      if (cache) cache.write(filepath, tpl)
+    tpls = yield this._parseFile(file, sync)
+    cache.write(file, tpls)
+    return tpls
+  }
+  private * _parseFile (file: string, sync?: boolean) {
+    const { fs, root } = this.options
+
+    for (const filepath of this.lookupFiles(file, this.options)) {
+      if (!(sync ? fs.existsSync(filepath) : yield fs.exists(filepath))) continue
+      const tpl = this.parse(sync ? fs.readFileSync(filepath) : yield fs.readFile(filepath), filepath)
       return tpl
     }
-    throw this.lookupError(file, options.root)
+    throw this.lookupError(file, root)
   }
-  public async parseFile (file: string, opts?: LiquidOptions): Promise<Template[]> {
-    return toThenable(this._parseFile(file, opts, false))
+  public async parseFile (file: string): Promise<Template[]> {
+    return toPromise(this.parseFileImpl(file, false))
   }
-  public parseFileSync (file: string, opts?: LiquidOptions): Template[] {
-    return toValue(this._parseFile(file, opts, true))
+  public parseFileSync (file: string): Template[] {
+    return toValue(this.parseFileImpl(file, true))
   }
-  public async renderFile (file: string, ctx?: object, opts?: LiquidOptions) {
-    const templates = await this.parseFile(file, opts)
-    return this.render(templates, ctx, opts)
+  public async renderFile (file: string, ctx?: object) {
+    const templates = await this.parseFile(file)
+    return this.render(templates, ctx)
   }
-  public renderFileSync (file: string, ctx?: object, opts?: LiquidOptions) {
-    const options = normalize(opts)
-    const templates = this.parseFileSync(file, options)
-    return this.renderSync(templates, ctx, opts)
+  public renderFileSync (file: string, ctx?: object) {
+    const templates = this.parseFileSync(file)
+    return this.renderSync(templates, ctx)
   }
 
   public _evalValue (str: string, ctx: Context): IterableIterator<any> {
-    const value = new Value(str, this.filters)
-    return value.value(ctx)
+    const value = new Value(str, this)
+    return value.value(ctx, false)
   }
   public async evalValue (str: string, ctx: Context): Promise<any> {
-    return toThenable(this._evalValue(str, ctx))
+    return toPromise(this._evalValue(str, ctx))
   }
   public evalValueSync (str: string, ctx: Context): any {
     return toValue(this._evalValue(str, ctx))
@@ -125,9 +122,25 @@ export class Liquid {
   }
   public express () {
     const self = this // eslint-disable-line
+    let firstCall = true
+
     return function (this: any, filePath: string, ctx: object, callback: (err: Error | null, rendered: string) => void) {
-      const opts = { root: [...normalizeStringArray(this.root), ...self.options.root] }
-      self.renderFile(filePath, ctx, opts).then(html => callback(null, html) as any, callback as any)
+      if (firstCall) {
+        firstCall = false
+        self.options.root.unshift(...normalizeStringArray(this.root))
+      }
+      self.renderFile(filePath, ctx).then(html => callback(null, html) as any, callback as any)
+    }
+  }
+
+  private * lookupFiles (file: string, options: NormalizedFullOptions) {
+    const { root, fs, extname } = options
+    for (const dir of root) {
+      yield fs.resolve(dir, file, extname)
+    }
+    if (fs.fallback !== undefined) {
+      const filepath = fs.fallback(file)
+      if (filepath !== undefined) yield filepath
     }
   }
 
@@ -136,18 +149,5 @@ export class Liquid {
     err.message = `ENOENT: Failed to lookup "${file}" in "${roots}"`
     err.code = 'ENOENT'
     return err
-  }
-
-  /**
-   * @deprecated use parseFile instead
-   */
-  public async getTemplate (file: string, opts?: LiquidOptions): Promise<Template[]> {
-    return this.parseFile(file, opts)
-  }
-  /**
-   * @deprecated use parseFileSync instead
-   */
-  public getTemplateSync (file: string, opts?: LiquidOptions): Template[] {
-    return this.parseFileSync(file, opts)
   }
 }

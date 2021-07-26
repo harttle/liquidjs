@@ -14,6 +14,11 @@ describe('tags/unless', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('no')
   })
+  it('should support elsif', async function () {
+    const src = '{% unless true %}1{%elsif true%}2{%else%}3{%endunless%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('2')
+  })
   it('should render unless when predicate yields false', async function () {
     const src = '{% unless false %}yes{%else%}no{%endunless%}'
     const html = await liquid.parseAndRender(src)

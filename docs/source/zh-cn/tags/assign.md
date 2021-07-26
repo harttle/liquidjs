@@ -2,6 +2,8 @@
 title: Assign
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 创建一个新变量。
 
 输入

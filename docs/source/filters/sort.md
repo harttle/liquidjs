@@ -2,6 +2,8 @@
 title: sort
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Sorts items in an array in case-sensitive order.
 
 Input

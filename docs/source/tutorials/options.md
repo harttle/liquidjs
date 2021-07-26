@@ -65,6 +65,12 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 **globals** is used to define global variables available to all templates even in cases of [render tag][render]. See [3185][185] for details.
 
+## jsTruthy
+
+**jsTruthy** is used to use standard Javascript truthiness rather than the Shopify.
+
+it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
+
 ## Trimming
 
 **greedy**, **trimOutputLeft**, **trimOutputRight**, **trimTagLeft**, **trimTagRight** options are used to eliminate extra newlines and indents in templates arround Liquid Constructs. See [Whitespace Control][wc] for details.
@@ -83,8 +89,10 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 **strictVariables** is used to assert variable existence.  If set to `false`, undefined variables will be rendered as empty string.  Otherwise, undefined variables will cause a render exception. Defaults to `false`.
 
+**lenientIf** modifies the behavior of `strictVariables` to allow handling optional variables. If set to `true`, an undefined variable will *not* cause an exception in the following two situations: a) it is the condition to an `if`, `elsif`, or `unless` tag; b) it occurs right before a `default` filter. Irrelevant if `strictVariables` is not set. Defaults to `false`.
+
 {% note info Non-existent Tags %}
-Non-existent tags always throw errors during pasrsing and this behaviour can not be customized.
+Non-existent tags always throw errors during parsing and this behaviour can not be customized.
 {% endnote %}
 
 [liquid]: ../api/classes/liquid_.liquid.html

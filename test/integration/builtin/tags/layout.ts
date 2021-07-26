@@ -38,8 +38,15 @@ describe('tags/layout', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/illegal filename "foo":"undefined"/)
+      expect(e.message).to.contain('illegal filename "undefined"')
     })
+  })
+  it('should handle layout none', async function () {
+    const src = '{% layout none %}' +
+      '{%block a%}A{%endblock%}' +
+      'B'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('AB')
   })
   describe('anonymous block', function () {
     it('should handle anonymous block', async function () {
@@ -68,6 +75,36 @@ describe('tags/layout', function () {
       '{%block b%}B{%endblock%}'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('XAYBZ')
+  })
+  it('should support block.super', async function () {
+    mock({
+      '/parent.html': '{% block css %}<link href="base.css" rel="stylesheet">{% endblock %}'
+    })
+    const src = '{% layout "parent.html" %}' +
+      '{%block css%}{{block.super}}<link href="extra.css" rel="stylesheet">{%endblock%}'
+    const html = await liquid.parseAndRender(src)
+    const output = '<link href="base.css" rel="stylesheet"><link href="extra.css" rel="stylesheet">'
+    return expect(html).to.equal(output)
+  })
+  it('should render block.super to empty if no parent exists', async function () {
+    mock({
+      '/parent.html': '{% block css %}{{block.super}}<link href="base.css" rel="stylesheet">{% endblock %}'
+    })
+    const src = '{% layout "parent.html" %}' +
+      '{%block css%}{{block.super}}<link href="extra.css" rel="stylesheet">{%endblock%}'
+    const html = await liquid.parseAndRender(src)
+    const output = '<link href="base.css" rel="stylesheet"><link href="extra.css" rel="stylesheet">'
+    return expect(html).to.equal(output)
+  })
+  it('should support nested block.super', async function () {
+    mock({
+      '/root.html': '{% block css %}<link href="root.css" rel="stylesheet">{% endblock %}',
+      '/parent.html': '{% layout "root.html" %}{% block css %}{{block.super}}<link href="parent.css" rel="stylesheet">{% endblock %}'
+    })
+    const src = '{% layout "parent.html" %}{%block css%}{{block.super}}<link href="extra.css" rel="stylesheet">{%endblock%}'
+    const html = await liquid.parseAndRender(src)
+    const output = '<link href="root.css" rel="stylesheet"><link href="parent.css" rel="stylesheet"><link href="extra.css" rel="stylesheet">'
+    return expect(html).to.equal(output)
   })
   it('should support variable as layout name', async function () {
     mock({

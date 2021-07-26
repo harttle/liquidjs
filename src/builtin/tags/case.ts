@@ -1,18 +1,30 @@
-import { Expression, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Tokenizer } from '../../parser/tokenizer'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-    this.cond = tagToken.args
+    this.cond = new Value(tagToken.args, this.liquid)
     this.cases = []
     this.elseTemplates = []
 
     let p: Template[] = []
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('tag:when', (token: TagToken) => {
-        this.cases.push({
-          val: token.args,
-          templates: p = []
-        })
+        p = []
+
+        const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+
+        while (!tokenizer.end()) {
+          const value = tokenizer.readValue()
+          if (value) {
+            this.cases.push({
+              val: value,
+              templates: p
+            })
+          }
+
+          tokenizer.readTo(',')
+        }
       })
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endcase', () => stream.stop())
@@ -26,10 +38,9 @@ export default {
 
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
-    const cond = yield new Expression(this.cond).value(ctx)
-    for (let i = 0; i < this.cases.length; i++) {
-      const branch = this.cases[i]
-      const val = yield new Expression(branch.val).value(ctx)
+    const cond = toValue(yield this.cond.value(ctx, ctx.opts.lenientIf))
+    for (const branch of this.cases) {
+      const val = evalToken(branch.val, ctx, ctx.opts.lenientIf)
       if (val === cond) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return

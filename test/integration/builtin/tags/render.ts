@@ -44,7 +44,7 @@ describe('tags/render', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).to.equal('RenderError')
-      expect(e.message).to.match(/illegal filename "not-exist":"undefined"/)
+      expect(e.message).to.match(/illegal filename "undefined"/)
     })
   })
 
@@ -76,15 +76,12 @@ describe('tags/render', function () {
   })
 
   it('should be able to access globals', async function () {
+    liquid = new Liquid({ root: '/', extname: '.html', globals: { name: 'Harttle' } })
     mock({
       '/hash.html': 'InParent: {{name}} {% render "user.html" %}',
       '/user.html': 'InChild: {{name}}'
     })
-    const html = await liquid.renderFile('hash.html', {
-      name: 'harttle'
-    }, {
-      globals: { name: 'Harttle' }
-    })
+    const html = await liquid.renderFile('hash', { name: 'harttle' })
     expect(html).to.equal('InParent: harttle InChild: Harttle')
   })
 

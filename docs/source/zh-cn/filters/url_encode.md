@@ -2,6 +2,8 @@
 title: url_encode
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 把字符串中 URL 不安全的字符转义为百分号编码。
 
 输入

@@ -2,6 +2,8 @@
 title: escape
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 把字符串中的 HTML 特殊字符转义，对不需要转义的字符串不会产生影响。
 
 输入

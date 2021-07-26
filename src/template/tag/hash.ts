@@ -13,7 +13,7 @@ import { Tokenizer } from '../../parser/tokenizer'
 export class Hash {
   hash: { [key: string]: any } = {}
   constructor (markup: string) {
-    const tokenizer = new Tokenizer(markup)
+    const tokenizer = new Tokenizer(markup, {})
     for (const hash of tokenizer.readHashes()) {
       this.hash[hash.name.content] = hash.value
     }
@@ -21,7 +21,7 @@ export class Hash {
   * render (ctx: Context) {
     const hash = {}
     for (const key of Object.keys(this.hash)) {
-      hash[key] = evalToken(this.hash[key], ctx)
+      hash[key] = yield evalToken(this.hash[key], ctx)
     }
     return hash
   }

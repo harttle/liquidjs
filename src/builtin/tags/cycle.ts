@@ -4,7 +4,7 @@ import { Tokenizer } from '../../parser/tokenizer'
 
 export default {
   parse: function (tagToken: TagToken) {
-    const tokenizer = new Tokenizer(tagToken.args)
+    const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operatorsTrie)
     const group = tokenizer.readValue()
     tokenizer.skipBlank()
 

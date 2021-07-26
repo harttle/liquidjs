@@ -63,6 +63,12 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 
 **globals** 用来定义对所有模板可见的全局变量。包括 [render tag][render] 引入的子模板，见 [3185][185]。
 
+## jsTruthy
+
+**jsTruthy** 用来使用 Javascript 的真值判断，默认为 `false` 使用 Shopify 方式。
+
+例如，空字符串在 JavaScript 中为假（`jsTruthy` 为 `true` 时），在 Shopify 真值表中为真。
+
 ## 换行和缩进
 
 **greedy**, **trimOutputLeft**, **trimOutputRight**, **trimTagLeft**, **trimTagRight** 选项用来移除 Liquid 语法周围的换行和缩进，详情请参考 [Whitespace Control][wc]。

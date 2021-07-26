@@ -2,6 +2,8 @@
 title: escape_once
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Escapes a string without changing existing escaped entities. It doesn't change strings that don't have anything to escape.
 
 Input

@@ -2,6 +2,8 @@
 title: abs
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 返回数字的绝对值。
 
 输入

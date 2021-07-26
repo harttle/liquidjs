@@ -2,6 +2,8 @@
 title: last
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Returns the last item of an array.
 
 Input

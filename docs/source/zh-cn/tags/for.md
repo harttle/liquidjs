@@ -2,6 +2,8 @@
 title: For
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 重复执行代码块的迭代标签。
 
 ## 基本使用

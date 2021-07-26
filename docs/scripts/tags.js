@@ -2,7 +2,7 @@
 
 'use strict'
 
-hexo.extend.tag.register('note', (args, content) => {
+hexo.extend.tag.register('note', (args, text) => {
   const className = args.shift()
   let header = ''
   let result = ''
@@ -12,8 +12,12 @@ hexo.extend.tag.register('note', (args, content) => {
   }
 
   result += `<blockquote class="note ${className}">${header}`
-  result += hexo.render.renderSync({ text: content, engine: 'markdown' })
+  result += hexo.render.renderSync({ text, engine: 'markdown' })
   result += '</blockquote>'
 
   return result
+}, true)
+
+hexo.extend.tag.register('since', (args, text) => {
+  return `<p class="since">Added in: ${text.trim()}</p>`
 }, true)

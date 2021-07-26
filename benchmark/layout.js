@@ -18,7 +18,8 @@ const template = `
 `
 
 function layout () {
-  console.log('--- layout ---')
+  console.log('         layout')
+  console.log('------------------------')
   return new Promise(resolve => {
     new Benchmark.Suite('layout')
       .add('cache=false', {

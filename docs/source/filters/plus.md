@@ -2,6 +2,8 @@
 title: plus
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Adds a number to another number.
 
 Input

@@ -7,8 +7,7 @@
     </h1>
     <a href={{"/add" | url}} class="todo-add"><i class="fa fa-plus-square"></i>Add Todo</a>
     <ul class="filter-category">
-        {% for i in (0..categories.length) %}
-        {% assign item=categories[i] %}
+        {% for item in categories %}
         <li style="background: {{ item.color }}">
             <a href="/todos/category/{{ item.id }}">{{ item.title }}</a>
         </li>
@@ -22,11 +21,7 @@
                 {{ todo.title | prepend: 'TODO: ' | upcase }}
             </span>
         </h2>
-    
-        <img
-            title="risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices"
-            src="{% include "todo-icon", id=todo.id }} %}"
-        >
+        {% render "todo-icon", id:todo.id %}
 
         <p class="description">
             Purus eu mi. Proin commodo, massa commodo dapibus elementum,
@@ -38,12 +33,12 @@
 
         <div class="todo-meta">
             {% if todo.category %}
-                <span>{{  todo.category.title | capitalize }}</span>
+                <span>{{  todo.category | capitalize }}</span>
             {% endif %}
         </div>
-        <a class="btn btn-primary" href={{"/edit/" | append todo.id | url }}><i class="fa fa-pencil"></i> Edit</a>
+        <a class="btn btn-primary" href={{"/edit/" | append: todo.id | url }}><i class="fa fa-pencil"></i> Edit</a>
         <a class="btn btn-default"><i class="fa fa-check"></i> Check</a>
-        <a class="btn ben-danger" href={{"/delete/" | append todo.id | url }}><i class="fa fa-trash-o"</i> Trash</a>
+        <a class="btn ben-danger" href={{"/delete/" | append: todo.id | url }}><i class="fa fa-trash-o"</i> Trash</a>
     </div>
     {% endfor %}
 </section>

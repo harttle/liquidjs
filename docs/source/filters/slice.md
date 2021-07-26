@@ -2,6 +2,8 @@
 title: slice
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Returns a substring of 1 character beginning at the index specified by the first argument. An optional second argument specifies the length of the substring to be returned.
 
 String indices are numbered starting from 0.

@@ -2,6 +2,8 @@
 title: strip_html
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Removes any HTML tags from a string.
 
 Input

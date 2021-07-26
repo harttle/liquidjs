@@ -116,12 +116,18 @@ note-warn = hsl(0, 100%, 50%)
     font-size: 2em
   h2
     font-size: 1.5em
+    border-bottom: 1px solid color-border
+    padding-bottom: 10px
+    margin-bottom: 15px
   h3
     font-size: 1.3em
   h1, h2, h3, h4, h5, h6
     line-height: 1em
     font-weight: bold
     margin: 1em 0
+  hr
+    border-bottom: none;
+    border-top: 1px dashed color-border;
   a
     color: color-link
     text-decoration: none
@@ -187,6 +193,9 @@ note-warn = hsl(0, 100%, 50%)
       border-left-color: note-info
     &.warn
       border-left-color: note-warn
+  .since
+    margin-top: 0;
+    font-style: italic;
   .note-title
     margin: 1em 0 0.5em
     display: block
@@ -206,7 +215,7 @@ note-warn = hsl(0, 100%, 50%)
         background: #eee
 
 .article-footer
-  margin: 30px 0 0
+  margin: 60px 0 0
   border-top: 1px solid color-border
   text-align: center
   color: color-gray

@@ -1,4 +1,4 @@
-import { Liquid, isFalsy } from '../../../src/liquid'
+import { Liquid, Context, isFalsy } from '../../../src/liquid'
 import * as chai from 'chai'
 import { mock, restore } from '../../stub/mockfs'
 import * as chaiAsPromised from 'chai-as-promised'
@@ -19,7 +19,7 @@ describe('Liquid', function () {
     it('should call plugin with Liquid', async function () {
       const engine = new Liquid()
       engine.plugin(function () {
-        this.registerFilter('t', isFalsy)
+        this.registerFilter('t', function (v) { return isFalsy(v, this.context) })
       })
       const html = await engine.parseAndRender('{{false|t}}')
       expect(html).to.equal('true')
@@ -91,7 +91,7 @@ describe('Liquid', function () {
         root: ['/root/'],
         extname: '.html'
       })
-      const tpls = await engine.getTemplate('mocha')
+      const tpls = await engine.parseFileSync('mocha')
       expect(tpls.length).to.gte(1)
       expect(tpls[0].token.getText()).to.contain('module.exports')
     })
@@ -99,14 +99,16 @@ describe('Liquid', function () {
   describe('#evalValue', function () {
     it('should eval string literal', async function () {
       const engine = new Liquid()
-      const str = await engine.evalValue('"foo"', {} as any)
+      const ctx = new Context()
+      const str = await engine.evalValue('"foo"', ctx)
       expect(str).to.equal('foo')
     })
   })
   describe('#evalValueSync', function () {
     it('should eval string literal', function () {
       const engine = new Liquid()
-      const str = engine.evalValueSync('"foo"', {} as any)
+      const ctx = new Context()
+      const str = engine.evalValueSync('"foo"', ctx)
       expect(str).to.equal('foo')
     })
   })
@@ -124,7 +126,7 @@ describe('Liquid', function () {
         root: ['/boo', '/root/'],
         extname: '.html'
       })
-      return expect(() => engine.getTemplateSync('/not/exist.html'))
+      return expect(() => engine.parseFileSync('/not/exist.html'))
         .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
   })

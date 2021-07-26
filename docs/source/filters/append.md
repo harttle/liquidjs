@@ -2,6 +2,8 @@
 title: append
 ---
 
+{% since %}v1.9.1{% endsince %}
+
 Concatenates two strings and returns the concatenated value.
 
 Input

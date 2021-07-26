@@ -30,6 +30,18 @@
     <td align="center"><a href="https://github.com/mastodon0"><img src="https://avatars1.githubusercontent.com/u/7924332?v=4" width="100px;" alt="Martin Schuster"/></a></td>
     <td align="center"><a href="http://js.chenlei.me"><img src="https://avatars0.githubusercontent.com/u/6339390?v=4" width="100px;" alt="Ray"/></a></td>
     <td align="center"><a href="https://github.com/CriGoT"><img src="https://avatars0.githubusercontent.com/u/1936786?v=4" width="100px;" alt="Cristofer Gonzales"/></a></td>
+    <td align="center"><a href="https://www.raymondcamden.com"><img src="https://avatars3.githubusercontent.com/u/393660?v=4" width="100px;" alt="Raymond Camden"/></a></td>
+    <td align="center"><a href="https://stedman.dev"><img src="https://avatars1.githubusercontent.com/u/183122?v=4" width="100px;" alt="Steve Stedman"/></a></td>
+    <td align="center"><a href="https://ciccarello.me"><img src="https://avatars0.githubusercontent.com/u/11273838?v=4" width="100px;" alt="Anthony Ciccarello"/></a></td>
+    <td align="center"><a href="https://twitter.com/IAmTrySound"><img src="https://avatars0.githubusercontent.com/u/5635476?v=4" width="100px;" alt="Bogdan Chadkin"/></a></td>
+    <td align="center"><a href="https://hightouch.io"><img src="https://avatars0.githubusercontent.com/u/5959235?v=4" width="100px;" alt="Tejas Manohar"/></a></td>
+    <td align="center"><a href="http://about.me/peterdehaan"><img src="https://avatars2.githubusercontent.com/u/557895?v=4" width="100px;" alt="Peter deHaan"/></a></td>
+    <td align="center"><a href="https://github.com/amit777"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4" width="100px;" alt="amit777"/></a></td>
+    <td align="center"><a href="http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html"><img src="https://avatars3.githubusercontent.com/u/1100776?v=4" width="100px;" alt="Steffen Schuldenzucker"/></a></td>
+    <td align="center"><a href="https://github.com/Pixcell"><img src="https://avatars0.githubusercontent.com/u/4005291?v=4" width="100px;" alt="Pixcell"/></a></td>
+    <td align="center"><a href="https://jasonet.co"><img src="https://avatars.githubusercontent.com/u/10660468?v=4" width="100px;" alt="Jason Etcovitch"/></a></td>
+    <td align="center"><a href="https://github.com/kayuapi"><img src="https://avatars.githubusercontent.com/u/10304328?v=4" width="100px;" alt="ZC"/></a></td>
+    <td align="center"><a href="https://memmie.lenglet.name"><img src="https://avatars.githubusercontent.com/u/729275?v=4" width="100px;" alt="Memmie Lenglet"/></a></td>
   </tr>
 </table>
 
