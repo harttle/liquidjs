@@ -71,6 +71,12 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
 
+## Date
+
+**timezoneOffset** is used to specify a different timezone to output dates, your local timezone will be used if not specified. For example, set `timezoneOffset: 0` to output all dates in UTC/GMT 00:00.
+
+**preserveTimezones** is a boolean effects only literal timestamps. When set to `true`, all literal timestamps will remain the same when output. This is a parser option, so Date objects passed to LiquidJS as data will not be affected.
+
 ## Trimming
 
 **greedy**, **trimOutputLeft**, **trimOutputRight**, **trimTagLeft**, **trimTagRight** options are used to eliminate extra newlines and indents in templates arround Liquid Constructs. See [Whitespace Control][wc] for details.

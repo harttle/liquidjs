@@ -16,6 +16,10 @@ Output
 Fri, Jul 17, 15
 ```
 
+{% note info TimeZone %}
+Date will be converted to local time before output. To avoid that, you can set `timezoneOffset` LiquidJS option to `0`, its default value is your local timezone offset which can be obtained by `new Date().getTimezoneOffset()`.
+{% endnote %}
+
 Input
 ```liquid
 {{ article.published_at | date: "%Y" }}
@@ -37,6 +41,10 @@ Output
 ```text
 Mar 14, 16
 ```
+
+{% note info Timestamp Strings %}
+Note that LiquidJS is using JavaScript [Date][newDate] to parse the input string, that means [IETF-compliant RFC 2822 timestamps](https://datatracker.ietf.org/doc/html/rfc2822#page-14) and strings in [a version of ISO8601](https://www.ecma-international.org/ecma-262/11.0/#sec-date.parse) are supported.
+{% endnote %}
 
 To get the current time, pass the special word `"now"` (or `"today"`) to `date`:
 

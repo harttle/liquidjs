@@ -1,9 +1,9 @@
-import strftime, { TimezoneDate } from '../../util/strftime'
+import strftime, { createDateFixedToTimezone } from '../../util/strftime'
 import { isString, isNumber } from '../../util/underscore'
 import { FilterImpl } from '../../template/filter/filter-impl'
 
 export function date (this: FilterImpl, v: string | Date, arg: string) {
-  let date = v
+  let date: Date
   if (v === 'now' || v === 'today') {
     date = new Date()
   } else if (isNumber(v)) {
@@ -12,10 +12,12 @@ export function date (this: FilterImpl, v: string | Date, arg: string) {
     if (/^\d+$/.test(v)) {
       date = new Date(+v * 1000)
     } else if (this.context.opts.preserveTimezones) {
-      date = new TimezoneDate(v)
+      date = createDateFixedToTimezone(v)
     } else {
       date = new Date(v)
     }
+  } else {
+    date = v
   }
   return isValidDate(date) ? strftime(date, arg) : v
 }

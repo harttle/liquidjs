@@ -16,6 +16,10 @@ title: date
 Fri, Jul 17, 15
 ```
 
+{% note info 时区 %}
+日期在输出时会转换为当地时区，设置 `timezoneOffset` LiquidJS 参数可以指定一个不同的时区。或者设置 `preserveTimezones` 为 `true` 来保持字面量时间戳的时区，数据中的日期对象不受此参数的影响。
+{% endnote %}
+
 输入
 ```liquid
 {{ article.published_at | date: "%Y" }}
@@ -37,6 +41,10 @@ Fri, Jul 17, 15
 ```text
 Mar 14, 16
 ```
+
+{% note info 时间戳字符串 %}
+LiquidJS 使用 JavaScript [Date][newDate] 来解析输入字符串，意味着支持 [IETF-compliant RFC 2822 时间戳](https://datatracker.ietf.org/doc/html/rfc2822#page-14) 和 [特定版本的 ISO8601](https://www.ecma-international.org/ecma-262/11.0/#sec-date.parse)。
+{% endnote %}
 
 可以用特殊值 `"now"`（或`"today"`）来获取当前时间：
 
