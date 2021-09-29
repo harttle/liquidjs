@@ -1,6 +1,6 @@
 import { Context } from '../context/context'
 import { Token } from '../tokens/token'
-import { Emitter } from '../render/emitter'
+import { Emitter } from '../emitters/emitter'
 
 export interface Template {
   token: Token;

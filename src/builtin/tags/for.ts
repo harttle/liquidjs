@@ -55,11 +55,11 @@ export default {
     for (const item of collection) {
       scope[this.variable] = item
       yield r.renderTemplates(this.templates, ctx, emitter)
-      if (emitter.break) {
-        emitter.break = false
+      if (emitter['break']) {
+        emitter['break'] = false
         break
       }
-      emitter.continue = false
+      emitter['continue'] = false
       scope.forloop.next()
     }
     ctx.pop()

@@ -51,7 +51,7 @@ export interface LiquidOptions {
   fs?: FS;
   /** the global environment passed down to all partial templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
-  /** Whether or not to keep value type when writing the Output. Defaults to `false`. */
+  /** Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to `false`. */
   keepOutputType?: boolean;
   /** An object of operators for conditional statements. Defaults to the regular Liquid operators. */
   operators?: Operators;
