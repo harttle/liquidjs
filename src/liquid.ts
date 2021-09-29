@@ -13,7 +13,6 @@ import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import { toPromise, toValue } from './util/async'
-import { Emitter } from './render/emitter'
 
 export * from './util/error'
 export * from './types'
@@ -24,7 +23,7 @@ export class Liquid {
   public parser: Parser
   public filters: FilterMap
   public tags: TagMap
-  private parseFileImpl: (file: string, sync?: boolean) => Iterator<Template[]>
+  public parseFileImpl: (file: string, sync?: boolean) => Iterator<Template[]>
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
@@ -45,14 +44,17 @@ export class Liquid {
 
   public _render (tpl: Template[], scope?: object, sync?: boolean): IterableIterator<any> {
     const ctx = new Context(scope, this.options, sync)
-    const emitter = new Emitter(this.options.keepOutputType)
-    return this.renderer.renderTemplates(tpl, ctx, emitter)
+    return this.renderer.renderTemplates(tpl, ctx)
   }
   public async render (tpl: Template[], scope?: object): Promise<any> {
     return toPromise(this._render(tpl, scope, false))
   }
   public renderSync (tpl: Template[], scope?: object): any {
     return toValue(this._render(tpl, scope, true))
+  }
+  public renderToNodeStream (tpl: Template[], scope?: object): NodeJS.ReadableStream {
+    const ctx = new Context(scope, this.options)
+    return this.renderer.renderTemplatesToNodeStream(tpl, ctx)
   }
 
   public _parseAndRender (html: string, scope?: object, sync?: boolean): IterableIterator<any> {

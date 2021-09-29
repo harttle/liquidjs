@@ -3,7 +3,7 @@ export { TypeGuards }
 export { ParseError, TokenizationError, AssertionError } from './util/error'
 export { assert } from './util/assert'
 export { Drop } from './drop/drop'
-export { Emitter } from './render/emitter'
+export { Emitter } from './emitters/emitter'
 export { Expression } from './render/expression'
 export { isFalsy, isTruthy } from './render/boolean'
 export { TagToken } from './tokens/tag-token'

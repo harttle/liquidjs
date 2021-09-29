@@ -2,7 +2,7 @@ import { Value } from './value'
 import { TemplateImpl } from '../template/template-impl'
 import { Template } from '../template/template'
 import { Context } from '../context/context'
-import { Emitter } from '../render/emitter'
+import { Emitter } from '../emitters/emitter'
 import { OutputToken } from '../tokens/output-token'
 import { Liquid } from '../liquid'
 
