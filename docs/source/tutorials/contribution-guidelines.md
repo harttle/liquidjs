@@ -4,7 +4,7 @@ title: Contribution Guideline
 
 ## Star on Github 👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
 
-Staring LiquidJS is the most important and easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
+Starring LiquidJS is the most important and easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
 
 ## Show Me Your Code
 
