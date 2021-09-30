@@ -217,6 +217,13 @@ describe('tags/for', function () {
     it('should support for reversed in the first position', async function () {
       const src = '{% for i in (1..8) reversed limit:2 %}{{ i }}{% endfor %}'
       const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('21')
+    })
+
+    it('should support for reversed in the first position with orderedFilterParameters=true', async function () {
+      const liquid = new Liquid({ orderedFilterParameters: true })
+      const src = '{% for i in (1..8) reversed limit:2 %}{{ i }}{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
       return expect(html).to.equal('87')
     })
 
@@ -224,6 +231,13 @@ describe('tags/for', function () {
       const src = '{% for i in (1..8) offset:2 reversed limit:3 %}{{ i }}{% endfor %}'
       const html = await liquid.parseAndRender(src)
       return expect(html).to.equal('543')
+    })
+
+    it('should support for reversed in the middle position with orderedFilterParameters=true', async function () {
+      const liquid = new Liquid({ orderedFilterParameters: true })
+      const src = '{% for i in (1..8) offset:2 reversed limit:3 %}{{ i }}{% endfor %}'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).to.equal('876')
     })
   })
 

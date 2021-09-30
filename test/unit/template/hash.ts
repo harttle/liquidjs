@@ -9,7 +9,7 @@ describe('Hash', function () {
   it('should parse "reverse"', async function () {
     const hash = await toThenable(new Hash('reverse').render(new Context({ foo: 3 })))
     expect(hash).to.haveOwnProperty('reverse')
-    expect(hash.reverse).to.be.undefined
+    expect(hash.reverse).to.be.true
   })
   it('should parse "num:foo"', async function () {
     const hash = await toThenable(new Hash('num:foo').render(new Context({ foo: 3 })))
@@ -37,7 +37,7 @@ describe('Hash', function () {
     const hash = await toThenable(new Hash('num1:2.3 reverse,num2:bar.coo\n num3: arr[0]').render(ctx))
     expect(hash).to.deep.equal({
       num1: 2.3,
-      reverse: undefined,
+      reverse: true,
       num2: 3,
       num3: 4
     })
