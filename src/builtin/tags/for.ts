@@ -18,7 +18,7 @@ export default {
 
     this.variable = variable.content
     this.collection = collection
-    this.hash = new Hash(toknenizer.remaining())
+    this.hash = new Hash(tokenizer.remaining())
     this.templates = []
     this.elseTemplates = []
 
@@ -46,9 +46,12 @@ export default {
     const hash = yield this.hash.render(ctx)
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
+    const reversedIndex = Reflect.ownKeys(hash).indexOf('reversed')
 
+    // reverse collection before slicing if 'reversed' is 1st parameter
+    if (reversedIndex === 0) collection.reverse()
     collection = collection.slice(offset, offset + limit)
-    if ('reversed' in hash) collection.reverse()
+    if (reversedIndex > 0) collection.reverse()
 
     const scope = { forloop: new ForloopDrop(collection.length) }
     ctx.push(scope)
