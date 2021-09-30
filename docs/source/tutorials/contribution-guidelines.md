@@ -2,6 +2,10 @@
 title: Contribution Guideline
 ---
 
+## Star on Github 👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
+
+Staring LiquidJS is the most important and easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
+
 ## Show Me Your Code
 
 **Code Style**: LiquidJS applies [standard](https://github.com/standard/eslint-config-standard) and [@typescript-eslint/recommended](https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/recommended.json) rules, make sure it's still valid before commit:
@@ -18,9 +22,7 @@ npm test
 
 **Commit Message**: Please align to [the Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially note the [type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), on which semantic-release bot depends.
 
-## Star on Github 👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
-
-This is the easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
+**Backward-Compatibility**: please be backward-compatible. LiquidJS is used by multiple layers of softwares, including underlying libraries, compilers, site generators and Web servers. It's not easy to do a major upgrade for most of them.
 
 ## Financial Support
 

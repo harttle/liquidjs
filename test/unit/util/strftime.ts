@@ -1,6 +1,5 @@
 import * as chai from 'chai'
-import t from '../../../src/util/strftime'
-
+import t, { timezoneOffset } from '../../../src/util/strftime'
 const expect = chai.expect
 
 describe('util/strftime', function () {
@@ -119,14 +118,18 @@ describe('util/strftime', function () {
   })
 
   describe('Time zone', () => {
+    afterEach(() => {
+      (timezoneOffset as any) = (new Date()).getTimezoneOffset()
+    })
     it('should format %z as time zone', function () {
-      const now = new Date('2016-01-04 13:15:23')
-      now.getTimezoneOffset = () => -480 // suppose we're in +8:00
+      const now = new Date('2016-01-04 13:15:23');
+
+      (timezoneOffset as any) = -480 // suppose we're in +8:00
       expect(t(now, '%z')).to.equal('+0800')
     })
     it('should format %z as negative time zone', function () {
-      const date = new Date('2016-01-04T13:15:23.000Z')
-      date.getTimezoneOffset = () => 480 // suppose we're in -8:00
+      const date = new Date('2016-01-04T13:15:23.000Z');
+      (timezoneOffset as any) = 480 // suppose we're in -8:00
       expect(t(date, '%z')).to.equal('-0800')
     })
   })
@@ -207,8 +210,8 @@ describe('util/strftime', function () {
       expect(t(now, '%#P')).to.equal('PM')
     })
     it('should support : flag', () => {
-      const date = new Date('2016-01-04T13:15:23.000Z')
-      date.getTimezoneOffset = () => -480 // suppose we're in +8:00
+      const date = new Date('2016-01-04T13:15:23.000Z');
+      (timezoneOffset as any) = -480 // suppose we're in +8:00
       expect(t(date, '%:z')).to.equal('+08:00')
       expect(t(date, '%z')).to.equal('+0800')
     })

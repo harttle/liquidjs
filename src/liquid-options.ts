@@ -6,6 +6,7 @@ import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
+import { timezoneOffset } from './util/strftime'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -24,6 +25,8 @@ export interface LiquidOptions {
   strictVariables?: boolean;
   /** Modifies the behavior of `strictVariables`. If set, a single undefined variable will *not* cause an exception in the context of the `if`/`elsif`/`unless` tag and the `default` filter. Instead, it will evaluate to `false` and `null`, respectively. Irrelevant if `strictVariables` is not set. Defaults to `false`. **/
   lenientIf?: boolean;
+  /** JavaScript timezoneOffset for `date` filter, default to local time. That means if you're in Australia (UTC+10), it'll default to -600 */
+  timezoneOffset?: number;
   /** Strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`. */
   trimTagRight?: boolean;
   /** Similar to `trimTagRight`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */
@@ -48,7 +51,7 @@ export interface LiquidOptions {
   fs?: FS;
   /** the global environment passed down to all partial templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
-  /** Whether or not to keep value type when writing the Output. Defaults to `false`. */
+  /** Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to `false`. */
   keepOutputType?: boolean;
   /** An object of operators for conditional statements. Defaults to the regular Liquid operators. */
   operators?: Operators;
@@ -108,6 +111,7 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   keepOutputType: false,
+  timezoneOffset: timezoneOffset,
   operators: defaultOperators,
   operatorsTrie: createTrie(defaultOperators)
 }
