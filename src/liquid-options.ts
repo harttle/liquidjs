@@ -55,6 +55,8 @@ export interface LiquidOptions {
   keepOutputType?: boolean;
   /** An object of operators for conditional statements. Defaults to the regular Liquid operators. */
   operators?: Operators;
+  /** Respect parameter order when using filters like "for ... reversed limit", Defaults to `false`. */
+  orderedFilterParameters?: boolean;
 }
 
 interface NormalizedOptions extends LiquidOptions {

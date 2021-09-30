@@ -3,14 +3,18 @@ import { toEnumerable } from '../../util/collection'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { Hash } from '../../template/tag/hash'
 
+const MODIFIERS = ['offset', 'limit', 'reversed']
+
+type valueof<T> = T[keyof T]
+
 export default {
   type: 'block',
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const toknenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
 
-    const variable = toknenizer.readIdentifier()
-    const inStr = toknenizer.readIdentifier()
-    const collection = toknenizer.readValue()
+    const variable = tokenizer.readIdentifier()
+    const inStr = tokenizer.readIdentifier()
+    const collection = tokenizer.readValue()
     assert(
       variable.size() && inStr.content === 'in' && collection,
       () => `illegal tag: ${token.getText()}`
@@ -44,14 +48,15 @@ export default {
     }
 
     const hash = yield this.hash.render(ctx)
-    const offset = hash.offset || 0
-    const limit = (hash.limit === undefined) ? collection.length : hash.limit
-    const reversedIndex = Reflect.ownKeys(hash).indexOf('reversed')
+    const modifiers = this.liquid.options.orderedFilterParameters
+      ? Object.keys(hash).filter(x => MODIFIERS.includes(x))
+      : MODIFIERS.filter(x => hash[x] !== undefined)
 
-    // reverse collection before slicing if 'reversed' is 1st parameter
-    if (reversedIndex === 0) collection.reverse()
-    collection = collection.slice(offset, offset + limit)
-    if (reversedIndex > 0) collection.reverse()
+    collection = modifiers.reduce((collection, modifier: valueof<typeof MODIFIERS>) => {
+      if (modifier === 'offset') return offset(collection, hash['offset'])
+      if (modifier === 'limit') return limit(collection, hash['limit'])
+      return reversed(collection)
+    }, collection)
 
     const scope = { forloop: new ForloopDrop(collection.length) }
     ctx.push(scope)
@@ -68,3 +73,15 @@ export default {
     ctx.pop()
   }
 } as TagImplOptions
+
+function reversed<T> (arr: Array<T>) {
+  return [...arr].reverse()
+}
+
+function offset<T> (arr: Array<T>, count: number) {
+  return arr.slice(count)
+}
+
+function limit<T> (arr: Array<T>, count: number) {
+  return arr.slice(0, count)
+}
