@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="css/navy.css">
 
-  <link rel="alternate" href="atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -94,24 +94,24 @@
     <div class="inner">
       <div id="intro-news-flex">
         
-        <a href="https://github.com/harttle/liquidjs/pull/5" target="_blank" rel="noopener external nofollow noreferrer" class="intro-news-wrap">
-          <div class="intro-news-time">2016-09-12</div>
-          <div class="intro-news-title">Async spike: rewrite the parser and render to support Promise, which enables async tags.</div>
-        </a>
-        
-        <a href="https://opencollective.com/liquidjs/#section-contribute" target="_blank" rel="noopener external nofollow noreferrer" class="intro-news-wrap">
+        <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs/#section-contribute" class="intro-news-wrap">
           <div class="intro-news-time">2020-02-26</div>
           <div class="intro-news-title">Backers: the first backer contributed to LiquidJS via Open Collective.</div>
         </a>
         
-        <a href="https://github.com/harttle/liquidjs/pull/202" target="_blank" rel="noopener external nofollow noreferrer" class="intro-news-wrap">
+        <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/202" class="intro-news-wrap">
           <div class="intro-news-time">2020-03-11</div>
           <div class="intro-news-title">Memory Optimization: a more elaborate parser reducing the memory footprint by 57.7%.</div>
         </a>
         
-        <a href="https://github.com/harttle/liquidjs/pull/205" target="_blank" rel="noopener external nofollow noreferrer" class="intro-news-wrap">
+        <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/205" class="intro-news-wrap">
           <div class="intro-news-time">2020-03-15</div>
           <div class="intro-news-title">Performance Boost: a simple AST to improve render performance by 100.3%.</div>
+        </a>
+        
+        <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/milestone/3?closed=1" class="intro-news-wrap">
+          <div class="intro-news-time">2021-09-30</div>
+          <div class="intro-news-title">Streamed Rendering: now render is 4x faster and support streamed rendering.</div>
         </a>
         
       </div>
@@ -121,7 +121,7 @@
 <div id="content-wrap">
   <div class="wrapper">
     <div class="inner">
-      <ul id="intro-feature-list"><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-shield"></i></div><h3 class="intro-feature-title">Safe Rendering</h3><p class="intro-feature-desc">Liquid templates are highly readable and fault-tolerant thus suitable for designers and customers. Operators and expressions are parsed to AST and no <code>eval</code> or <code>new Function</code> are used. </p></div></li><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-rocket"></i></div><h3 class="intro-feature-title">Zero Dependency</h3><p class="intro-feature-desc">Written with zero npm dependency and no native binding, available in both Node.js and browsers. All of the CMD, ESM and CJS bundles are available on CDN.</p></div></li><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-shopify"></i></div><h3 class="intro-feature-title">Shopify Compatible</h3><p class="intro-feature-desc">All filters and tags from Ruby <a href="https://github.com/shopify/liquid" target="_blank" rel="noopener external nofollow noreferrer">shopify/liquid</a> are supported by LiquidJS. <a href="https://jekyllrb.com/" target="_blank" rel="noopener external nofollow noreferrer">Jekyll sites</a>, <a href="https://pages.github.com/" target="_blank" rel="noopener external nofollow noreferrer">Github Pages</a> and <a href="https://themes.shopify.com/" target="_blank" rel="noopener external nofollow noreferrer">Shopify templates</a> can be ported to Node.js without pain.</p></div></li><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-typescript"></i></div><h3 class="intro-feature-title">TypeScript Strict</h3><p class="intro-feature-desc">The whole repo is re-written in TypeScript strict mode to ensure a smooth experience using this lib and the document is precise and always up to date.</p></div></li></ul>
+      <ul id="intro-feature-list"><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-shield"></i></div><h3 class="intro-feature-title">Safe Rendering</h3><p class="intro-feature-desc">Liquid templates are highly readable and fault-tolerant thus suitable for designers and customers. Operators and expressions are parsed to AST and no <code>eval</code> or <code>new Function</code> are used. </p></div></li><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-rocket"></i></div><h3 class="intro-feature-title">Zero Dependency</h3><p class="intro-feature-desc">Written with zero npm dependency and no native binding, available in both Node.js and browsers. All of the CMD, ESM and CJS bundles are available on CDN.</p></div></li><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-shopify"></i></div><h3 class="intro-feature-title">Shopify Compatible</h3><p class="intro-feature-desc">All filters and tags from Ruby <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/shopify/liquid">shopify/liquid</a> are supported by LiquidJS. <a target="_blank" rel="noopener external nofollow noreferrer" href="https://jekyllrb.com/">Jekyll sites</a>, <a target="_blank" rel="noopener external nofollow noreferrer" href="https://pages.github.com/">Github Pages</a> and <a target="_blank" rel="noopener external nofollow noreferrer" href="https://themes.shopify.com/">Shopify templates</a> can be ported to Node.js without pain.</p></div></li><li class="intro-feature-wrap"><div class="intro-feature"><div class="intro-feature-icon"><i class="icon-typescript"></i></div><h3 class="intro-feature-title">TypeScript Strict</h3><p class="intro-feature-desc">The whole repo is re-written in TypeScript strict mode to ensure a smooth experience using this lib and the document is precise and always up to date.</p></div></li></ul>
       <ul id="intro-cmd-wrap">
         <li class="intro-code-item"><span class="hl">import</span> { Liquid } <span class="hl">from</span> 'liquidjs'</li>
         <li class="intro-code-item"><span class="hl">const</span> engine = <span class="hl">new</span> Liquid()</li>
@@ -139,53 +139,55 @@
   <div class="wrapper">
     <div class="inner">
       <h3>Contributors</h3>
-      <p class="description">LiquidJS follows the <a href="https://github.com/all-contributors/all-contributors" target="_blank" rel="noopener external nofollow noreferrer">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guildelines here</a>! Thanks goes to these wonderful people:</p>
+      <p class="description">LiquidJS follows the <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/all-contributors/all-contributors">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guildelines here</a>! Thanks goes to these wonderful people:</p>
       <div class="all-contributors">
         <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://harttle.land" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/4427974?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/chenos" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/2993310?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://zachleat.com/" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars2.githubusercontent.com/u/39355?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/thardy" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/120636?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://paulrobertlloyd.com/" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/813383?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://twitter.com/alecdotbiz" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars2.githubusercontent.com/u/1925840?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/pmalouin" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars1.githubusercontent.com/u/1411117?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://jaswrks.com" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/1563559?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://oott123.com" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars2.githubusercontent.com/u/905663?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/ssendev" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/450793?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/wojtask9" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/6099236?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/thelornenelson" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/24596583?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://www.stam.pr/" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars2.githubusercontent.com/u/142338?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/thehappybug" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/3393530?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/robinbijlani" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/2503108?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://www.rmkennedy.com" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/8356669?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/strax" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars2.githubusercontent.com/u/587213?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://ScottFreeCode.github.io/" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/16506071?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="http://stevenrescigno.com" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/8505293?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://efcl.info/" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars1.githubusercontent.com/u/19714?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/wyozi" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/4894573?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/jamelait" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars1.githubusercontent.com/u/14369255?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://brandonpittman.net" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/967145?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/tgrandgent" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/17069042?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/mastodon0" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars1.githubusercontent.com/u/7924332?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="http://js.chenlei.me" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/6339390?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/CriGoT" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/1936786?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://www.raymondcamden.com" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/393660?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://stedman.dev" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars1.githubusercontent.com/u/183122?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://ciccarello.me" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/11273838?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://twitter.com/IAmTrySound" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/5635476?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://hightouch.io" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/5959235?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="http://about.me/peterdehaan" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars2.githubusercontent.com/u/557895?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/amit777" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars3.githubusercontent.com/u/1100776?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/Pixcell" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars0.githubusercontent.com/u/4005291?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://jasonet.co" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars.githubusercontent.com/u/10660468?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/kayuapi" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars.githubusercontent.com/u/10304328?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://memmie.lenglet.name" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars.githubusercontent.com/u/729275?v=4?s=100" width="100px;" alt=""/></a></td>
-    <td align="center"><a href="https://github.com/ilhamdev0" target="_blank" rel="noopener external nofollow noreferrer"><img src="https://avatars.githubusercontent.com/u/57636145?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://harttle.land"><img src="https://avatars3.githubusercontent.com/u/4427974?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/chenos"><img src="https://avatars0.githubusercontent.com/u/2993310?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://zachleat.com/"><img src="https://avatars2.githubusercontent.com/u/39355?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/thardy"><img src="https://avatars3.githubusercontent.com/u/120636?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://paulrobertlloyd.com/"><img src="https://avatars3.githubusercontent.com/u/813383?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://twitter.com/alecdotbiz"><img src="https://avatars2.githubusercontent.com/u/1925840?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/pmalouin"><img src="https://avatars1.githubusercontent.com/u/1411117?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://jaswrks.com"><img src="https://avatars3.githubusercontent.com/u/1563559?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://oott123.com"><img src="https://avatars2.githubusercontent.com/u/905663?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ssendev"><img src="https://avatars0.githubusercontent.com/u/450793?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/wojtask9"><img src="https://avatars3.githubusercontent.com/u/6099236?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/thelornenelson"><img src="https://avatars3.githubusercontent.com/u/24596583?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.stam.pr/"><img src="https://avatars2.githubusercontent.com/u/142338?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/thehappybug"><img src="https://avatars0.githubusercontent.com/u/3393530?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/robinbijlani"><img src="https://avatars0.githubusercontent.com/u/2503108?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.rmkennedy.com"><img src="https://avatars3.githubusercontent.com/u/8356669?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/strax"><img src="https://avatars2.githubusercontent.com/u/587213?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://ScottFreeCode.github.io/"><img src="https://avatars3.githubusercontent.com/u/16506071?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="http://stevenrescigno.com"><img src="https://avatars3.githubusercontent.com/u/8505293?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://efcl.info/"><img src="https://avatars1.githubusercontent.com/u/19714?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/wyozi"><img src="https://avatars3.githubusercontent.com/u/4894573?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jamelait"><img src="https://avatars1.githubusercontent.com/u/14369255?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://brandonpittman.net"><img src="https://avatars0.githubusercontent.com/u/967145?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/tgrandgent"><img src="https://avatars3.githubusercontent.com/u/17069042?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/mastodon0"><img src="https://avatars1.githubusercontent.com/u/7924332?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="http://js.chenlei.me"><img src="https://avatars0.githubusercontent.com/u/6339390?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/CriGoT"><img src="https://avatars0.githubusercontent.com/u/1936786?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.raymondcamden.com"><img src="https://avatars3.githubusercontent.com/u/393660?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://stedman.dev"><img src="https://avatars1.githubusercontent.com/u/183122?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://ciccarello.me"><img src="https://avatars0.githubusercontent.com/u/11273838?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://twitter.com/IAmTrySound"><img src="https://avatars0.githubusercontent.com/u/5635476?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hightouch.io"><img src="https://avatars0.githubusercontent.com/u/5959235?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="http://about.me/peterdehaan"><img src="https://avatars2.githubusercontent.com/u/557895?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/amit777"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="http://www.ifi.uzh.ch/en/ce/people/schuldenzucker.html"><img src="https://avatars3.githubusercontent.com/u/1100776?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Pixcell"><img src="https://avatars0.githubusercontent.com/u/4005291?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://jasonet.co"><img src="https://avatars.githubusercontent.com/u/10660468?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/kayuapi"><img src="https://avatars.githubusercontent.com/u/10304328?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://memmie.lenglet.name"><img src="https://avatars.githubusercontent.com/u/729275?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/ilhamdev0"><img src="https://avatars.githubusercontent.com/u/57636145?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/c412216887"><img src="https://avatars.githubusercontent.com/u/29691650?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a target="_blank" rel="noopener external nofollow noreferrer" href="https://digitalinspiration.com/"><img src="https://avatars.githubusercontent.com/u/1344071?v=4?s=100" width="100px;" alt=""/></a></td>
   </tr>
 </table>
 
@@ -202,7 +204,7 @@
   <div class="wrapper">
     <div class="inner">
       <h3>Backers</h3>
-      <p class="description">Love LiquidJS and want to contribute? <a href="https://opencollective.com/liquidjs" target="_blank" rel="noopener external nofollow noreferrer">Become a backer</a>. Find out more <a href="tutorials/contribution-guidelines.html#Financial-Support">how to contribute</a>!</p>
+      <p class="description">Love LiquidJS and want to contribute? <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs">Become a backer</a>. Find out more <a href="tutorials/contribution-guidelines.html#Financial-Support">how to contribute</a>!</p>
       <div class="open-collective">
         <object type="image/svg+xml" data="https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=72"></object>
       </div>

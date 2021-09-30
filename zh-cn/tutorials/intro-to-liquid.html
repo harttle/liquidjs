@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="../../css/navy.css">
 
-  <link rel="alternate" href="../../atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -87,37 +87,37 @@
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">Liquid 模板语言简介</h1>
                 
-                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tutorials/intro-to-liquid.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tutorials/intro-to-liquid.md" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
                 <p>LiquidJS 是一个简单的、安全的、兼容 Shopify 的、纯 JavaScript 编写的模板引擎。这个项目的目的是为 JavaScript 社区提供一个 Liquid 模板引擎的实现。Liquid 最初用 Ruby 实现并用于 Github Pages, Jekyll 和 Shopify，参考 <a href="./differences.html">和 Shopify/liquid 的区别</a>。</p>
 <p>LiquidJS 语法相对简单。LiquidJS 中有两种标记：</p>
 <ul>
-<li><strong>标签</strong>。标签由标签名和参数构成，由 <code>{%</code> 和 <code>%}</code> 包裹。</li>
-<li><strong>输出</strong>。输出由一个值和一组可选的过滤器构成，由 <code>{{</code> 和 <code>}}</code> 包裹。</li>
+<li><strong>标签</strong>。标签由标签名和参数构成，由 <code>{%</code> 和 <code>%&#125;</code> 包裹。</li>
+<li><strong>输出</strong>。输出由一个值和一组可选的过滤器构成，由 <code>{{` 和 `}}</code> 包裹。</li>
 </ul>
 <h2 id="输出" class="article-heading"><a href="#输出" class="headerlink" title="输出"></a>输出<a class="article-anchor" href="#输出" aria-hidden="true"></a></h2><p><strong>输出</strong> 用于转换和输出变量到 HTMl。下面的模板将会把 <code>username</code> 的值插入到 input 的 <code>value</code>：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;input type&#x3D;&quot;text&quot; name&#x3D;&quot;user&quot; value&#x3D;&quot;&#123;&#123;username&#125;&#125;&quot;&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;input type=&quot;text&quot; name=&quot;user&quot; value=&quot;&#123;&#123;username&#125;&#125;&quot;&gt;</span><br></pre></td></tr></table></figure>
 
 <p><em>输出</em> 里的值可以在输出之前经过若干个 <strong>过滤器</strong> 的转换。比如在变量后面追加一个字符串：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123; username | append: &quot;, welcome to LiquidJS!&quot; &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;&#123; username | append: &quot;, welcome to LiquidJS!&quot; &#125;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>过滤器可以级联，用起来像管道一样：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123; username | append: &quot;, welcome to LiquidJS!&quot; | capitalize &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;&#123; username | append: &quot;, welcome to LiquidJS!&quot; | capitalize &#125;&#125;</span><br></pre></td></tr></table></figure>
 
 <p><a href="../filters/overview.html">这里</a> 是 LiquidJS 支持的完整的过滤器列表。</p>
 <h2 id="标签" class="article-heading"><a href="#标签" class="headerlink" title="标签"></a>标签<a class="article-anchor" href="#标签" aria-hidden="true"></a></h2><p><strong>标签</strong> 用于控制模板渲染过程，操作模板变量，和其他模板交互等。例如 <code>assign</code> 可以用来定义一个模板中可以使用的变量：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% assign foo &#x3D; &quot;FOO&quot; %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign foo = &quot;FOO&quot; %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>一般标签成对地出现，一个开始标签和一个对应的结束标签，比如：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% if foo &#x3D;&#x3D; &quot;FOO&quot; %&#125;</span><br><span class="line">    Variable &#96;foo&#96; equals &quot;FOO&quot;</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    Variable &#96;foo&#96; not equals &quot;FOO&quot;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% if foo == &quot;FOO&quot; %&#125;</span><br><span class="line">    Variable `foo` equals &quot;FOO&quot;</span><br><span class="line">&#123;% else %&#125;</span><br><span class="line">    Variable `foo` not equals &quot;FOO&quot;</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
 <p><a href="../tags/overview.html">这里</a> 是 LiquidJS 支持的完整的标签列表。</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-26T12:45:03.359Z" itemprop="dateModified">上次更新：2021-09-26</time>
+                <time class="article-footer-updated" datetime="2021-09-30T16:54:19.718Z" itemprop="dateModified">上次更新：2021-09-30</time>
                 <a href="setup.html" class="article-footer-next" title="安装"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -126,7 +126,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">目录</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#输出"><span class="toc-text">输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#标签"><span class="toc-text">标签</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA"><span class="toc-text">输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE"><span class="toc-text">标签</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">回到顶部</a>
             </div>

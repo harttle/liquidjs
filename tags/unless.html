@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="../css/navy.css">
 
-  <link rel="alternate" href="../atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -87,7 +87,7 @@
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">Unless</h1>
                 
-                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/tags/unless.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/tags/unless.md" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
@@ -95,17 +95,17 @@
 
 <p>The opposite of <code>if</code> – executes a block of code only if a certain condition is <strong>not</strong> met.</p>
 <p>Input</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% unless product.title &#x3D;&#x3D; &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endunless %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% unless product.title == &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endunless %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">These shoes are not awesome.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">These shoes are not awesome.</span><br></pre></td></tr></table></figure>
 
 <p>This would be the equivalent of doing the following:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% if product.title !&#x3D; &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% if product.title != &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-26T12:45:03.359Z" itemprop="dateModified">Last updated: 2021-09-26</time>
+                <time class="article-footer-updated" datetime="2021-09-30T16:54:19.714Z" itemprop="dateModified">Last updated: 2021-09-30</time>
                 <a href="tablerow.html" class="article-footer-prev" title="sidebar.tags.tablerow"><i class="icon-chevron-left"></i><span>Prev</span></a>
               </footer>
             </div>

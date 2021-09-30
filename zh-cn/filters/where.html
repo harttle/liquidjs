@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="../../css/navy.css">
 
-  <link rel="alternate" href="../../atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -87,7 +87,7 @@
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">where</h1>
                 
-                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/filters/where.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/filters/where.md" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
@@ -96,29 +96,29 @@
 <p>按照数组中对象的属性值来过滤得到新数组，如果未指定第二个参数（属性值）则过滤得到所有属性值为 <a href="../tutorials/truthy-and-falsy.html">truthy</a> 的对象。</p>
 <p>下面的例子中，假设你有一个 <code>products</code> 列表并且希望展示其中的厨房产品。使用 <code>where</code> 过滤器可以得到一个只包含 <code>&quot;type&quot;</code> 属性值为 <code>&quot;kitchen&quot;</code> 的元素的数组。</p>
 <p>输入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign kitchen_products &#x3D; products | where: &quot;type&quot;, &quot;kitchen&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">&#123;% for product in kitchen_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign kitchen_products = products | where: &quot;type&quot;, &quot;kitchen&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">&#123;% for product in kitchen_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Vacuum</span><br><span class="line">- Spatula</span><br><span class="line">- Television</span><br><span class="line">- Garlic press</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">- Spatula</span><br><span class="line">- Garlic press</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Vacuum</span><br><span class="line">- Spatula</span><br><span class="line">- Television</span><br><span class="line">- Garlic press</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">- Spatula</span><br><span class="line">- Garlic press</span><br></pre></td></tr></table></figure>
 
 <p>如果你有一个产品列表且希望只显示可用的产品，可以用 <code>where</code> 过滤器但不指定目标值，LiquidJS 会过滤得到 <code>&quot;available&quot;</code> 值为 <a href="../tutorials/truthy-and-falsy.html">truthy</a> 的产品列表。</p>
 <p>输入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign available_products &#x3D; products | where: &quot;available&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Available products:</span><br><span class="line">&#123;% for product in available_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign available_products = products | where: &quot;available&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Available products:</span><br><span class="line">&#123;% for product in available_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Coffee mug</span><br><span class="line">- Limited edition sneakers</span><br><span class="line">- Boring sneakers</span><br><span class="line"></span><br><span class="line">Available products:</span><br><span class="line">- Coffee mug</span><br><span class="line">- Boring sneakers</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Coffee mug</span><br><span class="line">- Limited edition sneakers</span><br><span class="line">- Boring sneakers</span><br><span class="line"></span><br><span class="line">Available products:</span><br><span class="line">- Coffee mug</span><br><span class="line">- Boring sneakers</span><br></pre></td></tr></table></figure>
 
 <p><code>where</code> 后面再加一个 <code>first</code> 可以用来得到单个元素。例如，你要展示秋季系列里的单个 T-shirt。</p>
 <p>输入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% assign new_shirt &#x3D; products | where: &quot;type&quot;, &quot;shirt&quot; | first %&#125;</span><br><span class="line"></span><br><span class="line">Featured product: &#123;&#123; new_shirt.title &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign new_shirt = products | where: &quot;type&quot;, &quot;shirt&quot; | first %&#125;</span><br><span class="line"></span><br><span class="line">Featured product: &#123;&#123; new_shirt.title &#125;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Featured product: Hawaiian print sweater vest</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Featured product: Hawaiian print sweater vest</span><br></pre></td></tr></table></figure>
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-26T12:45:03.359Z" itemprop="dateModified">上次更新：2021-09-26</time>
+                <time class="article-footer-updated" datetime="2021-09-30T16:54:19.718Z" itemprop="dateModified">上次更新：2021-09-30</time>
                 <a href="url_encode.html" class="article-footer-prev" title="sidebar.filters.url_encode"><i class="icon-chevron-left"></i><span>上一页</span></a>
               </footer>
             </div>

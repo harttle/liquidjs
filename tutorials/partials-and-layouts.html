@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="../css/navy.css">
 
-  <link rel="alternate" href="../atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -87,31 +87,31 @@
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">Partials and Layouts</h1>
                 
-                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/tutorials/partials-and-layouts.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/tutorials/partials-and-layouts.md" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
                 <h2 id="Render-Partials" class="article-heading"><a href="#Render-Partials" class="headerlink" title="Render Partials"></a>Render Partials<a class="article-anchor" href="#Render-Partials" aria-hidden="true"></a></h2><p>For the following template files:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; file: color.liquid</span><br><span class="line">color: &#39;&#123;&#123; color &#125;&#125;&#39; shape: &#39;&#123;&#123; shape &#125;&#125;&#39;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; file: theme.liquid</span><br><span class="line">&#123;% assign shape &#x3D; &#39;circle&#39; %&#125;</span><br><span class="line">&#123;% render &#39;color.liquid&#39; %&#125;</span><br><span class="line">&#123;% render &#39;color.liquid&#39; with &#39;red&#39; %&#125;</span><br><span class="line">&#123;% render &#39;color.liquid&#39;, color: &#39;yellow&#39;, shape: &#39;square&#39; %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// file: color.liquid</span><br><span class="line">color: &#x27;&#123;&#123; color &#125;&#125;&#x27; shape: &#x27;&#123;&#123; shape &#125;&#125;&#x27;</span><br><span class="line"></span><br><span class="line">// file: theme.liquid</span><br><span class="line">&#123;% assign shape = &#x27;circle&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27; with &#x27;red&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27;, color: &#x27;yellow&#x27;, shape: &#x27;square&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>The output will be:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">color: &#39;&#39; shape: &#39;circle&#39;</span><br><span class="line">color: &#39;red&#39; shape: &#39;circle&#39;</span><br><span class="line">color: &#39;yellow&#39; shape: &#39;square&#39;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">color: &#x27;&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;red&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;yellow&#x27; shape: &#x27;square&#x27;</span><br></pre></td></tr></table></figure>
 
 <p>More details please refer to the <a href="../tags/render.html">render</a> tag.</p>
 <blockquote class="note tip"><strong class="note-title">The &quot;.liquid&quot; Extension</strong><p>The “.liquid” extension in <code>layout</code>, <code>render</code> and <code>include</code> an be omitted if Liquid instance is created using <code>extname: &quot;.liquid&quot;</code> option. See <a href="./options.html#extname">the extname option</a> for details.</p>
 </blockquote>
 
 <h2 id="Layout-Templates-Extends" class="article-heading"><a href="#Layout-Templates-Extends" class="headerlink" title="Layout Templates (Extends)"></a>Layout Templates (Extends)<a class="article-anchor" href="#Layout-Templates-Extends" aria-hidden="true"></a></h2><p>For the following template files:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; file: default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; file: page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// file: default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// file: page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>The output of <code>page.liquid</code>:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
 
 <p>More details please refer to the <a href="../tags/layout.html">layout</a> tag.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-26T12:45:03.359Z" itemprop="dateModified">Last updated: 2021-09-26</time>
+                <time class="article-footer-updated" datetime="2021-09-30T16:54:19.718Z" itemprop="dateModified">Last updated: 2021-09-30</time>
                 <a href="render-file.html" class="article-footer-prev" title="Render Files"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="use-in-expressjs.html" class="article-footer-next" title="Use in Express.js"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

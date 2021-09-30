@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="../css/navy.css">
 
-  <link rel="alternate" href="../atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -87,24 +87,24 @@
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">Differences with Shopify/liquid</h1>
                 
-                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/tutorials/differences.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/tutorials/differences.md" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>All filters and tags in <a href="https://github.com/Shopify/liquid" target="_blank" rel="noopener external nofollow noreferrer">shopify/liquid</a> are supposed to be built in LiquidJS, but not those business-logic specific tags/filters which are typically from Shopify themes (see <a href="./plugins.html#Plugin-List">Plugins List</a> in case you’re looking for them and feel free to add yours to the list). Though being compatible the Ruby version is one of our priorities, there are still some differences:</p>
+                <p>All filters and tags in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">shopify/liquid</a> are supposed to be built in LiquidJS, but not those business-logic specific tags/filters which are typically from Shopify themes (see <a href="./plugins.html#Plugin-List">Plugins List</a> in case you’re looking for them and feel free to add yours to the list). Though being compatible the Ruby version is one of our priorities, there are still some differences:</p>
 <ul>
-<li>Truthy and Falsy. All values except <code>undefined</code>, <code>null</code>, <code>false</code> are truthy, whereas in Ruby Liquid all except <code>nil</code> and <code>false</code> are truthy. See <a href="https://github.com/harttle/liquidjs/pull/26" target="_blank" rel="noopener external nofollow noreferrer">#26</a>.</li>
-<li>Number. In JavaScript we cannot distinguish or convert between <code>float</code> and <code>integer</code>, see <a href="https://github.com/harttle/liquidjs/issues/59" target="_blank" rel="noopener external nofollow noreferrer">#59</a>. And when applied <code>size</code> filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a <code>length</code> property.</li>
-<li><a href="https://github.com/Shopify/liquid/wiki/Introduction-to-Drops" target="_blank" rel="noopener external nofollow noreferrer">.to_liquid()</a> is replaced by <code>.toLiquid()</code></li>
-<li><a href="https://www.rubydoc.info/gems/liquid/Liquid/Drop" target="_blank" rel="noopener external nofollow noreferrer">.to_s()</a> is replaced by JavaScript <code>.toString()</code></li>
+<li>Truthy and Falsy. All values except <code>undefined</code>, <code>null</code>, <code>false</code> are truthy, whereas in Ruby Liquid all except <code>nil</code> and <code>false</code> are truthy. See <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/26">#26</a>.</li>
+<li>Number. In JavaScript we cannot distinguish or convert between <code>float</code> and <code>integer</code>, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/59">#59</a>. And when applied <code>size</code> filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a <code>length</code> property.</li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid/wiki/Introduction-to-Drops">.to_liquid()</a> is replaced by <code>.toLiquid()</code></li>
+<li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.rubydoc.info/gems/liquid/Liquid/Drop">.to_s()</a> is replaced by JavaScript <code>.toString()</code></li>
 <li>Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.</li>
-<li>Sort stability. The <a href="https://liquidjs.com/filters/sort.html">sort</a> stability is also not defined in both shopify/liquid and LiquidJS, but it’s <a href="https://v8.dev/features/stable-sort" target="_blank" rel="noopener external nofollow noreferrer">considered stable</a> for LiquidJS in Node.js 12+ and Google Chrome 70+.</li>
-<li>Trailing unmatched characters inside filters are allowed in shopify/liquid but not in LiquidJS. It means filter arguments without a colon like <code>{{ "a b" | split " "}}</code> will throw an error in LiquidJS. This is intended to improve Liquid usability, see <a href="https://github.com/harttle/liquidjs/issues/208" target="_blank" rel="noopener external nofollow noreferrer">#208</a> and <a href="https://github.com/harttle/liquidjs/issues/212" target="_blank" rel="noopener external nofollow noreferrer">#212</a>.</li>
+<li>Sort stability. The <a href="https://liquidjs.com/filters/sort.html">sort</a> stability is also not defined in both shopify/liquid and LiquidJS, but it’s <a target="_blank" rel="noopener external nofollow noreferrer" href="https://v8.dev/features/stable-sort">considered stable</a> for LiquidJS in Node.js 12+ and Google Chrome 70+.</li>
+<li>Trailing unmatched characters inside filters are allowed in shopify/liquid but not in LiquidJS. It means filter arguments without a colon like <code>{{ "a b" | split " "}}</code> will throw an error in LiquidJS. This is intended to improve Liquid usability, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/208">#208</a> and <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/212">#212</a>.</li>
 </ul>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-26T12:45:03.359Z" itemprop="dateModified">Last updated: 2021-09-26</time>
+                <time class="article-footer-updated" datetime="2021-09-30T16:54:19.718Z" itemprop="dateModified">Last updated: 2021-09-30</time>
                 <a href="changelog.html" class="article-footer-prev" title="Changelog"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="Contribution Guidelines"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

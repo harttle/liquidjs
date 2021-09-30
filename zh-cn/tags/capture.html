@@ -36,8 +36,8 @@
   
 <link rel="stylesheet" href="../../css/navy.css">
 
-  <link rel="alternate" href="../../atom.xml" title="LiquidJS">
-</head>
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 <body>
   <div id="container">
@@ -63,7 +63,7 @@
         
       </select>
     </div>
-    <a href="https://github.com/harttle/liquidjs" target="_blank" rel="noopener external nofollow noreferrer" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -87,7 +87,7 @@
               <header class="article-header">
                 <h1 class="article-title" itemprop="name">capture</h1>
                 
-                <a href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tags/capture.md" target="_blank" rel="noopener external nofollow noreferrer" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tags/capture.md" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
@@ -95,21 +95,21 @@
 
 <p>把 <code>capture</code> 开闭标签之间的内容渲染后赋值给一个变量，这个变量的类型总是字符串。</p>
 <p>输入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% capture my_variable %&#125;I am being captured.&#123;% endcapture %&#125;</span><br><span class="line">&#123;&#123; my_variable &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% capture my_variable %&#125;I am being captured.&#123;% endcapture %&#125;</span><br><span class="line">&#123;&#123; my_variable &#125;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">I am being captured.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">I am being captured.</span><br></pre></td></tr></table></figure>
 
 <p>在 <code>capture</code> 里可以使用 <code>assign</code> 创建的其他变量来构建复杂字符串：</p>
 <p>输入</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% assign favorite_food &#x3D; &quot;pizza&quot; %&#125;</span><br><span class="line">&#123;% assign age &#x3D; 35 %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% capture about_me %&#125;</span><br><span class="line">I am &#123;&#123; age &#125;&#125; and my favorite food is &#123;&#123; favorite_food &#125;&#125;.</span><br><span class="line">&#123;% endcapture %&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123; about_me &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign favorite_food = &quot;pizza&quot; %&#125;</span><br><span class="line">&#123;% assign age = 35 %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% capture about_me %&#125;</span><br><span class="line">I am &#123;&#123; age &#125;&#125; and my favorite food is &#123;&#123; favorite_food &#125;&#125;.</span><br><span class="line">&#123;% endcapture %&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123; about_me &#125;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">I am 35 and my favourite food is pizza.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">I am 35 and my favourite food is pizza.</span><br></pre></td></tr></table></figure>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-26T12:45:03.359Z" itemprop="dateModified">上次更新：2021-09-26</time>
+                <time class="article-footer-updated" datetime="2021-09-30T16:54:19.718Z" itemprop="dateModified">上次更新：2021-09-30</time>
                 <a href="assign.html" class="article-footer-prev" title="sidebar.tags.assign"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="case.html" class="article-footer-next" title="sidebar.tags.case"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
