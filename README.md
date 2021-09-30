@@ -109,6 +109,8 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://github.com/kayuapi"><img src="https://avatars.githubusercontent.com/u/10304328?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ZC</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=kayuapi" title="Documentation">📖</a></td>
     <td align="center"><a href="https://memmie.lenglet.name"><img src="https://avatars.githubusercontent.com/u/729275?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Memmie Lenglet</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=mems" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/ilhamdev0"><img src="https://avatars.githubusercontent.com/u/57636145?v=4?s=100" width="100px;" alt=""/><br /><sub><b>ilhamdev0</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=ilhamdev0" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/c412216887"><img src="https://avatars.githubusercontent.com/u/29691650?v=4?s=100" width="100px;" alt=""/><br /><sub><b>一饮一啄皆是人生</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=c412216887" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://digitalinspiration.com/"><img src="https://avatars.githubusercontent.com/u/1344071?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Agarwal</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=labnol" title="Documentation">📖</a></td>
   </tr>
 </table>
 
