@@ -2,7 +2,7 @@
 title: Options
 ---
 
-The [Liquid][liquid] constructor accepts a plain object as options to define the behaviour of LiquidJS. All of these options are optional thus we can specify any of them, for example the `cache` option:
+The [Liquid][liquid] constructor accepts a plain object as options to define the behavior of LiquidJS. All of these options are optional thus we can specify any of them, for example the `cache` option:
 
 ```javascript
 const { Liquid } = require('liquidjs')
@@ -42,7 +42,7 @@ LiquidJS defaults this option to <code>true</code> to be compatible with shopify
 
 ## extname
 
-**extname** defines the default extname to be appended into filenames if the filename has no extname. Defaults to `''` which means it's disabled by default. By setting it to `.liquid`:
+**extname** defines the default extension name to be appended into filenames if the filename has no extension name. Defaults to `''` which means it's disabled by default. By setting it to `.liquid`:
 
 ```liquid
 {% render "foo" %}  there's no extname, adds `.liquid` and loads foo.liquid
@@ -79,7 +79,7 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 
 ## Trimming
 
-**greedy**, **trimOutputLeft**, **trimOutputRight**, **trimTagLeft**, **trimTagRight** options are used to eliminate extra newlines and indents in templates arround Liquid Constructs. See [Whitespace Control][wc] for details.
+**greedy**, **trimOutputLeft**, **trimOutputRight**, **trimTagLeft**, **trimTagRight** options are used to eliminate extra newlines and indents in templates around Liquid Constructs. See [Whitespace Control][wc] for details.
 
 ## Delimiter
 
@@ -98,8 +98,12 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 **lenientIf** modifies the behavior of `strictVariables` to allow handling optional variables. If set to `true`, an undefined variable will *not* cause an exception in the following two situations: a) it is the condition to an `if`, `elsif`, or `unless` tag; b) it occurs right before a `default` filter. Irrelevant if `strictVariables` is not set. Defaults to `false`.
 
 {% note info Non-existent Tags %}
-Non-existent tags always throw errors during parsing and this behaviour can not be customized.
+Non-existent tags always throw errors during parsing and this behavior can not be customized.
 {% endnote %}
+
+## Parameter Order
+
+Parameter orders are ignored by default, for ea `{% for i in (1..8) reversed limit:3 %}` will always perform `limit` before `reversed`, even if `reversed` occurs before `limit`. To make parameter order respected, set **orderedFilterParameters** to `true`. Its default value is `false`.
 
 [liquid]: ../api/classes/liquid_.liquid.html
 [caching]: ./caching.html

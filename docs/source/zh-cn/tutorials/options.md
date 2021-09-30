@@ -98,6 +98,10 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 不存在的标签总是会抛出一个解析异常，这一行为无法自定义。
 {% endnote %}
 
+## 参数顺序
+
+默认会忽略参数出现的顺序，例如 `{% for i in (1..8) reversed limit:3 %}` 里总是会先执行 `limit` 再执行 `reversed`，虽然 `reversed` 先出现。为了让 LiquidJS 按顺序执行参数，需要设置 **orderedFilterParameters** 为 `true`。它的默认值为 `false`。
+
 [liquid]: ../api/classes/liquid_.liquid.html
 [caching]: ./caching.html
 [abstract-fs]: ./render-file.html#Abstract-File-System
