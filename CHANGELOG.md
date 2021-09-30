@@ -1,3 +1,18 @@
+# [9.26.0](https://github.com/harttle/liquidjs/compare/v9.25.1...v9.26.0) (2021-09-30)
+
+
+### Features
+
+* orderedFilterParameters, closes [#312](https://github.com/harttle/liquidjs/issues/312) ([10e8c8f](https://github.com/harttle/liquidjs/commit/10e8c8ff7e1cca6df43087953cd8daf4bd618563))
+* stream rendering, closed [#361](https://github.com/harttle/liquidjs/issues/361) fixes [#360](https://github.com/harttle/liquidjs/issues/360) ([9012133](https://github.com/harttle/liquidjs/commit/9012133e0717b1813c6a74a6a282f43ba14d0ada))
+* timezoneOffset option to specify output timezone, see [#375](https://github.com/harttle/liquidjs/issues/375) ([6b9f872](https://github.com/harttle/liquidjs/commit/6b9f872bccb4b0c636dc7be2088cafa9bc6c900a))
+
+
+### Performance Improvements
+
+* improve performance by 4x by simplified parseFile ([24f5346](https://github.com/harttle/liquidjs/commit/24f534608489fccc155f30bbaf37397c46278da6))
+* parse filenames in parse() insteadof render() ([8273c17](https://github.com/harttle/liquidjs/commit/8273c17dab3dc09858330ce45e3617a650e7fcaa))
+
 ## [9.25.1](https://github.com/harttle/liquidjs/compare/v9.25.0...v9.25.1) (2021-06-20)
 
 
