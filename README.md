@@ -107,6 +107,10 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://github.com/c412216887"><img src="https://avatars.githubusercontent.com/u/29691650?v=4?s=100" width="100px;" alt=""/><br /><sub><b>一饮一啄皆是人生</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=c412216887" title="Documentation">📖</a></td>
     <td align="center"><a href="https://digitalinspiration.com/"><img src="https://avatars.githubusercontent.com/u/1344071?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Amit Agarwal</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=labnol" title="Documentation">📖</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://n1ru4l.cloud/"><img src="https://avatars.githubusercontent.com/u/14338007?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Laurin Quast</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=n1ru4l" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/mattvague"><img src="https://avatars.githubusercontent.com/u/64985?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Vague</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=mattvague" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
