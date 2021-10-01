@@ -16,13 +16,10 @@ export default {
 
         while (!tokenizer.end()) {
           const value = tokenizer.readValue()
-          if (value) {
-            this.cases.push({
-              val: value,
-              templates: p
-            })
-          }
-
+          this.cases.push({
+            val: value,
+            templates: p
+          })
           tokenizer.readTo(',')
         }
       })

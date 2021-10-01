@@ -18,8 +18,10 @@ export default {
       const keyword = tokenizer.readIdentifier()
       if (keyword.content === 'with' || keyword.content === 'for') {
         tokenizer.skipBlank()
+        // can be normal key/value pair, like "with: true"
         if (tokenizer.peek() !== ':') {
           const value = tokenizer.readValue()
+          // can be normal key, like "with,"
           if (value) {
             const beforeAs = tokenizer.p
             const asStr = tokenizer.readIdentifier()
@@ -30,10 +32,14 @@ export default {
             this[keyword.content] = { value, alias: alias && alias.content }
             tokenizer.skipBlank()
             if (tokenizer.peek() === ',') tokenizer.advance()
+            // matched!
             continue
           }
         }
       }
+      /**
+       * restore cursor if with/for not matched
+       */
       tokenizer.p = begin
       break
     }
@@ -83,14 +89,11 @@ export function parseFilePath (tokenizer: Tokenizer, liquid: Liquid): ParsedFile
     const file = tokenizer.readValue()
     if (file === undefined) throw new TypeError(`illegal argument "${tokenizer.input}"`)
     if (file.getText() === 'none') return null
-    // for filenames like "files/{{file}}", eval as liquid template
     if (TypeGuards.isQuotedToken(file)) {
+      // for filenames like "files/{{file}}", eval as liquid template
       const tpls = liquid.parse(evalQuotedToken(file))
       // for filenames like "files/file.liquid", extract the string directly
-      if (tpls.length === 1) {
-        const first = tpls[0]
-        if (TypeGuards.isHTMLToken(first)) return first.getText()
-      }
+      if (tpls.length === 1 && TypeGuards.isHTMLToken(tpls[0].token)) return tpls[0].token.getContent()
       return tpls
     }
     return file

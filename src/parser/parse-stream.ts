@@ -15,13 +15,13 @@ export class ParseStream<T extends Token = TopLevelToken> {
     this.tokens = tokens
     this.parseToken = parseToken
   }
-  public on<T2 extends Template | T | undefined> (name: string, cb: (arg: T2) => void): ParseStream<T> {
+  public on<T2 extends Template | T | undefined> (name: string, cb: (this: ParseStream, arg: T2) => void): ParseStream<T> {
     this.handlers[name] = cb
     return this
   }
   private trigger <T extends Token | Template> (event: string, arg?: T) {
     const h = this.handlers[event]
-    return h ? (h(arg), true) : false
+    return h ? (h.call(this, arg), true) : false
   }
   public start () {
     this.trigger('start')

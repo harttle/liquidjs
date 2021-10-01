@@ -1,4 +1,4 @@
-import { Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template, TagImplOptions } from '../../types'
 
 export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
@@ -6,34 +6,29 @@ export default {
     this.elseTemplates = []
 
     let p
-    const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
+    this.liquid.parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
-        cond: new Value(tagToken.args, this.liquid),
+        predicate: new Value(tagToken.args, this.liquid),
         templates: (p = [])
       }))
-      .on('tag:elsif', (token: TagToken) => {
-        this.branches.push({
-          cond: new Value(token.args, this.liquid),
-          templates: p = []
-        })
-      })
+      .on('tag:elsif', (token: TagToken) => this.branches.push({
+        predicate: new Value(token.args, this.liquid),
+        templates: (p = [])
+      }))
       .on('tag:else', () => (p = this.elseTemplates))
-      .on('tag:endif', () => stream.stop())
+      .on('tag:endif', function () { this.stop() })
       .on('template', (tpl: Template) => p.push(tpl))
-      .on('end', () => {
-        throw new Error(`tag ${tagToken.getText()} not closed`)
-      })
-
-    stream.start()
+      .on('end', () => { throw new Error(`tag ${tagToken.getText()} not closed`) })
+      .start()
   },
 
   render: function * (ctx: Context, emitter: Emitter) {
     const r = this.liquid.renderer
 
-    for (const branch of this.branches) {
-      const cond = yield branch.cond.value(ctx, ctx.opts.lenientIf)
-      if (isTruthy(cond, ctx)) {
-        yield r.renderTemplates(branch.templates, ctx, emitter)
+    for (const { predicate, templates } of this.branches) {
+      const value = yield predicate.value(ctx, ctx.opts.lenientIf)
+      if (isTruthy(value, ctx)) {
+        yield r.renderTemplates(templates, ctx, emitter)
         return
       }
     }

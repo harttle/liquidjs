@@ -130,4 +130,13 @@ describe('Liquid', function () {
         .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
   })
+  describe('#enderToNodeStream', function () {
+    const engine = new Liquid()
+    it('should render a simple value', function (done) {
+      const stream = engine.renderToNodeStream(engine.parse('{{"foo"}}'))
+      let html = ''
+      stream.on('data', data => { html += data })
+      stream.on('end', () => { expect(html).to.equal('foo'); done() })
+    })
+  })
 })

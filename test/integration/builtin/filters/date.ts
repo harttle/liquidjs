@@ -30,6 +30,9 @@ describe('filters/date', function () {
     it('should apply numeric timezone offset (+2.30)', function () {
       return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
     })
+    it('should automatically work when timezone not specified', function () {
+      return test('{{ "1990-12-31T23:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
+    })
   })
   it('should render string as string if not valid', function () {
     return test('{{ "foo" | date: "%Y"}}', 'foo')

@@ -1,5 +1,7 @@
-import { expect } from 'chai'
+import { expect, use } from 'chai'
 import { Liquid } from '../../../src/liquid'
+import * as chaiAsPromised from 'chai-as-promised'
+use(chaiAsPromised)
 
 describe('LiquidOptions#fs', function () {
   let engine: Liquid
@@ -30,5 +32,14 @@ describe('LiquidOptions#fs', function () {
   it('should support renderSync', function () {
     const html = engine.renderFileSync('notexist/foo')
     expect(html).to.equal('content for /root/files/fallback')
+  })
+
+  it('should throw lookup failure if fallback not specified', function () {
+    const engine = new Liquid({
+      root: '/root/',
+      fs: { ...fs, fallback: undefined }
+    } as any)
+    return expect(engine.renderFile('notexist/foo'))
+      .to.be.rejectedWith('Failed to lookup')
   })
 })

@@ -191,6 +191,15 @@ describe('tags/layout', function () {
       return expect(html).to.equal('blackA')
     })
 
+    it('should support none', async function () {
+      mock({
+        '/main.html': '{% layout none %}foo'
+      })
+      const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
+      const html = await staticLiquid.renderFile('/main.html')
+      return expect(html).to.equal('foo')
+    })
+
     it('should support subpaths', async function () {
       mock({
         '/foo/parent.html': '{{color}}{%block%}{%endblock%}',

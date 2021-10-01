@@ -1,6 +1,8 @@
 import { Liquid, Drop } from '../../../../src/liquid'
-import { expect } from 'chai'
+import { expect, use } from 'chai'
 import { mock, restore } from '../../../stub/mockfs'
+import * as chaiAsPromised from 'chai-as-promised'
+use(chaiAsPromised)
 
 describe('tags/render', function () {
   let liquid: Liquid
@@ -92,6 +94,22 @@ describe('tags/render', function () {
     })
     const html = await liquid.renderFile('with.html')
     expect(html).to.equal('color:red, shape:rect')
+  })
+  it('should treat as normal key/value if followed by ":"', async () => {
+    mock({
+      '/with.html': '{% render "color" with: "foo" %}',
+      '/color.html': 'color:{{color}}, with:{{with}}'
+    })
+    const html = await liquid.renderFile('with.html')
+    expect(html).to.equal('color:, with:foo')
+  })
+  it('should treat as normal key if with value not specified', async () => {
+    mock({
+      '/with.html': '{% render "color" with, shape: "rect" %}',
+      '/color.html': 'color:{{color}}, with:{{with}}, shape:{{shape}}'
+    })
+    const html = await liquid.renderFile('with.html')
+    expect(html).to.equal('color:, with:true, shape:rect')
   })
   it('should support with...as', async function () {
     mock({
@@ -271,7 +289,7 @@ describe('tags/render', function () {
       const html = liquid.renderFileSync('with.html')
       expect(html).to.equal('color:red, shape:rect')
     })
-    it('should support filename with extention', function () {
+    it('should support filename with extension', function () {
       mock({
         '/parent.html': 'X{% render child.html color:"red" %}Y',
         '/child.html': 'child with {{color}}'
