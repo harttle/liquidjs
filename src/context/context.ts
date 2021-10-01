@@ -18,8 +18,8 @@ export class Context {
     this.globals = opts.globals
     this.environments = env
   }
-  public getRegister (key: string, defaultValue = {}) {
-    return (this.registers[key] = this.registers[key] || defaultValue)
+  public getRegister (key: string) {
+    return (this.registers[key] = this.registers[key] || {})
   }
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)

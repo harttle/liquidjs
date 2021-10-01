@@ -1,7 +1,8 @@
 import { stringify, toValue } from '../util/underscore'
+import { Emitter } from '../types'
 
-export class KeepingTypeEmitter {
-  public html: any = '';
+export class KeepingTypeEmitter implements Emitter {
+  public buffer: any = '';
 
   public write (html: any) {
     html = toValue(html)
@@ -9,14 +10,10 @@ export class KeepingTypeEmitter {
     // I.E:
     // {{ my-port }} -> 42
     // {{ my-host }}:{{ my-port }} -> 'host:42'
-    if (typeof html !== 'string' && this.html === '') {
-      this.html = html
+    if (typeof html !== 'string' && this.buffer === '') {
+      this.buffer = html
     } else {
-      this.html = stringify(this.html) + stringify(html)
+      this.buffer = stringify(this.buffer) + stringify(html)
     }
-  }
-
-  public end () {
-    return this.html
   }
 }

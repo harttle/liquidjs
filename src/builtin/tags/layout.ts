@@ -1,6 +1,7 @@
 import { assert, Tokenizer, Emitter, Hash, TagToken, TopLevelToken, Context, TagImplOptions } from '../../types'
 import BlockMode from '../../context/block-mode'
 import { parseFilePath, renderFilePath } from './render'
+import { BlankDrop } from '../../drop/blank-drop'
 
 export default {
   parseFilePath,
@@ -16,8 +17,7 @@ export default {
     const { renderer } = liquid
     if (file === null) {
       ctx.setRegister('blockMode', BlockMode.OUTPUT)
-      const html = yield renderer.renderTemplates(this.tpls, ctx)
-      emitter.write(html)
+      yield renderer.renderTemplates(this.tpls, ctx, emitter)
       return
     }
     const filepath = yield this.renderFilePath(this['file'], ctx, liquid)
@@ -28,13 +28,14 @@ export default {
     ctx.setRegister('blockMode', BlockMode.STORE)
     const html = yield renderer.renderTemplates(this.tpls, ctx)
     const blocks = ctx.getRegister('blocks')
-    if (blocks[''] === undefined) blocks[''] = () => html
+
+    // set whole content to anonymous block if anonymous doesn't specified
+    if (blocks[''] === undefined) blocks[''] = (parent: BlankDrop, emitter: Emitter) => emitter.write(html)
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
 
     // render the layout file use stored blocks
     ctx.push(yield hash.render(ctx))
-    const partial = yield renderer.renderTemplates(templates, ctx)
+    yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
-    emitter.write(partial)
   }
 } as TagImplOptions

@@ -1,45 +1,39 @@
 import BlockMode from '../../context/block-mode'
 import { BlockDrop } from '../../drop/block-drop'
-import { ParseStream, TagToken, TopLevelToken, Template, Context, TagImpl, Emitter } from '../../types'
+import { TagToken, TopLevelToken, Template, Context, TagImpl, Emitter } from '../../types'
 
 export default {
   parse (this: TagImpl, token: TagToken, remainTokens: TopLevelToken[]) {
     const match = /\w+/.exec(token.args)
     this.block = match ? match[0] : ''
     this.tpls = [] as Template[]
-    const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
-      .on('tag:endblock', () => stream.stop())
+    this.liquid.parser.parseStream(remainTokens)
+      .on('tag:endblock', function () { this.stop() })
       .on('template', (tpl: Template) => this.tpls.push(tpl))
-      .on('end', () => {
-        throw new Error(`tag ${token.getText()} not closed`)
-      })
-    stream.start()
+      .on('end', () => { throw new Error(`tag ${token.getText()} not closed`) })
+      .start()
   },
 
   * render (this: TagImpl, ctx: Context, emitter: Emitter) {
     const blockRender = this.getBlockRender(ctx)
-    yield this.emitHTML(ctx, emitter, blockRender)
+    if (ctx.getRegister('blockMode') === BlockMode.STORE) {
+      ctx.getRegister('blocks')[this.block] = blockRender
+    } else {
+      yield blockRender(new BlockDrop(), emitter)
+    }
   },
 
   getBlockRender (this: TagImpl, ctx: Context) {
     const { liquid, tpls } = this
-    const extendedBlockRender = ctx.getRegister('blocks')[this.block]
-    const defaultBlockRender = function * (superBlock: BlockDrop) {
+    const renderChild = ctx.getRegister('blocks')[this.block]
+    const renderCurrent = function * (superBlock: BlockDrop, emitter: Emitter) {
+      // add {{ block.super }} support when rendering
       ctx.push({ block: superBlock })
-      const result = yield liquid.renderer.renderTemplates(tpls, ctx)
+      yield liquid.renderer.renderTemplates(tpls, ctx, emitter)
       ctx.pop()
-      return result
     }
-    return extendedBlockRender
-      ? (superBlock: BlockDrop) => extendedBlockRender(new BlockDrop(() => defaultBlockRender(superBlock)))
-      : defaultBlockRender
-  },
-
-  * emitHTML (this: TagImpl, ctx: Context, emitter: Emitter, blockRender: (block: BlockDrop) => string) {
-    if (ctx.getRegister('blockMode', BlockMode.OUTPUT) === BlockMode.STORE) {
-      ctx.getRegister('blocks')[this.block] = blockRender
-    } else {
-      emitter.write(yield blockRender(new BlockDrop()))
-    }
+    return renderChild
+      ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(new BlockDrop(() => renderCurrent(superBlock, emitter)), emitter)
+      : renderCurrent
   }
 }

@@ -3,7 +3,7 @@ const { Liquid } = require('liquidjs')
 const engine = new Liquid({
   root: __dirname,
   extname: '.liquid',
-  globals: {title: 'LiquidJS Demo'}
+  globals: { title: 'LiquidJS Demo' }
 })
 
 engine.registerTag('header', {
@@ -21,6 +21,16 @@ const ctx = {
   todos: ['fork and clone', 'make it better', 'make a pull request']
 }
 
-engine.renderFile('todolist', ctx)
-  .then(console.log)
-  .catch(err => console.error(err.stack))
+async function main () {
+  console.log('==========renderFile===========')
+  const html = await engine.renderFile('todolist', ctx)
+  console.log(html)
+
+  console.log('===========Streamed===========')
+  const tpls = await engine.parseFile('todolist')
+  engine.renderToNodeStream(tpls, ctx)
+    .on('data', data => process.stdout.write(data))
+    .on('end', () => console.log(''))
+}
+
+main()
