@@ -14,7 +14,9 @@
     "lint": "eslint \"**/*.ts\" .",
     "check": "npm test && npm run lint",
     "test": "nyc mocha \"test/**/*.ts\"",
-    "benchmark": "cd benchmark && npm ci && npm start",
+    "perf": "cd benchmark && npm ci && npm start",
+    "perf:diff": "bin/perf-diff.sh",
+    "perf:engines": "cd benchmark && npm run engines",
     "build": "npm run build:dist && npm run build:docs",
     "build:dist": "rm -rf dist && rollup -c rollup.config.ts && ls -lh dist",
     "build:docs": "bin/build-docs.sh"

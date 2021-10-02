@@ -45,6 +45,8 @@
     <td align="center"><a href="https://github.com/ilhamdev0"><img src="https://avatars.githubusercontent.com/u/57636145?v=4?s=100" width="100px;" alt=""/></a></td>
     <td align="center"><a href="https://github.com/c412216887"><img src="https://avatars.githubusercontent.com/u/29691650?v=4?s=100" width="100px;" alt=""/></a></td>
     <td align="center"><a href="https://digitalinspiration.com/"><img src="https://avatars.githubusercontent.com/u/1344071?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a href="https://n1ru4l.cloud/"><img src="https://avatars.githubusercontent.com/u/14338007?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/mattvague"><img src="https://avatars.githubusercontent.com/u/64985?v=4?s=100" width="100px;" alt=""/></a></td>
   </tr>
 </table>
 

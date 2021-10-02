@@ -5,8 +5,8 @@ const data = require('./data/todolist.json')
 const path = require('path')
 
 const engines = {
-  liquid: require('./engines/liquid'),
   handlebars: require('./engines/handlebars'),
+  liquid: require('./engines/liquid'),
   react: require('./engines/react'),
   swig: require('./engines/swig')
 }
