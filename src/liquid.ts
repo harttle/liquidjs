@@ -1,7 +1,7 @@
 import { Context } from './context/context'
 import { forOwn, snakeCase } from './util/underscore'
 import { Template } from './template/template'
-import { Tokenizer } from './parser/tokenizer'
+import { LookupType } from './fs/loader'
 import { Render } from './render/render'
 import Parser from './parser/parser'
 import { TagImplOptions } from './template/tag/tag-impl-options'
@@ -18,12 +18,11 @@ export * from './util/error'
 export * from './types'
 
 export class Liquid {
-  public options: NormalizedFullOptions
-  public renderer: Render
-  public parser: Parser
-  public filters: FilterMap
-  public tags: TagMap
-  public parseFileImpl: (file: string, sync?: boolean) => Iterator<Template[]>
+  public readonly options: NormalizedFullOptions
+  public readonly renderer: Render
+  public readonly parser: Parser
+  public readonly filters: FilterMap
+  public readonly tags: TagMap
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = applyDefault(normalize(opts))
@@ -31,15 +30,12 @@ export class Liquid {
     this.renderer = new Render()
     this.filters = new FilterMap(this.options.strictFilters, this)
     this.tags = new TagMap()
-    this.parseFileImpl = this.options.cache ? this._parseFileCached : this._parseFile
 
     forOwn(builtinTags, (conf: TagImplOptions, name: string) => this.registerTag(snakeCase(name), conf))
     forOwn(builtinFilters, (handler: FilterImplOptions, name: string) => this.registerFilter(snakeCase(name), handler))
   }
   public parse (html: string, filepath?: string): Template[] {
-    const tokenizer = new Tokenizer(html, this.options.operatorsTrie, filepath)
-    const tokens = tokenizer.readTopLevelTokens(this.options)
-    return this.parser.parse(tokens)
+    return this.parser.parse(html, filepath)
   }
 
   public _render (tpl: Template[], scope?: object, sync?: boolean): IterableIterator<any> {
@@ -68,30 +64,17 @@ export class Liquid {
     return toValue(this._parseAndRender(html, scope, true))
   }
 
-  private * _parseFileCached (file: string, sync?: boolean) {
-    const cache = this.options.cache!
-    let tpls = yield cache.read(file)
-    if (tpls) return tpls
-
-    tpls = yield this._parseFile(file, sync)
-    cache.write(file, tpls)
-    return tpls
+  public _parsePartialFile (file: string, sync?: boolean) {
+    return this.parser.parseFile(file, sync, LookupType.Partials)
   }
-  private * _parseFile (file: string, sync?: boolean) {
-    const { fs, root } = this.options
-
-    for (const filepath of this.lookupFiles(file, this.options)) {
-      if (!(sync ? fs.existsSync(filepath) : yield fs.exists(filepath))) continue
-      const tpl = this.parse(sync ? fs.readFileSync(filepath) : yield fs.readFile(filepath), filepath)
-      return tpl
-    }
-    throw this.lookupError(file, root)
+  public _parseLayoutFile (file: string, sync?: boolean) {
+    return this.parser.parseFile(file, sync, LookupType.Layouts)
   }
   public async parseFile (file: string): Promise<Template[]> {
-    return toPromise(this.parseFileImpl(file, false))
+    return toPromise(this.parser.parseFile(file, false))
   }
   public parseFileSync (file: string): Template[] {
-    return toValue(this.parseFileImpl(file, true))
+    return toValue(this.parser.parseFile(file, true))
   }
   public async renderFile (file: string, ctx?: object) {
     const templates = await this.parseFile(file)
@@ -133,23 +116,5 @@ export class Liquid {
       }
       self.renderFile(filePath, ctx).then(html => callback(null, html) as any, callback as any)
     }
-  }
-
-  private * lookupFiles (file: string, options: NormalizedFullOptions) {
-    const { root, fs, extname } = options
-    for (const dir of root) {
-      yield fs.resolve(dir, file, extname)
-    }
-    if (fs.fallback !== undefined) {
-      const filepath = fs.fallback(file)
-      if (filepath !== undefined) yield filepath
-    }
-  }
-
-  private lookupError (file: string, roots: string[]) {
-    const err = new Error('ENOENT') as any
-    err.message = `ENOENT: Failed to lookup "${file}" in "${roots}"`
-    err.code = 'ENOENT'
-    return err
   }
 }

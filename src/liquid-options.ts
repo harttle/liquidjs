@@ -11,6 +11,10 @@ import { timezoneOffset } from './util/strftime'
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
   root?: string | string[];
+  /** A directory or an array of directories from where to resolve included templates. If it's an array, the files are looked up in the order they occur in the array. Defaults to `root` */
+  partials?: string | string[];
+  /** A directory or an array of directories from where to resolve layout templates. If it's an array, the files are looked up in the order they occur in the array. Defaults to `root` */
+  layouts?: string | string[];
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
@@ -61,12 +65,16 @@ export interface LiquidOptions {
 
 interface NormalizedOptions extends LiquidOptions {
   root?: string[];
+  partials?: string[];
+  layouts?: string[];
   cache?: Cache<Template[]>;
   operatorsTrie?: Trie;
 }
 
 export interface NormalizedFullOptions extends NormalizedOptions {
   root: string[];
+  partials: string[];
+  layouts: string[];
   extname: string;
   cache: undefined | Cache<Template[]>;
   jsTruthy: boolean;
@@ -93,6 +101,8 @@ export interface NormalizedFullOptions extends NormalizedOptions {
 
 export const defaultOptions: NormalizedFullOptions = {
   root: ['.'],
+  layouts: ['.'],
+  partials: ['.'],
   cache: undefined,
   extname: '',
   fs: fs,
@@ -123,6 +133,12 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
   if (options.hasOwnProperty('root')) {
     options.root = normalizeStringArray(options.root)
   }
+  if (options.hasOwnProperty('partials')) {
+    options.partials = normalizeStringArray(options.partials)
+  }
+  if (options.hasOwnProperty('layouts')) {
+    options.layouts = normalizeStringArray(options.layouts)
+  }
   if (options.hasOwnProperty('cache')) {
     let cache: Cache<Template[]> | undefined
     if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
@@ -137,7 +153,14 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
 }
 
 export function applyDefault (options: NormalizedOptions): NormalizedFullOptions {
-  return { ...defaultOptions, ...options }
+  const fullOptions = { ...defaultOptions, ...options }
+  if (fullOptions.partials === defaultOptions.partials) {
+    fullOptions.partials = fullOptions.root
+  }
+  if (fullOptions.layouts === defaultOptions.layouts) {
+    fullOptions.layouts = fullOptions.root
+  }
+  return fullOptions
 }
 
 export function normalizeStringArray (value: any): string[] {

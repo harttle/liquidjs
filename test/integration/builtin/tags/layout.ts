@@ -76,6 +76,15 @@ describe('tags/layout', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('XAYBZ')
   })
+  it('should support `options.layouts`', async () => {
+    mock({
+      '/layouts/parent.html': 'X{% block "a"%}{%endblock%}Y'
+    })
+    const src = '{% layout "parent.html" %}{%block a%}A{%endblock%}'
+    const liquid = new Liquid({ layouts: '/layouts' })
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('XAY')
+  })
   it('should support block.super', async function () {
     mock({
       '/parent.html': '{% block css %}<link href="base.css" rel="stylesheet">{% endblock %}'
@@ -171,7 +180,7 @@ describe('tags/layout', function () {
   })
 
   describe('static partial', function () {
-    it('should support filename with extention', async function () {
+    it('should support filename with extension', async function () {
       mock({
         '/parent.html': '{{color}}{%block%}{%endblock%}',
         '/main.html': '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'

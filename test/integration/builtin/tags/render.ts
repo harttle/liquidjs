@@ -21,6 +21,15 @@ describe('tags/render', function () {
     const html = await liquid.renderFile('/current.html')
     expect(html).to.equal('barfoobar')
   })
+  it('should support render', async function () {
+    mock({
+      '/current.html': 'bar{% render "foo.html" %}bar',
+      '/partials/foo.html': 'foo'
+    })
+    const liquid = new Liquid({ partials: '/partials' })
+    const html = await liquid.renderFile('/current.html')
+    expect(html).to.equal('barfoobar')
+  })
   it('should support template string', async function () {
     mock({
       '/current.html': 'bar{% render "bar/{{name}}" %}bar',

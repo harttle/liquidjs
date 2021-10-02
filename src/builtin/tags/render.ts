@@ -65,12 +65,12 @@ export default {
       scope['forloop'] = new ForloopDrop(collection.length)
       for (const item of collection) {
         scope[alias] = item
-        const templates = yield liquid.parseFileImpl(filepath, childCtx.sync)
+        const templates = yield liquid._parsePartialFile(filepath, childCtx.sync)
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
         scope.forloop.next()
       }
     } else {
-      const templates = yield liquid.parseFileImpl(filepath, childCtx.sync)
+      const templates = yield liquid._parsePartialFile(filepath, childCtx.sync)
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
     }
   }
