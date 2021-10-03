@@ -95,7 +95,7 @@
 <li><strong>Parser</strong></li>
 </ul>
 <h2 id="Constructors" class="article-heading"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors<a class="article-anchor" href="#Constructors" aria-hidden="true"></a></h2><h3 id="constructor-NaN" class="article-heading"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor<a class="article-anchor" href="#constructor-NaN" aria-hidden="true"></a></h3><p>+ <strong>new Parser</strong>(<code>liquid</code>: <a href="liquid_.liquid.html">Liquid</a>): <em><a href="parser_parser_.parser.html">Parser</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L13">parser/parser.ts:13</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L21">parser/parser.ts:21</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -110,10 +110,21 @@
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="parser_parser_.parser.html">Parser</a></em></p>
-<h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Private-liquid" class="article-heading"><a href="#Private-liquid" class="headerlink" title="Private liquid"></a><code>Private</code> liquid<a class="article-anchor" href="#Private-liquid" aria-hidden="true"></a></h3><p>• <strong>liquid</strong>: <em><a href="liquid_.liquid.html">Liquid</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L13">parser/parser.ts:13</a></em></p>
-<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="parse" class="article-heading"><a href="#parse" class="headerlink" title="parse"></a>parse<a class="article-anchor" href="#parse" aria-hidden="true"></a></h3><p>▸ <strong>parse</strong>(<code>tokens</code>: <a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]): <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
+<h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Private-cache" class="article-heading"><a href="#Private-cache" class="headerlink" title="Private cache"></a><code>Private</code> cache<a class="article-anchor" href="#Private-cache" aria-hidden="true"></a></h3><p>• <strong>cache</strong>: <em><a href="../interfaces/cache_cache_.cache.html">Cache</a>‹<a href="../interfaces/template_template_.template.html">Template</a>[]› | undefined</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L20">parser/parser.ts:20</a></em></p>
+<hr>
+<h3 id="Private-fs" class="article-heading"><a href="#Private-fs" class="headerlink" title="Private fs"></a><code>Private</code> fs<a class="article-anchor" href="#Private-fs" aria-hidden="true"></a></h3><p>• <strong>fs</strong>: <em><a href="../interfaces/fs_fs_.fs.html">FS</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L19">parser/parser.ts:19</a></em></p>
+<hr>
+<h3 id="Private-liquid" class="article-heading"><a href="#Private-liquid" class="headerlink" title="Private liquid"></a><code>Private</code> liquid<a class="article-anchor" href="#Private-liquid" aria-hidden="true"></a></h3><p>• <strong>liquid</strong>: <em><a href="liquid_.liquid.html">Liquid</a></em></p>
 <p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L18">parser/parser.ts:18</a></em></p>
+<hr>
+<h3 id="Private-loader" class="article-heading"><a href="#Private-loader" class="headerlink" title="Private loader"></a><code>Private</code> loader<a class="article-anchor" href="#Private-loader" aria-hidden="true"></a></h3><p>• <strong>loader</strong>: <em><a href="fs_loader_.loader.html">Loader</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L21">parser/parser.ts:21</a></em></p>
+<hr>
+<h3 id="parseFile" class="article-heading"><a href="#parseFile" class="headerlink" title="parseFile"></a>parseFile<a class="article-anchor" href="#parseFile" aria-hidden="true"></a></h3><p>• <strong>parseFile</strong>: <em>function</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L16">parser/parser.ts:16</a></em></p>
+<h4 id="Type-declaration" class="article-heading"><a href="#Type-declaration" class="headerlink" title="Type declaration:"></a>Type declaration:<a class="article-anchor" href="#Type-declaration" aria-hidden="true"></a></h4><p>▸ (<code>file</code>: string, <code>sync?</code>: undefined | false | true, <code>type?</code>: <a href="../enums/fs_loader_.lookuptype.html">LookupType</a>): <em>Iterator‹<a href="../interfaces/template_template_.template.html">Template</a>[]›</em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -123,14 +134,99 @@
 </tr>
 </thead>
 <tbody><tr>
-<td><code>tokens</code></td>
-<td><a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]</td>
+<td><code>file</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>sync?</code></td>
+<td>undefined &#124; false &#124; true</td>
+</tr>
+<tr>
+<td><code>type?</code></td>
+<td><a href="../enums/fs_loader_.lookuptype.html">LookupType</a></td>
+</tr>
+</tbody></table>
+<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="Private-parseFile" class="article-heading"><a href="#Private-parseFile" class="headerlink" title="Private _parseFile"></a><code>Private</code> _parseFile<a class="article-anchor" href="#Private-parseFile" aria-hidden="true"></a></h3><p>▸ <strong>_parseFile</strong>(<code>file</code>: string, <code>sync?</code>: undefined | false | true, <code>type</code>: <a href="../enums/fs_loader_.lookuptype.html">LookupType</a>): <em>IterableIterator‹Promise‹string› | <a href="../interfaces/template_template_.template.html">Template</a>[] | IterableIterator‹string | Promise‹boolean›››</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L68">parser/parser.ts:68</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>file</code></td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>sync?</code></td>
+<td>undefined &#124; false &#124; true</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><a href="../enums/fs_loader_.lookuptype.html">LookupType</a></td>
+<td>LookupType.Root</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>IterableIterator‹Promise‹string› | <a href="../interfaces/template_template_.template.html">Template</a>[] | IterableIterator‹string | Promise‹boolean›››</em></p>
+<hr>
+<h3 id="Private-parseFileCached" class="article-heading"><a href="#Private-parseFileCached" class="headerlink" title="Private _parseFileCached"></a><code>Private</code> _parseFileCached<a class="article-anchor" href="#Private-parseFileCached" aria-hidden="true"></a></h3><p>▸ <strong>_parseFileCached</strong>(<code>file</code>: string, <code>sync?</code>: undefined | false | true, <code>type</code>: <a href="../enums/fs_loader_.lookuptype.html">LookupType</a>): <em>IterableIterator‹any›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L59">parser/parser.ts:59</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>file</code></td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>sync?</code></td>
+<td>undefined &#124; false &#124; true</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><a href="../enums/fs_loader_.lookuptype.html">LookupType</a></td>
+<td>LookupType.Root</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>IterableIterator‹any›</em></p>
+<hr>
+<h3 id="parse" class="article-heading"><a href="#parse" class="headerlink" title="parse"></a>parse<a class="article-anchor" href="#parse" aria-hidden="true"></a></h3><p>▸ <strong>parse</strong>(<code>html</code>: string, <code>filepath?</code>: undefined | string): <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L30">parser/parser.ts:30</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>html</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>filepath?</code></td>
+<td>undefined &#124; string</td>
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
 <hr>
-<h3 id="parseStream" class="article-heading"><a href="#parseStream" class="headerlink" title="parseStream"></a>parseStream<a class="article-anchor" href="#parseStream" aria-hidden="true"></a></h3><p>▸ <strong>parseStream</strong>(<code>tokens</code>: <a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]): <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a>‹<a href="tokens_tag_token_.tagtoken.html">TagToken</a> | <a href="tokens_html_token_.htmltoken.html">HTMLToken</a> | <a href="tokens_output_token_.outputtoken.html">OutputToken</a>›</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L39">parser/parser.ts:39</a></em></p>
+<h3 id="parseStream" class="article-heading"><a href="#parseStream" class="headerlink" title="parseStream"></a>parseStream<a class="article-anchor" href="#parseStream" aria-hidden="true"></a></h3><p>▸ <strong>parseStream</strong>(<code>tokens</code>: <a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]): <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a>‹<a href="tokens_html_token_.htmltoken.html">HTMLToken</a> | <a href="tokens_output_token_.outputtoken.html">OutputToken</a> | <a href="tokens_tag_token_.tagtoken.html">TagToken</a>›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L56">parser/parser.ts:56</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -144,10 +240,10 @@
 <td><a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]</td>
 </tr>
 </tbody></table>
-<p><strong>Returns:</strong> <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a>‹<a href="tokens_tag_token_.tagtoken.html">TagToken</a> | <a href="tokens_html_token_.htmltoken.html">HTMLToken</a> | <a href="tokens_output_token_.outputtoken.html">OutputToken</a>›</em></p>
+<p><strong>Returns:</strong> <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a>‹<a href="tokens_html_token_.htmltoken.html">HTMLToken</a> | <a href="tokens_output_token_.outputtoken.html">OutputToken</a> | <a href="tokens_tag_token_.tagtoken.html">TagToken</a>›</em></p>
 <hr>
 <h3 id="parseToken" class="article-heading"><a href="#parseToken" class="headerlink" title="parseToken"></a>parseToken<a class="article-anchor" href="#parseToken" aria-hidden="true"></a></h3><p>▸ <strong>parseToken</strong>(<code>token</code>: <a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>, <code>remainTokens</code>: <a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]): <em><a href="template_tag_tag_.tag.html">Tag</a> | <a href="template_output_.output.html">Output</a> | <a href="template_html_.html.html">HTML</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L26">parser/parser.ts:26</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L43">parser/parser.ts:43</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -166,10 +262,27 @@
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="template_tag_tag_.tag.html">Tag</a> | <a href="template_output_.output.html">Output</a> | <a href="template_html_.html.html">HTML</a></em></p>
+<hr>
+<h3 id="parseTokens" class="article-heading"><a href="#parseTokens" class="headerlink" title="parseTokens"></a>parseTokens<a class="article-anchor" href="#parseTokens" aria-hidden="true"></a></h3><p>▸ <strong>parseTokens</strong>(<code>tokens</code>: <a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]): <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parser.ts#L35">parser/parser.ts:35</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>tokens</code></td>
+<td><a href="../modules/tokens_toplevel_token_.html#topleveltoken">TopLevelToken</a>[]</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-09-30T16:55:13.970Z" itemprop="dateModified">Last updated: 2021-09-30</time>
+                <time class="article-footer-updated" datetime="2021-10-03T14:41:21.757Z" itemprop="dateModified">Last updated: 2021-10-03</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -178,7 +291,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-liquid"><span class="toc-text">Private liquid</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#parse"><span class="toc-text">parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parseStream"><span class="toc-text">parseStream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parseToken"><span class="toc-text">parseToken</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-cache"><span class="toc-text">Private cache</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-fs"><span class="toc-text">Private fs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-liquid"><span class="toc-text">Private liquid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-loader"><span class="toc-text">Private loader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parseFile"><span class="toc-text">parseFile</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration"><span class="toc-text">Type declaration:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-parseFile"><span class="toc-text">Private _parseFile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-parseFileCached"><span class="toc-text">Private _parseFileCached</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parse"><span class="toc-text">parse</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parseStream"><span class="toc-text">parseStream</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parseToken"><span class="toc-text">parseToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#parseTokens"><span class="toc-text">parseTokens</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
