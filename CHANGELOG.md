@@ -1,3 +1,22 @@
+# [9.27.0](https://github.com/harttle/liquidjs/compare/v9.26.0...v9.27.0) (2021-10-03)
+
+
+### Bug Fixes
+
+* remove "stream" dependency in browser bundles, [#396](https://github.com/harttle/liquidjs/issues/396) ([3b5eb66](https://github.com/harttle/liquidjs/commit/3b5eb6664f673c29d74cb7645e01dcbdf43c8343))
+* renderToNodeStream() now emit 'error' event instead of throw ([afeef1d](https://github.com/harttle/liquidjs/commit/afeef1d7450b2799b3441b0241d2466b892a27ff))
+
+
+### Features
+
+* add `layouts`, `partials` apart from `root`, [#395](https://github.com/harttle/liquidjs/issues/395) ([b9ae479](https://github.com/harttle/liquidjs/commit/b9ae479b653a34fadb98c324c4683dd1fdd31af1))
+* renderFileToNodeStream(filepath, scope) ([68c4cfc](https://github.com/harttle/liquidjs/commit/68c4cfcfb647c22225dd6edede53ad7a5d7c4485))
+
+
+### Performance Improvements
+
+* make the most of streamed rendering ([aea3441](https://github.com/harttle/liquidjs/commit/aea34418de24cb85ea1acddf68c3683ce7fc9fa8))
+
 # [9.26.0](https://github.com/harttle/liquidjs/compare/v9.25.1...v9.26.0) (2021-09-30)
 
 
