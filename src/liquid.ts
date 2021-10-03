@@ -84,6 +84,10 @@ export class Liquid {
     const templates = this.parseFileSync(file)
     return this.renderSync(templates, ctx)
   }
+  public async renderFileToNodeStream (file: string, scope?: object) {
+    const templates = await this.parseFile(file)
+    return this.renderToNodeStream(templates, scope)
+  }
 
   public _evalValue (str: string, ctx: Context): IterableIterator<any> {
     const value = new Value(str, this)

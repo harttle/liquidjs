@@ -136,7 +136,36 @@ describe('Liquid', function () {
       const stream = engine.renderToNodeStream(engine.parse('{{"foo"}}'))
       let html = ''
       stream.on('data', data => { html += data })
-      stream.on('end', () => { expect(html).to.equal('foo'); done() })
+      stream.on('end', () => {
+        try {
+          expect(html).to.equal('foo')
+          done()
+        } catch (err) {
+          done(err)
+        }
+      })
+    })
+  })
+  describe('#enderFileToNodeStream', function () {
+    before(function () {
+      mock({
+        '/root/foo.html': 'foo'
+      })
+    })
+    after(restore)
+    it('should render a simple value', (done) => {
+      const engine = new Liquid({ root: ['/root/'] })
+      engine.renderFileToNodeStream('foo.html').then(stream => {
+        let html = ''
+        stream.on('data', data => { html += data })
+        stream.on('end', () => {
+          try {
+            expect(html).to.equal('foo'); done()
+          } catch (err) {
+            done(err)
+          }
+        })
+      })
     })
   })
 })
