@@ -10,7 +10,7 @@ import { KeepingTypeEmitter } from '../emitters/keeping-type-emitter'
 export class Render {
   public renderTemplatesToNodeStream (templates: Template[], ctx: Context): NodeJS.ReadableStream {
     const emitter = new StreamedEmitter()
-    toThenable(this.renderTemplates(templates, ctx, emitter))
+    Promise.resolve().then(() => toThenable(this.renderTemplates(templates, ctx, emitter)))
       .then(() => emitter.end(), err => emitter.error(err))
     return emitter.stream
   }

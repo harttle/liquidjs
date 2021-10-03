@@ -1,6 +1,7 @@
 import { expect, use } from 'chai'
 import { resolve } from 'path'
 import * as chaiAsPromised from 'chai-as-promised'
+import { drainStream } from '../stub/stream'
 
 use(chaiAsPromised)
 
@@ -30,27 +31,12 @@ describe('.renderToNodeStream()', function () {
 })
 
 describe('.renderFileToNodeStream()', function () {
-  it('should render to stream in Node.js', async done => {
+  it('should render to stream in Node.js', async () => {
     const cjs = require('../../dist/liquid.node.cjs')
     const engine = new cjs.Liquid({
       root: resolve(__dirname, '../stub/root/')
     })
     const stream = await engine.renderFileToNodeStream('foo.html')
-    let html = ''
-    stream.on('data', (data: string) => { html += data })
-    stream.on('end', () => {
-      try {
-        expect(html).to.equal('foo')
-        done()
-      } catch (err) {
-        done(err)
-      }
-    })
-  })
-  it('should throw in browser', async function () {
-    const cjs = require('../../dist/liquid.browser.umd')
-    const engine = new cjs.Liquid()
-    const render = () => engine.renderFileToNodeStream('foo')
-    return expect(render).to.throw('streaming not supported in browser')
+    expect(drainStream(stream)).to.eventually.equal('foo')
   })
 })

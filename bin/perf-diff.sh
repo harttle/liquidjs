@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 VERSION_LATEST=$(cat package.json | grep '"version":' | awk -F'"' '{print $4}')
 FILE_LOCAL=dist/liquid.node.cjs.js

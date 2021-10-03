@@ -2,6 +2,7 @@ import { Liquid, Context, isFalsy } from '../../../src/liquid'
 import * as chai from 'chai'
 import { mock, restore } from '../../stub/mockfs'
 import * as chaiAsPromised from 'chai-as-promised'
+import { drainStream } from '../../stub/stream'
 
 const expect = chai.expect
 chai.use(chaiAsPromised)
@@ -132,40 +133,33 @@ describe('Liquid', function () {
   })
   describe('#enderToNodeStream', function () {
     const engine = new Liquid()
-    it('should render a simple value', function (done) {
-      const stream = engine.renderToNodeStream(engine.parse('{{"foo"}}'))
-      let html = ''
-      stream.on('data', data => { html += data })
-      stream.on('end', () => {
-        try {
-          expect(html).to.equal('foo')
-          done()
-        } catch (err) {
-          done(err)
-        }
-      })
+    it('should render a simple value', async () => {
+      const stream = await engine.renderToNodeStream(engine.parse('{{"foo"}}'))
+      expect(drainStream(stream)).to.eventually.equal('foo')
     })
   })
   describe('#enderFileToNodeStream', function () {
+    let engine: Liquid
     before(function () {
       mock({
-        '/root/foo.html': 'foo'
+        '/root/foo.html': 'foo',
+        '/root/error.html': 'A{%throwingTag%}B'
+      })
+      engine = new Liquid({ root: ['/root/'] })
+      engine.registerTag('throwingTag', {
+        render: function () {
+          throw new Error('intended render error')
+        }
       })
     })
     after(restore)
-    it('should render a simple value', (done) => {
-      const engine = new Liquid({ root: ['/root/'] })
-      engine.renderFileToNodeStream('foo.html').then(stream => {
-        let html = ''
-        stream.on('data', data => { html += data })
-        stream.on('end', () => {
-          try {
-            expect(html).to.equal('foo'); done()
-          } catch (err) {
-            done(err)
-          }
-        })
-      })
+    it('should render a simple value', async () => {
+      const stream = await engine.renderFileToNodeStream('foo.html')
+      expect(drainStream(stream)).to.be.eventually.equal('foo')
+    })
+    it('should throw RenderError when tag throws', async () => {
+      const stream = engine.renderFileToNodeStream('error.html')
+      expect(drainStream(stream)).to.be.rejectedWith(/intended render error/)
     })
   })
 })
