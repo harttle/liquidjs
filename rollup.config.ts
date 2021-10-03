@@ -14,6 +14,16 @@ const treeshake = {
   propertyReadSideEffects: false
 }
 const input = './src/liquid.ts'
+const replaceFS = {
+  include: './src/liquid-options.ts',
+  delimiters: ['', ''],
+  './fs/node': './fs/browser'
+}
+const replaceStream = {
+  include: './src/render/render.ts',
+  delimiters: ['', ''],
+  '../emitters/streamed-emitter': '../emitters/streamed-emitter-browser'
+}
 
 const nodeCjs = {
   output: [{
@@ -65,11 +75,8 @@ const browserEsm = {
   }],
   external: ['path', 'fs'],
   plugins: [
-    replace({
-      include: './src/liquid-options.ts',
-      delimiters: ['', ''],
-      './fs/node': './fs/browser'
-    }),
+    replace(replaceFS),
+    replace(replaceStream),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
@@ -94,11 +101,8 @@ const browserUmd = {
     banner
   }],
   plugins: [
-    replace({
-      include: './src/liquid-options.ts',
-      delimiters: ['', ''],
-      './fs/node': './fs/browser'
-    }),
+    replace(replaceFS),
+    replace(replaceStream),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
@@ -122,11 +126,8 @@ const browserMin = {
     sourcemap
   }],
   plugins: [
-    replace({
-      include: './src/liquid-options.ts',
-      delimiters: ['', ''],
-      './fs/node': './fs/browser'
-    }),
+    replace(replaceFS),
+    replace(replaceStream),
     typescript({
       tsconfigOverride: {
         include: [ 'src' ],
