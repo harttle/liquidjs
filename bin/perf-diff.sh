@@ -13,4 +13,4 @@ if [ ! -f $FILE_LOCAL ]; then
     BUNDLES=cjs npm run build:dist
 fi
 
-node benchmark/diff.js $FILE_LOCAL $FILE_LATEST
+exec node benchmark/diff.js $FILE_LOCAL $FILE_LATEST

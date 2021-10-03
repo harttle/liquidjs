@@ -45,3 +45,6 @@ const diff = (localResult.perf - latestResult.perf) / latestResult.perf
 console.log(`Local: ${localResult.perf.toFixed(3)} ops/s (${localResult.cycles} cycles)`)
 console.log(`Latest: ${latestResult.perf.toFixed(3)} ops/s (${latestResult.cycles} cycles)`)
 console.log(`Diff: ${(diff * 100).toFixed(3)}%`)
+
+const THRESHOLD_PERCENT = -3
+process.exit(diff * 100 < THRESHOLD_PERCENT ? 1 : 0)
