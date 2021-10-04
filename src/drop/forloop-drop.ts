@@ -2,10 +2,12 @@ import { Drop } from './drop'
 
 export class ForloopDrop extends Drop {
   protected i = 0
+  public name: string
   public length: number
-  public constructor (length: number) {
+  public constructor (length: number, collection: string, variable: string) {
     super()
     this.length = length
+    this.name = `${variable}-${collection}`
   }
   public next () {
     this.i++

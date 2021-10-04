@@ -7,12 +7,13 @@ export default {
   parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
     const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operatorsTrie)
 
-    this.variable = tokenizer.readIdentifier()
+    const variable = tokenizer.readIdentifier()
     tokenizer.skipBlank()
 
     const tmp = tokenizer.readIdentifier()
     assert(tmp && tmp.content === 'in', () => `illegal tag: ${tagToken.getText()}`)
 
+    this.variable = variable.content
     this.collection = tokenizer.readValue()
     this.hash = new Hash(tokenizer.remaining())
     this.templates = []
@@ -39,12 +40,12 @@ export default {
     const cols = hash.cols || collection.length
 
     const r = this.liquid.renderer
-    const tablerowloop = new TablerowloopDrop(collection.length, cols)
+    const tablerowloop = new TablerowloopDrop(collection.length, cols, this.collection.getText(), this.variable)
     const scope = { tablerowloop }
     ctx.push(scope)
 
     for (let idx = 0; idx < collection.length; idx++, tablerowloop.next()) {
-      scope[this.variable.content] = collection[idx]
+      scope[this.variable] = collection[idx]
       if (tablerowloop.col0() === 0) {
         if (tablerowloop.row() !== 1) emitter.write('</tr>')
         emitter.write(`<tr class="row${tablerowloop.row()}">`)

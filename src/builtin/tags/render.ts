@@ -62,7 +62,7 @@ export default {
       const { value, alias } = this['for']
       let collection = evalToken(value, ctx)
       collection = toEnumerable(collection)
-      scope['forloop'] = new ForloopDrop(collection.length)
+      scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias)
       for (const item of collection) {
         scope[alias] = item
         const templates = yield liquid._parsePartialFile(filepath, childCtx.sync)
