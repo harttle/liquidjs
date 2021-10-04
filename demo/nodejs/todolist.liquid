@@ -2,6 +2,6 @@
 {%header content: title | capitalize%}
 <ul>
   {% for todo in todos %}
-  <li>{{forloop.index}} - {{todo}}</li>
+    {% render 'todo.liquid' with todo, index: forloop.index%}
   {% endfor %}
 </ul>

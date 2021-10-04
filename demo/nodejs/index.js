@@ -1,9 +1,14 @@
 const { Liquid } = require('liquidjs')
 
 const engine = new Liquid({
-  root: __dirname,
   extname: '.liquid',
-  globals: { title: 'LiquidJS Demo' }
+  globals: { title: 'LiquidJS Demo' },
+  // root files for `.render()` and `.parse()`
+  root: __dirname,
+  // layout files for `{% layout %}`
+  layouts: './layouts',
+  // partial files for `{% include %}` and `{% render %}`
+  partials: './partials'
 })
 
 engine.registerTag('header', {

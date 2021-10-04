@@ -7,6 +7,6 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "liquidjs": "latest"
+    "liquidjs": "^9.27.0"
   }
 }

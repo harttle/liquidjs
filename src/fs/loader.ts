@@ -20,16 +20,16 @@ export class Loader {
   }
 
   public * lookup (file: string, type: LookupType, sync?: boolean) {
-    const { fs, root } = this.options
-    for (const filepath of this.candidates(file, type)) {
+    const { fs } = this.options
+    const dirs = this.options[type]
+    for (const filepath of this.candidates(file, dirs)) {
       if (sync ? fs.existsSync(filepath) : yield fs.exists(filepath)) return filepath
     }
-    throw this.lookupError(file, root)
+    throw this.lookupError(file, dirs)
   }
 
-  private * candidates (file: string, type: LookupType) {
+  private * candidates (file: string, dirs: string[]) {
     const { fs, extname } = this.options
-    const dirs = this.options[type]
     for (const dir of dirs) {
       yield fs.resolve(dir, file, extname)
     }
