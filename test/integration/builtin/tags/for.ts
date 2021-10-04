@@ -45,7 +45,22 @@ describe('tags/for', function () {
   it('should output forloop', async function () {
     const src = '{%for i in (1..1)%}{{forloop}}{%endfor%}'
     const html = await liquid.parseAndRender(src, scope)
-    return expect(html).to.equal('{"i":0,"length":1}')
+    return expect(html).to.equal('{"i":0,"length":1,"name":"i-(1..1)"}')
+  })
+  it('should output forloop collection name', async function () {
+    const src = '{%for c in alpha%}{{forloop.name}}-{{c}}{%endfor%}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).to.equal('c-alpha-ac-alpha-bc-alpha-c')
+  })
+  it('should output forloop property accessor name', async function () {
+    const src = '{%for c in obj.foo%}{{forloop.name}}-{{c}}{%endfor%}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).to.equal('c-obj.foo-bar')
+  })
+  it('should output forloop quoted name', async function () {
+    const src = '{%for str in "string"%}{{forloop.name}}-{{str}}{%endfor%}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).to.equal('str-"string"-string')
   })
   describe('illegal', function () {
     it('should reject when for not closed', function () {

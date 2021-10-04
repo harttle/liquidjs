@@ -2,8 +2,8 @@ import { ForloopDrop } from './forloop-drop'
 
 export class TablerowloopDrop extends ForloopDrop {
   private cols: number
-  public constructor (length: number, cols: number) {
-    super(length)
+  public constructor (length: number, cols: number, collection: string, variable: string) {
+    super(length, collection, variable)
     this.length = length
     this.cols = cols
   }

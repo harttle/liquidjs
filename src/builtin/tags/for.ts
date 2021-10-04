@@ -58,7 +58,7 @@ export default {
       return reversed(collection)
     }, collection)
 
-    const scope = { forloop: new ForloopDrop(collection.length) }
+    const scope = { forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) }
     ctx.push(scope)
     for (const item of collection) {
       scope[this.variable] = item
