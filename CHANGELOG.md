@@ -1,3 +1,10 @@
+## [9.27.1](https://github.com/harttle/liquidjs/compare/v9.27.0...v9.27.1) (2021-10-04)
+
+
+### Bug Fixes
+
+* directory info in lookupError message, [#395](https://github.com/harttle/liquidjs/issues/395) ([92bfc65](https://github.com/harttle/liquidjs/commit/92bfc65e0b1d937c00a8368b272223c702132d23))
+
 # [9.27.0](https://github.com/harttle/liquidjs/compare/v9.26.0...v9.27.0) (2021-10-03)
 
 
