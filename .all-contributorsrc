@@ -414,6 +414,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bglw",
+      "name": "Liam Bigelow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40188355?v=4",
+      "profile": "https://github.com/bglw",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
