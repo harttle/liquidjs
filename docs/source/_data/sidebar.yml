@@ -28,6 +28,7 @@ filters:
   capitalize: capitalize.html
   ceil: ceil.html
   compact: compact.html
+  concat: concat.html
   date: date.html
   default: default.html
   divided_by: divided_by.html
@@ -65,7 +66,6 @@ filters:
   truncate: truncate.html
   truncatewords: truncatewords.html
   uniq: uniq.html
-  concat: concat.html
   upcase: upcase.html
   url_decode: url_decode.html
   url_encode: url_encode.html
