@@ -19,5 +19,5 @@ hexo.extend.tag.register('note', (args, text) => {
 }, true)
 
 hexo.extend.tag.register('since', (args, text) => {
-  return `<p class="since">Added in: ${text.trim()}</p>`
+  return `<p class="since">${text.trim()}</p>`
 }, true)

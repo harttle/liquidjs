@@ -75,7 +75,7 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 
 **timezoneOffset** is used to specify a different timezone to output dates, your local timezone will be used if not specified. For example, set `timezoneOffset: 0` to output all dates in UTC/GMT 00:00.
 
-**preserveTimezones** is a boolean effects only literal timestamps. When set to `true`, all literal timestamps will remain the same when output. This is a parser option, so Date objects passed to LiquidJS as data will not be affected.
+**preserveTimezones** is a boolean effects only literal timestamps. When set to `true`, all literal timestamps will remain the same when output. This is a parser option, so Date objects passed to LiquidJS as data will not be affected. Note that `preserveTimezones` has a higher priority than `timezoneOffset`.
 
 ## Trimming
 

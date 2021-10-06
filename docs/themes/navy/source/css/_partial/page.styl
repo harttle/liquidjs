@@ -196,6 +196,8 @@ note-warn = hsl(0, 100%, 50%)
   .since
     margin-top: 0;
     font-style: italic;
+  .since::before
+    content: "Added in: "
   .note-title
     margin: 1em 0 0.5em
     display: block
@@ -250,3 +252,6 @@ $article-footer-link
 
 .article-footer-updated
   font-size: 0.9em
+
+[lang="zh-cn"] .since::before
+  content: "支持版本："

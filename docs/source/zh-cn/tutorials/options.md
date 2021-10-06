@@ -73,7 +73,7 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 
 **timezoneOffset** 用来指定一个和你当地时区不同的时区，所有日期和时间输出时都转换到这个指定的时区。例如设置 `timezoneOffset: 0` 将会把所有日期按照 UTC/GMT 00:00 来输出。
 
-**preserveTimezones** 是一个布尔值，只影响时间戳字面量。当设置为 `true` 时，所有字面量的时间戳字符串会在输出时保持原状，即不论输入时采取怎样的时区，输出时仍然采用那一时区（和 Shopify Liquid 的行为一致）。注意这是一个解析器参数，渲染时传入的数据中的日期的输出不会受此参数影响。
+**preserveTimezones** 是一个布尔值，只影响时间戳字面量。当设置为 `true` 时，所有字面量的时间戳字符串会在输出时保持原状，即不论输入时采取怎样的时区，输出时仍然采用那一时区（和 Shopify Liquid 的行为一致）。注意这是一个解析器参数，渲染时传入的数据中的日期的输出不会受此参数影响。注意 `preserveTimezones` 比 `timezoneOffset` 的优先级更高。
 
 
 ## 换行和缩进

@@ -65,6 +65,7 @@ filters:
   truncate: truncate.html
   truncatewords: truncatewords.html
   uniq: uniq.html
+  concat: concat.html
   upcase: upcase.html
   url_decode: url_decode.html
   url_encode: url_encode.html

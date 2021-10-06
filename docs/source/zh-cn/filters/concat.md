@@ -2,7 +2,9 @@
 title: concat
 ---
 
-Concatenates (joins together) multiple arrays. The resulting array contains all the items from the input arrays.
+{% since %}v2.0.0{% endsince %}
+
+连接多个数组，返回的数组包含所有传入数组的元素。
 
 输入
 ```liquid
@@ -26,7 +28,7 @@ Concatenates (joins together) multiple arrays. The resulting array contains all 
 - potatoes
 ```
 
-You can string together `concat` filters to join more than two arrays:
+可以链式地使用 `concat` 过滤器来连接多个数组：
 
 输入
 ```liquid
