@@ -8,11 +8,11 @@ export function render (src: string, ctx?: object) {
   return liquid.parseAndRender(src, ctx)
 }
 
-export async function test (src: string, ctx: object | string, dst?: string, opts?: LiquidOptions) {
-  if (dst === undefined) {
-    dst = ctx as string
+export async function test (src: string, ctx: object | string, expected?: string, opts?: LiquidOptions) {
+  if (expected === undefined) {
+    expected = ctx as string
     ctx = {}
   }
   const engine = opts ? new Liquid(opts) : liquid
-  return expect(await engine.parseAndRender(src, ctx as object)).to.equal(dst)
+  return expect(await engine.parseAndRender(src, ctx as object)).to.equal(expected)
 }

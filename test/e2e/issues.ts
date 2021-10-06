@@ -108,4 +108,10 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(tpl)
     expect(html).to.equal('\r\ntrue\r\n')
   })
+  it('#401 Timezone Offset Issue', async () => {
+    const engine = new Liquid({ timezoneOffset: -600 })
+    const tpl = engine.parse('{{ date | date: "%Y-%m-%d %H:%M %p %z" }}')
+    const html = await engine.render(tpl, { date: '2021-10-06T15:31:00+08:00' })
+    expect(html).to.equal('2021-10-06 17:31 PM +1000')
+  })
 })

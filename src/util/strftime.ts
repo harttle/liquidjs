@@ -1,7 +1,5 @@
 import { changeCase, padStart, padEnd } from './underscore'
 
-export const timezoneOffset = new Date().getTimezoneOffset()
-const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 const monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -127,10 +125,10 @@ const formatCodes = {
   y: (d: Date) => d.getFullYear().toString().substring(2, 4),
   Y: (d: Date) => d.getFullYear(),
   z: (d: Date, opts: FormatOptions) => {
-    const nOffset = Math.abs(timezoneOffset)
+    const nOffset = Math.abs(d.getTimezoneOffset())
     const h = Math.floor(nOffset / 60)
     const m = nOffset % 60
-    return (timezoneOffset > 0 ? '-' : '+') +
+    return (d.getTimezoneOffset() > 0 ? '-' : '+') +
       padStart(h, 2, '0') +
       (opts.flags[':'] ? ':' : '') +
       padStart(m, 2, '0')
@@ -168,32 +166,4 @@ function format (d: Date, match: RegExpExecArray) {
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
   return padStart(ret, padWidth, padChar)
-}
-
-/**
- * Create a Date object fixed to it's declared Timezone. Both
- * - 2021-08-06T02:29:00.000Z and
- * - 2021-08-06T02:29:00.000+08:00
- * will always be displayed as
- * - 2021-08-06 02:29:00
- * regardless timezoneOffset in JavaScript realm
- *
- * The implementation hack:
- * Instead of calling `.getMonth()`/`.getUTCMonth()` respect to `preserveTimezones`,
- * we create a different Date to trick strftime, it's both simpler and more performant.
- * Given that a template is expected to be parsed fewer times than rendered.
- */
-export function createDateFixedToTimezone (dateString: string) {
-  const m = dateString.match(ISO8601_TIMEZONE_PATTERN)
-  // representing a UTC datetime
-  if (m && m[1] === 'Z') {
-    return new Date(+new Date(dateString) + timezoneOffset * 60000)
-  }
-  // has a timezone specified
-  if (m && m[2] && m[3] && m[4]) {
-    const [, , sign, hours, minutes] = m
-    const delta = (sign === '+' ? 1 : -1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
-    return new Date(+new Date(dateString) + (timezoneOffset + delta) * 60000)
-  }
-  return new Date(dateString)
 }

@@ -54,4 +54,30 @@ describe('filters/date', function () {
       '2017-02-28T12:00:00'
     )
   })
+  describe('timezoneOffset', function () {
+    // -06:00
+    const opts: LiquidOptions = { timezoneOffset: 360 }
+
+    it('should offset UTC date literal', function () {
+      return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T17:00:00', undefined, opts)
+    })
+    it('should offset date literal with timezone 00:00 specified', function () {
+      return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T17:00:00', undefined, opts)
+    })
+    it('should offset date literal with timezone -01:00 specified', function () {
+      return test('{{ "1990-12-31T23:00:00-01:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T18:00:00', undefined, opts)
+    })
+    it('should offset date from scope', function () {
+      const scope = { date: new Date('1990-12-31T23:00:00Z') }
+      return test('{{ date | date: "%Y-%m-%dT%H:%M:%S"}}', scope, '1990-12-31T17:00:00', opts)
+    })
+    it('should reflect timezoneOffset', function () {
+      const scope = { date: new Date('1990-12-31T23:00:00Z') }
+      return test('{{ date | date: "%z"}}', scope, '-0600', opts)
+    })
+    it('should ignore this setting when `preserveTimezones` also specified', function () {
+      const opts: LiquidOptions = { timezoneOffset: 600, preserveTimezones: true }
+      return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
+    })
+  })
 })

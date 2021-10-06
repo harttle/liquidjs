@@ -6,7 +6,6 @@ import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
-import { timezoneOffset } from './util/strftime'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -123,7 +122,6 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   keepOutputType: false,
-  timezoneOffset: timezoneOffset,
   operators: defaultOperators,
   operatorsTrie: createTrie(defaultOperators)
 }
