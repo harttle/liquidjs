@@ -64,11 +64,11 @@ export class Liquid {
     return toValue(this._parseAndRender(html, scope, true))
   }
 
-  public _parsePartialFile (file: string, sync?: boolean) {
-    return this.parser.parseFile(file, sync, LookupType.Partials)
+  public _parsePartialFile (file: string, sync?: boolean, currentFile?: string) {
+    return this.parser.parseFile(file, sync, LookupType.Partials, currentFile)
   }
-  public _parseLayoutFile (file: string, sync?: boolean) {
-    return this.parser.parseFile(file, sync, LookupType.Layouts)
+  public _parseLayoutFile (file: string, sync?: boolean, currentFile?: string) {
+    return this.parser.parseFile(file, sync, LookupType.Layouts, currentFile)
   }
   public async parseFile (file: string): Promise<Template[]> {
     return toPromise(this.parser.parseFile(file, false))

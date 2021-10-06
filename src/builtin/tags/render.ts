@@ -11,7 +11,7 @@ export default {
     const args = token.args
     const tokenizer = new Tokenizer(args, this.liquid.options.operatorsTrie)
     this['file'] = this.parseFilePath(tokenizer, this.liquid)
-
+    this['currentFile'] = token.file
     while (!tokenizer.end()) {
       tokenizer.skipBlank()
       const begin = tokenizer.p
@@ -65,12 +65,12 @@ export default {
       scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias)
       for (const item of collection) {
         scope[alias] = item
-        const templates = yield liquid._parsePartialFile(filepath, childCtx.sync)
+        const templates = yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
         scope.forloop.next()
       }
     } else {
-      const templates = yield liquid._parsePartialFile(filepath, childCtx.sync)
+      const templates = yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
     }
   }

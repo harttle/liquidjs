@@ -23,7 +23,19 @@ It's default to `false`. When setting to `true` a default LRU cache of size 1024
 
 Additionally, it can also be a custom cache implementation. See [Caching][caching] for details.
 
+## Partials/Layouts
+
+**root** is used to specify template directories for LiquidJS to lookup and read template files. Can be a single string and an array of strings. See [Render Files][render-file] for details.
+
+**layouts** is used to specify template directories for LiquidJS to lookup files for `{% layout %}`. Same format as `root` and will default to `root` if not specified.
+
+**partials** is used to specify template directories for LiquidJS to lookup files for `{% render %}` and `{% include %}`. Same format as `root` and will default to `root` if not specified.
+
+**relativeReference** is set to `true` by default to allow relative filenames. Note that relatively referenced files are also need to be within corresponding root. For example you can reference another file like `{% render ../foo/bar %}` as long as `../foo/bar` is also within `partials` directory.
+
 ## dynamicPartials
+
+> Note: for historical reasons, it's named dynamicPartials but it also works for layouts.
 
 **dynamicPartials** indicates whether or not to treat filename arguments in [include][include], [render][render], [layout][layout] tags as a variable. Defaults to `true`. For example, render the following snippet with scope `{ file: 'foo.html' }` will include the `foo.html`:
 
@@ -52,10 +64,6 @@ LiquidJS defaults this option to <code>true</code> to be compatible with shopify
 {% note info Legacy Versions %}
 Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change that you need to set <code>extname: ''</code> explicitly. See <a href="https://github.com/harttle/liquidjs/issues/41" target="_blank">#41</a> for details.
 {% endnote %}
-
-## root
-
-**root** is used to specify template directories for LiquidJS to lookup and read template files. Can be a single string and an array of strings. See [Render Files][render-file] for details.
 
 ## fs
 

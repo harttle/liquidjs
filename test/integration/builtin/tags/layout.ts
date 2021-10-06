@@ -179,6 +179,16 @@ describe('tags/layout', function () {
     return expect(html).to.equal('blackredA')
   })
 
+  it('should support relative reference', async function () {
+    mock({
+      '/foo/bar/parent.html': '{{color}}{%block%}{%endblock%}',
+      '/foo/bar/main.html': '{% layout ./parent.html color:"black"%}{%block%}A{%endblock%}'
+    })
+    const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
+    const html = await staticLiquid.renderFile('/foo/bar/main.html')
+    return expect(html).to.equal('blackA')
+  })
+
   describe('static partial', function () {
     it('should support filename with extension', async function () {
       mock({

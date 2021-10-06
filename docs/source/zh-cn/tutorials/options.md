@@ -15,13 +15,25 @@ const engine = new Liquid({
 下面的所有选项的概述，希望了解具体的类型和签名，请前往 <a href="https://liquidjs.com/api/interfaces/liquid_options_.liquidoptions.html" target="_self">LiquidOptions | API</a>.
 {% endnote %}
 
-## cache
+## 缓存
 
 **cache** 用来指定是否缓存曾经读取和处理过的模板来提升性能。在生产环境模板会重复渲染的情况会很有用。
 
 默认是 `false`，当设置为 `true` 时会启用一个大小为 1024 的 LRU 缓存。当然也可以传一个数字来指定缓存大小。此外还可以是一个自定义的缓存实现，LiquidJS 会通过它来查找和读写文件。详情请参考 [Caching][caching]。
 
-## dynamicPartials
+## 布局和片段
+
+**root** 用来指定 LiquidJS 查找和读取模板的根目录。可以是单个字符串，也可以是一个数组 LiquidJS 会顺序查找。详情请参考 [Render Files][render-file]。
+
+**layouts** 和 `root` 具有一样的格式，用来指定 `{% layout %}` 所使用的目录。没有指定时默认为 `root`。
+
+**partials** 和 `root` 具有一样的格式，用来指定 `{% render %}` 和 `{% include %}` 所使用的目录。没有指定时默认为 `root`。
+
+**relativeReference** 默认为 `true` 用来允许以相对路径引用其他文件。注意被引用的文件仍然需要在对应的 root 目录下。例如可以这样引用一个文件 `{% render ../foo/bar %}`，但需要确保 `../foo/bar` 处于 `partials` 目录下。
+
+## 动态引用
+
+> 注意由于历史原因这个选项叫做 dynamicPartials，但它对 layout 也起作用。
 
 **dynamicPartials** 表示是否把传给 [include][include], [render][render], [layout][layout] 标签的文件名当做变量处理。默认为 `true`。例如用上下文 `{ file: 'foo.html' }` 渲染下面的模板将会引入文件 `foo.html`：
 
@@ -50,10 +62,6 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 {% note info 旧版行为 %}
 在 2.0.1 之前，<code>extname</code> 默认值为 `.liquid`。要禁用它需要明确设置为 <code>extname: ''</code>。详情参考 <a href="https://github.com/harttle/liquidjs/issues/41" target="_blank">#41</a>。
 {% endnote %}
-
-## root
-
-**root** 用来指定 LiquidJS 查找和读取模板的根目录。可以是单个字符串，也可以是一个数组 LiquidJS 会顺序查找。详情请参考 [Render Files][render-file]。
 
 ## fs
 

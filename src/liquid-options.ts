@@ -14,6 +14,8 @@ export interface LiquidOptions {
   partials?: string | string[];
   /** A directory or an array of directories from where to resolve layout templates. If it's an array, the files are looked up in the order they occur in the array. Defaults to `root` */
   layouts?: string | string[];
+  /** Allow refer to layouts/partials by relative pathname. To avoid arbitrary filesystem read, paths been referenced also need to be within corresponding root, partials, layouts. Defaults to `true`. */
+  relativeReference?: boolean;
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
@@ -74,6 +76,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   root: string[];
   partials: string[];
   layouts: string[];
+  relativeReference: boolean;
   extname: string;
   cache: undefined | Cache<Template[]>;
   jsTruthy: boolean;
@@ -102,6 +105,7 @@ export const defaultOptions: NormalizedFullOptions = {
   root: ['.'],
   layouts: ['.'],
   partials: ['.'],
+  relativeReference: true,
   cache: undefined,
   extname: '',
   fs: fs,

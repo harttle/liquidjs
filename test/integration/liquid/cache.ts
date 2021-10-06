@@ -174,5 +174,23 @@ describe('LiquidOptions#cache', function () {
       const y = await engine.renderFile('foo')
       expect(y).to.equal('foo')
     })
+    it('should cache relative referenced files properly', async function () {
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: true
+      })
+      mock({
+        '/root/foo.html': '{% render "./bar" %}',
+        '/root/bar.html': 'bar1',
+        '/root/another/foo.html': '{% render "./bar" %}',
+        '/root/another/bar.html': 'bar2'
+      })
+      const foo1 = await engine.renderFile('foo')
+      expect(foo1).to.equal('bar1')
+
+      const foo2 = await engine.renderFile('another/foo')
+      expect(foo2).to.equal('bar2')
+    })
   })
 })

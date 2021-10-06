@@ -13,7 +13,7 @@ import { Loader, LookupType } from '../fs/loader'
 import { FS } from '../fs/fs'
 
 export default class Parser {
-  public parseFile: (file: string, sync?: boolean, type?: LookupType) => Iterator<Template[]>
+  public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Iterator<Template[]>
 
   private liquid: Liquid
   private fs: FS
@@ -56,17 +56,19 @@ export default class Parser {
   public parseStream (tokens: TopLevelToken[]) {
     return new ParseStream(tokens, (token, tokens) => this.parseToken(token, tokens))
   }
-  private * _parseFileCached (file: string, sync?: boolean, type: LookupType = LookupType.Root) {
-    const key = type + ':' + file
+  private * _parseFileCached (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string) {
+    const key = this.loader.shouldLoadRelative(file)
+      ? currentFile + ',' + file
+      : type + ':' + file
     let templates = yield this.cache!.read(key)
     if (templates) return templates
 
-    templates = yield this._parseFile(file, sync)
+    templates = yield this._parseFile(file, sync, type, currentFile)
     this.cache!.write(key, templates)
     return templates
   }
-  private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root) {
-    const filepath = yield this.loader.lookup(file, type, sync)
+  private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string) {
+    const filepath = yield this.loader.lookup(file, type, sync, currentFile)
     return this.liquid.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
   }
 }

@@ -19,6 +19,14 @@ describe('tags/include', function () {
     const html = await liquid.renderFile('/current.html')
     return expect(html).to.equal('barfoobar')
   })
+  it('should support relative reference', async function () {
+    mock({
+      '/foo/bar/current.html': 'bar{% include "../coo/foo.html" %}bar',
+      '/foo/coo/foo.html': 'foo'
+    })
+    const html = await liquid.renderFile('/foo/bar/current.html')
+    return expect(html).to.equal('barfoobar')
+  })
   it('should support template string', async function () {
     mock({
       '/current.html': 'bar{% include "bar/{{name}}" %}bar',

@@ -5,7 +5,7 @@ import * as chaiAsPromised from 'chai-as-promised'
 
 use(chaiAsPromised)
 
-describe('fs', function () {
+describe('fs/node', function () {
   describe('.resolve()', function () {
     it('should resolve based on root', async function () {
       const filepath = fs.resolve('/foo', 'bar.html', '.liquid')

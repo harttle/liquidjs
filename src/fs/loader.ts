@@ -6,6 +6,7 @@ interface LoaderOptions {
   root: string[];
   partials: string[];
   layouts: string[];
+  relativeReference: boolean;
 }
 export enum LookupType {
   Partials = 'partials',
@@ -19,24 +20,51 @@ export class Loader {
     this.options = options
   }
 
-  public * lookup (file: string, type: LookupType, sync?: boolean) {
+  public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string) {
     const { fs } = this.options
     const dirs = this.options[type]
-    for (const filepath of this.candidates(file, dirs)) {
+    for (const filepath of this.candidates(file, dirs, currentFile)) {
       if (sync ? fs.existsSync(filepath) : yield fs.exists(filepath)) return filepath
     }
     throw this.lookupError(file, dirs)
   }
 
-  private * candidates (file: string, dirs: string[]) {
+  public shouldLoadRelative (currentFile: string) {
+    return this.options.relativeReference && this.isRelativePath(currentFile)
+  }
+
+  public isRelativePath (path: string) {
+    return path.startsWith('./') || path.startsWith('../')
+  }
+
+  public * candidates (file: string, dirs: string[], currentFile?: string) {
     const { fs, extname } = this.options
+    if (this.shouldLoadRelative(file) && currentFile) {
+      const referenced = fs.resolve(this.dirname(currentFile), file, extname)
+      for (const dir of dirs) {
+        if (referenced.startsWith(dir)) {
+          // the relatively referenced file is within one of root dirs
+          yield referenced
+          return
+        }
+      }
+    }
     for (const dir of dirs) {
-      yield fs.resolve(dir, file, extname)
+      const referenced = fs.resolve(dir, file, extname)
+      if (referenced.startsWith(dir)) {
+        yield referenced
+      }
     }
     if (fs.fallback !== undefined) {
       const filepath = fs.fallback(file)
       if (filepath !== undefined) yield filepath
     }
+  }
+
+  private dirname (path: string) {
+    const segments = path.split('/')
+    segments.pop()
+    return segments.join('/')
   }
 
   private lookupError (file: string, roots: string[]) {

@@ -26,7 +26,7 @@ describe('tags/render', function () {
       '/current.html': 'bar{% render "foo.html" %}bar',
       '/partials/foo.html': 'foo'
     })
-    const liquid = new Liquid({ partials: '/partials' })
+    const liquid = new Liquid({ partials: '/partials', root: '/' })
     const html = await liquid.renderFile('/current.html')
     expect(html).to.equal('barfoobar')
   })
@@ -222,6 +222,31 @@ describe('tags/render', function () {
     }
     const html = await liquid.renderFile('personInfo.html', ctx)
     expect(html).to.equal('This is a person <p>Joe Shmoe<br/>City: Dallas</p>')
+  })
+  it('should support relative reference', async function () {
+    mock({
+      '/foo/coo/parent.html': 'X{% render ../bar/child.html, color:"red" %}Y',
+      '/foo/bar/child.html': 'child with {{color}}'
+    })
+    const staticLiquid = new Liquid({ dynamicPartials: false, root: '/foo' })
+    const html = await staticLiquid.renderFile('coo/parent.html')
+    expect(html).to.equal('Xchild with redY')
+  })
+  it('should disable relative reference if specified', () => {
+    mock({
+      '/foo/coo/parent.html': 'X{% render ../bar/child.html, color:"red" %}Y',
+      '/foo/bar/child.html': 'child with {{color}}'
+    })
+    const staticLiquid = new Liquid({ dynamicPartials: false, root: '/foo', relativeReference: false })
+    return expect(staticLiquid.renderFile('coo/parent.html')).to.be.rejectedWith(/Failed to lookup/)
+  })
+  it('should throw not found if relative reference out of root', () => {
+    mock({
+      '/foo/parent.html': 'X{% render ../bar/child.html, color:"red" %}Y',
+      '/bar/child.html': 'child with {{color}}'
+    })
+    const staticLiquid = new Liquid({ dynamicPartials: false, root: '/foo', partials: '/foo' })
+    return expect(staticLiquid.renderFile('parent.html')).to.be.rejectedWith(/Failed to lookup "..\/bar\/child.html"/)
   })
 
   describe('static partial', function () {

@@ -9,6 +9,7 @@ export default {
     const args = token.args
     const tokenizer = new Tokenizer(args, this.liquid.options.operatorsTrie)
     this['file'] = this.parseFilePath(tokenizer, this.liquid)
+    this['currentFile'] = token.file
 
     const begin = tokenizer.p
     const withStr = tokenizer.readIdentifier()
@@ -32,7 +33,7 @@ export default {
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const scope = yield hash.render(ctx)
     if (withVar) scope[filepath] = evalToken(withVar, ctx)
-    const templates = yield liquid._parsePartialFile(filepath, ctx.sync)
+    const templates = yield liquid._parsePartialFile(filepath, ctx.sync, this['currentFile'])
     ctx.push(scope)
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()

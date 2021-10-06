@@ -9,6 +9,7 @@ export default {
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
     const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
     this['file'] = this.parseFilePath(tokenizer, this.liquid)
+    this['currentFile'] = token.file
     this.hash = new Hash(tokenizer.remaining())
     this.tpls = this.liquid.parser.parseTokens(remainTokens)
   },
@@ -22,7 +23,7 @@ export default {
     }
     const filepath = yield this.renderFilePath(this['file'], ctx, liquid)
     assert(filepath, () => `illegal filename "${filepath}"`)
-    const templates = yield liquid._parseLayoutFile(filepath, ctx.sync)
+    const templates = yield liquid._parseLayoutFile(filepath, ctx.sync, this['currentFile'])
 
     // render remaining contents and store rendered results
     ctx.setRegister('blockMode', BlockMode.STORE)
