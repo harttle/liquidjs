@@ -250,7 +250,7 @@ describe('tags/render', function () {
   })
 
   describe('static partial', function () {
-    it('should support filename with extention', async function () {
+    it('should support filename with extension', async function () {
       mock({
         '/parent.html': 'X{% render child.html color:"red" %}Y',
         '/child.html': 'child with {{color}}'

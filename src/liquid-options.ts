@@ -133,13 +133,13 @@ export const defaultOptions: NormalizedFullOptions = {
 export function normalize (options?: LiquidOptions): NormalizedOptions {
   options = options || {}
   if (options.hasOwnProperty('root')) {
-    options.root = normalizeStringArray(options.root)
+    options.root = normalizeDirectoryList(options.root)
   }
   if (options.hasOwnProperty('partials')) {
-    options.partials = normalizeStringArray(options.partials)
+    options.partials = normalizeDirectoryList(options.partials)
   }
   if (options.hasOwnProperty('layouts')) {
-    options.layouts = normalizeStringArray(options.layouts)
+    options.layouts = normalizeDirectoryList(options.layouts)
   }
   if (options.hasOwnProperty('cache')) {
     let cache: Cache<Template[]> | undefined
@@ -165,8 +165,9 @@ export function applyDefault (options: NormalizedOptions): NormalizedFullOptions
   return fullOptions
 }
 
-export function normalizeStringArray (value: any): string[] {
-  if (_.isArray(value)) return value as string[]
-  if (_.isString(value)) return [value as string]
-  return []
+export function normalizeDirectoryList (value: any): string[] {
+  let list: string[] = []
+  if (_.isArray(value)) list = value
+  if (_.isString(value)) list = [value]
+  return list.map(str => fs.resolve(str, '.', '')).map(str => str[str.length - 1] !== '/' ? str + '/' : str)
 }

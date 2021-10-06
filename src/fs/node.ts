@@ -5,8 +5,13 @@ import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileS
 const statAsync = _.promisify(stat)
 const readFileAsync = _.promisify<string, string, string>(nodeReadFile)
 
-export function exists (filepath: string) {
-  return statAsync(filepath).then(() => true).catch(() => false)
+export async function exists (filepath: string) {
+  try {
+    await statAsync(filepath)
+    return true
+  } catch (err) {
+    return false
+  }
 }
 export function readFile (filepath: string) {
   return readFileAsync(filepath, 'utf8')

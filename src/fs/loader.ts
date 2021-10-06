@@ -23,7 +23,7 @@ export class Loader {
   public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string) {
     const { fs } = this.options
     const dirs = this.options[type]
-    for (const filepath of this.candidates(file, dirs, currentFile)) {
+    for (const filepath of this.candidates(file, dirs, currentFile, type !== LookupType.Root)) {
       if (sync ? fs.existsSync(filepath) : yield fs.exists(filepath)) return filepath
     }
     throw this.lookupError(file, dirs)
@@ -37,12 +37,12 @@ export class Loader {
     return path.startsWith('./') || path.startsWith('../')
   }
 
-  public * candidates (file: string, dirs: string[], currentFile?: string) {
+  public * candidates (file: string, dirs: string[], currentFile?: string, enforceRoot?: boolean) {
     const { fs, extname } = this.options
     if (this.shouldLoadRelative(file) && currentFile) {
       const referenced = fs.resolve(this.dirname(currentFile), file, extname)
       for (const dir of dirs) {
-        if (referenced.startsWith(dir)) {
+        if (!enforceRoot || referenced.startsWith(dir)) {
           // the relatively referenced file is within one of root dirs
           yield referenced
           return
@@ -51,7 +51,7 @@ export class Loader {
     }
     for (const dir of dirs) {
       const referenced = fs.resolve(dir, file, extname)
-      if (referenced.startsWith(dir)) {
+      if (!enforceRoot || referenced.startsWith(dir)) {
         yield referenced
       }
     }

@@ -10,7 +10,7 @@ import builtinTags from './builtin/tags'
 import * as builtinFilters from './builtin/filters'
 import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
-import { LiquidOptions, normalizeStringArray, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
+import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, applyDefault, normalize } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import { toPromise, toValue } from './util/async'
 
@@ -116,7 +116,7 @@ export class Liquid {
     return function (this: any, filePath: string, ctx: object, callback: (err: Error | null, rendered: string) => void) {
       if (firstCall) {
         firstCall = false
-        self.options.root.unshift(...normalizeStringArray(this.root))
+        self.options.root.unshift(...normalizeDirectoryList(this.root))
       }
       self.renderFile(filePath, ctx).then(html => callback(null, html) as any, callback as any)
     }
