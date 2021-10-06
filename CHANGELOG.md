@@ -1,3 +1,17 @@
+# [9.28.0](https://github.com/harttle/liquidjs/compare/v9.27.1...v9.28.0) (2021-10-06)
+
+
+### Bug Fixes
+
+* skip root check for renderFile() ([822ba0b](https://github.com/harttle/liquidjs/commit/822ba0be0f1cfbedd50376aff8ac49eee71bd48c))
+* support timezoneOffset for date from scope, [#401](https://github.com/harttle/liquidjs/issues/401) ([fd5ef47](https://github.com/harttle/liquidjs/commit/fd5ef474c36212e6a2446012dcd26bca93f84c7b))
+
+
+### Features
+
+* `relativeReference` for render/include/layout, [#395](https://github.com/harttle/liquidjs/issues/395) ([a3455eb](https://github.com/harttle/liquidjs/commit/a3455ebd0b207141c34630c0af44d917db2ca1dd))
+* implement `forloop.name` as found in ruby shopify/liquid ([6dc7fad](https://github.com/harttle/liquidjs/commit/6dc7fada72467418806c1ee4bd7eaf3003690fe6))
+
 ## [9.27.1](https://github.com/harttle/liquidjs/compare/v9.27.0...v9.27.1) (2021-10-04)
 
 
