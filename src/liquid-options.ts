@@ -55,7 +55,7 @@ export interface LiquidOptions {
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
   fs?: FS;
-  /** the global environment passed down to all partial templates, i.e. templates included by `include`, `layout` and `render` tags. */
+  /** the global scope passed down to all partial and layout templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
   /** Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to `false`. */
   keepOutputType?: boolean;

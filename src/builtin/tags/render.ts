@@ -1,3 +1,4 @@
+import { __assign } from 'tslib'
 import { assert } from '../../util/assert'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { toEnumerable } from '../../util/collection'
@@ -51,12 +52,12 @@ export default {
     assert(filepath, () => `illegal filename "${filepath}"`)
 
     const childCtx = new Context({}, ctx.opts, ctx.sync)
-    const scope = yield hash.render(ctx)
+    const scope = childCtx.bottom()
+    __assign(scope, yield hash.render(ctx))
     if (this['with']) {
       const { value, alias } = this['with']
       scope[alias || filepath] = evalToken(value, ctx)
     }
-    childCtx.push(scope)
 
     if (this['for']) {
       const { value, alias } = this['for']
@@ -67,7 +68,7 @@ export default {
         scope[alias] = item
         const templates = yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
-        scope.forloop.next()
+        scope['forloop'].next()
       }
     } else {
       const templates = yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])

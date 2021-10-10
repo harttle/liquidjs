@@ -441,6 +441,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "AleksandrHovhannisyan",
+      "name": "Aleksandr Hovhannisyan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19352442?v=4",
+      "profile": "https://www.aleksandrhovhannisyan.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

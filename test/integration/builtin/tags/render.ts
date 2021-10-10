@@ -86,6 +86,16 @@ describe('tags/render', function () {
     expect(html).to.equal('InParent: harttle InChild: ')
   })
 
+  it('should allow argument reassignment', async function () {
+    mock({
+      '/parent.html': '{% render child.html, color: "red" %}',
+      '/child.html': '{% assign color = "green" %}{{ color }}'
+    })
+    const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
+    const html = await staticLiquid.renderFile('parent.html')
+    return expect(html).to.equal('green')
+  })
+
   it('should be able to access globals', async function () {
     liquid = new Liquid({ root: '/', extname: '.html', globals: { name: 'Harttle' } })
     mock({

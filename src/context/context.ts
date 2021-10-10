@@ -6,9 +6,21 @@ import { isArray, isNil, isString, isFunction, toLiquid } from '../util/undersco
 import { InternalUndefinedVariableError } from '../util/error'
 
 export class Context {
+  /**
+   * insert a Context-level empty scope,
+   * for tags like {% capture %} {% assign %} to operate
+   */
   private scopes: Scope[] = [{}]
   private registers = {}
+  /**
+   * user passed in scope
+   * {% increment %}, {% decrement %} changes this scope,
+   * whereas {% capture %}, {% assign %} only hide this scope
+   */
   public environments: Scope
+  /**
+   * global scope used as fallback for missing variables
+   */
   public globals: Scope
   public sync: boolean
   public opts: NormalizedFullOptions

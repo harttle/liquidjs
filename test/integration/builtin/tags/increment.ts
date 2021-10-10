@@ -39,7 +39,7 @@ describe('tags/increment', function () {
     return expect(html).to.equal('012 10')
   })
 
-  it('should not shading capture', async function () {
+  it('should not hide capture', async function () {
     const src = '{% capture var %}10{% endcapture %}{% increment var %}{% increment var %}{% increment var %} {{var}}'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('012 10')

@@ -19,7 +19,7 @@ describe('tags/capture', function () {
     return expect(html).to.equal('A')
   })
 
-  it('should shading rather than overwriting', async function () {
+  it('should not change root scope', async function () {
     const src = '{% capture var %}10{% endcapture %}{{var}}'
     const ctx = { 'var': 20 }
     const html = await liquid.parseAndRender(src, ctx)
