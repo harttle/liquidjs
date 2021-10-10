@@ -57,6 +57,11 @@ export class Context {
   public bottom () {
     return this.scopes[0]
   }
+  /** Returns the first scope that's considered to be a page-level scope, if one exists. Otherwise, defaults to `bottom`. */
+  public getFirstPageLevelScope () {
+    const firstPageLevelScope = this.scopes.find((scope: Scope) => scope.isPageLevel)
+    return firstPageLevelScope || this.bottom()
+  }
   private findScope (key: string) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]

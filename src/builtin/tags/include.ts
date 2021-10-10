@@ -34,7 +34,7 @@ export default {
     const scope = yield hash.render(ctx)
     if (withVar) scope[filepath] = evalToken(withVar, ctx)
     const templates = yield liquid._parsePartialFile(filepath, ctx.sync, this['currentFile'])
-    ctx.push(scope)
+    ctx.push({ ...scope, isPageLevel: true })
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.restoreRegister(saved)

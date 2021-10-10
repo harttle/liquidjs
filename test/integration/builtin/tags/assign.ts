@@ -69,6 +69,11 @@ describe('tags/assign', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('-6')
   })
+  it('should allow reassignment', async function () {
+    const src = '{% assign var = 1 %}{% assign var = 2 %}{{ var }}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('2')
+  })
   describe('scope', function () {
     it('should read from parent scope', async function () {
       const src = '{%for a in (1..2)%}{{num}}{%endfor%}'

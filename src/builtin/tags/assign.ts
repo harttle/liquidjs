@@ -10,6 +10,7 @@ export default {
     this.value = tokenizer.remaining()
   },
   render: function * (ctx: Context) {
-    ctx.bottom()[this.key] = yield this.liquid._evalValue(this.value, ctx)
+    const firstPageLevelScope = ctx.getFirstPageLevelScope()
+    firstPageLevelScope[this.key] = yield this.liquid._evalValue(this.value, ctx)
   }
 } as TagImplOptions

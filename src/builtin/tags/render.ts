@@ -56,7 +56,7 @@ export default {
       const { value, alias } = this['with']
       scope[alias || filepath] = evalToken(value, ctx)
     }
-    childCtx.push(scope)
+    childCtx.push({ ...scope, isPageLevel: true })
 
     if (this['for']) {
       const { value, alias } = this['for']

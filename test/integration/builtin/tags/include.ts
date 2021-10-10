@@ -194,6 +194,16 @@ describe('tags/include', function () {
       const html = await staticLiquid.renderFile('parent.html')
       return expect(html).to.equal('Xchild with redY')
     })
+
+    it('should allow argument reassignment', async function () {
+      mock({
+        '/parent.html': '{% include child.html, color: "red" %}',
+        '/child.html': '{% assign color = "green" %}{{ color }}'
+      })
+      const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
+      const html = await staticLiquid.renderFile('parent.html')
+      return expect(html).to.equal('green')
+    })
   })
   describe('sync support', function () {
     it('should support quoted string', function () {
