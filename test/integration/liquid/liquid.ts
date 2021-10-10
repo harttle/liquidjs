@@ -113,6 +113,30 @@ describe('Liquid', function () {
       expect(str).to.equal('foo')
     })
   })
+  describe('#parse', function () {
+    it('should resolve relative partials', function () {
+      const engine = new Liquid({
+        root: ['/'],
+        extname: '.html'
+      })
+      mock({
+        '/root/partial.html': 'foo'
+      })
+      const tpls = engine.parse('{% render "./partial.html" %}', '/root/index.html')
+      return expect(engine.renderSync(tpls)).to.equal('foo')
+    })
+    it('should resolve against pwd for relative filepath', function () {
+      const engine = new Liquid({
+        root: ['/'],
+        extname: '.html'
+      })
+      mock({
+        [`${process.cwd()}/partial.html`]: 'foo'
+      })
+      const tpls = engine.parse('{% render "./partial.html" %}', './index.html')
+      return expect(engine.renderSync(tpls)).to.equal('foo')
+    })
+  })
   describe('#parseFileSync', function () {
     it('should throw with lookup list when file not exist', function () {
       const engine = new Liquid({

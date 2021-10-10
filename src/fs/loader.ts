@@ -45,7 +45,7 @@ export class Loader {
         if (!enforceRoot || referenced.startsWith(dir)) {
           // the relatively referenced file is within one of root dirs
           yield referenced
-          return
+          break
         }
       }
     }

@@ -7,10 +7,10 @@ use(chaiAsPromised)
 
 describe('fs/loader', function () {
   describe('.candidates()', function () {
-    it('should break once found', async function () {
+    it('should resolve relatively', async function () {
       const loader = new Loader({ relativeReference: true, fs, extname: '' } as any)
       const candidates = [...loader.candidates('./foo/bar', ['/root', '/root/foo'], '/root/current', true)]
-      expect(candidates.join()).to.equal('/root/foo/bar')
+      expect(candidates).to.contain('/root/foo/bar')
     })
   })
 })
