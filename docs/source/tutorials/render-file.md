@@ -78,14 +78,14 @@ var engine = new Liquid({
         readFileSync (file) {
             return db.model('Template').findByIdSync(file).text
         },
-        await readFile (file) {
+        async readFile (file) {
             const template = await db.model('Template').findById(file)
             return template.text
         },
         existsSync () {
             return true
         },
-        await exists () {
+        exists () {
             return true
         },
         resolve(root, file, ext) {
