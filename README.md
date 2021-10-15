@@ -111,6 +111,8 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://n1ru4l.cloud/"><img src="https://avatars.githubusercontent.com/u/14338007?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Laurin Quast</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=n1ru4l" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/mattvague"><img src="https://avatars.githubusercontent.com/u/64985?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matt Vague</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=mattvague" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/bglw"><img src="https://avatars.githubusercontent.com/u/40188355?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Liam Bigelow</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=bglw" title="Code">💻</a></td>
+    <td align="center"><a href="https://about.me/jasonkurian"><img src="https://avatars.githubusercontent.com/u/2642545?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jason Kurian</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=JaKXz" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/dphm"><img src="https://avatars.githubusercontent.com/u/1707217?v=4?s=100" width="100px;" alt=""/><br /><sub><b>d pham (they/them)</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=dphm" title="Documentation">📖</a></td>
   </tr>
 </table>
 
