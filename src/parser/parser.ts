@@ -11,13 +11,14 @@ import { TopLevelToken } from '../tokens/toplevel-token'
 import { Cache } from '../cache/cache'
 import { Loader, LookupType } from '../fs/loader'
 import { FS } from '../fs/fs'
+import { toThenable, Thenable } from '../util/async'
 
 export default class Parser {
   public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Iterator<Template[]>
 
   private liquid: Liquid
   private fs: FS
-  private cache: Cache<Template[]> | undefined
+  private cache: Cache<Thenable<Template[]>> | undefined
   private loader: Loader
 
   public constructor (liquid: Liquid) {
@@ -60,14 +61,19 @@ export default class Parser {
     const key = this.loader.shouldLoadRelative(file)
       ? currentFile + ',' + file
       : type + ':' + file
-    let templates = yield this.cache!.read(key)
-    if (templates) return templates
+    const tpls = yield this.cache!.read(key)
+    if (tpls) return tpls
 
-    templates = yield this._parseFile(file, sync, type, currentFile)
-    this.cache!.write(key, templates)
-    return templates
+    const task = toThenable(this._parseFile(file, sync, type, currentFile))
+    this.cache!.write(key, task)
+    try {
+      return yield task
+    } catch (e) {
+      // remove cached task if failed
+      this.cache!.remove(key)
+    }
   }
-  private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string) {
+  private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): IterableIterator<any> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)
     return this.liquid.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
   }

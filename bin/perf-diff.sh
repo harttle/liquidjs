@@ -9,8 +9,8 @@ if [ ! -f $FILE_LATEST ]; then
     curl $URL_LATEST > $FILE_LATEST
 fi
 
-if [ ! -f $FILE_LOCAL ]; then
-    BUNDLES=cjs npm run build:dist
-fi
+# if [ ! -f $FILE_LOCAL ]; then
+BUNDLES=cjs npm run build:dist
+# fi
 
 exec node benchmark/diff.js $FILE_LOCAL $FILE_LATEST

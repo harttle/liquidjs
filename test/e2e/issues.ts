@@ -1,9 +1,12 @@
 import { Liquid } from '../../src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
+import * as sinon from 'sinon'
+import * as sinonChai from 'sinon-chai'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
 
 use(chaiAsPromised)
+use(sinonChai)
 
 describe('Issues', function () {
   it('#221 unicode blanks are not properly treated', async () => {
@@ -128,5 +131,26 @@ describe('Issues', function () {
     const tpl = engine.parse('{% include "foo.liquid" %}')
     const html = await engine.renderSync(tpl)
     expect(html).to.equal('/tmp/foo.liquid')
+  })
+  it('#416 Templates imported by {% render %} not cached for concurrent async render', async () => {
+    const readFile = sinon.spy(() => Promise.resolve('HELLO'))
+    const exists = sinon.spy(() => 'HELLO')
+    const engine = new Liquid({
+      cache: true,
+      extname: '.liquid',
+      root: '~',
+      fs: {
+        exists,
+        resolve: (root: string, file: string, ext: string) => root + '#' + file + ext,
+        sep: '#',
+        readFile
+      } as any
+    })
+
+    await Promise.all(Array(5).fill(0).map(
+      x => engine.parseAndRender("{% render 'template' %}")
+    ))
+    expect(exists).to.be.calledOnce
+    expect(readFile).to.be.calledOnce
   })
 })

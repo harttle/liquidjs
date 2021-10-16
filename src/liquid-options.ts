@@ -6,6 +6,7 @@ import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
+import { Thenable } from './util/async'
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -19,7 +20,7 @@ export interface LiquidOptions {
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
-  cache?: boolean | number | Cache<Template[]>;
+  cache?: boolean | number | Cache<Thenable<Template[]>>;
   /** Use Javascript Truthiness. Defaults to `false`. */
   jsTruthy?: boolean;
   /** If set, treat the `filepath` parameter in `{%include filepath %}` and `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`. */
@@ -68,7 +69,7 @@ interface NormalizedOptions extends LiquidOptions {
   root?: string[];
   partials?: string[];
   layouts?: string[];
-  cache?: Cache<Template[]>;
+  cache?: Cache<Thenable<Template[]>>;
   operatorsTrie?: Trie;
 }
 
@@ -78,7 +79,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   layouts: string[];
   relativeReference: boolean;
   extname: string;
-  cache: undefined | Cache<Template[]>;
+  cache: undefined | Cache<Thenable<Template[]>>;
   jsTruthy: boolean;
   dynamicPartials: boolean;
   fs: FS;
@@ -142,10 +143,10 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
     options.layouts = normalizeDirectoryList(options.layouts)
   }
   if (options.hasOwnProperty('cache')) {
-    let cache: Cache<Template[]> | undefined
+    let cache: Cache<Thenable<Template[]>> | undefined
     if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
     else if (typeof options.cache === 'object') cache = options.cache
-    else cache = options.cache ? new LRU<Template[]>(1024) : undefined
+    else cache = options.cache ? new LRU(1024) : undefined
     options.cache = cache
   }
   if (options.hasOwnProperty('operators')) {

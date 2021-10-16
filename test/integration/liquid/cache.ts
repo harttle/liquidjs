@@ -155,10 +155,7 @@ describe('LiquidOptions#cache', function () {
         cache: true
       })
       mock({ '/root/foo.html': 'foo' })
-      mock({ '/root/bar.html': 'bar' })
-
       expect(engine.renderFileSync('foo')).to.equal('foo')
-      expect(engine.renderFileSync('bar')).to.equal('bar')
       mock({ '/root/foo.html': 'bar' })
       expect(engine.renderFileSync('foo')).to.equal('foo')
     })
