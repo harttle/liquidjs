@@ -71,10 +71,10 @@ export class Liquid {
     return this.parser.parseFile(file, sync, LookupType.Layouts, currentFile)
   }
   public async parseFile (file: string): Promise<Template[]> {
-    return toPromise(this.parser.parseFile(file, false))
+    return toPromise<Template[]>(this.parser.parseFile(file, false))
   }
   public parseFileSync (file: string): Template[] {
-    return toValue(this.parser.parseFile(file, true))
+    return toValue<Template[]>(this.parser.parseFile(file, true))
   }
   public async renderFile (file: string, ctx?: object) {
     const templates = await this.parseFile(file)

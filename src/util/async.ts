@@ -37,7 +37,7 @@ function isAsyncIterator (val: any): val is IterableIterator<any> {
 type Task<T> = Thenable<T>
 
 // convert an async iterator to a thenable (Promise compatible)
-export function toThenable<T> (val: IterableIterator<T> | Thenable<T> | any): Thenable<T> {
+export function toThenable<T> (val: IterableIterator<any> | Thenable<T> | any): Thenable<T> {
   if (isThenable(val)) return val
   if (isAsyncIterator(val)) return reduce()
   return createResolvedThenable(val)
@@ -64,12 +64,12 @@ export function toThenable<T> (val: IterableIterator<T> | Thenable<T> | any): Th
   }
 }
 
-export function toPromise<T> (val: IterableIterator<T> | Thenable<T> | T): Promise<T> {
+export function toPromise<T> (val: IterableIterator<any> | Thenable<T> | T): Promise<T> {
   return Promise.resolve(toThenable(val))
 }
 
 // get the value of async iterator in synchronous manner
-export function toValue<T> (val: IterableIterator<T> | Thenable<T> | T): T {
+export function toValue<T> (val: IterableIterator<any> | Thenable<T> | T): T {
   let ret: T
   toThenable(val)
     .then((x: any) => {

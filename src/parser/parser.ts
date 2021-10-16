@@ -14,7 +14,7 @@ import { FS } from '../fs/fs'
 import { toThenable, Thenable } from '../util/async'
 
 export default class Parser {
-  public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Iterator<Template[]>
+  public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => IterableIterator<any>
 
   private liquid: Liquid
   private fs: FS
