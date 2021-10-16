@@ -35,10 +35,14 @@ export class Loader {
     throw this.lookupError(file, dirs)
   }
 
+  public shouldLoadRelative (referencedFile: string) {
+    return this.options.relativeReference && this.rRelativePath.test(referencedFile)
+  }
+
   public * candidates (file: string, dirs: string[], currentFile?: string, enforceRoot?: boolean) {
     const { fs, extname } = this.options
     if (this.shouldLoadRelative(file) && currentFile) {
-      const referenced = fs.resolve(this.dirname(currentFile), file, extname, this.options)
+      const referenced = fs.resolve(this.dirname(currentFile), file, extname)
       for (const dir of dirs) {
         if (!enforceRoot || this.withinDir(referenced, dir)) {
           // the relatively referenced file is within one of root dirs
@@ -62,10 +66,6 @@ export class Loader {
   private withinDir (file: string, dir: string) {
     dir = dir.endsWith(this.sep) ? dir : dir + this.sep
     return file.startsWith(dir)
-  }
-
-  private shouldLoadRelative (referencedFile: string) {
-    return this.options.relativeReference && this.rRelativePath.test(referencedFile)
   }
 
   private dirname (path: string) {

@@ -1,5 +1,3 @@
-import { LoaderOptions } from './loader'
-
 export interface FS {
   /** check if a file exists asynchronously */
   exists: (filepath: string) => Promise<boolean>;
@@ -10,7 +8,7 @@ export interface FS {
   /** read a file synchronously */
   readFileSync: (filepath: string) => string;
   /** resolve a file against directory, for given `ext` option */
-  resolve: (dir: string, file: string, ext: string, options?: LoaderOptions) => string;
+  resolve: (dir: string, file: string, ext: string) => string;
   /** defaults to "/", will be used for "within roots" check */
   sep?: string;
   /** dirname for a filepath, used when resolving relative path */

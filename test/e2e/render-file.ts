@@ -55,6 +55,6 @@ describe('#renderFile()', function () {
       extname: '.html'
     })
     return expect(engine.renderFile('/not/exist.html')).to
-      .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo\/,\/root\/"/)
+      .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
   })
 })
