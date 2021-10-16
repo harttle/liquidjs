@@ -1,3 +1,10 @@
+## [9.28.1](https://github.com/harttle/liquidjs/compare/v9.28.0...v9.28.1) (2021-10-16)
+
+
+### Bug Fixes
+
+* hardcoded '/' in normalized `options.fs`, fixes [#412](https://github.com/harttle/liquidjs/issues/412), [#408](https://github.com/harttle/liquidjs/issues/408) ([9cfa43b](https://github.com/harttle/liquidjs/commit/9cfa43b8aee6a980f39d99f1cdb2be730ca21731))
+
 # [9.28.0](https://github.com/harttle/liquidjs/compare/v9.27.1...v9.28.0) (2021-10-06)
 
 
