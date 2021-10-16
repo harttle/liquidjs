@@ -1,3 +1,10 @@
+## [9.28.2](https://github.com/harttle/liquidjs/compare/v9.28.1...v9.28.2) (2021-10-16)
+
+
+### Bug Fixes
+
+* cache ongoing parseFile() calls, fixes [#416](https://github.com/harttle/liquidjs/issues/416) ([8894cbf](https://github.com/harttle/liquidjs/commit/8894cbfe6e0dbad4c07439adcefb6b3e2056be11))
+
 ## [9.28.1](https://github.com/harttle/liquidjs/compare/v9.28.0...v9.28.1) (2021-10-16)
 
 
