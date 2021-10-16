@@ -75,7 +75,7 @@ describe('Liquid', function () {
         extname: '.html'
       })
       return expect(engine.renderFile('/not/exist.html')).to
-        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo\/,\/root\/"/)
+        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
   })
   describe('#parseFile', function () {
@@ -85,7 +85,7 @@ describe('Liquid', function () {
         extname: '.html'
       })
       return expect(engine.parseFile('/not/exist.html')).to
-        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo\/,\/root\/"/)
+        .be.rejectedWith(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
     it('should fallback to require.resolve in Node.js', async function () {
       const engine = new Liquid({
@@ -144,7 +144,7 @@ describe('Liquid', function () {
         extname: '.html'
       })
       return expect(() => engine.parseFileSync('/not/exist.html'))
-        .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo\/,\/root\/"/)
+        .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
     it('should throw with lookup list when file not exist', function () {
       const engine = new Liquid({
@@ -152,7 +152,7 @@ describe('Liquid', function () {
         extname: '.html'
       })
       return expect(() => engine.parseFileSync('/not/exist.html'))
-        .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo\/,\/root\/"/)
+        .to.throw(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
     })
   })
   describe('#enderToNodeStream', function () {

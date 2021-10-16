@@ -60,3 +60,9 @@ export async function exists (filepath: string) {
 export function existsSync (filepath: string) {
   return true
 }
+
+export function dirname (filepath: string) {
+  return domResolve(filepath, '.')
+}
+
+export const sep = '/'

@@ -169,5 +169,5 @@ export function normalizeDirectoryList (value: any): string[] {
   let list: string[] = []
   if (_.isArray(value)) list = value
   if (_.isString(value)) list = [value]
-  return list.map(str => fs.resolve(str, '.', '')).map(str => str[str.length - 1] !== '/' ? str + '/' : str)
+  return list
 }

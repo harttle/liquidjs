@@ -1,6 +1,8 @@
 import { FS } from './fs'
+import { escapeRegex } from '../util/underscore'
+import { assert } from '../util/assert'
 
-interface LoaderOptions {
+export interface LoaderOptions {
   fs: FS;
   extname: string;
   root: string[];
@@ -15,9 +17,13 @@ export enum LookupType {
 }
 export class Loader {
   private options: LoaderOptions
+  private sep: string
+  private rRelativePath: RegExp
 
   constructor (options: LoaderOptions) {
     this.options = options
+    this.sep = this.options.fs.sep || '/'
+    this.rRelativePath = new RegExp(['.' + this.sep, '..' + this.sep].map(prefix => escapeRegex(prefix)).join('|'))
   }
 
   public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string) {
@@ -29,20 +35,12 @@ export class Loader {
     throw this.lookupError(file, dirs)
   }
 
-  public shouldLoadRelative (currentFile: string) {
-    return this.options.relativeReference && this.isRelativePath(currentFile)
-  }
-
-  public isRelativePath (path: string) {
-    return path.startsWith('./') || path.startsWith('../')
-  }
-
   public * candidates (file: string, dirs: string[], currentFile?: string, enforceRoot?: boolean) {
     const { fs, extname } = this.options
     if (this.shouldLoadRelative(file) && currentFile) {
-      const referenced = fs.resolve(this.dirname(currentFile), file, extname)
+      const referenced = fs.resolve(this.dirname(currentFile), file, extname, this.options)
       for (const dir of dirs) {
-        if (!enforceRoot || referenced.startsWith(dir)) {
+        if (!enforceRoot || this.withinDir(referenced, dir)) {
           // the relatively referenced file is within one of root dirs
           yield referenced
           break
@@ -51,7 +49,7 @@ export class Loader {
     }
     for (const dir of dirs) {
       const referenced = fs.resolve(dir, file, extname)
-      if (!enforceRoot || referenced.startsWith(dir)) {
+      if (!enforceRoot || this.withinDir(referenced, dir)) {
         yield referenced
       }
     }
@@ -61,10 +59,19 @@ export class Loader {
     }
   }
 
+  private withinDir (file: string, dir: string) {
+    dir = dir.endsWith(this.sep) ? dir : dir + this.sep
+    return file.startsWith(dir)
+  }
+
+  private shouldLoadRelative (referencedFile: string) {
+    return this.options.relativeReference && this.rRelativePath.test(referencedFile)
+  }
+
   private dirname (path: string) {
-    const segments = path.split('/')
-    segments.pop()
-    return segments.join('/')
+    const fs = this.options.fs
+    assert(fs.dirname, '`fs.dirname` is required for relative reference')
+    return fs.dirname!(path)
   }
 
   private lookupError (file: string, roots: string[]) {

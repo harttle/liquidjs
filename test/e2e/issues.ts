@@ -114,4 +114,19 @@ describe('Issues', function () {
     const html = await engine.render(tpl, { date: '2021-10-06T15:31:00+08:00' })
     expect(html).to.equal('2021-10-06 17:31 PM +1000')
   })
+  it('#412 Pass root as it is to `resolve`', async () => {
+    const engine = new Liquid({
+      root: '/tmp',
+      fs: {
+        readFileSync: (file: string) => file,
+        async readFile (file: string) { return 'foo' },
+        existsSync (file: string) { return true },
+        async exists (file: string) { return true },
+        resolve: (dir: string, file: string) => dir + '/' + file
+      }
+    })
+    const tpl = engine.parse('{% include "foo.liquid" %}')
+    const html = await engine.renderSync(tpl)
+    expect(html).to.equal('/tmp/foo.liquid')
+  })
 })

@@ -48,6 +48,8 @@
     <td align="center"><a href="https://n1ru4l.cloud/"><img src="https://avatars.githubusercontent.com/u/14338007?v=4?s=100" width="100px;" alt=""/></a></td>
     <td align="center"><a href="https://github.com/mattvague"><img src="https://avatars.githubusercontent.com/u/64985?v=4?s=100" width="100px;" alt=""/></a></td>
     <td align="center"><a href="https://github.com/bglw"><img src="https://avatars.githubusercontent.com/u/40188355?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a href="https://about.me/jasonkurian"><img src="https://avatars.githubusercontent.com/u/2642545?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/dphm"><img src="https://avatars.githubusercontent.com/u/1707217?v=4?s=100" width="100px;" alt=""/></a></td>
   </tr>
 </table>
 

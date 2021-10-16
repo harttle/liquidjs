@@ -7,12 +7,12 @@ import { stringify } from '../../util/underscore'
 import { assert } from '../../util/assert'
 
 export function append (v: string, arg: string) {
-  assert(arguments.length === 2, () => 'append expect 2 arguments')
+  assert(arguments.length === 2, 'append expect 2 arguments')
   return stringify(v) + stringify(arg)
 }
 
 export function prepend (v: string, arg: string) {
-  assert(arguments.length === 2, () => 'prepend expect 2 arguments')
+  assert(arguments.length === 2, 'prepend expect 2 arguments')
   return stringify(arg) + stringify(v)
 }
 

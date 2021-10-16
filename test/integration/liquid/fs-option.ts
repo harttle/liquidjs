@@ -6,16 +6,16 @@ use(chaiAsPromised)
 describe('LiquidOptions#fs', function () {
   let engine: Liquid
   const fs = {
-    exists: (x: string) => Promise.resolve(x.match(/^\/root\/files\//)),
-    existsSync: (x: string) => x.match(/^\/root\/files\//),
+    exists: (x: string) => Promise.resolve(!x.match(/not-exist/)),
+    existsSync: (x: string) => !x.match(/not-exist/),
     readFile: (x: string) => Promise.resolve(`content for ${x}`),
     readFileSync: (x: string) => `content for ${x}`,
     fallback: (x: string) => '/root/files/fallback',
-    resolve: (base: string, path: string) => base + path
+    resolve: (base: string, path: string) => base + '/' + path
   }
   beforeEach(function () {
     engine = new Liquid({
-      root: '/root/',
+      root: '/root',
       fs
     } as any)
   })
@@ -25,12 +25,12 @@ describe('LiquidOptions#fs', function () {
   })
 
   it('should support fallback', async function () {
-    const html = await engine.renderFile('notexist/foo')
+    const html = await engine.renderFile('not-exist/foo')
     expect(html).to.equal('content for /root/files/fallback')
   })
 
   it('should support renderSync', function () {
-    const html = engine.renderFileSync('notexist/foo')
+    const html = engine.renderFileSync('not-exist/foo')
     expect(html).to.equal('content for /root/files/fallback')
   })
 
@@ -39,7 +39,7 @@ describe('LiquidOptions#fs', function () {
       root: '/root/',
       fs: { ...fs, fallback: undefined }
     } as any)
-    return expect(engine.renderFile('notexist/foo'))
+    return expect(engine.renderFile('not-exist/foo'))
       .to.be.rejectedWith('Failed to lookup')
   })
 })

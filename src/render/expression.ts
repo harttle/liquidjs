@@ -21,7 +21,7 @@ export class Expression {
     this.postfix = [...toPostfix(tokens)]
   }
   public * evaluate (ctx: Context, lenient: boolean): any {
-    assert(ctx, () => 'unable to evaluate: context not defined')
+    assert(ctx, 'unable to evaluate: context not defined')
     const operands: any[] = []
     for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {

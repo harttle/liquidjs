@@ -1,6 +1,7 @@
 import * as _ from '../util/underscore'
-import { resolve as nodeResolve, extname } from 'path'
+import { resolve as nodeResolve, extname, dirname as nodeDirname } from 'path'
 import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
+import { LiquidOptions } from '../liquid-options'
 
 const statAsync = _.promisify(stat)
 const readFileAsync = _.promisify<string, string, string>(nodeReadFile)
@@ -27,7 +28,7 @@ export function existsSync (filepath: string) {
 export function readFileSync (filepath: string) {
   return nodeReadFileSync(filepath, 'utf8')
 }
-export function resolve (root: string, file: string, ext: string) {
+export function resolve (root: string, file: string, ext: string, opts: LiquidOptions) {
   if (!extname(file)) file += ext
   return nodeResolve(root, file)
 }
@@ -36,3 +37,7 @@ export function fallback (file: string) {
     return require.resolve(file)
   } catch (e) {}
 }
+export function dirname (filepath: string) {
+  return nodeDirname(filepath)
+}
+export { sep } from 'path'

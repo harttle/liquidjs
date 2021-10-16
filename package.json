@@ -14,6 +14,7 @@
     "lint": "eslint \"**/*.ts\" .",
     "check": "npm test && npm run lint",
     "test": "nyc mocha \"test/**/*.ts\"",
+    "test:e2e": "mocha \"test/e2e/**/*.ts\"",
     "perf": "cd benchmark && npm ci && npm start",
     "perf:diff": "bin/perf-diff.sh",
     "perf:engines": "cd benchmark && npm run engines",

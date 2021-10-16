@@ -6,23 +6,23 @@ import * as chaiAsPromised from 'chai-as-promised'
 use(chaiAsPromised)
 
 describe('fs/browser', function () {
+  if (+(process.version.match(/^v(\d+)/) as RegExpMatchArray)[1] < 8) {
+    console.info('jsdom not supported, skipping template-browser...')
+    return
+  }
+  const JSDOM = require('jsdom').JSDOM
+  beforeEach(function () {
+    const dom = new JSDOM(``, {
+      url: 'https://example.com/foo/bar/',
+      contentType: 'text/html',
+      includeNodeLocations: true
+    });
+    (global as any).document = dom.window.document
+  })
+  afterEach(function () {
+    delete (global as any).document
+  })
   describe('#resolve()', function () {
-    if (+(process.version.match(/^v(\d+)/) as RegExpMatchArray)[1] < 8) {
-      console.info('jsdom not supported, skipping template-browser...')
-      return
-    }
-    const JSDOM = require('jsdom').JSDOM
-    beforeEach(function () {
-      const dom = new JSDOM(``, {
-        url: 'https://example.com/foo/bar/',
-        contentType: 'text/html',
-        includeNodeLocations: true
-      });
-      (global as any).document = dom.window.document
-    })
-    afterEach(function () {
-      delete (global as any).document
-    })
     it('should support relative root', function () {
       expect(fs.resolve('./views/', 'foo', '')).to.equal('https://example.com/foo/bar/views/foo')
     })
@@ -49,6 +49,13 @@ describe('fs/browser', function () {
     })
     it('should not add extname when already have one', function () {
       expect(fs.resolve('https://example.com/views/', 'page.php', '.html')).to.equal('https://example.com/views/page.php')
+    })
+  })
+
+  describe('#dirname()', () => {
+    it('should return dirname of file', async function () {
+      const val = fs.dirname('https://example.com/views/foo/bar')
+      expect(val).to.equal('https://example.com/views/foo/')
     })
   })
 
