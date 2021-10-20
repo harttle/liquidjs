@@ -2,6 +2,7 @@ import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
 import replace from 'rollup-plugin-replace'
+import versionInjector from 'rollup-plugin-version-injector'
 
 const version = process.env.VERSION || pkg.version
 const sourcemap = true
@@ -13,6 +14,28 @@ const banner = `/*
 const treeshake = {
   propertyReadSideEffects: false
 }
+const tsconfig = {
+  tsconfigOverride: {
+    include: [ 'src' ],
+    exclude: [ 'test', 'benchmark' ],
+    compilerOptions: {
+      target: 'es5',
+      module: 'ES2015'
+    }
+  }
+}
+const versionInjection = versionInjector({
+  injectInComments: false,
+  injectInTags: {
+    fileRegexp: /\.(ts|js|html|css)$/,
+    tagId: 'VI',
+    dateFormat: 'mmmm d, yyyy HH:MM:ss'
+  },
+  packageJson: './package.json',
+  logLevel: 'info',
+  logger: console,
+  exclude: []
+})
 const input = './src/liquid.ts'
 const replaceFS = {
   include: './src/liquid-options.ts',
@@ -32,16 +55,7 @@ const nodeCjs = {
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [typescript({
-    tsconfigOverride: {
-      include: [ 'src' ],
-      exclude: [ 'test', 'benchmark' ],
-      compilerOptions: {
-        target: 'ES2017',
-        module: 'ES2015'
-      }
-    }
-  })],
+  plugins: [versionInjection, typescript(tsconfig)],
   treeshake,
   input
 }
@@ -53,16 +67,7 @@ const nodeEsm = {
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [typescript({
-    tsconfigOverride: {
-      include: [ 'src' ],
-      exclude: [ 'test', 'benchmark' ],
-      compilerOptions: {
-        target: 'ES2017',
-        module: 'ES2015'
-      }
-    }
-  })],
+  plugins: [versionInjection, typescript(tsconfig)],
   treeshake,
   input
 }
@@ -75,18 +80,10 @@ const browserEsm = {
   }],
   external: ['path', 'fs'],
   plugins: [
+    versionInjection,
     replace(replaceFS),
     replace(replaceStream),
-    typescript({
-      tsconfigOverride: {
-        include: [ 'src' ],
-        exclude: [ 'test', 'benchmark' ],
-        compilerOptions: {
-          target: 'ES2017',
-          module: 'ES2015'
-        }
-      }
-    })
+    typescript(tsconfig)
   ],
   treeshake,
   input
@@ -101,18 +98,10 @@ const browserUmd = {
     banner
   }],
   plugins: [
+    versionInjection,
     replace(replaceFS),
     replace(replaceStream),
-    typescript({
-      tsconfigOverride: {
-        include: [ 'src' ],
-        exclude: [ 'test', 'benchmark' ],
-        compilerOptions: {
-          target: 'es5',
-          module: 'ES2015'
-        }
-      }
-    })
+    typescript(tsconfig)
   ],
   treeshake,
   input
@@ -126,18 +115,10 @@ const browserMin = {
     sourcemap
   }],
   plugins: [
+    versionInjection,
     replace(replaceFS),
     replace(replaceStream),
-    typescript({
-      tsconfigOverride: {
-        include: [ 'src' ],
-        exclude: [ 'test', 'benchmark' ],
-        compilerOptions: {
-          target: 'es5',
-          module: 'ES2015'
-        }
-      }
-    }),
+    typescript(tsconfig),
     uglify()
   ],
   treeshake,

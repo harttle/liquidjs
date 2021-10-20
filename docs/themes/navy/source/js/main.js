@@ -59,6 +59,7 @@
   // playground
   /* global liquidjs, ace */
   if (!location.pathname.match(/playground.html$/)) return;
+  updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid();
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
@@ -120,6 +121,12 @@
 
   function utoa(str) {
     return btoa(unescape(encodeURIComponent(str)));
+  }
+  
+  function updateVersion(version) {
+    document.querySelector('.version').innerHTML = `
+      liquidjs@<a target="_blank" href="https://www.npmjs.com/package/liquidjs/v/${version}">${version}</a>
+    `
   }
 }());
 

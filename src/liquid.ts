@@ -16,6 +16,7 @@ import { toPromise, toValue } from './util/async'
 
 export * from './util/error'
 export * from './types'
+export const version = '[VI]{version}[/VI]'
 
 export class Liquid {
   public readonly options: NormalizedFullOptions

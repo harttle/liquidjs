@@ -8,5 +8,6 @@
       </div>
       <div class="col" id="previewEl">{{__('playground.loading')}}</div>
     </div>
+    <p class="inner version"></p>
   </div>
 </div>
