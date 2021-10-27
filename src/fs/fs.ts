@@ -9,9 +9,11 @@ export interface FS {
   readFileSync: (filepath: string) => string;
   /** resolve a file against directory, for given `ext` option */
   resolve: (dir: string, file: string, ext: string) => string;
-  /** defaults to "/", will be used for "within roots" check */
+  /** check if file is contained in `root`, always return `true` by default */
+  contains?: (root: string, file: string) => boolean;
+  /** defaults to "/" */
   sep?: string;
-  /** dirname for a filepath, used when resolving relative path */
+  /** required for relative path resolving */
   dirname?: (file: string) => string;
   /** fallback file for lookup failure */
   fallback?: (file: string) => string | undefined;

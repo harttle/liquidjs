@@ -85,6 +85,17 @@ describe('tags/layout', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('XAY')
   })
+  it('should use `layouts` if specified', async function () {
+    mock({
+      '/layouts/parent.html': 'LAYOUTS {%block%}{%endblock%}',
+      '/root/parent.html': 'ROOT {%block%}{%endblock%}',
+      '/root/main.html': '{% layout parent.html %}{%block%}A{%endblock%}'
+    })
+    const staticLiquid = new Liquid({ root: '/root', layouts: '/layouts', dynamicPartials: false })
+    const html = await staticLiquid.renderFile('main.html')
+    return expect(html).to.equal('LAYOUTS A')
+  })
+
   it('should support block.super', async function () {
     mock({
       '/parent.html': '{% block css %}<link href="base.css" rel="stylesheet">{% endblock %}'
@@ -186,6 +197,16 @@ describe('tags/layout', function () {
     })
     const staticLiquid = new Liquid({ root: '/', dynamicPartials: false })
     const html = await staticLiquid.renderFile('/foo/bar/main.html')
+    return expect(html).to.equal('blackA')
+  })
+
+  it('should support relative root', async function () {
+    mock({
+      [process.cwd() + '/foo/parent.html']: '{{color}}{%block%}{%endblock%}',
+      [process.cwd() + '/foo/bar/main.html']: '{% layout parent.html color:"black"%}{%block%}A{%endblock%}'
+    })
+    const staticLiquid = new Liquid({ root: './foo', dynamicPartials: false })
+    const html = await staticLiquid.renderFile('bar/main.html')
     return expect(html).to.equal('blackA')
   })
 

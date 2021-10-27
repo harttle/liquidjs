@@ -3,13 +3,9 @@ import { expect } from 'chai'
 
 describe('liquid-options', () => {
   describe('.normalize()', () => {
-    it('should return plain object for empty input', () => {
-      const options = normalize()
-      expect(JSON.stringify(options)).to.equal('{}')
-    })
-    it('should set falsy cache to undefined', () => {
+    it('should set cache to undefined if specified to falsy', () => {
       const options = normalize({ cache: false })
-      expect(JSON.stringify(options)).to.equal('{}')
+      expect(options.cache).to.equal(undefined)
     })
   })
 })

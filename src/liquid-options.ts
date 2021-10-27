@@ -131,16 +131,13 @@ export const defaultOptions: NormalizedFullOptions = {
   operatorsTrie: createTrie(defaultOperators)
 }
 
-export function normalize (options?: LiquidOptions): NormalizedOptions {
-  options = options || {}
+export function normalize (options: LiquidOptions): NormalizedFullOptions {
+  if (options.hasOwnProperty('operators')) {
+    (options as NormalizedOptions).operatorsTrie = createTrie(options.operators!)
+  }
   if (options.hasOwnProperty('root')) {
-    options.root = normalizeDirectoryList(options.root)
-  }
-  if (options.hasOwnProperty('partials')) {
-    options.partials = normalizeDirectoryList(options.partials)
-  }
-  if (options.hasOwnProperty('layouts')) {
-    options.layouts = normalizeDirectoryList(options.layouts)
+    if (!options.hasOwnProperty('partials')) options.partials = options.root
+    if (!options.hasOwnProperty('layouts')) options.layouts = options.root
   }
   if (options.hasOwnProperty('cache')) {
     let cache: Cache<Thenable<Template[]>> | undefined
@@ -149,21 +146,15 @@ export function normalize (options?: LiquidOptions): NormalizedOptions {
     else cache = options.cache ? new LRU(1024) : undefined
     options.cache = cache
   }
-  if (options.hasOwnProperty('operators')) {
-    (options as NormalizedOptions).operatorsTrie = createTrie(options.operators!)
+  options = { ...defaultOptions, ...options }
+  if (!options.fs!.dirname && options.relativeReference) {
+    console.warn('[LiquidJS] `fs.dirname` is required for relativeReference, set relativeReference to `false` to suppress this warning, or provide implementation for `fs.dirname`')
+    options.relativeReference = false
   }
-  return options as NormalizedOptions
-}
-
-export function applyDefault (options: NormalizedOptions): NormalizedFullOptions {
-  const fullOptions = { ...defaultOptions, ...options }
-  if (fullOptions.partials === defaultOptions.partials) {
-    fullOptions.partials = fullOptions.root
-  }
-  if (fullOptions.layouts === defaultOptions.layouts) {
-    fullOptions.layouts = fullOptions.root
-  }
-  return fullOptions
+  options.root = normalizeDirectoryList(options.root)
+  options.partials = normalizeDirectoryList(options.partials)
+  options.layouts = normalizeDirectoryList(options.layouts)
+  return options as NormalizedFullOptions
 }
 
 export function normalizeDirectoryList (value: any): string[] {

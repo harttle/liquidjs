@@ -1,5 +1,5 @@
 import * as _ from '../util/underscore'
-import { resolve as nodeResolve, extname, dirname as nodeDirname } from 'path'
+import { sep, resolve as nodeResolve, extname, dirname as nodeDirname } from 'path'
 import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
 
 const statAsync = _.promisify(stat)
@@ -39,4 +39,10 @@ export function fallback (file: string) {
 export function dirname (filepath: string) {
   return nodeDirname(filepath)
 }
+export function contains (root: string, file: string) {
+  root = nodeResolve(root)
+  root = root.endsWith(sep) ? root : root + sep
+  return file.startsWith(root)
+}
+
 export { sep } from 'path'
