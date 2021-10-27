@@ -1,3 +1,10 @@
+## [9.28.3](https://github.com/harttle/liquidjs/compare/v9.28.2...v9.28.3) (2021-10-27)
+
+
+### Bug Fixes
+
+* relative root (by default) yields LookupError, fixes [#419](https://github.com/harttle/liquidjs/issues/419), [#424](https://github.com/harttle/liquidjs/issues/424), also related to [#395](https://github.com/harttle/liquidjs/issues/395) ([aebeae9](https://github.com/harttle/liquidjs/commit/aebeae9e1bbb8472af7788dfd09a08cb6de58e1c))
+
 ## [9.28.2](https://github.com/harttle/liquidjs/compare/v9.28.1...v9.28.2) (2021-10-16)
 
 
