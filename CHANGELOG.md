@@ -1,3 +1,10 @@
+## [9.28.4](https://github.com/harttle/liquidjs/compare/v9.28.3...v9.28.4) (2021-10-31)
+
+
+### Bug Fixes
+
+* allow `{%render%}` to reassign argument, [#404](https://github.com/harttle/liquidjs/issues/404) ([124f4c4](https://github.com/harttle/liquidjs/commit/124f4c4485270a5fdfca610808a56ecd98d98417))
+
 ## [9.28.3](https://github.com/harttle/liquidjs/compare/v9.28.2...v9.28.3) (2021-10-27)
 
 
