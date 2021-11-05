@@ -25,7 +25,7 @@ export class Loader {
     if (options.relativeReference) {
       const sep = options.fs.sep
       assert(sep, '`fs.sep` is required for relative reference')
-      const rRelativePath = new RegExp(['.' + sep, '..' + sep].map(prefix => escapeRegex(prefix)).join('|'))
+      const rRelativePath = new RegExp(['.' + sep, '..' + sep, './', '../'].map(prefix => escapeRegex(prefix)).join('|'))
       this.shouldLoadRelative = (referencedFile: string) => rRelativePath.test(referencedFile)
     } else {
       this.shouldLoadRelative = (referencedFile: string) => false
