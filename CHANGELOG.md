@@ -1,3 +1,10 @@
+## [9.28.5](https://github.com/harttle/liquidjs/compare/v9.28.4...v9.28.5) (2021-11-05)
+
+
+### Bug Fixes
+
+* always allow './' and '../' to be relative, even on windows ([44f6b52](https://github.com/harttle/liquidjs/commit/44f6b520d53ba984ecb5fc430d70f698837d1802))
+
 ## [9.28.4](https://github.com/harttle/liquidjs/compare/v9.28.3...v9.28.4) (2021-10-31)
 
 
