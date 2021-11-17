@@ -5,6 +5,8 @@ import { Scope } from './scope'
 import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
 import { InternalUndefinedVariableError } from '../util/error'
 
+export type BackfillScopeCb = (variable: string, env: Scope) => Promise<any>
+
 export class Context {
   /**
    * insert a Context-level empty scope,
@@ -24,11 +26,14 @@ export class Context {
   public globals: Scope
   public sync: boolean
   public opts: NormalizedFullOptions
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, sync = false) {
+  public backfillScopeCb?: BackfillScopeCb
+
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, sync = false, backfillScopeCb?: BackfillScopeCb) {
     this.sync = sync
     this.opts = opts
     this.globals = opts.globals
     this.environments = env
+    this.backfillScopeCb = backfillScopeCb
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})
@@ -46,7 +51,13 @@ export class Context {
     return [this.globals, this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
-  public get (paths: string[]) {
+  public async get (paths: string[]) {
+    if (this.backfillScopeCb) {
+      if (!(paths[0] in this.environments)) {
+        await this.backfillScopeCb(paths[0], this.environments)
+      }
+    }
+
     const scope = this.findScope(paths[0])
     return this.getFromScope(scope, paths)
   }
