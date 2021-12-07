@@ -1,3 +1,11 @@
+## [9.28.6](https://github.com/harttle/liquidjs/compare/v9.28.5...v9.28.6) (2021-12-07)
+
+
+### Bug Fixes
+
+* size filter does not respect Objects, fixes [#385](https://github.com/harttle/liquidjs/issues/385) ([6c11426](https://github.com/harttle/liquidjs/commit/6c114267a526ef764dfd9bd94de199d2932ad91a))
+* throws when using `preserveTimezones` on Node.js, fixes [#431](https://github.com/harttle/liquidjs/issues/431) ([e2ef236](https://github.com/harttle/liquidjs/commit/e2ef236f68273b72a0b1293b0d13728cdb9aa4b8))
+
 ## [9.28.5](https://github.com/harttle/liquidjs/compare/v9.28.4...v9.28.5) (2021-11-05)
 
 
