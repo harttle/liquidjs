@@ -104,6 +104,7 @@ function readLast (obj: Scope) {
 }
 
 function readSize (obj: Scope) {
+  if (obj.hasOwnProperty('size') || obj['size'] !== undefined) return obj['size']
   if (isArray(obj) || isString(obj)) return obj.length
-  return obj['size']
+  if (typeof obj === 'object') return Object.keys(obj).length
 }

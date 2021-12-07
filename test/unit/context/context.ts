@@ -11,6 +11,7 @@ describe('Context', function () {
       foo: 'zoo',
       one: 1,
       zoo: { size: 4 },
+      map: new Map([['foo', 'FOO']]),
       obj: {
         first: 'f',
         last: 'l'
@@ -33,7 +34,7 @@ describe('Context', function () {
     it('should read nested property', async function () {
       expect(ctx.get(['obj', 'first'])).to.equal('f')
       expect(ctx.get(['obj', 'last'])).to.equal('l')
-      expect(ctx.get(['obj', 'size'])).to.equal(undefined)
+      expect(ctx.get(['obj', 'size'])).to.equal(2)
     })
     it('undefined property should yield undefined', async function () {
       expect(ctx.get(['notdefined'])).to.equal(undefined)
@@ -54,6 +55,13 @@ describe('Context', function () {
     })
     it('should return array length as size', async function () {
       expect(ctx.get(['bar', 'arr', 'size'])).to.equal(2)
+    })
+    it('should return map size as size', async function () {
+      expect(ctx.get(['map', 'size'])).to.equal(1)
+    })
+    it('should return undefined if not have a size', async function () {
+      expect(ctx.get(['one', 'size'])).to.equal(undefined)
+      expect(ctx.get(['non-exist', 'size'])).to.equal(undefined)
     })
     it('should read .first of array', async function () {
       expect(ctx.get(['bar', 'arr', 'first'])).to.equal('a')
