@@ -1,4 +1,4 @@
-import { LiquidDate } from './strftime'
+import { LiquidDate } from './liquid-date'
 
 // one minute in milliseconds
 const OneMinute = 60000
@@ -13,18 +13,18 @@ const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
  * - rewrite getTimezoneOffset() to trick strftime
  */
 export class TimezoneDate implements LiquidDate {
-  private timezoneOffset?: number
+  private timezoneOffset: number
   private date: Date
   constructor (init: string | number | Date | TimezoneDate, timezoneOffset: number) {
-    const diff = (hostTimezoneOffset - timezoneOffset) * OneMinute
     if (init instanceof TimezoneDate) {
       this.date = init.date
-      this.timezoneOffset = init.timezoneOffset
+      timezoneOffset = init.timezoneOffset
     } else {
+      const diff = (hostTimezoneOffset - timezoneOffset) * OneMinute
       const time = new Date(init).getTime() + diff
       this.date = new Date(time)
-      this.timezoneOffset = timezoneOffset
     }
+    this.timezoneOffset = timezoneOffset
   }
 
   getTime () {
@@ -55,11 +55,11 @@ export class TimezoneDate implements LiquidDate {
   getFullYear () {
     return this.date.getFullYear()
   }
-  toLocaleTimeString () {
-    return this.date.toLocaleTimeString()
+  toLocaleTimeString (locale?: string) {
+    return this.date.toLocaleTimeString(locale)
   }
-  toLocaleDateString () {
-    return this.date.toLocaleDateString()
+  toLocaleDateString (locale?: string) {
+    return this.date.toLocaleDateString(locale)
   }
   getTimezoneOffset () {
     return this.timezoneOffset!

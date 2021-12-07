@@ -22,5 +22,14 @@ describe('fs/loader', function () {
       const candidates = [...loader.candidates('../root-dir/bar', ['/root'], '/root/current', true)]
       expect(candidates).to.have.lengthOf(0)
     })
+    it('should default `.contains()` to () => true', async function () {
+      const customFs = {
+        ...fs,
+        contains: undefined
+      }
+      const loader = new Loader({ relativeReference: true, fs: customFs, extname: '' } as any)
+      const candidates = [...loader.candidates('../foo/bar', ['/root'], '/root/current', true)]
+      expect(candidates).to.contain('/foo/bar')
+    })
   })
 })

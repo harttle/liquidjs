@@ -1,4 +1,5 @@
-import strftime, { LiquidDate } from '../../util/strftime'
+import strftime from '../../util/strftime'
+import { LiquidDate } from '../../util/liquid-date'
 import { isString, isNumber } from '../../util/underscore'
 import { FilterImpl } from '../../template/filter/filter-impl'
 import { TimezoneDate } from '../../util/timezone-date'
