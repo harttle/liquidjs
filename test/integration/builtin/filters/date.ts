@@ -75,7 +75,7 @@ describe('filters/date', function () {
       const scope = { date: new Date('1990-12-31T23:00:00Z') }
       return test('{{ date | date: "%z"}}', scope, '-0600', opts)
     })
-    it('should ignore this setting when `preserveTimezones` also specified', function () {
+    it('should work with `preserveTimezones`', function () {
       const opts: LiquidOptions = { timezoneOffset: 600, preserveTimezones: true }
       return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
     })

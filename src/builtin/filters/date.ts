@@ -1,11 +1,11 @@
-import strftime from '../../util/strftime'
+import strftime, { LiquidDate } from '../../util/strftime'
 import { isString, isNumber } from '../../util/underscore'
 import { FilterImpl } from '../../template/filter/filter-impl'
 import { TimezoneDate } from '../../util/timezone-date'
 
 export function date (this: FilterImpl, v: string | Date, arg: string) {
   const opts = this.context.opts
-  let date: Date
+  let date: LiquidDate
   if (v === 'now' || v === 'today') {
     date = new Date()
   } else if (isNumber(v)) {
@@ -29,5 +29,5 @@ export function date (this: FilterImpl, v: string | Date, arg: string) {
 }
 
 function isValidDate (date: any): date is Date {
-  return date instanceof Date && !isNaN(date.getTime())
+  return (date instanceof Date || date instanceof TimezoneDate) && !isNaN(date.getTime())
 }

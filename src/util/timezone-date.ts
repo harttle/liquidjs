@@ -1,3 +1,5 @@
+import { LiquidDate } from './strftime'
+
 // one minute in milliseconds
 const OneMinute = 60000
 const hostTimezoneOffset = new Date().getTimezoneOffset()
@@ -10,14 +12,54 @@ const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
  * - create a Date offset by it's timezone difference, avoiding overriding a bunch of methods
  * - rewrite getTimezoneOffset() to trick strftime
  */
-export class TimezoneDate extends Date {
+export class TimezoneDate implements LiquidDate {
   private timezoneOffset?: number
-  constructor (init: string | number | Date, timezoneOffset: number) {
-    if (init instanceof TimezoneDate) return init
+  private date: Date
+  constructor (init: string | number | Date | TimezoneDate, timezoneOffset: number) {
     const diff = (hostTimezoneOffset - timezoneOffset) * OneMinute
-    const time = new Date(init).getTime() + diff
-    super(time)
-    this.timezoneOffset = timezoneOffset
+    if (init instanceof TimezoneDate) {
+      this.date = init.date
+      this.timezoneOffset = init.timezoneOffset
+    } else {
+      const time = new Date(init).getTime() + diff
+      this.date = new Date(time)
+      this.timezoneOffset = timezoneOffset
+    }
+  }
+
+  getTime () {
+    return this.date.getTime()
+  }
+
+  getMilliseconds () {
+    return this.date.getMilliseconds()
+  }
+  getSeconds () {
+    return this.date.getSeconds()
+  }
+  getMinutes () {
+    return this.date.getMinutes()
+  }
+  getHours () {
+    return this.date.getHours()
+  }
+  getDay () {
+    return this.date.getDay()
+  }
+  getDate () {
+    return this.date.getDate()
+  }
+  getMonth () {
+    return this.date.getMonth()
+  }
+  getFullYear () {
+    return this.date.getFullYear()
+  }
+  toLocaleTimeString () {
+    return this.date.toLocaleTimeString()
+  }
+  toLocaleDateString () {
+    return this.date.toLocaleDateString()
   }
   getTimezoneOffset () {
     return this.timezoneOffset!
@@ -36,7 +78,7 @@ export class TimezoneDate extends Date {
    * we create a different Date to trick strftime, it's both simpler and more performant.
    * Given that a template is expected to be parsed fewer times than rendered.
    */
-  static createDateFixedToTimezone (dateString: string) {
+  static createDateFixedToTimezone (dateString: string): LiquidDate {
     const m = dateString.match(ISO8601_TIMEZONE_PATTERN)
     // representing a UTC timestamp
     if (m && m[1] === 'Z') {

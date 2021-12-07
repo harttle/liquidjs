@@ -1,5 +1,20 @@
 import { changeCase, padStart, padEnd } from './underscore'
 
+export interface LiquidDate {
+  getTime(): number;
+  getMilliseconds(): number;
+  getSeconds(): number;
+  getMinutes(): number;
+  getHours(): number;
+  getDay(): number;
+  getDate(): number;
+  getMonth(): number;
+  getFullYear(): number;
+  getTimezoneOffset(): number;
+  toLocaleTimeString(): string;
+  toLocaleDateString(): string;
+}
+
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 const monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -27,18 +42,18 @@ function abbr (str: string) {
 }
 
 // prototype extensions
-function daysInMonth (d: Date) {
+function daysInMonth (d: LiquidDate) {
   const feb = isLeapYear(d) ? 29 : 28
   return [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 }
-function getDayOfYear (d: Date) {
+function getDayOfYear (d: LiquidDate) {
   let num = 0
   for (let i = 0; i < d.getMonth(); ++i) {
     num += daysInMonth(d)[i]
   }
   return num + d.getDate()
 }
-function getWeekOfYear (d: Date, startDay: number) {
+function getWeekOfYear (d: LiquidDate, startDay: number) {
   // Skip to startDay of this week
   const now = getDayOfYear(d) + (startDay - d.getDay())
   // Find the first startDay of the year
@@ -46,16 +61,16 @@ function getWeekOfYear (d: Date, startDay: number) {
   const then = (7 - jan1.getDay() + startDay)
   return String(Math.floor((now - then) / 7) + 1)
 }
-function isLeapYear (d: Date) {
+function isLeapYear (d: LiquidDate) {
   const year = d.getFullYear()
   return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)))
 }
-function getSuffix (d: Date) {
+function getSuffix (d: LiquidDate) {
   const str = d.getDate().toString()
   const index = parseInt(str.slice(-1))
   return suffixes[index] || suffixes['default']
 }
-function century (d: Date) {
+function century (d: LiquidDate) {
   return parseInt(d.getFullYear().toString().substring(0, 2), 10)
 }
 
@@ -90,41 +105,41 @@ const padChars = {
   P: ' '
 }
 const formatCodes = {
-  a: (d: Date) => dayNamesShort[d.getDay()],
-  A: (d: Date) => dayNames[d.getDay()],
-  b: (d: Date) => monthNamesShort[d.getMonth()],
-  B: (d: Date) => monthNames[d.getMonth()],
-  c: (d: Date) => d.toLocaleString(),
-  C: (d: Date) => century(d),
-  d: (d: Date) => d.getDate(),
-  e: (d: Date) => d.getDate(),
-  H: (d: Date) => d.getHours(),
-  I: (d: Date) => String(d.getHours() % 12 || 12),
-  j: (d: Date) => getDayOfYear(d),
-  k: (d: Date) => d.getHours(),
-  l: (d: Date) => String(d.getHours() % 12 || 12),
-  L: (d: Date) => d.getMilliseconds(),
-  m: (d: Date) => d.getMonth() + 1,
-  M: (d: Date) => d.getMinutes(),
-  N: (d: Date, opts: FormatOptions) => {
+  a: (d: LiquidDate) => dayNamesShort[d.getDay()],
+  A: (d: LiquidDate) => dayNames[d.getDay()],
+  b: (d: LiquidDate) => monthNamesShort[d.getMonth()],
+  B: (d: LiquidDate) => monthNames[d.getMonth()],
+  c: (d: LiquidDate) => d.toLocaleString(),
+  C: (d: LiquidDate) => century(d),
+  d: (d: LiquidDate) => d.getDate(),
+  e: (d: LiquidDate) => d.getDate(),
+  H: (d: LiquidDate) => d.getHours(),
+  I: (d: LiquidDate) => String(d.getHours() % 12 || 12),
+  j: (d: LiquidDate) => getDayOfYear(d),
+  k: (d: LiquidDate) => d.getHours(),
+  l: (d: LiquidDate) => String(d.getHours() % 12 || 12),
+  L: (d: LiquidDate) => d.getMilliseconds(),
+  m: (d: LiquidDate) => d.getMonth() + 1,
+  M: (d: LiquidDate) => d.getMinutes(),
+  N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
     const str = String(d.getMilliseconds()).substr(0, width)
     return padEnd(str, width, '0')
   },
-  p: (d: Date) => (d.getHours() < 12 ? 'AM' : 'PM'),
-  P: (d: Date) => (d.getHours() < 12 ? 'am' : 'pm'),
-  q: (d: Date) => getSuffix(d),
-  s: (d: Date) => Math.round(d.valueOf() / 1000),
-  S: (d: Date) => d.getSeconds(),
-  u: (d: Date) => d.getDay() || 7,
-  U: (d: Date) => getWeekOfYear(d, 0),
-  w: (d: Date) => d.getDay(),
-  W: (d: Date) => getWeekOfYear(d, 1),
-  x: (d: Date) => d.toLocaleDateString(),
-  X: (d: Date) => d.toLocaleTimeString(),
-  y: (d: Date) => d.getFullYear().toString().substring(2, 4),
-  Y: (d: Date) => d.getFullYear(),
-  z: (d: Date, opts: FormatOptions) => {
+  p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
+  P: (d: LiquidDate) => (d.getHours() < 12 ? 'am' : 'pm'),
+  q: (d: LiquidDate) => getSuffix(d),
+  s: (d: LiquidDate) => Math.round(d.getTime() / 1000),
+  S: (d: LiquidDate) => d.getSeconds(),
+  u: (d: LiquidDate) => d.getDay() || 7,
+  U: (d: LiquidDate) => getWeekOfYear(d, 0),
+  w: (d: LiquidDate) => d.getDay(),
+  W: (d: LiquidDate) => getWeekOfYear(d, 1),
+  x: (d: LiquidDate) => d.toLocaleDateString(),
+  X: (d: LiquidDate) => d.toLocaleTimeString(),
+  y: (d: LiquidDate) => d.getFullYear().toString().substring(2, 4),
+  Y: (d: LiquidDate) => d.getFullYear(),
+  z: (d: LiquidDate, opts: FormatOptions) => {
     const nOffset = Math.abs(d.getTimezoneOffset())
     const h = Math.floor(nOffset / 60)
     const m = nOffset % 60
@@ -139,7 +154,7 @@ const formatCodes = {
 };
 (formatCodes as any).h = formatCodes.b
 
-export default function (d: Date, formatStr: string) {
+export default function (d: LiquidDate, formatStr: string) {
   let output = ''
   let remaining = formatStr
   let match
@@ -151,7 +166,7 @@ export default function (d: Date, formatStr: string) {
   return output + remaining
 }
 
-function format (d: Date, match: RegExpExecArray) {
+function format (d: LiquidDate, match: RegExpExecArray) {
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
   if (!convert) return input

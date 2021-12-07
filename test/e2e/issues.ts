@@ -1,4 +1,4 @@
-import { Liquid } from '../../src/liquid'
+import { Liquid } from '../..'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import * as sinon from 'sinon'
@@ -152,5 +152,13 @@ describe('Issues', function () {
     ))
     expect(exists).to.be.calledOnce
     expect(readFile).to.be.calledOnce
+  })
+  it('#431 Error when using Date timezoneOffset in 9.28.5', async () => {
+    const engine = new Liquid({
+      timezoneOffset: 0,
+      preserveTimezones: true
+    })
+    const tpl = engine.parse('Welcome to {{ now | date: "%Y-%m-%d" }}!')
+    expect(engine.render(tpl, { now: new Date('2019/02/01') })).to.eventually.equal('Welcome to 2019-02-01')
   })
 })
