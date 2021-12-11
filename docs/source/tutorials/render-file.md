@@ -88,12 +88,17 @@ var engine = new Liquid({
         exists () {
             return true
         },
+        contains () {
+            return true
+        },
         resolve(root, file, ext) {
             return file
         }
     }
 });
 ```
+
+{% note warn Path Traversal Vulnerability %}The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you'll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.{% endnote %}
 
 [fs]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-fs
 [ifs]: https://github.com/harttle/liquidjs/blob/master/src/fs/ifs.ts

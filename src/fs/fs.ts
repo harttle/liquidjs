@@ -9,7 +9,7 @@ export interface FS {
   readFileSync: (filepath: string) => string;
   /** resolve a file against directory, for given `ext` option */
   resolve: (dir: string, file: string, ext: string) => string;
-  /** check if file is contained in `root`, always return `true` by default */
+  /** check if file is contained in `root`, always return `true` by default. Warning: not setting this could expose path traversal vulnerabilities. */
   contains?: (root: string, file: string) => boolean;
   /** defaults to "/" */
   sep?: string;
