@@ -1,3 +1,10 @@
+# [9.29.0](https://github.com/harttle/liquidjs/compare/v9.28.6...v9.29.0) (2021-12-11)
+
+
+### Features
+
+* customize globals & strictVariables when calling render, see [#432](https://github.com/harttle/liquidjs/issues/432) ([6801552](https://github.com/harttle/liquidjs/commit/6801552fe6829770cbbfdda051731c8b466ed9ec))
+
 ## [9.28.6](https://github.com/harttle/liquidjs/compare/v9.28.5...v9.28.6) (2021-12-07)
 
 
