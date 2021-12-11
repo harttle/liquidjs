@@ -10,7 +10,7 @@ import builtinTags from './builtin/tags'
 import * as builtinFilters from './builtin/filters'
 import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
-import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, normalize } from './liquid-options'
+import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, normalize, RenderOptions } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
 import { toPromise, toValue } from './util/async'
 
@@ -39,30 +39,30 @@ export class Liquid {
     return this.parser.parse(html, filepath)
   }
 
-  public _render (tpl: Template[], scope?: object, sync?: boolean): IterableIterator<any> {
-    const ctx = new Context(scope, this.options, sync)
+  public _render (tpl: Template[], scope: object | undefined, renderOptions: RenderOptions): IterableIterator<any> {
+    const ctx = new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplates(tpl, ctx)
   }
-  public async render (tpl: Template[], scope?: object): Promise<any> {
-    return toPromise(this._render(tpl, scope, false))
+  public async render (tpl: Template[], scope?: object, renderOptions?: RenderOptions): Promise<any> {
+    return toPromise(this._render(tpl, scope, { ...renderOptions, sync: false }))
   }
-  public renderSync (tpl: Template[], scope?: object): any {
-    return toValue(this._render(tpl, scope, true))
+  public renderSync (tpl: Template[], scope?: object, renderOptions?: RenderOptions): any {
+    return toValue(this._render(tpl, scope, { ...renderOptions, sync: true }))
   }
-  public renderToNodeStream (tpl: Template[], scope?: object): NodeJS.ReadableStream {
-    const ctx = new Context(scope, this.options)
+  public renderToNodeStream (tpl: Template[], scope?: object, renderOptions: RenderOptions = {}): NodeJS.ReadableStream {
+    const ctx = new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplatesToNodeStream(tpl, ctx)
   }
 
-  public _parseAndRender (html: string, scope?: object, sync?: boolean): IterableIterator<any> {
+  public _parseAndRender (html: string, scope: object | undefined, renderOptions: RenderOptions): IterableIterator<any> {
     const tpl = this.parse(html)
-    return this._render(tpl, scope, sync)
+    return this._render(tpl, scope, renderOptions)
   }
-  public async parseAndRender (html: string, scope?: object): Promise<any> {
-    return toPromise(this._parseAndRender(html, scope, false))
+  public async parseAndRender (html: string, scope?: object, renderOptions?: RenderOptions): Promise<any> {
+    return toPromise(this._parseAndRender(html, scope, { ...renderOptions, sync: false }))
   }
-  public parseAndRenderSync (html: string, scope?: object): any {
-    return toValue(this._parseAndRender(html, scope, true))
+  public parseAndRenderSync (html: string, scope?: object, renderOptions?: RenderOptions): any {
+    return toValue(this._parseAndRender(html, scope, { ...renderOptions, sync: true }))
   }
 
   public _parsePartialFile (file: string, sync?: boolean, currentFile?: string) {
@@ -77,17 +77,17 @@ export class Liquid {
   public parseFileSync (file: string): Template[] {
     return toValue<Template[]>(this.parser.parseFile(file, true))
   }
-  public async renderFile (file: string, ctx?: object) {
+  public async renderFile (file: string, ctx?: object, renderOptions?: RenderOptions) {
     const templates = await this.parseFile(file)
-    return this.render(templates, ctx)
+    return this.render(templates, ctx, renderOptions)
   }
-  public renderFileSync (file: string, ctx?: object) {
+  public renderFileSync (file: string, ctx?: object, renderOptions?: RenderOptions) {
     const templates = this.parseFileSync(file)
-    return this.renderSync(templates, ctx)
+    return this.renderSync(templates, ctx, renderOptions)
   }
-  public async renderFileToNodeStream (file: string, scope?: object) {
+  public async renderFileToNodeStream (file: string, scope?: object, renderOptions?: RenderOptions) {
     const templates = await this.parseFile(file)
-    return this.renderToNodeStream(templates, scope)
+    return this.renderToNodeStream(templates, scope, renderOptions)
   }
 
   public _evalValue (str: string, ctx: Context): IterableIterator<any> {

@@ -1,6 +1,6 @@
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
-import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
+import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
 import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
 import { InternalUndefinedVariableError } from '../util/error'
@@ -23,12 +23,20 @@ export class Context {
    */
   public globals: Scope
   public sync: boolean
+  /**
+   * The normalized liquid options object
+   */
   public opts: NormalizedFullOptions
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, sync = false) {
-    this.sync = sync
+  /**
+   * Throw when accessing undefined variable?
+   */
+  public strictVariables: boolean;
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}) {
+    this.sync = !!renderOptions.sync
     this.opts = opts
-    this.globals = opts.globals
+    this.globals = renderOptions.globals ?? opts.globals
     this.environments = env
+    this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})
@@ -54,7 +62,7 @@ export class Context {
     if (typeof paths === 'string') paths = paths.split('.')
     return paths.reduce((scope, path) => {
       scope = readProperty(scope, path)
-      if (isNil(scope) && this.opts.strictVariables) {
+      if (isNil(scope) && this.strictVariables) {
         throw new InternalUndefinedVariableError(path)
       }
       return scope

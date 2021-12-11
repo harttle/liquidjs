@@ -51,7 +51,7 @@ export default {
     const filepath = yield this.renderFilePath(this['file'], ctx, liquid)
     assert(filepath, () => `illegal filename "${filepath}"`)
 
-    const childCtx = new Context({}, ctx.opts, ctx.sync)
+    const childCtx = new Context({}, ctx.opts, { sync: ctx.sync, globals: ctx.globals, strictVariables: ctx.strictVariables })
     const scope = childCtx.bottom()
     __assign(scope, yield hash.render(ctx))
     if (this['with']) {

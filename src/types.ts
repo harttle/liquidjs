@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import * as TypeGuards from './util/type-guards'
 export { TypeGuards }
 export { ParseError, TokenizationError, AssertionError } from './util/error'

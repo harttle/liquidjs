@@ -43,6 +43,15 @@ describe('Liquid', function () {
       const html = await engine.parseAndRender(src, {})
       return expect(html).to.equal('12')
     })
+    it('should support `globals` render option', async function () {
+      const src = '{{ foo }}'
+      const html = await engine.parseAndRender(src, {}, { globals: { foo: 'FOO' } })
+      return expect(html).to.equal('FOO')
+    })
+    it('should support `strictVariables` render option', function () {
+      const src = '{{ foo }}'
+      return expect(engine.parseAndRender(src, {}, { strictVariables: true })).rejectedWith(/undefined variable/)
+    })
   })
   describe('#express()', function () {
     const liquid = new Liquid({ root: '/root' })

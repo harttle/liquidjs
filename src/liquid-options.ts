@@ -65,6 +65,21 @@ export interface LiquidOptions {
   orderedFilterParameters?: boolean;
 }
 
+export interface RenderOptions {
+  /**
+   * This call is sync or async? It's used by Liquid internal methods, you'll not need this.
+   */
+  sync?: boolean;
+  /**
+   * Same as `globals` on LiquidOptions, but only for current render() call
+   */
+  globals?: object;
+  /**
+   * Same as `strictVariables` on LiquidOptions, but only for current render() call
+   */
+  strictVariables?: boolean;
+}
+
 interface NormalizedOptions extends LiquidOptions {
   root?: string[];
   partials?: string[];
