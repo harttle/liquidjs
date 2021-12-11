@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -ex
+
 ./bin/build-contributors.sh
 ./bin/build-apidoc.sh
 ./bin/build-changelog.sh

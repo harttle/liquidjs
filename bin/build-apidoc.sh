@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+set -ex
+
 rm -rf docs/source/api docs/source/zh-cn/api
-typedoc ./src --gitRevision master --out docs/source/api --plugin typedoc-plugin-markdown --theme vuepress
+typedoc ./src --gitRevision master --out docs/source/api --plugin typedoc-plugin-markdown --ignoreCompilerErrors true --theme vuepress
 rm docs/source/api/README.md
 
 for file in $(find docs/source/api -name "*.md"); do
