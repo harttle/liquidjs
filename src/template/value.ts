@@ -16,7 +16,7 @@ export class Value {
     this.initial = tokenizer.readExpression()
     this.filters = tokenizer.readFilters().map(({ name, args }) => new Filter(name, liquid.filters.get(name), args, liquid))
   }
-  public * value (ctx: Context, lenient: boolean) {
+  public * value (ctx: Context, lenient: boolean): Generator<unknown, unknown, unknown> {
     lenient = lenient || (ctx.opts.lenientIf && this.filters.length > 0 && this.filters[0].name === 'default')
     let val = yield this.initial.evaluate(ctx, lenient)
 

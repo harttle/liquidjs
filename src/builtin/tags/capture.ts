@@ -17,7 +17,7 @@ export default {
       })
     stream.start()
   },
-  render: function * (ctx: Context) {
+  render: function * (ctx: Context): Generator<unknown, void, string> {
     const r = this.liquid.renderer
     const html = yield r.renderTemplates(this.templates, ctx)
     ctx.bottom()[this.variable] = html

@@ -7,6 +7,7 @@ export function isString (value: any): value is string {
   return typeof value === 'string'
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function isFunction (value: any): value is Function {
   return typeof value === 'function'
 }
@@ -65,16 +66,16 @@ export function isArray (value: any): value is any[] {
  * @return {Object} Returns object.
  */
 export function forOwn <T> (
-  object: {[key: string]: T} | undefined,
+  obj: {[key: string]: T} | undefined,
   iteratee: ((val: T, key: string, obj: {[key: string]: T}) => boolean | void)
 ) {
-  object = object || {}
-  for (const k in object) {
-    if (object.hasOwnProperty(k)) {
-      if (iteratee(object[k], k, object) === false) break
+  obj = obj || {}
+  for (const k in obj) {
+    if (Object.hasOwnProperty.call(obj, k)) {
+      if (iteratee(obj[k], k, obj) === false) break
     }
   }
-  return object
+  return obj
 }
 
 export function last <T>(arr: T[]): T;

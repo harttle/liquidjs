@@ -33,7 +33,7 @@ export class Loader {
     this.contains = this.options.fs.contains || (() => true)
   }
 
-  public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string) {
+  public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string): Generator<unknown, string, string> {
     const { fs } = this.options
     const dirs = this.options[type]
     for (const filepath of this.candidates(file, dirs, currentFile, type !== LookupType.Root)) {

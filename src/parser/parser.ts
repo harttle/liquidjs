@@ -14,7 +14,7 @@ import { FS } from '../fs/fs'
 import { toThenable, Thenable } from '../util/async'
 
 export default class Parser {
-  public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => IterableIterator<any>
+  public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Generator<unknown, Template[], Template[] | string>
 
   private liquid: Liquid
   private fs: FS
@@ -51,13 +51,13 @@ export default class Parser {
       }
       return new HTML(token)
     } catch (e) {
-      throw new ParseError(e, token)
+      throw new ParseError(e as Error, token)
     }
   }
   public parseStream (tokens: TopLevelToken[]) {
     return new ParseStream(tokens, (token, tokens) => this.parseToken(token, tokens))
   }
-  private * _parseFileCached (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string) {
+  private * _parseFileCached (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], Template[]> {
     const key = this.loader.shouldLoadRelative(file)
       ? currentFile + ',' + file
       : type + ':' + file
@@ -72,8 +72,9 @@ export default class Parser {
       // remove cached task if failed
       this.cache!.remove(key)
     }
+    return []
   }
-  private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): IterableIterator<any> {
+  private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], string> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)
     return this.liquid.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
   }

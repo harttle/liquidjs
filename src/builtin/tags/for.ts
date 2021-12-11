@@ -1,7 +1,7 @@
 import { assert, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { toEnumerable } from '../../util/collection'
 import { ForloopDrop } from '../../drop/forloop-drop'
-import { Hash } from '../../template/tag/hash'
+import { Hash, HashValue } from '../../template/tag/hash'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -38,7 +38,7 @@ export default {
 
     stream.start()
   },
-  render: function * (ctx: Context, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter): Generator<unknown, void | string, HashValue | Template[]> {
     const r = this.liquid.renderer
     let collection = toEnumerable(yield evalToken(this.collection, ctx))
 

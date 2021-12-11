@@ -9,7 +9,7 @@ export default {
     tokenizer.advance()
     this.value = tokenizer.remaining()
   },
-  render: function * (ctx: Context) {
+  render: function * (ctx: Context): Generator<unknown, void, unknown> {
     ctx.bottom()[this.key] = yield this.liquid._evalValue(this.value, ctx)
   }
 } as TagImplOptions

@@ -2,6 +2,10 @@ import { evalToken } from '../../render/expression'
 import { Context } from '../../context/context'
 import { Tokenizer } from '../../parser/tokenizer'
 
+export interface HashValue {
+  [key: string]: any;
+}
+
 /**
  * Key-Value Pairs Representing Tag Arguments
  * Example:
@@ -11,14 +15,14 @@ import { Tokenizer } from '../../parser/tokenizer'
  *    hash['reversed'] === undefined
  */
 export class Hash {
-  hash: { [key: string]: any } = {}
+  hash: HashValue = {}
   constructor (markup: string) {
     const tokenizer = new Tokenizer(markup, {})
     for (const hash of tokenizer.readHashes()) {
       this.hash[hash.name.content] = hash.value
     }
   }
-  * render (ctx: Context) {
+  * render (ctx: Context): Generator<unknown, HashValue, unknown> {
     const hash = {}
     for (const key of Object.keys(this.hash)) {
       hash[key] = this.hash[key] === undefined ? true : yield evalToken(this.hash[key], ctx)

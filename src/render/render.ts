@@ -26,7 +26,7 @@ export class Render {
         html && emitter.write(html)
         if (emitter['break'] || emitter['continue']) break
       } catch (e) {
-        const err = RenderError.is(e) ? e : new RenderError(e, tpl)
+        const err = RenderError.is(e) ? e : new RenderError(e as Error, tpl)
         throw err
       }
     }

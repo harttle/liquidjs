@@ -34,10 +34,8 @@ function isAsyncIterator (val: any): val is IterableIterator<any> {
   return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
 }
 
-type Task<T> = Thenable<T>
-
 // convert an async iterator to a thenable (Promise compatible)
-export function toThenable<T> (val: IterableIterator<any> | Thenable<T> | any): Thenable<T> {
+export function toThenable<T> (val: IteratorResult<unknown, T> | Thenable<T> | any): Thenable<T> {
   if (isThenable(val)) return val
   if (isAsyncIterator(val)) return reduce()
   return createResolvedThenable(val)
@@ -45,18 +43,18 @@ export function toThenable<T> (val: IterableIterator<any> | Thenable<T> | any): 
   function reduce<T> (prev?: T): Thenable<T> {
     let state
     try {
-      state = (val as IterableIterator<any>).next(prev)
+      state = val.next(prev)
     } catch (err) {
-      return createRejectedThenable(err)
+      return createRejectedThenable(err as Error)
     }
 
     if (state.done) return createResolvedThenable(state.value)
     return toThenable(state.value!).then(reduce, err => {
       let state
       try {
-        state = (val as IterableIterator<any>).throw!(err)
+        state = val.throw!(err)
       } catch (e) {
-        return createRejectedThenable(e)
+        return createRejectedThenable(e as Error)
       }
       if (state.done) return createResolvedThenable(state.value)
       return reduce(state.value)
@@ -64,12 +62,12 @@ export function toThenable<T> (val: IterableIterator<any> | Thenable<T> | any): 
   }
 }
 
-export function toPromise<T> (val: IterableIterator<any> | Thenable<T> | T): Promise<T> {
+export function toPromise<T> (val: Generator<unknown, T, unknown> | Thenable<T> | T): Promise<T> {
   return Promise.resolve(toThenable(val))
 }
 
 // get the value of async iterator in synchronous manner
-export function toValue<T> (val: IterableIterator<any> | Thenable<T> | T): T {
+export function toValue<T> (val: Generator<unknown, T, unknown> | Thenable<T> | T): T {
   let ret: T
   toThenable(val)
     .then((x: any) => {

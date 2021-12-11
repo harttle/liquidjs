@@ -12,7 +12,7 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
     super(token)
     this.value = new Value(token.content, liquid)
   }
-  public * render (ctx: Context, emitter: Emitter) {
+  public * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const val = yield this.value.value(ctx, false)
     emitter.write(val)
   }

@@ -22,7 +22,7 @@ export default {
       .start()
   },
 
-  render: function * (ctx: Context, emitter: Emitter) {
+  render: function * (ctx: Context, emitter: Emitter): Generator<unknown, void, string> {
     const r = this.liquid.renderer
 
     for (const { predicate, templates } of this.branches) {

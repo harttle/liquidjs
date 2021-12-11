@@ -3,6 +3,7 @@ import { Liquid } from '../../liquid'
 import { TemplateImpl } from '../../template/template-impl'
 import { Emitter, Hash, Context, TagToken, Template, TopLevelToken } from '../../types'
 import { TagImpl } from './tag-impl'
+import { HashValue } from './hash'
 
 export class Tag extends TemplateImpl<TagToken> implements Template {
   public name: string
@@ -20,8 +21,8 @@ export class Tag extends TemplateImpl<TagToken> implements Template {
       this.impl.parse(token, tokens)
     }
   }
-  public * render (ctx: Context, emitter: Emitter) {
-    const hash = yield new Hash(this.token.args).render(ctx)
+  public * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, HashValue | unknown> {
+    const hash = (yield new Hash(this.token.args).render(ctx)) as HashValue
     const impl = this.impl
     if (isFunction(impl.render)) return yield impl.render(ctx, emitter, hash)
   }

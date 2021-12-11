@@ -20,7 +20,7 @@ export function sort<T> (this: FilterImpl, arr: T[], property?: string) {
 
 export const size = (v: string | any[]) => (v && v.length) || 0
 
-export function map<T1, T2> (this: FilterImpl, arr: Scope[], property: string) {
+export function map (this: FilterImpl, arr: Scope[], property: string) {
   return toArray(arr).map(obj => this.context.getFromScope(obj, property.split('.')))
 }
 
