@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>Module: &quot;builtin/filters/string&quot; | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/api/modules/builtin_filters_string_.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/zh-cn/api/modules/builtin_filters_string_">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/zh-cn/api/modules/builtin_filters_string_">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../../../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../../../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../../../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../../../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../../../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../../../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../../../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../../../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../../../css/navy.css">
+
+  <link rel="alternate" href="../../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="../../tutorials/setup.html" class="main-nav-link">教程</a><a href="../../tags/overview.html" class="main-nav-link">标签</a><a href="../../filters/overview.html" class="main-nav-link">过滤器</a><a href="../../playground.html" class="main-nav-link">演示</a><a href="../classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div id="lang-select-wrap" class="main-nav-link">
+      <label><i class="icon-network"></i>简体中文</label>
+      <select id="lang-select" data-canonical="api/modules/builtin_filters_string_.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">快速入口</strong><a href="../classes/liquid_.liquid.html" class="sidebar-link">Liquid</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="sidebar-link">LiquidOptions</a><a href="../interfaces/fs_fs_.fs.html" class="sidebar-link">FS</a><a href="../interfaces/cache_cache_.cache.html" class="sidebar-link">Cache</a><strong class="sidebar-title">类</strong><a href="../classes/drop_blank_drop_.blankdrop.html" class="sidebar-link">BlankDrop</a><a href="../classes/context_context_.context.html" class="sidebar-link">Context</a><a href="../classes/tokens_delimited_token_.delimitedtoken.html" class="sidebar-link">DelimitedToken</a><a href="../classes/drop_drop_.drop.html" class="sidebar-link">Drop</a><a href="../classes/drop_empty_drop_.emptydrop.html" class="sidebar-link">EmptyDrop</a><a href="../classes/render_expression_.expression.html" class="sidebar-link">Expression</a><a href="../classes/tokens_filter_token_.filtertoken.html" class="sidebar-link">FilterToken</a><a href="../classes/drop_forloop_drop_.forloopdrop.html" class="sidebar-link">ForloopDrop</a><a href="../classes/tokens_html_token_.htmltoken.html" class="sidebar-link">HTMLToken</a><a href="../classes/tokens_hash_token_.hashtoken.html" class="sidebar-link">HashToken</a><a href="../classes/cache_lru_.lru.html" class="sidebar-link">LRU</a><a href="../classes/liquid_.liquid.html" class="sidebar-link">Liquid</a><a href="../classes/tokens_literal_token_.literaltoken.html" class="sidebar-link">LiteralToken</a><a href="../classes/drop_null_drop_.nulldrop.html" class="sidebar-link">NullDrop</a><a href="../classes/tokens_number_token_.numbertoken.html" class="sidebar-link">NumberToken</a><a href="../classes/tokens_operator_token_.operatortoken.html" class="sidebar-link">OperatorToken</a><a href="../classes/tokens_output_token_.outputtoken.html" class="sidebar-link">OutputToken</a><a href="../classes/util_error_.parseerror.html" class="sidebar-link">ParseError</a><a href="../classes/parser_parse_stream_.parsestream.html" class="sidebar-link">ParseStream</a><a href="../classes/parser_parser_.parser.html" class="sidebar-link">Parser</a><a href="../classes/tokens_property_access_token_.propertyaccesstoken.html" class="sidebar-link">PropertyaccessToken</a><a href="../classes/tokens_quoted_token_.quotedtoken.html" class="sidebar-link">QuotedToken</a><a href="../classes/tokens_range_token_.rangetoken.html" class="sidebar-link">RangeToken</a><a href="../classes/render_render_.render.html" class="sidebar-link">Render</a><a href="../classes/util_error_.rendererror.html" class="sidebar-link">RenderError</a><a href="../classes/drop_tablerowloop_drop_.tablerowloopdrop.html" class="sidebar-link">TablerowloopDrop</a><a href="../classes/tokens_tag_token_.tagtoken.html" class="sidebar-link">TagToken</a><a href="../classes/tokens_token_.token.html" class="sidebar-link">Token</a><a href="../classes/util_error_.tokenizationerror.html" class="sidebar-link">TokenizationError</a><a href="../classes/parser_tokenizer_.tokenizer.html" class="sidebar-link">Tokenizer</a><a href="../classes/tokens_word_token_.wordtoken.html" class="sidebar-link">WordToken</a><strong class="sidebar-title">枚举</strong><a href="../enums/context_block_mode_.blockmode.html" class="sidebar-link">BlockMode</a><a href="../enums/parser_token_kind_.tokenkind.html" class="sidebar-link">TokenKind</a><strong class="sidebar-title">接口</strong><a href="../interfaces/cache_cache_.cache.html" class="sidebar-link">Cache</a><a href="../interfaces/template_filter_filter_impl_options_.filterimploptions.html" class="sidebar-link">FilterImplOptions</a><a href="../interfaces/fs_fs_.fs.html" class="sidebar-link">FS</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="sidebar-link">LiquidOptions</a><a href="../interfaces/liquid_options_.normalizedfulloptions.html" class="sidebar-link">NormalizedFullOptions</a><a href="../interfaces/context_scope_.plainobject.html" class="sidebar-link">PlainObject</a><a href="../interfaces/template_tag_tag_impl_options_.tagimploptions.html" class="sidebar-link">TagImplOptions</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">Module: &quot;builtin/filters/string&quot;</h1>
+                
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/new?title=docs:&body=URL: https%3A%2F%2Fliquidjs.com%2Fzh-cn%2Fapi%2Fmodules%2Fbuiltin_filters_string_.html&labels=docs" class="article-edit-link" title="报告问题"><i class="icon-chat-bubble-dots"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <h2 id="Functions" class="article-heading"><a href="#Functions" class="headerlink" title="Functions"></a>Functions<a class="article-anchor" href="#Functions" aria-hidden="true"></a></h2><h3 id="append" class="article-heading"><a href="#append" class="headerlink" title="append"></a>append<a class="article-anchor" href="#append" aria-hidden="true"></a></h3><p>▸ <strong>append</strong>(<code>v</code>: string, <code>arg</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L9">src/builtin/filters/string.ts:9</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>arg</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="capitalize" class="article-heading"><a href="#capitalize" class="headerlink" title="capitalize"></a>capitalize<a class="article-anchor" href="#capitalize" aria-hidden="true"></a></h3><p>▸ <strong>capitalize</strong>(<code>str</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L55">src/builtin/filters/string.ts:55</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>str</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="downcase" class="article-heading"><a href="#downcase" class="headerlink" title="downcase"></a>downcase<a class="article-anchor" href="#downcase" aria-hidden="true"></a></h3><p>▸ <strong>downcase</strong>(<code>v</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L23">src/builtin/filters/string.ts:23</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="lstrip" class="article-heading"><a href="#lstrip" class="headerlink" title="lstrip"></a>lstrip<a class="article-anchor" href="#lstrip" aria-hidden="true"></a></h3><p>▸ <strong>lstrip</strong>(<code>v</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L19">src/builtin/filters/string.ts:19</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="prepend" class="article-heading"><a href="#prepend" class="headerlink" title="prepend"></a>prepend<a class="article-anchor" href="#prepend" aria-hidden="true"></a></h3><p>▸ <strong>prepend</strong>(<code>v</code>: string, <code>arg</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L14">src/builtin/filters/string.ts:14</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>arg</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="remove" class="article-heading"><a href="#remove" class="headerlink" title="remove"></a>remove<a class="article-anchor" href="#remove" aria-hidden="true"></a></h3><p>▸ <strong>remove</strong>(<code>v</code>: string, <code>arg</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L31">src/builtin/filters/string.ts:31</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>arg</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="removeFirst" class="article-heading"><a href="#removeFirst" class="headerlink" title="removeFirst"></a>removeFirst<a class="article-anchor" href="#removeFirst" aria-hidden="true"></a></h3><p>▸ <strong>removeFirst</strong>(<code>v</code>: string, <code>l</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L35">src/builtin/filters/string.ts:35</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="replace" class="article-heading"><a href="#replace" class="headerlink" title="replace"></a>replace<a class="article-anchor" href="#replace" aria-hidden="true"></a></h3><p>▸ <strong>replace</strong>(<code>v</code>: string, <code>pattern</code>: string, <code>replacement</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L60">src/builtin/filters/string.ts:60</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>pattern</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>replacement</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="replaceFirst" class="article-heading"><a href="#replaceFirst" class="headerlink" title="replaceFirst"></a>replaceFirst<a class="article-anchor" href="#replaceFirst" aria-hidden="true"></a></h3><p>▸ <strong>replaceFirst</strong>(<code>v</code>: string, <code>arg1</code>: string, <code>arg2</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L64">src/builtin/filters/string.ts:64</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>arg1</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>arg2</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="rstrip" class="article-heading"><a href="#rstrip" class="headerlink" title="rstrip"></a>rstrip<a class="article-anchor" href="#rstrip" aria-hidden="true"></a></h3><p>▸ <strong>rstrip</strong>(<code>str</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L39">src/builtin/filters/string.ts:39</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>str</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="split" class="article-heading"><a href="#split" class="headerlink" title="split"></a>split<a class="article-anchor" href="#split" aria-hidden="true"></a></h3><p>▸ <strong>split</strong>(<code>v</code>: string, <code>arg</code>: string): <em>string[]</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L43">src/builtin/filters/string.ts:43</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+<tr>
+<td><code>arg</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string[]</em></p>
+<hr>
+<h3 id="strip" class="article-heading"><a href="#strip" class="headerlink" title="strip"></a>strip<a class="article-anchor" href="#strip" aria-hidden="true"></a></h3><p>▸ <strong>strip</strong>(<code>v</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L47">src/builtin/filters/string.ts:47</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="stripNewlines" class="article-heading"><a href="#stripNewlines" class="headerlink" title="stripNewlines"></a>stripNewlines<a class="article-anchor" href="#stripNewlines" aria-hidden="true"></a></h3><p>▸ <strong>stripNewlines</strong>(<code>v</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L51">src/builtin/filters/string.ts:51</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="truncate" class="article-heading"><a href="#truncate" class="headerlink" title="truncate"></a>truncate<a class="article-anchor" href="#truncate" aria-hidden="true"></a></h3><p>▸ <strong>truncate</strong>(<code>v</code>: string, <code>l</code>: number, <code>o</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L68">src/builtin/filters/string.ts:68</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>number</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>string</td>
+<td>“…”</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="truncatewords" class="article-heading"><a href="#truncatewords" class="headerlink" title="truncatewords"></a>truncatewords<a class="article-anchor" href="#truncatewords" aria-hidden="true"></a></h3><p>▸ <strong>truncatewords</strong>(<code>v</code>: string, <code>l</code>: number, <code>o</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L74">src/builtin/filters/string.ts:74</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>string</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>l</code></td>
+<td>number</td>
+<td>15</td>
+</tr>
+<tr>
+<td><code>o</code></td>
+<td>string</td>
+<td>“…”</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+<hr>
+<h3 id="upcase" class="article-heading"><a href="#upcase" class="headerlink" title="upcase"></a>upcase<a class="article-anchor" href="#upcase" aria-hidden="true"></a></h3><p>▸ <strong>upcase</strong>(<code>str</code>: string): <em>string</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/builtin/filters/string.ts#L27">src/builtin/filters/string.ts:27</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>str</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>string</em></p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2021-12-11T13:32:07.262Z" itemprop="dateModified">上次更新：2021-12-11</time>
+                <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>下一页</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Functions"><span class="toc-text">Functions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#append"><span class="toc-text">append</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#capitalize"><span class="toc-text">capitalize</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#downcase"><span class="toc-text">downcase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lstrip"><span class="toc-text">lstrip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#prepend"><span class="toc-text">prepend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remove"><span class="toc-text">remove</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#removeFirst"><span class="toc-text">removeFirst</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#replace"><span class="toc-text">replace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#replaceFirst"><span class="toc-text">replaceFirst</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rstrip"><span class="toc-text">rstrip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strip"><span class="toc-text">strip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stripNewlines"><span class="toc-text">stripNewlines</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#truncate"><span class="toc-text">truncate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#truncatewords"><span class="toc-text">truncatewords</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#upcase"><span class="toc-text">upcase</span></a></li></ol></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">回到顶部</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2021 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="../../tutorials/setup.html" class="mobile-nav-link">教程</a><a href="../../tags/overview.html" class="mobile-nav-link">标签</a><a href="../../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../../playground.html" class="mobile-nav-link">演示</a><a href="../classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <strong class="mobile-nav-title">快速入口</strong><a href="../classes/liquid_.liquid.html" class="mobile-nav-link">Liquid</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="mobile-nav-link">LiquidOptions</a><a href="../interfaces/fs_fs_.fs.html" class="mobile-nav-link">FS</a><a href="../interfaces/cache_cache_.cache.html" class="mobile-nav-link">Cache</a><strong class="mobile-nav-title">类</strong><a href="../classes/drop_blank_drop_.blankdrop.html" class="mobile-nav-link">BlankDrop</a><a href="../classes/context_context_.context.html" class="mobile-nav-link">Context</a><a href="../classes/tokens_delimited_token_.delimitedtoken.html" class="mobile-nav-link">DelimitedToken</a><a href="../classes/drop_drop_.drop.html" class="mobile-nav-link">Drop</a><a href="../classes/drop_empty_drop_.emptydrop.html" class="mobile-nav-link">EmptyDrop</a><a href="../classes/render_expression_.expression.html" class="mobile-nav-link">Expression</a><a href="../classes/tokens_filter_token_.filtertoken.html" class="mobile-nav-link">FilterToken</a><a href="../classes/drop_forloop_drop_.forloopdrop.html" class="mobile-nav-link">ForloopDrop</a><a href="../classes/tokens_html_token_.htmltoken.html" class="mobile-nav-link">HTMLToken</a><a href="../classes/tokens_hash_token_.hashtoken.html" class="mobile-nav-link">HashToken</a><a href="../classes/cache_lru_.lru.html" class="mobile-nav-link">LRU</a><a href="../classes/liquid_.liquid.html" class="mobile-nav-link">Liquid</a><a href="../classes/tokens_literal_token_.literaltoken.html" class="mobile-nav-link">LiteralToken</a><a href="../classes/drop_null_drop_.nulldrop.html" class="mobile-nav-link">NullDrop</a><a href="../classes/tokens_number_token_.numbertoken.html" class="mobile-nav-link">NumberToken</a><a href="../classes/tokens_operator_token_.operatortoken.html" class="mobile-nav-link">OperatorToken</a><a href="../classes/tokens_output_token_.outputtoken.html" class="mobile-nav-link">OutputToken</a><a href="../classes/util_error_.parseerror.html" class="mobile-nav-link">ParseError</a><a href="../classes/parser_parse_stream_.parsestream.html" class="mobile-nav-link">ParseStream</a><a href="../classes/parser_parser_.parser.html" class="mobile-nav-link">Parser</a><a href="../classes/tokens_property_access_token_.propertyaccesstoken.html" class="mobile-nav-link">PropertyaccessToken</a><a href="../classes/tokens_quoted_token_.quotedtoken.html" class="mobile-nav-link">QuotedToken</a><a href="../classes/tokens_range_token_.rangetoken.html" class="mobile-nav-link">RangeToken</a><a href="../classes/render_render_.render.html" class="mobile-nav-link">Render</a><a href="../classes/util_error_.rendererror.html" class="mobile-nav-link">RenderError</a><a href="../classes/drop_tablerowloop_drop_.tablerowloopdrop.html" class="mobile-nav-link">TablerowloopDrop</a><a href="../classes/tokens_tag_token_.tagtoken.html" class="mobile-nav-link">TagToken</a><a href="../classes/tokens_token_.token.html" class="mobile-nav-link">Token</a><a href="../classes/util_error_.tokenizationerror.html" class="mobile-nav-link">TokenizationError</a><a href="../classes/parser_tokenizer_.tokenizer.html" class="mobile-nav-link">Tokenizer</a><a href="../classes/tokens_word_token_.wordtoken.html" class="mobile-nav-link">WordToken</a><strong class="mobile-nav-title">枚举</strong><a href="../enums/context_block_mode_.blockmode.html" class="mobile-nav-link">BlockMode</a><a href="../enums/parser_token_kind_.tokenkind.html" class="mobile-nav-link">TokenKind</a><strong class="mobile-nav-title">接口</strong><a href="../interfaces/cache_cache_.cache.html" class="mobile-nav-link">Cache</a><a href="../interfaces/template_filter_filter_impl_options_.filterimploptions.html" class="mobile-nav-link">FilterImplOptions</a><a href="../interfaces/fs_fs_.fs.html" class="mobile-nav-link">FS</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="mobile-nav-link">LiquidOptions</a><a href="../interfaces/liquid_options_.normalizedfulloptions.html" class="mobile-nav-link">NormalizedFullOptions</a><a href="../interfaces/context_scope_.plainobject.html" class="mobile-nav-link">PlainObject</a><a href="../interfaces/template_tag_tag_impl_options_.tagimploptions.html" class="mobile-nav-link">TagImplOptions</a>
+    </div>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
+    <select id="mobile-lang-select" data-canonical="api/modules/builtin_filters_string_.html">
+      
+        <option value="en">English</option>
+      
+        <option value="zh-cn" selected>简体中文</option>
+      
+    </select>
+  </div>
+</nav>
+  
+
+
+<script src="../../../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>
