@@ -161,4 +161,20 @@ describe('Issues', function () {
     const tpl = engine.parse('Welcome to {{ now | date: "%Y-%m-%d" }}!')
     expect(engine.render(tpl, { now: new Date('2019/02/01') })).to.eventually.equal('Welcome to 2019-02-01')
   })
+  it('#433 Support Jekyll-like includes', async () => {
+    const engine = new Liquid({
+      dynamicPartials: false,
+      root: '/tmp',
+      fs: {
+        readFileSync: (file: string) => file,
+        async readFile (file: string) { return `CONTENT for ${file}` },
+        existsSync (file: string) { return true },
+        async exists (file: string) { return true },
+        resolve: (dir: string, file: string) => dir + '/' + file
+      }
+    })
+    const tpl = engine.parse('{% include prefix/{{ my_variable | append: "-bar" }}/suffix %}')
+    const html = await engine.render(tpl, { my_variable: 'foo' })
+    expect(html).to.equal('CONTENT for /tmp/prefix/foo-bar/suffix')
+  })
 })

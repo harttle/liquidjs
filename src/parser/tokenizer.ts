@@ -33,7 +33,7 @@ export class Tokenizer {
   constructor (
     public input: string,
     private trie: Trie,
-    private file: string = ''
+    public file: string = ''
   ) {
     this.N = input.length
   }
@@ -119,15 +119,13 @@ export class Tokenizer {
     if (this.rawBeginAt > -1) return this.readEndrawOrRawContent(options)
     if (this.match(tagDelimiterLeft)) return this.readTagToken(options)
     if (this.match(outputDelimiterLeft)) return this.readOutputToken(options)
-    return this.readHTMLToken(options)
+    return this.readHTMLToken([tagDelimiterLeft, outputDelimiterLeft])
   }
 
-  readHTMLToken (options: NormalizedFullOptions): HTMLToken {
+  readHTMLToken (stopStrings: string[]): HTMLToken {
     const begin = this.p
     while (this.p < this.N) {
-      const { tagDelimiterLeft, outputDelimiterLeft } = options
-      if (this.match(tagDelimiterLeft)) break
-      if (this.match(outputDelimiterLeft)) break
+      if (stopStrings.some(str => this.match(str))) break
       ++this.p
     }
     return new HTMLToken(this.input, begin, this.p, this.file)
@@ -334,10 +332,16 @@ export class Tokenizer {
     return new QuotedToken(this.input, begin, this.p, this.file)
   }
 
-  readFileName (): IdentifierToken {
-    const begin = this.p
-    while (!(this.peekType() & BLANK) && this.peek() !== ',' && this.p < this.N) this.p++
-    return new IdentifierToken(this.input, begin, this.p, this.file)
+  * readFileNameTemplate (options: NormalizedFullOptions): IterableIterator<TopLevelToken> {
+    const { outputDelimiterLeft } = options
+    const htmlStopStrings = [',', ' ', outputDelimiterLeft]
+    const htmlStopStringSet = new Set(htmlStopStrings)
+    // break on ',' and ' ', outputDelimiterLeft only stops HTML token
+    while (this.p < this.N && !htmlStopStringSet.has(this.peek())) {
+      yield this.match(outputDelimiterLeft)
+        ? this.readOutputToken(options)
+        : this.readHTMLToken(htmlStopStrings)
+    }
   }
 
   match (word: string) {

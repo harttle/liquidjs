@@ -92,15 +92,20 @@ export function parseFilePath (tokenizer: Tokenizer, liquid: Liquid): ParsedFile
     if (file.getText() === 'none') return null
     if (TypeGuards.isQuotedToken(file)) {
       // for filenames like "files/{{file}}", eval as liquid template
-      const tpls = liquid.parse(evalQuotedToken(file))
-      // for filenames like "files/file.liquid", extract the string directly
-      if (tpls.length === 1 && TypeGuards.isHTMLToken(tpls[0].token)) return tpls[0].token.getContent()
-      return tpls
+      const templates = liquid.parse(evalQuotedToken(file))
+      return optimize(templates)
     }
     return file
   }
-  const filepath = tokenizer.readFileName().getText()
-  return filepath === 'none' ? null : filepath
+  const tokens = [...tokenizer.readFileNameTemplate(liquid.options)]
+  const templates = optimize(liquid.parser.parseTokens(tokens))
+  return templates === 'none' ? null : templates
+}
+
+function optimize (templates: Template[]): string | Template[] {
+  // for filenames like "files/file.liquid", extract the string directly
+  if (templates.length === 1 && TypeGuards.isHTMLToken(templates[0].token)) return templates[0].token.getContent()
+  return templates
 }
 
 export function renderFilePath (file: ParsedFileName, ctx: Context, liquid: Liquid) {

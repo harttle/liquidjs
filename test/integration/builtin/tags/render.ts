@@ -260,12 +260,15 @@ describe('tags/render', function () {
   })
 
   describe('static partial', function () {
+    let staticLiquid: Liquid
+    beforeEach(() => {
+      staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
+    })
     it('should support filename with extension', async function () {
       mock({
         '/parent.html': 'X{% render child.html color:"red" %}Y',
         '/child.html': 'child with {{color}}'
       })
-      const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
       expect(html).to.equal('Xchild with redY')
     })
@@ -275,7 +278,6 @@ describe('tags/render', function () {
         '/parent.html': 'X{% render bar/./../foo/child.html %}Y',
         '/foo/child.html': 'child'
       })
-      const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
       expect(html).to.equal('XchildY')
     })
@@ -285,7 +287,6 @@ describe('tags/render', function () {
         '/parent.html': 'X{% render foo/child.html %}Y',
         '/foo/child.html': 'child'
       })
-      const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
       expect(html).to.equal('XchildY')
     })
@@ -295,9 +296,26 @@ describe('tags/render', function () {
         '/parent.html': 'X{% render child.html, color:"red" %}Y',
         '/child.html': 'child with {{color}}'
       })
-      const staticLiquid = new Liquid({ dynamicPartials: false, root: '/' })
       const html = await staticLiquid.renderFile('parent.html')
       expect(html).to.equal('Xchild with redY')
+    })
+
+    it('should support template string', async function () {
+      mock({
+        '/current.html': 'bar{% render bar/{{name}} %}bar',
+        '/bar/foo.html': 'foo'
+      })
+      const html = await staticLiquid.renderFile('/current.html', { name: 'foo.html' })
+      expect(html).to.equal('barfoobar')
+    })
+
+    it('should support filters in template string', async function () {
+      mock({
+        '/current.html': 'bar{% render bar/{{name | append: ".html"}} %}bar',
+        '/bar/foo.html': 'foo'
+      })
+      const html = await staticLiquid.renderFile('/current.html', { name: 'foo' })
+      expect(html).to.equal('barfoobar')
     })
   })
   describe('sync support', function () {
