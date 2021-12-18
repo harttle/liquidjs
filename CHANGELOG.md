@@ -1,3 +1,10 @@
+# [9.30.0](https://github.com/harttle/liquidjs/compare/v9.29.0...v9.30.0) (2021-12-18)
+
+
+### Features
+
+* support jekyll-like include, see [#433](https://github.com/harttle/liquidjs/issues/433) ([23279a8](https://github.com/harttle/liquidjs/commit/23279a816a0582ade7f3b15c1c65c74bc147d134))
+
 # [9.29.0](https://github.com/harttle/liquidjs/compare/v9.28.6...v9.29.0) (2021-12-11)
 
 
