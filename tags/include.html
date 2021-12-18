@@ -93,13 +93,13 @@
               <div class="article-content" itemprop="articleBody">
                 <p class="since">v1.9.1</p>
 
-<blockquote class="note warn"><strong class="note-title">Deprecated</strong><p>This tag is deprecated, use <a href="./render.html">render</a> tag instead for better encapsulation.</p>
+<blockquote class="note warn"><strong class="note-title">Deprecated</strong><p>This tag is deprecated, use <a href="./render.html">render</a> tag instead, which contains all the features of <code>include</code> and provides better encapsulation.</p>
 </blockquote>
 
 <h2 id="Include-a-Template" class="article-heading"><a href="#Include-a-Template" class="headerlink" title="Include a Template"></a>Include a Template<a class="article-anchor" href="#Include-a-Template" aria-hidden="true"></a></h2><p>Renders a partial template from the template <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">roots</a>.</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include &#x27;footer.liquid&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>When the <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension can be omitted and writes:</p>
+<p>If <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension becomes optional:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include &#x27;footer&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>When a partial template is rendered by <code>include</code>, the code inside it can access its parent’s variables but its parent cannot access variables defined inside a included template.</p>
@@ -110,10 +110,22 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign featured_product = all_products[&#x27;product_handle&#x27;] %&#125;</span><br><span class="line">&#123;% include &#x27;product&#x27; with featured_product as product %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>In the example above, the <code>product</code> variable in the partial template will hold the value of <code>featured_product</code> in the parent template.</p>
+<h2 id="Outputs-amp-Filters" class="article-heading"><a href="#Outputs-amp-Filters" class="headerlink" title="Outputs &amp; Filters"></a>Outputs &amp; Filters<a class="article-anchor" href="#Outputs-amp-Filters" aria-hidden="true"></a></h2><p>When filename is specified as literal string, it supports Liquid output and filter syntax. Useful when concatenating strings for a complex filename.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include &quot;prefix/&#123;&#123;name | append: \&quot;.html\&quot;&#125;&#125;&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote class="note info"><strong class="note-title">Escaping</strong><p>In LiquidJS, <code>&quot;</code> within quoted string literals need to be escaped. Adding a slash before the quote, e.g. <code>\&quot;</code>. Using Jekyll-like filenames can make this easier, see below.</p>
+</blockquote>
+
+<h2 id="Jekyll-like-filenames" class="article-heading"><a href="#Jekyll-like-filenames" class="headerlink" title="Jekyll-like filenames"></a>Jekyll-like filenames<a class="article-anchor" href="#Jekyll-like-filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like includes, file names are specified as literal string. And it also supports Liquid outputs and filters.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include prefix/&#123;&#123; page.my_variable &#125;&#125;/suffix %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This way, you don’t need to escape <code>&quot;</code> in the filename expression.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include prefix/&#123;&#123;name | append: &quot;.html&quot;&#125;&#125; %&#125;</span><br></pre></td></tr></table></figure>
+
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-12-12T03:12:05.115Z" itemprop="dateModified">Last updated: 2021-12-12</time>
+                <time class="article-footer-updated" datetime="2021-12-18T07:29:47.826Z" itemprop="dateModified">Last updated: 2021-12-18</time>
                 <a href="if.html" class="article-footer-prev" title="sidebar.tags.if"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="increment.html" class="article-footer-next" title="sidebar.tags.increment"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -122,7 +134,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Include-a-Template"><span class="toc-text">Include a Template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Passing-Variables"><span class="toc-text">Passing Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-with-Parameter"><span class="toc-text">The with Parameter</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Include-a-Template"><span class="toc-text">Include a Template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Passing-Variables"><span class="toc-text">Passing Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-with-Parameter"><span class="toc-text">The with Parameter</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Outputs-amp-Filters"><span class="toc-text">Outputs &amp; Filters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jekyll-like-filenames"><span class="toc-text">Jekyll-like filenames</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>

@@ -93,19 +93,31 @@
               <div class="article-content" itemprop="articleBody">
                 <p class="since">v9.2.0</p>
 
-<h2 id="Basic-Usage" class="article-heading"><a href="#Basic-Usage" class="headerlink" title="Basic Usage"></a>Basic Usage<a class="article-anchor" href="#Basic-Usage" aria-hidden="true"></a></h2><h3 id="Render-a-Template" class="article-heading"><a href="#Render-a-Template" class="headerlink" title="Render a Template"></a>Render a Template<a class="article-anchor" href="#Render-a-Template" aria-hidden="true"></a></h3><p>Renders a partial template from the template <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">root</a>s.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render &#x27;footer.liquid&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Render-a-Template" class="article-heading"><a href="#Render-a-Template" class="headerlink" title="Render a Template"></a>Render a Template<a class="article-anchor" href="#Render-a-Template" aria-hidden="true"></a></h2><p>Render a partial template from partials directory specified by <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-partials">partials</a> or <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">root</a>.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// index.liquid</span><br><span class="line">Contents</span><br><span class="line">&#123;% render &#x27;footer.liquid&#x27; %&#125;</span><br><span class="line"></span><br><span class="line">// footer.liquid</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// result</span><br><span class="line">Contents</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
 
-<p>When the <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension can be omitted and writes:</p>
+<p>If <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension becomes optional:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render &#x27;footer&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
-<blockquote class="note info"><strong class="note-title">Variable Scope</strong><p>When a partial template is rendered, the code inside it can’t access its parent’s variables and its variables won’t be accessible by its parent. This encapsulation helps make theme code easier to understand and maintain.</p>
+<blockquote class="note info"><strong class="note-title">Variable Scope</strong><p>When a partial template is rendered, the code inside it can’t access its parent’s variables and its variables won’t be accessible by its parent. This encapsulation makes partials easier to understand and maintain.</p>
 </blockquote>
 
-<h3 id="Passing-Variables" class="article-heading"><a href="#Passing-Variables" class="headerlink" title="Passing Variables"></a>Passing Variables<a class="article-anchor" href="#Passing-Variables" aria-hidden="true"></a></h3><p>Variables defined in parent’s scope can be passed to a the partial template by listing them as parameters on the render tag:</p>
+<h2 id="Passing-Variables" class="article-heading"><a href="#Passing-Variables" class="headerlink" title="Passing Variables"></a>Passing Variables<a class="article-anchor" href="#Passing-Variables" aria-hidden="true"></a></h2><p>Variables defined in parent’s scope can be passed to a the partial template by listing them as parameters on the render tag:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign my_variable = &#x27;apples&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;name&#x27;, my_variable: my_variable, my_other_variable: &#x27;oranges&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
 <p><a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-globals">globals</a> don’t need to be passed down. They are accessible from all files.</p>
+<h2 id="Outputs-amp-Filters" class="article-heading"><a href="#Outputs-amp-Filters" class="headerlink" title="Outputs &amp; Filters"></a>Outputs &amp; Filters<a class="article-anchor" href="#Outputs-amp-Filters" aria-hidden="true"></a></h2><p>When filename is specified as literal string, it supports Liquid output and filter syntax. Useful when concatenating strings for a complex filename.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render &quot;prefix/&#123;&#123;name | append: \&quot;.html\&quot;&#125;&#125;&quot; %&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote class="note info"><strong class="note-title">Escaping</strong><p>In LiquidJS, <code>&quot;</code> within quoted string literals need to be escaped. Adding a slash before the quote, e.g. <code>\&quot;</code>. Using Jekyll-like filenames can make this easier, see below.</p>
+</blockquote>
+
+<h2 id="Jekyll-like-Filenames" class="article-heading"><a href="#Jekyll-like-Filenames" class="headerlink" title="Jekyll-like Filenames"></a>Jekyll-like Filenames<a class="article-anchor" href="#Jekyll-like-Filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, file names are specified as literal string. And it also supports Liquid outputs and filters.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render prefix/&#123;&#123; page.my_variable &#125;&#125;/suffix %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This way, you don’t need to escape <code>&quot;</code> in the filename expression.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render prefix/&#123;&#123;name | append: &quot;.html&quot;&#125;&#125; %&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Parameters" class="article-heading"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters<a class="article-anchor" href="#Parameters" aria-hidden="true"></a></h2><h3 id="The-with-Parameter" class="article-heading"><a href="#The-with-Parameter" class="headerlink" title="The with Parameter"></a>The <code>with</code> Parameter<a class="article-anchor" href="#The-with-Parameter" aria-hidden="true"></a></h3><p>A single object can be passed to a snippet by using the <code>with...as</code> syntax:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign featured_product = all_products[&#x27;product_handle&#x27;] %&#125;</span><br><span class="line">&#123;% render &#x27;product&#x27; with featured_product as product %&#125;</span><br></pre></td></tr></table></figure>
 
@@ -120,7 +132,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-12-12T03:12:05.115Z" itemprop="dateModified">Last updated: 2021-12-12</time>
+                <time class="article-footer-updated" datetime="2021-12-18T07:29:47.826Z" itemprop="dateModified">Last updated: 2021-12-18</time>
                 <a href="raw.html" class="article-footer-prev" title="sidebar.tags.raw"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="tablerow.html" class="article-footer-next" title="sidebar.tags.tablerow"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -129,7 +141,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Usage"><span class="toc-text">Basic Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Render-a-Template"><span class="toc-text">Render a Template</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Passing-Variables"><span class="toc-text">Passing Variables</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters"><span class="toc-text">Parameters</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The-with-Parameter"><span class="toc-text">The with Parameter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-for-Parameter"><span class="toc-text">The for Parameter</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Render-a-Template"><span class="toc-text">Render a Template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Passing-Variables"><span class="toc-text">Passing Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Outputs-amp-Filters"><span class="toc-text">Outputs &amp; Filters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jekyll-like-Filenames"><span class="toc-text">Jekyll-like Filenames</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters"><span class="toc-text">Parameters</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#The-with-Parameter"><span class="toc-text">The with Parameter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-for-Parameter"><span class="toc-text">The for Parameter</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>

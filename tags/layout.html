@@ -93,35 +93,40 @@
               <div class="article-content" itemprop="articleBody">
                 <p class="since">v1.9.1</p>
 
-<h2 id="Using-a-Layout-Template" class="article-heading"><a href="#Using-a-Layout-Template" class="headerlink" title="Using a Layout Template"></a>Using a Layout Template<a class="article-anchor" href="#Using-a-Layout-Template" aria-hidden="true"></a></h2><p>Renders current template inside a layout template from the template <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">roots</a>.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout &#x27;footer.liquid&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Using-a-Layout" class="article-heading"><a href="#Using-a-Layout" class="headerlink" title="Using a Layout"></a>Using a Layout<a class="article-anchor" href="#Using-a-Layout" aria-hidden="true"></a></h2><p>Introduce a layout template for the current template to render in. The directory for layout files are defined by <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-layouts">layouts</a> or <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">root</a>.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block %&#125;&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block %&#125;My page content&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">// result</span><br><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
 
-<p>When the <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension can be omitted and writes:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout &#x27;footer&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<p>If <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the <code>.liquid</code> extension becomes optional:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout &#x27;default-layout&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>When a partial template is rendered by <code>layout</code>, the code inside it can access its caller’s variables but its parent cannot access variables defined inside a included template.</p>
+<blockquote class="note info"><strong class="note-title">Scoping</strong><p>When a partial template is rendered by <code>layout</code>, its template have access for its caller’s variables but not vice versa. Variables defined in layout will be popped out before control returning to its caller.</p>
+</blockquote>
+
+<h2 id="Multiple-Blocks" class="article-heading"><a href="#Multiple-Blocks" class="headerlink" title="Multiple Blocks"></a>Multiple Blocks<a class="article-anchor" href="#Multiple-Blocks" aria-hidden="true"></a></h2><p>The layout file can contain multiple blocks, each with a specified name. The following snippets yield same result as in the above example.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// default-layout.liquid</span><br><span class="line">&#123;% block header %&#125;&#123;% endblock %&#125;</span><br><span class="line">&#123;% block content %&#125;&#123;% endblock %&#125;</span><br><span class="line">&#123;% block footer %&#125;&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">// page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block header %&#125;Header&#123;% endblock %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br><span class="line">&#123;% block footer %&#125;Footer&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Default-Block-Contents" class="article-heading"><a href="#Default-Block-Contents" class="headerlink" title="Default Block Contents"></a>Default Block Contents<a class="article-anchor" href="#Default-Block-Contents" aria-hidden="true"></a></h2><p>In the above layout files, blocks has empty contents. But it’s not necessarily be empty, in which case, the block contents in layout files will be used as default templates. The following snippets are also equivalent to the above examples:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// default-layout.liquid</span><br><span class="line">&#123;% block header %&#125;Header&#123;% endblock %&#125;</span><br><span class="line">&#123;% block content %&#125;&#123;% endblock %&#125;</span><br><span class="line">&#123;% block footer %&#125;Footer&#123;% endblock %&#125;</span><br><span class="line"></span><br><span class="line">// page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="Passing-Variables" class="article-heading"><a href="#Passing-Variables" class="headerlink" title="Passing Variables"></a>Passing Variables<a class="article-anchor" href="#Passing-Variables" aria-hidden="true"></a></h2><p>Variables defined in current template can be passed to a the layout template by listing them as parameters on the <code>layout</code> tag:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign my_variable = &#x27;apples&#x27; %&#125;</span><br><span class="line">&#123;% layout &#x27;name&#x27;, my_variable: my_variable, my_other_variable: &#x27;oranges&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Blocks" class="article-heading"><a href="#Blocks" class="headerlink" title="Blocks"></a>Blocks<a class="article-anchor" href="#Blocks" aria-hidden="true"></a></h2><p>The layout file can contain multiple <code>block</code>s which will be populated by the child template (the caller). For example we have a <code>default-layout.liquid</code> file with the following contents:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<h2 id="Outputs-amp-Filters" class="article-heading"><a href="#Outputs-amp-Filters" class="headerlink" title="Outputs &amp; Filters"></a>Outputs &amp; Filters<a class="article-anchor" href="#Outputs-amp-Filters" aria-hidden="true"></a></h2><p>When filename is specified as literal string, it supports Liquid output and filter syntax. Useful when concatenating strings for a complex filename.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout &quot;prefix/&#123;&#123;name | append: \&quot;.html\&quot;&#125;&#125;&quot; %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>And it’s called by a <code>page.liquid</code> file with <code>layout</code> tag:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout &quot;default-layout&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<blockquote class="note info"><strong class="note-title">Escaping</strong><p>In LiquidJS, <code>&quot;</code> within quoted string literals need to be escaped. Adding a slash before the quote, e.g. <code>\&quot;</code>. Using Jekyll-like filenames can make this easier, see below.</p>
+</blockquote>
 
-<p>The render result of <code>page.liquid</code> will be :</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<h2 id="Jekyll-like-Filenames" class="article-heading"><a href="#Jekyll-like-Filenames" class="headerlink" title="Jekyll-like Filenames"></a>Jekyll-like Filenames<a class="article-anchor" href="#Jekyll-like-Filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, file names are specified as literal string. And it also supports Liquid outputs and filters.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout prefix/&#123;&#123; page.my_variable &#125;&#125;/suffix %&#125;</span><br></pre></td></tr></table></figure>
 
-<blockquote class="note tip"><strong class="note-title">Block</strong><ul>
-    <li>Multiple blocks can be defined within a layout template;</li>
-    <li>The block name is optional when there's only one block.</li>
-    <li>The block contents will fallback to parent's corresponding block if not provided by child template.</li>
-</ul></blockquote>
+<p>This way, you don’t need to escape <code>&quot;</code> in the filename expression.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% layout prefix/&#123;&#123;name | append: &quot;.html&quot;&#125;&#125; %&#125;</span><br></pre></td></tr></table></figure>
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-12-12T03:12:05.115Z" itemprop="dateModified">Last updated: 2021-12-12</time>
+                <time class="article-footer-updated" datetime="2021-12-18T07:29:47.826Z" itemprop="dateModified">Last updated: 2021-12-18</time>
                 <a href="increment.html" class="article-footer-prev" title="sidebar.tags.increment"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="raw.html" class="article-footer-next" title="sidebar.tags.raw"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -130,7 +135,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-a-Layout-Template"><span class="toc-text">Using a Layout Template</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Passing-Variables"><span class="toc-text">Passing Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Blocks"><span class="toc-text">Blocks</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Using-a-Layout"><span class="toc-text">Using a Layout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Multiple-Blocks"><span class="toc-text">Multiple Blocks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Default-Block-Contents"><span class="toc-text">Default Block Contents</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Passing-Variables"><span class="toc-text">Passing Variables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Outputs-amp-Filters"><span class="toc-text">Outputs &amp; Filters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jekyll-like-Filenames"><span class="toc-text">Jekyll-like Filenames</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
