@@ -79,11 +79,13 @@ tags:
   comment: comment.html
   cycle: cycle.html
   decrement: decrement.html
+  echo: echo.html
   for: for.html
   if: if.html
   include: include.html
   increment: increment.html
   layout: layout.html
+  liquid: liquid.html
   raw: raw.html
   render: render.html
   tablerow: tablerow.html
