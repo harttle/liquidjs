@@ -11,6 +11,7 @@ import { OutputToken } from '../../../src/tokens/output-token'
 import { HTMLToken } from '../../../src/tokens/html-token'
 import { createTrie } from '../../../src/util/operator-trie'
 import { defaultOperators } from '../../../src/types'
+import { LiquidTagToken } from '../../../src/tokens/liquid-tag-token'
 
 describe('Tokenizer', function () {
   const trie = createTrie(defaultOperators)
@@ -498,6 +499,30 @@ describe('Tokenizer', function () {
 
       expect(rhs).to.be.instanceOf(QuotedToken)
       expect(rhs.getText()).to.deep.equal('"\\""')
+    })
+  })
+  describe('#readLiquidTagTokens', () => {
+    it('should read newline terminated tokens', () => {
+      const tokenizer = new Tokenizer('echo \'hello\'', trie)
+      const tokens = tokenizer.readLiquidTagTokens()
+      expect(tokens.length).to.equal(1)
+      const tag = tokens[0]
+      expect(tag).instanceOf(LiquidTagToken)
+      expect(tag.name).to.equal('echo')
+      expect(tag.args).to.equal('\'hello\'')
+    })
+    it('should gracefully handle empty lines', () => {
+      const tokenizer = new Tokenizer(`
+        echo 'hello'
+
+        decrement foo
+        `, trie)
+      const tokens = tokenizer.readLiquidTagTokens()
+      expect(tokens.length).to.equal(2)
+    })
+    it('should throw if line does not start with an identifier', () => {
+      const tokenizer = new Tokenizer('!', trie)
+      expect(() => tokenizer.readLiquidTagTokens()).to.throw(/illegal liquid tag syntax/)
     })
   })
 })
