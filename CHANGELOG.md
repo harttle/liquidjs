@@ -1,3 +1,10 @@
+# [9.31.0](https://github.com/harttle/liquidjs/compare/v9.30.0...v9.31.0) (2021-12-19)
+
+
+### Features
+
+* implement `liquid` and `echo` tags, see [#428](https://github.com/harttle/liquidjs/issues/428) ([fde9924](https://github.com/harttle/liquidjs/commit/fde9924ee622efae4c013d2aa01c6d705c8d5f46))
+
 # [9.30.0](https://github.com/harttle/liquidjs/compare/v9.29.0...v9.30.0) (2021-12-18)
 
 
