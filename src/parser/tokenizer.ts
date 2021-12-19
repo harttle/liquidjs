@@ -24,6 +24,7 @@ import { TYPES, QUOTE, BLANK, IDENTIFIER } from '../util/character'
 import { matchOperator } from './match-operator'
 import { Trie } from '../util/operator-trie'
 import { Expression } from '../render/expression'
+import { LiquidTagToken } from '../tokens/liquid-tag-token'
 
 export class Tokenizer {
   p = 0
@@ -189,6 +190,24 @@ export class Tokenizer {
       }
     }
     throw this.mkError(`raw ${this.snapshot(this.rawBeginAt)} not closed`, begin)
+  }
+
+  readLiquidTagTokens (options: NormalizedFullOptions = defaultOptions): LiquidTagToken[] {
+    const tokens: LiquidTagToken[] = []
+    while (this.p < this.N) {
+      const token = this.readLiquidTagToken(options)
+      if (token.name) tokens.push(token)
+    }
+    return tokens
+  }
+
+  readLiquidTagToken (options: NormalizedFullOptions): LiquidTagToken {
+    const { file, input } = this
+    const begin = this.p
+    let end = this.N
+    if (this.readToDelimiter('\n') !== -1) end = this.p
+    const token = new LiquidTagToken(input, begin, end, options, file)
+    return token
   }
 
   mkError (msg: string, begin: number) {

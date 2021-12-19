@@ -177,4 +177,21 @@ describe('Issues', function () {
     const html = await engine.render(tpl, { my_variable: 'foo' })
     expect(html).to.equal('CONTENT for /tmp/prefix/foo-bar/suffix')
   })
+  it('#428 Implement liquid/echo tags', () => {
+    const template = `{%- liquid
+      for value in array
+        assign double_value = value | times: 2
+        echo double_value | times: 2
+        unless forloop.last
+          echo '#'
+        endunless
+      endfor
+    
+      echo '#'
+      echo double_value
+    -%}`
+    const engine = new Liquid()
+    const html = engine.parseAndRenderSync(template, { array: [1, 2, 3] })
+    expect(html).to.equal('4#8#12#6')
+  })
 })
