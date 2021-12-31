@@ -15,12 +15,25 @@ A simple, expressive and safe [Shopify][shopify/liquid] / Github Pages compatibl
 
 <p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
 
+## What's it like?
+
+Basically there're two types of Liquid syntax: tags enclosed by `{% %}` and outputs enclosed by `{{ }}`. A Liquid template looks like:
+
+```liquid
+{% if username %}
+  {{ username | append: ", welcome to LiquidJS!" | capitalize }}
+{% endif %}
+```
+
+[A live demo](https://liquidjs.com/playground.html) is also available and here's a [quick tutorial](https://liquidjs.com/tutorials/intro-to-liquid.html) for Liquid syntax.
+
+
 ## Installation
 
 Install from npm in Node.js:
 
 ```bash
-npm install --save liquidjs
+npm install liquidjs
 ```
 
 Or use the UMD bundle from jsDelivr:

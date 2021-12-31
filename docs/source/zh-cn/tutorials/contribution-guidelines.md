@@ -26,7 +26,7 @@ npm test
 
 ## 成为赞助者！
 
-LiquidJS 是开源的、免费的，并且 **没有** 商业支持，也 **没有** 任何广告。如果你喜欢 LiquidJS 或你的公司在使用 LiquidJS，请考虑通过 [Open Collective][oc] 或 [Patreon][pt] 赞助，作为感谢你的名字和头像（或 Logo）会展示在这里和 [Github README][liquidjs]。
+LiquidJS 是开源和免费的。如果你喜欢 LiquidJS 或你的公司在使用 LiquidJS，请考虑通过 [Open Collective][oc] 或 [Patreon][pt] 赞助，作为感谢你的名字和头像（或 Logo）会展示在这里，[LiquidJS 首页](https://liquidjs.com/)和 [Github README][liquidjs]。
 
 <object type="image/svg+xml" data="https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=72"></object>
 

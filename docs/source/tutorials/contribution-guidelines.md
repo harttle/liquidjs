@@ -26,7 +26,7 @@ npm test
 
 ## Financial Support
 
-LiquidJS is Open Source and Free and **without** capitalists support and **without** any ADs. To help it live and thrive, consider contribute on [Open Collective][oc] or [Patreon][pt]. To acknowledge your contribution, your name and avatar will be listed here and on [Github README][liquidjs].
+LiquidJS is Open Source and Free. To help it live and thrive, please consider contribute on [Open Collective][oc] or [Patreon][pt]. To acknowledge your contribution, your name and avatar will be listed here, [homepage](https://liquidjs.com/) for LiquidJS and on [Github README][liquidjs].
 
 <object type="image/svg+xml" data="https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=72"></object>
 
