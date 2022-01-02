@@ -115,10 +115,19 @@
 <p>Output</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">2.99</span><br></pre></td></tr></table></figure>
 
+<h2 id="Allowing-false" class="article-heading"><a href="#Allowing-false" class="headerlink" title="Allowing false"></a>Allowing <code>false</code><a class="article-anchor" href="#Allowing-false" aria-hidden="true"></a></h2><p class="since">v9.32.0</p>
+
+<p>To allow variables to return <code>false</code> instead of the default value, you can use the <code>allow_false</code> parameter.</p>
+<p>Input</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign display_price = false %&#125;</span><br><span class="line">&#123;&#123; display_price | default: true, allow_false: true &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Output</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">false</span><br></pre></td></tr></table></figure>
+
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2021-12-31T09:51:16.551Z" itemprop="dateModified">Last updated: 2021-12-31</time>
+                <time class="article-footer-updated" datetime="2022-01-02T08:33:57.872Z" itemprop="dateModified">Last updated: 2022-01-02</time>
                 <a href="date.html" class="article-footer-prev" title="sidebar.filters.date"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="divided_by.html" class="article-footer-next" title="sidebar.filters.divided_by"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -127,7 +136,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Allowing-false"><span class="toc-text">Allowing false</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
@@ -141,7 +150,7 @@
     <footer id="footer" class="wrapper">
   <div class="inner">
     <div id="footer-copyright">
-      &copy; 2021 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      &copy; 2022 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
       Documentation licensed under <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>.
     </div>
     <div id="footer-links">
