@@ -12,6 +12,9 @@ describe('filters/object', function () {
     it('undefined should use default', async () => expect(await liquid.parseAndRender('{{not_defined | default: "a"}}')).to.equal('a'))
     it('true should not use default', async () => expect(await liquid.parseAndRender('{{true | default: "a"}}')).to.equal('true'))
     it('0 should not use default', async () => expect(await liquid.parseAndRender('{{0 | default: "a"}}')).to.equal('0'))
+    it('should output false when allow_false=true', async () => expect(await liquid.parseAndRender('{{false | default: true, allow_false: true}}')).to.equal('false'))
+    it('should output default without allow_false', async () => expect(await liquid.parseAndRender('{{false | default: true}}')).to.equal('true'))
+    it('should output default when allow_false=false', async () => expect(await liquid.parseAndRender('{{false | default: true, allow_false: false}}')).to.equal('true'))
   })
   describe('json', function () {
     it('should stringify string', async () => expect(await liquid.parseAndRender('{{"foo" | json}}')).to.equal('"foo"'))

@@ -44,4 +44,23 @@ Output
 2.99
 ```
 
+## Allowing `false`
+
+{% since %}v9.32.0{% endsince %}
+
+To allow variables to return `false` instead of the default value, you can use the `allow_false` parameter.
+
+Input
+
+```liquid
+{% assign display_price = false %}
+{{ display_price | default: true, allow_false: true }}
+```
+
+Output
+
+```text
+false
+```
+
 [falsy]: ../tutorials/truthy-and-falsy.html

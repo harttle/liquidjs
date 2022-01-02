@@ -42,4 +42,23 @@ title: default
 2.99
 ```
 
+## 允许 `false`
+
+{% since %}v9.32.0{% endsince %}
+
+为了允许让 `false` 直接输出而不是用默认值，可以用 `allow_false` 参数。
+
+输入
+
+```liquid
+{% assign display_price = false %}
+{{ display_price | default: true, allow_false: true }}
+```
+
+输出
+
+```text
+false
+```
+
 [falsy]: ../tutorials/truthy-and-falsy.html
