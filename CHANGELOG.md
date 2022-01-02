@@ -1,3 +1,10 @@
+# [9.32.0](https://github.com/harttle/liquidjs/compare/v9.31.0...v9.32.0) (2022-01-02)
+
+
+### Features
+
+* support allow_false for `default` filter, see [#435](https://github.com/harttle/liquidjs/issues/435) ([c756191](https://github.com/harttle/liquidjs/commit/c756191f49f9c2b823048367abfdf0adf2bdb875))
+
 # [9.31.0](https://github.com/harttle/liquidjs/compare/v9.30.0...v9.31.0) (2021-12-19)
 
 
