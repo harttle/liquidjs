@@ -62,7 +62,7 @@ export class Tokenizer {
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
-    const end = matchOperator(this.input, this.p, this.trie, this.p + 8)
+    const end = matchOperator(this.input, this.p, this.trie)
     if (end === -1) return
     return new OperatorToken(this.input, this.p, (this.p = end), this.file)
   }
