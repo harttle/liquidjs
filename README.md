@@ -128,6 +128,9 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <td align="center"><a href="https://www.aleksandrhovhannisyan.com/"><img src="https://avatars.githubusercontent.com/u/19352442?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Aleksandr Hovhannisyan</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=AleksandrHovhannisyan" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/jg-rp"><img src="https://avatars.githubusercontent.com/u/72664870?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jg-rp</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jg-rp" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/ameyaapte1"><img src="https://avatars.githubusercontent.com/u/16054747?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ameya Apte</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=ameyaapte1" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-restore -->
