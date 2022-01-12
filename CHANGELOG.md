@@ -1,3 +1,10 @@
+## [9.32.1](https://github.com/harttle/liquidjs/compare/v9.32.0...v9.32.1) (2022-01-12)
+
+
+### Bug Fixes
+
+* remove limit on operator char length ([7677f84](https://github.com/harttle/liquidjs/commit/7677f848c0c57335dd1c4f1e3ec251fbf9b1663f))
+
 # [9.32.0](https://github.com/harttle/liquidjs/compare/v9.31.0...v9.32.0) (2022-01-02)
 
 
