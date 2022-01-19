@@ -1,3 +1,10 @@
+## [9.33.1](https://github.com/harttle/liquidjs/compare/v9.33.0...v9.33.1) (2022-01-19)
+
+
+### Bug Fixes
+
+* liquidjs.version on npm package ([53824a2](https://github.com/harttle/liquidjs/commit/53824a2d00f978214fcd83a48118b7900cf97449))
+
 # [9.33.0](https://github.com/harttle/liquidjs/compare/v9.32.1...v9.33.0) (2022-01-19)
 
 
