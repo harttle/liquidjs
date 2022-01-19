@@ -118,17 +118,17 @@
 
 <h3 id="break" class="article-heading"><a href="#break" class="headerlink" title="break"></a>break<a class="article-anchor" href="#break" aria-hidden="true"></a></h3><p>Causes the loop to stop iterating when it encounters the <code>break</code> tag.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% for i in (1..5) %&#125;</span><br><span class="line">  &#123;% if i == 4 %&#125;</span><br><span class="line">    &#123;% break %&#125;</span><br><span class="line">  &#123;% else %&#125;</span><br><span class="line">    &#123;&#123; i &#125;&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% for i in (1..5) %&#125;</span><br><span class="line">  &#123;%- if i == 4 -%&#125;</span><br><span class="line">    &#123;% break %&#125;</span><br><span class="line">  &#123;%- else -%&#125;</span><br><span class="line">    &#123;&#123; i &#125;&#125;</span><br><span class="line">  &#123;%- endif -%&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 2 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">123</span><br></pre></td></tr></table></figure>
 
 <h3 id="continue" class="article-heading"><a href="#continue" class="headerlink" title="continue"></a>continue<a class="article-anchor" href="#continue" aria-hidden="true"></a></h3><p>Causes the loop to skip the current iteration when it encounters the <code>continue</code> tag.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% for i in (1..5) %&#125;</span><br><span class="line">  &#123;% if i == 4 %&#125;</span><br><span class="line">    &#123;% continue %&#125;</span><br><span class="line">  &#123;% else %&#125;</span><br><span class="line">    &#123;&#123; i &#125;&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% for i in (1..5) %&#125;</span><br><span class="line">  &#123;%- if i == 4 -%&#125;</span><br><span class="line">    &#123;%- continue -%&#125;</span><br><span class="line">  &#123;%- else -%&#125;</span><br><span class="line">    &#123;&#123; i &#125;&#125;</span><br><span class="line">  &#123;%- endif -%&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 2 3   5</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1235</span><br></pre></td></tr></table></figure>
 
 <h3 id="forloop" class="article-heading"><a href="#forloop" class="headerlink" title="forloop"></a>forloop<a class="article-anchor" href="#forloop" aria-hidden="true"></a></h3><p>There’s a <code>forloop</code> object available inside <code>for</code> loops. It’s used to indicate the current state of <code>for</code> loop.</p>
 <p>The <code>forloop.first</code>, <code>forloop.last</code> and <code>forloop.length</code> property:</p>
@@ -147,24 +147,40 @@
 
 <h2 id="Parameters" class="article-heading"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters<a class="article-anchor" href="#Parameters" aria-hidden="true"></a></h2><h3 id="limit" class="article-heading"><a href="#limit" class="headerlink" title="limit"></a>limit<a class="article-anchor" href="#limit" aria-hidden="true"></a></h3><p>Limits the loop to the specified number of iterations.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- if array = [1,2,3,4,5,6] --&gt;</span><br><span class="line">&#123;% for item in array limit:2 %&#125;</span><br><span class="line">  &#123;&#123; item &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- for array = [1,2,3,4,5,6] --&gt;</span><br><span class="line">&#123;% for item in array limit:2 %&#125;</span><br><span class="line">  &#123;&#123;- item -&#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">12</span><br></pre></td></tr></table></figure>
 
 <h3 id="offset" class="article-heading"><a href="#offset" class="headerlink" title="offset"></a>offset<a class="article-anchor" href="#offset" aria-hidden="true"></a></h3><p>Begins the loop at the specified index.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- if array = [1,2,3,4,5,6] --&gt;</span><br><span class="line">&#123;% for item in array offset:2 %&#125;</span><br><span class="line">  &#123;&#123; item &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- for array = [1,2,3,4,5,6] --&gt;</span><br><span class="line">&#123;% for item in array offset:2 %&#125;</span><br><span class="line">  &#123;&#123;- item -&#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 4 5 6</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3456</span><br></pre></td></tr></table></figure>
+
+<h4 id="offset-continue" class="article-heading"><a href="#offset-continue" class="headerlink" title="offset:continue"></a>offset:continue<a class="article-anchor" href="#offset-continue" aria-hidden="true"></a></h4><p class="since">v9.33.0</p>
+
+<p>Offset value can be <code>continue</code> to continue previous loop. For example:</p>
+<p>Input</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- for array = [1,2,3,4,5,6] --&gt;</span><br><span class="line">&#123;% for item in array limit:2 %&#125;</span><br><span class="line">  &#123;&#123;- item -&#125;&#125;</span><br><span class="line">&#123;% endfor%&#125;</span><br><span class="line">&#123;% for item in array offset:continue %&#125;</span><br><span class="line">  &#123;&#123;- item -&#125;&#125;</span><br><span class="line">&#123;% endfor%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Output</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">12</span><br><span class="line">3456</span><br></pre></td></tr></table></figure>
+
+<p>For the same variable name (<code>&quot;item&quot;</code> in this case) and same collection (<code>&quot;array&quot;</code> in this case), there’s one position record. That means you can start a new loop with a different variable name:</p>
+<p>Input</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;!-- for array = [1,2,3,4,5,6] --&gt;</span><br><span class="line">&#123;% for item in array limit:2 %&#125;</span><br><span class="line">  &#123;&#123;- item -&#125;&#125;</span><br><span class="line">&#123;% endfor%&#125;</span><br><span class="line">&#123;% for item2 in array offset:continue %&#125;</span><br><span class="line">  &#123;&#123;- item2 -&#125;&#125;</span><br><span class="line">&#123;% endfor%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Output</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">12</span><br><span class="line">123456</span><br></pre></td></tr></table></figure>
 
 <h3 id="range" class="article-heading"><a href="#range" class="headerlink" title="range"></a>range<a class="article-anchor" href="#range" aria-hidden="true"></a></h3><p>Defines a range of numbers to loop through. The range can be defined by both literal and variable numbers.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% for i in (3..5) %&#125;</span><br><span class="line">  &#123;&#123; i &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign num = 4 %&#125;</span><br><span class="line">&#123;% for i in (1..num) %&#125;</span><br><span class="line">  &#123;&#123; i &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% for i in (3..5) %&#125;</span><br><span class="line">  &#123;&#123;- i -&#125;&#125;</span><br><span class="line">&#123;% endfor-%&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign num = 4 %&#125;</span><br><span class="line">&#123;% for i in (1..num) %&#125;</span><br><span class="line">  &#123;&#123;- i -&#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">3 4 5</span><br><span class="line">1 2 3 4</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">345</span><br><span class="line">1234</span><br></pre></td></tr></table></figure>
 
 <h3 id="reversed" class="article-heading"><a href="#reversed" class="headerlink" title="reversed"></a>reversed<a class="article-anchor" href="#reversed" aria-hidden="true"></a></h3><p>Reverses the order of the loop. Note that this flag’s spelling is different from the filter <code>reverse</code>.</p>
 <p>Input</p>
@@ -188,7 +204,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-12T13:26:14.534Z" itemprop="dateModified">Last updated: 2022-01-12</time>
+                <time class="article-footer-updated" datetime="2022-01-19T16:55:27.074Z" itemprop="dateModified">Last updated: 2022-01-19</time>
                 <a href="echo.html" class="article-footer-prev" title="sidebar.tags.echo"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="if.html" class="article-footer-next" title="sidebar.tags.if"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -197,7 +213,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Usage"><span class="toc-text">Basic Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#for%E2%80%A6in"><span class="toc-text">for…in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#else"><span class="toc-text">else</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#break"><span class="toc-text">break</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#continue"><span class="toc-text">continue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forloop"><span class="toc-text">forloop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters"><span class="toc-text">Parameters</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#limit"><span class="toc-text">limit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#offset"><span class="toc-text">offset</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#range"><span class="toc-text">range</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reversed"><span class="toc-text">reversed</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Usage"><span class="toc-text">Basic Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#for%E2%80%A6in"><span class="toc-text">for…in</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#else"><span class="toc-text">else</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#break"><span class="toc-text">break</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#continue"><span class="toc-text">continue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forloop"><span class="toc-text">forloop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Parameters"><span class="toc-text">Parameters</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#limit"><span class="toc-text">limit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#offset"><span class="toc-text">offset</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#offset-continue"><span class="toc-text">offset:continue</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#range"><span class="toc-text">range</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reversed"><span class="toc-text">reversed</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
