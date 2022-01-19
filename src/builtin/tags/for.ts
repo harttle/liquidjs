@@ -47,7 +47,11 @@ export default {
       return
     }
 
+    const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
+    ctx.push({ continue: ctx.getRegister(continueKey) })
     const hash = yield this.hash.render(ctx)
+    ctx.pop()
+
     const modifiers = this.liquid.options.orderedFilterParameters
       ? Object.keys(hash).filter(x => MODIFIERS.includes(x))
       : MODIFIERS.filter(x => hash[x] !== undefined)
@@ -58,6 +62,7 @@ export default {
       return reversed(collection)
     }, collection)
 
+    ctx.setRegister(continueKey, (hash['offset'] || 0) + collection.length)
     const scope = { forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) }
     ctx.push(scope)
     for (const item of collection) {

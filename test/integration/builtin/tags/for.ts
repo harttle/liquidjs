@@ -220,6 +220,27 @@ describe('tags/for', function () {
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).to.equal('1 0 ')
     })
+    it('should continue from limit-ed loop', async function () {
+      const src = '{%for i in arr limit:2%}{{i}}{%endfor%}-{%for i in arr offset:continue%}{{i}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, { arr: [1, 2, 3, 4, 5] })
+      return expect(html).to.equal('12-345')
+    })
+    it('should continue nothing for fully iterated loop', async function () {
+      const src = '{%for i in arr%}{{i}}{%endfor%}-{%for i in arr offset:continue%}{{i}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, { arr: [1, 2, 3, 4, 5] })
+      return expect(html).to.equal('12345-')
+    })
+    it('should treat different variable names as different forloop', async function () {
+      const src = '{%for i in (1..5)%}{{i}}{%endfor%}-{%for j in (1..5) offset:continue%}{{j}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, {})
+      return expect(html).to.equal('12345-12345')
+    })
+    it('should treat different collection names as different forloop', async function () {
+      const src = '{%for i in arr1%}{{i}}{%endfor%}-{%for i in arr2 offset:continue%}{{i}}{%endfor%}'
+      const arr = [1, 2, 3, 4, 5]
+      const html = await liquid.parseAndRender(src, { arr1: arr, arr2: arr })
+      return expect(html).to.equal('12345-12345')
+    })
   })
 
   describe('reversed', function () {

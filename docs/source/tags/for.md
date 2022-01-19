@@ -66,17 +66,17 @@ Causes the loop to stop iterating when it encounters the `break` tag.
 Input
 ```liquid
 {% for i in (1..5) %}
-  {% if i == 4 %}
+  {%- if i == 4 -%}
     {% break %}
-  {% else %}
+  {%- else -%}
     {{ i }}
-  {% endif %}
+  {%- endif -%}
 {% endfor %}
 ```
 
 Output
 ```text
-1 2 3
+123
 ```
 
 ### continue
@@ -86,17 +86,17 @@ Causes the loop to skip the current iteration when it encounters the `continue` 
 Input
 ```liquid
 {% for i in (1..5) %}
-  {% if i == 4 %}
-    {% continue %}
-  {% else %}
+  {%- if i == 4 -%}
+    {%- continue -%}
+  {%- else -%}
     {{ i }}
-  {% endif %}
+  {%- endif -%}
 {% endfor %}
 ```
 
 Output
 ```text
-1 2 3   5
+1235
 ```
 
 ### forloop
@@ -152,15 +152,15 @@ Limits the loop to the specified number of iterations.
 
 Input
 ```liquid
-<!-- if array = [1,2,3,4,5,6] -->
+<!-- for array = [1,2,3,4,5,6] -->
 {% for item in array limit:2 %}
-  {{ item }}
+  {{- item -}}
 {% endfor %}
 ```
 
 Output
 ```text
-1 2
+12
 ```
 
 ### offset
@@ -169,15 +169,57 @@ Begins the loop at the specified index.
 
 Input
 ```liquid
-<!-- if array = [1,2,3,4,5,6] -->
+<!-- for array = [1,2,3,4,5,6] -->
 {% for item in array offset:2 %}
-  {{ item }}
+  {{- item -}}
 {% endfor %}
 ```
 
 Output
 ```text
-3 4 5 6
+3456
+```
+
+#### offset:continue
+
+{% since %}v9.33.0{% endsince %}
+
+Offset value can be `continue` to continue previous loop. For example:
+
+Input
+```liquid
+<!-- for array = [1,2,3,4,5,6] -->
+{% for item in array limit:2 %}
+  {{- item -}}
+{% endfor%}
+{% for item in array offset:continue %}
+  {{- item -}}
+{% endfor%}
+```
+
+Output
+```text
+12
+3456
+```
+
+For the same variable name (`"item"` in this case) and same collection (`"array"` in this case), there's one position record. That means you can start a new loop with a different variable name:
+
+Input
+```liquid
+<!-- for array = [1,2,3,4,5,6] -->
+{% for item in array limit:2 %}
+  {{- item -}}
+{% endfor%}
+{% for item2 in array offset:continue %}
+  {{- item2 -}}
+{% endfor%}
+```
+
+Output
+```text
+12
+123456
 ```
 
 ### range
@@ -187,19 +229,19 @@ Defines a range of numbers to loop through. The range can be defined by both lit
 Input
 ```liquid
 {% for i in (3..5) %}
-  {{ i }}
-{% endfor %}
+  {{- i -}}
+{% endfor-%}
 
 {% assign num = 4 %}
 {% for i in (1..num) %}
-  {{ i }}
+  {{- i -}}
 {% endfor %}
 ```
 
 Output
 ```text
-3 4 5
-1 2 3 4
+345
+1234
 ```
 
 ### reversed

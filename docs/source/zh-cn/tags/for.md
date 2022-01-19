@@ -49,17 +49,17 @@ The collection is empty.
 输入
 ```liquid
 {% for i in (1..5) %}
-  {% if i == 4 %}
+  {%- if i == 4 -%}
     {% break %}
-  {% else %}
+  {%- else -%}
     {{ i }}
-  {% endif %}
+  {%- endif -%}
 {% endfor %}
 ```
 
 输出
 ```text
-1 2 3
+123
 ```
 
 ### continue
@@ -69,17 +69,17 @@ The collection is empty.
 输入
 ```liquid
 {% for i in (1..5) %}
-  {% if i == 4 %}
-    {% continue %}
-  {% else %}
+  {%- if i == 4 -%}
+    {%- continue -%}
+  {%- else -%}
     {{ i }}
-  {% endif %}
+  {%- endif -%}
 {% endfor %}
 ```
 
 输出
 ```text
-1 2 3   5
+1235
 ```
 
 ### forloop
@@ -137,13 +137,13 @@ index index0 rindex rindex0
 ```liquid
 <!-- if array = [1,2,3,4,5,6] -->
 {% for item in array limit:2 %}
-  {{ item }}
+  {{- item -}}
 {% endfor %}
 ```
 
 输出
 ```text
-1 2
+12
 ```
 
 ### offset
@@ -152,15 +152,57 @@ index index0 rindex rindex0
 
 输入
 ```liquid
-<!-- if array = [1,2,3,4,5,6] -->
+<!-- for array = [1,2,3,4,5,6] -->
 {% for item in array offset:2 %}
-  {{ item }}
+  {{- item -}}
 {% endfor %}
 ```
 
 输出
 ```text
-3 4 5 6
+3456
+```
+
+#### offset:continue
+
+{% since %}v9.33.0{% endsince %}
+
+`offset` 的值可以是 `continue`，用来继续上一次循环。例如：
+
+输入
+```liquid
+<!-- for array = [1,2,3,4,5,6] -->
+{% for item in array limit:2 %}
+  {{- item -}}
+{% endfor%}
+{% for item in array offset:continue %}
+  {{- item -}}
+{% endfor%}
+```
+
+输出
+```text
+12
+3456
+```
+
+对同样的变量名和集合名（这个例子中是 `"item-array"`），存在唯一的位置记录。也就是说用新的变量名就可以开启一个新的循环：
+
+输入
+```liquid
+<!-- for array = [1,2,3,4,5,6] -->
+{% for item in array limit:2 %}
+  {{- item -}}
+{% endfor%}
+{% for item2 in array offset:continue %}
+  {{- item2 -}}
+{% endfor%}
+```
+
+输出
+```text
+12
+123456
 ```
 
 ### range
