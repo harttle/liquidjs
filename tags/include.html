@@ -116,13 +116,13 @@
 <blockquote class="note info"><strong class="note-title">Escaping</strong><p>In LiquidJS, <code>&quot;</code> within quoted string literals need to be escaped by adding a slash before the quote, e.g. <code>\&quot;</code>. Using Jekyll-like filenames can make this easier, see below.</p>
 </blockquote>
 
-<h2 id="Jekyll-like-filenames" class="article-heading"><a href="#Jekyll-like-filenames" class="headerlink" title="Jekyll-like filenames"></a>Jekyll-like filenames<a class="article-anchor" href="#Jekyll-like-filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, where file names are specified as literal string without surrounding quotes. Liquid outputs and filters are also supported within that, for example:</p>
+<h2 id="Jekyll-like-filenames" class="article-heading"><a href="#Jekyll-like-filenames" class="headerlink" title="Jekyll-like filenames"></a>Jekyll-like filenames<a class="article-anchor" href="#Jekyll-like-filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, where file names are specified as literal string without surrounding quotes. Liquid outputs and filters are also supported within that, for example:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include prefix/&#123;&#123; page.my_variable &#125;&#125;/suffix %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>This way, you don’t need to escape <code>&quot;</code> in the filename expression.</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include prefix/&#123;&#123;name | append: &quot;.html&quot;&#125;&#125; %&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Jekyll-include" class="article-heading"><a href="#Jekyll-include" class="headerlink" title="Jekyll include"></a>Jekyll include<a class="article-anchor" href="#Jekyll-include" aria-hidden="true"></a></h2><p><a href="../api/interfaces/liquid_options_.liquidoptions.html#jekyllInclude">jekyllInclude</a> is used to enable Jekyll-like include syntax. Defaults to <code>false</code>, when set to <code>true</code>:</p>
+<h2 id="Jekyll-include" class="article-heading"><a href="#Jekyll-include" class="headerlink" title="Jekyll include"></a>Jekyll include<a class="article-anchor" href="#Jekyll-include" aria-hidden="true"></a></h2><p><a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude">jekyllInclude</a> is used to enable Jekyll-like include syntax. Defaults to <code>false</code>, when set to <code>true</code>:</p>
 <ul>
 <li>Filename will be static: <code>dynamicPartials</code> now defaults to <code>false</code> (instead of <code>true</code>). And you can set <code>dynamicPartials</code> back to <code>true</code>.</li>
 <li>Use <code>=</code> instead of <code>:</code> to separate parameter key-values.</li>
@@ -140,7 +140,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-19T17:17:46.704Z" itemprop="dateModified">Last updated: 2022-01-19</time>
+                <time class="article-footer-updated" datetime="2022-01-19T17:39:45.280Z" itemprop="dateModified">Last updated: 2022-01-19</time>
                 <a href="if.html" class="article-footer-prev" title="sidebar.tags.if"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="increment.html" class="article-footer-next" title="sidebar.tags.increment"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
