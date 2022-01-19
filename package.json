@@ -18,6 +18,7 @@
     "perf": "cd benchmark && npm ci && npm start",
     "perf:diff": "bin/perf-diff.sh",
     "perf:engines": "cd benchmark && npm run engines",
+    "postversion": "npm run build:dist",
     "build": "npm run build:dist && npm run build:docs",
     "build:dist": "rollup -c rollup.config.ts",
     "build:docs": "bin/build-docs.sh"
