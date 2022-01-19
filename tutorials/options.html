@@ -116,14 +116,16 @@
 <blockquote class="note warn"><strong class="note-title">Common Pitfall</strong><p>LiquidJS defaults this option to <code>true</code> to be compatible with shopify/liquid, but if you’re from <a href="https://github.com/11ty/eleventy" rel="external nofollow noreferrer" target="_blank">eleventy</a> it’s set to <code>false</code> by default (see <a href="https://www.11ty.dev/docs/languages/liquid/#quoted-include-paths" rel="external nofollow noreferrer" target="_blank">Quoted Include Paths</a>) which I believe is trying to be compatible with Jekyll.</p>
 </blockquote>
 
-<h2 id="Jekyll-include" class="article-heading"><a href="#Jekyll-include" class="headerlink" title="Jekyll include"></a>Jekyll include<a class="article-anchor" href="#Jekyll-include" aria-hidden="true"></a></h2><p><a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude">jekyllInclude</a> is used to enable Jekyll-like include syntax. Defaults to <code>false</code>, when set to <code>true</code>:</p>
+<h2 id="Jekyll-include" class="article-heading"><a href="#Jekyll-include" class="headerlink" title="Jekyll include"></a>Jekyll include<a class="article-anchor" href="#Jekyll-include" aria-hidden="true"></a></h2><p class="since">v9.33.0</p>
+
+<p><a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude">jekyllInclude</a> is used to enable Jekyll-like include syntax. Defaults to <code>false</code>, when set to <code>true</code>:</p>
 <ul>
 <li>Filename will be static: <code>dynamicPartials</code> now defaults to <code>false</code> (instead of <code>true</code>). And you can set <code>dynamicPartials</code> back to <code>true</code>.</li>
 <li>Use <code>=</code> instead of <code>:</code> to separate parameter key-values.</li>
 <li>Parameters are under <code>include</code> variable instead of current scope.</li>
 </ul>
 <p>For example in the following template, <code>name.html</code> is not quoted, <code>header</code> and <code>&quot;HEADER&quot;</code> are separated by <code>=</code>, and the <code>header</code> parameter is referenced by <code>include.header</code>. More details please check out <a href="../tags/include.html">include</a>.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// entry template</span><br><span class="line">&#123;% include name.html header=&quot;HEADER&quot; content=&quot;CONTENT&quot; %&#125;</span><br><span class="line"></span><br><span class="line">// name.html</span><br><span class="line">&lt;header&gt;&#123;&#123;include.header&#125;&#125;&lt;/header&gt;</span><br><span class="line">&#123;&#123;include.content&#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// entry template</span><br><span class="line">&#123;% include article.html header=&quot;HEADER&quot; content=&quot;CONTENT&quot; %&#125;</span><br><span class="line"></span><br><span class="line">// article.html</span><br><span class="line">&lt;article&gt;</span><br><span class="line">  &lt;header&gt;&#123;&#123;include.header&#125;&#125;&lt;/header&gt;</span><br><span class="line">  &#123;&#123;include.content&#125;&#125;</span><br><span class="line">&lt;/article&gt;</span><br></pre></td></tr></table></figure>
 
 <h2 id="extname" class="article-heading"><a href="#extname" class="headerlink" title="extname"></a>extname<a class="article-anchor" href="#extname" aria-hidden="true"></a></h2><p><strong>extname</strong> defines the default extension name to be appended into filenames if the filename has no extension name. Defaults to <code>&#39;&#39;</code> which means it’s disabled by default. By setting it to <code>.liquid</code>:</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render &quot;foo&quot; %&#125;  there&#x27;s no extname, adds `.liquid` and loads foo.liquid</span><br><span class="line">&#123;% render &quot;foo.html&quot; %&#125;  there is an extname already, loads foo.html directly</span><br></pre></td></tr></table></figure>
@@ -151,7 +153,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-19T17:39:45.280Z" itemprop="dateModified">Last updated: 2022-01-19</time>
+                <time class="article-footer-updated" datetime="2022-01-19T18:05:53.677Z" itemprop="dateModified">Last updated: 2022-01-19</time>
                 <a href="setup.html" class="article-footer-prev" title="Setup"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="render-file.html" class="article-footer-next" title="Render Files"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

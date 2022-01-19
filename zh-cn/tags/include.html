@@ -122,25 +122,27 @@
 <p>这样文件名里的 <code>&quot;</code> 就不用转义了。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include prefix/&#123;&#123;name | append: &quot;.html&quot;&#125;&#125; %&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="Jekyll-include" class="article-heading"><a href="#Jekyll-include" class="headerlink" title="Jekyll include"></a>Jekyll include<a class="article-anchor" href="#Jekyll-include" aria-hidden="true"></a></h2><p><a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude">jekyllInclude</a> 用来启用 Jekyll-like include 语法。默认为 <code>false</code>，当设置为 <code>true</code> 时：</p>
+<h2 id="Jekyll-include" class="article-heading"><a href="#Jekyll-include" class="headerlink" title="Jekyll include"></a>Jekyll include<a class="article-anchor" href="#Jekyll-include" aria-hidden="true"></a></h2><p class="since">v9.33.0</p>
+
+<p><a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude">jekyllInclude</a> 用来启用 Jekyll-like include 语法。默认为 <code>false</code>，当设置为 <code>true</code> 时：</p>
 <ul>
 <li>默认启用静态文件名：<code>dynamicPartials</code> 的默认值变为 <code>false</code>（而非 <code>true</code>）。但你也可以把它设置回 <code>true</code>。</li>
 <li>参数的键和值之间由 <code>=</code> 分隔（本来是 <code>:</code>）。</li>
 <li>参数放到了 <code>include</code> 变量下，而非当前作用域。</li>
 </ul>
 <p>例如下面的模板：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include name.html header=&quot;HEADER&quot; content=&quot;CONTENT&quot; %&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% include article.html header=&quot;HEADER&quot; content=&quot;CONTENT&quot; %&#125;</span><br></pre></td></tr></table></figure>
 
-<p>其中 <code>name.html</code> 的内容是：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;header&gt;&#123;&#123;include.header&#125;&#125;&lt;/header&gt;</span><br><span class="line">&#123;&#123;include.content&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 <code>article.html</code> 的内容是：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;article&gt;</span><br><span class="line">  &lt;header&gt;&#123;&#123;include.header&#125;&#125;&lt;/header&gt;</span><br><span class="line">  &#123;&#123;include.content&#125;&#125;</span><br><span class="line">&lt;/article&gt;</span><br></pre></td></tr></table></figure>
 
 <p>注意我们通过 <code>include.header</code> 引用第一个参数，而不是 <code>header</code>。输出如下：</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>HEADER<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">CONTENT</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">article</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">header</span>&gt;</span>HEADER<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line">  CONTENT</span><br><span class="line"><span class="tag">&lt;/<span class="name">article</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-19T17:39:45.284Z" itemprop="dateModified">上次更新：2022-01-19</time>
+                <time class="article-footer-updated" datetime="2022-01-19T18:05:53.677Z" itemprop="dateModified">上次更新：2022-01-19</time>
                 <a href="if.html" class="article-footer-prev" title="sidebar.tags.if"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="increment.html" class="article-footer-next" title="sidebar.tags.increment"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
