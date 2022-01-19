@@ -1,3 +1,11 @@
+# [9.33.0](https://github.com/harttle/liquidjs/compare/v9.32.1...v9.33.0) (2022-01-19)
+
+
+### Features
+
+* support `offset:continue`, see [#439](https://github.com/harttle/liquidjs/issues/439) ([8c27a84](https://github.com/harttle/liquidjs/commit/8c27a84059384ae730eb0fa1524df04e122e27a0))
+* support Jekyll-like include syntax, see [#441](https://github.com/harttle/liquidjs/issues/441) ([388d0fb](https://github.com/harttle/liquidjs/commit/388d0fbbc42fe8cd69faba61c1dc29e9bb5ec2d0))
+
 ## [9.32.1](https://github.com/harttle/liquidjs/compare/v9.32.0...v9.32.1) (2022-01-12)
 
 
