@@ -47,8 +47,31 @@ const engine = new Liquid({
 {% liquid foo.html %}
 ```
 
-{% note warn Common Pitfall %}
+{% note warn 常见陷阱 %}
 LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/liquid，但如果你在使用 <a href="https://github.com/11ty/eleventy" target="_blank">eleventy</a> 它会设置默认值 <code>false</code> （参考 <a href="https://www.11ty.dev/docs/languages/liquid/#quoted-include-paths" target="_blank">Quoted Include Paths</a>）以兼容于 Jekyll。{% endnote %}
+
+## Jekyll include
+
+{% since %}v9.33.0{% endsince %}
+
+[jekyllInclude][jekyllInclude] 用来启用 Jekyll-like include 语法。默认为 `false`，当设置为 `true` 时：
+
+- 默认启用静态文件名：`dynamicPartials` 的默认值变为 `false`（而非 `true`）。但你也可以把它设置回 `true`。
+- 参数的键和值之间由 `=` 分隔（本来是 `:`）。
+- 参数放到了 `include` 变量下，而非当前作用域。
+
+例如下面的模板中，`name.html` 没有带引号，`header` 和 `"HEADER"` 以 `=` 分隔，`header` 参数通过 `include.header` 来引用。更多详情请参考 [include][include]。
+
+```liquid
+// entry template
+{% include article.html header="HEADER" content="CONTENT" %}
+
+// article.html
+<article>
+  <header>{{include.header}}</header>
+  {{include.content}}
+</article>
+```
 
 ## extname
 
@@ -120,3 +143,4 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 [layout]: ../tags/layout.html
 [wc]: ./whitespace-control.html
 [intro]: ./intro-to-liquid.html
+[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude

@@ -72,6 +72,8 @@ This way, you don't need to escape `"` in the filename expression.
 
 ## Jekyll include
 
+{% since %}v9.33.0{% endsince %}
+
 [jekyllInclude][jekyllInclude] is used to enable Jekyll-like include syntax. Defaults to `false`, when set to `true`:
 
 - Filename will be static: `dynamicPartials` now defaults to `false` (instead of `true`). And you can set `dynamicPartials` back to `true`.
@@ -81,24 +83,28 @@ This way, you don't need to escape `"` in the filename expression.
 For example, the following template:
 
 ```liquid
-{% include name.html header="HEADER" content="CONTENT" %}
+{% include article.html header="HEADER" content="CONTENT" %}
 ```
 
-`name.html` with following content:
+`article.html` with following content:
 
 ```liquid
-<header>{{include.header}}</header>
-{{include.content}}
+<article>
+  <header>{{include.header}}</header>
+  {{include.content}}
+</article>
 ```
 
 Note that we're referencing the first parameter by `include.header` instead of `header`. Will output following:
 
 ```html
-<header>HEADER</header>
-CONTENT
+<article>
+  <header>HEADER</header>
+  CONTENT
+</article>
 ```
 
 [extname]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
 [root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
-[dynamicPartials]: ../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials
-[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#jekyllInclude
+[dynamicPartials]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-dynamicPartials
+[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude

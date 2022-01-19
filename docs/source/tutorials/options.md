@@ -52,6 +52,29 @@ Setting `dynamicPartials: false`, LiquidJS will try to include the file named `f
 {% note warn Common Pitfall %}
 LiquidJS defaults this option to <code>true</code> to be compatible with shopify/liquid, but if you're from <a href="https://github.com/11ty/eleventy" target="_blank">eleventy</a> it's set to <code>false</code> by default (see <a href="https://www.11ty.dev/docs/languages/liquid/#quoted-include-paths" target="_blank">Quoted Include Paths</a>) which I believe is trying to be compatible with Jekyll.{% endnote %}
 
+## Jekyll include
+
+{% since %}v9.33.0{% endsince %}
+
+[jekyllInclude][jekyllInclude] is used to enable Jekyll-like include syntax. Defaults to `false`, when set to `true`:
+
+- Filename will be static: `dynamicPartials` now defaults to `false` (instead of `true`). And you can set `dynamicPartials` back to `true`.
+- Use `=` instead of `:` to separate parameter key-values.
+- Parameters are under `include` variable instead of current scope.
+
+For example in the following template, `name.html` is not quoted, `header` and `"HEADER"` are separated by `=`, and the `header` parameter is referenced by `include.header`. More details please check out [include][include].
+
+```liquid
+// entry template
+{% include article.html header="HEADER" content="CONTENT" %}
+
+// article.html
+<article>
+  <header>{{include.header}}</header>
+  {{include.content}}
+</article>
+```
+
 ## extname
 
 **extname** defines the default extension name to be appended into filenames if the filename has no extension name. Defaults to `''` which means it's disabled by default. By setting it to `.liquid`:
@@ -123,3 +146,4 @@ Parameter orders are ignored by default, for ea `{% for i in (1..8) reversed lim
 [layout]: ../tags/layout.html
 [wc]: ./whitespace-control.html
 [intro]: ./intro-to-liquid.html
+[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude

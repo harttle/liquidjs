@@ -72,6 +72,8 @@ title: Include
 
 ## Jekyll include
 
+{% since %}v9.33.0{% endsince %}
+
 [jekyllInclude][jekyllInclude] 用来启用 Jekyll-like include 语法。默认为 `false`，当设置为 `true` 时：
 
 - 默认启用静态文件名：`dynamicPartials` 的默认值变为 `false`（而非 `true`）。但你也可以把它设置回 `true`。
@@ -81,24 +83,28 @@ title: Include
 例如下面的模板：
 
 ```liquid
-{% include name.html header="HEADER" content="CONTENT" %}
+{% include article.html header="HEADER" content="CONTENT" %}
 ```
 
-其中 `name.html` 的内容是：
+其中 `article.html` 的内容是：
 
 ```liquid
-<header>{{include.header}}</header>
-{{include.content}}
+<article>
+  <header>{{include.header}}</header>
+  {{include.content}}
+</article>
 ```
 
 注意我们通过 `include.header` 引用第一个参数，而不是 `header`。输出如下：
 
 ```html
-<header>HEADER</header>
-CONTENT
+<article>
+  <header>HEADER</header>
+  CONTENT
+</article>
 ```
 
 [extname]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
 [root]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
-[dynamicPartials]: ../../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials
-[jekyllInclude]: ../../api/interfaces/liquid_options_.liquidoptions.html#jekyllInclude
+[dynamicPartials]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-dynamicPartials
+[jekyllInclude]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude
