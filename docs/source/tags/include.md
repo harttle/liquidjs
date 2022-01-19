@@ -53,12 +53,12 @@ When filename is specified as literal string, it supports Liquid output and filt
 ```
 
 {% note info Escaping %}
-In LiquidJS, `"` within quoted string literals need to be escaped. Adding a slash before the quote, e.g. `\"`. Using Jekyll-like filenames can make this easier, see below.
+In LiquidJS, `"` within quoted string literals need to be escaped by adding a slash before the quote, e.g. `\"`. Using Jekyll-like filenames can make this easier, see below.
 {% endnote %}
 
 ## Jekyll-like filenames
 
-Setting [dynamicPartials][dynamicPartials] to `false` will enable Jekyll-like includes, file names are specified as literal string. And it also supports Liquid outputs and filters.
+Setting [dynamicPartials][dynamicPartials] to `false` will enable Jekyll-like filenames, where file names are specified as literal string without surrounding quotes. Liquid outputs and filters are also supported within that, for example:
 
 ```liquid
 {% include prefix/{{ page.my_variable }}/suffix %}
@@ -70,6 +70,35 @@ This way, you don't need to escape `"` in the filename expression.
 {% include prefix/{{name | append: ".html"}} %}
 ```
 
+## Jekyll include
+
+[jekyllInclude][jekyllInclude] is used to enable Jekyll-like include syntax. Defaults to `false`, when set to `true`:
+
+- Filename will be static: `dynamicPartials` now defaults to `false` (instead of `true`). And you can set `dynamicPartials` back to `true`.
+- Use `=` instead of `:` to separate parameter key-values.
+- Parameters are under `include` variable instead of current scope.
+
+For example, the following template:
+
+```liquid
+{% include name.html header="HEADER" content="CONTENT" %}
+```
+
+`name.html` with following content:
+
+```liquid
+<header>{{include.header}}</header>
+{{include.content}}
+```
+
+Note that we're referencing the first parameter by `include.header` instead of `header`. Will output following:
+
+```html
+<header>HEADER</header>
+CONTENT
+```
+
 [extname]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
 [root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
 [dynamicPartials]: ../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials
+[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#jekyllInclude

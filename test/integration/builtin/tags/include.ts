@@ -248,4 +248,44 @@ describe('tags/include', function () {
       return expect(html).to.equal('Xchild with redY')
     })
   })
+
+  describe('Jekyll include', function () {
+    before(function () {
+      liquid = new Liquid({
+        root: '/',
+        extname: '.html',
+        jekyllInclude: true
+      })
+    })
+    it('should support Jekyll style include', function () {
+      mock({
+        '/current.html': '{% include bar/foo.html content="FOO" %}',
+        '/bar/foo.html': '{{include.content}}-{{content}}'
+      })
+      const html = liquid.renderFileSync('/current.html')
+      return expect(html).to.equal('FOO-')
+    })
+    it('should support multiple parameters', function () {
+      mock({
+        '/current.html': '{% include bar/foo.html header="HEADER" content="CONTENT" %}',
+        '/bar/foo.html': '<h2>{{include.header}}</h2>{{include.content}}'
+      })
+      const html = liquid.renderFileSync('/current.html')
+      return expect(html).to.equal('<h2>HEADER</h2>CONTENT')
+    })
+    it('should support dynamicPartials=true', function () {
+      mock({
+        '/current.html': '{% include "bar/foo.html" content="FOO" %}',
+        '/bar/foo.html': '{{include.content}}-{{content}}'
+      })
+      liquid = new Liquid({
+        root: '/',
+        extname: '.html',
+        jekyllInclude: true,
+        dynamicPartials: true
+      })
+      const html = liquid.renderFileSync('/current.html')
+      return expect(html).to.equal('FOO-')
+    })
+  })
 })

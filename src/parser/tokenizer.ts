@@ -233,16 +233,16 @@ export class Tokenizer {
     return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
-  readHashes () {
+  readHashes (jekyllStyle?: boolean) {
     const hashes = []
     while (true) {
-      const hash = this.readHash()
+      const hash = this.readHash(jekyllStyle)
       if (!hash) return hashes
       hashes.push(hash)
     }
   }
 
-  readHash (): HashToken | undefined {
+  readHash (jekyllStyle?: boolean): HashToken | undefined {
     this.skipBlank()
     if (this.peek() === ',') ++this.p
     const begin = this.p
@@ -251,7 +251,8 @@ export class Tokenizer {
     let value
 
     this.skipBlank()
-    if (this.peek() === ':') {
+    const sep = jekyllStyle ? '=' : ':'
+    if (this.peek() === sep) {
       ++this.p
       value = this.readValue()
     }

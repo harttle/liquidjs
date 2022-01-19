@@ -20,7 +20,7 @@ export default {
       } else tokenizer.p = begin
     } else tokenizer.p = begin
 
-    this.hash = new Hash(tokenizer.remaining())
+    this.hash = new Hash(tokenizer.remaining(), this.liquid.options.jekyllInclude)
   },
   render: function * (ctx: Context, emitter: Emitter) {
     const { liquid, hash, withVar } = this
@@ -34,7 +34,7 @@ export default {
     const scope = yield hash.render(ctx)
     if (withVar) scope[filepath] = evalToken(withVar, ctx)
     const templates = yield liquid._parsePartialFile(filepath, ctx.sync, this['currentFile'])
-    ctx.push(scope)
+    ctx.push(ctx.opts.jekyllInclude ? { include: scope } : scope)
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.restoreRegister(saved)

@@ -44,5 +44,61 @@ title: Include
 
 上面的例子中，子模板中 `product` 会保有父模板中的 `featured_product` 变量的值。
 
+## 输出和过滤器
+
+文件名为字符串字面量时，支持 Liquid 输出和过滤器。在拼接文件名时很方便：
+
+```liquid
+{% include "prefix/{{name | append: \".html\"}}" %}
+```
+
+{% note info 转义 %}
+字符串字面量里的 `"` 需要转义为 `\"`，使用静态文件名可以避免这个问题，见下面的 Jekyll-like 文件名。
+{% endnote %}
+
+## Jekyll-like 文件名
+
+设置 [dynamicPartials][dynamicPartials] 为 `false` 来启用 Jekyll-like 文件名，这时文件名不需要用引号包含，会被当作字面量处理。 这样的字符串里面仍然支持 Liquid 输出和过滤器，例如：
+
+```liquid
+{% include prefix/{{ page.my_variable }}/suffix %}
+```
+
+这样文件名里的 `"` 就不用转义了。
+
+```liquid
+{% include prefix/{{name | append: ".html"}} %}
+```
+
+## Jekyll include
+
+[jekyllInclude][jekyllInclude] 用来启用 Jekyll-like include 语法。默认为 `false`，当设置为 `true` 时：
+
+- 默认启用静态文件名：`dynamicPartials` 的默认值变为 `false`（而非 `true`）。但你也可以把它设置回 `true`。
+- 参数的键和值之间由 `=` 分隔（本来是 `:`）。
+- 参数放到了 `include` 变量下，而非当前作用域。
+
+例如下面的模板：
+
+```liquid
+{% include name.html header="HEADER" content="CONTENT" %}
+```
+
+其中 `name.html` 的内容是：
+
+```liquid
+<header>{{include.header}}</header>
+{{include.content}}
+```
+
+注意我们通过 `include.header` 引用第一个参数，而不是 `header`。输出如下：
+
+```html
+<header>HEADER</header>
+CONTENT
+```
+
 [extname]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
 [root]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
+[dynamicPartials]: ../../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials
+[jekyllInclude]: ../../api/interfaces/liquid_options_.liquidoptions.html#jekyllInclude

@@ -16,9 +16,9 @@ export interface HashValue {
  */
 export class Hash {
   hash: HashValue = {}
-  constructor (markup: string) {
+  constructor (markup: string, jekyllStyle?: boolean) {
     const tokenizer = new Tokenizer(markup, {})
-    for (const hash of tokenizer.readHashes()) {
+    for (const hash of tokenizer.readHashes(jekyllStyle)) {
       this.hash[hash.name.content] = hash.value
     }
   }

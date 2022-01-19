@@ -17,6 +17,8 @@ export interface LiquidOptions {
   layouts?: string | string[];
   /** Allow refer to layouts/partials by relative pathname. To avoid arbitrary filesystem read, paths been referenced also need to be within corresponding root, partials, layouts. Defaults to `true`. */
   relativeReference?: boolean;
+  /** Use jekyll style include, pass parameters to `include` variable of current scope. Defaults to `false`. */
+  jekyllInclude?: boolean;
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
@@ -93,6 +95,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   partials: string[];
   layouts: string[];
   relativeReference: boolean;
+  jekyllInclude: boolean;
   extname: string;
   cache: undefined | Cache<Thenable<Template[]>>;
   jsTruthy: boolean;
@@ -122,6 +125,7 @@ export const defaultOptions: NormalizedFullOptions = {
   layouts: ['.'],
   partials: ['.'],
   relativeReference: true,
+  jekyllInclude: false,
   cache: undefined,
   extname: '',
   fs: fs,
@@ -161,7 +165,7 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
     else cache = options.cache ? new LRU(1024) : undefined
     options.cache = cache
   }
-  options = { ...defaultOptions, ...options }
+  options = { ...defaultOptions, ...(options.jekyllInclude ? { dynamicPartials: false } : {}), ...options }
   if (!options.fs!.dirname && options.relativeReference) {
     console.warn('[LiquidJS] `fs.dirname` is required for relativeReference, set relativeReference to `false` to suppress this warning, or provide implementation for `fs.dirname`')
     options.relativeReference = false
