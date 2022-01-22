@@ -9,6 +9,9 @@ tutorials:
   advanced:
     caching: caching.html
     registeration: register-filters-tags.html
+    access_scope_in_filters: access-scope-in-filters.html
+    parse_parameters: parse-parameters.html
+    sync_and_async: sync-and-async.html
     whitespace: whitespace-control.html
     plugins: plugins.html
     operators: operators.html
