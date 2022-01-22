@@ -29,8 +29,7 @@ self.addEventListener('fetch', event => {
   if (
     event.request.method !== 'GET' || blackList.some(regex => regex.exec(event.request.url))
   ) return network(event.request)
-  const pn = networkAndSave(event.request)
-  event.respondWith(cache(event.request).then(res => res || pn).catch(() => pn))
+  event.respondWith(networkAndSave(event.request).catch(() => cache(event.request)))
 })
 
 function cache (req) {
