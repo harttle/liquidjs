@@ -100,11 +100,13 @@
 <li>Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.</li>
 <li>Sort stability. The <a href="https://liquidjs.com/filters/sort.html">sort</a> stability is also not defined in both shopify/liquid and LiquidJS, but it’s <a target="_blank" rel="noopener external nofollow noreferrer" href="https://v8.dev/features/stable-sort">considered stable</a> for LiquidJS in Node.js 12+ and Google Chrome 70+.</li>
 <li>Trailing unmatched characters inside filters are allowed in shopify/liquid but not in LiquidJS. It means filter arguments without a colon like <code>{{ "a b" | split " "}}</code> will throw an error in LiquidJS. This is intended to improve Liquid usability, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/208">#208</a> and <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/212">#212</a>.</li>
+<li>LiquidJS has additional tags: <a href="https://liquidjs.com/tags/layout.html">layout</a> and corresponding <code>block</code> tag.</li>
+<li>LiquidJS has additional filters: <a href="https://liquidjs.com/filters/json.html">json</a>.</li>
 </ul>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T14:01:48.478Z" itemprop="dateModified">Last updated: 2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-22T15:25:05.203Z" itemprop="dateModified">Last updated: 2022-01-22</time>
                 <a href="changelog.html" class="article-footer-prev" title="Changelog"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="Contribution Guidelines"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
