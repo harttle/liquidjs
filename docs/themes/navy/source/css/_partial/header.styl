@@ -36,7 +36,7 @@ logo-size = 36px
 #search-input-wrap
   display: none
   padding-left: 6px
-  border-bottom: 1px solid color-gray
+  border-bottom: 1px solid var(--color-gray)
   &.on
     display: inline-block
   > i, > span, #search-input
@@ -59,7 +59,7 @@ logo-size = 36px
   text-decoration: none
   line-height: logo-size
   opacity: 0.7
-  transition: 0.2s
+  transition: opacity 0.2s, color 0.2s
   display: inline-block
   padding: 0 15px
   i
@@ -68,7 +68,8 @@ logo-size = 36px
     opacity: 1
   &:hover
     opacity: 1
-    color: color-link-hover
+    color: var(--color-link-hover)
+    text-decoration: none
 
 #lang-select-wrap
 #github-link-wrap

@@ -3,12 +3,36 @@ support-for-ie = false
 vendor-prefixes = webkit moz ms official
 
 // Colors
-color-default = #444
-color-gray = #999
-color-border = #e3e3e3
-color-navy = hsl(210, 25%, 12%)
-color-link = #0e83cd
-color-link-hover = lighten(color-link, 10%)
+:root {
+    --color-default: #444
+    --color-default-invert: #d1d2d4
+    --color-gray: #999
+    --color-border: #e3e3e3
+    --color-navy: hsl(210, 25%, 12%)
+    --color-content-bg: #fff
+    --color-content-bg-hl: #eee
+    --color-news-bg: darken(hsl(210, 25%, 12%), 5%)
+    --color-navy-lighter: lighten(hsl(210, 25%, 12%), 10%)
+    --color-link: #0e83cd
+    --color-link-hover: lighten(#0e83cd, 10%)
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-default: #d1d2d4
+        --color-default-invert: #444
+        --color-gray: invert(#999)
+        --color-border: invert(#e3e3e3)
+        --color-backgrond: #fff
+        --color-navy: hsl(210, 25%, 12%)
+        --color-news-bg: darken(hsl(210, 25%, 12%), 5%)
+        --color-content-bg-hl: #000
+        --color-navy-lighter: lighten(hsl(210, 25%, 12%), 10%)
+        --color-content-bg: #1c1c1c
+        --color-link: #0e83cd
+        --color-link-hover: lighten(#0e83cd, 10%)
+    }
+}
 
 // Typography
 font-sans = "Helvetica Neue", Helvetica, Arial, sans-serif

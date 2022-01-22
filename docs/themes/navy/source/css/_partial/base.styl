@@ -21,14 +21,27 @@ input, button, select
   border: 0
 
 body
-  background: color-navy
+  background: var(--color-navy)
   font-size: font-size
   font-family: font-sans
-  color: color-default
+  color: var(--color-default)
   text-rendering: optimizeLegibility
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   overflow-x: hidden
+
+a
+  color: var(--color-link)
+  text-decoration: none
+  &:hover
+    color: var(--color-link-hover)
+    text-decoration: underline
+  @media print
+    color: var(--color-default)
+    text-decoration: underline
+    &:after
+      content: " (" attr(href) ")"
+      font-size: 80%
 
 @media screen and (max-device-width: 480px)
   body
@@ -44,10 +57,8 @@ body
     padding: 0 gutter-width
 
 #content-wrap
-  background: #fff
-  border-top: 1px solid darken(color-navy, 5%)
-  border-bottom: 1px solid darken(color-navy, 5%)
-  margin: -1px 0
+  background: var(--color-content-bg)
+  overflow: hidden
   
 .video-container
   text-align: center

@@ -1,21 +1,40 @@
 // https://github.com/chriskempson/tomorrow-theme
-highlight-background = #fff
-highlight-current-line = #efefef
-highlight-selection = #d6d6d6
-highlight-foreground = #4d4d4c
-highlight-comment = #8e908c
-highlight-red = #c82829
-highlight-orange = #f5871f
-highlight-yellow = #eab700
-highlight-green = #718c00
-highlight-aqua = #3e999f
-highlight-blue = #4271ae
-highlight-purple = #8959a8
+:root {
+    --highlight-background: #eee
+    --highlight-current-line: #efefef
+    --highlight-selection: #d6d6d6
+    --highlight-foreground: #4d4d4c
+    --highlight-comment: #8e908c
+    --highlight-red: #c82829
+    --highlight-orange: #f5871f
+    --highlight-yellow: #eab700
+    --highlight-green: #718c00
+    --highlight-aqua: #3e999f
+    --highlight-blue: #4271ae
+    --highlight-purple: #8959a8
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --highlight-background: #000000
+        --highlight-current-line: #2a2a2a
+        --highlight-selection: #424242
+        --highlight-foreground: #eaeaea
+        --highlight-comment: #969896
+        --highlight-red: #d54e53
+        --highlight-orange: #e78c45
+        --highlight-yellow: #e7c547
+        --highlight-green: #b9ca4a
+        --highlight-aqua: #70c0b1
+        --highlight-blue: #7aa6da
+        --highlight-purple: #c397d8
+    }
+}
 
 pre, code
   font-family: font-mono
-  color: highlight-foreground
-  background: #eee
+  color: var(--highlight-foreground)
+  background: var(--color-content-bg-hl)
 
 code
   padding: 0 5px
@@ -29,9 +48,9 @@ pre
     padding: 0
 
 .highlight
-  background: #eee
   padding: 10px 15px
-  color: highlight-foreground
+  color: var(--highlight-foreground)
+  background: var(--highlight-background)
   overflow: auto
   margin: 0
   table
@@ -42,12 +61,12 @@ pre
   figcaption
     clearfix()
     margin: -5px 0 5px
-    color: color-gray
+    color: var(--color-gray)
     a
       float: right
   pre
+    margin: 0
     padding: 0
-    border: none
     background: none
   .line
     height: 22px
@@ -55,7 +74,7 @@ pre
 pre
   .comment
   .title
-    color: highlight-comment
+    color: var(--highlight-comment)
   .variable
   .attribute
   .tag
@@ -68,27 +87,27 @@ pre
   .css .id
   .css .class
   .css .pseudo
-    color: highlight-red
+    color: var(--highlight-red)
   .number
   .preprocessor
   .built_in
   .literal
   .params
   .constant
-    color: highlight-orange
+    color: var(--highlight-orange)
   .class
   .ruby .class .title
   .css .rules .attribute
-    color: highlight-green
+    color: var(--highlight-green)
   .string
   .value
   .inheritance
   .header
   .ruby .symbol
   .xml .cdata
-    color: highlight-green
+    color: var(--highlight-green)
   .css .hexcolor
-    color: highlight-aqua
+    color: var(--highlight-aqua)
   .function
   .python .decorator
   .python .title
@@ -97,7 +116,7 @@ pre
   .perl .sub
   .javascript .title
   .coffeescript .title
-    color: highlight-blue
+    color: var(--highlight-blue)
   .keyword
   .javascript .function
-    color: highlight-purple
+    color: var(--highlight-purple)

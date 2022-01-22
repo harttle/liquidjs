@@ -15,13 +15,13 @@ lang-select-height = 40px
   width: mobile-nav-width
   left: @width * -1
   height: 100%
-  background: color-navy
+  background: var(--color-navy)
   transition: transition-duration
   .mobile-nav-on &
     transform: translateX(100%)
 
 .mobile-sidebar-list
-  background: lighten(color-navy, 10%)
+  background: var(--color-navy-lighter)
 
 #mobile-nav-inner
   overflow-y: auto
@@ -85,7 +85,7 @@ lang-select-height = 40px
   text-overflow: ellipsis
 
 .mobile-nav-title
-  color: color-link
+  color: var(--color-link)
   font-weight: bold
   padding: 10px 15px
   line-height: 1
@@ -101,7 +101,7 @@ lang-select-height = 40px
   bottom: 0
   left: 0
   width: 100%
-  background: color-navy
+  background: var(--color-navy)
   border-top: 1px solid #444
 
 #mobile-lang-select-label
