@@ -9,6 +9,7 @@ const urlsToCache = [
   '/fonts/icomoon.ttf?e8nnma'
 ]
 const blackList = [
+  /chrome-extension:/,
   /google-analytics.com.*collect/
 ]
 
@@ -29,8 +30,14 @@ self.addEventListener('fetch', event => {
   if (
     event.request.method !== 'GET' || blackList.some(regex => regex.exec(event.request.url))
   ) return network(event.request)
-  const pn = networkAndSave(event.request)
-  event.respondWith(cache(event.request).then(res => res || pn).catch(() => pn))
+  if (event.request.url.match(/\.githubusercontent\.com/)) {
+    // cache first
+    const pn = networkAndSave(event.request)
+    event.respondWith(cache(event.request).then(res => res || pn).catch(() => pn))
+  } else {
+    // network first
+    event.respondWith(networkAndSave(event.request).catch(() => cache(event.request)))
+  }
 })
 
 function cache (req) {

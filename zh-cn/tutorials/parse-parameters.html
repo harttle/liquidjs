@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>参数解析 | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/tutorials/parse-parameters.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/zh-cn/tutorials/parse-parameters">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/zh-cn/tutorials/parse-parameters">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../../css/navy.css">
+
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div id="lang-select-wrap" class="main-nav-link">
+      <label><i class="icon-network"></i>简体中文</label>
+      <select id="lang-select" data-canonical="tutorials/parse-parameters.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">开始使用</strong><a href="intro-to-liquid.html" class="sidebar-link">Liquid 简介</a><a href="setup.html" class="sidebar-link">安装</a><a href="options.html" class="sidebar-link">选项</a><a href="render-file.html" class="sidebar-link">文件渲染</a><a href="partials-and-layouts.html" class="sidebar-link">引用/继承</a><a href="use-in-expressjs.html" class="sidebar-link">Express.js 中使用</a><strong class="sidebar-title">高级主题</strong><a href="caching.html" class="sidebar-link">缓存</a><a href="register-filters-tags.html" class="sidebar-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="sidebar-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="sidebar-link current">参数解析</a><a href="sync-and-async.html" class="sidebar-link">同步和异步</a><a href="whitespace-control.html" class="sidebar-link">换行和缩进</a><a href="plugins.html" class="sidebar-link">插件</a><a href="operators.html" class="sidebar-link">运算符</a><a href="truthy-and-falsy.html" class="sidebar-link">真和假</a><strong class="sidebar-title">其他</strong><a href="migrate-to-9.html" class="sidebar-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="sidebar-link">更新日志</a><a href="differences.html" class="sidebar-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="sidebar-link">贡献指南</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">参数解析</h1>
+                
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tutorials/parse-parameters.md" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <h2 id="访问原始参数" class="article-heading"><a href="#访问原始参数" class="headerlink" title="访问原始参数"></a>访问原始参数<a class="article-anchor" href="#访问原始参数" aria-hidden="true"></a></h2><p>在 <a href="/tutorials/register-filters-tags.html">注册过滤器和标签</a> 中提到，可以通过 <code>tagToken.args</code> 来得到标签的原始参数字符串。例如：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Usage: &#123;% random foo bar coo %&#125;</span></span><br><span class="line"><span class="comment">// Output: &quot;foo&quot;, &quot;bar&quot; or &quot;coo&quot;</span></span><br><span class="line">engine.registerTag(<span class="string">&#x27;random&#x27;</span>, &#123;</span><br><span class="line">  <span class="function"><span class="title">parse</span>(<span class="params">tagToken</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// tagToken.args === &quot;foo bar coo&quot;</span></span><br><span class="line">    <span class="built_in">this</span>.items = tagToken.args.split(<span class="string">&#x27; &#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="function"><span class="title">render</span>(<span class="params">context, emitter</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// get a random index</span></span><br><span class="line">    <span class="keyword">const</span> index = <span class="built_in">Math</span>.floor(<span class="built_in">this</span>.items.length * <span class="built_in">Math</span>.random())</span><br><span class="line">    <span class="comment">// output that item</span></span><br><span class="line">    emitter.write(<span class="built_in">this</span>.items[index])</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>见这个 JSFiddle：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/ctj364up/2/">http://jsfiddle.net/ctj364up/2/</a>。</p>
+<h2 id="解析参数的值" class="article-heading"><a href="#解析参数的值" class="headerlink" title="解析参数的值"></a>解析参数的值<a class="article-anchor" href="#解析参数的值" aria-hidden="true"></a></h2><p>除了静态的参数字符串之外，我们更希望把动态的值传递给标签。LiquidJS 中的值可以是字面量（字符串、数字等，也可以是当前上下文的变量。</p>
+<p>下面是修改过的模板，也包含三个值用来随机。但它们表示的是值而不是静态的字符串。第一个是字符串字面量，第二个是标识符（表示变量），第三个是属性访问表达式，包含两个标识符。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% random &quot;foo&quot; bar obj.coo %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解析这么多种情况会很麻烦，但 LiquidJS 提供了 <a href="/api/classes/parser_tokenizer_.tokenizer.html">Tokenizer</a> 类来处理这种情况。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; Liquid, Tokenizer, evalToken &#125; = <span class="built_in">require</span>(<span class="string">&#x27;liquidjs&#x27;</span>)</span><br><span class="line"></span><br><span class="line">engine.registerTag(<span class="string">&#x27;random&#x27;</span>, &#123;</span><br><span class="line">  <span class="function"><span class="title">parse</span>(<span class="params">tagToken</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> tokenizer = <span class="keyword">new</span> Tokenizer(tagToken.args)</span><br><span class="line">    <span class="built_in">this</span>.items = []</span><br><span class="line">    <span class="keyword">while</span> (!tokenizer.end()) &#123;</span><br><span class="line">      <span class="comment">// here readValue() returns a LiteralToken or PropertyAccessToken</span></span><br><span class="line">      <span class="built_in">this</span>.items.push(tokenizer.readValue())</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  * <span class="function"><span class="title">render</span>(<span class="params">context, emitter</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> index = <span class="built_in">Math</span>.floor(<span class="built_in">this</span>.items.length * <span class="built_in">Math</span>.random())</span><br><span class="line">    <span class="keyword">const</span> token = <span class="built_in">this</span>.items[index]</span><br><span class="line">    <span class="comment">// in LiquidJS, we use yield to wait for async call</span></span><br><span class="line">    <span class="keyword">const</span> value = <span class="keyword">yield</span> evalToken(token, context)</span><br><span class="line">    emitter.write(value)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>用上下文 <code>&#123; bar: &quot;bar&quot;, obj: &#123; coo: &quot;coo&quot; &#125; &#125;</code> 来调用这个标签可以得到上第一个例子一样的效果。见这个 JSFiddle：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/ctj364up/3/">http://jsfiddle.net/ctj364up/3/</a>.</p>
+<blockquote class="note info"><strong class="note-title">异步和 Promise</strong><p>在 LiquidJS 里异步用生成器实现，这样同样一份标签的实现也可以用于同步的 API 比如 <code>renderSync()</code>，<code>parseAndRenderSync()</code>，<code>renderFileSync()</code>。如果要在标签实现里等待 Promise，只需要把 <code>await somePromise</code> 换成 <code>yield somePromise</code>，并保留 <code>* render()</code> 不要改成 <code>async render()</code>。更多细节请参考 <a href="/tutorials/sync-and-async.html">Sync and Async</a>。</p>
+</blockquote>
+
+<h2 id="把键值对解析为命名参数" class="article-heading"><a href="#把键值对解析为命名参数" class="headerlink" title="把键值对解析为命名参数"></a>把键值对解析为命名参数<a class="article-anchor" href="#把键值对解析为命名参数" aria-hidden="true"></a></h2><p>当参数很多时或者有可选参数时，使用命名参数语法会很方便。这时参数由无序的键值对构成，LiquidJS 中的 <a href="/api/classes/template_tag_hash_.hash.html">Hash</a> 类就是来处理这种情况的。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% random from:2, to:max %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子用来产生 [2, max] 范围内的随机数。我们要用 <code>Hash</code> 来解析 <code>from</code> 和 <code>to</code> 参数。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; Liquid, Hash &#125; = <span class="built_in">require</span>(<span class="string">&#x27;liquidjs&#x27;</span>)</span><br><span class="line"></span><br><span class="line">engine.registerTag(<span class="string">&#x27;random&#x27;</span>, &#123;</span><br><span class="line">  <span class="function"><span class="title">parse</span>(<span class="params">tagToken</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 解析参数结果，存到 `this.args` 里</span></span><br><span class="line">    <span class="built_in">this</span>.args = <span class="keyword">new</span> Hash(tagToken.args)</span><br><span class="line">  &#125;,</span><br><span class="line">  * <span class="function"><span class="title">render</span>(<span class="params">context, emitter</span>)</span> &#123;</span><br><span class="line">    <span class="comment">// 在当前 `context` 下计算参数的值</span></span><br><span class="line">    <span class="keyword">const</span> &#123;<span class="keyword">from</span>, to&#125; = <span class="keyword">yield</span> <span class="built_in">this</span>.args.render(context)</span><br><span class="line">    <span class="keyword">const</span> length = to - <span class="keyword">from</span> + <span class="number">1</span></span><br><span class="line">    <span class="keyword">const</span> value = <span class="keyword">from</span> + <span class="built_in">Math</span>.floor(length * <span class="built_in">Math</span>.random())</span><br><span class="line">    emitter.write(value)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>&#123; max: 10 &#125;</code> 上下文上渲染 <code>&#123;% random from:2, to:max %&#125;</code> 将会得到 [2, 10] 范围内的随机数。见这个 JSFiddle：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/ctj364up/4/">http://jsfiddle.net/ctj364up/4/</a>。</p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2022-01-22T14:01:48.482Z" itemprop="dateModified">上次更新：2022-01-22</time>
+                <a href="access-scope-in-filters.html" class="article-footer-prev" title="过滤器里访问上下文"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="sync-and-async.html" class="article-footer-next" title="同步和异步"><span>下一页</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E5%8E%9F%E5%A7%8B%E5%8F%82%E6%95%B0"><span class="toc-text">访问原始参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%9E%90%E5%8F%82%E6%95%B0%E7%9A%84%E5%80%BC"><span class="toc-text">解析参数的值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%8A%E9%94%AE%E5%80%BC%E5%AF%B9%E8%A7%A3%E6%9E%90%E4%B8%BA%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0"><span class="toc-text">把键值对解析为命名参数</span></a></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">回到顶部</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2022 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <strong class="mobile-nav-title">开始使用</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Liquid 简介</a><a href="setup.html" class="mobile-nav-link">安装</a><a href="options.html" class="mobile-nav-link">选项</a><a href="render-file.html" class="mobile-nav-link">文件渲染</a><a href="partials-and-layouts.html" class="mobile-nav-link">引用/继承</a><a href="use-in-expressjs.html" class="mobile-nav-link">Express.js 中使用</a><strong class="mobile-nav-title">高级主题</strong><a href="caching.html" class="mobile-nav-link">缓存</a><a href="register-filters-tags.html" class="mobile-nav-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="mobile-nav-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="mobile-nav-link current">参数解析</a><a href="sync-and-async.html" class="mobile-nav-link">同步和异步</a><a href="whitespace-control.html" class="mobile-nav-link">换行和缩进</a><a href="plugins.html" class="mobile-nav-link">插件</a><a href="operators.html" class="mobile-nav-link">运算符</a><a href="truthy-and-falsy.html" class="mobile-nav-link">真和假</a><strong class="mobile-nav-title">其他</strong><a href="migrate-to-9.html" class="mobile-nav-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">更新日志</a><a href="differences.html" class="mobile-nav-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="mobile-nav-link">贡献指南</a>
+    </div>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
+    <select id="mobile-lang-select" data-canonical="tutorials/parse-parameters.html">
+      
+        <option value="en">English</option>
+      
+        <option value="zh-cn" selected>简体中文</option>
+      
+    </select>
+  </div>
+</nav>
+  
+
+
+<script src="../../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>

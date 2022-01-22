@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>同步和异步 | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/tutorials/sync-and-async.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/zh-cn/tutorials/sync-and-async">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/zh-cn/tutorials/sync-and-async">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../../css/navy.css">
+
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div id="lang-select-wrap" class="main-nav-link">
+      <label><i class="icon-network"></i>简体中文</label>
+      <select id="lang-select" data-canonical="tutorials/sync-and-async.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">开始使用</strong><a href="intro-to-liquid.html" class="sidebar-link">Liquid 简介</a><a href="setup.html" class="sidebar-link">安装</a><a href="options.html" class="sidebar-link">选项</a><a href="render-file.html" class="sidebar-link">文件渲染</a><a href="partials-and-layouts.html" class="sidebar-link">引用/继承</a><a href="use-in-expressjs.html" class="sidebar-link">Express.js 中使用</a><strong class="sidebar-title">高级主题</strong><a href="caching.html" class="sidebar-link">缓存</a><a href="register-filters-tags.html" class="sidebar-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="sidebar-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="sidebar-link">参数解析</a><a href="sync-and-async.html" class="sidebar-link current">同步和异步</a><a href="whitespace-control.html" class="sidebar-link">换行和缩进</a><a href="plugins.html" class="sidebar-link">插件</a><a href="operators.html" class="sidebar-link">运算符</a><a href="truthy-and-falsy.html" class="sidebar-link">真和假</a><strong class="sidebar-title">其他</strong><a href="migrate-to-9.html" class="sidebar-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="sidebar-link">更新日志</a><a href="differences.html" class="sidebar-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="sidebar-link">贡献指南</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">同步和异步</h1>
+                
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tutorials/sync-and-async.md" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <p>LiquidJS 支持同步调用也支持异步调用，支持 Promise。为了同异步复用一套标签和过滤器，LiquidJS 标签用生成器来实现。</p>
+<h2 id="同异步-API" class="article-heading"><a href="#同异步-API" class="headerlink" title="同异步 API"></a>同异步 API<a class="article-anchor" href="#同异步-API" aria-hidden="true"></a></h2><p><a href="/api/classes/liquid_.liquid.html">Liquid</a> 上主要的方法都支持同步和异步，下面这些方法返回 <code>Promise</code>：</p>
+<ul>
+<li><code>render()</code></li>
+<li><code>renderFile()</code></li>
+<li><code>parseFile()</code></li>
+<li><code>parseAndRender()</code></li>
+<li><code>evalValue()</code></li>
+</ul>
+<p>它们的同步版本带一个 <code>Sync</code> 后缀：</p>
+<ul>
+<li><code>renderSync()</code></li>
+<li><code>renderFileSync()</code></li>
+<li><code>parseFileSync()</code></li>
+<li><code>parseAndRenderSync()</code></li>
+<li><code>evalValueSync()</code></li>
+</ul>
+<h2 id="如何实现兼容同步的标签" class="article-heading"><a href="#如何实现兼容同步的标签" class="headerlink" title="如何实现兼容同步的标签"></a>如何实现兼容同步的标签<a class="article-anchor" href="#如何实现兼容同步的标签" aria-hidden="true"></a></h2><h3 id="要求" class="article-heading"><a href="#要求" class="headerlink" title="要求"></a>要求<a class="article-anchor" href="#要求" aria-hidden="true"></a></h3><p>所有内置标签都兼容同步，可以安全地用于同步或异步 API。为了让你的自定义标签页支持同步，你的标签不能返回 <code>Promise</code>，这意味着你的 <code>render(context, emitter)</code> 函数：</p>
+<ul>
+<li>不能直接 <code>return &lt;Promise&gt;</code>，</li>
+<li>也不能声明为 <code>async</code>。</li>
+</ul>
+<blockquote class="note info"><strong class="note-title">不兼容同步的标签</strong><p>不兼容同步的标签也仍然是合法标签，在异步 API 下也会正常运行。被同步调用时，返回 <code>Promise</code> 的标签会被渲染成 <code>[object Promise]</code>。</p>
+</blockquote>
+
+<h3 id="等待-Promise" class="article-heading"><a href="#等待-Promise" class="headerlink" title="等待 Promise"></a>等待 Promise<a class="article-anchor" href="#等待-Promise" aria-hidden="true"></a></h3><p>但 LiquidJS 是支持 <code>Promise</code> 的，你仍然可以调用返回 <code>Promise</code> 的方法并等它 resolve。只需要把 <code>await</code> 换成 <code>yield</code> 并保留 <code>* render()</code> 不要改成 <code>async render()</code>。例如：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; TagToken, Context, Emitter, TopLevelToken &#125; <span class="keyword">from</span> <span class="string">&#x27;liquidjs&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: &#123;% upper &quot;alice&quot; %&#125;</span></span><br><span class="line"><span class="comment">// Output: ALICE</span></span><br><span class="line">engine.registerTag(<span class="string">&#x27;upper&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">parse</span>: <span class="function"><span class="keyword">function</span>(<span class="params">tagToken: TagToken, remainTokens: TopLevelToken[]</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.str = tagToken.args</span><br><span class="line">    &#125;,</span><br><span class="line">    * render: <span class="function"><span class="keyword">function</span>(<span class="params">ctx: Context</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 同步调用时 `ctx.sync == true`，`_evalValue()` 会同步地执行</span></span><br><span class="line">        <span class="keyword">var</span> str = <span class="keyword">yield</span> <span class="built_in">this</span>.liquid._evalValue(<span class="built_in">this</span>.str, ctx)</span><br><span class="line">        <span class="keyword">return</span> str.toUpperCase()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>见这个 JSFiddle：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/ctj364up/6/">http://jsfiddle.net/ctj364up/6/</a>。</p>
+<h2 id="只支持异步的标签" class="article-heading"><a href="#只支持异步的标签" class="headerlink" title="只支持异步的标签"></a>只支持异步的标签<a class="article-anchor" href="#只支持异步的标签" aria-hidden="true"></a></h2><p>对于只用于异步 API 的标签，或者只能实现为异步的标签，使用生成器语法和 async 语法并没有区别。</p>
+<p>例如，如果上面的 <code>this.liquid._evalValue()</code> 不会检查 <code>ctx.sync</code> 而且总是返回一个 <code>Promise</code>，那么即使这个标签用 <code>* render()</code> 和 <code>yield this.liquid._evalValue()</code> 实现，最终也会渲染成 <code>&lt;object Promise&gt;</code>。</p>
+<p>这时可以直接使用 async 语法。注意有些 LiquidJS API 会返回 <code>Promise</code>，有些会返回生成器。你需要用 <a href="/api/modules/liquid_.html#toPromise">toPromise</a> API 来把生成器转换为 <code>Promise</code>，比如：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; TagToken, Context, Emitter, TopLevelToken, toPromise &#125; <span class="keyword">from</span> <span class="string">&#x27;liquidjs&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Usage: &#123;% upper &quot;alice&quot; %&#125;</span></span><br><span class="line"><span class="comment">// Output: ALICE</span></span><br><span class="line">engine.registerTag(<span class="string">&#x27;upper&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">parse</span>: <span class="function"><span class="keyword">function</span>(<span class="params">tagToken: TagToken, remainTokens: TopLevelToken[]</span>) </span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.str = tagToken.args; <span class="comment">// name</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">render</span>: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">ctx: Context</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> str = <span class="keyword">await</span> toPromise(<span class="built_in">this</span>.liquid._evalValue(<span class="built_in">this</span>.str, ctx));</span><br><span class="line">        <span class="comment">// Or use the alternate API that returns a Promise</span></span><br><span class="line">        <span class="comment">// var str = await this.liquid.evalValue(this.str, ctx);</span></span><br><span class="line">        <span class="keyword">return</span> str.toUpperCase()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>见这个 JSFiddle：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/ctj364up/5/">http://jsfiddle.net/ctj364up/5/</a>。</p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2022-01-22T14:01:48.482Z" itemprop="dateModified">上次更新：2022-01-22</time>
+                <a href="parse-parameters.html" class="article-footer-prev" title="参数解析"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="whitespace-control.html" class="article-footer-next" title="换行和缩进"><span>下一页</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8C%E5%BC%82%E6%AD%A5-API"><span class="toc-text">同异步 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E5%85%BC%E5%AE%B9%E5%90%8C%E6%AD%A5%E7%9A%84%E6%A0%87%E7%AD%BE"><span class="toc-text">如何实现兼容同步的标签</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A6%81%E6%B1%82"><span class="toc-text">要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%89%E5%BE%85-Promise"><span class="toc-text">等待 Promise</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AA%E6%94%AF%E6%8C%81%E5%BC%82%E6%AD%A5%E7%9A%84%E6%A0%87%E7%AD%BE"><span class="toc-text">只支持异步的标签</span></a></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">回到顶部</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2022 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <strong class="mobile-nav-title">开始使用</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Liquid 简介</a><a href="setup.html" class="mobile-nav-link">安装</a><a href="options.html" class="mobile-nav-link">选项</a><a href="render-file.html" class="mobile-nav-link">文件渲染</a><a href="partials-and-layouts.html" class="mobile-nav-link">引用/继承</a><a href="use-in-expressjs.html" class="mobile-nav-link">Express.js 中使用</a><strong class="mobile-nav-title">高级主题</strong><a href="caching.html" class="mobile-nav-link">缓存</a><a href="register-filters-tags.html" class="mobile-nav-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="mobile-nav-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="mobile-nav-link">参数解析</a><a href="sync-and-async.html" class="mobile-nav-link current">同步和异步</a><a href="whitespace-control.html" class="mobile-nav-link">换行和缩进</a><a href="plugins.html" class="mobile-nav-link">插件</a><a href="operators.html" class="mobile-nav-link">运算符</a><a href="truthy-and-falsy.html" class="mobile-nav-link">真和假</a><strong class="mobile-nav-title">其他</strong><a href="migrate-to-9.html" class="mobile-nav-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">更新日志</a><a href="differences.html" class="mobile-nav-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="mobile-nav-link">贡献指南</a>
+    </div>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
+    <select id="mobile-lang-select" data-canonical="tutorials/sync-and-async.html">
+      
+        <option value="en">English</option>
+      
+        <option value="zh-cn" selected>简体中文</option>
+      
+    </select>
+  </div>
+</nav>
+  
+
+
+<script src="../../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>
