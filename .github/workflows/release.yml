@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: |
           npm ci
-          npm run build
+          npm run build:dist
       - name: Test
         run: |
           npm run lint
@@ -30,8 +30,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
-      - name: Publish Docs
-        uses: JamesIves/github-pages-deploy-action@4.1.4
-        with: 
-          branch: gh-pages
-          folder: docs/public
