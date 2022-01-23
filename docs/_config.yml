@@ -19,8 +19,12 @@ pretty_urls:
 theme: navy
 
 highlight:
+  enable: false
+prismjs:
   enable: true
-  line_number: false
+  preprocess: true
+  line_number: true
+  tab_replace: ''
 
 algolia:
   applicationID: 0X19J927JZ

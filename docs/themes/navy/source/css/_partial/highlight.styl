@@ -1,40 +1,24 @@
 // https://github.com/chriskempson/tomorrow-theme
+// Tomorrow Night Eighties
 :root {
-    --highlight-background: #eee
-    --highlight-current-line: #efefef
-    --highlight-selection: #d6d6d6
-    --highlight-foreground: #4d4d4c
-    --highlight-comment: #8e908c
-    --highlight-red: #c82829
-    --highlight-orange: #f5871f
-    --highlight-yellow: #eab700
-    --highlight-green: #718c00
-    --highlight-aqua: #3e999f
-    --highlight-blue: #4271ae
-    --highlight-purple: #8959a8
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --highlight-background: #000000
-        --highlight-current-line: #2a2a2a
-        --highlight-selection: #424242
-        --highlight-foreground: #eaeaea
-        --highlight-comment: #969896
-        --highlight-red: #d54e53
-        --highlight-orange: #e78c45
-        --highlight-yellow: #e7c547
-        --highlight-green: #b9ca4a
-        --highlight-aqua: #70c0b1
-        --highlight-blue: #7aa6da
-        --highlight-purple: #c397d8
-    }
+    --highlight-background: #2d2d2d
+    --highlight-current-line: #393939
+    --highlight-selection: #515151
+    --highlight-foreground: #cccccc
+    --highlight-comment: #999999
+    --highlight-red: #f2777a
+    --highlight-orange: #f99157
+    --highlight-yellow: #ffcc66
+    --highlight-green: #99cc99
+    --highlight-aqua: #66cccc
+    --highlight-blue: #6699cc
+    --highlight-purple: #cc99cc
 }
 
 pre, code
   font-family: font-mono
   color: var(--highlight-foreground)
-  background: var(--color-content-bg-hl)
+  background: var(--highlight-background)
 
 code
   padding: 0 5px
