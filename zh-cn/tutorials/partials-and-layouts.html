@@ -77,7 +77,7 @@
     <div id="content-inner">
       <aside id="sidebar" role="navigation">
   <div class="inner">
-    <strong class="sidebar-title">开始使用</strong><a href="intro-to-liquid.html" class="sidebar-link">Liquid 简介</a><a href="setup.html" class="sidebar-link">安装</a><a href="options.html" class="sidebar-link">选项</a><a href="render-file.html" class="sidebar-link">文件渲染</a><a href="partials-and-layouts.html" class="sidebar-link current">引用/继承</a><a href="use-in-expressjs.html" class="sidebar-link">Express.js 中使用</a><strong class="sidebar-title">高级主题</strong><a href="caching.html" class="sidebar-link">缓存</a><a href="register-filters-tags.html" class="sidebar-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="sidebar-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="sidebar-link">参数解析</a><a href="sync-and-async.html" class="sidebar-link">同步和异步</a><a href="whitespace-control.html" class="sidebar-link">换行和缩进</a><a href="plugins.html" class="sidebar-link">插件</a><a href="operators.html" class="sidebar-link">运算符</a><a href="truthy-and-falsy.html" class="sidebar-link">真和假</a><strong class="sidebar-title">其他</strong><a href="migrate-to-9.html" class="sidebar-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="sidebar-link">更新日志</a><a href="differences.html" class="sidebar-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="sidebar-link">贡献指南</a>
+    <strong class="sidebar-title">开始使用</strong><a href="intro-to-liquid.html" class="sidebar-link">Liquid 简介</a><a href="setup.html" class="sidebar-link">安装</a><a href="options.html" class="sidebar-link">选项</a><a href="render-file.html" class="sidebar-link">文件渲染</a><a href="partials-and-layouts.html" class="sidebar-link current">引用/继承</a><a href="use-in-expressjs.html" class="sidebar-link">Express.js 中使用</a><strong class="sidebar-title">高级主题</strong><a href="caching.html" class="sidebar-link">缓存</a><a href="register-filters-tags.html" class="sidebar-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="sidebar-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="sidebar-link">参数解析</a><a href="render-tag-content.html" class="sidebar-link">渲染标签内容</a><a href="sync-and-async.html" class="sidebar-link">同步和异步</a><a href="whitespace-control.html" class="sidebar-link">换行和缩进</a><a href="plugins.html" class="sidebar-link">插件</a><a href="operators.html" class="sidebar-link">运算符</a><a href="truthy-and-falsy.html" class="sidebar-link">真和假</a><strong class="sidebar-title">其他</strong><a href="migrate-to-9.html" class="sidebar-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="sidebar-link">更新日志</a><a href="differences.html" class="sidebar-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="sidebar-link">贡献指南</a>
   </div>
 </aside>
       <article class="article-container" itemscope itemtype="http://schema.org/Article">
@@ -92,19 +92,37 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <h2 id="引用模板片段" class="article-heading"><a href="#引用模板片段" class="headerlink" title="引用模板片段"></a>引用模板片段<a class="article-anchor" href="#引用模板片段" aria-hidden="true"></a></h2><p>对于如下两个模板文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 文件：color.liquid</span><br><span class="line">color: &#x27;&#123;&#123; color &#125;&#125;&#x27; shape: &#x27;&#123;&#123; shape &#125;&#125;&#x27;</span><br><span class="line"></span><br><span class="line">// 文件：theme.liquid</span><br><span class="line">&#123;% assign shape = &#x27;circle&#x27; %&#125;</span><br><span class="line">&#123;% include &#x27;color&#x27; %&#125;</span><br><span class="line">&#123;% include &#x27;color&#x27; with &#x27;red&#x27; %&#125;</span><br><span class="line">&#123;% include &#x27;color&#x27;, color: &#x27;yellow&#x27;, shape: &#x27;square&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 文件：color.liquid
+color: &#39;&#123;&#123; color &#125;&#125;&#39; shape: &#39;&#123;&#123; shape &#125;&#125;&#39;
+
+&#x2F;&#x2F; 文件：theme.liquid
+&#123;% assign shape &#x3D; &#39;circle&#39; %&#125;
+&#123;% include &#39;color&#39; %&#125;
+&#123;% include &#39;color&#39; with &#39;red&#39; %&#125;
+&#123;% include &#39;color&#39;, color: &#39;yellow&#39;, shape: &#39;square&#39; %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>输出为：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">color: &#x27;&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;red&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;yellow&#x27; shape: &#x27;square&#x27;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">color: &#39;&#39; shape: &#39;circle&#39;
+color: &#39;red&#39; shape: &#39;circle&#39;
+color: &#39;yellow&#39; shape: &#39;square&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <blockquote class="note tip"><strong class="note-title">&quot;.liquid&quot; 文件扩展名</strong><p>如果设置了 <code>extname: &quot;.liquid&quot;</code> 选项，就可以省略 <code>layout</code>, <code>render</code> 和 <code>include</code> 里面文件名的 “.liquid” 后缀。详情请参考 <a href="./options.html#extname">extname 选项</a>。</p>
 </blockquote>
 
 <h2 id="布局模板（模板继承）" class="article-heading"><a href="#布局模板（模板继承）" class="headerlink" title="布局模板（模板继承）"></a>布局模板（模板继承）<a class="article-anchor" href="#布局模板（模板继承）" aria-hidden="true"></a></h2><p>对于如下两个模板文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 文件：default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// 文件：page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 文件：default-layout.liquid
+Header
+&#123;% block content %&#125;My default content&#123;% endblock %&#125;
+Footer
+
+&#x2F;&#x2F; 文件：page.liquid
+&#123;% layout &quot;default-layout&quot; %&#125;
+&#123;% block content %&#125;My page content&#123;% endblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>渲染 <code>page.liquid</code> 将会输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Header
+My page content
+Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <blockquote class="note tip"><strong class="note-title">Block</strong><ul>
     <li>布局文件（父模板）中可以定义多个 block；</li>
@@ -113,7 +131,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T16:03:03.368Z" itemprop="dateModified">上次更新：2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.650Z" itemprop="dateModified">上次更新：2022-01-23</time>
                 <a href="render-file.html" class="article-footer-prev" title="文件渲染"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="use-in-expressjs.html" class="article-footer-next" title="Express.js 中使用"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -160,7 +178,7 @@
     </ul>
     
     <div class="mobile-sidebar-list">
-      <strong class="mobile-nav-title">开始使用</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Liquid 简介</a><a href="setup.html" class="mobile-nav-link">安装</a><a href="options.html" class="mobile-nav-link">选项</a><a href="render-file.html" class="mobile-nav-link">文件渲染</a><a href="partials-and-layouts.html" class="mobile-nav-link current">引用/继承</a><a href="use-in-expressjs.html" class="mobile-nav-link">Express.js 中使用</a><strong class="mobile-nav-title">高级主题</strong><a href="caching.html" class="mobile-nav-link">缓存</a><a href="register-filters-tags.html" class="mobile-nav-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="mobile-nav-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="mobile-nav-link">参数解析</a><a href="sync-and-async.html" class="mobile-nav-link">同步和异步</a><a href="whitespace-control.html" class="mobile-nav-link">换行和缩进</a><a href="plugins.html" class="mobile-nav-link">插件</a><a href="operators.html" class="mobile-nav-link">运算符</a><a href="truthy-and-falsy.html" class="mobile-nav-link">真和假</a><strong class="mobile-nav-title">其他</strong><a href="migrate-to-9.html" class="mobile-nav-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">更新日志</a><a href="differences.html" class="mobile-nav-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="mobile-nav-link">贡献指南</a>
+      <strong class="mobile-nav-title">开始使用</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Liquid 简介</a><a href="setup.html" class="mobile-nav-link">安装</a><a href="options.html" class="mobile-nav-link">选项</a><a href="render-file.html" class="mobile-nav-link">文件渲染</a><a href="partials-and-layouts.html" class="mobile-nav-link current">引用/继承</a><a href="use-in-expressjs.html" class="mobile-nav-link">Express.js 中使用</a><strong class="mobile-nav-title">高级主题</strong><a href="caching.html" class="mobile-nav-link">缓存</a><a href="register-filters-tags.html" class="mobile-nav-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="mobile-nav-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="mobile-nav-link">参数解析</a><a href="render-tag-content.html" class="mobile-nav-link">渲染标签内容</a><a href="sync-and-async.html" class="mobile-nav-link">同步和异步</a><a href="whitespace-control.html" class="mobile-nav-link">换行和缩进</a><a href="plugins.html" class="mobile-nav-link">插件</a><a href="operators.html" class="mobile-nav-link">运算符</a><a href="truthy-and-falsy.html" class="mobile-nav-link">真和假</a><strong class="mobile-nav-title">其他</strong><a href="migrate-to-9.html" class="mobile-nav-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">更新日志</a><a href="differences.html" class="mobile-nav-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="mobile-nav-link">贡献指南</a>
     </div>
     
   </div>

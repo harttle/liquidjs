@@ -95,17 +95,24 @@
 
 <p>对数组中的元素排序，排序方式为 JavaScript <code>Array.prototype.sort()</code>。</p>
 <p>输入</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign my_array = &quot;zebra, octopus, giraffe, Sally Snake&quot; | split: &quot;, &quot; %&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123; my_array | sort | join: &quot;, &quot; &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> my_array <span class="token operator">=</span> <span class="token string">"zebra, octopus, giraffe, Sally Snake"</span> <span class="token operator">|</span> <span class="token function filter">split</span><span class="token operator">:</span> <span class="token string">", "</span> <span class="token delimiter punctuation">%&#125;</span></span>
+
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> my_array <span class="token operator">|</span> <span class="token function filter">sort</span> <span class="token operator">|</span> <span class="token function filter">join</span><span class="token operator">:</span> <span class="token string">", "</span> <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>输出</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">Sally Snake, giraffe, octopus, zebra</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">
+
+Sally Snake, giraffe, octopus, zebra<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>有一个参数来指定用元素的哪个属性排序。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign products_by_price = collection.products | sort: &quot;price&quot; %&#125;</span><br><span class="line">&#123;% for product in products_by_price %&#125;</span><br><span class="line">  &lt;h4&gt;&#123;&#123; product.title &#125;&#125;&lt;/h4&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> products_by_price <span class="token operator">=</span> <span class="token object">collection</span><span class="token punctuation">.</span>products <span class="token operator">|</span> <span class="token function filter">sort</span><span class="token operator">:</span> <span class="token string">"price"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> products_by_price <span class="token delimiter punctuation">%&#125;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h4</span><span class="token punctuation">></span></span><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h4</span><span class="token punctuation">></span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T16:03:03.368Z" itemprop="dateModified">上次更新：2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.646Z" itemprop="dateModified">上次更新：2022-01-23</time>
                 <a href="slice.html" class="article-footer-prev" title="sidebar.filters.slice"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="sort_natural.html" class="article-footer-next" title="sidebar.filters.sort_natural"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

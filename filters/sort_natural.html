@@ -95,17 +95,24 @@
 
 <p>Sorts items in an array in case-insensitive order.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign my_array = &quot;zebra, octopus, giraffe, Sally Snake&quot; | split: &quot;, &quot; %&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123; my_array | sort_natural | join: &quot;, &quot; &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> my_array <span class="token operator">=</span> <span class="token string">"zebra, octopus, giraffe, Sally Snake"</span> <span class="token operator">|</span> <span class="token function filter">split</span><span class="token operator">:</span> <span class="token string">", "</span> <span class="token delimiter punctuation">%&#125;</span></span>
+
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> my_array <span class="token operator">|</span> <span class="token function filter">sort_natural</span> <span class="token operator">|</span> <span class="token function filter">join</span><span class="token operator">:</span> <span class="token string">", "</span> <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">giraffe, octopus, Sally Snake, zebra</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">
+
+giraffe, octopus, Sally Snake, zebra<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>An optional argument specifies which property of the array’s items to use for sorting.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign products_by_company = collection.products | sort_natural: &quot;company&quot; %&#125;</span><br><span class="line">&#123;% for product in products_by_company %&#125;</span><br><span class="line">  &lt;h4&gt;&#123;&#123; product.title &#125;&#125;&lt;/h4&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> products_by_company <span class="token operator">=</span> <span class="token object">collection</span><span class="token punctuation">.</span>products <span class="token operator">|</span> <span class="token function filter">sort_natural</span><span class="token operator">:</span> <span class="token string">"company"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> products_by_company <span class="token delimiter punctuation">%&#125;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h4</span><span class="token punctuation">></span></span><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h4</span><span class="token punctuation">></span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T16:03:03.364Z" itemprop="dateModified">Last updated: 2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.642Z" itemprop="dateModified">Last updated: 2022-01-23</time>
                 <a href="sort.html" class="article-footer-prev" title="sidebar.filters.sort"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="split.html" class="article-footer-next" title="sidebar.filters.split"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

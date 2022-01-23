@@ -77,7 +77,7 @@
     <div id="content-inner">
       <aside id="sidebar" role="navigation">
   <div class="inner">
-    <strong class="sidebar-title">Getting Started</strong><a href="intro-to-liquid.html" class="sidebar-link">Intro to Liquid</a><a href="setup.html" class="sidebar-link">Setup</a><a href="options.html" class="sidebar-link">Options</a><a href="render-file.html" class="sidebar-link">Render Files</a><a href="partials-and-layouts.html" class="sidebar-link current">Includes and Layouts</a><a href="use-in-expressjs.html" class="sidebar-link">Use in Express.js</a><strong class="sidebar-title">Advanced</strong><a href="caching.html" class="sidebar-link">Caching</a><a href="register-filters-tags.html" class="sidebar-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="sidebar-link">Access Scope in Filters</a><a href="parse-parameters.html" class="sidebar-link">Parse Parameters</a><a href="sync-and-async.html" class="sidebar-link">Sync and Async</a><a href="whitespace-control.html" class="sidebar-link">Whitespace Control</a><a href="plugins.html" class="sidebar-link">Plugins</a><a href="operators.html" class="sidebar-link">Operators</a><a href="truthy-and-falsy.html" class="sidebar-link">Truthy and Falsy</a><strong class="sidebar-title">Miscellaneous</strong><a href="migrate-to-9.html" class="sidebar-link">Migrate to LiquidJS 9</a><a href="changelog.html" class="sidebar-link">Changelog</a><a href="differences.html" class="sidebar-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="sidebar-link">Contribution Guidelines</a>
+    <strong class="sidebar-title">Getting Started</strong><a href="intro-to-liquid.html" class="sidebar-link">Intro to Liquid</a><a href="setup.html" class="sidebar-link">Setup</a><a href="options.html" class="sidebar-link">Options</a><a href="render-file.html" class="sidebar-link">Render Files</a><a href="partials-and-layouts.html" class="sidebar-link current">Includes and Layouts</a><a href="use-in-expressjs.html" class="sidebar-link">Use in Express.js</a><strong class="sidebar-title">Advanced</strong><a href="caching.html" class="sidebar-link">Caching</a><a href="register-filters-tags.html" class="sidebar-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="sidebar-link">Access Scope in Filters</a><a href="parse-parameters.html" class="sidebar-link">Parse Parameters</a><a href="render-tag-content.html" class="sidebar-link">Render Tag Content</a><a href="sync-and-async.html" class="sidebar-link">Sync and Async</a><a href="whitespace-control.html" class="sidebar-link">Whitespace Control</a><a href="plugins.html" class="sidebar-link">Plugins</a><a href="operators.html" class="sidebar-link">Operators</a><a href="truthy-and-falsy.html" class="sidebar-link">Truthy and Falsy</a><strong class="sidebar-title">Miscellaneous</strong><a href="migrate-to-9.html" class="sidebar-link">Migrate to LiquidJS 9</a><a href="changelog.html" class="sidebar-link">Changelog</a><a href="differences.html" class="sidebar-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="sidebar-link">Contribution Guidelines</a>
   </div>
 </aside>
       <article class="article-container" itemscope itemtype="http://schema.org/Article">
@@ -92,26 +92,44 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <h2 id="Render-Partials" class="article-heading"><a href="#Render-Partials" class="headerlink" title="Render Partials"></a>Render Partials<a class="article-anchor" href="#Render-Partials" aria-hidden="true"></a></h2><p>For the following template files:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// file: color.liquid</span><br><span class="line">color: &#x27;&#123;&#123; color &#125;&#125;&#x27; shape: &#x27;&#123;&#123; shape &#125;&#125;&#x27;</span><br><span class="line"></span><br><span class="line">// file: theme.liquid</span><br><span class="line">&#123;% assign shape = &#x27;circle&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27; with &#x27;red&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27;, color: &#x27;yellow&#x27;, shape: &#x27;square&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; file: color.liquid
+color: &#39;&#123;&#123; color &#125;&#125;&#39; shape: &#39;&#123;&#123; shape &#125;&#125;&#39;
+
+&#x2F;&#x2F; file: theme.liquid
+&#123;% assign shape &#x3D; &#39;circle&#39; %&#125;
+&#123;% render &#39;color.liquid&#39; %&#125;
+&#123;% render &#39;color.liquid&#39; with &#39;red&#39; %&#125;
+&#123;% render &#39;color.liquid&#39;, color: &#39;yellow&#39;, shape: &#39;square&#39; %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>The output will be:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">color: &#x27;&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;red&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;yellow&#x27; shape: &#x27;square&#x27;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">color: &#39;&#39; shape: &#39;circle&#39;
+color: &#39;red&#39; shape: &#39;circle&#39;
+color: &#39;yellow&#39; shape: &#39;square&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>More details please refer to the <a href="../tags/render.html">render</a> tag.</p>
 <blockquote class="note tip"><strong class="note-title">The &quot;.liquid&quot; Extension</strong><p>The “.liquid” extension in <code>layout</code>, <code>render</code> and <code>include</code> can be omitted if Liquid instance is created using <code>extname: &quot;.liquid&quot;</code> option. See <a href="./options.html#extname">the extname option</a> for details.</p>
 </blockquote>
 
 <h2 id="Layout-Templates-Extends" class="article-heading"><a href="#Layout-Templates-Extends" class="headerlink" title="Layout Templates (Extends)"></a>Layout Templates (Extends)<a class="article-anchor" href="#Layout-Templates-Extends" aria-hidden="true"></a></h2><p>For the following template files:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// file: default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// file: page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; file: default-layout.liquid
+Header
+&#123;% block content %&#125;My default content&#123;% endblock %&#125;
+Footer
+
+&#x2F;&#x2F; file: page.liquid
+&#123;% layout &quot;default-layout.liquid&quot; %&#125;
+&#123;% block content %&#125;My page content&#123;% endblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>The output of <code>page.liquid</code>:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Header
+My page content
+Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>More details please refer to the <a href="../tags/layout.html">layout</a> tag.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T16:03:03.364Z" itemprop="dateModified">Last updated: 2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.646Z" itemprop="dateModified">Last updated: 2022-01-23</time>
                 <a href="render-file.html" class="article-footer-prev" title="Render Files"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="use-in-expressjs.html" class="article-footer-next" title="Use in Express.js"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -158,7 +176,7 @@
     </ul>
     
     <div class="mobile-sidebar-list">
-      <strong class="mobile-nav-title">Getting Started</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Intro to Liquid</a><a href="setup.html" class="mobile-nav-link">Setup</a><a href="options.html" class="mobile-nav-link">Options</a><a href="render-file.html" class="mobile-nav-link">Render Files</a><a href="partials-and-layouts.html" class="mobile-nav-link current">Includes and Layouts</a><a href="use-in-expressjs.html" class="mobile-nav-link">Use in Express.js</a><strong class="mobile-nav-title">Advanced</strong><a href="caching.html" class="mobile-nav-link">Caching</a><a href="register-filters-tags.html" class="mobile-nav-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="mobile-nav-link">Access Scope in Filters</a><a href="parse-parameters.html" class="mobile-nav-link">Parse Parameters</a><a href="sync-and-async.html" class="mobile-nav-link">Sync and Async</a><a href="whitespace-control.html" class="mobile-nav-link">Whitespace Control</a><a href="plugins.html" class="mobile-nav-link">Plugins</a><a href="operators.html" class="mobile-nav-link">Operators</a><a href="truthy-and-falsy.html" class="mobile-nav-link">Truthy and Falsy</a><strong class="mobile-nav-title">Miscellaneous</strong><a href="migrate-to-9.html" class="mobile-nav-link">Migrate to LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">Changelog</a><a href="differences.html" class="mobile-nav-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="mobile-nav-link">Contribution Guidelines</a>
+      <strong class="mobile-nav-title">Getting Started</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Intro to Liquid</a><a href="setup.html" class="mobile-nav-link">Setup</a><a href="options.html" class="mobile-nav-link">Options</a><a href="render-file.html" class="mobile-nav-link">Render Files</a><a href="partials-and-layouts.html" class="mobile-nav-link current">Includes and Layouts</a><a href="use-in-expressjs.html" class="mobile-nav-link">Use in Express.js</a><strong class="mobile-nav-title">Advanced</strong><a href="caching.html" class="mobile-nav-link">Caching</a><a href="register-filters-tags.html" class="mobile-nav-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="mobile-nav-link">Access Scope in Filters</a><a href="parse-parameters.html" class="mobile-nav-link">Parse Parameters</a><a href="render-tag-content.html" class="mobile-nav-link">Render Tag Content</a><a href="sync-and-async.html" class="mobile-nav-link">Sync and Async</a><a href="whitespace-control.html" class="mobile-nav-link">Whitespace Control</a><a href="plugins.html" class="mobile-nav-link">Plugins</a><a href="operators.html" class="mobile-nav-link">Operators</a><a href="truthy-and-falsy.html" class="mobile-nav-link">Truthy and Falsy</a><strong class="mobile-nav-title">Miscellaneous</strong><a href="migrate-to-9.html" class="mobile-nav-link">Migrate to LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">Changelog</a><a href="differences.html" class="mobile-nav-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="mobile-nav-link">Contribution Guidelines</a>
     </div>
     
   </div>

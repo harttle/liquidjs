@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>渲染标签内容 | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/tutorials/render-tag-content.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/zh-cn/tutorials/render-tag-content">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/zh-cn/tutorials/render-tag-content">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../../css/navy.css">
+
+  <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div id="lang-select-wrap" class="main-nav-link">
+      <label><i class="icon-network"></i>简体中文</label>
+      <select id="lang-select" data-canonical="tutorials/render-tag-content.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">开始使用</strong><a href="intro-to-liquid.html" class="sidebar-link">Liquid 简介</a><a href="setup.html" class="sidebar-link">安装</a><a href="options.html" class="sidebar-link">选项</a><a href="render-file.html" class="sidebar-link">文件渲染</a><a href="partials-and-layouts.html" class="sidebar-link">引用/继承</a><a href="use-in-expressjs.html" class="sidebar-link">Express.js 中使用</a><strong class="sidebar-title">高级主题</strong><a href="caching.html" class="sidebar-link">缓存</a><a href="register-filters-tags.html" class="sidebar-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="sidebar-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="sidebar-link">参数解析</a><a href="render-tag-content.html" class="sidebar-link current">渲染标签内容</a><a href="sync-and-async.html" class="sidebar-link">同步和异步</a><a href="whitespace-control.html" class="sidebar-link">换行和缩进</a><a href="plugins.html" class="sidebar-link">插件</a><a href="operators.html" class="sidebar-link">运算符</a><a href="truthy-and-falsy.html" class="sidebar-link">真和假</a><strong class="sidebar-title">其他</strong><a href="migrate-to-9.html" class="sidebar-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="sidebar-link">更新日志</a><a href="differences.html" class="sidebar-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="sidebar-link">贡献指南</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">渲染标签内容</h1>
+                
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/zh-cn/tutorials/render-tag-content.md" class="article-edit-link" title="改进这篇文档"><i class="icon-pencil"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <p>自定义标签可以有内容，也可以嵌套使用。本文描述了如何实现一个由<em>开始标签</em>，<em>结束标签</em>和之间的<em>标签内容</em>的自定义标签。</p>
+<h2 id="渲染标签内容" class="article-heading"><a href="#渲染标签内容" class="headerlink" title="渲染标签内容"></a>渲染标签内容<a class="article-anchor" href="#渲染标签内容" aria-hidden="true"></a></h2><p>我们先实现一个简单的 <code>wrap</code> 标签，它会把内容包装在 <code>&lt;div class=&quot;wrapper&quot;&gt;&lt;/div&gt;</code> 元素里：</p>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> wrap <span class="token delimiter punctuation">%&#125;</span></span>
+  <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token string">"hello world!"</span> <span class="token operator">|</span> <span class="token function filter">capitalize</span> <span class="token delimiter punctuation">&#125;&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> endwrap <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>期望输出：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">'</span>wrapper<span class="token punctuation">'</span></span><span class="token punctuation">></span></span>
+  Hello world!
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>首先 <a href="./register-filters-tags.html">注册</a> 一个名为 <code>wrap</code> 的标签，把内容解析到 <code>this.tpls</code> 数组里。<code>parse(tagToken, remainTokens)</code> 中，</p>
+<ul>
+<li><code>tagToken</code> 是当前 <em>Token</em> <code>&#123;% wrap %&#125;</code>，</li>
+<li><code>remainTokens</code> 是当前模板中后续所有 <em>Token</em> 的数组。</li>
+</ul>
+<p>我们要做的是从 <code>remainTokens</code> 里拿出来/<code>.shift()</code> 足够的标签直到遇到 <code>endwrap</code>（其实可以是任意名字，但按照惯例应该叫 <code>endwrap</code>）。如果到模板结尾都没遇到 <code>endwrap</code>，需要抛出一个标签未关闭的 <code>Error</code>。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">engine<span class="token punctuation">.</span><span class="token function">registerTag</span><span class="token punctuation">(</span><span class="token string">'wrap'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">parse</span><span class="token punctuation">(</span><span class="token parameter">tagToken<span class="token punctuation">,</span> remainTokens</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>tpls <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">let</span> closed <span class="token operator">=</span> <span class="token boolean">false</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>remainTokens<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">let</span> token <span class="token operator">=</span> remainTokens<span class="token punctuation">.</span><span class="token function">shift</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token comment">// 得到了结束标签，停止解析</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>token<span class="token punctuation">.</span>name <span class="token operator">===</span> <span class="token string">'endwrap'</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        closed <span class="token operator">=</span> <span class="token boolean">true</span>
+        <span class="token keyword">break</span>
+      <span class="token punctuation">&#125;</span>
+      <span class="token comment">// 把 Token 解析成 Template</span>
+      <span class="token comment">// parseToken() 可能会消耗多个 Token</span>
+      <span class="token comment">// 例如 &#123;% if %&#125;...&#123;% endif %&#125;</span>
+      <span class="token keyword">let</span> tpl <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>parser<span class="token punctuation">.</span><span class="token function">parseToken</span><span class="token punctuation">(</span>token<span class="token punctuation">,</span> remainTokens<span class="token punctuation">)</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>tpls<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>tpl<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>closed<span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">tag </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>tagToken<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> not closed</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token operator">*</span> <span class="token function">render</span><span class="token punctuation">(</span><span class="token parameter">context<span class="token punctuation">,</span> emitter</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    emitter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;div class='wrapper'>"</span><span class="token punctuation">)</span>
+    <span class="token keyword">yield</span> <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>renderer<span class="token punctuation">.</span><span class="token function">renderTemplates</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>tpls<span class="token punctuation">,</span> context<span class="token punctuation">,</span> emitter<span class="token punctuation">)</span>
+    emitter<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"&lt;/div>"</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>.renderTemplates()</code> 可能是异步的，因此需要 <code>yield</code> 来等它完成。更多关于 LiquidJS 异步的信息可以参考 <a href="./sync-and-async.html">同步和异步</a>。<code>render()</code> 的其他部分比较直观，这是 JSFiddle 版本：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/por0zcn1/3/">http://jsfiddle.net/por0zcn1/3/</a>。</p>
+<h2 id="使用-ParseStream" class="article-heading"><a href="#使用-ParseStream" class="headerlink" title="使用 ParseStream"></a>使用 ParseStream<a class="article-anchor" href="#使用-ParseStream" aria-hidden="true"></a></h2><p>对于像 <a href="../tags/for.html">for</a> 和 <a href="../tags/if.html">if</a> 这样的复杂标签，<code>parse()</code> 会变得很复杂。使用 <a href="../api/classes/parser_parse_stream_.parsestream.html">ParseStream</a> 工具可以按事件风格来组织 <code>parse()</code> 的逻辑。下面是用 <code>ParseStream</code> 重写过的 <code>parse()</code>，实现了和上面例子中完全一样的功能。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">parse</span><span class="token punctuation">(</span><span class="token parameter">tagToken<span class="token punctuation">,</span> remainTokens</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>tpls <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>parser<span class="token punctuation">.</span><span class="token function">parseStream</span><span class="token punctuation">(</span>remainTokens<span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'template'</span><span class="token punctuation">,</span> <span class="token parameter">tpl</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>tpls<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>tpl<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment">// 注意这里不能用箭头函数，因为我们需要 `this`</span>
+    <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'tag:endwrap'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">tag </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>tagToken<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> not closed</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这是 JSFiddle 链接：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/por0zcn1/4/">http://jsfiddle.net/por0zcn1/4/</a>。简单起见，下面的例子都借助 <code>ParseStream</code> 来实现。</p>
+<h2 id="操作上下文" class="article-heading"><a href="#操作上下文" class="headerlink" title="操作上下文"></a>操作上下文<a class="article-anchor" href="#操作上下文" aria-hidden="true"></a></h2><p>上面的 <code>wrap</code> 标签看起来没什么用，反正没它也可以很容易地渲染那部分内容。我们现在来实现一个 <code>repeat</code> 标签，把内容渲染两次（还可以<a href="./parse-parameters.html">加个参数</a>让它渲染任意次）：</p>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> repeat <span class="token delimiter punctuation">%&#125;</span></span>
+  <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> repeat<span class="token punctuation">.</span>i <span class="token delimiter punctuation">&#125;&#125;</span></span>. <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token string">"hello world!"</span> <span class="token operator">|</span> <span class="token function filter">capitalize</span> <span class="token delimiter punctuation">&#125;&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> endrepeat <span class="token delimiter punctuation">%&#125;</span></span>`<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>期望输出：</p>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html">1. Hello world!
+2. Hello world!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>你可能注意到了在 <code>repeat</code> 上下文里有个额外的变量 <code>repeat.i</code>，这就需要我们操作 <em>上下文</em>。</p>
+<blockquote class="note info"><strong class="note-title">上下文</strong><p><em>上下文</em> 定义了 Liquid 模板中每个变量的值。在 LiquidJS 中，<code>Context</code> 由一个 <code>Scope</code> 的栈组成。<em>Scope</em> 就是一个普通对象，就像传给 <code>engine.render(tpl, scope)</code> 的 <code>scope</code> 一样。</p>
+</blockquote>
+
+<p>每次进入新的 <em>上下文</em> 时，我们需要 <code>push</code> 一个新的 <code>Scope</code>。当结束渲染并退出 <em>上下文</em> 时，再把 <code>Scope</code> 从 <em>上下文</em> <code>pop</code> 出来。见下面的实现：</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">engine<span class="token punctuation">.</span><span class="token function">registerTag</span><span class="token punctuation">(</span><span class="token string">'repeat'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+  <span class="token function">parse</span><span class="token punctuation">(</span><span class="token parameter">tagToken<span class="token punctuation">,</span> remainTokens</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>tpls <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>parser<span class="token punctuation">.</span><span class="token function">parseStream</span><span class="token punctuation">(</span>remainTokens<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'template'</span><span class="token punctuation">,</span> <span class="token parameter">tpl</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>tpls<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>tpl<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'tag:endrepeat'</span><span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">tag </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>tagToken<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> not closed</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token operator">*</span> <span class="token function">render</span><span class="token punctuation">(</span><span class="token parameter">context<span class="token punctuation">,</span> emitter</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> repeat <span class="token operator">=</span> <span class="token punctuation">&#123;</span> i<span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">&#125;</span>
+    context<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> repeat <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">yield</span> <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>renderer<span class="token punctuation">.</span><span class="token function">renderTemplates</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>tpls<span class="token punctuation">,</span> context<span class="token punctuation">,</span> emitter<span class="token punctuation">)</span>
+    repeat<span class="token punctuation">.</span>i<span class="token operator">++</span>
+    <span class="token keyword">yield</span> <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>renderer<span class="token punctuation">.</span><span class="token function">renderTemplates</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>tpls<span class="token punctuation">,</span> context<span class="token punctuation">,</span> emitter<span class="token punctuation">)</span>
+    context<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>parse()</code> 部分和 <code>wrap</code> 标签完全相同，在 <code>render()</code> 部分我们通过调用两次 <code>.renderTemplates(this.tpls)</code> 来重复渲染内容。这是 JSFiddle 链接：<a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/por0zcn1/2/">http://jsfiddle.net/por0zcn1/2/</a>。</p>
+<blockquote class="note warn"><strong class="note-title">成对使用 Push 和 Pop</strong><p>必须成对地使用 <code>context.push()</code> 和 <code>context.pop()</code>。如果忘记 <code>pop()</code> 会导致 <code>Scope</code> 泄露给后面的模板内容，也可能损坏 <em>上下文</em> 栈。.</p>
+</blockquote>
+
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.650Z" itemprop="dateModified">上次更新：2022-01-23</time>
+                <a href="parse-parameters.html" class="article-footer-prev" title="参数解析"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="sync-and-async.html" class="article-footer-next" title="同步和异步"><span>下一页</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%B2%E6%9F%93%E6%A0%87%E7%AD%BE%E5%86%85%E5%AE%B9"><span class="toc-text">渲染标签内容</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-ParseStream"><span class="toc-text">使用 ParseStream</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-text">操作上下文</span></a></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">回到顶部</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2022 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <li class="mobile-nav-item">
+        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
+      </li>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <strong class="mobile-nav-title">开始使用</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Liquid 简介</a><a href="setup.html" class="mobile-nav-link">安装</a><a href="options.html" class="mobile-nav-link">选项</a><a href="render-file.html" class="mobile-nav-link">文件渲染</a><a href="partials-and-layouts.html" class="mobile-nav-link">引用/继承</a><a href="use-in-expressjs.html" class="mobile-nav-link">Express.js 中使用</a><strong class="mobile-nav-title">高级主题</strong><a href="caching.html" class="mobile-nav-link">缓存</a><a href="register-filters-tags.html" class="mobile-nav-link">注册标签/过滤器</a><a href="access-scope-in-filters.html" class="mobile-nav-link">过滤器里访问上下文</a><a href="parse-parameters.html" class="mobile-nav-link">参数解析</a><a href="render-tag-content.html" class="mobile-nav-link current">渲染标签内容</a><a href="sync-and-async.html" class="mobile-nav-link">同步和异步</a><a href="whitespace-control.html" class="mobile-nav-link">换行和缩进</a><a href="plugins.html" class="mobile-nav-link">插件</a><a href="operators.html" class="mobile-nav-link">运算符</a><a href="truthy-and-falsy.html" class="mobile-nav-link">真和假</a><strong class="mobile-nav-title">其他</strong><a href="migrate-to-9.html" class="mobile-nav-link">迁移到 LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">更新日志</a><a href="differences.html" class="mobile-nav-link">与 Shopify/liquid 的不同</a><a href="contribution-guidelines.html" class="mobile-nav-link">贡献指南</a>
+    </div>
+    
+  </div>
+  <div id="mobile-lang-select-wrap">
+    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
+    <select id="mobile-lang-select" data-canonical="tutorials/render-tag-content.html">
+      
+        <option value="en">English</option>
+      
+        <option value="zh-cn" selected>简体中文</option>
+      
+    </select>
+  </div>
+</nav>
+  
+
+
+<script src="../../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>

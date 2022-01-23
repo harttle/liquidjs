@@ -95,17 +95,21 @@
 
 <p>The opposite of <code>if</code> – executes a block of code only if a certain condition is <strong>not</strong> met.</p>
 <p>Input</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% unless product.title == &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endunless %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">unless</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token operator">==</span> <span class="token string">"Awesome Shoes"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+  These shoes are not awesome.
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endunless</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>Output</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">These shoes are not awesome.</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">These shoes are not awesome.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>This would be the equivalent of doing the following:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% if product.title != &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">if</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token operator">!=</span> <span class="token string">"Awesome Shoes"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+  These shoes are not awesome.
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endif</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T16:03:03.364Z" itemprop="dateModified">Last updated: 2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.646Z" itemprop="dateModified">Last updated: 2022-01-23</time>
                 <a href="tablerow.html" class="article-footer-prev" title="sidebar.tags.tablerow"><i class="icon-chevron-left"></i><span>Prev</span></a>
               </footer>
             </div>

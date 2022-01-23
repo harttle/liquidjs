@@ -94,36 +94,48 @@
                 <p class="since">v9.2.0</p>
 
 <h2 id="Render-a-Template" class="article-heading"><a href="#Render-a-Template" class="headerlink" title="Render a Template"></a>Render a Template<a class="article-anchor" href="#Render-a-Template" aria-hidden="true"></a></h2><p>Render a partial template from partials directory specified by <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-partials">partials</a> or <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">root</a>.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// index.liquid</span><br><span class="line">Contents</span><br><span class="line">&#123;% render &#x27;footer.liquid&#x27; %&#125;</span><br><span class="line"></span><br><span class="line">// footer.liquid</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// result</span><br><span class="line">Contents</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid">// index.liquid
+Contents
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'footer.liquid'</span> <span class="token delimiter punctuation">%&#125;</span></span>
+
+// footer.liquid
+Footer
+
+// result
+Contents
+Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>If <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension becomes optional:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render &#x27;footer&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'footer'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <blockquote class="note info"><strong class="note-title">Variable Scope</strong><p>When a partial template is rendered, the code inside it can’t access its parent’s variables and its variables won’t be accessible by its parent. This encapsulation makes partials easier to understand and maintain.</p>
 </blockquote>
 
 <h2 id="Passing-Variables" class="article-heading"><a href="#Passing-Variables" class="headerlink" title="Passing Variables"></a>Passing Variables<a class="article-anchor" href="#Passing-Variables" aria-hidden="true"></a></h2><p>Variables defined in parent’s scope can be passed to a the partial template by listing them as parameters on the render tag:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign my_variable = &#x27;apples&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;name&#x27;, my_variable: my_variable, my_other_variable: &#x27;oranges&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> my_variable <span class="token operator">=</span> <span class="token string">'apples'</span> <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'name'</span><span class="token punctuation">,</span> my_variable<span class="token operator">:</span> my_variable<span class="token punctuation">,</span> my_other_variable<span class="token operator">:</span> <span class="token string">'oranges'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p><a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-globals">globals</a> don’t need to be passed down. They are accessible from all files.</p>
 <h2 id="Outputs-amp-Filters" class="article-heading"><a href="#Outputs-amp-Filters" class="headerlink" title="Outputs &amp; Filters"></a>Outputs &amp; Filters<a class="article-anchor" href="#Outputs-amp-Filters" aria-hidden="true"></a></h2><p>When filename is specified as literal string, it supports Liquid output and filter syntax. Useful when concatenating strings for a complex filename.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render &quot;prefix/&#123;&#123;name | append: \&quot;.html\&quot;&#125;&#125;&quot; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">"prefix/&#123;&#123;name | append: \"</span><span class="token punctuation">.</span>html\<span class="token string">"&#125;&#125;"</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <blockquote class="note info"><strong class="note-title">Escaping</strong><p>In LiquidJS, <code>&quot;</code> within quoted string literals need to be escaped. Adding a slash before the quote, e.g. <code>\&quot;</code>. Using Jekyll-like filenames can make this easier, see below.</p>
 </blockquote>
 
 <h2 id="Jekyll-like-Filenames" class="article-heading"><a href="#Jekyll-like-Filenames" class="headerlink" title="Jekyll-like Filenames"></a>Jekyll-like Filenames<a class="article-anchor" href="#Jekyll-like-Filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, file names are specified as literal string. And it also supports Liquid outputs and filters.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render prefix/&#123;&#123; page.my_variable &#125;&#125;/suffix %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> prefix/&#123;&#123; <span class="token object">page</span><span class="token punctuation">.</span>my_variable &#125;&#125;/suffix <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>This way, you don’t need to escape <code>&quot;</code> in the filename expression.</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% render prefix/&#123;&#123;name | append: &quot;.html&quot;&#125;&#125; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> prefix/&#123;&#123;name <span class="token operator">|</span> <span class="token function filter">append</span><span class="token operator">:</span> <span class="token string">".html"</span>&#125;&#125; <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h2 id="Parameters" class="article-heading"><a href="#Parameters" class="headerlink" title="Parameters"></a>Parameters<a class="article-anchor" href="#Parameters" aria-hidden="true"></a></h2><h3 id="The-with-Parameter" class="article-heading"><a href="#The-with-Parameter" class="headerlink" title="The with Parameter"></a>The <code>with</code> Parameter<a class="article-anchor" href="#The-with-Parameter" aria-hidden="true"></a></h3><p>A single object can be passed to a snippet by using the <code>with...as</code> syntax:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign featured_product = all_products[&#x27;product_handle&#x27;] %&#125;</span><br><span class="line">&#123;% render &#x27;product&#x27; with featured_product as product %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> featured_product <span class="token operator">=</span> all_products<span class="token punctuation">[</span><span class="token string">'product_handle'</span><span class="token punctuation">]</span> <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'product'</span> <span class="token keyword">with</span> featured_product <span class="token keyword">as</span> <span class="token object">product</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>In the example above, the <code>product</code> variable in the partial template will hold the value of <code>featured_product</code> in the parent template.</p>
 <h3 id="The-for-Parameter" class="article-heading"><a href="#The-for-Parameter" class="headerlink" title="The for Parameter"></a>The <code>for</code> Parameter<a class="article-anchor" href="#The-for-Parameter" aria-hidden="true"></a></h3><p>A partial template can be rendered once for each value of an enumerable by using the <code>for...as</code> syntax:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;% assign variants = product.variants %&#125;</span><br><span class="line">&#123;% render &#x27;variant&#x27; for variants as variant %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> variants <span class="token operator">=</span> <span class="token object">product</span><span class="token punctuation">.</span>variants <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'variant'</span> <span class="token keyword">for</span> variants <span class="token keyword">as</span> <span class="token object">variant</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>In the example above, the partial template will be rendered once for each <code>variant</code> of the <code>product</code>, and the <code>variant</code> variable will hold a product’s variant object within the snippet.</p>
 <blockquote class="note tip"><strong class="note-title">The forloop object</strong><p>When using the for parameter, the <a href="./for.html#forloop">forloop</a> object is accessible within the snippet.</p>
@@ -132,7 +144,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-01-22T16:03:03.364Z" itemprop="dateModified">Last updated: 2022-01-22</time>
+                <time class="article-footer-updated" datetime="2022-01-23T06:25:32.646Z" itemprop="dateModified">Last updated: 2022-01-23</time>
                 <a href="raw.html" class="article-footer-prev" title="sidebar.tags.raw"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="tablerow.html" class="article-footer-next" title="sidebar.tags.tablerow"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
