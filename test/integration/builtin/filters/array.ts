@@ -156,6 +156,18 @@ describe('filters/array', function () {
         - Boring sneakers
         `)
     })
+    it('should support filter by null property', function () {
+      return test(`{% assign untyped_products = products | where: "type", null %}
+        Untyped products:
+        {% for product in untyped_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Untyped products:
+        - Coffee mug
+        - Limited edition sneakers
+        - Boring sneakers
+        `)
+    })
     it('should support nested property', async function () {
       const authors = [
         { name: 'Alice', books: { year: 2019 } },

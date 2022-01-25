@@ -2,6 +2,7 @@ import { isArray, last as arrayLast } from '../../util/underscore'
 import { toArray } from '../../util/collection'
 import { isTruthy } from '../../render/boolean'
 import { FilterImpl } from '../../template/filter/filter-impl'
+import { isComparable } from '../../drop/comparable'
 
 export const join = (v: any[], arg: string) => v.join(arg === undefined ? ' ' : arg)
 export const last = (v: any) => isArray(v) ? arrayLast(v) : ''
@@ -26,7 +27,9 @@ export function slice<T> (v: T[], begin: number, length = 1): T[] {
 export function where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): T[] {
   return toArray(arr).filter(obj => {
     const value = this.context.getFromScope(obj, String(property).split('.'))
-    return expected === undefined ? isTruthy(value) : value === expected
+    if (expected === undefined) return isTruthy(value)
+    if (isComparable(expected)) return expected.equals(value)
+    return value === expected
   })
 }
 
