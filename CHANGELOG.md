@@ -1,3 +1,15 @@
+# [9.34.0](https://github.com/harttle/liquidjs/compare/v9.33.1...v9.34.0) (2022-01-28)
+
+
+### Bug Fixes
+
+* where-filter null handling ([#457](https://github.com/harttle/liquidjs/issues/457)) ([9da41c8](https://github.com/harttle/liquidjs/commit/9da41c8a37d9c49ee4a16d5bd520fd6ae01c14ec))
+
+
+### Features
+
+* `ownPropertyOnly` option to protect prototype, [#454](https://github.com/harttle/liquidjs/issues/454) ([7e99efc](https://github.com/harttle/liquidjs/commit/7e99efc5131e20cf3f59e1fc2c371a15aa4109db))
+
 ## [9.33.1](https://github.com/harttle/liquidjs/compare/v9.33.0...v9.33.1) (2022-01-19)
 
 
