@@ -2,11 +2,12 @@
 <html lang="zh-cn">
 <head prefix="og: http://ogp.me/ns#">
   <meta charset="utf-8">
-  <title>LiquidJS</title>
+  <title>演示 | LiquidJS</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一个用来尝试和分享 Liquid 模板的在线编辑器">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/zh-cn/manifest.json">
   <!-- Canonical links -->
   <link rel="canonical" href="https://liquidjs.com/zh-cn/playground.html">
   <!-- Alternative links -->
@@ -69,7 +70,8 @@
     <div id="playground" role="main">
   <div class="wrapper">
     <h1 class="inner">演示</h1>
-    <div class="row inner">
+    <div class="loader" role=status aria-busy=true></div>
+    <div id="editors" class="row inner hide" aria-hide=true>
       <div class="col">
         <div id="editorEl">{% assign people = &quot;alice, bob, carol&quot; | split: &quot;, &quot; -%}
 
