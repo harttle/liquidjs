@@ -2,7 +2,7 @@
 title: Contribution Guideline
 ---
 
-## Star on Github 👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
+## 👉👉👉 Star LiquidJS  [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
 
 Starring LiquidJS is the most important and easiest way to support us: boost its rank and expose it to more people, which in turn makes it better.
 
@@ -26,13 +26,19 @@ npm test
 
 ## Financial Support
 
-LiquidJS is Open Source and Free. To help it live and thrive, please consider contribute on [Open Collective][oc] or [Patreon][pt]. To acknowledge your contribution, your name and avatar will be listed here, [homepage](https://liquidjs.com/) for LiquidJS and on [Github README][liquidjs].
+LiquidJS is Open Source and Free. To help it live and thrive, please consider contribute on [Open Collective][oc] or [Patreon][pt]. To acknowledge your contribution, your name and avatar will be listed here, on LiquidJS [homepage](https://liquidjs.com/) and on [Github README][liquidjs].
 
-<object type="image/svg+xml" data="https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=72"></object>
+### Backers
+If you personally like LiquidJS and find it's useful to you, you can become a backer!
 
-[![Become a Patron!](../icon/become_a_patron_button@2x.png)](https://www.patreon.com/bePatron?u=32321060)
+<object type="image/svg+xml" data="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72"></object>
 
-[oc]: https://opencollective.com/liquidjs/
+### Sponsors
+If LiquidJS is benefiting your business/company, please sponsor us to make it better!
+
+<object type="image/svg+xml" data="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72"></object>
+
+[oc]: https://opencollective.com/liquidjs/contribute/backer-ii-10666/checkout
 [pt]: https://www.patreon.com/harttle
 [shopify/liquid]: https://shopify.github.io/liquid/
 [caniuse-promises]: http://caniuse.com/#feat=promises

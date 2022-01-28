@@ -1,5 +1,6 @@
 ---
 title: 过滤器
+description: 每个 Liquid 过滤器的描述和示例
 ---
 
 LiquidJS 支持 Liquid 语法中具体业务无关的过滤器，基本上 [shopify/liquid 核心][shopify/liquid] 支持的 LiquidJS 都支持。这部分包含了所有 LiquidJS 支持的过滤器的文档和使用示例。

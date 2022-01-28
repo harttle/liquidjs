@@ -76,9 +76,20 @@
   editor.on('change', update);
   dataEditor.on('change', update);
   update();
+  ready();
+
+  function ready() {
+    const loader = document.querySelector('.loader');
+    loader.classList.add('hide');
+    loader.setAttribute('aria-busy', false);
+
+    const editors = document.querySelector('#editors');
+    editors.classList.remove('hide');
+    editors.setAttribute('aria-hide', false);
+  }
 
   function createEditor(id, lang) {
-    var editor = ace.edit(id);
+    const editor = ace.edit(id);
     editor.setTheme('ace/theme/tomorrow_night');
     editor.getSession().setMode('ace/mode/' + lang);
     editor.getSession().setOptions({

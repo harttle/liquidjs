@@ -1,5 +1,6 @@
 ---
 title: 标签
+description: 每个 Liquid 标签的描述和示例
 ---
 
 LiquidJS 支持 Liquid 语法中具体业务无关的标签，包含 [shopify/liquid 核心][shopify/liquid] 里的所有标签。这部分包含了所有 LiquidJS 支持的标签的文档和使用示例。

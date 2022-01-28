@@ -51,12 +51,19 @@ More details, refer to [The Setup Guide][setup].
 * [react-liquid](https://github.com/aquibm/react-liquid#readme): Liquid templating language component for React
 * [@11ty/eleventy](https://www.npmjs.com/package/@11ty/eleventy): A simpler static site generator. An alternative to Jekyll. Written in JavaScript. Transforms a directory of templates (of varying types) into HTML.
 
-## Backers
+## Financial Support
 
 If you love LiquidJS or your company is using LiquidJS? Please consider [support us on Open Collective or Patreon][financial-support].
 
-![backers from open-collective](https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=97)
+### Backers
+If you personally like LiquidJS and find it's useful to you, you can become a backer!
 
+<object type="image/svg+xml" data="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72"></object>
+
+### Sponsors
+If LiquidJS is benefiting your business/company, please sponsor us to make it better!
+
+<object type="image/svg+xml" data="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72"></object>
 ## Contributors ✨
 
 Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to these wonderful people:

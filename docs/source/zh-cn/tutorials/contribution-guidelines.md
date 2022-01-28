@@ -2,7 +2,7 @@
 title: 贡献指南
 ---
 
-## Star on Github 👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
+## Star LiquidJS 👉👉👉 [![harttle/liquidjs](https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square)][liquidjs]
 
 Star 是支持 LiquidJS 最重要的方式，也是最简单的方式：通过提升排名来让更多人了解 LiquidJS，让它得到更好的改进。
 
@@ -24,13 +24,19 @@ npm test
 
 **向后兼容**：请考虑向后（之前的旧的版本）兼容。LiquidJS 被用于很多层的软件，包括底层库、编译器、站点生成器、 Web 服务器。对多数最终用户来说，驱动或请求整个系统做一次主版本升级是很难办到的。
 
-## 成为赞助者！
+## 资金支持
 
-LiquidJS 是开源和免费的。如果你喜欢 LiquidJS 或你的公司在使用 LiquidJS，请考虑通过 [Open Collective][oc] 或 [Patreon][pt] 赞助，作为感谢你的名字和头像（或 Logo）会展示在这里，[LiquidJS 首页](https://liquidjs.com/)和 [Github README][liquidjs]。
+LiquidJS 是开源和免费的，但支持 [Open Collective][oc] 或 [Patreon][pt] 赞助，作为感谢你的名字和头像（或 Logo）会展示在这里，[LiquidJS 首页](https://liquidjs.com/)和 [Github README][liquidjs]。
 
-<object type="image/svg+xml" data="https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=72"></object>
+### 支持者
+如果你喜欢 LiquidJS，希望支持我们，你可以成为 Open Collective Backer！
 
-[![Become a Patron!](../../icon/become_a_patron_button@2x.png)](https://www.patreon.com/bePatron?u=32321060)
+<object type="image/svg+xml" data="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72"></object>
+
+### 赞助商
+如果你的公司/业务在使用 LiquidJS，请考虑赞助我们！让 LiquidJS 变得更好，以及保持开放和免费！
+
+<object type="image/svg+xml" data="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72"></object>
 
 [oc]: https://opencollective.com/liquidjs/
 [pt]: https://www.patreon.com/harttle

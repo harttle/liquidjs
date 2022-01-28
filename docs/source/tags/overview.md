@@ -1,5 +1,6 @@
 ---
 title: Tags
+description: Description and demo for each Liquid tag
 ---
 
 LiquidJS implements business-logic independent tags that are typically implemented in [shopify/liquid][shopify/liquid]. This section contains the specification and demoes for all the tags implemented by LiquidJS.
