@@ -137,6 +137,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/ameyaapte1"><img src="https://avatars.githubusercontent.com/u/16054747?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Ameya Apte</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=ameyaapte1" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/tbdrz"><img src="https://avatars.githubusercontent.com/u/50599116?v=4?s=100" width="100px;" alt=""/><br /><sub><b>tbdrz</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=tbdrz" title="Documentation">📖</a></td>
   </tr>
 </table>
 
