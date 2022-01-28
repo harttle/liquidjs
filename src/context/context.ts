@@ -59,11 +59,11 @@ export class Context {
     return this.getFromScope(scope, paths)
   }
   public getFromScope (scope: object, paths: string[] | string) {
-    if (typeof paths === 'string') paths = paths.split('.')
-    return paths.reduce((scope, path) => {
-      scope = readProperty(scope, path)
+    if (isString(paths)) paths = paths.split('.')
+    return paths.reduce((scope, path, i) => {
+      scope = readProperty(scope, path, this.opts.ownPropertyOnly)
       if (isNil(scope) && this.strictVariables) {
-        throw new InternalUndefinedVariableError(path)
+        throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
       }
       return scope
     }, scope)
@@ -87,10 +87,11 @@ export class Context {
   }
 }
 
-export function readProperty (obj: Scope, key: string) {
+export function readProperty (obj: Scope, key: string, ownPropertyOnly: boolean) {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
-  if (isFunction(obj[key])) return obj[key]()
+  const jsProperty = readJSProperty(obj, key, ownPropertyOnly)
+  if (isFunction(jsProperty)) return jsProperty.call(obj)
   if (obj instanceof Drop) {
     if (obj.hasOwnProperty(key)) return obj[key]
     return obj.liquidMethodMissing(key)
@@ -98,6 +99,10 @@ export function readProperty (obj: Scope, key: string) {
   if (key === 'size') return readSize(obj)
   if (key === 'first') return readFirst(obj)
   if (key === 'last') return readLast(obj)
+  return jsProperty
+}
+export function readJSProperty (obj: Scope, key: string, ownPropertyOnly: boolean) {
+  if (ownPropertyOnly && !Object.hasOwnProperty.call(obj, key)) return undefined
   return obj[key]
 }
 

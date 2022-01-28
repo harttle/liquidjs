@@ -95,11 +95,11 @@ describe('Context', function () {
     })
     it('should throw when deep variable not exist', async function () {
       ctx.push({ foo: 'FOO' })
-      return expect(() => ctx.get(['foo', 'bar', 'not', 'defined'])).to.throw(/undefined variable: bar/)
+      return expect(() => ctx.get(['foo', 'bar', 'not', 'defined'])).to.throw(/undefined variable: foo.bar/)
     })
     it('should throw when itself not defined', async function () {
       ctx.push({ foo: 'FOO' })
-      return expect(() => ctx.get(['foo', 'BAR'])).to.throw(/undefined variable: BAR/)
+      return expect(() => ctx.get(['foo', 'BAR'])).to.throw(/undefined variable: foo.BAR/)
     })
     it('should find variable in parent scope', async function () {
       ctx.push({ 'foo': 'foo' })
@@ -107,6 +107,68 @@ describe('Context', function () {
         'bar': 'bar'
       })
       expect(ctx.get(['foo'])).to.equal('foo')
+    })
+  })
+
+  describe('ownPropertyOnly', async function () {
+    let ctx: Context
+    beforeEach(function () {
+      ctx = new Context(ctx, {
+        ownPropertyOnly: true
+      } as any)
+    })
+    it('should return undefined for prototype object property', function () {
+      ctx.push({ foo: Object.create({ bar: 'BAR' }) })
+      return expect(ctx.get(['foo', 'bar'])).to.equal(undefined)
+    })
+    it('should return undefined for Array.prototype.reduce', function () {
+      ctx.push({ foo: [] })
+      return expect(ctx.get(['foo', 'reduce'])).to.equal(undefined)
+    })
+    it('should return undefined for function prototype property', function () {
+      function Foo () {}
+      Foo.prototype.bar = 'BAR'
+      ctx.push({ foo: new (Foo as any)() })
+      return expect(ctx.get(['foo', 'bar'])).to.equal(undefined)
+    })
+    it('should allow function constructor properties', function () {
+      function Foo (this: any) { this.bar = 'BAR' }
+      ctx.push({ foo: new (Foo as any)() })
+      return expect(ctx.get(['foo', 'bar'])).to.equal('BAR')
+    })
+    it('should return undefined for class method', function () {
+      class Foo { bar () {} }
+      ctx.push({ foo: new Foo() })
+      return expect(ctx.get(['foo', 'bar'])).to.equal(undefined)
+    })
+    it('should allow class property', function () {
+      class Foo { bar = 'BAR' }
+      ctx.push({ foo: new Foo() })
+      return expect(ctx.get(['foo', 'bar'])).to.equal('BAR')
+    })
+    it('should allow Array.prototype.length', function () {
+      ctx.push({ foo: [1, 2] })
+      return expect(ctx.get(['foo', 'length'])).to.equal(2)
+    })
+    it('should allow size to access Array.prototype.length', function () {
+      ctx.push({ foo: [1, 2] })
+      return expect(ctx.get(['foo', 'size'])).to.equal(2)
+    })
+    it('should allow size to access Set.prototype.size', function () {
+      ctx.push({ foo: new Set([1, 2]) })
+      return expect(ctx.get(['foo', 'size'])).to.equal(2)
+    })
+    it('should allow size to access Object key count', function () {
+      ctx.push({ foo: { bar: 'BAR', coo: 'COO' } })
+      return expect(ctx.get(['foo', 'size'])).to.equal(2)
+    })
+    it('should throw when property is hidden and strictVariables is true', function () {
+      ctx = new Context(ctx, {
+        ownPropertyOnly: true,
+        strictVariables: true
+      } as any)
+      ctx.push({ foo: Object.create({ bar: 'BAR' }) })
+      return expect(() => ctx.get(['foo', 'bar'])).to.throw(/undefined variable: foo.bar/)
     })
   })
 

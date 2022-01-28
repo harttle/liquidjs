@@ -12,7 +12,7 @@
   "types": "dist/liquid.d.ts",
   "scripts": {
     "lint": "eslint \"**/*.ts\" .",
-    "check": "npm run build && npm test && npm run lint",
+    "check": "npm run build && npm test && npm run lint && npm run perf:diff",
     "test": "nyc mocha \"test/**/*.ts\"",
     "test:e2e": "mocha \"test/e2e/**/*.ts\"",
     "perf": "cd benchmark && npm ci && npm start",

@@ -31,6 +31,8 @@ export interface LiquidOptions {
   strictFilters?: boolean;
   /** Whether or not to assert variable existence.  If set to `false`, undefined variables will be rendered as empty string.  Otherwise, undefined variables will cause an exception. Defaults to `false`. */
   strictVariables?: boolean;
+  /** Hide scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates. */
+  ownPropertyOnly?: boolean;
   /** Modifies the behavior of `strictVariables`. If set, a single undefined variable will *not* cause an exception in the context of the `if`/`elsif`/`unless` tag and the `default` filter. Instead, it will evaluate to `false` and `null`, respectively. Irrelevant if `strictVariables` is not set. Defaults to `false`. **/
   lenientIf?: boolean;
   /** JavaScript timezoneOffset for `date` filter, default to local time. That means if you're in Australia (UTC+10), it'll default to -600 */
@@ -80,6 +82,10 @@ export interface RenderOptions {
    * Same as `strictVariables` on LiquidOptions, but only for current render() call
    */
   strictVariables?: boolean;
+  /**
+   * Same as `ownPropertyOnly` on LiquidOptions, but only for current render() call
+   */
+  ownPropertyOnly?: boolean;
 }
 
 interface NormalizedOptions extends LiquidOptions {
@@ -103,6 +109,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   fs: FS;
   strictFilters: boolean;
   strictVariables: boolean;
+  ownPropertyOnly: boolean;
   lenientIf: boolean;
   trimTagRight: boolean;
   trimTagLeft: boolean;
@@ -143,6 +150,7 @@ export const defaultOptions: NormalizedFullOptions = {
   preserveTimezones: false,
   strictFilters: false,
   strictVariables: false,
+  ownPropertyOnly: false,
   lenientIf: false,
   globals: {},
   keepOutputType: false,

@@ -194,4 +194,9 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync(template, { array: [1, 2, 3] })
     expect(html).to.equal('4#8#12#6')
   })
+  it('#454 leaking JS prototype getter functions in evaluation', async () => {
+    const engine = new Liquid({ ownPropertyOnly: true })
+    const html = engine.parseAndRenderSync('{{foo | size}}-{{bar.coo}}', { foo: 'foo', bar: Object.create({ coo: 'COO' }) })
+    expect(html).to.equal('3-')
+  })
 })

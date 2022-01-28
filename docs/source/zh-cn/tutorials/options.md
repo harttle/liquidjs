@@ -125,6 +125,8 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 
 **strictVariables** 用来启用变量严格模式。如果设置为 `true` 变量不存在时渲染会抛出异常，默认为 `false` 这时不存在的变量会被渲染为空字符串。
 
+**ownPropertyOnly** 用来隐藏原型上的变量，如果你需要把未经处理过的对象传递给模板时，可以设置 `ownPropertyOnly` 为 `true`，默认为 `false`。
+
 {% note info 不存在的标签 %}
 不存在的标签总是会抛出一个解析异常，这一行为无法自定义。
 {% endnote %}
