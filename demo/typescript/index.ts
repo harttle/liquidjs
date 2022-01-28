@@ -21,5 +21,4 @@ const ctx = {
   title: 'Welcome to liquidjs!'
 }
 
-// console.log('isTruthy:', isTruthy('a string here'));
 engine.renderFile('todolist', ctx).then(console.log)
