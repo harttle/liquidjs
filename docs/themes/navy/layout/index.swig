@@ -25,7 +25,7 @@
   <div class="wrapper">
     <div class="inner">
       {{ page.content }}
-      <div id="intro-cmd-wrap" class="highlight typescript"><pre><span class="line"><span class="keyword">import</span> { Liquid } <span class="keyword">from</span> <span class="string">'liquidjs'</span></span><br><span class="line"><span class="keyword">const</span> engine = <span class="keyword">new</span> Liquid()</span><br><span class="line"><span class="keyword">const</span> tpl = engine.parse(<span class="string">'Welcome to {{v}}!'</span>)</span><br><span class="line">engine.render(tpl, {<span class="attr">v</span>: <span class="string">"Liquid"</span>}).then(<span class="built_in">console</span>.log)</span><br><span class="line"><span class="comment">// Outputs "Welcome to Liquid!"</span></span><br></pre></div>
+      <div id="intro-cmd-wrap" class="highlight typescript"><pre><span class="line"><span class="keyword">import</span> { Liquid } <span class="keyword">from</span> <span class="string">'liquidjs'</span></span><br><span class="line"><span class="keyword">const</span> engine = <span class="keyword">new</span> Liquid()</span><br><span class="line"><span class="keyword">const</span> tpl = engine.parse(<span class="string">'Welcome to {% raw %}{{v}}{% endraw %}!'</span>)</span><br><span class="line">engine.render(tpl, {<span class="attr">v</span>: <span class="string">"Liquid"</span>}).then(<span class="built_in">console</span>.log)</span><br><span class="line"><span class="comment">// Outputs "Welcome to Liquid!"</span></span><br></pre></div>
       <div id="intro-get-started-wrap">
         <a href="tutorials/setup.html" id="intro-get-started-link">{{ __('index.get_started') }}</a>
       </div>
