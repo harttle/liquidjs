@@ -14,5 +14,5 @@ Input
 
 Output
 ```text
-
-ants, bugs, bees```
+ants, bugs, bees
+```
