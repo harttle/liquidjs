@@ -12,7 +12,7 @@ export const reverse = (v: any[]) => [...v].reverse()
 
 export function sort<T> (this: FilterImpl, arr: T[], property?: string) {
   const getValue = (obj: Scope) => property ? this.context.getFromScope(obj, property.split('.')) : obj
-  return toArray(arr).sort((lhs, rhs) => {
+  return [...toArray(arr)].sort((lhs, rhs) => {
     lhs = getValue(lhs)
     rhs = getValue(rhs)
     return lhs < rhs ? -1 : (lhs > rhs ? 1 : 0)

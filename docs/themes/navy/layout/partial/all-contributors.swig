@@ -53,6 +53,8 @@
     <td align="center"><a href="https://www.aleksandrhovhannisyan.com/"><img src="https://avatars.githubusercontent.com/u/19352442?v=4?s=100" width="100px;" alt=""/></a></td>
     <td align="center"><a href="https://github.com/jg-rp"><img src="https://avatars.githubusercontent.com/u/72664870?v=4?s=100" width="100px;" alt=""/></a></td>
     <td align="center"><a href="https://github.com/ameyaapte1"><img src="https://avatars.githubusercontent.com/u/16054747?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a href="https://github.com/tbdrz"><img src="https://avatars.githubusercontent.com/u/50599116?v=4?s=100" width="100px;" alt=""/></a></td>
+    <td align="center"><a href="http://santialbo.com"><img src="https://avatars.githubusercontent.com/u/1557563?v=4?s=100" width="100px;" alt=""/></a></td>
   </tr>
 </table>
 

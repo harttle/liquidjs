@@ -138,6 +138,10 @@ describe('filters/array', function () {
       const c = { name: { first: 'Carol' } }
       return test(tpl, { arr: [b, c, a, c] }, 'Alice Bob Carol Carol')
     })
+    it('should not change the original array', () => {
+      const arr = ["one", "two", "three", "four", "five"]
+      return test("{{arr | sort}} {{arr}}", { arr }, 'fivefouronethreetwo onetwothreefourfive')
+    })
   })
   describe('uniq', function () {
     it('should uniq string list', function () {
