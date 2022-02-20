@@ -15,7 +15,7 @@ describe('.parseAndRender()', function () {
   it('should stringify array ', async function () {
     var ctx = { arr: [-2, 'a'] }
     const html = await engine.parseAndRender('{{arr}}', ctx)
-    return expect(html).to.equal('-2,a')
+    return expect(html).to.equal('-2a')
   })
   it('should render undefined as empty', async function () {
     const html = await engine.parseAndRender('foo{{zzz}}bar', {})
@@ -41,9 +41,9 @@ describe('.parseAndRender()', function () {
     const ctx = { obj: [1, 2] }
     const template = engine.parse('{{obj}}')
     const result = await engine.render(template, ctx)
-    expect(result).to.equal('1,2')
+    expect(result).to.equal('12')
     const result2 = await engine.render(template, ctx)
-    expect(result2).to.equal('1,2')
+    expect(result2).to.equal('12')
   })
   it('should support the "join" filter', async function () {
     var ctx = { names: ['alice', 'bob'] }

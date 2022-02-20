@@ -103,7 +103,7 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(
       `{{ 'a \n b \n c' | newline_to_br | split: '<br />' }}`
     )
-    expect(html).to.equal('a ,\n b ,\n c')
+    expect(html).to.equal('a \n b \n c')
   })
   it('#342 New lines in logical operator', async () => {
     const engine = new Liquid()

@@ -32,6 +32,7 @@ export function stringify (value: any): string {
   value = toValue(value)
   if (isString(value)) return value
   if (isNil(value)) return ''
+  if (isArray(value)) return value.map(x => stringify(x)).join('')
   return String(value)
 }
 

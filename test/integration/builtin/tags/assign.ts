@@ -24,7 +24,7 @@ describe('tags/assign', function () {
   it('should assign as array', async function () {
     const src = '{% assign foo=(1..3) %}{{foo}}'
     const html = await liquid.parseAndRender(src)
-    return expect(html).to.equal('1,2,3')
+    return expect(html).to.equal('123')
   })
   it('should assign as filter result', async function () {
     const src = '{% assign foo="a b" | capitalize | split: " " | first %}{{foo}}'

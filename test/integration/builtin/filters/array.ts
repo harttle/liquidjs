@@ -36,7 +36,7 @@ describe('filters/array', function () {
   describe('map', () => {
     it('should support map', function () {
       const posts = [{ category: 'foo' }, { category: 'bar' }]
-      return test('{{posts | map: "category"}}', { posts }, 'foo,bar')
+      return test('{{posts | map: "category"}}', { posts }, 'foobar')
     })
     it('should normalize non-array input', function () {
       const post = { category: 'foo' }
@@ -53,7 +53,7 @@ describe('filters/array', function () {
   describe('compact', () => {
     it('should compact array', function () {
       const posts = [{ category: 'foo' }, { category: 'bar' }, { foo: 'bar' }]
-      return test('{{posts | map: "category" | compact}}', { posts }, 'foo,bar')
+      return test('{{posts | map: "category" | compact}}', { posts }, 'foobar')
     })
   })
   describe('reverse', function () {
