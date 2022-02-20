@@ -1,3 +1,11 @@
+## [9.34.1](https://github.com/harttle/liquidjs/compare/v9.34.0...v9.34.1) (2022-02-20)
+
+
+### Bug Fixes
+
+* array output now join with "" instead of "," ([ab5e245](https://github.com/harttle/liquidjs/commit/ab5e245fba9a0f6936275319d4e5e25aadb0f7c1))
+* sort filter unexpectedly modifies original array, [#475](https://github.com/harttle/liquidjs/issues/475) ([dbc0497](https://github.com/harttle/liquidjs/commit/dbc049738633b1b6f578d9d20f830b548ba67a22))
+
 # [9.34.0](https://github.com/harttle/liquidjs/compare/v9.33.1...v9.34.0) (2022-01-28)
 
 
