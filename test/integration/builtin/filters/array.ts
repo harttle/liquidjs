@@ -139,8 +139,8 @@ describe('filters/array', function () {
       return test(tpl, { arr: [b, c, a, c] }, 'Alice Bob Carol Carol')
     })
     it('should not change the original array', () => {
-      const arr = ["one", "two", "three", "four", "five"]
-      return test("{{arr | sort}} {{arr}}", { arr }, 'fivefouronethreetwo onetwothreefourfive')
+      const arr = ['one', 'two', 'three', 'four', 'five']
+      return test('{{arr | sort}} {{arr}}', { arr }, 'fivefouronethreetwo onetwothreefourfive')
     })
   })
   describe('uniq', function () {
