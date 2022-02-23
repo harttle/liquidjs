@@ -128,7 +128,15 @@
           "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
       ],
-      "@semantic-release/github"
+      [
+        "@semantic-release/github", {
+          "assets": [
+            {"path": "dist/*.umd.js", "label": "liquid.js"},
+            {"path": "dist/*.min.js", "label": "liquid.min.js"},
+            {"path": "dist/*.min.js.map", "label": "liquid.min.js.map"}
+          ]
+        }
+      ]
     ]
   },
   "nyc": {

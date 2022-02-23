@@ -37,12 +37,12 @@ const versionInjection = versionInjector({
   exclude: []
 })
 const input = './src/liquid.ts'
-const replaceFS = {
+const browserFS = {
   include: './src/liquid-options.ts',
   delimiters: ['', ''],
   './fs/node': './fs/browser'
 }
-const replaceStream = {
+const browserStream = {
   include: './src/render/render.ts',
   delimiters: ['', ''],
   '../emitters/streamed-emitter': '../emitters/streamed-emitter-browser'
@@ -81,8 +81,8 @@ const browserEsm = {
   external: ['path', 'fs'],
   plugins: [
     versionInjection,
-    replace(replaceFS),
-    replace(replaceStream),
+    replace(browserFS),
+    replace(browserStream),
     typescript(tsconfig)
   ],
   treeshake,
@@ -99,8 +99,8 @@ const browserUmd = {
   }],
   plugins: [
     versionInjection,
-    replace(replaceFS),
-    replace(replaceStream),
+    replace(browserFS),
+    replace(browserStream),
     typescript(tsconfig)
   ],
   treeshake,
@@ -112,12 +112,13 @@ const browserMin = {
     file: 'dist/liquid.browser.min.js',
     name: 'liquidjs',
     format: 'umd',
-    sourcemap
+    sourcemap,
+    banner
   }],
   plugins: [
     versionInjection,
-    replace(replaceFS),
-    replace(replaceStream),
+    replace(browserFS),
+    replace(browserStream),
     typescript(tsconfig),
     uglify()
   ],
