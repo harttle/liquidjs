@@ -1,3 +1,15 @@
+# [9.35.0](https://github.com/harttle/liquidjs/compare/v9.34.1...v9.35.0) (2022-02-23)
+
+
+### Bug Fixes
+
+* `url_encode` throws on undefined value, fixes [#479](https://github.com/harttle/liquidjs/issues/479) ([ca3240c](https://github.com/harttle/liquidjs/commit/ca3240c2c4d157095d2ebe0024d0c71bc5e435f8))
+
+
+### Features
+
+* expose all tags/filters and TimezoneDate, closes [#464](https://github.com/harttle/liquidjs/issues/464) ([dab8a29](https://github.com/harttle/liquidjs/commit/dab8a29070b2508f2e6532717b7663966f610bec))
+
 ## [9.34.1](https://github.com/harttle/liquidjs/compare/v9.34.0...v9.34.1) (2022-02-20)
 
 
