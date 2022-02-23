@@ -199,4 +199,12 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync('{{foo | size}}-{{bar.coo}}', { foo: 'foo', bar: Object.create({ coo: 'COO' }) })
     expect(html).to.equal('3-')
   })
+  it('#479 url_encode throws on undefined value', async () => {
+    const engine = new Liquid({
+      strictVariables: false
+    })
+    const tpl = engine.parse('{{ v | url_encode }}')
+    const html = await engine.render(tpl, { v: undefined })
+    expect(html).to.equal('')
+  })
 })
