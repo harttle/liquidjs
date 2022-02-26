@@ -115,7 +115,7 @@ app<span class="token punctuation">.</span><span class="token function">set</spa
 <p>And you’re setting template root for liquidjs to <code>views1</code> and expressjs to <code>views2</code>:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    root<span class="token operator">:</span> <span class="token string">'./views1/'</span>
+    <span class="token literal-property property">root</span><span class="token operator">:</span> <span class="token string">'./views1/'</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 app<span class="token punctuation">.</span><span class="token function">engine</span><span class="token punctuation">(</span><span class="token string">'liquid'</span><span class="token punctuation">,</span> engine<span class="token punctuation">.</span><span class="token function">express</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
@@ -129,13 +129,13 @@ res<span class="token punctuation">.</span><span class="token function">render</
 <h2 id="Caching" class="article-heading"><a href="#Caching" class="headerlink" title="Caching"></a>Caching<a class="article-anchor" href="#Caching" aria-hidden="true"></a></h2><p>Simply setting the <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-cache">cache option</a> to true will enable template caching, as explained in <a href="./caching.html">Caching</a>. It’s recommended to enable cache in production environment, which can be done by:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-    cache<span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">NODE_ENV</span> <span class="token operator">===</span> <span class="token string">'production'</span>
+    <span class="token literal-property property">cache</span><span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">NODE_ENV</span> <span class="token operator">===</span> <span class="token string">'production'</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-02-23T17:39:54.593Z" itemprop="dateModified">Last updated: 2022-02-23</time>
+                <time class="article-footer-updated" datetime="2022-02-26T18:06:22.681Z" itemprop="dateModified">Last updated: 2022-02-26</time>
                 <a href="partials-and-layouts.html" class="article-footer-prev" title="Includes and Layouts"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="caching.html" class="article-footer-next" title="Caching"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
