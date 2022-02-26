@@ -41,7 +41,11 @@ export function rstrip (str: string) {
 }
 
 export function split (v: string, arg: string) {
-  return stringify(v).split(String(arg))
+  const arr = stringify(v).split(String(arg))
+  // align to ruby split, which is the behavior of shopify/liquid
+  // see: https://ruby-doc.org/core-2.4.0/String.html#method-i-split
+  while (arr.length && arr[arr.length - 1] === '') arr.pop()
+  return arr
 }
 
 export function strip (v: string) {
@@ -68,11 +72,11 @@ export function replaceFirst (v: string, arg1: string, arg2: string) {
 export function truncate (v: string, l = 50, o = '...') {
   v = stringify(v)
   if (v.length <= l) return v
-  return v.substr(0, l - o.length) + o
+  return v.substring(0, l - o.length) + o
 }
 
 export function truncatewords (v: string, l = 15, o = '...') {
-  const arr = v.split(/\s+/)
+  const arr = stringify(v).split(/\s+/)
   let ret = arr.slice(0, l).join(' ')
   if (arr.length >= l) ret += o
   return ret

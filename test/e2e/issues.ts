@@ -207,4 +207,18 @@ describe('Issues', function () {
     const html = await engine.render(tpl, { v: undefined })
     expect(html).to.equal('')
   })
+  it('#481 filters that should not throw', async () => {
+    const engine = new Liquid()
+    const tpl = engine.parse(`
+      {{ foo | join }}
+      {{ foo | map: "k" }}
+      {{ foo | reverse }}
+      {{ foo | slice: 2 }}
+      {{ foo | newline_to_br }}
+      {{ foo | strip_html }}
+      {{ foo | truncatewords }}
+    `)
+    const html = await engine.render(tpl, { foo: undefined })
+    expect(html.trim()).to.equal('')
+  })
 })

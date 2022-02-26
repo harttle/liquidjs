@@ -3,6 +3,8 @@ import { Drop } from '../drop/drop'
 const toStr = Object.prototype.toString
 const toLowerCase = String.prototype.toLowerCase
 
+export const hasOwnProperty = Object.hasOwnProperty
+
 export function isString (value: any): value is string {
   return typeof value === 'string'
 }
@@ -72,7 +74,7 @@ export function forOwn <T> (
 ) {
   obj = obj || {}
   for (const k in obj) {
-    if (Object.hasOwnProperty.call(obj, k)) {
+    if (hasOwnProperty.call(obj, k)) {
       if (iteratee(obj[k], k, obj) === false) break
     }
   }
@@ -149,4 +151,8 @@ export function caseInsensitiveCompare (a: any, b: any) {
   if (a < b) return -1
   if (a > b) return 1
   return 0
+}
+
+export function argumentsToValue<F extends (...args: any) => any> (fn: F) {
+  return (...args: Parameters<F>) => fn(...args.map(toValue))
 }

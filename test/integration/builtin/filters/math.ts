@@ -60,44 +60,6 @@ describe('filters/math', function () {
     it('should support variable', () => test('{{ 4 | plus: b }}', { b: 2 }, '6'))
   })
 
-  describe('sort_natural', function () {
-    it('should sort alphabetically', () => {
-      return test(
-        '{% assign my_array = "zebra, octopus, giraffe, Sally Snake" | split: ", " %}{{ my_array | sort_natural | join: ", " }}',
-        'giraffe, octopus, Sally Snake, zebra'
-      )
-    })
-    it('should sort with specified property', () => test(
-      '{{ students | sort_natural: "name" | map: "name" | join }}',
-      { students: [{ name: 'bob' }, { name: 'alice' }, { name: 'carol' }] },
-      'alice bob carol'
-    ))
-    it('should be stable', () => test(
-      '{{ students | sort_natural: "age" | map: "name" | join }}',
-      { students: [{ name: 'bob', age: 1 }, { name: 'alice', age: 1 }, { name: 'carol', age: 1 }] },
-      'bob alice carol'
-    ))
-    it('should be stable when it comes to undefined props', () => test(
-      '{{ students | sort_natural: "age" | map: "name" | join }}',
-      { students: [{ name: 'bob' }, { name: 'alice', age: 2 }, { name: 'amber' }, { name: 'watson' }, { name: 'michael' }, { name: 'charlie' }] },
-      'alice bob amber watson michael charlie'
-    ))
-    it('should tolerate undefined props', () => test(
-      '{{ students | sort_natural: "age" | map: "name" | join }}',
-      { students: [{ name: 'bob' }, { name: 'alice', age: 2 }, { name: 'carol' }] },
-      'alice bob carol'
-    ))
-    it('should tolerate non array', () => test(
-      '{{ students | sort_natural: "age" | map: "name" | join }}',
-      { students: {} },
-      ''
-    ))
-    it('should tolerate falsy input', () => test(
-      '{{ students | sort_natural: "age" | map: "name" | join }}',
-      { students: undefined },
-      ''
-    ))
-  })
   describe('round', function () {
     it('should return "1" for 1.2', () => test('{{1.2|round}}', '1'))
     it('should return "3" for 2.7', () => test('{{2.7|round}}', '3'))

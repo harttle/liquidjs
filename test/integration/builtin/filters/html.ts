@@ -18,6 +18,8 @@ describe('filters/html', function () {
       test('{{ "1 < 2 & 3" | escape_once }}', '1 &lt; 2 &amp; 3'))
     it('should not escape twice',
       () => test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3'))
+    it('should escape nil value to empty string', () =>
+      test('{{ undefinedValue | escape_once }}', ''))
   })
   describe('newline_to_br', function () {
     it('should support string_with_newlines', function () {

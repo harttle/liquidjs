@@ -1,4 +1,4 @@
-import { isString, isObject, isArray } from './underscore'
+import { isNil, isString, isObject, isArray } from './underscore'
 
 export function toEnumerable (val: any) {
   if (isArray(val)) return val
@@ -8,6 +8,7 @@ export function toEnumerable (val: any) {
 }
 
 export function toArray (val: any) {
+  if (isNil(val)) return []
   if (isArray(val)) return val
   return [ val ]
 }

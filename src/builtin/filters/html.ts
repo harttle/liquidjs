@@ -20,17 +20,17 @@ export function escape (str: string) {
 }
 
 function unescape (str: string) {
-  return String(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m])
+  return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m])
 }
 
 export function escapeOnce (str: string) {
-  return escape(unescape(str))
+  return escape(unescape(stringify(str)))
 }
 
 export function newlineToBr (v: string) {
-  return v.replace(/\n/g, '<br />\n')
+  return stringify(v).replace(/\n/g, '<br />\n')
 }
 
 export function stripHtml (v: string) {
-  return v.replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
+  return stringify(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
 }

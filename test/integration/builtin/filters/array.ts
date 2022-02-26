@@ -28,10 +28,27 @@ describe('filters/array', function () {
       return expect(render(src)).to.be.rejectedWith('unexpected token at "\\" and \\"", line:1, col:65')
     })
   })
-  it('should support split/last', function () {
-    const src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
-      '{{ my_array|last }}'
-    return test(src, 'tiger')
+  describe('last', () => {
+    it('should support last', function () {
+      const src = '{{ arr | last }}'
+      const scope = { arr: ['zebra', 'octopus', 'giraffe', 'tiger'] }
+      return test(src, scope, 'tiger')
+    })
+  })
+  describe('split', () => {
+    it('should support split', function () {
+      const src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
+        '{{ my_array|last }}'
+      return test(src, 'tiger')
+    })
+    it('should remove trailing empty strings', async () => {
+      const src = '{{ "zebra,octopus,,,," | split: "," | join: ", " }}'
+      return test(src, {}, 'zebra, octopus')
+    })
+    it('should return empty array for nil value', async () => {
+      await test('{{ notDefined | split: "," | size }}', {}, '0')
+      await test('{{ nil | split: "," | size }}', {}, '0')
+    })
   })
   describe('map', () => {
     it('should support map', function () {
@@ -56,6 +73,15 @@ describe('filters/array', function () {
       return test('{{posts | map: "category" | compact}}', { posts }, 'foobar')
     })
   })
+
+  describe('concat', () => {
+    it('should ignore nil left value', async () => {
+      const scope = { undefinedValue: undefined, nullValue: null, arr: ['foo', 'bar'] }
+      await test('{{ undefinedValue | concat: arr | join: "," }}', scope, 'foo,bar')
+      await test('{{ nullValue | concat: arr | join: "," }}', scope, 'foo,bar')
+    })
+  })
+
   describe('reverse', function () {
     it('should support reverse', () => test(
       '{{ "Ground control to Major Tom." | split: "" | reverse | join: "" }}',
@@ -118,6 +144,7 @@ describe('filters/array', function () {
     it('should slice substr by -3,2', () => test('{{ "Liquid" | slice: -3, 2 }}', 'ui'))
     it('should slice substr by -2,2', () => test('{{ "abc" | slice: -2, 2 }}', 'bc'))
     it('should support array', () => test('{{ "1,2,3,4" | split: "," | slice: 1,2 | join }}', '2 3'))
+    it('should return empty array for nil value', () => test('{{ nil | slice: 0 }}', ''))
   })
   describe('sort', function () {
     it('should support sort', function () {
@@ -142,6 +169,54 @@ describe('filters/array', function () {
       const arr = ['one', 'two', 'three', 'four', 'five']
       return test('{{arr | sort}} {{arr}}', { arr }, 'fivefouronethreetwo onetwothreefourfive')
     })
+    it('should return empty array for nil value', () => {
+      return test('{{notDefined | sort | size}}', {}, '0')
+    })
+  })
+  describe('sort_natural', function () {
+    it('should sort alphabetically', () => {
+      return test(
+        '{% assign my_array = "zebra, octopus, giraffe, Sally Snake" | split: ", " %}{{ my_array | sort_natural | join: ", " }}',
+        'giraffe, octopus, Sally Snake, zebra'
+      )
+    })
+    it('should sort with specified property', () => test(
+      '{{ students | sort_natural: "name" | map: "name" | join }}',
+      { students: [{ name: 'bob' }, { name: 'alice' }, { name: 'carol' }] },
+      'alice bob carol'
+    ))
+    it('should be stable', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: [{ name: 'bob', age: 1 }, { name: 'alice', age: 1 }, { name: 'carol', age: 1 }] },
+      'bob alice carol'
+    ))
+    it('should be stable when it comes to undefined props', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: [{ name: 'bob' }, { name: 'alice', age: 2 }, { name: 'amber' }, { name: 'watson' }, { name: 'michael' }, { name: 'charlie' }] },
+      'alice bob amber watson michael charlie'
+    ))
+    it('should tolerate undefined props', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | join }}',
+      { students: [{ name: 'bob' }, { name: 'alice', age: 2 }, { name: 'carol' }] },
+      'alice bob carol'
+    ))
+    it('should tolerate non array', async () => {
+      await test(
+        '{{ students | sort_natural: "age" | map: "name" | join }}',
+        { students: {} },
+        ''
+      )
+      await test(
+        '{{ students | sort_natural: "age" | map: "name" | size }}',
+        { students: {} },
+        '1'
+      )
+    })
+    it('should return empty array for nil value', () => test(
+      '{{ students | sort_natural: "age" | map: "name" | size }}',
+      { students: undefined },
+      '0'
+    ))
   })
   describe('uniq', function () {
     it('should uniq string list', function () {

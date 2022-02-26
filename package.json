@@ -129,11 +129,21 @@
         }
       ],
       [
-        "@semantic-release/github", {
+        "@semantic-release/github",
+        {
           "assets": [
-            {"path": "dist/*.umd.js", "label": "liquid.js"},
-            {"path": "dist/*.min.js", "label": "liquid.min.js"},
-            {"path": "dist/*.min.js.map", "label": "liquid.min.js.map"}
+            {
+              "path": "dist/*.umd.js",
+              "label": "liquid.js"
+            },
+            {
+              "path": "dist/*.min.js",
+              "label": "liquid.min.js"
+            },
+            {
+              "path": "dist/*.min.js.map",
+              "label": "liquid.min.js.map"
+            }
           ]
         }
       ]
@@ -149,5 +159,6 @@
       "pre-commit": "npm run check",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  }
+  },
+  "dependencies": {}
 }

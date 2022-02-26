@@ -1,12 +1,14 @@
 import strftime from '../../util/strftime'
 import { LiquidDate } from '../../util/liquid-date'
-import { isString, isNumber } from '../../util/underscore'
+import { toValue, stringify, isString, isNumber } from '../../util/underscore'
 import { FilterImpl } from '../../template/filter/filter-impl'
 import { TimezoneDate } from '../../util/timezone-date'
 
 export function date (this: FilterImpl, v: string | Date, arg: string) {
   const opts = this.context.opts
   let date: LiquidDate
+  v = toValue(v)
+  arg = stringify(arg)
   if (v === 'now' || v === 'today') {
     date = new Date()
   } else if (isNumber(v)) {
