@@ -84,6 +84,8 @@ tags:
   cycle: cycle.html
   decrement: decrement.html
   echo: echo.html
+  else: if.html
+  elsif: if.html
   for: for.html
   if: if.html
   include: include.html
@@ -94,6 +96,7 @@ tags:
   render: render.html
   tablerow: tablerow.html
   unless: unless.html
+  when: case.html
 
 api:
   quick_entry:

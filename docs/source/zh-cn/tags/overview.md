@@ -11,8 +11,8 @@ LiquidJS 支持十几个过滤器，可以分为如下几类：
 --- | --- | ---
 迭代 | 遍历一个集合 | for, cycle, tablerow
 控制流 | 控制模板渲染的执行分支 | if, unless, elif, else, case, when
-变量 | 定义和修改变量 | assign, increment, decrement
+变量 | 定义和修改变量 | assign, increment, decrement, capture, echo
 文件 | 引入或继承其他模板 | render, include, layout
-语言 | 暂时禁用 Liquid 语法 | raw, comment
+语言 | 暂时禁用 Liquid 语法 | raw, comment, liquid
 
 [shopify/liquid]: https://github.com/Shopify/liquid
