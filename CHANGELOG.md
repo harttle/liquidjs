@@ -1,3 +1,10 @@
+## [9.35.1](https://github.com/harttle/liquidjs/compare/v9.35.0...v9.35.1) (2022-02-26)
+
+
+### Bug Fixes
+
+* some filters throw on nil input, see [#481](https://github.com/harttle/liquidjs/issues/481) ([7dfb620](https://github.com/harttle/liquidjs/commit/7dfb620d30f8818685e1cfb8e7492313a0d036ab))
+
 # [9.35.0](https://github.com/harttle/liquidjs/compare/v9.34.1...v9.35.0) (2022-02-23)
 
 
