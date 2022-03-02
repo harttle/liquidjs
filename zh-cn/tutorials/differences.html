@@ -93,7 +93,20 @@
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">Shopify/liquid</a> 中的所有标签和过滤器 LiquidJS 都支持，但不包括 Shopify 主题中业务逻辑相关的标签和过滤器（如果你在找这些标签可以参考 <a href="./plugins.html#插件列表">插件列表</a>，也欢迎把你的插件添加到列表中）。尽管原则上我们尽力兼容于 Shopify/liquid，但仍然存在一些区别：</p>
+                <h2 id="兼容性" class="article-heading"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性<a class="article-anchor" href="#兼容性" aria-hidden="true"></a></h2><p>LiquidJS 一直很重视兼容于 Ruby 版本的 Liquid。Liquid 模板语言最初由 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">Ruby 实现</a>，用于 Shopify，Jekyll 以及 Github Pages，它是 Ruby 里最流行的模板引擎之一。因此由很多人用 LiquidJS 来渲染他们的 Shopify 主题和 Jekyll 站点。</p>
+<p>所以“兼容”意味着让这些开发者有很好的使用体验：</p>
+<ul>
+<li><strong>LiquidJS 应当能够渲染语法正确的 Liquid 模板</strong>。例如 <code>forloop.index</code> 应该是 1 开始的下表，<code>nil</code> 应该渲染成空字符串而不是 <code>undefined</code> 等。即使有些功能（例如 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/236">#236</a>）用 JavaScript 很难实现，但至少 LiquidJS 会尝试实现所有的 Liquid 语义。</li>
+<li><strong>所有 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">shopify/liquid</a> 里的标签和过滤器 LiquidJS 都要实现</strong>。这之外有些业务逻辑相关的标签/过滤器尤其是 Shopify 平台上的那些，应该维护在 <a href="./plugins.html#插件列表">插件</a> 里。但是这其中有一些很有用的标签（比如 <code>&#123;% layout %&#125;</code>）LiquidJS 也会考虑实现，可以去开个 Issue 讨论一下。</li>
+</ul>
+<p>同时，既然现在用 JavaScript 实现了，那 Liquid 应该有更强的功能：</p>
+<ul>
+<li><strong>完全支持异步</strong>。所有过滤器和标签都可以实现为异步，只需要返回 <code>Promise</code> 即可。</li>
+<li><strong>同时支持同步</strong>。对一些非 I/O 密集的场景，同步渲染会更快。只要模板包含的标签和过滤器都支持同步，你就可以调用类似 <code>.renderSync()</code> 这样的 API。所有内置标签和过滤器都同时支持同步和异步。</li>
+<li><strong><a href="https://liquidjs.com/tutorials/render-file.html#Abstract-File-System">抽象文件系统</a></strong>。和异步功能一起使用，LiquidJS 可以实现渲染数据库里的模板 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/414">#414</a>，远程 HTTP 服务器上的模板 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/485">#485</a>，等等。</li>
+<li><strong>额外的标签和过滤器</strong>。比如 <code>layout</code> 和 <code>json</code>。</li>
+</ul>
+<h2 id="区别" class="article-heading"><a href="#区别" class="headerlink" title="区别"></a>区别<a class="article-anchor" href="#区别" aria-hidden="true"></a></h2><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">Shopify/liquid</a> 中的所有标签和过滤器 LiquidJS 都支持，但不包括 Shopify 主题中业务逻辑相关的标签和过滤器（如果你在找这些标签可以参考 <a href="./plugins.html#插件列表">插件列表</a>，也欢迎把你的插件添加到列表中）。尽管原则上我们尽力兼容于 Shopify/liquid，但仍然存在一些区别：</p>
 <ul>
 <li>真和假。在 LiquidJS 中 <code>undefined</code>, <code>null</code>, <code>false</code> 是假，之外的都是真；在 Ruby 中 <code>nil</code> 和 <code>false</code> 是假，其他都是真。见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/26">#26</a>。</li>
 <li>数字。JavaScript 不区分浮点数和整数，因此缺失一部分整数算术，见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/59">#59</a>。此外 <code>size</code> 过滤器作用于数字时总是返回零，而不是 Ruby 中的浮点数或整数的内存大小。</li>
@@ -108,7 +121,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-02-26T18:10:48.060Z" itemprop="dateModified">上次更新：2022-02-26</time>
+                <time class="article-footer-updated" datetime="2022-03-02T13:22:52.821Z" itemprop="dateModified">上次更新：2022-03-02</time>
                 <a href="changelog.html" class="article-footer-prev" title="更新日志"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="贡献指南"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -117,7 +130,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">目录</strong>
-                
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-text">兼容性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB"><span class="toc-text">区别</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">回到顶部</a>
             </div>

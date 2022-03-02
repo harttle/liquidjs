@@ -93,7 +93,20 @@
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>All filters and tags in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">shopify/liquid</a> are supposed to be built in LiquidJS, but not those business-logic specific tags/filters which are typically from Shopify themes (see <a href="./plugins.html#Plugin-List">Plugins List</a> in case you’re looking for them and feel free to add yours to the list). Though being compatible the Ruby version is one of our priorities, there are still some differences:</p>
+                <h2 id="Compatibility" class="article-heading"><a href="#Compatibility" class="headerlink" title="Compatibility"></a>Compatibility<a class="article-anchor" href="#Compatibility" aria-hidden="true"></a></h2><p>Being compatible the Ruby version is one of our priorities. Liquid language is originally <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">implemented in Ruby</a> and used by Shopify, Jekyll and thus Github Pages, as you can see it’s one of the most popular template engines in Ruby. There’re lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.</p>
+<p>So “being compatible” means serve developers from Shopify and Jekyll well:</p>
+<ul>
+<li><strong>Well-formed Liquid template should work just fine in LiquidJS</strong>. For example, <code>forloop.index</code> should be 1-indexed, <code>nil</code> should be rendered as empty string rather than <code>undefined</code>, etc. Although some features (e.g. <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/236">#236</a>) are not feasible in JavaScript, at least we’re trying to implement all the semantics of Liquid language.</li>
+<li><strong>All filters and tags in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">shopify/liquid</a> are supposed to be built in LiquidJS</strong>. But not those business-logic specific tags/filters typically defined by Shopify platform. Those features should be maintained as <a href="./plugins.html#Plugin-List">plugins</a>. For filters/tags that are not business-logic specific, like <code>&#123;% layout %&#125;</code>, and extremely useful, feel free to file an issue.</li>
+</ul>
+<p>In the meantime, it’s now implemented in JavaScript, that means it has to be more powerful:</p>
+<ul>
+<li><strong>Async as first-class citizen</strong>. Filters and tags can be implemented asynchronously by return a <code>Promise</code>.</li>
+<li><strong>Also can be sync</strong>. For scenarios that are not I/O intensive, render synchronously can be much faster. You can call synchronous APIs like <code>.renderSync()</code> as long as all the filters and tags in template support to be rendered synchronously. All builtin filters/tags support both sync and async render.</li>
+<li><strong><a href="https://liquidjs.com/tutorials/render-file.html#Abstract-File-System">Abstract file system</a></strong>. Along with async feature, LiquidJS can be used to serve templates stored in Databases <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/414">#414</a>, on remote HTTP server <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/485">#485</a>, and so on.</li>
+<li><strong>Additional tags and filters</strong> like <code>layout</code> and <code>json</code>.</li>
+</ul>
+<h2 id="Differences" class="article-heading"><a href="#Differences" class="headerlink" title="Differences"></a>Differences<a class="article-anchor" href="#Differences" aria-hidden="true"></a></h2><p>Though we’re trying to be compatible with the Ruby version, there are still some differences:</p>
 <ul>
 <li>Truthy and Falsy. All values except <code>undefined</code>, <code>null</code>, <code>false</code> are truthy, whereas in Ruby Liquid all except <code>nil</code> and <code>false</code> are truthy. See <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/26">#26</a>.</li>
 <li>Number. In JavaScript we cannot distinguish or convert between <code>float</code> and <code>integer</code>, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/59">#59</a>. And when applied <code>size</code> filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a <code>length</code> property.</li>
@@ -108,7 +121,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-02-26T18:10:48.056Z" itemprop="dateModified">Last updated: 2022-02-26</time>
+                <time class="article-footer-updated" datetime="2022-03-02T13:22:52.817Z" itemprop="dateModified">Last updated: 2022-03-02</time>
                 <a href="changelog.html" class="article-footer-prev" title="Changelog"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="Contribution Guidelines"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -117,7 +130,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Compatibility"><span class="toc-text">Compatibility</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Differences"><span class="toc-text">Differences</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
