@@ -1,3 +1,11 @@
+## [9.35.2](https://github.com/harttle/liquidjs/compare/v9.35.1...v9.35.2) (2022-03-02)
+
+
+### Bug Fixes
+
+* corner case for concat filter without argument, [#481](https://github.com/harttle/liquidjs/issues/481) ([aa95517](https://github.com/harttle/liquidjs/commit/aa955173d4c7adc585e862934429f1f4c5f64969))
+* export all builtin tags from LiquidJS, [#464](https://github.com/harttle/liquidjs/issues/464) ([33009bb](https://github.com/harttle/liquidjs/commit/33009bb988eb74c58f390992750d91b967cb3428))
+
 ## [9.35.1](https://github.com/harttle/liquidjs/compare/v9.35.0...v9.35.1) (2022-02-26)
 
 
