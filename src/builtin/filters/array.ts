@@ -41,8 +41,9 @@ export function compact<T> (this: FilterImpl, arr: T[]) {
   return toArray(arr).filter(x => !isNil(toValue(x)))
 }
 
-export function concat<T1, T2> (v: T1[], arg: T2[]): (T1 | T2)[] {
+export function concat<T1, T2> (v: T1[], arg: T2[] = []): (T1 | T2)[] {
   v = toValue(v)
+  arg = toArray(arg).map(v => toValue(v))
   return toArray(v).concat(arg)
 }
 

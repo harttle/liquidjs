@@ -217,8 +217,14 @@ describe('Issues', function () {
       {{ foo | newline_to_br }}
       {{ foo | strip_html }}
       {{ foo | truncatewords }}
+      {{ foo | concat | json }}
     `)
     const html = await engine.render(tpl, { foo: undefined })
-    expect(html.trim()).to.equal('')
+    expect(html.trim()).to.equal('[]')
+  })
+  it('#481 concat should always return an array', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(`{{ foo | concat | json }}`)
+    expect(html).to.equal('[]')
   })
 })

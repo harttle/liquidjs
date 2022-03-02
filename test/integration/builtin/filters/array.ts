@@ -75,10 +75,23 @@ describe('filters/array', function () {
   })
 
   describe('concat', () => {
+    it('should concat args value', async () => {
+      const scope = { val: ['hey'], arr: ['foo', 'bar'] }
+      await test('{{ val | concat: arr | join: "," }}', scope, 'hey,foo,bar')
+    })
+    it('should support undefined left value', async () => {
+      const scope = { arr: ['foo', 'bar'] }
+      await test('{{ notDefined | concat: arr | join: "," }}', scope, 'foo,bar')
+    })
     it('should ignore nil left value', async () => {
       const scope = { undefinedValue: undefined, nullValue: null, arr: ['foo', 'bar'] }
       await test('{{ undefinedValue | concat: arr | join: "," }}', scope, 'foo,bar')
       await test('{{ nullValue | concat: arr | join: "," }}', scope, 'foo,bar')
+    })
+    it('should ignore nil right value', async () => {
+      const scope = { nullValue: null }
+      await test('{{ nullValue | concat | join: "," }}', scope, '')
+      await test('{{ nullValue | concat: nil | join: "," }}', scope, '')
     })
   })
 
