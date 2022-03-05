@@ -89,7 +89,8 @@ export class Tokenizer {
         ++this.p
         const arg = this.readFilterArg()
         arg && args.push(arg)
-        while (this.p < this.N && this.peek() !== ',' && this.peek() !== '|') ++this.p
+        this.skipBlank()
+        assert(this.end() || this.peek() === ',' || this.peek() === '|', () => `unexpected character ${this.snapshot()}`)
       } while (this.peek() === ',')
     }
     return new FilterToken(name.getText(), args, this.input, begin, this.p, this.file)

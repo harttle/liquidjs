@@ -1,5 +1,8 @@
 import { Liquid } from '../../../../src/liquid'
-import { expect } from 'chai'
+import { expect, use } from 'chai'
+import * as chaiAsPromised from 'chai-as-promised'
+
+use(chaiAsPromised)
 
 describe('filters/object', function () {
   const liquid = new Liquid()
@@ -15,6 +18,10 @@ describe('filters/object', function () {
     it('should output false when allow_false=true', async () => expect(await liquid.parseAndRender('{{false | default: true, allow_false: true}}')).to.equal('false'))
     it('should output default without allow_false', async () => expect(await liquid.parseAndRender('{{false | default: true}}')).to.equal('true'))
     it('should output default when allow_false=false', async () => expect(await liquid.parseAndRender('{{false | default: true, allow_false: false}}')).to.equal('true'))
+    it('should throw for additional args', () => {
+      const src = `{{ age | default: 'now'  date: '%d'}}` // missing `|` before `date`
+      return expect(liquid.parseAndRender(src)).to.be.rejectedWith(/unexpected character "date: '%d'"/)
+    })
   })
   describe('json', function () {
     it('should stringify string', async () => expect(await liquid.parseAndRender('{{"foo" | json}}')).to.equal('"foo"'))
