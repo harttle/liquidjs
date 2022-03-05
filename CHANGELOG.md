@@ -1,3 +1,12 @@
+# [9.36.0](https://github.com/harttle/liquidjs/compare/v9.35.2...v9.36.0) (2022-03-05)
+
+
+### Features
+
+* Access array item by negative index, closes [#486](https://github.com/harttle/liquidjs/issues/486) ([049685b](https://github.com/harttle/liquidjs/commit/049685b9a0271ba03875e24ff2f6c7870cae62a7))
+* allow strip filter with specified char, closes [#390](https://github.com/harttle/liquidjs/issues/390) ([c503cb2](https://github.com/harttle/liquidjs/commit/c503cb23dfbdd6f146d6dea16a84eab3df1f7aa9))
+* appropriate error for malformed filters, fixes [#271](https://github.com/harttle/liquidjs/issues/271) ([01014ed](https://github.com/harttle/liquidjs/commit/01014edc491e12d38981045442da9faee598cdf7))
+
 ## [9.35.2](https://github.com/harttle/liquidjs/compare/v9.35.1...v9.35.2) (2022-03-02)
 
 
