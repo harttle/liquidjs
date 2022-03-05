@@ -227,4 +227,9 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(`{{ foo | concat | json }}`)
     expect(html).to.equal('[]')
   })
+  it('#486 Access array items from the right with negative indexes', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(`{% assign a = "x,y,z" | split: ',' -%}{{ a[-1] }} {{ a[-3] }} {{ a[-8] }}`)
+    expect(html).to.equal('z x ')
+  })
 })

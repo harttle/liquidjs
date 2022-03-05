@@ -22,7 +22,8 @@ describe('Context', function () {
         zoo: 'coo',
         'Mr.Smith': 'John',
         arr: ['a', 'b']
-      }
+      },
+      arr: ['a', 'b', 'c', 'd']
     }
     ctx = new Context(scope)
   })
@@ -68,6 +69,12 @@ describe('Context', function () {
     })
     it('should read .last of array', async function () {
       expect(ctx.get(['bar', 'arr', 'last'])).to.equal('b')
+    })
+    it('should read element of array', async function () {
+      expect(ctx.get(['arr', 1])).to.equal('b')
+    })
+    it('should read element of array from end', async function () {
+      expect(ctx.get(['arr', -2])).to.equal('c')
     })
     it('should call function', async function () {
       expect(ctx.get(['func'])).to.equal('FUNC')

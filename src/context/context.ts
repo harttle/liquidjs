@@ -5,6 +5,8 @@ import { Scope } from './scope'
 import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
 import { InternalUndefinedVariableError } from '../util/error'
 
+type PropertyKey = string | number;
+
 export class Context {
   /**
    * insert a Context-level empty scope,
@@ -54,11 +56,11 @@ export class Context {
     return [this.globals, this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
-  public get (paths: string[]) {
+  public get (paths: PropertyKey[]) {
     const scope = this.findScope(paths[0])
     return this.getFromScope(scope, paths)
   }
-  public getFromScope (scope: object, paths: string[] | string) {
+  public getFromScope (scope: object, paths: PropertyKey[] | string) {
     if (isString(paths)) paths = paths.split('.')
     return paths.reduce((scope, path, i) => {
       scope = readProperty(scope, path, this.opts.ownPropertyOnly)
@@ -77,7 +79,7 @@ export class Context {
   public bottom () {
     return this.scopes[0]
   }
-  private findScope (key: string) {
+  private findScope (key: string | number) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
       if (key in candidate) return candidate
@@ -87,21 +89,19 @@ export class Context {
   }
 }
 
-export function readProperty (obj: Scope, key: string, ownPropertyOnly: boolean) {
+export function readProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
   if (isNil(obj)) return obj
   obj = toLiquid(obj)
+  if (isArray(obj) && key < 0) return obj[obj.length + +key]
   const jsProperty = readJSProperty(obj, key, ownPropertyOnly)
+  if (jsProperty === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key)
   if (isFunction(jsProperty)) return jsProperty.call(obj)
-  if (obj instanceof Drop) {
-    if (obj.hasOwnProperty(key)) return obj[key]
-    return obj.liquidMethodMissing(key)
-  }
   if (key === 'size') return readSize(obj)
-  if (key === 'first') return readFirst(obj)
-  if (key === 'last') return readLast(obj)
+  else if (key === 'first') return readFirst(obj)
+  else if (key === 'last') return readLast(obj)
   return jsProperty
 }
-export function readJSProperty (obj: Scope, key: string, ownPropertyOnly: boolean) {
+export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
   if (ownPropertyOnly && !Object.hasOwnProperty.call(obj, key)) return undefined
   return obj[key]
 }
