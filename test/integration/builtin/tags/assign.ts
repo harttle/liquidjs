@@ -6,7 +6,7 @@ use(chaiAsPromised)
 
 describe('tags/assign', function () {
   const liquid = new Liquid()
-  it('should throw when variable expression illegal', function () {
+  it('should throw when variable name illegal', function () {
     const src = '{% assign / %}'
     const ctx = {}
     return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(/illegal/)
@@ -15,6 +15,10 @@ describe('tags/assign', function () {
     const src = '{% assign foo="bar" %}{{foo}}'
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('bar')
+  })
+  it('should throw when variable value illegal', async function () {
+    const src = '{% assign foo = “bar” %}'
+    return expect(liquid.parseAndRender(src)).to.be.rejectedWith(/unexpected token at "“bar”"/)
   })
   it('should support assign to a number', async function () {
     const src = '{% assign foo=10086 %}{{foo}}'
