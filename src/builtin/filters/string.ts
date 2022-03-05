@@ -3,7 +3,7 @@
  *
  * * prefer stringify() to String() since `undefined`, `null` should eval ''
  */
-import { stringify } from '../../util/underscore'
+import { escapeRegExp, stringify } from '../../util/underscore'
 import { assert } from '../../util/assert'
 
 export function append (v: string, arg: string) {
@@ -16,7 +16,11 @@ export function prepend (v: string, arg: string) {
   return stringify(arg) + stringify(v)
 }
 
-export function lstrip (v: string) {
+export function lstrip (v: string, chars?: string) {
+  if (chars) {
+    chars = escapeRegExp(stringify(chars))
+    return stringify(v).replace(new RegExp(`^[${chars}]+`, 'g'), '')
+  }
   return stringify(v).replace(/^\s+/, '')
 }
 
@@ -36,7 +40,11 @@ export function removeFirst (v: string, l: string) {
   return stringify(v).replace(String(l), '')
 }
 
-export function rstrip (str: string) {
+export function rstrip (str: string, chars?: string) {
+  if (chars) {
+    chars = escapeRegExp(stringify(chars))
+    return stringify(str).replace(new RegExp(`[${chars}]+$`, 'g'), '')
+  }
   return stringify(str).replace(/\s+$/, '')
 }
 
@@ -48,7 +56,13 @@ export function split (v: string, arg: string) {
   return arr
 }
 
-export function strip (v: string) {
+export function strip (v: string, chars?: string) {
+  if (chars) {
+    chars = escapeRegExp(stringify(chars))
+    return stringify(v)
+      .replace(new RegExp(`^[${chars}]+`, 'g'), '')
+      .replace(new RegExp(`[${chars}]+$`, 'g'), '')
+  }
   return stringify(v).trim()
 }
 

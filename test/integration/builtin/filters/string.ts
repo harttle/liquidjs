@@ -86,9 +86,10 @@ describe('filters/string', function () {
     it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
     it('should return empty for undefined', () => test('{{ foo | upcase }}', ''))
   })
-  it('should support lstrip', function () {
+  it('should support lstrip', async () => {
     const src = '{{ "          So much room for activities!          " | lstrip }}'
-    return test(src, 'So much room for activities!          ')
+    await test(src, 'So much room for activities!          ')
+    await test('{{ "foobarcoo" | lstrip: "fo" }}', 'barcoo')
   })
   it('should support prepend', function () {
     return test('{% assign url = "liquidmarkup.com" %}' +
@@ -115,9 +116,10 @@ describe('filters/string', function () {
             '{{ my_string | replace_first: "my", "your" }}',
     '\nTake your protein pills and put my helmet on')
   })
-  it('should support rstrip', function () {
-    return test('{{ "          So much room for activities!          " | rstrip }}',
+  it('should support rstrip', async () => {
+    await test('{{ "          So much room for activities!          " | rstrip }}',
       '          So much room for activities!')
+    await test('{{ "foobarcoo" | rstrip: "fco" }}', 'foobar')
   })
   it('should support split', function () {
     return test('{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
@@ -126,9 +128,12 @@ describe('filters/string', function () {
             '{% endfor %}',
     'John Paul George Ringo ')
   })
-  it('should support strip', function () {
-    return test('{{ "          So much room for activities!          " | strip }}',
+  it('should support strip', async () => {
+    await test('{{ "          So much room for activities!          " | strip }}',
       'So much room for activities!')
+    await test('{{ "          So much room for activities!          " | strip: "So " }}',
+      'much room for activities!')
+    await test('{{ "&[]{}" | strip: "&[]{}" }}', '')
   })
   it('should support strip_newlines', function () {
     return test('{% capture string_with_newlines %}\n' +

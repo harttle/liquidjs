@@ -156,3 +156,7 @@ export function caseInsensitiveCompare (a: any, b: any) {
 export function argumentsToValue<F extends (...args: any) => any> (fn: F) {
   return (...args: Parameters<F>) => fn(...args.map(toValue))
 }
+
+export function escapeRegExp (text: string) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}
