@@ -54,8 +54,8 @@
         <input type="search" id="search-input" placeholder="搜索...">
       </div>
     </nav>
-    <div id="lang-select-wrap" class="main-nav-link">
-      <label><i class="icon-network"></i>简体中文</label>
+    <div class="main-nav-link icon-nav-link">
+      <label><i class="icon-network"></i> <span class="icon-nav-title">简体中文</span></label>
       <select id="lang-select" data-canonical="api/classes/drop_forloop_drop_.forloopdrop.html">
         
           <option value="en">English</option>
@@ -64,8 +64,8 @@
         
       </select>
     </div>
-    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
-    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs" class="main-nav-link"><i class="icon-opencollective"></i>Support</a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">Github</span></a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-opencollective"></i> <span class="icon-nav-title">Support</span></a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -184,7 +184,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-03-05T16:55:00.440Z" itemprop="dateModified">上次更新：2022-03-05</time>
+                <time class="article-footer-updated" datetime="2022-03-17T08:24:44.822Z" itemprop="dateModified">上次更新：2022-03-17</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -225,9 +225,6 @@
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
       <a href="../../tutorials/intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../../tags/overview.html" class="mobile-nav-link">标签</a><a href="../../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../../playground.html" class="mobile-nav-link">演示</a><a href="liquid_.liquid.html" class="mobile-nav-link">API</a>
-      <li class="mobile-nav-item">
-        <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank">GitHub</a>
-      </li>
     </ul>
     
     <div class="mobile-sidebar-list">
@@ -235,15 +232,19 @@
     </div>
     
   </div>
-  <div id="mobile-lang-select-wrap">
-    <span id="mobile-lang-select-label"><i class="icon-network"></i><span>简体中文</span></span>
-    <select id="mobile-lang-select" data-canonical="api/classes/drop_forloop_drop_.forloopdrop.html">
-      
-        <option value="en">English</option>
-      
-        <option value="zh-cn" selected>简体中文</option>
-      
-    </select>
+  <div id="mobile-button-list">
+    <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-github"></i></a>
+    <a href="https://opencollective.com/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-opencollective"></i></a>
+    <div id="mobile-lang-select-wrap" class="mobile-nav-link">
+      <label for="mobile-lang-select"><i class="icon-network"></i></label>
+      <select id="mobile-lang-select" data-canonical="api/classes/drop_forloop_drop_.forloopdrop.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
   </div>
 </nav>
   
