@@ -29,7 +29,6 @@ logo-size = 36px
 #main-nav
   display: none
   flex: 1 auto
-  padding-left: 20px
   @media mq-normal
     display: block
 
@@ -62,9 +61,7 @@ logo-size = 36px
   opacity: 0.7
   transition: opacity 0.2s, color 0.2s
   display: inline-block
-  padding: 0 15px
-  i
-    padding-right: 8px
+  padding: 0 12px
   &.active
     opacity: 1
   &:hover
@@ -72,10 +69,14 @@ logo-size = 36px
     color: var(--color-link-hover)
     text-decoration: none
 
-#lang-select-wrap
-#github-link-wrap
+.icon-nav-link
   display: none
   position: relative
+  padding: 0 8px
+  .icon-nav-title
+    display: none
+    @media mq-small
+      display: inline
   @media mq-normal
     display: block
 

@@ -10,16 +10,16 @@
         <input type="search" id="search-input" placeholder="{{__('menu.search')}}...">
       </div>
     </nav>
-    <div id="lang-select-wrap" class="main-nav-link">
-      <label><i class="icon-network"></i>{{ lang_name(page.lang) }}</label>
+    <div class="main-nav-link icon-nav-link">
+      <label><i class="icon-network"></i> <span class="icon-nav-title">{{ lang_name(page.lang) }}</span></label>
       <select id="lang-select" data-canonical="{{ canonical_path_for_nav() }}">
         {% for lang in site.data.languages %}
           <option value="{{ loop.key }}"{% if page.lang === loop.key %} selected{% endif %}>{{ lang_name(loop.key) }}</option>
         {% endfor %}
       </select>
     </div>
-    <a href="https://github.com/{{ config.github }}" id="github-link-wrap" class="main-nav-link"><i class="icon-github"></i>Github</a>
-    <a href="https://opencollective.com/liquidjs" class="main-nav-link"><i class="icon-opencollective"></i>Support</a>
+    <a href="https://github.com/{{ config.github }}" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">Github</span></a>
+    <a href="https://opencollective.com/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-opencollective"></i> <span class="icon-nav-title">Support</span></a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>

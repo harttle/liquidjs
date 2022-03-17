@@ -78,7 +78,7 @@ lang-select-height = 40px
   color: #fff
   text-decoration: none
   display: block
-  padding: 10px 15px
+  padding: 12px 16px
   line-height: 1
   white-space: nowrap
   overflow: hidden
@@ -96,22 +96,21 @@ lang-select-height = 40px
   overflow: hidden
   text-overflow: ellipsis
 
-#mobile-lang-select-wrap
+#mobile-button-list
   position: absolute
   bottom: 0
   left: 0
   width: 100%
   background: var(--color-navy)
   border-top: 1px solid #444
+  padding: 12px 16px
+  .mobile-nav-link
+    display: inline-block
+    padding: 0
+    margin-right: 16px
 
-#mobile-lang-select-label
-  line-height: lang-select-height
-  color: #fff
-  padding: 10px 15px
-  i
-    opacity: 0.7
-  span
-    padding-left: 8px
+#mobile-lang-select-wrap
+  position: relative
 
 #mobile-lang-select
   -webkit-appearance: menulist-button
