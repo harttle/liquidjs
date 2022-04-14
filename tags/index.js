@@ -14,4 +14,5 @@ module.exports = function (engine) {
   require('./raw.js')(engine)
   require('./tablerow.js')(engine)
   require('./unless.js')(engine)
+  require('./parseAssign.js')(engine)
 }
