@@ -1,3 +1,12 @@
+## [9.36.1](https://github.com/harttle/liquidjs/compare/v9.36.0...v9.36.1) (2022-04-17)
+
+
+### Bug Fixes
+
+* contains operator does not support Drop, fixes [#492](https://github.com/harttle/liquidjs/issues/492) ([9e024ff](https://github.com/harttle/liquidjs/commit/9e024ff2bcf17e7ac19c718389d4cef39b8a51f7))
+* responsive header ([a56af6b](https://github.com/harttle/liquidjs/commit/a56af6bbfb5b698db55fbeb87e8e0872688fbe19))
+* use `createRequire` for ESM, fixes [#334](https://github.com/harttle/liquidjs/issues/334) ([eec381e](https://github.com/harttle/liquidjs/commit/eec381ec72db3858452799b7a3264e240be3044d))
+
 # [9.36.0](https://github.com/harttle/liquidjs/compare/v9.35.2...v9.36.0) (2022-03-05)
 
 
