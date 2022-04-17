@@ -1,4 +1,4 @@
-import { Liquid } from '../..'
+import { Liquid, Drop } from '../..'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import * as sinon from 'sinon'
@@ -231,5 +231,14 @@ describe('Issues', function () {
     const engine = new Liquid()
     const html = await engine.parseAndRender(`{% assign a = "x,y,z" | split: ',' -%}{{ a[-1] }} {{ a[-3] }} {{ a[-8] }}`)
     expect(html).to.equal('z x ')
+  })
+  it('#492 contains operator does not support Drop', async () => {
+    class TemplateDrop extends Drop {
+      valueOf () { return 'product' }
+    }
+    const engine = new Liquid()
+    const ctx = { template: new TemplateDrop() }
+    const html = await engine.parseAndRender(`{% if template contains "product" %}contains{%endif%}`, ctx)
+    expect(html).to.equal('contains')
   })
 })

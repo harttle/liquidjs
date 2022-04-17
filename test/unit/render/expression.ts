@@ -1,5 +1,6 @@
 import { Tokenizer } from '../../../src/parser/tokenizer'
 import { expect } from 'chai'
+import { Drop } from '../../../src/drop/drop'
 import { Context } from '../../../src/context/context'
 import { toThenable } from '../../../src/util/async'
 import { defaultOperators } from '../../../src/render/operator'
@@ -129,6 +130,13 @@ describe('Expression', function () {
     })
     it('should support < or contains', async function () {
       expect(await toThenable(create('1 < 2 or x contains "x"').evaluate(ctx, false))).to.equal(true)
+    })
+    it('should support Drops for "x contains "x""', async () => {
+      class TemplateDrop extends Drop {
+        valueOf () { return 'X' }
+      }
+      const ctx = new Context({ x: 'XXX', X: new TemplateDrop() })
+      expect(await toThenable(create('x contains X').evaluate(ctx, false))).to.equal(true)
     })
     it('should support value and !=', async function () {
       const ctx = new Context({ empty: '' })

@@ -1,6 +1,6 @@
 import { isComparable } from '../drop/comparable'
 import { Context } from '../context/context'
-import { isFunction } from '../util/underscore'
+import { isFunction, toValue } from '../util/underscore'
 import { isTruthy } from '../render/boolean'
 
 export interface Operators {
@@ -39,6 +39,8 @@ export const defaultOperators: Operators = {
     return l <= r
   },
   'contains': (l: any, r: any) => {
+    l = toValue(l)
+    r = toValue(r)
     return l && isFunction(l.indexOf) ? l.indexOf(r) > -1 : false
   },
   'and': (l: any, r: any, ctx: Context) => isTruthy(l, ctx) && isTruthy(r, ctx),
