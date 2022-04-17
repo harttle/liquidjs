@@ -1,6 +1,7 @@
 import * as _ from '../util/underscore'
 import { sep, resolve as nodeResolve, extname, dirname as nodeDirname } from 'path'
 import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
+import { requireResolve } from './node-require'
 
 const statAsync = _.promisify(stat)
 const readFileAsync = _.promisify<string, string, string>(nodeReadFile)
@@ -33,7 +34,7 @@ export function resolve (root: string, file: string, ext: string) {
 }
 export function fallback (file: string) {
   try {
-    return require.resolve(file)
+    return requireResolve(file)
   } catch (e) {}
 }
 export function dirname (filepath: string) {

@@ -1,10 +1,10 @@
 import { stringify } from '../util/underscore'
 import { Emitter } from './emitter'
+import { PassThrough } from 'stream'
 
 export class StreamedEmitter implements Emitter {
   public buffer = '';
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  public stream: NodeJS.ReadWriteStream = new (require('stream').PassThrough)()
+  public stream: NodeJS.ReadWriteStream = new PassThrough()
   public write (html: any) {
     this.stream.write(stringify(html))
   }

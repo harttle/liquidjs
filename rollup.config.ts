@@ -47,6 +47,11 @@ const browserStream = {
   delimiters: ['', ''],
   '../emitters/streamed-emitter': '../emitters/streamed-emitter-browser'
 }
+const esmRequire = {
+  include: './src/fs/node.ts',
+  delimiters: ['', ''],
+  './node-require': './node-require.mjs'
+}
 
 const nodeCjs = {
   output: [{
@@ -67,7 +72,11 @@ const nodeEsm = {
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [versionInjection, typescript(tsconfig)],
+  plugins: [
+    versionInjection,
+    replace(esmRequire),
+    typescript(tsconfig)
+  ],
   treeshake,
   input
 }
