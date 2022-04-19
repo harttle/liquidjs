@@ -1,3 +1,10 @@
+## [9.36.2](https://github.com/harttle/liquidjs/compare/v9.36.1...v9.36.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* lazy createRequire to allow exceptions being catched, fixes [#497](https://github.com/harttle/liquidjs/issues/497) ([b377dad](https://github.com/harttle/liquidjs/commit/b377dad9e34c3de3e0eedc1ee6f17a0e9d919669))
+
 ## [9.36.1](https://github.com/harttle/liquidjs/compare/v9.36.0...v9.36.1) (2022-04-17)
 
 
