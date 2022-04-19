@@ -68,7 +68,7 @@ Here's a demo for browsers: [demo/browser](https://github.com/harttle/liquidjs/t
 
 ## Abstract File System
 
-LiquidJS defines an abstract file system interface in [src/fs/ifs.ts][ifs] and the default implementation is [src/fs/node.ts][fs-node] for Node.js and [src/fs/browser.ts][fs-browser] for the browser bundle.
+LiquidJS defines an abstract file system interface in [src/fs/fs.ts][ifs] and the default implementation is [src/fs/node.ts][fs-node] for Node.js and [src/fs/browser.ts][fs-browser] for the browser bundle.
 
 The `Liquid` constructor provides a [fs][fs] option to specify the file system implementation. It's supposed to be used to define customized template fetching logic, i.e. fetch template from a database table, like:
 
@@ -101,7 +101,7 @@ var engine = new Liquid({
 {% note warn Path Traversal Vulnerability %}The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you'll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.{% endnote %}
 
 [fs]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-fs
-[ifs]: https://github.com/harttle/liquidjs/blob/master/src/fs/ifs.ts
+[ifs]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs.ts
 [fs-node]: https://github.com/harttle/liquidjs/blob/master/src/fs/node.ts
 [fs-browser]: https://github.com/harttle/liquidjs/blob/master/src/fs/browser.ts
 [layout]: https://help.shopify.com/en/themes/liquid/tags/theme-tags#layout
