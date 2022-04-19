@@ -1,5 +1,10 @@
 import { createRequire } from 'module'
 
-const require = createRequire(import.meta.url)
-
-export const requireResolve = require.resolve
+export function requireResolve (file) {
+  /**
+   * createRequire() can throw,
+   * when import.meta.url not begin with "file://".
+   */
+  const require = createRequire(import.meta.url)
+  return require.resolve(file)
+}
