@@ -25,6 +25,8 @@ describe('filters/math', function () {
     it('should return 2 for 4,2', () => test('{{4 | divided_by: 2}}', '2'))
     it('should return 4 for 16,4', () => test('{{16 | divided_by: 4}}', '4'))
     it('should return 1 for 5,3', () => test('{{5 | divided_by: 3}}', (5 / 3).toString()))
+    it('should support integer arithmetic', () => test('{{5 | divided_by: 3, true}}', '1'))
+    it('should floor the result in integer arithmetic', () => test('{{ -5 | divided_by: 3, true}}', '-2'))
     it('should convert string to number', () => test('{{"6" | divided_by: "3"}}', '2'))
   })
   describe('floor', function () {

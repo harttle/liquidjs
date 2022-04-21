@@ -199,6 +199,11 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync('{{foo | size}}-{{bar.coo}}', { foo: 'foo', bar: Object.create({ coo: 'COO' }) })
     expect(html).to.equal('3-')
   })
+  it('#465 Liquidjs divided_by not compatible with Ruby/Shopify Liquid', () => {
+    const engine = new Liquid({ ownPropertyOnly: true })
+    const html = engine.parseAndRenderSync('{{ 5 | divided_by: 3, true }}')
+    expect(html).to.equal('1')
+  })
   it('#479 url_encode throws on undefined value', async () => {
     const engine = new Liquid({
       strictVariables: false

@@ -26,6 +26,23 @@ Output
 1.6666666666666667
 ```
 
-{% note info Integer Arithmetic %}Since JavaScript doesn't differentiate integers and floats, LiquidJS is not capable of integer arithmetic and the return type is always `number`, the string representation of which depends on its value.{% endnote %}
+In JavaScript, float and integer shares the same type `number` and we cannot tell the difference. For example:
+
+```javascript
+// always true
+5.0 === 5
+```
+
+You'll need to pass another `integerArithmetic` argument to enforce integer divide:
+
+Input
+```liquid
+{{ 5 | divided_by: 3, true }}
+```
+
+Output
+```text
+1
+```
 
 [floor]: ./floor.html

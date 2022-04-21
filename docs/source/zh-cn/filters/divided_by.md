@@ -26,6 +26,23 @@ title: divided_by
 1.6666666666666667
 ```
 
-{% note info Integer Arithmetic %}Since JavaScript doesn't differentiate integers and floats, LiquidJS is not capable of integer arithmetic and the return type is always `number`, the string representation of which depends on its value.{% endnote %}
+在 JavaScript 里数字没有浮点和整数的区分，它们的类型都是 `number`：
+
+```javascript
+// always true
+5.0 === 5
+```
+
+因此如果需要做整数运算，需要传入额外的 `integerArithmetic` 参数：
+
+Input
+```liquid
+{{ 5 | divided_by: 3, true }}
+```
+
+Output
+```text
+1
+```
 
 [floor]: ./floor.html
