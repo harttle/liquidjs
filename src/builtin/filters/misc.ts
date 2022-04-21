@@ -1,5 +1,5 @@
 import { isFalsy } from '../../render/boolean'
-import { isArray, isString, toValue } from '../../util/underscore'
+import { identify, isArray, isString, toValue } from '../../util/underscore'
 import { FilterImpl } from '../../template/filter/filter-impl'
 
 export function Default<T1 extends boolean, T2> (this: FilterImpl, value: T1, defaultValue: T2, ...args: Array<[string, any]>): T1 | T2 {
@@ -12,3 +12,5 @@ export function Default<T1 extends boolean, T2> (this: FilterImpl, value: T1, de
 export function json (value: any) {
   return JSON.stringify(value)
 }
+
+export const raw = identify

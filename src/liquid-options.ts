@@ -1,4 +1,4 @@
-import * as _ from './util/underscore'
+import { snakeCase, forOwn, isArray, isString, isFunction } from './util/underscore'
 import { Template } from './template/template'
 import { Cache } from './cache/cache'
 import { LRU } from './cache/lru'
@@ -7,6 +7,16 @@ import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
 import { Thenable } from './util/async'
+import * as builtinFilters from './builtin/filters'
+import { assert, FilterImplOptions } from './types'
+
+const filters = new Map()
+forOwn(builtinFilters, (conf: FilterImplOptions, name: string) => {
+  filters.set(snakeCase(name), conf)
+})
+
+type OutputEscape = (value: any) => string
+type OutputEscapeOption = 'escape' | 'json' | OutputEscape
 
 export interface LiquidOptions {
   /** A directory or an array of directories from where to resolve layout and include templates, and the filename passed to `.renderFile()`. If it's an array, the files are looked up in the order they occur in the array. Defaults to `["."]` */
@@ -63,6 +73,8 @@ export interface LiquidOptions {
   globals?: object;
   /** Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to `false`. */
   keepOutputType?: boolean;
+  /** Default escape filter applied to output values, when set, you'll have to add `| raw` for values don't need to be escaped. Defaults to `undefined`. */
+  outputEscape?: OutputEscapeOption;
   /** An object of operators for conditional statements. Defaults to the regular Liquid operators. */
   operators?: Operators;
   /** Respect parameter order when using filters like "for ... reversed limit", Defaults to `false`. */
@@ -93,6 +105,7 @@ interface NormalizedOptions extends LiquidOptions {
   partials?: string[];
   layouts?: string[];
   cache?: Cache<Thenable<Template[]>>;
+  outputEscape?: OutputEscape;
   operatorsTrie?: Trie;
 }
 
@@ -181,12 +194,24 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
   options.root = normalizeDirectoryList(options.root)
   options.partials = normalizeDirectoryList(options.partials)
   options.layouts = normalizeDirectoryList(options.layouts)
+  options.outputEscape = options.outputEscape && getOutputEscapeFunction(options.outputEscape)
   return options as NormalizedFullOptions
+}
+
+function getOutputEscapeFunction (nameOrFunction: OutputEscapeOption) {
+  if (isString(nameOrFunction)) {
+    const filterImpl = filters.get(nameOrFunction)
+    assert(isFunction(filterImpl), `filter "${nameOrFunction}" not found`)
+    return filterImpl
+  } else {
+    assert(isFunction(nameOrFunction), '`outputEscape` need to be of type string or function')
+    return nameOrFunction
+  }
 }
 
 export function normalizeDirectoryList (value: any): string[] {
   let list: string[] = []
-  if (_.isArray(value)) list = value
-  if (_.isString(value)) list = [value]
+  if (isArray(value)) list = value
+  if (isString(value)) list = [value]
   return list
 }

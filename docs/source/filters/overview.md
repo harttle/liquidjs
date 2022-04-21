@@ -14,6 +14,6 @@ String | append, prepend, capitalize, upcase, downcase, strip, lstrip, rstrip, s
 HTML/URI | escape, escape_once, url_encode, url_decode, strip_html, newline_to_br
 Array | slice, map, sort, sort_natural, uniq, where, first, last, join, reverse, concat, compact, size
 Date | date
-Misc | default, json
+Misc | default, json, raw
 
 [shopify/liquid]: https://github.com/Shopify/liquid

@@ -51,6 +51,7 @@ filters:
   newline_to_br: newline_to_br.html
   plus: plus.html
   prepend: prepend.html
+  raw: raw.html
   remove: remove.html
   remove_first: remove_first.html
   replace: replace.html

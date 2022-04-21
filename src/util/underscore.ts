@@ -1,6 +1,6 @@
 import { Drop } from '../drop/drop'
 
-const toStr = Object.prototype.toString
+export const toString = Object.prototype.toString
 const toLowerCase = String.prototype.toLowerCase
 
 export const hasOwnProperty = Object.hasOwnProperty
@@ -57,7 +57,7 @@ export function isNil (value: any): boolean {
 
 export function isArray (value: any): value is any[] {
   // be compatible with IE 8
-  return toStr.call(value) === '[object Array]'
+  return toString.call(value) === '[object Array]'
 }
 
 /*
