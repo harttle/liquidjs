@@ -1,3 +1,15 @@
+# [9.37.0](https://github.com/harttle/liquidjs/compare/v9.36.2...v9.37.0) (2022-04-21)
+
+
+### Bug Fixes
+
+* support integer arithmetic for `divided_by`, closes [#465](https://github.com/harttle/liquidjs/issues/465) ([e69a510](https://github.com/harttle/liquidjs/commit/e69a51025efa7dec7d60d0067200a1466988ebbc))
+
+
+### Features
+
+* automatic output escaping, closes [#500](https://github.com/harttle/liquidjs/issues/500) ([f88490c](https://github.com/harttle/liquidjs/commit/f88490cd3cd0b5316c43c3ca76837544d99ce0b0))
+
 ## [9.36.2](https://github.com/harttle/liquidjs/compare/v9.36.1...v9.36.2) (2022-04-19)
 
 
