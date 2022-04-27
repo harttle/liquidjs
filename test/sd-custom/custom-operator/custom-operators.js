@@ -45,6 +45,7 @@ function getCtx() {
       code: "+1",
       country_code: "+1",
     },
+    strNum10: "10",
   };
 }
 
@@ -568,6 +569,69 @@ describe("custom operators", () => {
     it("should eval non identical currency - 2", function () {
       const src = getLiquidText("rCurr <= lCurr");
       return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+  });
+
+  // The following tests make sure operators behave as expected when comparing string and number
+  describe("string and number operand types", () => {
+    it("== should always be false - 1", () => {
+      const src = getLiquidText("lNum == strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+
+    it("== should always be false - 2", () => {
+      const src = getLiquidText("rNum == strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+
+    it("!= should always be true - 1", () => {
+      const src = getLiquidText("lNum != strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(TRUE);
+    });
+
+    it("!= should always be true - 2", () => {
+      const src = getLiquidText("rNum != strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(TRUE);
+    });
+
+    it("> should eval - 1", () => {
+      const src = getLiquidText("rNum > strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(TRUE);
+    });
+
+    it("> should eval - 2", () => {
+      const src = getLiquidText("strNum10 > rNum");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+
+    it(">= should eval - 1", () => {
+      const src = getLiquidText("rNum >= strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(TRUE);
+    });
+
+    it(">= should eval - 2", () => {
+      const src = getLiquidText("strNum10 >= rNum");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+
+    it("< should eval - 1", () => {
+      const src = getLiquidText("rNum < strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+
+    it("< should eval - 2", () => {
+      const src = getLiquidText("strNum10 < rNum");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(TRUE);
+    });
+
+    it("<= should eval - 1", () => {
+      const src = getLiquidText("rNum <= strNum10");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(FALSE);
+    });
+
+    it("<= should eval - 2", () => {
+      const src = getLiquidText("strNum10 <= rNum");
+      return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(TRUE);
     });
   });
 });
