@@ -4,6 +4,14 @@ const expect = chai.expect;
 const equals = require("../../../sd-custom/custom-operator/equals.js");
 
 describe("Custom equals operator", () => {
+  it("should use default evaluation for operands of different types", () => {
+    expect(equals(1, "1")).to.equal(1 === "1");
+    expect(equals(5, "1")).to.equal(5 === "1");
+    expect(equals("1", 5)).to.equal("1" === 5);
+    expect(equals("5", true)).to.equal("5" === true);
+    expect(equals(5, {})).to.equal(5 === {});
+  });
+
   it("should eval numbers correctly", () => {
     expect(equals(0, 0)).to.equal(true);
     expect(equals(-10, -10)).to.equal(true);
@@ -90,7 +98,7 @@ describe("Custom equals operator", () => {
       expect(equals(date2, date3)).to.equal(false);
     });
     it("should return false for unsupported date format", () => {
-      expect(equals(date3, date4)).to.equal(false);
+      expect(equals(date3, date4)).to.equal(date3 === date4);
     });
   });
 

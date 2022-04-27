@@ -45,12 +45,16 @@ function currencyGreaterThanOrEqual(l, r) {
   return l.value >= r.value && l.type === r.type;
 }
 
+function defaultHandler(l, r) {
+  return l >= r;
+}
+
 function greaterThanOrEqual(l, r) {
   const lType = getType(l);
   const rType = getType(r);
 
   if (lType !== rType) {
-    return false;
+    return defaultHandler(l, r);
   }
 
   switch (lType) {
@@ -61,7 +65,7 @@ function greaterThanOrEqual(l, r) {
     case SD_CUSTOM_TYPES.date:
       return dateGreaterThanOrEqual(l, r);
     default:
-      return l >= r;
+      return defaultHandler(l, r);
   }
 }
 

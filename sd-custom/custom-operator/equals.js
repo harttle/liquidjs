@@ -95,12 +95,16 @@ function arrayEquals(l, r) {
   });
 }
 
+function defaultHandler(l, r) {
+  return l === r;
+}
+
 function equals(l, r) {
   const lType = getType(l);
   const rType = getType(r);
 
   if (lType !== rType) {
-    return false;
+    return defaultHandler(l, r);
   }
 
   switch (lType) {
@@ -115,7 +119,7 @@ function equals(l, r) {
     case SD_CUSTOM_TYPES.phoneNumber:
       return phoneNumberEquals(l, r);
     default:
-      return l === r;
+      return defaultHandler(l, r);
   }
 }
 

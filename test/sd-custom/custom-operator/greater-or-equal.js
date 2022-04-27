@@ -4,6 +4,14 @@ const expect = chai.expect;
 const greaterThanOrEqual = require("../../../sd-custom/custom-operator/greater-or-equal.js");
 
 describe("Custom greater or equals operator", () => {
+  it("should use default evaluation for operands of different types", () => {
+    expect(greaterThanOrEqual(1, "1")).to.equal(1 >= "1");
+    expect(greaterThanOrEqual(5, "1")).to.equal(5 >= "1");
+    expect(greaterThanOrEqual("1", 5)).to.equal("1" >= 5);
+    expect(greaterThanOrEqual("5", true)).to.equal("5" >= true);
+    expect(greaterThanOrEqual(5, {})).to.equal(5 >= {});
+  });
+
   it("should eval numbers correctly", () => {
     expect(greaterThanOrEqual(0, 0)).to.equal(true);
     expect(greaterThanOrEqual(-1, -2)).to.equal(true);
@@ -71,7 +79,7 @@ describe("Custom greater or equals operator", () => {
     });
 
     it("should return false for unsupported date format", () => {
-      expect(greaterThanOrEqual(date3, date4)).to.equal(false);
+      expect(greaterThanOrEqual(date3, date4)).to.equal(date3 >= date4);
     });
   });
 

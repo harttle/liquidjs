@@ -4,6 +4,14 @@ const expect = chai.expect;
 const smaller = require("../../../sd-custom/custom-operator/smaller.js");
 
 describe("Custom smaller than operator", () => {
+  it("should use default evaluation for operands of different types", () => {
+    expect(smaller(1, "1")).to.equal(1 < "1");
+    expect(smaller(5, "1")).to.equal(5 < "1");
+    expect(smaller("1", 5)).to.equal("1" < 5);
+    expect(smaller("5", true)).to.equal("5" < true);
+    expect(smaller(5, {})).to.equal(5 < {});
+  });
+
   it("should eval numbers correctly", () => {
     expect(smaller(0, 0)).to.equal(false);
     expect(smaller(-1, -2)).to.equal(false);
@@ -72,7 +80,7 @@ describe("Custom smaller than operator", () => {
     });
 
     it("should return false for unsupported date format", () => {
-      expect(smaller(date3, date4)).to.equal(false);
+      expect(smaller(date3, date4)).to.equal(date3 < date4);
     });
   });
 

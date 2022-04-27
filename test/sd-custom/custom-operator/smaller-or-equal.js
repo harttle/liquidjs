@@ -4,6 +4,14 @@ const expect = chai.expect;
 const smallerThanOrEqual = require("../../../sd-custom/custom-operator/smaller-or-equal.js");
 
 describe("Custom smaller or equals operator", () => {
+  it("should use default evaluation for operands of different types", () => {
+    expect(smallerThanOrEqual(1, "1")).to.equal(1 <= "1");
+    expect(smallerThanOrEqual(5, "1")).to.equal(5 <= "1");
+    expect(smallerThanOrEqual("1", 5)).to.equal("1" <= 5);
+    expect(smallerThanOrEqual("5", true)).to.equal("5" <= true);
+    expect(smallerThanOrEqual(5, {})).to.equal(5 <= {});
+  });
+
   it("should eval numbers correctly", () => {
     expect(smallerThanOrEqual(0, 0)).to.equal(true);
     expect(smallerThanOrEqual(-1, -2)).to.equal(false);
@@ -72,7 +80,7 @@ describe("Custom smaller or equals operator", () => {
     });
 
     it("should return false for unsupported date format", () => {
-      expect(smallerThanOrEqual(date3, date4)).to.equal(false);
+      expect(smallerThanOrEqual(date3, date4)).to.equal(date3 <= date4);
     });
   });
 
