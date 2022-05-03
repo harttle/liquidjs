@@ -52,6 +52,11 @@ describe('Liquid', function () {
       const src = '{{ foo }}'
       return expect(engine.parseAndRender(src, {}, { strictVariables: true })).rejectedWith(/undefined variable/)
     })
+    it('should support async variables in output', async () => {
+      const src = '{{ foo }}'
+      const html = await engine.parseAndRender(src, { foo: Promise.resolve('FOO') })
+      expect(html).to.equal('FOO')
+    })
   })
   describe('#express()', function () {
     const liquid = new Liquid({ root: '/root' })

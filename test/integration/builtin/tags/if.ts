@@ -142,4 +142,10 @@ describe('tags/if', function () {
     const html = liquid.parseAndRenderSync(src, scope)
     return expect(html).to.equal('true')
   })
+  it('should support async variables', async () => {
+    const src = `{%if var == 'var' %}success{%endif%}`
+    const scope = { 'var': Promise.resolve('var') }
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).to.equal('success')
+  })
 })

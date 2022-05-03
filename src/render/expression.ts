@@ -25,9 +25,9 @@ export class Expression {
     const operands: any[] = []
     for (const token of this.postfix) {
       if (TypeGuards.isOperatorToken(token)) {
-        const r = yield operands.pop()
-        const l = yield operands.pop()
-        const result = evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
+        const r = operands.pop()
+        const l = operands.pop()
+        const result = yield evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
         operands.push(result)
       } else {
         operands.push(yield evalToken(token, ctx, lenient && this.postfix.length === 1))
