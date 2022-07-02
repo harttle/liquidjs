@@ -207,8 +207,7 @@ export class Tokenizer {
     const begin = this.p
     let end = this.N
     if (this.readToDelimiter('\n') !== -1) end = this.p
-    const token = new LiquidTagToken(input, begin, end, options, file)
-    return token
+    return new LiquidTagToken(input, begin, end, options, file)
   }
 
   mkError (msg: string, begin: number) {
