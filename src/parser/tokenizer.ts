@@ -233,6 +233,17 @@ export class Tokenizer {
     return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
+  readTagName (): string {
+    this.skipBlank()
+    const begin = this.p
+    // Handle inline comment tags
+    if (this.input[this.p] === '#') {
+      return this.input.slice(begin, ++this.p)
+    }
+    while (this.peekType() & IDENTIFIER) ++this.p
+    return this.input.slice(begin, this.p)
+  }
+
   readHashes (jekyllStyle?: boolean) {
     const hashes = []
     while (true) {
