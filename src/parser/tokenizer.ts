@@ -235,13 +235,9 @@ export class Tokenizer {
 
   readTagName (): string {
     this.skipBlank()
-    const begin = this.p
     // Handle inline comment tags
-    if (this.input[this.p] === '#') {
-      return this.input.slice(begin, ++this.p)
-    }
-    while (this.peekType() & IDENTIFIER) ++this.p
-    return this.input.slice(begin, this.p)
+    if (this.input[this.p] === '#') return this.input.slice(this.p, ++this.p)
+    return this.readIdentifier().getText()
   }
 
   readHashes (jekyllStyle?: boolean) {
