@@ -126,11 +126,13 @@ describe('LiquidOptions#cache', function () {
         extname: '.html',
         cache: true
       })
-      try { await engine.renderFile('foo') } catch (err) {}
+      try {
+        await engine.renderFile('foo')
+      } catch (err) {}
 
       mock({ '/root/foo.html': 'foo' })
-      const y = await engine.renderFile('foo')
-      expect(y).to.equal('foo')
+      const html = await engine.renderFile('foo')
+      expect(html).to.equal('foo')
     })
   })
 

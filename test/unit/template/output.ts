@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import { toThenable } from '../../../src/util/async'
+import { toPromise } from '../../../src/util/async'
 import { Context } from '../../../src/context/context'
 import { Output } from '../../../src/template/output'
 import { OutputToken } from '../../../src/tokens/output-token'
@@ -21,25 +21,25 @@ describe('Output', function () {
       foo: { obj: { arr: ['a', 2] } }
     })
     const output = new Output({ content: 'foo' } as OutputToken, liquid)
-    await toThenable(output.render(scope, emitter))
+    await toPromise(output.render(scope, emitter))
     return expect(emitter.html).to.equal('[object Object]')
   })
   it('should skip function property', async function () {
     const scope = new Context({ obj: { foo: 'foo', bar: (x: any) => x } })
     const output = new Output({ content: 'obj' } as OutputToken, liquid)
-    await toThenable(output.render(scope, emitter))
+    await toPromise(output.render(scope, emitter))
     return expect(emitter.html).to.equal('[object Object]')
   })
   it('should respect to .toString()', async () => {
     const scope = new Context({ obj: { toString: () => 'FOO' } })
     const output = new Output({ content: 'obj' } as OutputToken, liquid)
-    await toThenable(output.render(scope, emitter))
+    await toPromise(output.render(scope, emitter))
     return expect(emitter.html).to.equal('FOO')
   })
   it('should respect to .toString()', async () => {
     const scope = new Context({ obj: { toString: () => 'FOO' } })
     const output = new Output({ content: 'obj' } as OutputToken, liquid)
-    await toThenable(output.render(scope, emitter))
+    await toPromise(output.render(scope, emitter))
     return expect(emitter.html).to.equal('FOO')
   })
   context('when keepOutputType is enabled', () => {
@@ -62,7 +62,7 @@ describe('Output', function () {
         foo: 42
       }, { ...defaultOptions, keepOutputType: true })
       const output = new Output({ content: 'foo' } as OutputToken, liquid)
-      await toThenable(output.render(scope, emitter))
+      await toPromise(output.render(scope, emitter))
       return expect(emitter.html).to.equal(42)
     })
     it('should respect output variable boolean type', async () => {
@@ -70,7 +70,7 @@ describe('Output', function () {
         foo: true
       }, { ...defaultOptions, keepOutputType: true })
       const output = new Output({ content: 'foo' } as OutputToken, liquid)
-      await toThenable(output.render(scope, emitter))
+      await toPromise(output.render(scope, emitter))
       return expect(emitter.html).to.equal(true)
     })
     it('should respect output variable object type', async () => {
@@ -78,7 +78,7 @@ describe('Output', function () {
         foo: 'test'
       }, { ...defaultOptions, keepOutputType: true })
       const output = new Output({ content: 'foo' } as OutputToken, liquid)
-      await toThenable(output.render(scope, emitter))
+      await toPromise(output.render(scope, emitter))
       return expect(emitter.html).to.equal('test')
     })
     it('should respect output variable string type', async () => {
@@ -86,7 +86,7 @@ describe('Output', function () {
         foo: { a: { b: 42 } }
       }, { ...defaultOptions, keepOutputType: true })
       const output = new Output({ content: 'foo' } as OutputToken, liquid)
-      await toThenable(output.render(scope, emitter))
+      await toPromise(output.render(scope, emitter))
       return expect(emitter.html).to.deep.equal({ a: { b: 42 } })
     })
   })

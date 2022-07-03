@@ -1,12 +1,10 @@
 import { snakeCase, forOwn, isArray, isString, isFunction } from './util/underscore'
-import { Template } from './template/template'
-import { Cache } from './cache/cache'
+import { LiquidCache } from './cache/cache'
 import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
-import { Thenable } from './util/async'
 import * as builtinFilters from './builtin/filters'
 import { assert, FilterImplOptions } from './types'
 
@@ -32,7 +30,7 @@ export interface LiquidOptions {
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
-  cache?: boolean | number | Cache<Thenable<Template[]>>;
+  cache?: boolean | number | LiquidCache;
   /** Use Javascript Truthiness. Defaults to `false`. */
   jsTruthy?: boolean;
   /** If set, treat the `filepath` parameter in `{%include filepath %}` and `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`. */
@@ -104,7 +102,7 @@ interface NormalizedOptions extends LiquidOptions {
   root?: string[];
   partials?: string[];
   layouts?: string[];
-  cache?: Cache<Thenable<Template[]>>;
+  cache?: LiquidCache;
   outputEscape?: OutputEscape;
   operatorsTrie?: Trie;
 }
@@ -116,7 +114,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   relativeReference: boolean;
   jekyllInclude: boolean;
   extname: string;
-  cache: undefined | Cache<Thenable<Template[]>>;
+  cache?: LiquidCache;
   jsTruthy: boolean;
   dynamicPartials: boolean;
   fs: FS;
@@ -180,7 +178,7 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
     if (!options.hasOwnProperty('layouts')) options.layouts = options.root
   }
   if (options.hasOwnProperty('cache')) {
-    let cache: Cache<Thenable<Template[]>> | undefined
+    let cache: LiquidCache | undefined
     if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
     else if (typeof options.cache === 'object') cache = options.cache
     else cache = options.cache ? new LRU(1024) : undefined

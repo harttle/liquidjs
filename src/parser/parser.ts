@@ -8,17 +8,17 @@ import { Output } from '../template/output'
 import { HTML } from '../template/html'
 import { Template } from '../template/template'
 import { TopLevelToken } from '../tokens/toplevel-token'
-import { Cache } from '../cache/cache'
+import { LiquidCache } from '../cache/cache'
 import { Loader, LookupType } from '../fs/loader'
+import { toPromise } from '../util/async'
 import { FS } from '../fs/fs'
-import { toThenable, Thenable } from '../util/async'
 
 export default class Parser {
   public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Generator<unknown, Template[], Template[] | string>
 
   private liquid: Liquid
   private fs: FS
-  private cache: Cache<Thenable<Template[]>> | undefined
+  private cache?: LiquidCache
   private loader: Loader
 
   public constructor (liquid: Liquid) {
@@ -58,21 +58,18 @@ export default class Parser {
     return new ParseStream(tokens, (token, tokens) => this.parseToken(token, tokens))
   }
   private * _parseFileCached (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], Template[]> {
-    const key = this.loader.shouldLoadRelative(file)
-      ? currentFile + ',' + file
-      : type + ':' + file
-    const tpls = yield this.cache!.read(key)
+    const cache = this.cache!
+    const key = this.loader.shouldLoadRelative(file) ? currentFile + ',' + file : type + ':' + file
+    const tpls = yield cache.read(key)
     if (tpls) return tpls
 
-    const task = toThenable(this._parseFile(file, sync, type, currentFile))
-    this.cache!.write(key, task)
-    try {
-      return yield task
-    } catch (e) {
-      // remove cached task if failed
-      this.cache!.remove(key)
-    }
-    return []
+    const task = this._parseFile(file, sync, type, currentFile)
+    // sync mode: exec the task and cache the result
+    // async mode: cache the task before exec
+    const taskOrTpl = sync ? yield task : toPromise(task)
+    cache.write(key, taskOrTpl as any)
+    // note: concurrent tasks will be reused, cache for failed task is removed until its end
+    try { return yield taskOrTpl } catch (err) { cache.remove(key); throw err }
   }
   private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], string> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)

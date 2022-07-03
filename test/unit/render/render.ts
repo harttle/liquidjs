@@ -4,7 +4,7 @@ import { HTMLToken } from '../../../src/tokens/html-token'
 import { Render } from '../../../src/render/render'
 import { HTML } from '../../../src/template/html'
 import { SimpleEmitter } from '../../../src/emitters/simple-emitter'
-import { toThenable } from '../../../src/util/async'
+import { toPromise } from '../../../src/util/async'
 import { Tag } from '../../../src/template/tag/tag'
 import { TagToken } from '../../../src/types'
 
@@ -18,7 +18,7 @@ describe('render', function () {
     it('should render html', async function () {
       const scope = new Context()
       const token = { getContent: () => '<p>' } as HTMLToken
-      const html = await toThenable(render.renderTemplates([new HTML(token)], scope, new SimpleEmitter()))
+      const html = await toPromise(render.renderTemplates([new HTML(token)], scope, new SimpleEmitter()))
       return expect(html).to.equal('<p>')
     })
   })

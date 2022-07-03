@@ -4,7 +4,7 @@ import { Context } from '../../../src/context/context'
 import * as sinon from 'sinon'
 import * as sinonChai from 'sinon-chai'
 import { TagToken } from '../../../src/tokens/tag-token'
-import { toThenable } from '../../../src/util/async'
+import { toPromise } from '../../../src/util/async'
 
 chai.use(sinonChai)
 const expect = chai.expect
@@ -20,7 +20,7 @@ describe('Tag', function () {
       args: '',
       name: 'foo'
     } as TagToken
-    await toThenable(new Tag(token, [], {
+    await toPromise(new Tag(token, [], {
       tags: {
         get: () => ({ render: spy })
       }

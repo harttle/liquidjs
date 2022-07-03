@@ -4,13 +4,13 @@ import { Template } from '../template/template'
 import { Emitter } from '../emitters/emitter'
 import { SimpleEmitter } from '../emitters/simple-emitter'
 import { StreamedEmitter } from '../emitters/streamed-emitter'
-import { toThenable } from '../util/async'
+import { toPromise } from '../util/async'
 import { KeepingTypeEmitter } from '../emitters/keeping-type-emitter'
 
 export class Render {
   public renderTemplatesToNodeStream (templates: Template[], ctx: Context): NodeJS.ReadableStream {
     const emitter = new StreamedEmitter()
-    Promise.resolve().then(() => toThenable(this.renderTemplates(templates, ctx, emitter)))
+    Promise.resolve().then(() => toPromise(this.renderTemplates(templates, ctx, emitter)))
       .then(() => emitter.end(), err => emitter.error(err))
     return emitter.stream
   }

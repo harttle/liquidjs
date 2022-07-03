@@ -1,7 +1,7 @@
 import * as chai from 'chai'
 import { Liquid } from '../../../src/liquid'
 import { QuotedToken } from '../../../src/tokens/quoted-token'
-import { toThenable } from '../../../src/util/async'
+import { toPromise } from '../../../src/util/async'
 import * as sinonChai from 'sinon-chai'
 import * as sinon from 'sinon'
 import { Context } from '../../../src/context/context'
@@ -36,7 +36,7 @@ describe('Value', function () {
       const scope = new Context({
         foo: { bar: 'bar' }
       })
-      await toThenable(tpl.value(scope, false))
+      await toPromise(tpl.value(scope, false))
       expect(date).to.have.been.calledWith('bar', 'b')
       expect(time).to.have.been.calledWith('y', 2)
     })

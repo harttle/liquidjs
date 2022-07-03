@@ -246,4 +246,14 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(`{% if template contains "product" %}contains{%endif%}`, ctx)
     expect(html).to.equal('contains')
   })
+  it('#513 should support large number of templates [async]', async () => {
+    const engine = new Liquid()
+    const html = await engine.parseAndRender(`{% for i in (1..10000) %}{{ i }}{% endfor %}`)
+    expect(html).to.have.lengthOf(38894)
+  })
+  it('#513 should support large number of templates [sync]', () => {
+    const engine = new Liquid()
+    const html = engine.parseAndRenderSync(`{% for i in (1..10000) %}{{ i }}{% endfor %}`)
+    expect(html).to.have.lengthOf(38894)
+  })
 })
