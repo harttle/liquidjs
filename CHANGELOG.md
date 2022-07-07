@@ -1,3 +1,15 @@
+# [9.38.0](https://github.com/harttle/liquidjs/compare/v9.37.0...v9.38.0) (2022-07-07)
+
+
+### Bug Fixes
+
+* stack overflow on large number of templates, [#513](https://github.com/harttle/liquidjs/issues/513) ([3dc4290](https://github.com/harttle/liquidjs/commit/3dc4290b56265cfafbee8d9836e912d9b8492f90))
+
+
+### Features
+
+* inline comment tag ([#514](https://github.com/harttle/liquidjs/issues/514)) ([2f87708](https://github.com/harttle/liquidjs/commit/2f8770898963e35ac4491f6975a8abd03dc09067))
+
 # [9.37.0](https://github.com/harttle/liquidjs/compare/v9.36.2...v9.37.0) (2022-04-21)
 
 
