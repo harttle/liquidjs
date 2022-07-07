@@ -525,4 +525,33 @@ describe('Tokenizer', function () {
       expect(() => tokenizer.readLiquidTagTokens()).to.throw(/illegal liquid tag syntax/)
     })
   })
+  describe('#read inline comment tags', () => {
+    it('should allow hash characters in tag names', () => {
+      const tokenizer = new Tokenizer('{% # some comment %}', trie)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      const tag = tokens[0] as TagToken
+      expect(tag).instanceOf(TagToken)
+      expect(tag.name).to.equal('#')
+      expect(tag.args).to.equal('some comment')
+    })
+    it('should handle leading whitespace', () => {
+      const tokenizer = new Tokenizer('{%\n  # some comment %}', trie)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      const tag = tokens[0] as TagToken
+      expect(tag).instanceOf(TagToken)
+      expect(tag.name).to.equal('#')
+      expect(tag.args).to.equal('some comment')
+    })
+    it('should handle no trailing whitespace', () => {
+      const tokenizer = new Tokenizer('{%\n  #some comment %}', trie)
+      const tokens = tokenizer.readTopLevelTokens()
+      expect(tokens.length).to.equal(1)
+      const tag = tokens[0] as TagToken
+      expect(tag).instanceOf(TagToken)
+      expect(tag.name).to.equal('#')
+      expect(tag.args).to.equal('some comment')
+    })
+  })
 })

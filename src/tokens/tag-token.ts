@@ -19,7 +19,7 @@ export class TagToken extends DelimitedToken {
     super(TokenKind.Tag, value, input, begin, end, trimTagLeft, trimTagRight, file)
 
     const tokenizer = new Tokenizer(this.content, options.operatorsTrie)
-    this.name = tokenizer.readIdentifier().getText()
+    this.name = tokenizer.readTagName()
     if (!this.name) throw new TokenizationError(`illegal tag syntax`, this)
 
     tokenizer.skipBlank()
