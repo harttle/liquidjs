@@ -1,3 +1,15 @@
+# [9.39.0](https://github.com/harttle/liquidjs/compare/v9.38.0...v9.39.0) (2022-07-09)
+
+
+### Bug Fixes
+
+* for tag not respecting Drop#valueOf(), fixes [#515](https://github.com/harttle/liquidjs/issues/515) ([c3e51ca](https://github.com/harttle/liquidjs/commit/c3e51caa701fd4449ed5257e23569a37ef12dea2))
+
+
+### Features
+
+* iteration protocols ([a19feea](https://github.com/harttle/liquidjs/commit/a19feea7c46fc476139a150bda051f485328afe8))
+
 # [9.38.0](https://github.com/harttle/liquidjs/compare/v9.37.0...v9.38.0) (2022-07-07)
 
 
