@@ -324,8 +324,7 @@ describe('tags/for', function () {
         yield 'b'
         yield 'c'
       }
-
-      public valueOf (): string {
+      toString () {
         return 'MockIterableDrop'
       }
     }

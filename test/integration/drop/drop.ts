@@ -61,4 +61,15 @@ describe('drop/drop', function () {
     const html = await liquid.parseAndRender(`{{obj.foo}}`, { obj: new PromiseDrop() })
     expect(html).to.equal('FOO')
   })
+  it('should respect valueOf', async () => {
+    class CustomDrop extends Drop {
+      prop = 'not enumerable'
+      valueOf () {
+        return ['foo', 'bar']
+      }
+    }
+    const tpl = '{{drop}}: {% for field in drop %}{{ field }};{% endfor %}'
+    const html = await liquid.parseAndRender(tpl, { drop: new CustomDrop() })
+    expect(html).to.equal('foobar: foo;bar;')
+  })
 })

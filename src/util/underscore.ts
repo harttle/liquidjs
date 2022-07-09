@@ -39,7 +39,7 @@ export function stringify (value: any): string {
 }
 
 export function toValue (value: any): any {
-  return value instanceof Drop ? value.valueOf() : value
+  return (value instanceof Drop && isFunction(value.valueOf)) ? value.valueOf() : value
 }
 
 export function isNumber (value: any): value is number {
