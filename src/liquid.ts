@@ -12,7 +12,7 @@ import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, normalize, RenderOptions } from './liquid-options'
 import { FilterImplOptions } from './template/filter/filter-impl-options'
-import { toPromise, toValue } from './util/async'
+import { toPromise, toValueSync } from './util/async'
 
 export * from './util/error'
 export * from './types'
@@ -47,7 +47,7 @@ export class Liquid {
     return toPromise(this._render(tpl, scope, { ...renderOptions, sync: false }))
   }
   public renderSync (tpl: Template[], scope?: object, renderOptions?: RenderOptions): any {
-    return toValue(this._render(tpl, scope, { ...renderOptions, sync: true }))
+    return toValueSync(this._render(tpl, scope, { ...renderOptions, sync: true }))
   }
   public renderToNodeStream (tpl: Template[], scope?: object, renderOptions: RenderOptions = {}): NodeJS.ReadableStream {
     const ctx = new Context(scope, this.options, renderOptions)
@@ -62,7 +62,7 @@ export class Liquid {
     return toPromise(this._parseAndRender(html, scope, { ...renderOptions, sync: false }))
   }
   public parseAndRenderSync (html: string, scope?: object, renderOptions?: RenderOptions): any {
-    return toValue(this._parseAndRender(html, scope, { ...renderOptions, sync: true }))
+    return toValueSync(this._parseAndRender(html, scope, { ...renderOptions, sync: true }))
   }
 
   public _parsePartialFile (file: string, sync?: boolean, currentFile?: string) {
@@ -75,7 +75,7 @@ export class Liquid {
     return toPromise<Template[]>(this.parser.parseFile(file, false))
   }
   public parseFileSync (file: string): Template[] {
-    return toValue<Template[]>(this.parser.parseFile(file, true))
+    return toValueSync<Template[]>(this.parser.parseFile(file, true))
   }
   public async renderFile (file: string, ctx?: object, renderOptions?: RenderOptions) {
     const templates = await this.parseFile(file)
@@ -98,7 +98,7 @@ export class Liquid {
     return toPromise(this._evalValue(str, ctx))
   }
   public evalValueSync (str: string, ctx: Context): any {
-    return toValue(this._evalValue(str, ctx))
+    return toValueSync(this._evalValue(str, ctx))
   }
 
   public registerFilter (name: string, filter: FilterImplOptions) {

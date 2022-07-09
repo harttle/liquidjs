@@ -14,6 +14,14 @@ export function isFunction (value: any): value is Function {
   return typeof value === 'function'
 }
 
+export function isPromise<T> (val: any): val is Promise<T> {
+  return val && isFunction(val.then)
+}
+
+export function isIterator (val: any): val is IterableIterator<any> {
+  return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
+}
+
 export function escapeRegex (str: string) {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
 }

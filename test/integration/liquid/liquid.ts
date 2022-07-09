@@ -58,6 +58,33 @@ describe('Liquid', function () {
       expect(html).to.equal('FOO')
     })
   })
+  describe('#parseAndRenderSync', function () {
+    const engine = new Liquid()
+    it('should parse and render variable output', function () {
+      const html = engine.parseAndRenderSync('{{"foo"}}')
+      expect(html).to.equal('foo')
+    })
+    it('should parse and render complex output', function () {
+      const tpl = '{{ "Welcome|to]Liquid" | split: "|" | join: "("}}'
+      const html = engine.parseAndRenderSync(tpl)
+      expect(html).to.equal('Welcome(to]Liquid')
+    })
+    it('should support for-in with variable', function () {
+      const src = '{% assign total = 3 | minus: 1 %}' +
+        '{% for i in (1..total) %}{{ i }}{% endfor %}'
+      const html = engine.parseAndRenderSync(src, {})
+      return expect(html).to.equal('12')
+    })
+    it('should support `globals` render option', function () {
+      const src = '{{ foo }}'
+      const html = engine.parseAndRenderSync(src, {}, { globals: { foo: 'FOO' } })
+      return expect(html).to.equal('FOO')
+    })
+    it('should support `strictVariables` render option', function () {
+      const src = '{{ foo }}'
+      return expect(() => engine.parseAndRenderSync(src, {}, { strictVariables: true })).throw(/undefined variable/)
+    })
+  })
   describe('#express()', function () {
     const liquid = new Liquid({ root: '/root' })
     const render = liquid.express()

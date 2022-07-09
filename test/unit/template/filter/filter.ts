@@ -76,6 +76,6 @@ describe('filter', function () {
   it('should support key value pairs', async function () {
     filters.set('add', (a, b) => b[0] + ':' + (a + b[1]))
     const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
-    expect(await toPromise((filters.create('add', [['num', two]]).render(3, ctx)))).to.equal('num:5')
+    expect(await toPromise(filters.create('add', [['num', two]]).render(3, ctx))).to.equal('num:5')
   })
 })

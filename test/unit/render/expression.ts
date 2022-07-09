@@ -2,7 +2,7 @@ import { Tokenizer } from '../../../src/parser/tokenizer'
 import { expect } from 'chai'
 import { Drop } from '../../../src/drop/drop'
 import { Context } from '../../../src/context/context'
-import { toPromise } from '../../../src/util/async'
+import { toPromise, toValueSync } from '../../../src/util/async'
 import { defaultOperators } from '../../../src/render/operator'
 import { createTrie } from '../../../src/util/operator-trie'
 
@@ -156,6 +156,23 @@ describe('Expression', function () {
     it('should allow nested property access', async function () {
       const ctx = new Context({ obj: { foo: 'FOO' }, keys: { "what's this": 'foo' } })
       expect(await toPromise(create('obj[keys["what\'s this"]]').evaluate(ctx, false))).to.equal('FOO')
+    })
+  })
+
+  describe('sync', function () {
+    it('should eval literal', function () {
+      expect(toValueSync(create('2.4').evaluate(ctx, false))).to.equal(2.4)
+    })
+    it('should return false for "1==2"', () => {
+      expect(toValueSync(create('1==2').evaluate(ctx, false))).to.equal(false)
+    })
+    it('should escape quote', function () {
+      const ctx = new Context({ quote: '"' })
+      expect(toValueSync(create('"\\"" == quote').evaluate(ctx, false))).to.equal(true)
+    })
+    it('should allow nested property access', function () {
+      const ctx = new Context({ obj: { foo: 'FOO' }, keys: { "what's this": 'foo' } })
+      expect(toValueSync(create('obj[keys["what\'s this"]]').evaluate(ctx, false))).to.equal('FOO')
     })
   })
 })

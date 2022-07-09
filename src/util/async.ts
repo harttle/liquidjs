@@ -1,23 +1,8 @@
-import { isFunction } from './underscore'
-
-type resolver = (x?: any) => any
-
-export interface Thenable<T> {
-  then (resolve: resolver, reject?: resolver): Thenable<T>;
-  catch (reject: resolver): Thenable<T>;
-}
-
-function isThenable<T> (val: any): val is Thenable<T> {
-  return val && isFunction(val.then)
-}
-
-function isAsyncIterator (val: any): val is IterableIterator<any> {
-  return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
-}
+import { isPromise, isIterator } from './underscore'
 
 // convert an async iterator to a Promise
-export async function toPromise<T> (val: Generator<unknown, T, unknown> | Thenable<T> | T): Promise<T> {
-  if (!isAsyncIterator(val)) return val
+export async function toPromise<T> (val: Generator<unknown, T, unknown> | Promise<T> | T): Promise<T> {
+  if (!isIterator(val)) return val
   let value: unknown
   let done = false
   let next = 'next'
@@ -27,8 +12,8 @@ export async function toPromise<T> (val: Generator<unknown, T, unknown> | Thenab
     value = state.value
     next = 'next'
     try {
-      if (isAsyncIterator(value)) value = toPromise(value)
-      if (isThenable(value)) value = await value
+      if (isIterator(value)) value = toPromise(value)
+      if (isPromise(value)) value = await value
     } catch (err) {
       next = 'throw'
       value = err
@@ -37,9 +22,9 @@ export async function toPromise<T> (val: Generator<unknown, T, unknown> | Thenab
   return value as T
 }
 
-// convert an async iterator to a value in a synchronous maner
-export function toValue<T> (val: Generator<unknown, T, unknown> | T): T {
-  if (!isAsyncIterator(val)) return val
+// convert an async iterator to a value in a synchronous manner
+export function toValueSync<T> (val: Generator<unknown, T, unknown> | T): T {
+  if (!isIterator(val)) return val
   let value: any
   let done = false
   let next = 'next'
@@ -48,9 +33,9 @@ export function toValue<T> (val: Generator<unknown, T, unknown> | T): T {
     done = state.done
     value = state.value
     next = 'next'
-    if (isAsyncIterator(value)) {
+    if (isIterator(value)) {
       try {
-        value = toValue(value)
+        value = toValueSync(value)
       } catch (err) {
         next = 'throw'
         value = err
