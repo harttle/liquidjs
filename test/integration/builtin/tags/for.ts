@@ -1,4 +1,4 @@
-import { Liquid } from '../../../../src/liquid'
+import { Drop, Liquid } from '../../../../src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { Scope } from '../../../../src/context/scope'
@@ -302,6 +302,68 @@ describe('tags/for', function () {
       const src = '{%for c in emptyArray%}a{%else%}b{%endfor%}'
       const html = await liquid.parseAndRenderSync(src, scope)
       return expect(html).to.equal('b')
+    })
+  })
+
+  describe('iterables', function () {
+    class MockIterable {
+      * [Symbol.iterator] () {
+        yield 'a'
+        yield 'b'
+        yield 'c'
+      }
+    }
+
+    class MockEmptyIterable {
+      * [Symbol.iterator] () {}
+    }
+
+    class MockIterableDrop extends Drop {
+      * [Symbol.iterator] () {
+        yield 'a'
+        yield 'b'
+        yield 'c'
+      }
+
+      public valueOf (): string {
+        return 'MockIterableDrop'
+      }
+    }
+
+    it('should loop over iterable objects', function () {
+      const src = '{% for i in someIterable %}{{i}}{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { someIterable: new MockIterable() })
+      return expect(html).to.equal('abc')
+    })
+    it('should loop over iterable drops', function () {
+      const src = '{{ someDrop }}: {% for i in someDrop %}{{i}}{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { someDrop: new MockIterableDrop() })
+      return expect(html).to.equal('MockIterableDrop: abc')
+    })
+    it('should loop over iterable objects with a limit', function () {
+      const src = '{% for i in someIterable limit:2 %}{{i}}{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { someIterable: new MockIterable() })
+      return expect(html).to.equal('ab')
+    })
+    it('should loop over iterable objects with an offset', function () {
+      const src = '{% for i in someIterable offset:1 %}{{i}}{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { someIterable: new MockIterable() })
+      return expect(html).to.equal('bc')
+    })
+    it('should loop over iterable objects in reverse', function () {
+      const src = '{% for i in someIterable reversed %}{{i}}{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { someIterable: new MockIterable() })
+      return expect(html).to.equal('cba')
+    })
+    it('should go to else for an empty iterable', function () {
+      const src = '{% for i in emptyIterable reversed %}{{i}}{%else%}EMPTY{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { emptyIterable: new MockEmptyIterable() })
+      return expect(html).to.equal('EMPTY')
+    })
+    it('should support iterable names', function () {
+      const src = '{% for i in someDrop %}{{forloop.name}} {%else%}EMPTY{%endfor%}'
+      const html = liquid.parseAndRenderSync(src, { someDrop: new MockIterableDrop() })
+      return expect(html).to.equal('i-someDrop i-someDrop i-someDrop ')
     })
   })
 })

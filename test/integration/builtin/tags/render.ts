@@ -155,6 +155,20 @@ describe('tags/render', function () {
     const html = await liquid.renderFile('index.html', { colors: ['red', 'green'] })
     expect(html).to.equal('1: red\n2: green\n')
   })
+  it('should support for <iterable> as', async function () {
+    class MockIterable {
+      * [Symbol.iterator] () {
+        yield 'red'
+        yield 'green'
+      }
+    }
+    mock({
+      '/index.html': '{% render "item" for colors as color %}',
+      '/item.html': '{{forloop.index}}: {{color}}\n'
+    })
+    const html = await liquid.renderFile('index.html', { colors: new MockIterable() })
+    expect(html).to.equal('1: red\n2: green\n')
+  })
   it('should support for <non-array> as', async function () {
     mock({
       '/index.html': '{% render "item" for "green" as color %}',
