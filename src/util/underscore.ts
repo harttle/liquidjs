@@ -60,6 +60,10 @@ export function isArray (value: any): value is any[] {
   return toString.call(value) === '[object Array]'
 }
 
+export function isIterable (value: any): value is Iterable<any> {
+  return isObject(value) && Symbol.iterator in value
+}
+
 /*
  * Iterates over own enumerable string keyed properties of an object and invokes iteratee for each property.
  * The iteratee is invoked with three arguments: (value, key, object).

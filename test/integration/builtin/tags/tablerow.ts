@@ -24,6 +24,23 @@ describe('tags/tablerow', function () {
     return expect(html).to.equal(dst)
   })
 
+  it('should support iterables', async function () {
+    class MockIterable {
+      * [Symbol.iterator] () {
+        yield 1
+        yield 2
+        yield 3
+      }
+    }
+    const src = '{% tablerow i in someIterable %}{{ i }}{% endtablerow %}'
+    const ctx = {
+      someIterable: new MockIterable()
+    }
+    const dst = '<tr class="row1"><td class="col1">1</td><td class="col2">2</td><td class="col3">3</td></tr>'
+    const html = await liquid.parseAndRender(src, ctx)
+    return expect(html).to.equal(dst)
+  })
+
   it('should support cols', async function () {
     const src = '{% tablerow i in alpha cols:2 %}{{ i }}{% endtablerow %}'
     const ctx = {
