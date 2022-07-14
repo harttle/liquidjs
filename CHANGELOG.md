@@ -1,3 +1,10 @@
+## [9.39.1](https://github.com/harttle/liquidjs/compare/v9.39.0...v9.39.1) (2022-07-14)
+
+
+### Bug Fixes
+
+* throw ParseError instead of RenderError for invalid assign expression, closes [#519](https://github.com/harttle/liquidjs/issues/519) ([c41a5d5](https://github.com/harttle/liquidjs/commit/c41a5d5babf85ccedbcb3b6f9a3cf5c326f72ae1))
+
 # [9.39.0](https://github.com/harttle/liquidjs/compare/v9.38.0...v9.39.0) (2022-07-09)
 
 
