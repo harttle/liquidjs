@@ -256,4 +256,8 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync(`{% for i in (1..10000) %}{{ i }}{% endfor %}`)
     expect(html).to.have.lengthOf(38894)
   })
+  it('#519 should throw parse error for invalid assign expression', () => {
+    const engine = new Liquid()
+    expect(() => engine.parse('{% assign headshot = https://testurl.com/not_enclosed_in_quotes.jpg %}')).to.throw(/unexpected token at ":/)
+  })
 })

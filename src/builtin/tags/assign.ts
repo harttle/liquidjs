@@ -1,4 +1,4 @@
-import { Tokenizer, assert, TagImplOptions, TagToken, Context } from '../../types'
+import { Value, Tokenizer, assert, TagImplOptions, TagToken, Context } from '../../types'
 
 export default {
   parse: function (token: TagToken) {
@@ -7,9 +7,9 @@ export default {
     tokenizer.skipBlank()
     assert(tokenizer.peek() === '=', () => `illegal token ${token.getText()}`)
     tokenizer.advance()
-    this.value = tokenizer.remaining()
+    this.value = new Value(tokenizer.remaining(), this.liquid)
   },
   render: function * (ctx: Context): Generator<unknown, void, unknown> {
-    ctx.bottom()[this.key] = yield this.liquid._evalValue(this.value, ctx)
+    ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
   }
 } as TagImplOptions

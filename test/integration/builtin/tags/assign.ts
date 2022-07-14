@@ -1,4 +1,4 @@
-import { Liquid } from '../../../../src/liquid'
+import { ParseError, Liquid } from '../../../../src/liquid'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 
@@ -16,9 +16,10 @@ describe('tags/assign', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('bar')
   })
-  it('should throw when variable value illegal', async function () {
+  it('should throw when variable value illegal', function () {
     const src = '{% assign foo = “bar” %}'
-    return expect(liquid.parseAndRender(src)).to.be.rejectedWith(/unexpected token at "“bar”"/)
+    expect(() => liquid.parse(src)).to.throw(/unexpected token at "“bar”"/)
+    expect(() => liquid.parse(src)).to.throw(ParseError)
   })
   it('should support assign to a number', async function () {
     const src = '{% assign foo=10086 %}{{foo}}'
