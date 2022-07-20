@@ -72,4 +72,16 @@ describe('drop/drop', function () {
     const html = await liquid.parseAndRender(tpl, { drop: new CustomDrop() })
     expect(html).to.equal('foobar: foo;bar;')
   })
+  it('should support valueOf in == expression', async () => {
+    class AddressDrop extends Drop {
+      valueOf () {
+        return 'test'
+      }
+    }
+    const address = new AddressDrop()
+    const customer = { default_address: new AddressDrop() }
+    const tpl = `{% if address == customer.default_address %}{{address}}{% endif %}`
+    const html = await liquid.parseAndRender(tpl, { address, customer })
+    expect(html).to.equal('test')
+  })
 })
