@@ -1,3 +1,10 @@
+## [9.39.2](https://github.com/harttle/liquidjs/compare/v9.39.1...v9.39.2) (2022-07-21)
+
+
+### Bug Fixes
+
+* expression support Drop.valueOf, fixes [#522](https://github.com/harttle/liquidjs/issues/522) ([4ad383d](https://github.com/harttle/liquidjs/commit/4ad383d9beb57f5683805decc1851778db64aea4))
+
 ## [9.39.1](https://github.com/harttle/liquidjs/compare/v9.39.0...v9.39.1) (2022-07-14)
 
 
