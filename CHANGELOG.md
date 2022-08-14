@@ -1,3 +1,15 @@
+# [9.40.0](https://github.com/harttle/liquidjs/compare/v9.39.2...v9.40.0) (2022-08-14)
+
+
+### Bug Fixes
+
+* target ES6 for ESM bundles, fixes [#526](https://github.com/harttle/liquidjs/issues/526) ([905a6dd](https://github.com/harttle/liquidjs/commit/905a6dd1491705c1154b6679a67c1eb1ffe7eef5))
+
+
+### Features
+
+* export toValueSync & defaultOptions to evaluate expression, see [#527](https://github.com/harttle/liquidjs/issues/527) ([e874b40](https://github.com/harttle/liquidjs/commit/e874b4060b46195e05a5cc6690626bdaa532154c))
+
 ## [9.39.2](https://github.com/harttle/liquidjs/compare/v9.39.1...v9.39.2) (2022-07-21)
 
 
