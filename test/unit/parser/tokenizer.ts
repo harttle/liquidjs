@@ -17,7 +17,7 @@ describe('Tokenizer', function () {
   const trie = createTrie(defaultOperators)
 
   it('should read quoted', () => {
-    expect(new Tokenizer('"foo" ff', trie).readQuoted()!.getText()).to.equal('"foo"')
+    expect(new Tokenizer('"foo" ff').readQuoted()!.getText()).to.equal('"foo"')
     expect(new Tokenizer(' "foo"ff', trie).readQuoted()!.getText()).to.equal('"foo"')
   })
   it('should read value', () => {

@@ -20,7 +20,7 @@ export class Expression {
   public constructor (tokens: IterableIterator<Token>) {
     this.postfix = [...toPostfix(tokens)]
   }
-  public * evaluate (ctx: Context, lenient: boolean): Generator<unknown, unknown, unknown> {
+  public * evaluate (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {
     assert(ctx, 'unable to evaluate: context not defined')
     const operands: any[] = []
     for (const token of this.postfix) {

@@ -33,7 +33,7 @@ export class Tokenizer {
 
   constructor (
     public input: string,
-    private trie: Trie,
+    private trie: Trie = defaultOptions.operatorsTrie,
     public file: string = ''
   ) {
     this.N = input.length

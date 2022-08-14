@@ -199,7 +199,7 @@ describe('Liquid', function () {
   describe('#enderToNodeStream', function () {
     const engine = new Liquid()
     it('should render a simple value', async () => {
-      const stream = await engine.renderToNodeStream(engine.parse('{{"foo"}}'))
+      const stream = engine.renderToNodeStream(engine.parse('{{"foo"}}'))
       expect(drainStream(stream)).to.eventually.equal('foo')
     })
   })
