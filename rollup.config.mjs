@@ -1,9 +1,10 @@
 import { uglify } from 'rollup-plugin-uglify'
-import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
 import replace from 'rollup-plugin-replace'
 import versionInjector from 'rollup-plugin-version-injector'
+import { createRequire } from 'module'
 
+const pkg = createRequire(import.meta.url)('./package.json')
 const version = process.env.VERSION || pkg.version
 const sourcemap = true
 const banner = `/*
@@ -14,16 +15,16 @@ const banner = `/*
 const treeshake = {
   propertyReadSideEffects: false
 }
-const tsconfig = {
+const tsconfig = (target) => ({
   tsconfigOverride: {
     include: [ 'src' ],
     exclude: [ 'test', 'benchmark' ],
     compilerOptions: {
-      target: 'es5',
+      target,
       module: 'ES2015'
     }
   }
-}
+})
 const versionInjection = versionInjector({
   injectInComments: false,
   injectInTags: {
@@ -60,7 +61,7 @@ const nodeCjs = {
     banner
   }],
   external: ['path', 'fs'],
-  plugins: [versionInjection, typescript(tsconfig)],
+  plugins: [versionInjection, typescript(tsconfig('es5'))],
   treeshake,
   input
 }
@@ -75,7 +76,7 @@ const nodeEsm = {
   plugins: [
     versionInjection,
     replace(esmRequire),
-    typescript(tsconfig)
+    typescript(tsconfig('es6'))
   ],
   treeshake,
   input
@@ -92,7 +93,7 @@ const browserEsm = {
     versionInjection,
     replace(browserFS),
     replace(browserStream),
-    typescript(tsconfig)
+    typescript(tsconfig('es6'))
   ],
   treeshake,
   input
@@ -110,7 +111,7 @@ const browserUmd = {
     versionInjection,
     replace(browserFS),
     replace(browserStream),
-    typescript(tsconfig)
+    typescript(tsconfig('es5'))
   ],
   treeshake,
   input
@@ -128,7 +129,7 @@ const browserMin = {
     versionInjection,
     replace(browserFS),
     replace(browserStream),
-    typescript(tsconfig),
+    typescript(tsconfig('es5')),
     uglify()
   ],
   treeshake,

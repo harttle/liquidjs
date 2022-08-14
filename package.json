@@ -11,7 +11,7 @@
   },
   "types": "dist/liquid.d.ts",
   "scripts": {
-    "lint": "eslint \"**/*.ts\" .",
+    "lint": "eslint \"**/*.mjs\" \"**/*.ts\" .",
     "check": "npm run build && npm test && npm run lint && npm run perf:diff",
     "test": "nyc mocha \"test/**/*.ts\"",
     "test:e2e": "mocha \"test/e2e/**/*.ts\"",
@@ -20,7 +20,7 @@
     "perf:engines": "cd benchmark && npm run engines",
     "postversion": "npm run build:dist",
     "build": "npm run build:dist && npm run build:docs",
-    "build:dist": "rollup -c rollup.config.ts",
+    "build:dist": "rollup -c rollup.config.mjs",
     "build:docs": "bin/build-docs.sh"
   },
   "bin": {

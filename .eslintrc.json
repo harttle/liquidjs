@@ -32,7 +32,7 @@
     "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }]
   },
   "overrides": [{
-    "files": ["**/*.js", "*.js"],
+    "files": ["**/*.js", "**/*.mjs"],
     "rules": {
       "@typescript-eslint/no-var-requires": "off"
     }
