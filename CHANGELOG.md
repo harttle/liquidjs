@@ -1,3 +1,10 @@
+# [9.41.0](https://github.com/harttle/liquidjs/compare/v9.40.0...v9.41.0) (2022-08-24)
+
+
+### Features
+
+* use evalValue to parse & render expression, [#527](https://github.com/harttle/liquidjs/issues/527) ([071368a](https://github.com/harttle/liquidjs/commit/071368afe1c4fd36ebdb0e1d300c367db1766f7f))
+
 # [9.40.0](https://github.com/harttle/liquidjs/compare/v9.39.2...v9.40.0) (2022-08-14)
 
 
