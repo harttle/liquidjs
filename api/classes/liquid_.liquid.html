@@ -128,7 +128,7 @@
 <hr>
 <h3 id="Readonly-tags" class="article-heading"><a href="#Readonly-tags" class="headerlink" title="Readonly tags"></a><code>Readonly</code> tags<a class="article-anchor" href="#Readonly-tags" aria-hidden="true"></a></h3><p>• <strong>tags</strong>: <em><a href="template_tag_tag_map_.tagmap.html">TagMap</a></em></p>
 <p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L26">src/liquid.ts:26</a></em></p>
-<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="evalValue" class="article-heading"><a href="#evalValue" class="headerlink" title="_evalValue"></a>_evalValue<a class="article-anchor" href="#evalValue" aria-hidden="true"></a></h3><p>▸ <strong>_evalValue</strong>(<code>str</code>: string, <code>ctx</code>: <a href="context_context_.context.html">Context</a>): <em>IterableIterator‹any›</em></p>
+<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="evalValue" class="article-heading"><a href="#evalValue" class="headerlink" title="_evalValue"></a>_evalValue<a class="article-anchor" href="#evalValue" aria-hidden="true"></a></h3><p>▸ <strong>_evalValue</strong>(<code>str</code>: string, <code>scopeOrContext?</code>: object | <a href="context_context_.context.html">Context</a>): <em>IterableIterator‹any›</em></p>
 <p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L93">src/liquid.ts:93</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
@@ -143,8 +143,8 @@
 <td>string</td>
 </tr>
 <tr>
-<td><code>ctx</code></td>
-<td><a href="context_context_.context.html">Context</a></td>
+<td><code>scopeOrContext?</code></td>
+<td>object &#124; <a href="context_context_.context.html">Context</a></td>
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em>IterableIterator‹any›</em></p>
@@ -249,8 +249,8 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>IterableIterator‹any›</em></p>
 <hr>
-<h3 id="evalValue-1" class="article-heading"><a href="#evalValue-1" class="headerlink" title="evalValue"></a>evalValue<a class="article-anchor" href="#evalValue-1" aria-hidden="true"></a></h3><p>▸ <strong>evalValue</strong>(<code>str</code>: string, <code>ctx</code>: <a href="context_context_.context.html">Context</a>): <em>Promise‹any›</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L97">src/liquid.ts:97</a></em></p>
+<h3 id="evalValue-1" class="article-heading"><a href="#evalValue-1" class="headerlink" title="evalValue"></a>evalValue<a class="article-anchor" href="#evalValue-1" aria-hidden="true"></a></h3><p>▸ <strong>evalValue</strong>(<code>str</code>: string, <code>scopeOrContext?</code>: object | <a href="context_context_.context.html">Context</a>): <em>Promise‹any›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L98">src/liquid.ts:98</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -264,14 +264,14 @@
 <td>string</td>
 </tr>
 <tr>
-<td><code>ctx</code></td>
-<td><a href="context_context_.context.html">Context</a></td>
+<td><code>scopeOrContext?</code></td>
+<td>object &#124; <a href="context_context_.context.html">Context</a></td>
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em>Promise‹any›</em></p>
 <hr>
-<h3 id="evalValueSync" class="article-heading"><a href="#evalValueSync" class="headerlink" title="evalValueSync"></a>evalValueSync<a class="article-anchor" href="#evalValueSync" aria-hidden="true"></a></h3><p>▸ <strong>evalValueSync</strong>(<code>str</code>: string, <code>ctx</code>: <a href="context_context_.context.html">Context</a>): <em>any</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L100">src/liquid.ts:100</a></em></p>
+<h3 id="evalValueSync" class="article-heading"><a href="#evalValueSync" class="headerlink" title="evalValueSync"></a>evalValueSync<a class="article-anchor" href="#evalValueSync" aria-hidden="true"></a></h3><p>▸ <strong>evalValueSync</strong>(<code>str</code>: string, <code>scopeOrContext?</code>: object | <a href="context_context_.context.html">Context</a>): <em>any</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L101">src/liquid.ts:101</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -285,14 +285,14 @@
 <td>string</td>
 </tr>
 <tr>
-<td><code>ctx</code></td>
-<td><a href="context_context_.context.html">Context</a></td>
+<td><code>scopeOrContext?</code></td>
+<td>object &#124; <a href="context_context_.context.html">Context</a></td>
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em>any</em></p>
 <hr>
 <h3 id="express" class="article-heading"><a href="#express" class="headerlink" title="express"></a>express<a class="article-anchor" href="#express" aria-hidden="true"></a></h3><p>▸ <strong>express</strong>(): <em>(Anonymous function)</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L113">src/liquid.ts:113</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L114">src/liquid.ts:114</a></em></p>
 <p><strong>Returns:</strong> <em>(Anonymous function)</em></p>
 <hr>
 <h3 id="parse" class="article-heading"><a href="#parse" class="headerlink" title="parse"></a>parse<a class="article-anchor" href="#parse" aria-hidden="true"></a></h3><p>▸ <strong>parse</strong>(<code>html</code>: string, <code>filepath?</code>: undefined | string): <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
@@ -401,7 +401,7 @@
 <p><strong>Returns:</strong> <em><a href="../interfaces/template_template_.template.html">Template</a>[]</em></p>
 <hr>
 <h3 id="plugin" class="article-heading"><a href="#plugin" class="headerlink" title="plugin"></a>plugin<a class="article-anchor" href="#plugin" aria-hidden="true"></a></h3><p>▸ <strong>plugin</strong>(<code>plugin</code>: function): <em>void</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L110">src/liquid.ts:110</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L111">src/liquid.ts:111</a></em></p>
 <p><strong>Parameters:</strong></p>
 <p>▪ <strong>plugin</strong>: <em>function</em></p>
 <p>▸ (<code>this</code>: <a href="liquid_.liquid.html">Liquid</a>, <code>L</code>: typeof Liquid): <em>void</em></p>
@@ -425,7 +425,7 @@
 <p><strong>Returns:</strong> <em>void</em></p>
 <hr>
 <h3 id="registerFilter" class="article-heading"><a href="#registerFilter" class="headerlink" title="registerFilter"></a>registerFilter<a class="article-anchor" href="#registerFilter" aria-hidden="true"></a></h3><p>▸ <strong>registerFilter</strong>(<code>name</code>: string, <code>filter</code>: <a href="../interfaces/template_filter_filter_impl_options_.filterimploptions.html">FilterImplOptions</a>): <em>void</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L104">src/liquid.ts:104</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L105">src/liquid.ts:105</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -446,7 +446,7 @@
 <p><strong>Returns:</strong> <em>void</em></p>
 <hr>
 <h3 id="registerTag" class="article-heading"><a href="#registerTag" class="headerlink" title="registerTag"></a>registerTag<a class="article-anchor" href="#registerTag" aria-hidden="true"></a></h3><p>▸ <strong>registerTag</strong>(<code>name</code>: string, <code>tag</code>: <a href="../interfaces/template_tag_tag_impl_options_.tagimploptions.html">TagImplOptions</a>): <em>void</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L107">src/liquid.ts:107</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid.ts#L108">src/liquid.ts:108</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -622,7 +622,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-08-20T15:59:09.023Z" itemprop="dateModified">Last updated: 2022-08-20</time>
+                <time class="article-footer-updated" datetime="2022-08-24T12:56:43.300Z" itemprop="dateModified">Last updated: 2022-08-24</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
