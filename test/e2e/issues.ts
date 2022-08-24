@@ -266,4 +266,14 @@ describe('Issues', function () {
     const result = toValueSync(expression.evaluate(new Context({ a: 1, b: 2 })))
     expect(result).to.equal(false)
   })
+  it('#527 export Liquid Expression (evalValue)', async () => {
+    const liquid = new Liquid()
+    const result = await liquid.evalValue('a > b', { a: 1, b: 2 })
+    expect(result).to.equal(false)
+  })
+  it('#527 export Liquid Expression (evalValueSync)', async () => {
+    const liquid = new Liquid()
+    const result = liquid.evalValueSync('a > b', { a: 1, b: 2 })
+    expect(result).to.equal(false)
+  })
 })
