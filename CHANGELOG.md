@@ -1,3 +1,10 @@
+# [9.42.0](https://github.com/harttle/liquidjs/compare/v9.41.0...v9.42.0) (2022-08-27)
+
+
+### Features
+
+* promise in expression & nested property, [#533](https://github.com/harttle/liquidjs/issues/533) [#276](https://github.com/harttle/liquidjs/issues/276) ([bbf00f3](https://github.com/harttle/liquidjs/commit/bbf00f37bf6080d38ebc258d1921d3ff0d504186))
+
 # [9.41.0](https://github.com/harttle/liquidjs/compare/v9.40.0...v9.41.0) (2022-08-24)
 
 
