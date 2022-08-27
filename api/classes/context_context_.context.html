@@ -97,7 +97,7 @@
 <li><strong>Context</strong></li>
 </ul>
 <h2 id="Constructors" class="article-heading"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors<a class="article-anchor" href="#Constructors" aria-hidden="true"></a></h2><h3 id="constructor-NaN" class="article-heading"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor<a class="article-anchor" href="#constructor-NaN" aria-hidden="true"></a></h3><p>+ <strong>new Context</strong>(<code>env</code>: object, <code>opts</code>: <a href="../interfaces/liquid_options_.normalizedfulloptions.html">NormalizedFullOptions</a>, <code>renderOptions</code>: <a href="../interfaces/liquid_options_.renderoptions.html">RenderOptions</a>): <em><a href="context_context_.context.html">Context</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L35">src/context/context.ts:35</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L36">src/context/context.ts:36</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -125,36 +125,74 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="context_context_.context.html">Context</a></em></p>
 <h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="environments" class="article-heading"><a href="#environments" class="headerlink" title="environments"></a>environments<a class="article-anchor" href="#environments" aria-hidden="true"></a></h3><p>• <strong>environments</strong>: <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L22">src/context/context.ts:22</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L23">src/context/context.ts:23</a></em></p>
 <p>user passed in scope<br><code>&#123;% increment %&#125;</code>, <code>&#123;% decrement %&#125;</code> changes this scope,<br>whereas <code>&#123;% capture %&#125;</code>, <code>&#123;% assign %&#125;</code> only hide this scope</p>
 <hr>
 <h3 id="globals" class="article-heading"><a href="#globals" class="headerlink" title="globals"></a>globals<a class="article-anchor" href="#globals" aria-hidden="true"></a></h3><p>• <strong>globals</strong>: <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L26">src/context/context.ts:26</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L27">src/context/context.ts:27</a></em></p>
 <p>global scope used as fallback for missing variables</p>
 <hr>
 <h3 id="opts" class="article-heading"><a href="#opts" class="headerlink" title="opts"></a>opts<a class="article-anchor" href="#opts" aria-hidden="true"></a></h3><p>• <strong>opts</strong>: <em><a href="../interfaces/liquid_options_.normalizedfulloptions.html">NormalizedFullOptions</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L31">src/context/context.ts:31</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L32">src/context/context.ts:32</a></em></p>
 <p>The normalized liquid options object</p>
 <hr>
 <h3 id="Private-registers" class="article-heading"><a href="#Private-registers" class="headerlink" title="Private registers"></a><code>Private</code> registers<a class="article-anchor" href="#Private-registers" aria-hidden="true"></a></h3><p>• <strong>registers</strong>: <em>object</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L16">src/context/context.ts:16</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L17">src/context/context.ts:17</a></em></p>
 <h4 id="Type-declaration" class="article-heading"><a href="#Type-declaration" class="headerlink" title="Type declaration:"></a>Type declaration:<a class="article-anchor" href="#Type-declaration" aria-hidden="true"></a></h4><hr>
 <h3 id="Private-scopes" class="article-heading"><a href="#Private-scopes" class="headerlink" title="Private scopes"></a><code>Private</code> scopes<a class="article-anchor" href="#Private-scopes" aria-hidden="true"></a></h3><p>• <strong>scopes</strong>: <em><a href="../modules/context_scope_.html#scope">Scope</a>[]</em> = [&#x7b;&#x7d;]</p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L15">src/context/context.ts:15</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L16">src/context/context.ts:16</a></em></p>
 <p>insert a Context-level empty scope,<br>for tags like <code>&#123;% capture %&#125;</code> <code>&#123;% assign %&#125;</code> to operate</p>
 <hr>
 <h3 id="strictVariables" class="article-heading"><a href="#strictVariables" class="headerlink" title="strictVariables"></a>strictVariables<a class="article-anchor" href="#strictVariables" aria-hidden="true"></a></h3><p>• <strong>strictVariables</strong>: <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L35">src/context/context.ts:35</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L36">src/context/context.ts:36</a></em></p>
 <p>Throw when accessing undefined variable?</p>
 <hr>
 <h3 id="sync" class="article-heading"><a href="#sync" class="headerlink" title="sync"></a>sync<a class="article-anchor" href="#sync" aria-hidden="true"></a></h3><p>• <strong>sync</strong>: <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L27">src/context/context.ts:27</a></em></p>
-<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="bottom" class="article-heading"><a href="#bottom" class="headerlink" title="bottom"></a>bottom<a class="article-anchor" href="#bottom" aria-hidden="true"></a></h3><p>▸ <strong>bottom</strong>(): <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L79">src/context/context.ts:79</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L28">src/context/context.ts:28</a></em></p>
+<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="get" class="article-heading"><a href="#get" class="headerlink" title="_get"></a>_get<a class="article-anchor" href="#get" aria-hidden="true"></a></h3><p>▸ <strong>_get</strong>(<code>paths</code>: <a href="../modules/context_context_.html#propertykey">PropertyKey</a>[]): <em>IterableIterator‹unknown›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L66">src/context/context.ts:66</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>paths</code></td>
+<td><a href="../modules/context_context_.html#propertykey">PropertyKey</a>[]</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>IterableIterator‹unknown›</em></p>
+<hr>
+<h3 id="getFromScope" class="article-heading"><a href="#getFromScope" class="headerlink" title="_getFromScope"></a>_getFromScope<a class="article-anchor" href="#getFromScope" aria-hidden="true"></a></h3><p>▸ <strong>_getFromScope</strong>(<code>scope</code>: unknown, <code>paths</code>: <a href="../modules/context_context_.html#propertykey">PropertyKey</a>[] | string): <em>IterableIterator‹unknown›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L76">src/context/context.ts:76</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>scope</code></td>
+<td>unknown</td>
+</tr>
+<tr>
+<td><code>paths</code></td>
+<td><a href="../modules/context_context_.html#propertykey">PropertyKey</a>[] &#124; string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>IterableIterator‹unknown›</em></p>
+<hr>
+<h3 id="bottom" class="article-heading"><a href="#bottom" class="headerlink" title="bottom"></a>bottom<a class="article-anchor" href="#bottom" aria-hidden="true"></a></h3><p>▸ <strong>bottom</strong>(): <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L92">src/context/context.ts:92</a></em></p>
 <p><strong>Returns:</strong> <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
 <hr>
 <h3 id="Private-findScope" class="article-heading"><a href="#Private-findScope" class="headerlink" title="Private findScope"></a><code>Private</code> findScope<a class="article-anchor" href="#Private-findScope" aria-hidden="true"></a></h3><p>▸ <strong>findScope</strong>(<code>key</code>: string | number): <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L82">src/context/context.ts:82</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L95">src/context/context.ts:95</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -170,8 +208,9 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
 <hr>
-<h3 id="get" class="article-heading"><a href="#get" class="headerlink" title="get"></a>get<a class="article-anchor" href="#get" aria-hidden="true"></a></h3><p>▸ <strong>get</strong>(<code>paths</code>: <a href="../modules/context_context_.html#propertykey">PropertyKey</a>[]): <em>object</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L59">src/context/context.ts:59</a></em></p>
+<h3 id="get-1" class="article-heading"><a href="#get-1" class="headerlink" title="get"></a>get<a class="article-anchor" href="#get-1" aria-hidden="true"></a></h3><p>▸ <strong>get</strong>(<code>paths</code>: <a href="../modules/context_context_.html#propertykey">PropertyKey</a>[]): <em>unknown</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L63">src/context/context.ts:63</a></em></p>
+<p><strong><code>deprecated</code></strong> use <code>_get()</code> instead</p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -185,14 +224,15 @@
 <td><a href="../modules/context_context_.html#propertykey">PropertyKey</a>[]</td>
 </tr>
 </tbody></table>
-<p><strong>Returns:</strong> <em>object</em></p>
+<p><strong>Returns:</strong> <em>unknown</em></p>
 <hr>
 <h3 id="getAll" class="article-heading"><a href="#getAll" class="headerlink" title="getAll"></a>getAll<a class="article-anchor" href="#getAll" aria-hidden="true"></a></h3><p>▸ <strong>getAll</strong>(): <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L55">src/context/context.ts:55</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L56">src/context/context.ts:56</a></em></p>
 <p><strong>Returns:</strong> <em><a href="../modules/context_scope_.html#scope">Scope</a></em></p>
 <hr>
-<h3 id="getFromScope" class="article-heading"><a href="#getFromScope" class="headerlink" title="getFromScope"></a>getFromScope<a class="article-anchor" href="#getFromScope" aria-hidden="true"></a></h3><p>▸ <strong>getFromScope</strong>(<code>scope</code>: object, <code>paths</code>: <a href="../modules/context_context_.html#propertykey">PropertyKey</a>[] | string): <em>object</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L63">src/context/context.ts:63</a></em></p>
+<h3 id="getFromScope-1" class="article-heading"><a href="#getFromScope-1" class="headerlink" title="getFromScope"></a>getFromScope<a class="article-anchor" href="#getFromScope-1" aria-hidden="true"></a></h3><p>▸ <strong>getFromScope</strong>(<code>scope</code>: unknown, <code>paths</code>: <a href="../modules/context_context_.html#propertykey">PropertyKey</a>[] | string): <em>IterableIterator‹unknown›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L73">src/context/context.ts:73</a></em></p>
+<p><strong><code>deprecated</code></strong> use <code>_get()</code> instead</p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -203,17 +243,17 @@
 </thead>
 <tbody><tr>
 <td><code>scope</code></td>
-<td>object</td>
+<td>unknown</td>
 </tr>
 <tr>
 <td><code>paths</code></td>
 <td><a href="../modules/context_context_.html#propertykey">PropertyKey</a>[] &#124; string</td>
 </tr>
 </tbody></table>
-<p><strong>Returns:</strong> <em>object</em></p>
+<p><strong>Returns:</strong> <em>IterableIterator‹unknown›</em></p>
 <hr>
 <h3 id="getRegister" class="article-heading"><a href="#getRegister" class="headerlink" title="getRegister"></a>getRegister<a class="article-anchor" href="#getRegister" aria-hidden="true"></a></h3><p>▸ <strong>getRegister</strong>(<code>key</code>: string): <em>any</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L43">src/context/context.ts:43</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L44">src/context/context.ts:44</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -230,11 +270,11 @@
 <p><strong>Returns:</strong> <em>any</em></p>
 <hr>
 <h3 id="pop" class="article-heading"><a href="#pop" class="headerlink" title="pop"></a>pop<a class="article-anchor" href="#pop" aria-hidden="true"></a></h3><p>▸ <strong>pop</strong>(): <em>undefined | <a href="drop_drop_.drop.html">Drop</a>‹› | <a href="../interfaces/context_scope_.plainobject.html">PlainObject</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L76">src/context/context.ts:76</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L89">src/context/context.ts:89</a></em></p>
 <p><strong>Returns:</strong> <em>undefined | <a href="drop_drop_.drop.html">Drop</a>‹› | <a href="../interfaces/context_scope_.plainobject.html">PlainObject</a></em></p>
 <hr>
 <h3 id="push" class="article-heading"><a href="#push" class="headerlink" title="push"></a>push<a class="article-anchor" href="#push" aria-hidden="true"></a></h3><p>▸ <strong>push</strong>(<code>ctx</code>: object): <em>number</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L73">src/context/context.ts:73</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L86">src/context/context.ts:86</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -251,7 +291,7 @@
 <p><strong>Returns:</strong> <em>number</em></p>
 <hr>
 <h3 id="restoreRegister" class="article-heading"><a href="#restoreRegister" class="headerlink" title="restoreRegister"></a>restoreRegister<a class="article-anchor" href="#restoreRegister" aria-hidden="true"></a></h3><p>▸ <strong>restoreRegister</strong>(<code>keyValues</code>: [string, any][]): <em>void</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L52">src/context/context.ts:52</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L53">src/context/context.ts:53</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -268,7 +308,7 @@
 <p><strong>Returns:</strong> <em>void</em></p>
 <hr>
 <h3 id="saveRegister" class="article-heading"><a href="#saveRegister" class="headerlink" title="saveRegister"></a>saveRegister<a class="article-anchor" href="#saveRegister" aria-hidden="true"></a></h3><p>▸ <strong>saveRegister</strong>(…<code>keys</code>: string[]): <em>[string, any][]</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L49">src/context/context.ts:49</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L50">src/context/context.ts:50</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -285,7 +325,7 @@
 <p><strong>Returns:</strong> <em>[string, any][]</em></p>
 <hr>
 <h3 id="setRegister" class="article-heading"><a href="#setRegister" class="headerlink" title="setRegister"></a>setRegister<a class="article-anchor" href="#setRegister" aria-hidden="true"></a></h3><p>▸ <strong>setRegister</strong>(<code>key</code>: string, <code>value</code>: any): <em>any</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L46">src/context/context.ts:46</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/context/context.ts#L47">src/context/context.ts:47</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -307,7 +347,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-08-24T12:56:43.384Z" itemprop="dateModified">Last updated: 2022-08-24</time>
+                <time class="article-footer-updated" datetime="2022-08-27T15:20:33.839Z" itemprop="dateModified">Last updated: 2022-08-27</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -316,7 +356,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#environments"><span class="toc-text">environments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#globals"><span class="toc-text">globals</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opts"><span class="toc-text">opts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-registers"><span class="toc-text">Private registers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration"><span class="toc-text">Type declaration:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-scopes"><span class="toc-text">Private scopes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strictVariables"><span class="toc-text">strictVariables</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sync"><span class="toc-text">sync</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#bottom"><span class="toc-text">bottom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-findScope"><span class="toc-text">Private findScope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get"><span class="toc-text">get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getAll"><span class="toc-text">getAll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getFromScope"><span class="toc-text">getFromScope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getRegister"><span class="toc-text">getRegister</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pop"><span class="toc-text">pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#push"><span class="toc-text">push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#restoreRegister"><span class="toc-text">restoreRegister</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#saveRegister"><span class="toc-text">saveRegister</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setRegister"><span class="toc-text">setRegister</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#environments"><span class="toc-text">environments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#globals"><span class="toc-text">globals</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opts"><span class="toc-text">opts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-registers"><span class="toc-text">Private registers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration"><span class="toc-text">Type declaration:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-scopes"><span class="toc-text">Private scopes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strictVariables"><span class="toc-text">strictVariables</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sync"><span class="toc-text">sync</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#get"><span class="toc-text">_get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getFromScope"><span class="toc-text">_getFromScope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bottom"><span class="toc-text">bottom</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-findScope"><span class="toc-text">Private findScope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#get-1"><span class="toc-text">get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getAll"><span class="toc-text">getAll</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getFromScope-1"><span class="toc-text">getFromScope</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getRegister"><span class="toc-text">getRegister</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pop"><span class="toc-text">pop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#push"><span class="toc-text">push</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#restoreRegister"><span class="toc-text">restoreRegister</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#saveRegister"><span class="toc-text">saveRegister</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setRegister"><span class="toc-text">setRegister</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
