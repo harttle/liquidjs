@@ -109,7 +109,7 @@ const formatCodes = {
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
-    const str = String(d.getMilliseconds()).substr(0, width)
+    const str = String(d.getMilliseconds()).slice(0, width)
     return padEnd(str, width, '0')
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
@@ -123,7 +123,7 @@ const formatCodes = {
   W: (d: LiquidDate) => getWeekOfYear(d, 1),
   x: (d: LiquidDate) => d.toLocaleDateString(),
   X: (d: LiquidDate) => d.toLocaleTimeString(),
-  y: (d: LiquidDate) => d.getFullYear().toString().substring(2, 4),
+  y: (d: LiquidDate) => d.getFullYear().toString().slice(2, 4),
   Y: (d: LiquidDate) => d.getFullYear(),
   z: (d: LiquidDate, opts: FormatOptions) => {
     const nOffset = Math.abs(d.getTimezoneOffset())

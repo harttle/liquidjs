@@ -1,4 +1,4 @@
-import { evalToken } from '../../render/expression'
+import { _evalToken } from '../../render/expression'
 import { Context } from '../../context/context'
 import { identify } from '../../util/underscore'
 import { FilterImplOptions } from './filter-impl-options'
@@ -17,11 +17,11 @@ export class Filter {
     this.args = args
     this.liquid = liquid
   }
-  public render (value: any, context: Context) {
+  public * render (value: any, context: Context): IterableIterator<unknown> {
     const argv: any[] = []
     for (const arg of this.args as FilterArg[]) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], evalToken(arg[1], context)])
-      else argv.push(evalToken(arg, context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], yield _evalToken(arg[1], context)])
+      else argv.push(yield _evalToken(arg, context))
     }
     return this.impl.apply({ context, liquid: this.liquid }, [value, ...argv])
   }

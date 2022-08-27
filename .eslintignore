@@ -3,3 +3,4 @@ dist
 demo
 coverage
 docs
+private.*

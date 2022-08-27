@@ -1,4 +1,4 @@
-import { toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { toValue, _evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { Tokenizer } from '../../parser/tokenizer'
 
 export default {
@@ -37,7 +37,7 @@ export default {
     const r = this.liquid.renderer
     const cond = toValue(yield this.cond.value(ctx, ctx.opts.lenientIf))
     for (const branch of this.cases) {
-      const val = evalToken(branch.val, ctx, ctx.opts.lenientIf)
+      const val = yield _evalToken(branch.val, ctx, ctx.opts.lenientIf)
       if (val === cond) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return

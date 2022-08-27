@@ -7,13 +7,18 @@
     "node": true
   },
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "tsconfig.json"
+  },
   "plugins": [
+    "deprecation",
     "mocha",
     "standard",
     "@typescript-eslint",
     "promise"
   ],
   "rules": {
+    "deprecation/deprecation": "error",
     "no-var": 2,
     "prefer-const": 2,
     "no-unused-vars": "off",
@@ -35,6 +40,11 @@
     "files": ["**/*.js", "**/*.mjs"],
     "rules": {
       "@typescript-eslint/no-var-requires": "off"
+    }
+  }, {
+    "files": ["test/**/*.ts"],
+    "rules": {
+      "deprecation/deprecation": "off"
     }
   }]
 }

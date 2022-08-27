@@ -3,7 +3,7 @@ import { assert } from '../../util/assert'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { toEnumerable } from '../../util/collection'
 import { Liquid } from '../../liquid'
-import { Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
+import { Token, Template, evalQuotedToken, TypeGuards, Tokenizer, _evalToken, Hash, Emitter, TagToken, Context, TagImplOptions } from '../../types'
 
 export default {
   parseFilePath,
@@ -56,12 +56,12 @@ export default {
     __assign(scope, yield hash.render(ctx))
     if (this['with']) {
       const { value, alias } = this['with']
-      scope[alias || filepath] = evalToken(value, ctx)
+      scope[alias || filepath] = yield _evalToken(value, ctx)
     }
 
     if (this['for']) {
       const { value, alias } = this['for']
-      let collection = evalToken(value, ctx)
+      let collection = yield _evalToken(value, ctx)
       collection = toEnumerable(collection)
       scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias)
       for (const item of collection) {
@@ -108,8 +108,8 @@ function optimize (templates: Template[]): string | Template[] {
   return templates
 }
 
-export function renderFilePath (file: ParsedFileName, ctx: Context, liquid: Liquid) {
+export function * renderFilePath (file: ParsedFileName, ctx: Context, liquid: Liquid): IterableIterator<unknown> {
   if (typeof file === 'string') return file
   if (Array.isArray(file)) return liquid.renderer.renderTemplates(file, ctx)
-  return evalToken(file, ctx)
+  return yield _evalToken(file, ctx)
 }

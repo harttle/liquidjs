@@ -150,7 +150,7 @@ export function changeCase (str: string): string {
 }
 
 export function ellipsis (str: string, N: number): string {
-  return str.length > N ? str.substr(0, N - 3) + '...' : str
+  return str.length > N ? str.slice(0, N - 3) + '...' : str
 }
 
 // compare string in case-insensitive way, undefined values to the tail

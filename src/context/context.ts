@@ -4,6 +4,7 @@ import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-
 import { Scope } from './scope'
 import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
 import { InternalUndefinedVariableError } from '../util/error'
+import { toValueSync } from '../util/async'
 
 type PropertyKey = string | number;
 
@@ -56,19 +57,31 @@ export class Context {
     return [this.globals, this.environments, ...this.scopes]
       .reduce((ctx, val) => __assign(ctx, val), {})
   }
-  public get (paths: PropertyKey[]) {
-    const scope = this.findScope(paths[0])
-    return this.getFromScope(scope, paths)
+  /**
+   * @deprecated use `_get()` instead
+   */
+  public get (paths: PropertyKey[]): unknown {
+    return toValueSync(this._get(paths))
   }
-  public getFromScope (scope: object, paths: PropertyKey[] | string) {
+  public * _get (paths: PropertyKey[]): IterableIterator<unknown> {
+    const scope = this.findScope(paths[0])
+    return yield this._getFromScope(scope, paths)
+  }
+  /**
+   * @deprecated use `_get()` instead
+   */
+  public getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
+    return toValueSync(this._getFromScope(scope, paths))
+  }
+  public * _getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
     if (isString(paths)) paths = paths.split('.')
-    return paths.reduce((scope, path, i) => {
-      scope = readProperty(scope, path, this.opts.ownPropertyOnly)
+    for (let i = 0; i < paths.length; i++) {
+      scope = yield readProperty(scope as object, paths[i], this.opts.ownPropertyOnly)
       if (isNil(scope) && this.strictVariables) {
         throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
       }
-      return scope
-    }, scope)
+    }
+    return scope
   }
   public push (ctx: object) {
     return this.scopes.push(ctx)

@@ -276,4 +276,57 @@ describe('Issues', function () {
     const result = liquid.evalValueSync('a > b', { a: 1, b: 2 })
     expect(result).to.equal(false)
   })
+  it('#276 Promise support in expressions', async () => {
+    const liquid = new Liquid()
+    const tpl = '{%if name == "alice" %}true{%endif%}'
+    const ctx = { name: Promise.resolve('alice') }
+    const html = await liquid.parseAndRender(tpl, ctx)
+    expect(html).to.equal('true')
+  })
+  it('#533 Nested Promise support for scope object', async () => {
+    const liquid = new Liquid()
+    const context = {
+      a: 1,
+      b: Promise.resolve(1),
+      async c () { return 1 },
+      d: { d: 1 },
+      e: { e: Promise.resolve(1) },
+      f: {
+        async f () { return 1 }
+      },
+      g: Promise.resolve({ g: 1 }),
+      async h () {
+        return { h: 1 }
+      },
+      i: Promise.resolve({
+        i: Promise.resolve(1)
+      }),
+      j: Promise.resolve({
+        async j () {
+          return 1
+        }
+      })
+    }
+
+    expect(await liquid.evalValue('a == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('b == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('c == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('d.d == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('e.e == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('f.f == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('g.g == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('h.h == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('i.i == 1', context)).to.equal(true)
+    expect(await liquid.evalValue('j.j == 1', context)).to.equal(true)
+    expect(await liquid.parseAndRender('{{a}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{b}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{c}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{d.d}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{e.e}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{f.f}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{g.g}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{h.h}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{i.i}}', context)).to.equal('1')
+    expect(await liquid.parseAndRender('{{j.j}}', context)).to.equal('1')
+  })
 })

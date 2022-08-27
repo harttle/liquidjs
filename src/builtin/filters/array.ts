@@ -10,14 +10,19 @@ export const last = argumentsToValue((v: any) => isArray(v) ? arrayLast(v) : '')
 export const first = argumentsToValue((v: any) => isArray(v) ? v[0] : '')
 export const reverse = argumentsToValue((v: any[]) => [...toArray(v)].reverse())
 
-export function sort<T> (this: FilterImpl, arr: T[], property?: string) {
-  arr = toValue(arr)
-  const getValue = (obj: Scope) => property ? this.context.getFromScope(obj, stringify(property).split('.')) : obj
-  return [...toArray(arr)].sort((lhs, rhs) => {
-    lhs = getValue(lhs)
-    rhs = getValue(rhs)
-    return lhs < rhs ? -1 : (lhs > rhs ? 1 : 0)
-  })
+export function * sort<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
+  const values: [T, string | number][] = []
+  for (const item of toArray(toValue(arr))) {
+    values.push([
+      item,
+      property ? yield this.context._getFromScope(item, stringify(property).split('.')) : item
+    ])
+  }
+  return values.sort((lhs, rhs) => {
+    const lvalue = lhs[1]
+    const rvalue = rhs[1]
+    return lvalue < rvalue ? -1 : (lvalue > rvalue ? 1 : 0)
+  }).map(tuple => tuple[0])
 }
 
 export function sortNatural<T> (input: T[], property?: string) {
@@ -31,9 +36,12 @@ export function sortNatural<T> (input: T[], property?: string) {
 
 export const size = (v: string | any[]) => (v && v.length) || 0
 
-export function map (this: FilterImpl, arr: Scope[], property: string) {
-  arr = toValue(arr)
-  return toArray(arr).map(obj => this.context.getFromScope(obj, stringify(property).split('.')))
+export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
+  const results = []
+  for (const item of toArray(toValue(arr))) {
+    results.push(yield this.context._getFromScope(item, stringify(property).split('.')))
+  }
+  return results
 }
 
 export function compact<T> (this: FilterImpl, arr: T[]) {
@@ -55,13 +63,16 @@ export function slice<T> (v: T[] | string, begin: number, length = 1): T[] | str
   return v.slice(begin, begin + length)
 }
 
-export function where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): T[] {
-  arr = toValue(arr)
-  return toArray(arr).filter(obj => {
-    const value = this.context.getFromScope(obj, stringify(property).split('.'))
-    if (expected === undefined) return isTruthy(value, this.context)
-    if (isComparable(expected)) return expected.equals(value)
-    return value === expected
+export function * where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
+  const values: unknown[] = []
+  arr = toArray(toValue(arr))
+  for (const item of arr) {
+    values.push(yield this.context._getFromScope(item, stringify(property).split('.')))
+  }
+  return arr.filter((_, i) => {
+    if (expected === undefined) return isTruthy(values[i], this.context)
+    if (isComparable(expected)) return expected.equals(values[i])
+    return values[i] === expected
   })
 }
 

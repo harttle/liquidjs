@@ -1,4 +1,4 @@
-import { assert, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
+import { assert, Tokenizer, _evalToken, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../../types'
 import { toEnumerable } from '../../util/collection'
 import { ForloopDrop } from '../../drop/forloop-drop'
 import { Hash, HashValue } from '../../template/tag/hash'
@@ -40,7 +40,7 @@ export default {
   },
   render: function * (ctx: Context, emitter: Emitter): Generator<unknown, void | string, HashValue | Template[]> {
     const r = this.liquid.renderer
-    let collection = toEnumerable(yield evalToken(this.collection, ctx))
+    let collection = toEnumerable(yield _evalToken(this.collection, ctx))
 
     if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)

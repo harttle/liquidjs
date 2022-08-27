@@ -13,6 +13,7 @@ import { Context } from '../context/context'
 import { range } from '../util/underscore'
 import { Operators } from '../render/operator'
 import { UndefinedVariableError } from '../util/error'
+import { toValueSync } from '../util/async'
 
 export class Expression {
   private postfix: Token[]
@@ -30,26 +31,36 @@ export class Expression {
         const result = yield evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
         operands.push(result)
       } else {
-        operands.push(yield evalToken(token, ctx, lenient && this.postfix.length === 1))
+        operands.push(yield _evalToken(token, ctx, lenient && this.postfix.length === 1))
       }
     }
     return operands[0]
   }
 }
 
-export function evalToken (token: Token | undefined, ctx: Context, lenient = false): any {
-  if (TypeGuards.isPropertyAccessToken(token)) return evalPropertyAccessToken(token, ctx, lenient)
-  if (TypeGuards.isRangeToken(token)) return evalRangeToken(token, ctx)
+/**
+ * @deprecated use `_evalToken` instead
+ */
+export function * evalToken (token: Token | undefined, ctx: Context, lenient = false) {
+  return toValueSync(_evalToken(token, ctx, lenient))
+}
+
+export function * _evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
+  if (TypeGuards.isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
+  if (TypeGuards.isRangeToken(token)) return yield evalRangeToken(token, ctx)
   if (TypeGuards.isLiteralToken(token)) return evalLiteralToken(token)
   if (TypeGuards.isNumberToken(token)) return evalNumberToken(token)
   if (TypeGuards.isWordToken(token)) return token.getText()
   if (TypeGuards.isQuotedToken(token)) return evalQuotedToken(token)
 }
 
-function evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean) {
-  const props: string[] = token.props.map(prop => evalToken(prop, ctx, false))
+function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
+  const props: string[] = []
+  for (const prop of token.props) {
+    props.push((yield _evalToken(prop, ctx, false)) as unknown as string)
+  }
   try {
-    return ctx.get([token.propertyName, ...props])
+    return yield ctx._get([token.propertyName, ...props])
   } catch (e) {
     if (lenient && (e as Error).name === 'InternalUndefinedVariableError') return null
     throw (new UndefinedVariableError(e as Error, token))
@@ -74,9 +85,9 @@ function evalLiteralToken (token: LiteralToken) {
   return literalValues[token.literal]
 }
 
-function evalRangeToken (token: RangeToken, ctx: Context) {
-  const low: number = evalToken(token.lhs, ctx)
-  const high: number = evalToken(token.rhs, ctx)
+function * evalRangeToken (token: RangeToken, ctx: Context) {
+  const low: number = yield _evalToken(token.lhs, ctx)
+  const high: number = yield _evalToken(token.rhs, ctx)
   return range(+low, +high + 1)
 }
 
