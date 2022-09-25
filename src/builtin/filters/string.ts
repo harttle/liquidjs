@@ -89,9 +89,10 @@ export function truncate (v: string, l = 50, o = '...') {
   return v.substring(0, l - o.length) + o
 }
 
-export function truncatewords (v: string, l = 15, o = '...') {
+export function truncatewords (v: string, words = 15, o = '...') {
   const arr = stringify(v).split(/\s+/)
-  let ret = arr.slice(0, l).join(' ')
-  if (arr.length >= l) ret += o
+  if (words <= 0) words = 1
+  let ret = arr.slice(0, words).join(' ')
+  if (arr.length >= words) ret += o
   return ret
 }

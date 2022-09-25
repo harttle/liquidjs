@@ -172,6 +172,10 @@ describe('filters/string', function () {
     })
   })
   describe('truncatewords', function () {
+    it('should truncate to 1 words if less than 1', function () {
+      return test('{{ "Ground control to Major Tom." | truncatewords: 0 }}',
+        'Ground...')
+    })
     it('should truncate when too many words', function () {
       return test('{{ "Ground control to Major Tom." | truncatewords: 3 }}',
         'Ground control to...')
