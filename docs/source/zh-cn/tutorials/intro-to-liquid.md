@@ -16,7 +16,7 @@ LiquidJS 语法相对简单。LiquidJS 中有两种标记：
 
 ## 输出
 
-**输出** 用于转换和输出变量到 HTMl。下面的模板将会把 `username` 的值插入到 input 的 `value`：
+**输出** 用于转换和输出变量到 HTML。下面的模板将会把 `username` 的值插入到 input 的 `value`：
 
 ```liquid
 <input type="text" name="user" value="{{username}}">
