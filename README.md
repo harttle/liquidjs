@@ -56,14 +56,14 @@ More details, refer to [The Setup Guide][setup].
 If you love LiquidJS or your company is using LiquidJS? Please consider [support us on Open Collective or Patreon][financial-support].
 
 ### Backers
-If you personally like LiquidJS and find it's useful to you, you can become a backer!
+If you personally like LiquidJS and find it useful to you, you can buy me a coffee!
 
-<object type="image/svg+xml" data="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72"></object>
+<img src="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72">
 
 ### Sponsors
-If LiquidJS is benefiting your business/company, please sponsor us to make it better!
+If LiquidJS is benefiting your business/company, please sponsor us to contribute to our effort!
 
-<object type="image/svg+xml" data="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72"></object>
+<img src="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72">
 ## Contributors ✨
 
 Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to these wonderful people:
