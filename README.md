@@ -44,12 +44,12 @@ Or use the UMD bundle from jsDelivr:
 
 More details, refer to [The Setup Guide][setup].
 
-## Related Packages
+## Related Projects
 
+* [@11ty/eleventy](https://www.npmjs.com/package/@11ty/eleventy): A simpler static site generator. An alternative to Jekyll. Written in JavaScript. Transforms a directory of templates (of varying types) into HTML.
 * [gulp-liquidjs](https://www.npmjs.com/package/@tuanpham-dev/gulp-liquidjs): A shopify compatible Liquid template engine for Gulp using liquidjs.
 * [grunt-liquify](https://www.npmjs.com/package/grunt-liquify): A Grunt task to process Liquid using liquidjs. Use it to add Liquid magic to your scripts and css assets.
 * [react-liquid](https://github.com/aquibm/react-liquid#readme): Liquid templating language component for React
-* [@11ty/eleventy](https://www.npmjs.com/package/@11ty/eleventy): A simpler static site generator. An alternative to Jekyll. Written in JavaScript. Transforms a directory of templates (of varying types) into HTML.
 
 ## Financial Support
 
