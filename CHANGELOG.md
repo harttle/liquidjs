@@ -1,3 +1,10 @@
+## [9.42.1](https://github.com/harttle/liquidjs/compare/v9.42.0...v9.42.1) (2022-10-21)
+
+
+### Bug Fixes
+
+* truncatewords should use at least one word, [#537](https://github.com/harttle/liquidjs/issues/537) ([32f613f](https://github.com/harttle/liquidjs/commit/32f613fb43e90f97364ee6a020589992dbb553cf))
+
 # [9.42.0](https://github.com/harttle/liquidjs/compare/v9.41.0...v9.42.0) (2022-08-27)
 
 
