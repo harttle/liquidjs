@@ -1,4 +1,4 @@
-# LiquidJS for Express.js
+# Using LiquidJS with Express.js
 
 ## Get Started
 

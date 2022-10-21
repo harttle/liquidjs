@@ -1,0 +1,6 @@
+{% layout 'html.liquid' %}
+<ul>
+  {% for todo in todos %}
+    {% render 'todo.liquid' with todo, index: forloop.index%}
+  {% endfor %}
+</ul>
