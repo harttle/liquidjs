@@ -23,7 +23,7 @@
     "hexo-renderer-marked": "^2.0.0",
     "hexo-renderer-pug": "^2.0.0",
     "hexo-renderer-stylus": "^1.0.0",
-    "hexo-renderer-swig": "^1.1.0",
+    "hexo-renderer-swig": "^2.0.0",
     "hexo-server": "^1.0.0",
     "hexo-uglify": "^1.0.0"
   },
