@@ -8,7 +8,7 @@ title: Echo
 
 ## echo
 
-Input
+输入
 ```liquid
 {% assign username = 'Bob' %}
 {% echo username | append: ", welcome to LiquidJS!" | capitalize %}
