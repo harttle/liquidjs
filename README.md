@@ -142,6 +142,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center"><a href="http://santialbo.com"><img src="https://avatars.githubusercontent.com/u/1557563?v=4?s=100" width="100px;" alt="Santi Albo"/><br /><sub><b>Santi Albo</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=santialbo" title="Documentation">📖</a></td>
       <td align="center"><a href="https://github.com/YahangWu"><img src="https://avatars.githubusercontent.com/u/12295975?v=4?s=100" width="100px;" alt="Yahang Wu"/><br /><sub><b>Yahang Wu</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=YahangWu" title="Documentation">📖</a></td>
       <td align="center"><a href="https://github.com/hongl-1"><img src="https://avatars.githubusercontent.com/u/101576612?v=4?s=100" width="100px;" alt="hongl"/><br /><sub><b>hongl</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=hongl-1" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/zxx-457"><img src="https://avatars.githubusercontent.com/u/114141362?v=4?s=100" width="100px;" alt="zxx-457"/><br /><sub><b>zxx-457</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=zxx-457" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
