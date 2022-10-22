@@ -14,7 +14,7 @@ title: Echo
 {% echo username | append: ", welcome to LiquidJS!" | capitalize %}
 ```
 
-Output
+输出
 ```text
 Bob, welcome to LiquidJS!
 ```
