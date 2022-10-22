@@ -4,7 +4,7 @@ title: Liquid
 
 {% since %}v9.31.0{% endsince %}
 
-通过liquid标签可以在一个分隔符中使用多个标签, 使Liquid逻辑书写更简洁。
+通过 liquid 标签可以在一个分隔符中使用多个标签, 使 Liquid 逻辑书写更简洁。
 
 ## liquid
 
