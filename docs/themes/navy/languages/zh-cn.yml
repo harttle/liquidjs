@@ -59,7 +59,6 @@ sidebar:
     overview: 概述
   tags:
     overview: 概述
-    '# (inline comment)': '#（单行注释）'
   api:
     quick_entry: 快速入口
     classes: 类

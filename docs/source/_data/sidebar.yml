@@ -78,7 +78,7 @@ filters:
 
 tags:
   overview: overview.html
-  "# (inline comment)": inline_comment.html
+  "#": inline_comment.html
   assign: assign.html
   capture: capture.html
   case: case.html
