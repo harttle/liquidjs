@@ -1,13 +1,13 @@
 import { Context } from './context/context'
-import { forOwn, snakeCase } from './util/underscore'
+import { forOwn } from './util/underscore'
 import { Template } from './template/template'
 import { LookupType } from './fs/loader'
 import { Render } from './render/render'
 import Parser from './parser/parser'
 import { TagImplOptions } from './template/tag/tag-impl-options'
 import { Value } from './template/value'
-import builtinTags from './builtin/tags'
-import * as builtinFilters from './builtin/filters'
+import { tags } from './tags'
+import { filters } from './filters'
 import { TagMap } from './template/tag/tag-map'
 import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, normalize, RenderOptions } from './liquid-options'
@@ -32,8 +32,8 @@ export class Liquid {
     this.filters = new FilterMap(this.options.strictFilters, this)
     this.tags = new TagMap()
 
-    forOwn(builtinTags, (conf: TagImplOptions, name: string) => this.registerTag(snakeCase(name), conf))
-    forOwn(builtinFilters, (handler: FilterImplOptions, name: string) => this.registerFilter(snakeCase(name), handler))
+    forOwn(tags, (conf: TagImplOptions, name: string) => this.registerTag(name, conf))
+    forOwn(filters, (handler: FilterImplOptions, name: string) => this.registerFilter(name, handler))
   }
   public parse (html: string, filepath?: string): Template[] {
     return this.parser.parse(html, filepath)

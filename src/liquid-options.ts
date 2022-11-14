@@ -1,17 +1,12 @@
-import { snakeCase, forOwn, isArray, isString, isFunction } from './util/underscore'
+import { isArray, isString, isFunction } from './util/underscore'
 import { LiquidCache } from './cache/cache'
 import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { createTrie, Trie } from './util/operator-trie'
-import * as builtinFilters from './builtin/filters'
-import { assert, FilterImplOptions } from './types'
-
-const filters = new Map()
-forOwn(builtinFilters, (conf: FilterImplOptions, name: string) => {
-  filters.set(snakeCase(name), conf)
-})
+import { filters } from './filters'
+import { assert } from './types'
 
 type OutputEscape = (value: any) => string
 type OutputEscapeOption = 'escape' | 'json' | OutputEscape
@@ -198,7 +193,7 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
 
 function getOutputEscapeFunction (nameOrFunction: OutputEscapeOption) {
   if (isString(nameOrFunction)) {
-    const filterImpl = filters.get(nameOrFunction)
+    const filterImpl = filters[nameOrFunction]
     assert(isFunction(filterImpl), `filter "${nameOrFunction}" not found`)
     return filterImpl
   } else {

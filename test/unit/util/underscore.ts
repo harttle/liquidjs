@@ -7,15 +7,6 @@ const expect = chai.expect
 chai.use(sinonChai)
 
 describe('util/underscore', function () {
-  describe('.camel2snake()', function () {
-    it('should convert camelCase to snakeCase', function () {
-      expect(_.snakeCase('fooBarCoo')).to.equal('foo_bar_coo')
-    })
-    it('should convert empty string to empty string', function () {
-      expect(_.snakeCase('')).to.equal('')
-    })
-  })
-
   describe('.isString()', function () {
     it('should return true for literal string', function () {
       expect(_.isString('foo')).to.be.true

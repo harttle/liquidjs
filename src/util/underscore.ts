@@ -137,13 +137,6 @@ export function identify<T> (val: T): T {
   return val
 }
 
-export function snakeCase (str: string) {
-  return str.replace(
-    /(\w?)([A-Z])/g,
-    (_, a, b) => (a ? a + '_' : '') + b.toLowerCase()
-  )
-}
-
 export function changeCase (str: string): string {
   const hasLowerCase = [...str].some(ch => ch >= 'a' && ch <= 'z')
   return hasLowerCase ? str.toUpperCase() : str.toLowerCase()
