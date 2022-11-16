@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Context, Liquid } from '../..'
+import { Liquid } from '../..'
 
 describe('#evalValue()', function () {
   var engine: Liquid
@@ -18,15 +18,5 @@ describe('#evalValue()', function () {
   it('should inherit Liquid options', async function () {
     const val = await engine.evalValue('foo')
     expect(val).to.equal('FOO')
-  })
-
-  it('should support passing Context', async function () {
-    const val = await engine.evalValue('a > b', new Context({ a: 1, b: 2 }))
-    expect(val).to.equal(false)
-  })
-
-  it('should respect options in passed in Context', async function () {
-    const val = await engine.evalValue('foo', new Context({}, { globals: { foo: 'BAR' } } as any))
-    expect(val).to.equal('BAR')
   })
 })

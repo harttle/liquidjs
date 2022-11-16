@@ -90,16 +90,16 @@ export class Liquid {
     return this.renderToNodeStream(templates, scope, renderOptions)
   }
 
-  public _evalValue (str: string, scopeOrContext?: object | Context): IterableIterator<any> {
+  public _evalValue (str: string, scope?: object): IterableIterator<any> {
     const value = new Value(str, this)
-    const ctx = scopeOrContext instanceof Context ? scopeOrContext : new Context(scopeOrContext, this.options)
+    const ctx = new Context(scope, this.options)
     return value.value(ctx, false)
   }
-  public async evalValue (str: string, scopeOrContext?: object | Context): Promise<any> {
-    return toPromise(this._evalValue(str, scopeOrContext))
+  public async evalValue (str: string, scope?: object): Promise<any> {
+    return toPromise(this._evalValue(str, scope))
   }
-  public evalValueSync (str: string, scopeOrContext?: object | Context): any {
-    return toValueSync(this._evalValue(str, scopeOrContext))
+  public evalValueSync (str: string, scope?: object): any {
+    return toValueSync(this._evalValue(str, scope))
   }
 
   public registerFilter (name: string, filter: FilterImplOptions) {
