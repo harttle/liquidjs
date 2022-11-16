@@ -44,5 +44,3 @@ export function toValueSync<T> (val: Generator<unknown, T, unknown> | T): T {
   } while (!done)
   return value
 }
-
-export const toThenable = toPromise

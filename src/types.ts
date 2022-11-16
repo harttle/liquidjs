@@ -22,7 +22,7 @@ export { Hash } from './template/tag/hash'
 export { Value } from './template/value'
 // eslint-disable-next-line deprecation/deprecation
 export { _evalToken, evalToken, evalQuotedToken } from './render/expression'
-export { toPromise, toThenable, toValueSync } from './util/async'
+export { toPromise, toValueSync } from './util/async'
 export { defaultOperators, Operators } from './render/operator'
 export { createTrie, Trie } from './util/operator-trie'
 export { toValue } from './util/underscore'
