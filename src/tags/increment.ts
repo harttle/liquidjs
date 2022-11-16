@@ -3,7 +3,7 @@ import { Tokenizer, Emitter, TagToken, Context, TagImplOptions } from '../types'
 
 export default {
   parse: function (token: TagToken) {
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
     this.variable = tokenizer.readIdentifier().content
   },
   render: function (context: Context, emitter: Emitter) {

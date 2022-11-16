@@ -3,13 +3,10 @@ import { expect } from 'chai'
 import { Drop } from '../../../src/drop/drop'
 import { Context } from '../../../src/context/context'
 import { toPromise, toValueSync } from '../../../src/util/async'
-import { defaultOperators } from '../../../src/render/operator'
-import { createTrie } from '../../../src/util/operator-trie'
 
 describe('Expression', function () {
   const ctx = new Context({})
-  const trie = createTrie(defaultOperators)
-  const create = (str: string) => new Tokenizer(str, trie).readExpression()
+  const create = (str: string) => new Tokenizer(str).readExpression()
 
   it('should throw when context not defined', done => {
     toPromise(create('foo').evaluate(undefined!, false))

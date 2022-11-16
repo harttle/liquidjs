@@ -7,7 +7,7 @@ export default {
   parseFilePath,
   renderFilePath,
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
     this['file'] = this.parseFilePath(tokenizer, this.liquid)
     this['currentFile'] = token.file
     this.hash = new Hash(tokenizer.remaining())

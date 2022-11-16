@@ -10,7 +10,7 @@ type valueof<T> = T[keyof T]
 export default {
   type: 'block',
   parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
 
     const variable = tokenizer.readIdentifier()
     const inStr = tokenizer.readIdentifier()

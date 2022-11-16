@@ -29,7 +29,7 @@ export default class Parser {
     this.loader = new Loader(this.liquid.options)
   }
   public parse (html: string, filepath?: string): Template[] {
-    const tokenizer = new Tokenizer(html, this.liquid.options.operatorsTrie, filepath)
+    const tokenizer = new Tokenizer(html, this.liquid.options.operators, filepath)
     const tokens = tokenizer.readTopLevelTokens(this.liquid.options)
     return this.parseTokens(tokens)
   }

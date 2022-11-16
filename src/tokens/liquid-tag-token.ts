@@ -22,7 +22,7 @@ export class LiquidTagToken extends DelimitedToken {
       this.name = ''
       this.args = ''
     } else {
-      const tokenizer = new Tokenizer(this.content, options.operatorsTrie)
+      const tokenizer = new Tokenizer(this.content, options.operators)
       this.name = tokenizer.readTagName()
       if (!this.name) throw new TokenizationError(`illegal liquid tag syntax`, this)
 

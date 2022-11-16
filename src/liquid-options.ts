@@ -4,7 +4,6 @@ import { LRU } from './cache/lru'
 import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
-import { createTrie, Trie } from './util/operator-trie'
 import { filters } from './filters'
 import { assert } from './types'
 
@@ -99,7 +98,6 @@ interface NormalizedOptions extends LiquidOptions {
   layouts?: string[];
   cache?: LiquidCache;
   outputEscape?: OutputEscape;
-  operatorsTrie?: Trie;
 }
 
 export interface NormalizedFullOptions extends NormalizedOptions {
@@ -130,7 +128,6 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   globals: object;
   keepOutputType: boolean;
   operators: Operators;
-  operatorsTrie: Trie;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -160,14 +157,10 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   keepOutputType: false,
-  operators: defaultOperators,
-  operatorsTrie: createTrie(defaultOperators)
+  operators: defaultOperators
 }
 
 export function normalize (options: LiquidOptions): NormalizedFullOptions {
-  if (options.hasOwnProperty('operators')) {
-    (options as NormalizedOptions).operatorsTrie = createTrie(options.operators!)
-  }
   if (options.hasOwnProperty('root')) {
     if (!options.hasOwnProperty('partials')) options.partials = options.root
     if (!options.hasOwnProperty('layouts')) options.layouts = options.root

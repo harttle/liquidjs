@@ -12,7 +12,7 @@ export default {
       .on('tag:when', (token: TagToken) => {
         p = []
 
-        const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+        const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
 
         while (!tokenizer.end()) {
           const value = tokenizer.readValue()

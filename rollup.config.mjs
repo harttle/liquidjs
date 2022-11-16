@@ -16,6 +16,7 @@ const treeshake = {
   propertyReadSideEffects: false
 }
 const tsconfig = (target) => ({
+  check: true,
   tsconfigOverride: {
     include: [ 'src' ],
     exclude: [ 'test', 'benchmark' ],

@@ -2,7 +2,7 @@ import { Value, Tokenizer, assert, TagImplOptions, TagToken, Context } from '../
 
 export default {
   parse: function (token: TagToken) {
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operatorsTrie)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
     this.key = tokenizer.readIdentifier().content
     tokenizer.skipBlank()
     assert(tokenizer.peek() === '=', () => `illegal token ${token.getText()}`)

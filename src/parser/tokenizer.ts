@@ -22,21 +22,24 @@ import { TokenizationError } from '../util/error'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { TYPES, QUOTE, BLANK, IDENTIFIER } from '../util/character'
 import { matchOperator } from './match-operator'
-import { Trie } from '../util/operator-trie'
+import { Trie, createTrie } from '../util/operator-trie'
 import { Expression } from '../render/expression'
+import { Operators } from '../render/operator'
 import { LiquidTagToken } from '../tokens/liquid-tag-token'
 
 export class Tokenizer {
   p = 0
   N: number
   private rawBeginAt = -1
+  private opTrie: Trie
 
   constructor (
     public input: string,
-    private trie: Trie = defaultOptions.operatorsTrie,
+    operators: Operators = defaultOptions.operators,
     public file: string = ''
   ) {
     this.N = input.length
+    this.opTrie = createTrie(operators)
   }
 
   readExpression () {
@@ -62,7 +65,7 @@ export class Tokenizer {
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
-    const end = matchOperator(this.input, this.p, this.trie)
+    const end = matchOperator(this.input, this.p, this.opTrie)
     if (end === -1) return
     return new OperatorToken(this.input, this.p, (this.p = end), this.file)
   }
