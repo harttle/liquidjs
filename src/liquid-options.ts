@@ -5,7 +5,7 @@ import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render/operator'
 import { filters } from './filters'
-import { assert } from './types'
+import { assert } from './util/assert'
 
 type OutputEscape = (value: any) => string
 type OutputEscapeOption = 'escape' | 'json' | OutputEscape

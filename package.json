@@ -10,6 +10,9 @@
     "./dist/liquid.node.esm.js": "./dist/liquid.browser.esm.js"
   },
   "types": "dist/liquid.d.ts",
+  "engines": {
+    "node": ">=14"
+  },
   "scripts": {
     "lint": "eslint \"**/*.mjs\" \"**/*.ts\" .",
     "check": "npm run build && npm test && npm run lint && npm run perf:diff",

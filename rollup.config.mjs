@@ -61,8 +61,8 @@ const nodeCjs = {
     format: 'cjs',
     banner
   }],
-  external: ['path', 'fs'],
-  plugins: [versionInjection, typescript(tsconfig('es5'))],
+  external: ['path', 'fs', 'stream'],
+  plugins: [versionInjection, typescript(tsconfig('ES2020'))],
   treeshake,
   input
 }
@@ -73,7 +73,7 @@ const nodeEsm = {
     format: 'esm',
     banner
   }],
-  external: ['path', 'fs'],
+  external: ['path', 'fs', 'stream'],
   plugins: [
     versionInjection,
     replace(esmRequire),
