@@ -140,7 +140,7 @@ const formatCodes = {
 };
 (formatCodes as any).h = formatCodes.b
 
-export default function (d: LiquidDate, formatStr: string) {
+export function strftime (d: LiquidDate, formatStr: string) {
   let output = ''
   let remaining = formatStr
   let match

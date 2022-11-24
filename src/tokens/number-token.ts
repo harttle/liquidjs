@@ -1,6 +1,6 @@
 import { Token } from './token'
 import { IdentifierToken } from './identifier-token'
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export class NumberToken extends Token {
   constructor (

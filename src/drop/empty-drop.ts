@@ -1,6 +1,6 @@
 import { Drop } from './drop'
 import { Comparable } from './comparable'
-import { isObject, isString, isArray, toValue } from '../util/underscore'
+import { isObject, isString, isArray, toValue } from '../util'
 
 export class EmptyDrop extends Drop implements Comparable {
   public equals (value: any) {

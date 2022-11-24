@@ -1,29 +1,34 @@
-import BlockMode from '../context/block-mode'
-import { BlockDrop } from '../drop/block-drop'
-import { TagToken, TopLevelToken, Template, Context, TagImpl, Emitter } from '../types'
+import { BlockMode } from '../context'
+import { isTagToken } from '../util'
+import { BlockDrop } from '../drop'
+import { Liquid, TagToken, TopLevelToken, Template, Context, Emitter, Tag } from '..'
 
-export default {
-  parse (this: TagImpl, token: TagToken, remainTokens: TopLevelToken[]) {
+export default class extends Tag {
+  private block: string
+  private tpls: Template[] = []
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(token, remainTokens, liquid)
     const match = /\w+/.exec(token.args)
     this.block = match ? match[0] : ''
-    this.tpls = [] as Template[]
-    this.liquid.parser.parseStream(remainTokens)
-      .on('tag:endblock', function () { this.stop() })
-      .on('template', (tpl: Template) => this.tpls.push(tpl))
-      .on('end', () => { throw new Error(`tag ${token.getText()} not closed`) })
-      .start()
-  },
+    while (remainTokens.length) {
+      const token = remainTokens.shift()!
+      if (isTagToken(token) && token.name === 'endblock') return
+      const template = liquid.parser.parseToken(token, remainTokens)
+      this.tpls.push(template)
+    }
+    throw new Error(`tag ${token.getText()} not closed`)
+  }
 
-  * render (this: TagImpl, ctx: Context, emitter: Emitter) {
+  * render (ctx: Context, emitter: Emitter) {
     const blockRender = this.getBlockRender(ctx)
     if (ctx.getRegister('blockMode') === BlockMode.STORE) {
       ctx.getRegister('blocks')[this.block] = blockRender
     } else {
       yield blockRender(new BlockDrop(), emitter)
     }
-  },
+  }
 
-  getBlockRender (this: TagImpl, ctx: Context) {
+  private getBlockRender (ctx: Context) {
     const { liquid, tpls } = this
     const renderChild = ctx.getRegister('blocks')[this.block]
     const renderCurrent = function * (superBlock: BlockDrop, emitter: Emitter) {

@@ -1,17 +1,14 @@
-import { TagToken } from '../tokens/tag-token'
-import { TopLevelToken } from '../tokens/toplevel-token'
-import { TagImplOptions } from '../template/tag/tag-impl-options'
+import { Liquid, TopLevelToken, TagToken, Tag } from '..'
+import { isTagToken } from '../util'
 
-export default {
-  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-    const stream = this.liquid.parser.parseStream(remainTokens)
-    stream
-      .on('token', (token: TagToken) => {
-        if (token.name === 'endcomment') stream.stop()
-      })
-      .on('end', () => {
-        throw new Error(`tag ${tagToken.getText()} not closed`)
-      })
-    stream.start()
+export default class extends Tag {
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(tagToken, remainTokens, liquid)
+    while (remainTokens.length) {
+      const token = remainTokens.shift()!
+      if (isTagToken(token) && token.name === 'endcomment') return
+    }
+    throw new Error(`tag ${tagToken.getText()} not closed`)
   }
-} as TagImplOptions
+  render () {}
+}

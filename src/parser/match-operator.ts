@@ -1,8 +1,7 @@
-import { IDENTIFIER, TYPES } from '../util/character'
-import { Trie } from '../util/operator-trie'
+import { Trie, TrieNode, IDENTIFIER, TYPES } from '../util'
 
 export function matchOperator (str: string, begin: number, trie: Trie, end = str.length) {
-  let node = trie
+  let node: TrieNode = trie
   let i = begin
   let info
   while (node[str[i]] && i < end) {

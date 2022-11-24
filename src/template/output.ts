@@ -1,11 +1,10 @@
 import { Value } from './value'
-import { TemplateImpl } from '../template/template-impl'
-import { Template } from '../template/template'
+import { Template, TemplateImpl } from '../template'
 import { Context } from '../context/context'
 import { Emitter } from '../emitters/emitter'
 import { OutputToken } from '../tokens/output-token'
 import { Liquid } from '../liquid'
-import { Filter } from './filter/filter'
+import { Filter } from './filter'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
   private value: Value

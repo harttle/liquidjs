@@ -1,7 +1,6 @@
-import { Token } from '../tokens/token'
-import { isTagToken, isHTMLToken, isDelimitedToken } from '../util/type-guards'
+import { Token } from '../tokens'
 import { NormalizedFullOptions } from '../liquid-options'
-import { TYPES, INLINE_BLANK, BLANK } from '../util/character'
+import { isTagToken, isHTMLToken, isDelimitedToken, TYPES, INLINE_BLANK, BLANK } from '../util'
 
 export function whiteSpaceCtrl (tokens: Token[], options: NormalizedFullOptions) {
   let inRaw = false

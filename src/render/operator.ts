@@ -1,11 +1,10 @@
 import { isComparable } from '../drop/comparable'
-import { Context } from '../context/context'
-import { isFunction, toValue } from '../util/underscore'
+import { Context } from '../context'
+import { isFunction, toValue } from '../util'
 import { isTruthy } from '../render/boolean'
 
-export interface Operators {
-  [key: string]: (lhs: any, rhs: any, ctx: Context) => boolean;
-}
+export type OperatorHandler = (lhs: any, rhs: any, ctx: Context) => boolean;
+export type Operators = Record<string, OperatorHandler>
 
 export const defaultOperators: Operators = {
   '==': (l: any, r: any) => {

@@ -1,8 +1,5 @@
-import strftime from '../util/strftime'
-import { LiquidDate } from '../util/liquid-date'
-import { toValue, stringify, isString, isNumber } from '../util/underscore'
-import { FilterImpl } from '../template/filter/filter-impl'
-import { TimezoneDate } from '../util/timezone-date'
+import { toValue, stringify, isString, isNumber, TimezoneDate, LiquidDate, strftime } from '../util'
+import { FilterImpl } from '../template'
 
 export function date (this: FilterImpl, v: string | Date, format: string, timeZoneOffset?: number) {
   const opts = this.context.opts

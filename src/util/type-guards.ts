@@ -1,15 +1,5 @@
-import { OperatorToken } from '../tokens/operator-token'
-import { DelimitedToken } from '../tokens/delimited-token'
-import { IdentifierToken } from '../tokens/identifier-token'
-import { TagToken } from '../tokens/tag-token'
-import { HTMLToken } from '../tokens/html-token'
-import { OutputToken } from '../tokens/output-token'
-import { PropertyAccessToken } from '../tokens/property-access-token'
-import { LiteralToken } from '../tokens/literal-token'
-import { QuotedToken } from '../tokens/quoted-token'
-import { NumberToken } from '../tokens/number-token'
-import { RangeToken } from '../tokens/range-token'
-import { TokenKind } from '../parser/token-kind'
+import { RangeToken, NumberToken, QuotedToken, LiteralToken, PropertyAccessToken, OutputToken, HTMLToken, TagToken, IdentifierToken, DelimitedToken, OperatorToken } from '../tokens'
+import { TokenKind } from '../parser'
 
 export function isDelimitedToken (val: any): val is DelimitedToken {
   return !!(getKind(val) & TokenKind.Delimited)

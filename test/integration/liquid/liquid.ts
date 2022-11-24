@@ -1,7 +1,7 @@
-import { Liquid, Context, isFalsy } from '../../../src/liquid'
 import * as chai from 'chai'
-import { mock, restore } from '../../stub/mockfs'
 import * as chaiAsPromised from 'chai-as-promised'
+import { Liquid, Context, isFalsy } from '../../../src'
+import { mock, restore } from '../../stub/mockfs'
 import { drainStream } from '../../stub/stream'
 
 const expect = chai.expect

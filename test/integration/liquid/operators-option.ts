@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Liquid, defaultOperators } from '../../../src/liquid'
+import { Liquid, defaultOperators } from '../../../src'
 
 describe('LiquidOptions#operators', function () {
   let engine: Liquid

@@ -1,19 +1,8 @@
-import { QuotedToken } from '../tokens/quoted-token'
-import { PropertyAccessToken } from '../tokens/property-access-token'
-import { NumberToken } from '../tokens/number-token'
-import { assert } from '../util/assert'
-import { literalValues } from '../util/literal'
-import { LiteralToken } from '../tokens/literal-token'
-import * as TypeGuards from '../util/type-guards'
-import { Token } from '../tokens/token'
-import { OperatorToken } from '../tokens/operator-token'
-import { RangeToken } from '../tokens/range-token'
-import { parseStringLiteral } from '../parser/parse-string-literal'
-import { Context } from '../context/context'
-import { range } from '../util/underscore'
-import { Operators } from '../render/operator'
-import { UndefinedVariableError } from '../util/error'
-import { toValueSync } from '../util/async'
+import { RangeToken, OperatorToken, Token, LiteralToken, NumberToken, PropertyAccessToken, QuotedToken } from '../tokens'
+import { isQuotedToken, isWordToken, isNumberToken, isLiteralToken, isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, literalValues, assert } from '../util'
+import { parseStringLiteral } from '../parser'
+import { Context } from '../context'
+import { Operators } from '../render'
 
 export class Expression {
   private postfix: Token[]
@@ -25,7 +14,7 @@ export class Expression {
     assert(ctx, 'unable to evaluate: context not defined')
     const operands: any[] = []
     for (const token of this.postfix) {
-      if (TypeGuards.isOperatorToken(token)) {
+      if (isOperatorToken(token)) {
         const r = operands.pop()
         const l = operands.pop()
         const result = yield evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
@@ -38,20 +27,13 @@ export class Expression {
   }
 }
 
-/**
- * @deprecated use `_evalToken` instead
- */
-export function * evalToken (token: Token | undefined, ctx: Context, lenient = false) {
-  return toValueSync(_evalToken(token, ctx, lenient))
-}
-
 export function * _evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
-  if (TypeGuards.isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
-  if (TypeGuards.isRangeToken(token)) return yield evalRangeToken(token, ctx)
-  if (TypeGuards.isLiteralToken(token)) return evalLiteralToken(token)
-  if (TypeGuards.isNumberToken(token)) return evalNumberToken(token)
-  if (TypeGuards.isWordToken(token)) return token.getText()
-  if (TypeGuards.isQuotedToken(token)) return evalQuotedToken(token)
+  if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
+  if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
+  if (isLiteralToken(token)) return evalLiteralToken(token)
+  if (isNumberToken(token)) return evalNumberToken(token)
+  if (isWordToken(token)) return token.getText()
+  if (isQuotedToken(token)) return evalQuotedToken(token)
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
@@ -94,7 +76,7 @@ function * evalRangeToken (token: RangeToken, ctx: Context) {
 function * toPostfix (tokens: IterableIterator<Token>): IterableIterator<Token> {
   const ops: OperatorToken[] = []
   for (const token of tokens) {
-    if (TypeGuards.isOperatorToken(token)) {
+    if (isOperatorToken(token)) {
       while (ops.length && ops[ops.length - 1].getPrecedence() > token.getPrecedence()) {
         yield ops.pop()!
       }

@@ -1,4 +1,4 @@
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export abstract class Token {
   public constructor (

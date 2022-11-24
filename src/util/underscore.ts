@@ -81,7 +81,7 @@ export function isIterable (value: any): value is Iterable<any> {
  * @return {Object} Returns object.
  */
 export function forOwn <T> (
-  obj: {[key: string]: T} | undefined,
+  obj: Record<string, T> | undefined,
   iteratee: ((val: T, key: string, obj: {[key: string]: T}) => boolean | void)
 ) {
   obj = obj || {}

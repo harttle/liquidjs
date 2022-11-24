@@ -1,4 +1,5 @@
-import { Liquid, Drop } from '../..'
+import { Liquid } from '../../src/liquid'
+import { Drop } from '../../src/drop/drop'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 

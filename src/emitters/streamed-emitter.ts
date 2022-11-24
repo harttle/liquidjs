@@ -1,4 +1,4 @@
-import { stringify } from '../util/underscore'
+import { stringify } from '../util'
 import { Emitter } from './emitter'
 import { PassThrough } from 'stream'
 

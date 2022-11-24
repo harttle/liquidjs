@@ -1,8 +1,7 @@
 import { DelimitedToken } from './delimited-token'
 import { TokenizationError } from '../util/error'
-import { NormalizedFullOptions } from '../liquid-options'
-import { TokenKind } from '../parser/token-kind'
-import { Tokenizer } from '../parser/tokenizer'
+import { Tokenizer, TokenKind } from '../parser'
+import type { NormalizedFullOptions } from '../liquid-options'
 
 export class TagToken extends DelimitedToken {
   public name: string

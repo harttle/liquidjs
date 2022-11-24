@@ -1,6 +1,6 @@
 import * as chai from 'chai'
 import { toPromise } from '../../../src/util/async'
-import { Hash } from '../../../src/template/tag/hash'
+import { Hash } from '../../../src/template/hash'
 import { Context } from '../../../src/context/context'
 
 const expect = chai.expect

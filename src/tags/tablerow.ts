@@ -1,20 +1,28 @@
 import { toEnumerable } from '../util/collection'
-import { assert, _evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../types'
+import { ValueToken, Liquid, Tag, _evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Tokenizer } from '../parser/tokenizer'
 
-export default {
-  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
+export default class extends Tag {
+  private variable: string
+  private hash: Hash
+  private templates: Template[]
+  private collection: ValueToken
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(tagToken, remainTokens, liquid)
     const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
 
     const variable = tokenizer.readIdentifier()
     tokenizer.skipBlank()
 
-    const tmp = tokenizer.readIdentifier()
-    assert(tmp && tmp.content === 'in', () => `illegal tag: ${tagToken.getText()}`)
+    const predicate = tokenizer.readIdentifier()
+    const collectionToken = tokenizer.readValue()
+    if (predicate.content !== 'in' || !collectionToken) {
+      throw new Error(`illegal tag: ${tagToken.getText()}`)
+    }
 
     this.variable = variable.content
-    this.collection = tokenizer.readValue()
+    this.collection = collectionToken
     this.hash = new Hash(tokenizer.remaining())
     this.templates = []
 
@@ -28,11 +36,11 @@ export default {
       })
 
     stream.start()
-  },
+  }
 
-  render: function * (ctx: Context, emitter: Emitter) {
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     let collection = toEnumerable(yield _evalToken(this.collection, ctx))
-    const hash = yield this.hash.render(ctx)
+    const hash = (yield this.hash.render(ctx)) as Record<string, any>
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit
 
@@ -57,4 +65,4 @@ export default {
     if (collection.length) emitter.write('</tr>')
     ctx.pop()
   }
-} as TagImplOptions
+}

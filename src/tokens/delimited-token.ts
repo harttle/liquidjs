@@ -1,6 +1,6 @@
 import { Token } from './token'
-import { TokenKind } from '../parser/token-kind'
-import { last } from '../util/underscore'
+import { TokenKind } from '../parser'
+import { last } from '../util'
 
 export abstract class DelimitedToken extends Token {
   public trimLeft = false

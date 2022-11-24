@@ -10,7 +10,7 @@ class Node<T> {
 }
 
 export class LRU<T> implements Cache<T> {
-  private cache: { [key: string]: Node<T> } = {}
+  private cache: Record<string, Node<T>> = {}
   private head: Node<T>
   private tail: Node<T>
 

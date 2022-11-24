@@ -1,6 +1,6 @@
 import { Token } from './token'
-import { NUMBER, TYPES, SIGN } from '../util/character'
-import { TokenKind } from '../parser/token-kind'
+import { NUMBER, TYPES, SIGN } from '../util'
+import { TokenKind } from '../parser'
 
 export class IdentifierToken extends Token {
   public content: string

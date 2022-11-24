@@ -1,14 +1,13 @@
-import { assert } from '../util/assert'
-import { _evalToken, Emitter, TagToken, Context, TagImplOptions } from '../types'
-import { Tokenizer } from '../parser/tokenizer'
+import { Tokenizer, assert, TopLevelToken, Liquid, ValueToken, _evalToken, Emitter, TagToken, Context, Tag } from '..'
 
-export default {
-  parse: function (tagToken: TagToken) {
+export default class extends Tag {
+  private candidates: ValueToken[] = []
+  private group?: ValueToken
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(tagToken, remainTokens, liquid)
     const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
     const group = tokenizer.readValue()
     tokenizer.skipBlank()
-
-    this.candidates = []
 
     if (group) {
       if (tokenizer.peek() === ':') {
@@ -23,10 +22,10 @@ export default {
       tokenizer.readTo(',')
     }
     assert(this.candidates.length, () => `empty candidates: ${tagToken.getText()}`)
-  },
+  }
 
-  render: function * (ctx: Context, emitter: Emitter) {
-    const group = yield _evalToken(this.group, ctx)
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
+    const group = (yield _evalToken(this.group, ctx)) as ValueToken
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle')
     let idx = groups[fingerprint]
@@ -38,7 +37,6 @@ export default {
     const candidate = this.candidates[idx]
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
-    const html = yield _evalToken(candidate, ctx)
-    emitter.write(html)
+    return yield _evalToken(candidate, ctx)
   }
-} as TagImplOptions
+}

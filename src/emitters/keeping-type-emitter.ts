@@ -1,5 +1,5 @@
-import { stringify, toValue } from '../util/underscore'
-import { Emitter } from '../types'
+import { stringify, toValue } from '../util'
+import { Emitter } from './emitter'
 
 export class KeepingTypeEmitter implements Emitter {
   public buffer: any = '';

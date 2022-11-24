@@ -36,7 +36,24 @@ engine.registerFilter('upper', v => v.toUpperCase())
 engine.registerFilter('add', (initial, arg1, arg2) => initial + arg1 + arg2)
 ```
 
-查看已有的过滤器实现：<https://github.com/harttle/liquidjs/tree/master/src/builtin/filters>
+查看已有的过滤器实现：<https://github.com/harttle/liquidjs/tree/master/src/builtin/filters>。对于复杂的标签，也可以用一个类来实现：
+
+```typescript
+// Usage: {% upper name:"alice" %}
+import { Hash, Tag, TagToken, Context, Emitter, TopLevelToken, Liquid } from 'liquidjs'
+
+engine.registerTag('upper', class UpperTag extends Tag {
+    private hash: Hash
+    constructor(tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+        super(tagToken, remainTokens, liquid)
+        this.hash = new Hash(tagToken.args)
+    }
+    * render(ctx: Context) {
+        const hash = yield this.hash.render();
+        return hash.name.toUpperCase() // 'ALICE'
+    }
+});
+```
 
 ## 反注册标签/过滤器
 

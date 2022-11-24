@@ -1,7 +1,7 @@
-import { Emitter, Context } from '../types'
+import { Tag, Emitter, Context } from '..'
 
-export default {
-  render: function (ctx: Context, emitter: Emitter) {
+export default class extends Tag {
+  render (ctx: Context, emitter: Emitter) {
     emitter['continue'] = true
   }
 }

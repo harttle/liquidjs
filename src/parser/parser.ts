@@ -1,19 +1,13 @@
-import { ParseError } from '../util/error'
-import { Liquid, Tokenizer } from '../liquid'
+import { toPromise, assert, isTagToken, isOutputToken, ParseError } from '../util'
+import { Tokenizer } from './tokenizer'
 import { ParseStream } from './parse-stream'
-import { isTagToken, isOutputToken } from '../util/type-guards'
-import { OutputToken } from '../tokens/output-token'
-import { Tag } from '../template/tag/tag'
-import { Output } from '../template/output'
-import { HTML } from '../template/html'
-import { Template } from '../template/template'
-import { TopLevelToken } from '../tokens/toplevel-token'
-import { LiquidCache } from '../cache/cache'
-import { Loader, LookupType } from '../fs/loader'
-import { toPromise } from '../util/async'
-import { FS } from '../fs/fs'
+import { TopLevelToken, OutputToken } from '../tokens'
+import { Template, Output, HTML } from '../template'
+import { LiquidCache } from '../cache'
+import { FS, Loader, LookupType } from '../fs'
+import type { Liquid } from '../liquid'
 
-export default class Parser {
+export class Parser {
   public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Generator<unknown, Template[], Template[] | string>
 
   private liquid: Liquid
@@ -44,7 +38,9 @@ export default class Parser {
   public parseToken (token: TopLevelToken, remainTokens: TopLevelToken[]) {
     try {
       if (isTagToken(token)) {
-        return new Tag(token, remainTokens, this.liquid)
+        const TagClass = this.liquid.tags[token.name]
+        assert(TagClass, `tag "${token.name}" not found`)
+        return new TagClass(token, remainTokens, this.liquid)
       }
       if (isOutputToken(token)) {
         return new Output(token as OutputToken, this.liquid)

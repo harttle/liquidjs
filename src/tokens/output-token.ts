@@ -1,6 +1,6 @@
 import { DelimitedToken } from './delimited-token'
 import { NormalizedFullOptions } from '../liquid-options'
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export class OutputToken extends DelimitedToken {
   public constructor (

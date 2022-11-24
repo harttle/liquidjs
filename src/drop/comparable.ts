@@ -1,4 +1,4 @@
-import { isFunction } from '../util/underscore'
+import { isFunction } from '../util'
 
 export interface Comparable {
   equals: (rhs: any) => boolean;

@@ -1,11 +1,9 @@
-import { isArray, isString, isFunction } from './util/underscore'
-import { LiquidCache } from './cache/cache'
-import { LRU } from './cache/lru'
+import { assert, isArray, isString, isFunction } from './util'
+import { LRU, LiquidCache } from './cache'
 import { FS } from './fs/fs'
 import * as fs from './fs/node'
-import { defaultOperators, Operators } from './render/operator'
+import { defaultOperators, Operators } from './render'
 import { filters } from './filters'
-import { assert } from './util/assert'
 
 type OutputEscape = (value: any) => string
 type OutputEscapeOption = 'escape' | 'json' | OutputEscape

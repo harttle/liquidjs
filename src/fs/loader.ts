@@ -1,6 +1,5 @@
 import { FS } from './fs'
-import { escapeRegex } from '../util/underscore'
-import { assert } from '../util/assert'
+import { assert, escapeRegex } from '../util'
 
 export interface LoaderOptions {
   fs: FS;

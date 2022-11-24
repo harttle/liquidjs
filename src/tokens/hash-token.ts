@@ -1,7 +1,7 @@
 import { Token } from './token'
 import { ValueToken } from './value-token'
 import { IdentifierToken } from './identifier-token'
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export class HashToken extends Token {
   constructor (

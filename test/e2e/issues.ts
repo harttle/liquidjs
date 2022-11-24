@@ -1,4 +1,4 @@
-import { Tokenizer, Context, Liquid, Drop, defaultOptions, toValueSync } from '../..'
+import { Tokenizer, Context, Liquid, Drop, toValueSync } from '../..'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import * as sinon from 'sinon'
@@ -261,7 +261,7 @@ describe('Issues', function () {
     expect(() => engine.parse('{% assign headshot = https://testurl.com/not_enclosed_in_quotes.jpg %}')).to.throw(/unexpected token at ":/)
   })
   it('#527 export Liquid Expression', () => {
-    const tokenizer = new Tokenizer('a > b', defaultOptions.operatorsTrie)
+    const tokenizer = new Tokenizer('a > b')
     const expression = tokenizer.readExpression()
     const result = toValueSync(expression.evaluate(new Context({ a: 1, b: 2 })))
     expect(result).to.equal(false)

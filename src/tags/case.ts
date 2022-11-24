@@ -1,10 +1,12 @@
-import { toValue, _evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../types'
-import { Tokenizer } from '../parser/tokenizer'
+import { ValueToken, Liquid, Tokenizer, toValue, _evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 
-export default {
-  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
+export default class extends Tag {
+  private cond: Value
+  private cases: { val?: ValueToken, templates: Template[] }[] = []
+  private elseTemplates: Template[] = []
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(tagToken, remainTokens, liquid)
     this.cond = new Value(tagToken.args, this.liquid)
-    this.cases = []
     this.elseTemplates = []
 
     let p: Template[] = []
@@ -31,9 +33,9 @@ export default {
       })
 
     stream.start()
-  },
+  }
 
-  render: function * (ctx: Context, emitter: Emitter) {
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
     const r = this.liquid.renderer
     const cond = toValue(yield this.cond.value(ctx, ctx.opts.lenientIf))
     for (const branch of this.cases) {
@@ -45,4 +47,4 @@ export default {
     }
     yield r.renderTemplates(this.elseTemplates, ctx, emitter)
   }
-} as TagImplOptions
+}

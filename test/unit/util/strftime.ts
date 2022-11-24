@@ -1,5 +1,5 @@
 import * as chai from 'chai'
-import t from '../../../src/util/strftime'
+import { strftime as t } from '../../../src/util/strftime'
 import { DateWithTimezone } from '../../stub/date-with-timezone'
 const expect = chai.expect
 

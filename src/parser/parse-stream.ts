@@ -1,13 +1,12 @@
-import { Token } from '../tokens/token'
-import { Template } from '../template/template'
-import { isTagToken } from '../util/type-guards'
-import { TopLevelToken } from '../tokens/toplevel-token'
+import { Token, TopLevelToken } from '../tokens'
+import { Template } from '../template'
+import { isTagToken } from '../util'
 
 type ParseToken<T extends Token> = ((token: T, remainTokens: T[]) => Template)
 
 export class ParseStream<T extends Token = TopLevelToken> {
   private tokens: T[]
-  private handlers: {[key: string]: (arg: any) => void} = {}
+  private handlers: Record<string, (arg: any) => void> = {}
   private stopRequested = false
   private parseToken: ParseToken<T>
 

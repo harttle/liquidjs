@@ -1,10 +1,10 @@
-import * as _ from '../util/underscore'
+import { promisify } from '../util'
 import { sep, resolve as nodeResolve, extname, dirname as nodeDirname } from 'path'
 import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
 import { requireResolve } from './node-require'
 
-const statAsync = _.promisify(stat)
-const readFileAsync = _.promisify<string, string, string>(nodeReadFile)
+const statAsync = promisify(stat)
+const readFileAsync = promisify<string, string, string>(nodeReadFile)
 
 export async function exists (filepath: string) {
   try {

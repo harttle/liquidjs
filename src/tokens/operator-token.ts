@@ -1,5 +1,5 @@
 import { Token } from './token'
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export const precedence = {
   '==': 1,

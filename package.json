@@ -9,7 +9,7 @@
     "./dist/liquid.node.cjs.js": "./dist/liquid.browser.umd.js",
     "./dist/liquid.node.esm.js": "./dist/liquid.browser.esm.js"
   },
-  "types": "dist/liquid.d.ts",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=14"
   },
@@ -44,9 +44,6 @@
     "LICENSE",
     "README.md"
   ],
-  "engines": {
-    "node": ">=4.8.7"
-  },
   "keywords": [
     "liquid",
     "template engine",

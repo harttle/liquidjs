@@ -1,6 +1,4 @@
-import { NullDrop } from '../drop/null-drop'
-import { EmptyDrop } from '../drop/empty-drop'
-import { BlankDrop } from '../drop/blank-drop'
+import { BlankDrop, EmptyDrop, NullDrop } from '../drop'
 
 const nil = new NullDrop()
 export const literalValues = {

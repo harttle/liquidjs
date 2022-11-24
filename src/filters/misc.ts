@@ -1,6 +1,6 @@
 import { isFalsy } from '../render/boolean'
 import { identify, isArray, isString, toValue } from '../util/underscore'
-import { FilterImpl } from '../template/filter/filter-impl'
+import { FilterImpl } from '../template'
 
 export function Default<T1 extends boolean, T2> (this: FilterImpl, value: T1, defaultValue: T2, ...args: Array<[string, any]>): T1 | T2 {
   value = toValue(value)

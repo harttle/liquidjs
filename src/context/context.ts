@@ -2,9 +2,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
-import { isArray, isNil, isString, isFunction, toLiquid } from '../util/underscore'
-import { InternalUndefinedVariableError } from '../util/error'
-import { toValueSync } from '../util/async'
+import { isArray, isNil, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync } from '../util'
 
 type PropertyKey = string | number;
 

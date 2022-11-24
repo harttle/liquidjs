@@ -1,24 +1,27 @@
-import { assert, Tokenizer, _evalToken, Emitter, TagToken, TopLevelToken, Context, Template, TagImplOptions, ParseStream } from '../types'
+import { Hash, ValueToken, Liquid, Tag, Tokenizer, _evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { toEnumerable } from '../util/collection'
 import { ForloopDrop } from '../drop/forloop-drop'
-import { Hash, HashValue } from '../template/tag/hash'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
 type valueof<T> = T[keyof T]
 
-export default {
-  type: 'block',
-  parse: function (token: TagToken, remainTokens: TopLevelToken[]) {
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
+export default class extends Tag {
+  private variable: string
+  private collection: ValueToken
+  private hash: Hash
+  private templates: Template[]
+  private elseTemplates: Template[]
 
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(token, remainTokens, liquid)
+    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
     const variable = tokenizer.readIdentifier()
     const inStr = tokenizer.readIdentifier()
     const collection = tokenizer.readValue()
-    assert(
-      variable.size() && inStr.content === 'in' && collection,
-      () => `illegal tag: ${token.getText()}`
-    )
+    if (!variable.size() || inStr.content !== 'in' || !collection) {
+      throw new Error(`illegal tag: ${token.getText()}`)
+    }
 
     this.variable = variable.content
     this.collection = collection
@@ -37,8 +40,8 @@ export default {
       })
 
     stream.start()
-  },
-  render: function * (ctx: Context, emitter: Emitter): Generator<unknown, void | string, HashValue | Template[]> {
+  }
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, void | string, Template[]> {
     const r = this.liquid.renderer
     let collection = toEnumerable(yield _evalToken(this.collection, ctx))
 
@@ -77,7 +80,7 @@ export default {
     }
     ctx.pop()
   }
-} as TagImplOptions
+}
 
 function reversed<T> (arr: Array<T>) {
   return [...arr].reverse()

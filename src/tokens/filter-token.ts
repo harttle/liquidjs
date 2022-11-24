@@ -1,6 +1,6 @@
 import { Token } from './token'
 import { FilterArg } from '../parser/filter-arg'
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export class FilterToken extends Token {
   public constructor (

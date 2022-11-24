@@ -4,16 +4,12 @@ import { Context } from '../../../src/context/context'
 import { Output } from '../../../src/template/output'
 import { OutputToken } from '../../../src/tokens/output-token'
 import { defaultOptions } from '../../../src/liquid-options'
-import { createTrie } from '../../../src/util/operator-trie'
-import { defaultOperators } from '../../../src/types'
 
 const expect = chai.expect
 
 describe('Output', function () {
   const emitter: any = { write: (html: string) => (emitter.html += html), html: '' }
-  const liquid = {
-    options: { operatorsTrie: createTrie(defaultOperators) }
-  } as any
+  const liquid = { options: {} } as any
   beforeEach(() => { emitter.html = '' })
 
   it('should stringify objects', async function () {

@@ -1,12 +1,13 @@
-import { Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template, TagImplOptions } from '../types'
+import { Liquid, Tag, Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template } from '..'
 
-export default {
-  parse: function (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-    this.branches = []
-    this.elseTemplates = []
+export default class extends Tag {
+  private branches: { predicate: Value, templates: Template[] }[] = []
+  private elseTemplates: Template[] = []
 
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(tagToken, remainTokens, liquid)
     let p
-    this.liquid.parser.parseStream(remainTokens)
+    liquid.parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
         predicate: new Value(tagToken.args, this.liquid),
         templates: (p = [])
@@ -20,9 +21,9 @@ export default {
       .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => { throw new Error(`tag ${tagToken.getText()} not closed`) })
       .start()
-  },
+  }
 
-  render: function * (ctx: Context, emitter: Emitter): Generator<unknown, void, string> {
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, void, string> {
     const r = this.liquid.renderer
 
     for (const { predicate, templates } of this.branches) {
@@ -34,4 +35,4 @@ export default {
     }
     yield r.renderTemplates(this.elseTemplates, ctx, emitter)
   }
-} as TagImplOptions
+}

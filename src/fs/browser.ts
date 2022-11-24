@@ -1,4 +1,4 @@
-import { last } from '../util/underscore'
+import { last } from '../util'
 
 function domResolve (root: string, path: string) {
   const base = document.createElement('base')

@@ -1,6 +1,6 @@
 import { Token } from './token'
 import { ValueToken } from './value-token'
-import { TokenKind } from '../parser/token-kind'
+import { TokenKind } from '../parser'
 
 export class RangeToken extends Token {
   constructor (

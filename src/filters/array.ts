@@ -1,9 +1,8 @@
-import { argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, hasOwnProperty } from '../util/underscore'
-import { toArray } from '../util/collection'
-import { isTruthy } from '../render/boolean'
-import { FilterImpl } from '../template/filter/filter-impl'
-import { Scope } from '../context/scope'
-import { isComparable } from '../drop/comparable'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, hasOwnProperty } from '../util'
+import { isTruthy } from '../render'
+import { FilterImpl } from '../template'
+import { Scope } from '../context'
+import { isComparable } from '../drop'
 
 export const join = argumentsToValue((v: any[], arg: string) => toArray(v).join(arg === undefined ? ' ' : arg))
 export const last = argumentsToValue((v: any) => isArray(v) ? arrayLast(v) : '')

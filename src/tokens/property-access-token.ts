@@ -1,8 +1,7 @@
 import { Token } from './token'
 import { IdentifierToken } from './identifier-token'
 import { QuotedToken } from './quoted-token'
-import { TokenKind } from '../parser/token-kind'
-import { parseStringLiteral } from '../parser/parse-string-literal'
+import { TokenKind, parseStringLiteral } from '../parser'
 
 export class PropertyAccessToken extends Token {
   public propertyName: string

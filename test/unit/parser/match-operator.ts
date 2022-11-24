@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { matchOperator } from '../../../src/parser/match-operator'
-import { defaultOperators } from '../../../src/types'
+import { defaultOperators } from '../../../src'
 import { createTrie } from '../../../src/util/operator-trie'
 
 describe('parser/matchOperator()', function () {

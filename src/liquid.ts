@@ -1,38 +1,24 @@
-import { Context } from './context/context'
-import { forOwn } from './util/underscore'
-import { Template } from './template/template'
+import { Context } from './context'
+import { toPromise, toValueSync, isFunction, forOwn } from './util'
+import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value } from './template'
 import { LookupType } from './fs/loader'
-import { Render } from './render/render'
-import Parser from './parser/parser'
-import { TagImplOptions } from './template/tag/tag-impl-options'
-import { Value } from './template/value'
+import { Render } from './render'
+import { Parser } from './parser'
 import { tags } from './tags'
 import { filters } from './filters'
-import { TagMap } from './template/tag/tag-map'
-import { FilterMap } from './template/filter/filter-map'
 import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, normalize, RenderOptions } from './liquid-options'
-import { FilterImplOptions } from './template/filter/filter-impl-options'
-import { toPromise, toValueSync } from './util/async'
-
-export * from './util/error'
-export * from './types'
-export const version = '[VI]{version}[/VI]'
 
 export class Liquid {
   public readonly options: NormalizedFullOptions
-  public readonly renderer: Render
+  public readonly renderer = new Render()
   public readonly parser: Parser
-  public readonly filters: FilterMap
-  public readonly tags: TagMap
+  public readonly filters: Record<string, FilterImplOptions> = {}
+  public readonly tags: Record<string, TagClass> = {}
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = normalize(opts)
     this.parser = new Parser(this)
-    this.renderer = new Render()
-    this.filters = new FilterMap(this.options.strictFilters, this)
-    this.tags = new TagMap()
-
-    forOwn(tags, (conf: TagImplOptions, name: string) => this.registerTag(name, conf))
+    forOwn(tags, (conf: TagClass, name: string) => this.registerTag(name, conf))
     forOwn(filters, (handler: FilterImplOptions, name: string) => this.registerFilter(name, handler))
   }
   public parse (html: string, filepath?: string): Template[] {
@@ -103,10 +89,10 @@ export class Liquid {
   }
 
   public registerFilter (name: string, filter: FilterImplOptions) {
-    this.filters.set(name, filter)
+    this.filters[name] = filter
   }
-  public registerTag (name: string, tag: TagImplOptions) {
-    this.tags.set(name, tag)
+  public registerTag (name: string, tag: TagClass | TagImplOptions) {
+    this.tags[name] = isFunction(tag) ? tag : createTagClass(tag)
   }
   public plugin (plugin: (this: Liquid, L: typeof Liquid) => void) {
     return plugin.call(this, Liquid)

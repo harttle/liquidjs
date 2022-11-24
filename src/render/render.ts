@@ -1,11 +1,7 @@
-import { RenderError } from '../util/error'
-import { Context } from '../context/context'
-import { Template } from '../template/template'
-import { Emitter } from '../emitters/emitter'
-import { SimpleEmitter } from '../emitters/simple-emitter'
-import { StreamedEmitter } from '../emitters/streamed-emitter'
-import { toPromise } from '../util/async'
-import { KeepingTypeEmitter } from '../emitters/keeping-type-emitter'
+import { toPromise, RenderError } from '../util'
+import { Context } from '../context'
+import { Template } from '../template'
+import { Emitter, KeepingTypeEmitter, StreamedEmitter, SimpleEmitter } from '../emitters'
 
 export class Render {
   public renderTemplatesToNodeStream (templates: Template[], ctx: Context): NodeJS.ReadableStream {

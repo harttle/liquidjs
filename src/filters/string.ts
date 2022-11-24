@@ -3,8 +3,7 @@
  *
  * * prefer stringify() to String() since `undefined`, `null` should eval ''
  */
-import { escapeRegExp, stringify } from '../util/underscore'
-import { assert } from '../util/assert'
+import { assert, escapeRegExp, stringify } from '../util'
 
 export function append (v: string, arg: string) {
   assert(arguments.length === 2, 'append expect 2 arguments')

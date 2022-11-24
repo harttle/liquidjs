@@ -1,12 +1,11 @@
 import { expect } from 'chai'
 import { Context } from '../../../src/context/context'
-import { HTMLToken } from '../../../src/tokens/html-token'
+import { HTMLToken, TagToken } from '../../../src/tokens'
 import { Render } from '../../../src/render/render'
 import { HTML } from '../../../src/template/html'
 import { SimpleEmitter } from '../../../src/emitters/simple-emitter'
 import { toPromise } from '../../../src/util/async'
-import { Tag } from '../../../src/template/tag/tag'
-import { TagToken } from '../../../src/types'
+import { Tag } from '../../../src/template/tag'
 
 describe('render', function () {
   let render: Render
@@ -42,17 +41,16 @@ describe('render', function () {
     })
     it('should render to html stream asyncly', function (done) {
       const scope = new Context()
+      class CustomTag extends Tag {
+        render () {
+          return new Promise(
+            resolve => setTimeout(() => resolve('async tag'), 10)
+          )
+        }
+      }
       const tpls = [
         new HTML({ getContent: () => '<p>' } as HTMLToken),
-        new Tag({ content: 'foo', args: '', name: 'foo' } as TagToken, [], {
-          tags: {
-            get: () => ({
-              render: () => new Promise(
-                resolve => setTimeout(() => resolve('async tag'), 10)
-              )
-            })
-          }
-        } as any),
+        new CustomTag({ content: 'foo', args: '', name: 'foo' } as TagToken, [], {} as any),
         new HTML({ getContent: () => '</p>' } as HTMLToken)
       ]
       const stream = render.renderTemplatesToNodeStream(tpls, scope)

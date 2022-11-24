@@ -38,16 +38,16 @@ const versionInjection = versionInjector({
   logger: console,
   exclude: []
 })
-const input = './src/liquid.ts'
+const input = './src/index.ts'
 const browserFS = {
   include: './src/liquid-options.ts',
   delimiters: ['', ''],
   './fs/node': './fs/browser'
 }
 const browserStream = {
-  include: './src/render/render.ts',
+  include: './src/emitters/index.ts',
   delimiters: ['', ''],
-  '../emitters/streamed-emitter': '../emitters/streamed-emitter-browser'
+  './streamed-emitter': './streamed-emitter-browser'
 }
 const esmRequire = {
   include: './src/fs/node.ts',
