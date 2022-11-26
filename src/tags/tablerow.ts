@@ -1,5 +1,5 @@
 import { toEnumerable } from '../util/collection'
-import { ValueToken, Liquid, Tag, _evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Tokenizer } from '../parser/tokenizer'
 
@@ -39,7 +39,7 @@ export default class extends Tag {
   }
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
-    let collection = toEnumerable(yield _evalToken(this.collection, ctx))
+    let collection = toEnumerable(yield evalToken(this.collection, ctx))
     const hash = (yield this.hash.render(ctx)) as Record<string, any>
     const offset = hash.offset || 0
     const limit = (hash.limit === undefined) ? collection.length : hash.limit

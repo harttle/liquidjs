@@ -1,4 +1,4 @@
-import { _evalToken } from '../render/expression'
+import { evalToken } from '../render/expression'
 import { Context } from '../context/context'
 import { Tokenizer } from '../parser/tokenizer'
 import { Token } from '../tokens/token'
@@ -24,7 +24,7 @@ export class Hash {
   * render (ctx: Context): Generator<unknown, Record<string, any>, unknown> {
     const hash = {}
     for (const key of Object.keys(this.hash)) {
-      hash[key] = this.hash[key] === undefined ? true : yield _evalToken(this.hash[key], ctx)
+      hash[key] = this.hash[key] === undefined ? true : yield evalToken(this.hash[key], ctx)
     }
     return hash
   }

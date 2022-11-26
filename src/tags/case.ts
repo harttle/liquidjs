@@ -1,4 +1,4 @@
-import { ValueToken, Liquid, Tokenizer, toValue, _evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
+import { ValueToken, Liquid, Tokenizer, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 
 export default class extends Tag {
   private cond: Value
@@ -39,7 +39,7 @@ export default class extends Tag {
     const r = this.liquid.renderer
     const cond = toValue(yield this.cond.value(ctx, ctx.opts.lenientIf))
     for (const branch of this.cases) {
-      const val = yield _evalToken(branch.val, ctx, ctx.opts.lenientIf)
+      const val = yield evalToken(branch.val, ctx, ctx.opts.lenientIf)
       if (val === cond) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return

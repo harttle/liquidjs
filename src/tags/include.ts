@@ -1,4 +1,4 @@
-import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, Tokenizer, _evalToken, Hash, Emitter, TagToken, Context } from '..'
+import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, Tokenizer, evalToken, Hash, Emitter, TagToken, Context } from '..'
 import { BlockMode, Scope } from '../context'
 import { parseFilePath, renderFilePath } from './render'
 
@@ -33,7 +33,7 @@ export default class extends Tag {
     ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const scope = (yield hash.render(ctx)) as Scope
-    if (withVar) scope[filepath] = yield _evalToken(withVar, ctx)
+    if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
     const templates = (yield liquid._parsePartialFile(filepath, ctx.sync, this['currentFile'])) as Template[]
     ctx.push(ctx.opts.jekyllInclude ? { include: scope } : scope)
     yield renderer.renderTemplates(templates, ctx, emitter)

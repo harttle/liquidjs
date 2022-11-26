@@ -20,14 +20,14 @@ export class Expression {
         const result = yield evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
         operands.push(result)
       } else {
-        operands.push(yield _evalToken(token, ctx, lenient && this.postfix.length === 1))
+        operands.push(yield evalToken(token, ctx, lenient && this.postfix.length === 1))
       }
     }
     return operands[0]
   }
 }
 
-export function * _evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
+export function * evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
   if (isLiteralToken(token)) return evalLiteralToken(token)
@@ -39,7 +39,7 @@ export function * _evalToken (token: Token | undefined, ctx: Context, lenient = 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
   const props: string[] = []
   for (const prop of token.props) {
-    props.push((yield _evalToken(prop, ctx, false)) as unknown as string)
+    props.push((yield evalToken(prop, ctx, false)) as unknown as string)
   }
   try {
     return yield ctx._get([token.propertyName, ...props])
@@ -68,8 +68,8 @@ function evalLiteralToken (token: LiteralToken) {
 }
 
 function * evalRangeToken (token: RangeToken, ctx: Context) {
-  const low: number = yield _evalToken(token.lhs, ctx)
-  const high: number = yield _evalToken(token.rhs, ctx)
+  const low: number = yield evalToken(token.lhs, ctx)
+  const high: number = yield evalToken(token.rhs, ctx)
   return range(+low, +high + 1)
 }
 
