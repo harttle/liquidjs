@@ -1,13 +1,9 @@
 # [10.0.0](https://github.com/harttle/liquidjs/compare/v9.43.0...v10.0.0) (2022-11-27)
 
 
-### chore
-
-* rename filters to snake style, [#487](https://github.com/harttle/liquidjs/issues/487) ([ff112a4](https://github.com/harttle/liquidjs/commit/ff112a4750f91475e9eccdb301d7a468e895f6ca))
-
-
 ### Code Refactoring
 
+* rename filters to snake style, [#487](https://github.com/harttle/liquidjs/issues/487) ([ff112a4](https://github.com/harttle/liquidjs/commit/ff112a4750f91475e9eccdb301d7a468e895f6ca))
 * `_evalToken` renamed to `evalToken` ([4e1a30a](https://github.com/harttle/liquidjs/commit/4e1a30a20c579408c87f2d28b9b6ec8e1dda65cc))
 * change `ownPropertyOnly` default value to `true` ([7eb6216](https://github.com/harttle/liquidjs/commit/7eb621601c2b05d6e379e5ce42219f2b1f556208))
 * delay creation of `operatorsTrie` and hide this implementation ([bb58d3e](https://github.com/harttle/liquidjs/commit/bb58d3e549dc5a5e067895ec4a0b3257b434f225))
