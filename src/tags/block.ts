@@ -4,8 +4,8 @@ import { BlockDrop } from '../drop'
 import { Liquid, TagToken, TopLevelToken, Template, Context, Emitter, Tag } from '..'
 
 export default class extends Tag {
-  private block: string
-  private tpls: Template[] = []
+  block: string
+  templates: Template[] = []
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
     const match = /\w+/.exec(token.args)
@@ -14,7 +14,7 @@ export default class extends Tag {
       const token = remainTokens.shift()!
       if (isTagToken(token) && token.name === 'endblock') return
       const template = liquid.parser.parseToken(token, remainTokens)
-      this.tpls.push(template)
+      this.templates.push(template)
     }
     throw new Error(`tag ${token.getText()} not closed`)
   }
@@ -29,12 +29,12 @@ export default class extends Tag {
   }
 
   private getBlockRender (ctx: Context) {
-    const { liquid, tpls } = this
+    const { liquid, templates } = this
     const renderChild = ctx.getRegister('blocks')[this.block]
     const renderCurrent = function * (superBlock: BlockDrop, emitter: Emitter) {
       // add {{ block.super }} support when rendering
       ctx.push({ block: superBlock })
-      yield liquid.renderer.renderTemplates(tpls, ctx, emitter)
+      yield liquid.renderer.renderTemplates(templates, ctx, emitter)
       ctx.pop()
     }
     return renderChild

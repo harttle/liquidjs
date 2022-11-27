@@ -1,0 +1,13 @@
+{% layout 'html.liquid' %}
+
+<h1>{{ title | capitalize }}</h1>
+<a>
+  {% if authed %} Sign out {{ username }}
+  {% else %} Sign in
+  {% endif %}
+</a>
+<ul>
+  {% for todo in todos %}
+    <p>{{ todo }}</p>
+  {% endfor %}
+</ul>

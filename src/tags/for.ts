@@ -7,11 +7,11 @@ const MODIFIERS = ['offset', 'limit', 'reversed']
 type valueof<T> = T[keyof T]
 
 export default class extends Tag {
-  private variable: string
-  private collection: ValueToken
-  private hash: Hash
-  private templates: Template[]
-  private elseTemplates: Template[]
+  variable: string
+  collection: ValueToken
+  hash: Hash
+  templates: Template[]
+  elseTemplates: Template[]
 
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)

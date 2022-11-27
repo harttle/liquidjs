@@ -4,10 +4,10 @@ import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Tokenizer } from '../parser/tokenizer'
 
 export default class extends Tag {
-  private variable: string
-  private hash: Hash
-  private templates: Template[]
-  private collection: ValueToken
+  variable: string
+  args: Hash
+  templates: Template[]
+  collection: ValueToken
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
     const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
@@ -23,7 +23,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collectionToken
-    this.hash = new Hash(tokenizer.remaining())
+    this.args = new Hash(tokenizer.remaining())
     this.templates = []
 
     let p
@@ -40,12 +40,12 @@ export default class extends Tag {
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     let collection = toEnumerable(yield evalToken(this.collection, ctx))
-    const hash = (yield this.hash.render(ctx)) as Record<string, any>
-    const offset = hash.offset || 0
-    const limit = (hash.limit === undefined) ? collection.length : hash.limit
+    const args = (yield this.args.render(ctx)) as Record<string, any>
+    const offset = args.offset || 0
+    const limit = (args.limit === undefined) ? collection.length : args.limit
 
     collection = collection.slice(offset, offset + limit)
-    const cols = hash.cols || collection.length
+    const cols = args.cols || collection.length
 
     const r = this.liquid.renderer
     const tablerowloop = new TablerowloopDrop(collection.length, cols, this.collection.getText(), this.variable)

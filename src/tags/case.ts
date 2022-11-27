@@ -1,12 +1,12 @@
 import { ValueToken, Liquid, Tokenizer, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 
 export default class extends Tag {
-  private cond: Value
-  private cases: { val?: ValueToken, templates: Template[] }[] = []
-  private elseTemplates: Template[] = []
+  value: Value
+  branches: { value?: ValueToken, templates: Template[] }[] = []
+  elseTemplates: Template[] = []
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
-    this.cond = new Value(tagToken.args, this.liquid)
+    this.value = new Value(tagToken.args, this.liquid)
     this.elseTemplates = []
 
     let p: Template[] = []
@@ -18,8 +18,8 @@ export default class extends Tag {
 
         while (!tokenizer.end()) {
           const value = tokenizer.readValue()
-          this.cases.push({
-            val: value,
+          this.branches.push({
+            value: value,
             templates: p
           })
           tokenizer.readTo(',')
@@ -37,10 +37,10 @@ export default class extends Tag {
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
     const r = this.liquid.renderer
-    const cond = toValue(yield this.cond.value(ctx, ctx.opts.lenientIf))
-    for (const branch of this.cases) {
-      const val = yield evalToken(branch.val, ctx, ctx.opts.lenientIf)
-      if (val === cond) {
+    const value = toValue(yield this.value.value(ctx, ctx.opts.lenientIf))
+    for (const branch of this.branches) {
+      const target = yield evalToken(branch.value, ctx, ctx.opts.lenientIf)
+      if (target === value) {
         yield r.renderTemplates(branch.templates, ctx, emitter)
         return
       }

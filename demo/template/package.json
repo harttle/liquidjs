@@ -1,0 +1,17 @@
+{
+  "name": "liquidjs-demo-template",
+  "private": true,
+  "description": "liquid template parsing",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "dependencies": {
+    "liquidjs": "latest",
+    "ts-node": "^8.10.2",
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37"
+  }
+}

@@ -7,7 +7,7 @@ import { Liquid } from '../liquid'
 import { Filter } from './filter'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
-  private value: Value
+  value: Value
   public constructor (token: OutputToken, liquid: Liquid) {
     super(token)
     this.value = new Value(token.content, liquid)

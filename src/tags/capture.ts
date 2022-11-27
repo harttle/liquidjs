@@ -3,8 +3,8 @@ import { evalQuotedToken } from '../render'
 import { isTagToken } from '../util'
 
 export default class extends Tag {
-  private variable: string
-  private templates: Template[] = []
+  variable: string
+  templates: Template[] = []
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
     const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
