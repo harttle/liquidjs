@@ -1,3 +1,35 @@
+# [10.0.0](https://github.com/harttle/liquidjs/compare/v9.43.0...v10.0.0) (2022-11-27)
+
+
+### chore
+
+* rename filters to snake style, [#487](https://github.com/harttle/liquidjs/issues/487) ([ff112a4](https://github.com/harttle/liquidjs/commit/ff112a4750f91475e9eccdb301d7a468e895f6ca))
+
+
+### Code Refactoring
+
+* `_evalToken` renamed to `evalToken` ([4e1a30a](https://github.com/harttle/liquidjs/commit/4e1a30a20c579408c87f2d28b9b6ec8e1dda65cc))
+* change `ownPropertyOnly` default value to `true` ([7eb6216](https://github.com/harttle/liquidjs/commit/7eb621601c2b05d6e379e5ce42219f2b1f556208))
+* delay creation of `operatorsTrie` and hide this implementation ([bb58d3e](https://github.com/harttle/liquidjs/commit/bb58d3e549dc5a5e067895ec4a0b3257b434f225))
+* remove `toThenable` export ([ffefd91](https://github.com/harttle/liquidjs/commit/ffefd91fbc0195c589c8c34ae80f2017acfe557c))
+* remove use of internal `Context` class in `evalValue` argument ([b115077](https://github.com/harttle/liquidjs/commit/b115077e122a7b90e7972d58174d68aea8edd7bf))
+
+
+### Performance Improvements
+
+* target Node.js 14 for cjs bundle (main entry) ([1f6ce7c](https://github.com/harttle/liquidjs/commit/1f6ce7c8224123cea318d1aa6c12aa091d6e0518))
+
+
+### BREAKING CHANGES
+
+* `evalToken` now returns a generator (LiquidJS async), which is different from `evalToken` in previous LiquidJS versions.
+* main entry need Node.js>=14 to run, you can build LiquidJS by your own by using ESM entry.
+* `ownPropertyOnly` default value changed to `true`
+* `<liquidjs>.toThenable` is removed, use `<liquidjs>.toPromise` instead
+* `evalValue` won't support `Context` as second argument anymore.
+* use `operators` instead of `operatorsTrie` as Tokenizer constructor argument, #500
+* keys in `<liquidjs>.filters` are now in snake case (instead of camel case), identical to that in Liquid template.
+
 # [9.43.0](https://github.com/harttle/liquidjs/compare/v9.42.1...v9.43.0) (2022-11-27)
 
 
