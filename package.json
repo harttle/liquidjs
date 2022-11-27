@@ -1,6 +1,6 @@
 {
   "name": "liquidjs",
-  "version": "9.42.1",
+  "version": "9.43.0",
   "description": "A simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.",
   "main": "dist/liquid.node.cjs.js",
   "module": "dist/liquid.node.esm.js",

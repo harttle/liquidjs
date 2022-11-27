@@ -1,3 +1,10 @@
+# [9.43.0](https://github.com/harttle/liquidjs/compare/v9.42.1...v9.43.0) (2022-11-27)
+
+
+### Features
+
+* support timezone offset argument for date filter, [#553](https://github.com/harttle/liquidjs/issues/553) ([7a71485](https://github.com/harttle/liquidjs/commit/7a714855df9ba188e2e82839d248f6623ce94a87))
+
 ## [9.42.1](https://github.com/harttle/liquidjs/compare/v9.42.0...v9.42.1) (2022-10-21)
 
 
