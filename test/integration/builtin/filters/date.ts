@@ -61,6 +61,9 @@ describe('filters/date', function () {
     it('should offset UTC date literal', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T17:00:00', undefined, opts)
     })
+    it('should support timezone offset argument', function () {
+      return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", 360}}', '1990-12-31T17:00:00')
+    })
     it('should offset date literal with timezone 00:00 specified', function () {
       return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T17:00:00', undefined, opts)
     })

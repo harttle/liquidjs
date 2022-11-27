@@ -4,11 +4,11 @@ import { toValue, stringify, isString, isNumber } from '../../util/underscore'
 import { FilterImpl } from '../../template/filter/filter-impl'
 import { TimezoneDate } from '../../util/timezone-date'
 
-export function date (this: FilterImpl, v: string | Date, arg: string) {
+export function date (this: FilterImpl, v: string | Date, format: string, timeZoneOffset?: number) {
   const opts = this.context.opts
   let date: LiquidDate
   v = toValue(v)
-  arg = stringify(arg)
+  format = stringify(format)
   if (v === 'now' || v === 'today') {
     date = new Date()
   } else if (isNumber(v)) {
@@ -25,10 +25,12 @@ export function date (this: FilterImpl, v: string | Date, arg: string) {
     date = v
   }
   if (!isValidDate(date)) return v
-  if (opts.hasOwnProperty('timezoneOffset')) {
+  if (timeZoneOffset !== undefined) {
+    date = new TimezoneDate(date, timeZoneOffset)
+  } else if (opts.timezoneOffset !== undefined) {
     date = new TimezoneDate(date, opts.timezoneOffset!)
   }
-  return strftime(date, arg)
+  return strftime(date, format)
 }
 
 function isValidDate (date: any): date is Date {
