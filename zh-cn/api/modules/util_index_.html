@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head prefix="og: http://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>Module: &quot;util/index&quot; | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LiquidJS is a simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/zh-cn/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/zh-cn/api/modules/util_index_.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/zh-cn/api/modules/util_index_">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/zh-cn/api/modules/util_index_">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../../../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../../../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../../../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../../../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../../../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../../../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../../../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../../../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../../../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../../../css/navy.css">
+
+  <link rel="alternate" href="../../../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="/zh-cn/" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="../../tutorials/intro-to-liquid.html" class="main-nav-link">教程</a><a href="../../tags/overview.html" class="main-nav-link">标签</a><a href="../../filters/overview.html" class="main-nav-link">过滤器</a><a href="../../playground.html" class="main-nav-link">演示</a><a href="../classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="搜索...">
+      </div>
+    </nav>
+    <div class="main-nav-link icon-nav-link">
+      <label><i class="icon-network"></i> <span class="icon-nav-title">简体中文</span></label>
+      <select id="lang-select" data-canonical="api/modules/util_index_.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">Github</span></a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-opencollective"></i> <span class="icon-nav-title">Support</span></a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">快速入口</strong><a href="../classes/liquid_.liquid.html" class="sidebar-link">Liquid</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="sidebar-link">LiquidOptions</a><a href="../interfaces/fs_fs_.fs.html" class="sidebar-link">FS</a><a href="../interfaces/cache_cache_.cache.html" class="sidebar-link">Cache</a><strong class="sidebar-title">类</strong><a href="../classes/drop_blank_drop_.blankdrop.html" class="sidebar-link">BlankDrop</a><a href="../classes/context_context_.context.html" class="sidebar-link">Context</a><a href="../classes/tokens_delimited_token_.delimitedtoken.html" class="sidebar-link">DelimitedToken</a><a href="../classes/drop_drop_.drop.html" class="sidebar-link">Drop</a><a href="../classes/drop_empty_drop_.emptydrop.html" class="sidebar-link">EmptyDrop</a><a href="../classes/render_expression_.expression.html" class="sidebar-link">Expression</a><a href="../classes/tokens_filter_token_.filtertoken.html" class="sidebar-link">FilterToken</a><a href="../classes/drop_forloop_drop_.forloopdrop.html" class="sidebar-link">ForloopDrop</a><a href="../classes/tokens_html_token_.htmltoken.html" class="sidebar-link">HTMLToken</a><a href="../classes/tokens_hash_token_.hashtoken.html" class="sidebar-link">HashToken</a><a href="../classes/cache_lru_.lru.html" class="sidebar-link">LRU</a><a href="../classes/liquid_.liquid.html" class="sidebar-link">Liquid</a><a href="../classes/tokens_literal_token_.literaltoken.html" class="sidebar-link">LiteralToken</a><a href="../classes/drop_null_drop_.nulldrop.html" class="sidebar-link">NullDrop</a><a href="../classes/tokens_number_token_.numbertoken.html" class="sidebar-link">NumberToken</a><a href="../classes/tokens_operator_token_.operatortoken.html" class="sidebar-link">OperatorToken</a><a href="../classes/tokens_output_token_.outputtoken.html" class="sidebar-link">OutputToken</a><a href="../classes/util_error_.parseerror.html" class="sidebar-link">ParseError</a><a href="../classes/parser_parse_stream_.parsestream.html" class="sidebar-link">ParseStream</a><a href="../classes/parser_parser_.parser.html" class="sidebar-link">Parser</a><a href="../classes/tokens_property_access_token_.propertyaccesstoken.html" class="sidebar-link">PropertyaccessToken</a><a href="../classes/tokens_quoted_token_.quotedtoken.html" class="sidebar-link">QuotedToken</a><a href="../classes/tokens_range_token_.rangetoken.html" class="sidebar-link">RangeToken</a><a href="../classes/render_render_.render.html" class="sidebar-link">Render</a><a href="../classes/util_error_.rendererror.html" class="sidebar-link">RenderError</a><a href="../classes/drop_tablerowloop_drop_.tablerowloopdrop.html" class="sidebar-link">TablerowloopDrop</a><a href="../classes/tokens_tag_token_.tagtoken.html" class="sidebar-link">TagToken</a><a href="../classes/tokens_token_.token.html" class="sidebar-link">Token</a><a href="../classes/util_error_.tokenizationerror.html" class="sidebar-link">TokenizationError</a><a href="../classes/parser_tokenizer_.tokenizer.html" class="sidebar-link">Tokenizer</a><a href="../classes/tokens_word_token_.wordtoken.html" class="sidebar-link">WordToken</a><strong class="sidebar-title">枚举</strong><a href="../enums/context_block_mode_.blockmode.html" class="sidebar-link">BlockMode</a><a href="../enums/parser_token_kind_.tokenkind.html" class="sidebar-link">TokenKind</a><strong class="sidebar-title">接口</strong><a href="../interfaces/cache_cache_.cache.html" class="sidebar-link">Cache</a><a href="../interfaces/template_filter_filter_impl_options_.filterimploptions.html" class="sidebar-link">FilterImplOptions</a><a href="../interfaces/fs_fs_.fs.html" class="sidebar-link">FS</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="sidebar-link">LiquidOptions</a><a href="../interfaces/liquid_options_.normalizedfulloptions.html" class="sidebar-link">NormalizedFullOptions</a><a href="../interfaces/context_scope_.plainobject.html" class="sidebar-link">PlainObject</a><a href="../interfaces/template_tag_tag_impl_options_.tagimploptions.html" class="sidebar-link">TagImplOptions</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">Module: &quot;util/index&quot;</h1>
+                
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/new?title=docs:&body=URL: https%3A%2F%2Fliquidjs.com%2Fzh-cn%2Fapi%2Fmodules%2Futil_index_.html&labels=docs" class="article-edit-link" title="报告问题"><i class="icon-chat-bubble-dots"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <h2 id="References" class="article-heading"><a href="#References" class="headerlink" title="References"></a>References<a class="article-anchor" href="#References" aria-hidden="true"></a></h2><h3 id="AssertionError" class="article-heading"><a href="#AssertionError" class="headerlink" title="AssertionError"></a>AssertionError<a class="article-anchor" href="#AssertionError" aria-hidden="true"></a></h3><p>• <strong>AssertionError</strong>:</p>
+<hr>
+<h3 id="BLANK" class="article-heading"><a href="#BLANK" class="headerlink" title="BLANK"></a>BLANK<a class="article-anchor" href="#BLANK" aria-hidden="true"></a></h3><p>• <strong>BLANK</strong>:</p>
+<hr>
+<h3 id="IDENTIFIER" class="article-heading"><a href="#IDENTIFIER" class="headerlink" title="IDENTIFIER"></a>IDENTIFIER<a class="article-anchor" href="#IDENTIFIER" aria-hidden="true"></a></h3><p>• <strong>IDENTIFIER</strong>:</p>
+<hr>
+<h3 id="INLINE-BLANK" class="article-heading"><a href="#INLINE-BLANK" class="headerlink" title="INLINE_BLANK"></a>INLINE_BLANK<a class="article-anchor" href="#INLINE-BLANK" aria-hidden="true"></a></h3><p>• <strong>INLINE_BLANK</strong>:</p>
+<hr>
+<h3 id="InternalUndefinedVariableError" class="article-heading"><a href="#InternalUndefinedVariableError" class="headerlink" title="InternalUndefinedVariableError"></a>InternalUndefinedVariableError<a class="article-anchor" href="#InternalUndefinedVariableError" aria-hidden="true"></a></h3><p>• <strong>InternalUndefinedVariableError</strong>:</p>
+<hr>
+<h3 id="LiquidDate" class="article-heading"><a href="#LiquidDate" class="headerlink" title="LiquidDate"></a>LiquidDate<a class="article-anchor" href="#LiquidDate" aria-hidden="true"></a></h3><p>• <strong>LiquidDate</strong>:</p>
+<hr>
+<h3 id="LiquidError" class="article-heading"><a href="#LiquidError" class="headerlink" title="LiquidError"></a>LiquidError<a class="article-anchor" href="#LiquidError" aria-hidden="true"></a></h3><p>• <strong>LiquidError</strong>:</p>
+<hr>
+<h3 id="NUMBER" class="article-heading"><a href="#NUMBER" class="headerlink" title="NUMBER"></a>NUMBER<a class="article-anchor" href="#NUMBER" aria-hidden="true"></a></h3><p>• <strong>NUMBER</strong>:</p>
+<hr>
+<h3 id="OPERATOR" class="article-heading"><a href="#OPERATOR" class="headerlink" title="OPERATOR"></a>OPERATOR<a class="article-anchor" href="#OPERATOR" aria-hidden="true"></a></h3><p>• <strong>OPERATOR</strong>:</p>
+<hr>
+<h3 id="ParseError" class="article-heading"><a href="#ParseError" class="headerlink" title="ParseError"></a>ParseError<a class="article-anchor" href="#ParseError" aria-hidden="true"></a></h3><p>• <strong>ParseError</strong>:</p>
+<hr>
+<h3 id="QUOTE" class="article-heading"><a href="#QUOTE" class="headerlink" title="QUOTE"></a>QUOTE<a class="article-anchor" href="#QUOTE" aria-hidden="true"></a></h3><p>• <strong>QUOTE</strong>:</p>
+<hr>
+<h3 id="RenderError" class="article-heading"><a href="#RenderError" class="headerlink" title="RenderError"></a>RenderError<a class="article-anchor" href="#RenderError" aria-hidden="true"></a></h3><p>• <strong>RenderError</strong>:</p>
+<hr>
+<h3 id="SIGN" class="article-heading"><a href="#SIGN" class="headerlink" title="SIGN"></a>SIGN<a class="article-anchor" href="#SIGN" aria-hidden="true"></a></h3><p>• <strong>SIGN</strong>:</p>
+<hr>
+<h3 id="TYPES" class="article-heading"><a href="#TYPES" class="headerlink" title="TYPES"></a>TYPES<a class="article-anchor" href="#TYPES" aria-hidden="true"></a></h3><p>• <strong>TYPES</strong>:</p>
+<hr>
+<h3 id="TimezoneDate" class="article-heading"><a href="#TimezoneDate" class="headerlink" title="TimezoneDate"></a>TimezoneDate<a class="article-anchor" href="#TimezoneDate" aria-hidden="true"></a></h3><p>• <strong>TimezoneDate</strong>:</p>
+<hr>
+<h3 id="TokenizationError" class="article-heading"><a href="#TokenizationError" class="headerlink" title="TokenizationError"></a>TokenizationError<a class="article-anchor" href="#TokenizationError" aria-hidden="true"></a></h3><p>• <strong>TokenizationError</strong>:</p>
+<hr>
+<h3 id="Trie" class="article-heading"><a href="#Trie" class="headerlink" title="Trie"></a>Trie<a class="article-anchor" href="#Trie" aria-hidden="true"></a></h3><p>• <strong>Trie</strong>:</p>
+<hr>
+<h3 id="TrieNode" class="article-heading"><a href="#TrieNode" class="headerlink" title="TrieNode"></a>TrieNode<a class="article-anchor" href="#TrieNode" aria-hidden="true"></a></h3><p>• <strong>TrieNode</strong>:</p>
+<hr>
+<h3 id="UndefinedVariableError" class="article-heading"><a href="#UndefinedVariableError" class="headerlink" title="UndefinedVariableError"></a>UndefinedVariableError<a class="article-anchor" href="#UndefinedVariableError" aria-hidden="true"></a></h3><p>• <strong>UndefinedVariableError</strong>:</p>
+<hr>
+<h3 id="argumentsToValue" class="article-heading"><a href="#argumentsToValue" class="headerlink" title="argumentsToValue"></a>argumentsToValue<a class="article-anchor" href="#argumentsToValue" aria-hidden="true"></a></h3><p>• <strong>argumentsToValue</strong>:</p>
+<hr>
+<h3 id="assert" class="article-heading"><a href="#assert" class="headerlink" title="assert"></a>assert<a class="article-anchor" href="#assert" aria-hidden="true"></a></h3><p>• <strong>assert</strong>:</p>
+<hr>
+<h3 id="caseInsensitiveCompare" class="article-heading"><a href="#caseInsensitiveCompare" class="headerlink" title="caseInsensitiveCompare"></a>caseInsensitiveCompare<a class="article-anchor" href="#caseInsensitiveCompare" aria-hidden="true"></a></h3><p>• <strong>caseInsensitiveCompare</strong>:</p>
+<hr>
+<h3 id="changeCase" class="article-heading"><a href="#changeCase" class="headerlink" title="changeCase"></a>changeCase<a class="article-anchor" href="#changeCase" aria-hidden="true"></a></h3><p>• <strong>changeCase</strong>:</p>
+<hr>
+<h3 id="createTrie" class="article-heading"><a href="#createTrie" class="headerlink" title="createTrie"></a>createTrie<a class="article-anchor" href="#createTrie" aria-hidden="true"></a></h3><p>• <strong>createTrie</strong>:</p>
+<hr>
+<h3 id="ellipsis" class="article-heading"><a href="#ellipsis" class="headerlink" title="ellipsis"></a>ellipsis<a class="article-anchor" href="#ellipsis" aria-hidden="true"></a></h3><p>• <strong>ellipsis</strong>:</p>
+<hr>
+<h3 id="escapeRegExp" class="article-heading"><a href="#escapeRegExp" class="headerlink" title="escapeRegExp"></a>escapeRegExp<a class="article-anchor" href="#escapeRegExp" aria-hidden="true"></a></h3><p>• <strong>escapeRegExp</strong>:</p>
+<hr>
+<h3 id="escapeRegex" class="article-heading"><a href="#escapeRegex" class="headerlink" title="escapeRegex"></a>escapeRegex<a class="article-anchor" href="#escapeRegex" aria-hidden="true"></a></h3><p>• <strong>escapeRegex</strong>:</p>
+<hr>
+<h3 id="forOwn" class="article-heading"><a href="#forOwn" class="headerlink" title="forOwn"></a>forOwn<a class="article-anchor" href="#forOwn" aria-hidden="true"></a></h3><p>• <strong>forOwn</strong>:</p>
+<hr>
+<h3 id="hasOwnProperty-NaN" class="article-heading"><a href="#hasOwnProperty-NaN" class="headerlink" title="hasOwnProperty"></a>hasOwnProperty<a class="article-anchor" href="#hasOwnProperty-NaN" aria-hidden="true"></a></h3><p>• <strong>hasOwnProperty</strong>:</p>
+<hr>
+<h3 id="identify" class="article-heading"><a href="#identify" class="headerlink" title="identify"></a>identify<a class="article-anchor" href="#identify" aria-hidden="true"></a></h3><p>• <strong>identify</strong>:</p>
+<hr>
+<h3 id="isArray" class="article-heading"><a href="#isArray" class="headerlink" title="isArray"></a>isArray<a class="article-anchor" href="#isArray" aria-hidden="true"></a></h3><p>• <strong>isArray</strong>:</p>
+<hr>
+<h3 id="isDelimitedToken" class="article-heading"><a href="#isDelimitedToken" class="headerlink" title="isDelimitedToken"></a>isDelimitedToken<a class="article-anchor" href="#isDelimitedToken" aria-hidden="true"></a></h3><p>• <strong>isDelimitedToken</strong>:</p>
+<hr>
+<h3 id="isFunction" class="article-heading"><a href="#isFunction" class="headerlink" title="isFunction"></a>isFunction<a class="article-anchor" href="#isFunction" aria-hidden="true"></a></h3><p>• <strong>isFunction</strong>:</p>
+<hr>
+<h3 id="isHTMLToken" class="article-heading"><a href="#isHTMLToken" class="headerlink" title="isHTMLToken"></a>isHTMLToken<a class="article-anchor" href="#isHTMLToken" aria-hidden="true"></a></h3><p>• <strong>isHTMLToken</strong>:</p>
+<hr>
+<h3 id="isIterable" class="article-heading"><a href="#isIterable" class="headerlink" title="isIterable"></a>isIterable<a class="article-anchor" href="#isIterable" aria-hidden="true"></a></h3><p>• <strong>isIterable</strong>:</p>
+<hr>
+<h3 id="isIterator" class="article-heading"><a href="#isIterator" class="headerlink" title="isIterator"></a>isIterator<a class="article-anchor" href="#isIterator" aria-hidden="true"></a></h3><p>• <strong>isIterator</strong>:</p>
+<hr>
+<h3 id="isLiteralToken" class="article-heading"><a href="#isLiteralToken" class="headerlink" title="isLiteralToken"></a>isLiteralToken<a class="article-anchor" href="#isLiteralToken" aria-hidden="true"></a></h3><p>• <strong>isLiteralToken</strong>:</p>
+<hr>
+<h3 id="isNil" class="article-heading"><a href="#isNil" class="headerlink" title="isNil"></a>isNil<a class="article-anchor" href="#isNil" aria-hidden="true"></a></h3><p>• <strong>isNil</strong>:</p>
+<hr>
+<h3 id="isNumber" class="article-heading"><a href="#isNumber" class="headerlink" title="isNumber"></a>isNumber<a class="article-anchor" href="#isNumber" aria-hidden="true"></a></h3><p>• <strong>isNumber</strong>:</p>
+<hr>
+<h3 id="isNumberToken" class="article-heading"><a href="#isNumberToken" class="headerlink" title="isNumberToken"></a>isNumberToken<a class="article-anchor" href="#isNumberToken" aria-hidden="true"></a></h3><p>• <strong>isNumberToken</strong>:</p>
+<hr>
+<h3 id="isObject" class="article-heading"><a href="#isObject" class="headerlink" title="isObject"></a>isObject<a class="article-anchor" href="#isObject" aria-hidden="true"></a></h3><p>• <strong>isObject</strong>:</p>
+<hr>
+<h3 id="isOperatorToken" class="article-heading"><a href="#isOperatorToken" class="headerlink" title="isOperatorToken"></a>isOperatorToken<a class="article-anchor" href="#isOperatorToken" aria-hidden="true"></a></h3><p>• <strong>isOperatorToken</strong>:</p>
+<hr>
+<h3 id="isOutputToken" class="article-heading"><a href="#isOutputToken" class="headerlink" title="isOutputToken"></a>isOutputToken<a class="article-anchor" href="#isOutputToken" aria-hidden="true"></a></h3><p>• <strong>isOutputToken</strong>:</p>
+<hr>
+<h3 id="isPromise" class="article-heading"><a href="#isPromise" class="headerlink" title="isPromise"></a>isPromise<a class="article-anchor" href="#isPromise" aria-hidden="true"></a></h3><p>• <strong>isPromise</strong>:</p>
+<hr>
+<h3 id="isPropertyAccessToken" class="article-heading"><a href="#isPropertyAccessToken" class="headerlink" title="isPropertyAccessToken"></a>isPropertyAccessToken<a class="article-anchor" href="#isPropertyAccessToken" aria-hidden="true"></a></h3><p>• <strong>isPropertyAccessToken</strong>:</p>
+<hr>
+<h3 id="isQuotedToken" class="article-heading"><a href="#isQuotedToken" class="headerlink" title="isQuotedToken"></a>isQuotedToken<a class="article-anchor" href="#isQuotedToken" aria-hidden="true"></a></h3><p>• <strong>isQuotedToken</strong>:</p>
+<hr>
+<h3 id="isRangeToken" class="article-heading"><a href="#isRangeToken" class="headerlink" title="isRangeToken"></a>isRangeToken<a class="article-anchor" href="#isRangeToken" aria-hidden="true"></a></h3><p>• <strong>isRangeToken</strong>:</p>
+<hr>
+<h3 id="isString" class="article-heading"><a href="#isString" class="headerlink" title="isString"></a>isString<a class="article-anchor" href="#isString" aria-hidden="true"></a></h3><p>• <strong>isString</strong>:</p>
+<hr>
+<h3 id="isTagToken" class="article-heading"><a href="#isTagToken" class="headerlink" title="isTagToken"></a>isTagToken<a class="article-anchor" href="#isTagToken" aria-hidden="true"></a></h3><p>• <strong>isTagToken</strong>:</p>
+<hr>
+<h3 id="isWordToken" class="article-heading"><a href="#isWordToken" class="headerlink" title="isWordToken"></a>isWordToken<a class="article-anchor" href="#isWordToken" aria-hidden="true"></a></h3><p>• <strong>isWordToken</strong>:</p>
+<hr>
+<h3 id="last" class="article-heading"><a href="#last" class="headerlink" title="last"></a>last<a class="article-anchor" href="#last" aria-hidden="true"></a></h3><p>• <strong>last</strong>:</p>
+<hr>
+<h3 id="literalValues" class="article-heading"><a href="#literalValues" class="headerlink" title="literalValues"></a>literalValues<a class="article-anchor" href="#literalValues" aria-hidden="true"></a></h3><p>• <strong>literalValues</strong>:</p>
+<hr>
+<h3 id="pad" class="article-heading"><a href="#pad" class="headerlink" title="pad"></a>pad<a class="article-anchor" href="#pad" aria-hidden="true"></a></h3><p>• <strong>pad</strong>:</p>
+<hr>
+<h3 id="padEnd" class="article-heading"><a href="#padEnd" class="headerlink" title="padEnd"></a>padEnd<a class="article-anchor" href="#padEnd" aria-hidden="true"></a></h3><p>• <strong>padEnd</strong>:</p>
+<hr>
+<h3 id="padStart" class="article-heading"><a href="#padStart" class="headerlink" title="padStart"></a>padStart<a class="article-anchor" href="#padStart" aria-hidden="true"></a></h3><p>• <strong>padStart</strong>:</p>
+<hr>
+<h3 id="promisify" class="article-heading"><a href="#promisify" class="headerlink" title="promisify"></a>promisify<a class="article-anchor" href="#promisify" aria-hidden="true"></a></h3><p>• <strong>promisify</strong>:</p>
+<hr>
+<h3 id="range" class="article-heading"><a href="#range" class="headerlink" title="range"></a>range<a class="article-anchor" href="#range" aria-hidden="true"></a></h3><p>• <strong>range</strong>:</p>
+<hr>
+<h3 id="strftime" class="article-heading"><a href="#strftime" class="headerlink" title="strftime"></a>strftime<a class="article-anchor" href="#strftime" aria-hidden="true"></a></h3><p>• <strong>strftime</strong>:</p>
+<hr>
+<h3 id="stringify" class="article-heading"><a href="#stringify" class="headerlink" title="stringify"></a>stringify<a class="article-anchor" href="#stringify" aria-hidden="true"></a></h3><p>• <strong>stringify</strong>:</p>
+<hr>
+<h3 id="toArray" class="article-heading"><a href="#toArray" class="headerlink" title="toArray"></a>toArray<a class="article-anchor" href="#toArray" aria-hidden="true"></a></h3><p>• <strong>toArray</strong>:</p>
+<hr>
+<h3 id="toEnumerable" class="article-heading"><a href="#toEnumerable" class="headerlink" title="toEnumerable"></a>toEnumerable<a class="article-anchor" href="#toEnumerable" aria-hidden="true"></a></h3><p>• <strong>toEnumerable</strong>:</p>
+<hr>
+<h3 id="toLiquid" class="article-heading"><a href="#toLiquid" class="headerlink" title="toLiquid"></a>toLiquid<a class="article-anchor" href="#toLiquid" aria-hidden="true"></a></h3><p>• <strong>toLiquid</strong>:</p>
+<hr>
+<h3 id="toPromise" class="article-heading"><a href="#toPromise" class="headerlink" title="toPromise"></a>toPromise<a class="article-anchor" href="#toPromise" aria-hidden="true"></a></h3><p>• <strong>toPromise</strong>:</p>
+<hr>
+<h3 id="toString-NaN" class="article-heading"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString<a class="article-anchor" href="#toString-NaN" aria-hidden="true"></a></h3><p>• <strong>toString</strong>:</p>
+<hr>
+<h3 id="toValue" class="article-heading"><a href="#toValue" class="headerlink" title="toValue"></a>toValue<a class="article-anchor" href="#toValue" aria-hidden="true"></a></h3><p>• <strong>toValue</strong>:</p>
+<hr>
+<h3 id="toValueSync" class="article-heading"><a href="#toValueSync" class="headerlink" title="toValueSync"></a>toValueSync<a class="article-anchor" href="#toValueSync" aria-hidden="true"></a></h3><p>• <strong>toValueSync</strong>:</p>
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2022-11-27T09:47:21.537Z" itemprop="dateModified">上次更新：2022-11-27</time>
+                <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>下一页</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">目录</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-text">References</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#AssertionError"><span class="toc-text">AssertionError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BLANK"><span class="toc-text">BLANK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IDENTIFIER"><span class="toc-text">IDENTIFIER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#INLINE-BLANK"><span class="toc-text">INLINE_BLANK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InternalUndefinedVariableError"><span class="toc-text">InternalUndefinedVariableError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LiquidDate"><span class="toc-text">LiquidDate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LiquidError"><span class="toc-text">LiquidError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NUMBER"><span class="toc-text">NUMBER</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OPERATOR"><span class="toc-text">OPERATOR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ParseError"><span class="toc-text">ParseError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#QUOTE"><span class="toc-text">QUOTE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RenderError"><span class="toc-text">RenderError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SIGN"><span class="toc-text">SIGN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TYPES"><span class="toc-text">TYPES</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TimezoneDate"><span class="toc-text">TimezoneDate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TokenizationError"><span class="toc-text">TokenizationError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Trie"><span class="toc-text">Trie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TrieNode"><span class="toc-text">TrieNode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UndefinedVariableError"><span class="toc-text">UndefinedVariableError</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#argumentsToValue"><span class="toc-text">argumentsToValue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#assert"><span class="toc-text">assert</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#caseInsensitiveCompare"><span class="toc-text">caseInsensitiveCompare</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#changeCase"><span class="toc-text">changeCase</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createTrie"><span class="toc-text">createTrie</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ellipsis"><span class="toc-text">ellipsis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#escapeRegExp"><span class="toc-text">escapeRegExp</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#escapeRegex"><span class="toc-text">escapeRegex</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#forOwn"><span class="toc-text">forOwn</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hasOwnProperty-NaN"><span class="toc-text">hasOwnProperty</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#identify"><span class="toc-text">identify</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isArray"><span class="toc-text">isArray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isDelimitedToken"><span class="toc-text">isDelimitedToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isFunction"><span class="toc-text">isFunction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isHTMLToken"><span class="toc-text">isHTMLToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isIterable"><span class="toc-text">isIterable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isIterator"><span class="toc-text">isIterator</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isLiteralToken"><span class="toc-text">isLiteralToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isNil"><span class="toc-text">isNil</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isNumber"><span class="toc-text">isNumber</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isNumberToken"><span class="toc-text">isNumberToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isObject"><span class="toc-text">isObject</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isOperatorToken"><span class="toc-text">isOperatorToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isOutputToken"><span class="toc-text">isOutputToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isPromise"><span class="toc-text">isPromise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isPropertyAccessToken"><span class="toc-text">isPropertyAccessToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isQuotedToken"><span class="toc-text">isQuotedToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isRangeToken"><span class="toc-text">isRangeToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isString"><span class="toc-text">isString</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isTagToken"><span class="toc-text">isTagToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isWordToken"><span class="toc-text">isWordToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#last"><span class="toc-text">last</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#literalValues"><span class="toc-text">literalValues</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pad"><span class="toc-text">pad</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#padEnd"><span class="toc-text">padEnd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#padStart"><span class="toc-text">padStart</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#promisify"><span class="toc-text">promisify</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#range"><span class="toc-text">range</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#strftime"><span class="toc-text">strftime</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stringify"><span class="toc-text">stringify</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toArray"><span class="toc-text">toArray</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toEnumerable"><span class="toc-text">toEnumerable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toLiquid"><span class="toc-text">toLiquid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toPromise"><span class="toc-text">toPromise</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toString-NaN"><span class="toc-text">toString</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toValue"><span class="toc-text">toValue</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toValueSync"><span class="toc-text">toValueSync</span></a></li></ol></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">回到顶部</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2022 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://www.patreon.com/harttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-patreon"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="../../tutorials/intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../../tags/overview.html" class="mobile-nav-link">标签</a><a href="../../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../../playground.html" class="mobile-nav-link">演示</a><a href="../classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <strong class="mobile-nav-title">快速入口</strong><a href="../classes/liquid_.liquid.html" class="mobile-nav-link">Liquid</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="mobile-nav-link">LiquidOptions</a><a href="../interfaces/fs_fs_.fs.html" class="mobile-nav-link">FS</a><a href="../interfaces/cache_cache_.cache.html" class="mobile-nav-link">Cache</a><strong class="mobile-nav-title">类</strong><a href="../classes/drop_blank_drop_.blankdrop.html" class="mobile-nav-link">BlankDrop</a><a href="../classes/context_context_.context.html" class="mobile-nav-link">Context</a><a href="../classes/tokens_delimited_token_.delimitedtoken.html" class="mobile-nav-link">DelimitedToken</a><a href="../classes/drop_drop_.drop.html" class="mobile-nav-link">Drop</a><a href="../classes/drop_empty_drop_.emptydrop.html" class="mobile-nav-link">EmptyDrop</a><a href="../classes/render_expression_.expression.html" class="mobile-nav-link">Expression</a><a href="../classes/tokens_filter_token_.filtertoken.html" class="mobile-nav-link">FilterToken</a><a href="../classes/drop_forloop_drop_.forloopdrop.html" class="mobile-nav-link">ForloopDrop</a><a href="../classes/tokens_html_token_.htmltoken.html" class="mobile-nav-link">HTMLToken</a><a href="../classes/tokens_hash_token_.hashtoken.html" class="mobile-nav-link">HashToken</a><a href="../classes/cache_lru_.lru.html" class="mobile-nav-link">LRU</a><a href="../classes/liquid_.liquid.html" class="mobile-nav-link">Liquid</a><a href="../classes/tokens_literal_token_.literaltoken.html" class="mobile-nav-link">LiteralToken</a><a href="../classes/drop_null_drop_.nulldrop.html" class="mobile-nav-link">NullDrop</a><a href="../classes/tokens_number_token_.numbertoken.html" class="mobile-nav-link">NumberToken</a><a href="../classes/tokens_operator_token_.operatortoken.html" class="mobile-nav-link">OperatorToken</a><a href="../classes/tokens_output_token_.outputtoken.html" class="mobile-nav-link">OutputToken</a><a href="../classes/util_error_.parseerror.html" class="mobile-nav-link">ParseError</a><a href="../classes/parser_parse_stream_.parsestream.html" class="mobile-nav-link">ParseStream</a><a href="../classes/parser_parser_.parser.html" class="mobile-nav-link">Parser</a><a href="../classes/tokens_property_access_token_.propertyaccesstoken.html" class="mobile-nav-link">PropertyaccessToken</a><a href="../classes/tokens_quoted_token_.quotedtoken.html" class="mobile-nav-link">QuotedToken</a><a href="../classes/tokens_range_token_.rangetoken.html" class="mobile-nav-link">RangeToken</a><a href="../classes/render_render_.render.html" class="mobile-nav-link">Render</a><a href="../classes/util_error_.rendererror.html" class="mobile-nav-link">RenderError</a><a href="../classes/drop_tablerowloop_drop_.tablerowloopdrop.html" class="mobile-nav-link">TablerowloopDrop</a><a href="../classes/tokens_tag_token_.tagtoken.html" class="mobile-nav-link">TagToken</a><a href="../classes/tokens_token_.token.html" class="mobile-nav-link">Token</a><a href="../classes/util_error_.tokenizationerror.html" class="mobile-nav-link">TokenizationError</a><a href="../classes/parser_tokenizer_.tokenizer.html" class="mobile-nav-link">Tokenizer</a><a href="../classes/tokens_word_token_.wordtoken.html" class="mobile-nav-link">WordToken</a><strong class="mobile-nav-title">枚举</strong><a href="../enums/context_block_mode_.blockmode.html" class="mobile-nav-link">BlockMode</a><a href="../enums/parser_token_kind_.tokenkind.html" class="mobile-nav-link">TokenKind</a><strong class="mobile-nav-title">接口</strong><a href="../interfaces/cache_cache_.cache.html" class="mobile-nav-link">Cache</a><a href="../interfaces/template_filter_filter_impl_options_.filterimploptions.html" class="mobile-nav-link">FilterImplOptions</a><a href="../interfaces/fs_fs_.fs.html" class="mobile-nav-link">FS</a><a href="../interfaces/liquid_options_.liquidoptions.html" class="mobile-nav-link">LiquidOptions</a><a href="../interfaces/liquid_options_.normalizedfulloptions.html" class="mobile-nav-link">NormalizedFullOptions</a><a href="../interfaces/context_scope_.plainobject.html" class="mobile-nav-link">PlainObject</a><a href="../interfaces/template_tag_tag_impl_options_.tagimploptions.html" class="mobile-nav-link">TagImplOptions</a>
+    </div>
+    
+  </div>
+  <div id="mobile-button-list">
+    <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-github"></i></a>
+    <a href="https://opencollective.com/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-opencollective"></i></a>
+    <div id="mobile-lang-select-wrap" class="mobile-nav-link">
+      <label for="mobile-lang-select"><i class="icon-network"></i></label>
+      <select id="mobile-lang-select" data-canonical="api/modules/util_index_.html">
+        
+          <option value="en">English</option>
+        
+          <option value="zh-cn" selected>简体中文</option>
+        
+      </select>
+    </div>
+  </div>
+</nav>
+  
+
+
+<script src="../../../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>

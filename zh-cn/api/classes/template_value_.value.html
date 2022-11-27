@@ -97,7 +97,7 @@
 <li><strong>Value</strong></li>
 </ul>
 <h2 id="Constructors" class="article-heading"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors<a class="article-anchor" href="#Constructors" aria-hidden="true"></a></h2><h3 id="constructor-NaN" class="article-heading"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor<a class="article-anchor" href="#constructor-NaN" aria-hidden="true"></a></h3><p>+ <strong>new Value</strong>(<code>str</code>: string, <code>liquid</code>: <a href="liquid_.liquid.html">Liquid</a>): <em><a href="template_value_.value.html">Value</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L9">src/template/value.ts:9</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L10">src/template/value.ts:10</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -119,13 +119,34 @@
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="template_value_.value.html">Value</a></em></p>
-<h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Readonly-filters" class="article-heading"><a href="#Readonly-filters" class="headerlink" title="Readonly filters"></a><code>Readonly</code> filters<a class="article-anchor" href="#Readonly-filters" aria-hidden="true"></a></h3><p>• <strong>filters</strong>: <em><a href="template_filter_filter_.filter.html">Filter</a>[]</em> = []</p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L8">src/template/value.ts:8</a></em></p>
+<h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Readonly-filters" class="article-heading"><a href="#Readonly-filters" class="headerlink" title="Readonly filters"></a><code>Readonly</code> filters<a class="article-anchor" href="#Readonly-filters" aria-hidden="true"></a></h3><p>• <strong>filters</strong>: <em><a href="template_filter_.filter.html">Filter</a>[]</em> = []</p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L9">src/template/value.ts:9</a></em></p>
 <hr>
 <h3 id="Readonly-initial" class="article-heading"><a href="#Readonly-initial" class="headerlink" title="Readonly initial"></a><code>Readonly</code> initial<a class="article-anchor" href="#Readonly-initial" aria-hidden="true"></a></h3><p>• <strong>initial</strong>: <em><a href="render_expression_.expression.html">Expression</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L9">src/template/value.ts:9</a></em></p>
-<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="value" class="article-heading"><a href="#value" class="headerlink" title="value"></a>value<a class="article-anchor" href="#value" aria-hidden="true"></a></h3><p>▸ <strong>value</strong>(<code>ctx</code>: <a href="context_context_.context.html">Context</a>, <code>lenient</code>: boolean): <em>Generator‹unknown, unknown, unknown›</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L19">src/template/value.ts:19</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L10">src/template/value.ts:10</a></em></p>
+<h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="Private-getFilter" class="article-heading"><a href="#Private-getFilter" class="headerlink" title="Private getFilter"></a><code>Private</code> getFilter<a class="article-anchor" href="#Private-getFilter" aria-hidden="true"></a></h3><p>▸ <strong>getFilter</strong>(<code>liquid</code>: <a href="liquid_.liquid.html">Liquid</a>, <code>name</code>: string): <em><a href="../interfaces/template_filter_impl_options_.filterimploptions.html">FilterImplOptions</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L29">src/template/value.ts:29</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>liquid</code></td>
+<td><a href="liquid_.liquid.html">Liquid</a></td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em><a href="../interfaces/template_filter_impl_options_.filterimploptions.html">FilterImplOptions</a></em></p>
+<hr>
+<h3 id="value" class="article-heading"><a href="#value" class="headerlink" title="value"></a>value<a class="article-anchor" href="#value" aria-hidden="true"></a></h3><p>▸ <strong>value</strong>(<code>ctx</code>: <a href="context_context_.context.html">Context</a>, <code>lenient</code>: boolean): <em>Generator‹unknown, unknown, unknown›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/template/value.ts#L20">src/template/value.ts:20</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -147,7 +168,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-11-27T05:48:45.779Z" itemprop="dateModified">上次更新：2022-11-27</time>
+                <time class="article-footer-updated" datetime="2022-11-27T09:47:21.541Z" itemprop="dateModified">上次更新：2022-11-27</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -156,7 +177,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">目录</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Readonly-filters"><span class="toc-text">Readonly filters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Readonly-initial"><span class="toc-text">Readonly initial</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#value"><span class="toc-text">value</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Readonly-filters"><span class="toc-text">Readonly filters</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Readonly-initial"><span class="toc-text">Readonly initial</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-getFilter"><span class="toc-text">Private getFilter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#value"><span class="toc-text">value</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">回到顶部</a>
             </div>

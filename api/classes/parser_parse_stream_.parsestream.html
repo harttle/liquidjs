@@ -98,7 +98,7 @@
 <li><strong>ParseStream</strong></li>
 </ul>
 <h2 id="Constructors" class="article-heading"><a href="#Constructors" class="headerlink" title="Constructors"></a>Constructors<a class="article-anchor" href="#Constructors" aria-hidden="true"></a></h2><h3 id="constructor-NaN" class="article-heading"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor<a class="article-anchor" href="#constructor-NaN" aria-hidden="true"></a></h3><p>+ <strong>new ParseStream</strong>(<code>tokens</code>: T[], <code>parseToken</code>: <a href="../modules/parser_parse_stream_.html#parsetoken">ParseToken</a>‹T›): <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L12">src/parser/parse-stream.ts:12</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L11">src/parser/parse-stream.ts:11</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -117,36 +117,19 @@
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a></em></p>
-<h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Private-handlers" class="article-heading"><a href="#Private-handlers" class="headerlink" title="Private handlers"></a><code>Private</code> handlers<a class="article-anchor" href="#Private-handlers" aria-hidden="true"></a></h3><p>• <strong>handlers</strong>: <em>object</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L10">src/parser/parse-stream.ts:10</a></em></p>
-<h4 id="Type-declaration" class="article-heading"><a href="#Type-declaration" class="headerlink" title="Type declaration:"></a>Type declaration:<a class="article-anchor" href="#Type-declaration" aria-hidden="true"></a></h4><ul>
-<li>[ <strong>key</strong>: <em>string</em>]: function</li>
-</ul>
-<p>▸ (<code>arg</code>: any): <em>void</em></p>
-<p><strong>Parameters:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>arg</code></td>
-<td>any</td>
-</tr>
-</tbody></table>
+<h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Private-handlers" class="article-heading"><a href="#Private-handlers" class="headerlink" title="Private handlers"></a><code>Private</code> handlers<a class="article-anchor" href="#Private-handlers" aria-hidden="true"></a></h3><p>• <strong>handlers</strong>: <em>Record‹string, function›</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L9">src/parser/parse-stream.ts:9</a></em></p>
 <hr>
 <h3 id="Private-parseToken" class="article-heading"><a href="#Private-parseToken" class="headerlink" title="Private parseToken"></a><code>Private</code> parseToken<a class="article-anchor" href="#Private-parseToken" aria-hidden="true"></a></h3><p>• <strong>parseToken</strong>: <em><a href="../modules/parser_parse_stream_.html#parsetoken">ParseToken</a>‹T›</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L12">src/parser/parse-stream.ts:12</a></em></p>
-<hr>
-<h3 id="Private-stopRequested" class="article-heading"><a href="#Private-stopRequested" class="headerlink" title="Private stopRequested"></a><code>Private</code> stopRequested<a class="article-anchor" href="#Private-stopRequested" aria-hidden="true"></a></h3><p>• <strong>stopRequested</strong>: <em>boolean</em> = false</p>
 <p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L11">src/parser/parse-stream.ts:11</a></em></p>
 <hr>
+<h3 id="Private-stopRequested" class="article-heading"><a href="#Private-stopRequested" class="headerlink" title="Private stopRequested"></a><code>Private</code> stopRequested<a class="article-anchor" href="#Private-stopRequested" aria-hidden="true"></a></h3><p>• <strong>stopRequested</strong>: <em>boolean</em> = false</p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L10">src/parser/parse-stream.ts:10</a></em></p>
+<hr>
 <h3 id="Private-tokens" class="article-heading"><a href="#Private-tokens" class="headerlink" title="Private tokens"></a><code>Private</code> tokens<a class="article-anchor" href="#Private-tokens" aria-hidden="true"></a></h3><p>• <strong>tokens</strong>: <em>T[]</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L9">src/parser/parse-stream.ts:9</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L8">src/parser/parse-stream.ts:8</a></em></p>
 <h2 id="Methods" class="article-heading"><a href="#Methods" class="headerlink" title="Methods"></a>Methods<a class="article-anchor" href="#Methods" aria-hidden="true"></a></h2><h3 id="on" class="article-heading"><a href="#on" class="headerlink" title="on"></a>on<a class="article-anchor" href="#on" aria-hidden="true"></a></h3><p>▸ <strong>on</strong>&lt;<strong>T2</strong>&gt;(<code>name</code>: string, <code>cb</code>: function): <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a>‹T›</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L18">src/parser/parse-stream.ts:18</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L17">src/parser/parse-stream.ts:17</a></em></p>
 <p><strong>Type parameters:</strong></p>
 <p>▪ <strong>T2</strong>: <em><a href="../interfaces/template_template_.template.html">Template</a> | T | undefined</em></p>
 <p><strong>Parameters:</strong></p>
@@ -173,15 +156,15 @@
 <p><strong>Returns:</strong> <em><a href="parser_parse_stream_.parsestream.html">ParseStream</a>‹T›</em></p>
 <hr>
 <h3 id="start" class="article-heading"><a href="#start" class="headerlink" title="start"></a>start<a class="article-anchor" href="#start" aria-hidden="true"></a></h3><p>▸ <strong>start</strong>(): <em>this</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L26">src/parser/parse-stream.ts:26</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L25">src/parser/parse-stream.ts:25</a></em></p>
 <p><strong>Returns:</strong> <em>this</em></p>
 <hr>
 <h3 id="stop" class="article-heading"><a href="#stop" class="headerlink" title="stop"></a>stop<a class="article-anchor" href="#stop" aria-hidden="true"></a></h3><p>▸ <strong>stop</strong>(): <em>this</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L40">src/parser/parse-stream.ts:40</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L39">src/parser/parse-stream.ts:39</a></em></p>
 <p><strong>Returns:</strong> <em>this</em></p>
 <hr>
 <h3 id="Private-trigger" class="article-heading"><a href="#Private-trigger" class="headerlink" title="Private trigger"></a><code>Private</code> trigger<a class="article-anchor" href="#Private-trigger" aria-hidden="true"></a></h3><p>▸ <strong>trigger</strong>&lt;<strong>T</strong>&gt;(<code>event</code>: string, <code>arg?</code>: T): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L22">src/parser/parse-stream.ts:22</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/parser/parse-stream.ts#L21">src/parser/parse-stream.ts:21</a></em></p>
 <p><strong>Type parameters:</strong></p>
 <p>▪ <strong>T</strong>: <em><a href="tokens_token_.token.html">Token</a> | <a href="../interfaces/template_template_.template.html">Template</a></em></p>
 <p><strong>Parameters:</strong></p>
@@ -205,7 +188,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-11-27T05:48:43.715Z" itemprop="dateModified">Last updated: 2022-11-27</time>
+                <time class="article-footer-updated" datetime="2022-11-27T09:47:18.884Z" itemprop="dateModified">Last updated: 2022-11-27</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -214,7 +197,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Type-parameters"><span class="toc-text">Type parameters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-handlers"><span class="toc-text">Private handlers</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration"><span class="toc-text">Type declaration:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-parseToken"><span class="toc-text">Private parseToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-stopRequested"><span class="toc-text">Private stopRequested</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-tokens"><span class="toc-text">Private tokens</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#on"><span class="toc-text">on</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#start"><span class="toc-text">start</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stop"><span class="toc-text">stop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-trigger"><span class="toc-text">Private trigger</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Type-parameters"><span class="toc-text">Type parameters</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchy"><span class="toc-text">Hierarchy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Constructors"><span class="toc-text">Constructors</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#constructor-NaN"><span class="toc-text">constructor</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Properties"><span class="toc-text">Properties</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-handlers"><span class="toc-text">Private handlers</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-parseToken"><span class="toc-text">Private parseToken</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-stopRequested"><span class="toc-text">Private stopRequested</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-tokens"><span class="toc-text">Private tokens</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Methods"><span class="toc-text">Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#on"><span class="toc-text">on</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#start"><span class="toc-text">start</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stop"><span class="toc-text">stop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Private-trigger"><span class="toc-text">Private trigger</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
