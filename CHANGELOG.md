@@ -1,3 +1,10 @@
+# [10.1.0](https://github.com/harttle/liquidjs/compare/v10.0.0...v10.1.0) (2022-11-29)
+
+
+### Features
+
+* timezone name for `opts.timezoneOffset` and `date` argument, fixes [#553](https://github.com/harttle/liquidjs/issues/553) ([89c6c76](https://github.com/harttle/liquidjs/commit/89c6c7676d40f23090472a28cbf2fb22f93daad3))
+
 # [10.0.0](https://github.com/harttle/liquidjs/compare/v9.43.0...v10.0.0) (2022-11-27)
 
 
