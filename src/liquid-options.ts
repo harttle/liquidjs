@@ -35,8 +35,8 @@ export interface LiquidOptions {
   ownPropertyOnly?: boolean;
   /** Modifies the behavior of `strictVariables`. If set, a single undefined variable will *not* cause an exception in the context of the `if`/`elsif`/`unless` tag and the `default` filter. Instead, it will evaluate to `false` and `null`, respectively. Irrelevant if `strictVariables` is not set. Defaults to `false`. **/
   lenientIf?: boolean;
-  /** JavaScript timezoneOffset for `date` filter, default to local time. That means if you're in Australia (UTC+10), it'll default to -600 */
-  timezoneOffset?: number;
+  /** JavaScript timezone name or timezoneOffset for `date` filter, default to local time. That means if you're in Australia (UTC+10), it'll default to `-600` or `Australia/Lindeman` */
+  timezoneOffset?: number | string;
   /** Strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`. */
   trimTagRight?: boolean;
   /** Similar to `trimTagRight`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */

@@ -64,15 +64,28 @@ describe('filters/date', function () {
     it('should support timezone offset argument', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", 360}}', '1990-12-31T17:00:00')
     })
+    it('should support timezone name argument', function () {
+      return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }}', '1991-01-01T04:30:00')
+    })
+    it('should support timezone name argument when DST is not active', function () {
+      return test('{{ "2021-01-01T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "America/New_York" }}', '2021-01-01T18:00:00')
+    })
+    it('should support timezone name argument when DST is active', function () {
+      return test('{{ "2021-06-01T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "America/New_York" }}', '2021-06-01T19:00:00')
+    })
     it('should offset date literal with timezone 00:00 specified', function () {
       return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T17:00:00', undefined, opts)
     })
     it('should offset date literal with timezone -01:00 specified', function () {
       return test('{{ "1990-12-31T23:00:00-01:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T18:00:00', undefined, opts)
     })
-    it('should offset date from scope', function () {
+    it('should offset date from scope (timezone offset)', function () {
       const scope = { date: new Date('1990-12-31T23:00:00Z') }
       return test('{{ date | date: "%Y-%m-%dT%H:%M:%S"}}', scope, '1990-12-31T17:00:00', opts)
+    })
+    it('should offset date from scope (timezone name)', function () {
+      const scope = { date: new Date('1990-12-31T23:00:00Z') }
+      return test('{{ date | date: "%Y-%m-%dT%H:%M:%S"}}', scope, '1990-12-31T17:00:00', { timezoneOffset: 'America/Merida' })
     })
     it('should reflect timezoneOffset', function () {
       const scope = { date: new Date('1990-12-31T23:00:00Z') }
