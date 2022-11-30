@@ -25,6 +25,7 @@ var ctx = {
   duration_20_days: {value: 20, type: "DAYS", days: 20},
   duration_2_months: {value: 2, type: "MONTHS", days: 60},
   duration_3_years: {value: 3, type: "YEARS", days: 1095},
+  duration_fortnight_invalid: {value: 1, type: "FORTNIGHT", days: 14},
   currency_thousand: {value: 1000, type: "INR"},
   currency_hundred: {value: 100, type: "INR"},
   currency_ten: {value: 10, type: "INR"},
@@ -50,6 +51,17 @@ var ctx = {
 
 function test (src, dst) {
   return expect(liquid.parseAndRender(src, ctx)).to.eventually.equal(dst)
+}
+
+function checkForError(src, errorMessage) {
+
+  if(!errorMessage){
+    return expect(liquid.parseAndRender(src, ctx)).to.be.rejected;
+  }
+
+  return expect(liquid.parseAndRender(src, ctx)).to.be.rejectedWith(
+    errorMessage
+  );
 }
 
 describe('filters', function () {
@@ -705,6 +717,124 @@ describe('filters', function () {
       const dst = {value: 0, type: "INR"};
       return test('{{ 2 | times: currency_val_null | times: currency_thousand}}', JSON.stringify(dst))
     })
+  })
+
+  describe("toCurrency", function(){
+    const errMessage = "invalid currency value or type";
+
+    it('should return {value: 8000, type: "INR"}"', () => {
+      const dst = { value: 8000, type: "INR" };
+      return test('{{ 8000 | toCurrency: "INR" }}', JSON.stringify(dst));
+    });
+
+    it('should return {value: 100, type: "USD"}', () => {
+      const dst = { value: 100, type: "USD" };
+      return test('{{ 100 | toCurrency: "USD" }}', JSON.stringify(dst));
+    });
+
+    it('should return {value: 150.1, type: "USD"}', () => {
+      const dst = { value: 150.1, type: "USD" };
+      return test('{{ 150.1 | toCurrency: "USD" }}', JSON.stringify(dst));
+    });
+
+    it("should return value and type same as existing variable", () => 
+      test(
+        "{% assign currVar = currency_thousand.value | toCurrency: currency_thousand.type %}{{currVar}}",
+        JSON.stringify(ctx.currency_thousand)
+      )
+    );
+
+    it("should throw error when assigning value from existing variable with null value", () =>
+      checkForError(
+        '{% assign currVar = currency_val_null.value  | toCurrency: currency_val_null.type %}{{currVar}}',
+         errMessage));
+
+    it("should throw error when currency value is a string", () =>
+      checkForError('{{ test | toCurrency: "USD" }}', errMessage));
+
+    it("should throw error when currency value is null", () =>
+      checkForError('{{ null | toCurrency: "USD" }}', errMessage));
+
+    it("should throw error when currency value is undefined", () =>
+      checkForError('{{ undefined | toCurrency: "USD" }}', errMessage));
+
+    it("should throw error when currency value is NaN", () =>
+      checkForError('{{ NaN | toCurrency: "USD" }}', errMessage));
+
+    it("should throw error when currency type is a number", () =>
+      checkForError("{{ 100 | toCurrency: 1 }}", errMessage));
+
+    it("should throw error when currency type is a symbol", () =>
+      checkForError("{{ 100 | toCurrency: $ }}", errMessage));
+
+    it("should throw error when currency type is null", () =>
+      checkForError("{{ 100 | toCurrency: null }}", errMessage));
+
+    it("should throw error when currency type is undefined", () =>
+      checkForError("{{ 100 | toCurrency: undefined }}", errMessage));
+  });
+
+  describe("toDuration", function(){
+
+    const invalidDurationTypeOrValueErrMsg = "invalid duration value or type";
+
+    it("should return {value: 10, type: 'DAYS', days: 10}", () => {
+      const dst = {value: 10, type: 'DAYS', days: 10};
+      return test('{{ 10 | toDuration: "Days" }}', JSON.stringify(dst))
+    })
+
+    it("should return {value: 7, type: 'weeks', days: 49}", () => {
+      const dst = {value: 7, type: 'WEEKS', days: 49};
+      return test('{{ 7 | toDuration: "weeks" }}', JSON.stringify(dst))
+    })
+
+    it("should return {value: 5, type: 'MONTHS', days: 150}", () => {
+      const dst = {value: 5, type: 'MONTHS', days: 150};
+      return test('{{ 5 | toDuration: "months" }}', JSON.stringify(dst))
+    })
+
+    it("should return {value: 2, type: 'YEARS', days: 730}", () => {
+      const dst = {value: 2, type: 'YEARS', days: 730};
+      return test('{{ 2 | toDuration: "Years" }}', JSON.stringify(dst))
+    })
+
+    it("should return duration value, type as existing variable with days calculated", () => 
+      test(
+        '{% assign durVar = duration_10_weeks.value | toDuration: duration_10_weeks.type %}{{durVar}}', 
+        JSON.stringify(ctx.duration_10_weeks)
+      )
+    )
+
+    it("should return duration value, type as existing variable with days calculated", () => 
+      test(
+        '{% assign durVar = duration_3_years.value | toDuration: duration_3_years.type %}{{durVar}}', 
+        JSON.stringify(ctx.duration_3_years)
+      )
+    )
+
+    it("should throw error when duration value is a string", () =>
+      checkForError('{{ "test" | toDuration: "days" }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration value is NaN", () =>
+      checkForError('{{ NaN | toDuration: "days" }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration value is undefined", () =>
+      checkForError('{{ undefined | toDuration: "months" }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration value is null", () =>
+      checkForError('{{ null | toDuration: "months" }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration type is not days, weeks, months or years", () =>
+      checkForError('{{ 2 | toDuration: duration_fortnight_invalid.type }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration type is a number", () =>
+      checkForError('{{ 10 | toDuration: 10 }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration type is null", () =>
+      checkForError('{{ 10 | toDuration: null }}', invalidDurationTypeOrValueErrMsg));
+
+    it("should throw error when duration type is undefined", () =>
+      checkForError('{{ 10 | toDuration: undefined }}', invalidDurationTypeOrValueErrMsg));
   })
 
   describe('truncate', function () {

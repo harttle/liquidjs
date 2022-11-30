@@ -19,6 +19,13 @@ var unescapeMap = {
   "&#39;": "'"
 };
 
+const DURATION_TYPES = {
+  DAYS: "DAYS", 
+  WEEKS: "WEEKS", 
+  MONTHS: "MONTHS", 
+  YEARS: "YEARS"
+}
+
 var filters = {
   abs: v => Math.abs(v),
   append: (v, arg) => v + arg,
@@ -75,6 +82,8 @@ var filters = {
   strip_html: v => stringify(v).replace(/<\/?\s*\w+\s*\/?>/g, ""),
   strip_newlines: v => stringify(v).replace(/\n/g, ""),
   times: (v, arg) => multiply(v, arg),
+  toCurrency: (v, arg) => toCurrency(v, arg),
+  toDuration: (v, arg) => toDuration(v, arg),
   truncate: (v, l, o) => {
     v = stringify(v);
     o = o === undefined ? "..." : o;
@@ -193,6 +202,32 @@ function calculateDurationInDays(toDate, fromDate) {
     type: "DAYS",
     value: durationInDays,
     days: durationInDays
+  }
+}
+
+/**
+ * 
+ * @param {number} durValue - should be a number, can be 0, negative number. 
+ * @param {string} durType - should be a string and be either days, weeks, months or years. 
+ * @returns A number which is a product of durValue and x, where x depends on 
+ * durType (days, weeks, months or years). An error will be thrown if x is not
+ * days, weeks, months or years.
+ */
+function calculateDaysFromDurValueAndType(durValue, durType){
+  switch (durType) {
+    case DURATION_TYPES.DAYS:
+      return durValue;
+    case DURATION_TYPES.WEEKS:
+      return durValue * 7;
+    case DURATION_TYPES.MONTHS:
+      return durValue * 30;
+    case DURATION_TYPES.YEARS:
+      return durValue * 365;
+    default:
+      throw new Error(
+        `duration type of ${durType} found to be incorrect` +
+          `while calculating days from durValue and durType`
+      );
   }
 }
 
@@ -447,6 +482,49 @@ function operationOnDates(v, arg, operation) {
   }
 }
 
+/**
+ * 
+ * @param {number} currValue - should be a number, can be 0, negative number. 
+ * @param {string} currType - should be a string
+ * @returns An object with properties value(of type number, value same as currValue) 
+ * and type(of type string and value same as currType)
+ */
+function toCurrency(currValue, currType) {
+  if (
+    isValidNumber(currValue) &&
+    _.isString(currType)
+  ) {
+    return { value: currValue, type: currType };
+  }
+  throw new Error("invalid currency value or type");
+}
+
+
+/**
+ * 
+ * @param {number} durValue - should be a number, can be 0, negative number. 
+ * @param {string} durType - should be a string and be either days, weeks, months or years.
+ * @returns An object with properties value(of type number, value same as durValue), 
+ * type(of type string, value same as durType), 
+ * days(of type number, value calcuated from arguments durValue and durType)
+ */
+function toDuration(durValue, durType) {
+  if (
+    isValidNumber(durValue) &&
+    _.isString(durType)
+  ) {
+    const durationType = durType.toUpperCase();
+
+    if(Object.values(DURATION_TYPES).includes(durationType)){
+      return {
+        value: durValue,
+        type: durationType,
+        days: calculateDaysFromDurValueAndType(durValue, durationType)
+      };
+    }
+  }
+  throw new Error("invalid duration value or type");
+}
 
 registerAll.filters = filters;
 module.exports = registerAll;
