@@ -1,3 +1,16 @@
+# [10.2.0](https://github.com/harttle/liquidjs/compare/v10.1.0...v10.2.0) (2022-12-02)
+
+
+### Bug Fixes
+
+* `case` should render multiple `when` statements ([d17813e](https://github.com/harttle/liquidjs/commit/d17813ef5217264bd08f741b0e1f713bedf2d464))
+
+
+### Features
+
+* add remove_last filter ([6c3f1c1](https://github.com/harttle/liquidjs/commit/6c3f1c1e0c0c5d30ef77eaf20df65e149e51e693))
+* add replace_last filter ([b4d1e27](https://github.com/harttle/liquidjs/commit/b4d1e27420fcf36ae6d5dbc92cfe4a26299690f2))
+
 # [10.1.0](https://github.com/harttle/liquidjs/compare/v10.0.0...v10.1.0) (2022-11-29)
 
 
