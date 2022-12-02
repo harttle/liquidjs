@@ -39,6 +39,14 @@ export function remove_first (v: string, l: string) {
   return stringify(v).replace(String(l), '')
 }
 
+export function remove_last (v: string, l: string) {
+  const str = stringify(v)
+  const pattern = String(l)
+  const index = str.lastIndexOf(pattern)
+  if (index === -1) return str
+  return str.substring(0, index) + str.substring(index + pattern.length + 1)
+}
+
 export function rstrip (str: string, chars?: string) {
   if (chars) {
     chars = escapeRegExp(stringify(chars))
