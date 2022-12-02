@@ -202,4 +202,14 @@ describe('filters/string', function () {
       return test('{{ "1 2 3 4 5 6 7 8 9 a b c d e f" | truncatewords }}', '1 2 3 4 5 6 7 8 9 a b c d e f...')
     })
   })
+  describe('replace_last', function () {
+    it('should replace the last occurrence of substring', function () {
+      return test('{{ "Take my protein pills and put my helmet on" | replace_last: "my", "your" }}',
+        'Take my protein pills and put your helmet on')
+    })
+    it('should handle substring not found', function () {
+      return test('{{ "Take my protein pills and put my helmet on" | replace_last: "nosuchthing", "your" }}',
+        'Take my protein pills and put my helmet on')
+    })
+  })
 })

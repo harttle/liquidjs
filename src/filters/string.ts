@@ -82,6 +82,15 @@ export function replace_first (v: string, arg1: string, arg2: string) {
   return stringify(v).replace(String(arg1), arg2)
 }
 
+export function replace_last (v: string, arg1: string, arg2: string) {
+  const str = stringify(v)
+  const pattern = String(arg1)
+  const index = str.lastIndexOf(pattern)
+  if (index === -1) return str
+  const replacement = String(arg2)
+  return str.substring(0, index) + replacement + str.substring(index + pattern.length)
+}
+
 export function truncate (v: string, l = 50, o = '...') {
   v = stringify(v)
   if (v.length <= l) return v
