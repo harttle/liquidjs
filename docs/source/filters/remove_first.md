@@ -13,5 +13,5 @@ Input
 
 Output
 ```text
-I strained to see the t through the rain
+I sted to see the train through the rain
 ```
