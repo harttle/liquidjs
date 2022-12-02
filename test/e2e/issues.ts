@@ -329,4 +329,21 @@ describe('Issues', function () {
     expect(await liquid.parseAndRender('{{i.i}}', context)).to.equal('1')
     expect(await liquid.parseAndRender('{{j.j}}', context)).to.equal('1')
   })
+  it('#559 Case/When should evaluate multiple When statements', async () => {
+    const liquid = new Liquid()
+    const tpl = `
+      {% assign tag = 'Love' %}
+
+      {% case tag %}
+        {% when 'Love' or 'Luck' %}
+          This is a love or luck potion.
+        {% when 'Strength','Health', 'Love' %}
+          This is a strength or health or love potion.
+        {% else %}
+          This is a potion.
+      {% endcase %}
+    `
+    const html = await liquid.parseAndRender(tpl)
+    expect(html).to.match(/^\s*This is a love or luck potion.\s+This is a strength or health or love potion.\s*$/)
+  })
 })

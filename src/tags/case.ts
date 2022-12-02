@@ -2,7 +2,7 @@ import { ValueToken, Liquid, Tokenizer, toValue, evalToken, Value, Emitter, TagT
 
 export default class extends Tag {
   value: Value
-  branches: { value?: ValueToken, templates: Template[] }[] = []
+  branches: { values: ValueToken[], templates: Template[] }[] = []
   elseTemplates: Template[] = []
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
@@ -15,15 +15,15 @@ export default class extends Tag {
         p = []
 
         const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
-
+        const values: ValueToken[] = []
         while (!tokenizer.end()) {
-          const value = tokenizer.readValue()
-          this.branches.push({
-            value: value,
-            templates: p
-          })
+          values.push(tokenizer.readValueOrThrow())
           tokenizer.readTo(',')
         }
+        this.branches.push({
+          values,
+          templates: p
+        })
       })
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endcase', () => stream.stop())
@@ -35,16 +35,22 @@ export default class extends Tag {
     stream.start()
   }
 
-  * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const r = this.liquid.renderer
-    const value = toValue(yield this.value.value(ctx, ctx.opts.lenientIf))
+    const target = toValue(yield this.value.value(ctx, ctx.opts.lenientIf))
+    let branchHit = false
     for (const branch of this.branches) {
-      const target = yield evalToken(branch.value, ctx, ctx.opts.lenientIf)
-      if (target === value) {
-        yield r.renderTemplates(branch.templates, ctx, emitter)
-        return
+      for (const valueToken of branch.values) {
+        const value = yield evalToken(valueToken, ctx, ctx.opts.lenientIf)
+        if (target === value) {
+          yield r.renderTemplates(branch.templates, ctx, emitter)
+          branchHit = true
+          break
+        }
       }
     }
-    yield r.renderTemplates(this.elseTemplates, ctx, emitter)
+    if (!branchHit) {
+      yield r.renderTemplates(this.elseTemplates, ctx, emitter)
+    }
   }
 }

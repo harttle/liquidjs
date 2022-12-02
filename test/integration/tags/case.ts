@@ -71,4 +71,12 @@ describe('tags/case', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).to.equal('foo')
   })
+  it('should render multiple matching branches', async function () {
+    const src = '{% case "b" %}' +
+            '{% when "a", "b" %}first' +
+            '{% when "b" %}second' +
+            '{%endcase%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).to.equal('firstsecond')
+  })
 })
