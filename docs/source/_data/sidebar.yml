@@ -54,8 +54,10 @@ filters:
   raw: raw.html
   remove: remove.html
   remove_first: remove_first.html
+  remove_last: remove_last.html
   replace: replace.html
   replace_first: replace_first.html
+  replace_last: replace_last.html
   reverse: reverse.html
   round: round.html
   rstrip: rstrip.html
