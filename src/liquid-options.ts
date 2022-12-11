@@ -3,7 +3,8 @@ import { LRU, LiquidCache } from './cache'
 import { FS } from './fs/fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render'
-import { filters } from './filters'
+import { json } from './filters/misc'
+import { escape } from './filters/html'
 
 type OutputEscape = (value: any) => string
 type OutputEscapeOption = 'escape' | 'json' | OutputEscape
@@ -182,15 +183,11 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
   return options as NormalizedFullOptions
 }
 
-function getOutputEscapeFunction (nameOrFunction: OutputEscapeOption) {
-  if (isString(nameOrFunction)) {
-    const filterImpl = filters[nameOrFunction]
-    assert(isFunction(filterImpl), `filter "${nameOrFunction}" not found`)
-    return filterImpl
-  } else {
-    assert(isFunction(nameOrFunction), '`outputEscape` need to be of type string or function')
-    return nameOrFunction
-  }
+function getOutputEscapeFunction (nameOrFunction: OutputEscapeOption): OutputEscape {
+  if (nameOrFunction === 'escape') return escape
+  if (nameOrFunction === 'json') return json
+  assert(isFunction(nameOrFunction), '`outputEscape` need to be of type string or function')
+  return nameOrFunction
 }
 
 export function normalizeDirectoryList (value: any): string[] {
