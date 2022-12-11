@@ -1,3 +1,10 @@
+# [10.3.0](https://github.com/harttle/liquidjs/compare/v10.2.0...v10.3.0) (2022-12-11)
+
+
+### Features
+
+* support disable outputEscape for specific filters, [#565](https://github.com/harttle/liquidjs/issues/565) ([e6db371](https://github.com/harttle/liquidjs/commit/e6db371519f0fb3b0068347cfb2016aed386c8fa))
+
 # [10.2.0](https://github.com/harttle/liquidjs/compare/v10.1.0...v10.2.0) (2022-12-02)
 
 
