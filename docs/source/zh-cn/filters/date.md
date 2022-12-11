@@ -20,6 +20,21 @@ Fri, Jul 17, 15
 日期在输出时会转换为当地时区，设置 `timezoneOffset` LiquidJS 参数可以指定一个不同的时区。或者设置 `preserveTimezones` 为 `true` 来保持字面量时间戳的时区，数据中的日期对象不受此参数的影响。
 {% endnote %}
 
+你也可以在使用 `date` 时再设置时区：
+
+输入
+```liquid
+{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", 360}} // 等价于设置 `options.timezoneOffset` to `360`.
+{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }}
+```
+
+输出
+```liquid
+1990-12-31T17:00:00
+1991-01-01T04:30:00
+```
+
+
 输入
 ```liquid
 {{ article.published_at | date: "%Y" }}
@@ -30,7 +45,7 @@ Fri, Jul 17, 15
 2015
 ```
 
-对于包含格式正确的字符串也好使：
+输入也可以是符合 JavaScript `Date` 格式的字符串：：
 
 输入
 ```liquid

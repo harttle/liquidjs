@@ -20,6 +20,20 @@ Fri, Jul 17, 15
 Date will be converted to local time before output. To avoid that, you can set `timezoneOffset` LiquidJS option to `0`, its default value is your local timezone offset which can be obtained by `new Date().getTimezoneOffset()`.
 {% endnote %}
 
+And you can set a timezone for each individual `date` filter via the second parameter:
+
+Input
+```liquid
+{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", 360}} // equivalent to setting `options.timezoneOffset` to `360`.
+{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }}
+```
+
+Output
+```liquid
+1990-12-31T17:00:00
+1991-01-01T04:30:00
+```
+
 Input
 ```liquid
 {{ article.published_at | date: "%Y" }}
