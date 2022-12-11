@@ -13,4 +13,7 @@ export function json (value: any) {
   return JSON.stringify(value)
 }
 
-export const raw = identify
+export const raw = {
+  raw: true,
+  handler: identify
+}

@@ -13,9 +13,7 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
     this.value = new Value(token.content, liquid)
     const filters = this.value.filters
     const outputEscape = liquid.options.outputEscape
-    if (filters.length && filters[filters.length - 1].name === 'raw') {
-      filters.pop()
-    } else if (outputEscape) {
+    if (!filters[filters.length - 1]?.raw && outputEscape) {
       filters.push(new Filter(toString.call(outputEscape), outputEscape, [], liquid))
     }
   }

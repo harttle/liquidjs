@@ -6,6 +6,11 @@ export interface FilterImpl {
   liquid: Liquid;
 }
 
-export interface FilterImplOptions {
-  (this: FilterImpl, value: any, ...args: any[]): any;
+export type FilterHandler = (this: FilterImpl, value: any, ...args: any[]) => any;
+
+export interface FilterOptions {
+  handler: FilterHandler;
+  raw: boolean;
 }
+
+export type FilterImplOptions = FilterHandler | FilterOptions
