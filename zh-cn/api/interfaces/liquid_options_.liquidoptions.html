@@ -99,128 +99,128 @@
 </li>
 </ul>
 <h2 id="Properties" class="article-heading"><a href="#Properties" class="headerlink" title="Properties"></a>Properties<a class="article-anchor" href="#Properties" aria-hidden="true"></a></h2><h3 id="Optional-cache" class="article-heading"><a href="#Optional-cache" class="headerlink" title="Optional cache"></a><code>Optional</code> cache<a class="article-anchor" href="#Optional-cache" aria-hidden="true"></a></h3><p>• <strong>cache</strong>? : <em>boolean | number | <a href="../modules/cache_index_.html#liquidcache">LiquidCache</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L25">src/liquid-options.ts:25</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L26">src/liquid-options.ts:26</a></em></p>
 <p>Whether or not to cache resolved templates. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-dynamicPartials" class="article-heading"><a href="#Optional-dynamicPartials" class="headerlink" title="Optional dynamicPartials"></a><code>Optional</code> dynamicPartials<a class="article-anchor" href="#Optional-dynamicPartials" aria-hidden="true"></a></h3><p>• <strong>dynamicPartials</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L29">src/liquid-options.ts:29</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L30">src/liquid-options.ts:30</a></em></p>
 <p>If set, treat the <code>filepath</code> parameter in <code>&#123;%include filepath %&#125;</code> and <code>&#123;%layout filepath%&#125;</code> as a variable, otherwise as a literal value. Defaults to <code>true</code>.</p>
 <hr>
 <h3 id="Optional-extname" class="article-heading"><a href="#Optional-extname" class="headerlink" title="Optional extname"></a><code>Optional</code> extname<a class="article-anchor" href="#Optional-extname" aria-hidden="true"></a></h3><p>• <strong>extname</strong>? : <em>undefined | string</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L23">src/liquid-options.ts:23</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L24">src/liquid-options.ts:24</a></em></p>
 <p>Add a extname (if filepath doesn’t include one) before template file lookup. Eg: setting to <code>&quot;.html&quot;</code> will allow including file by basename. Defaults to <code>&quot;&quot;</code>.</p>
 <hr>
 <h3 id="Optional-fs" class="article-heading"><a href="#Optional-fs" class="headerlink" title="Optional fs"></a><code>Optional</code> fs<a class="article-anchor" href="#Optional-fs" aria-hidden="true"></a></h3><p>• <strong>fs</strong>? : <em><a href="fs_fs_.fs.html">FS</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L61">src/liquid-options.ts:61</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L62">src/liquid-options.ts:62</a></em></p>
 <p><code>fs</code> is used to override the default file-system module with a custom implementation.</p>
 <hr>
 <h3 id="Optional-globals" class="article-heading"><a href="#Optional-globals" class="headerlink" title="Optional globals"></a><code>Optional</code> globals<a class="article-anchor" href="#Optional-globals" aria-hidden="true"></a></h3><p>• <strong>globals</strong>? : <em>undefined | object</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L63">src/liquid-options.ts:63</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L64">src/liquid-options.ts:64</a></em></p>
 <p>the global scope passed down to all partial and layout templates, i.e. templates included by <code>include</code>, <code>layout</code> and <code>render</code> tags.</p>
 <hr>
 <h3 id="Optional-greedy" class="article-heading"><a href="#Optional-greedy" class="headerlink" title="Optional greedy"></a><code>Optional</code> greedy<a class="article-anchor" href="#Optional-greedy" aria-hidden="true"></a></h3><p>• <strong>greedy</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L59">src/liquid-options.ts:59</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L60">src/liquid-options.ts:60</a></em></p>
 <p>Whether <code>trim*Left</code>/<code>trim*Right</code> is greedy. When set to <code>true</code>, all consecutive blank characters including <code>\n</code> will be trimed regardless of line breaks. Defaults to <code>true</code>.</p>
 <hr>
 <h3 id="Optional-jekyllInclude" class="article-heading"><a href="#Optional-jekyllInclude" class="headerlink" title="Optional jekyllInclude"></a><code>Optional</code> jekyllInclude<a class="article-anchor" href="#Optional-jekyllInclude" aria-hidden="true"></a></h3><p>• <strong>jekyllInclude</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L21">src/liquid-options.ts:21</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L22">src/liquid-options.ts:22</a></em></p>
 <p>Use jekyll style include, pass parameters to <code>include</code> variable of current scope. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-jsTruthy" class="article-heading"><a href="#Optional-jsTruthy" class="headerlink" title="Optional jsTruthy"></a><code>Optional</code> jsTruthy<a class="article-anchor" href="#Optional-jsTruthy" aria-hidden="true"></a></h3><p>• <strong>jsTruthy</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L27">src/liquid-options.ts:27</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L28">src/liquid-options.ts:28</a></em></p>
 <p>Use Javascript Truthiness. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-keepOutputType" class="article-heading"><a href="#Optional-keepOutputType" class="headerlink" title="Optional keepOutputType"></a><code>Optional</code> keepOutputType<a class="article-anchor" href="#Optional-keepOutputType" aria-hidden="true"></a></h3><p>• <strong>keepOutputType</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L65">src/liquid-options.ts:65</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L66">src/liquid-options.ts:66</a></em></p>
 <p>Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-layouts" class="article-heading"><a href="#Optional-layouts" class="headerlink" title="Optional layouts"></a><code>Optional</code> layouts<a class="article-anchor" href="#Optional-layouts" aria-hidden="true"></a></h3><p>• <strong>layouts</strong>? : <em>string | string[]</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L17">src/liquid-options.ts:17</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L18">src/liquid-options.ts:18</a></em></p>
 <p>A directory or an array of directories from where to resolve layout templates. If it’s an array, the files are looked up in the order they occur in the array. Defaults to <code>root</code></p>
 <hr>
 <h3 id="Optional-lenientIf" class="article-heading"><a href="#Optional-lenientIf" class="headerlink" title="Optional lenientIf"></a><code>Optional</code> lenientIf<a class="article-anchor" href="#Optional-lenientIf" aria-hidden="true"></a></h3><p>• <strong>lenientIf</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L37">src/liquid-options.ts:37</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L38">src/liquid-options.ts:38</a></em></p>
 <p>Modifies the behavior of <code>strictVariables</code>. If set, a single undefined variable will <em>not</em> cause an exception in the context of the <code>if</code>/<code>elsif</code>/<code>unless</code> tag and the <code>default</code> filter. Instead, it will evaluate to <code>false</code> and <code>null</code>, respectively. Irrelevant if <code>strictVariables</code> is not set. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-operators" class="article-heading"><a href="#Optional-operators" class="headerlink" title="Optional operators"></a><code>Optional</code> operators<a class="article-anchor" href="#Optional-operators" aria-hidden="true"></a></h3><p>• <strong>operators</strong>? : <em><a href="../modules/index_.html#operators">Operators</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L69">src/liquid-options.ts:69</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L70">src/liquid-options.ts:70</a></em></p>
 <p>An object of operators for conditional statements. Defaults to the regular Liquid operators.</p>
 <hr>
 <h3 id="Optional-orderedFilterParameters" class="article-heading"><a href="#Optional-orderedFilterParameters" class="headerlink" title="Optional orderedFilterParameters"></a><code>Optional</code> orderedFilterParameters<a class="article-anchor" href="#Optional-orderedFilterParameters" aria-hidden="true"></a></h3><p>• <strong>orderedFilterParameters</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L71">src/liquid-options.ts:71</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L72">src/liquid-options.ts:72</a></em></p>
 <p>Respect parameter order when using filters like “for … reversed limit”, Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-outputDelimiterLeft" class="article-heading"><a href="#Optional-outputDelimiterLeft" class="headerlink" title="Optional outputDelimiterLeft"></a><code>Optional</code> outputDelimiterLeft<a class="article-anchor" href="#Optional-outputDelimiterLeft" aria-hidden="true"></a></h3><p>• <strong>outputDelimiterLeft</strong>? : <em>undefined | string</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L53">src/liquid-options.ts:53</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L54">src/liquid-options.ts:54</a></em></p>
 <p>The left delimiter for liquid outputs.</p>
 <hr>
 <h3 id="Optional-outputDelimiterRight" class="article-heading"><a href="#Optional-outputDelimiterRight" class="headerlink" title="Optional outputDelimiterRight"></a><code>Optional</code> outputDelimiterRight<a class="article-anchor" href="#Optional-outputDelimiterRight" aria-hidden="true"></a></h3><p>• <strong>outputDelimiterRight</strong>? : <em>undefined | string</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L55">src/liquid-options.ts:55</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L56">src/liquid-options.ts:56</a></em></p>
 <p>The right delimiter for liquid outputs.</p>
 <hr>
 <h3 id="Optional-outputEscape" class="article-heading"><a href="#Optional-outputEscape" class="headerlink" title="Optional outputEscape"></a><code>Optional</code> outputEscape<a class="article-anchor" href="#Optional-outputEscape" aria-hidden="true"></a></h3><p>• <strong>outputEscape</strong>? : <em><a href="../modules/liquid_options_.html#outputescapeoption">OutputEscapeOption</a></em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L67">src/liquid-options.ts:67</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L68">src/liquid-options.ts:68</a></em></p>
 <p>Default escape filter applied to output values, when set, you’ll have to add <code>| raw</code> for values don’t need to be escaped. Defaults to <code>undefined</code>.</p>
 <hr>
 <h3 id="Optional-ownPropertyOnly" class="article-heading"><a href="#Optional-ownPropertyOnly" class="headerlink" title="Optional ownPropertyOnly"></a><code>Optional</code> ownPropertyOnly<a class="article-anchor" href="#Optional-ownPropertyOnly" aria-hidden="true"></a></h3><p>• <strong>ownPropertyOnly</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L35">src/liquid-options.ts:35</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L36">src/liquid-options.ts:36</a></em></p>
 <p>Hide scope variables from prototypes, useful when you’re passing a not sanitized object into LiquidJS or need to hide prototypes from templates.</p>
 <hr>
 <h3 id="Optional-partials" class="article-heading"><a href="#Optional-partials" class="headerlink" title="Optional partials"></a><code>Optional</code> partials<a class="article-anchor" href="#Optional-partials" aria-hidden="true"></a></h3><p>• <strong>partials</strong>? : <em>string | string[]</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L15">src/liquid-options.ts:15</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L16">src/liquid-options.ts:16</a></em></p>
 <p>A directory or an array of directories from where to resolve included templates. If it’s an array, the files are looked up in the order they occur in the array. Defaults to <code>root</code></p>
 <hr>
 <h3 id="Optional-preserveTimezones" class="article-heading"><a href="#Optional-preserveTimezones" class="headerlink" title="Optional preserveTimezones"></a><code>Optional</code> preserveTimezones<a class="article-anchor" href="#Optional-preserveTimezones" aria-hidden="true"></a></h3><p>• <strong>preserveTimezones</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L57">src/liquid-options.ts:57</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L58">src/liquid-options.ts:58</a></em></p>
 <p>Whether input strings to date filter preserve the given timezone</p>
 <hr>
 <h3 id="Optional-relativeReference" class="article-heading"><a href="#Optional-relativeReference" class="headerlink" title="Optional relativeReference"></a><code>Optional</code> relativeReference<a class="article-anchor" href="#Optional-relativeReference" aria-hidden="true"></a></h3><p>• <strong>relativeReference</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L19">src/liquid-options.ts:19</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L20">src/liquid-options.ts:20</a></em></p>
 <p>Allow refer to layouts/partials by relative pathname. To avoid arbitrary filesystem read, paths been referenced also need to be within corresponding root, partials, layouts. Defaults to <code>true</code>.</p>
 <hr>
 <h3 id="Optional-root" class="article-heading"><a href="#Optional-root" class="headerlink" title="Optional root"></a><code>Optional</code> root<a class="article-anchor" href="#Optional-root" aria-hidden="true"></a></h3><p>• <strong>root</strong>? : <em>string | string[]</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L13">src/liquid-options.ts:13</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L14">src/liquid-options.ts:14</a></em></p>
 <p>A directory or an array of directories from where to resolve layout and include templates, and the filename passed to <code>.renderFile()</code>. If it’s an array, the files are looked up in the order they occur in the array. Defaults to <code>[&quot;.&quot;]</code></p>
 <hr>
 <h3 id="Optional-strictFilters" class="article-heading"><a href="#Optional-strictFilters" class="headerlink" title="Optional strictFilters"></a><code>Optional</code> strictFilters<a class="article-anchor" href="#Optional-strictFilters" aria-hidden="true"></a></h3><p>• <strong>strictFilters</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L31">src/liquid-options.ts:31</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L32">src/liquid-options.ts:32</a></em></p>
 <p>Whether or not to assert filter existence. If set to <code>false</code>, undefined filters will be skipped. Otherwise, undefined filters will cause an exception. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-strictVariables" class="article-heading"><a href="#Optional-strictVariables" class="headerlink" title="Optional strictVariables"></a><code>Optional</code> strictVariables<a class="article-anchor" href="#Optional-strictVariables" aria-hidden="true"></a></h3><p>• <strong>strictVariables</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L33">src/liquid-options.ts:33</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L34">src/liquid-options.ts:34</a></em></p>
 <p>Whether or not to assert variable existence.  If set to <code>false</code>, undefined variables will be rendered as empty string.  Otherwise, undefined variables will cause an exception. Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-tagDelimiterLeft" class="article-heading"><a href="#Optional-tagDelimiterLeft" class="headerlink" title="Optional tagDelimiterLeft"></a><code>Optional</code> tagDelimiterLeft<a class="article-anchor" href="#Optional-tagDelimiterLeft" aria-hidden="true"></a></h3><p>• <strong>tagDelimiterLeft</strong>? : <em>undefined | string</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L49">src/liquid-options.ts:49</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L50">src/liquid-options.ts:50</a></em></p>
 <p>The left delimiter for liquid tags.</p>
 <hr>
 <h3 id="Optional-tagDelimiterRight" class="article-heading"><a href="#Optional-tagDelimiterRight" class="headerlink" title="Optional tagDelimiterRight"></a><code>Optional</code> tagDelimiterRight<a class="article-anchor" href="#Optional-tagDelimiterRight" aria-hidden="true"></a></h3><p>• <strong>tagDelimiterRight</strong>? : <em>undefined | string</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L51">src/liquid-options.ts:51</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L52">src/liquid-options.ts:52</a></em></p>
 <p>The right delimiter for liquid tags.</p>
 <hr>
 <h3 id="Optional-timezoneOffset" class="article-heading"><a href="#Optional-timezoneOffset" class="headerlink" title="Optional timezoneOffset"></a><code>Optional</code> timezoneOffset<a class="article-anchor" href="#Optional-timezoneOffset" aria-hidden="true"></a></h3><p>• <strong>timezoneOffset</strong>? : <em>number | string</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L39">src/liquid-options.ts:39</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L40">src/liquid-options.ts:40</a></em></p>
 <p>JavaScript timezone name or timezoneOffset for <code>date</code> filter, default to local time. That means if you’re in Australia (UTC+10), it’ll default to <code>-600</code> or <code>Australia/Lindeman</code></p>
 <hr>
 <h3 id="Optional-trimOutputLeft" class="article-heading"><a href="#Optional-trimOutputLeft" class="headerlink" title="Optional trimOutputLeft"></a><code>Optional</code> trimOutputLeft<a class="article-anchor" href="#Optional-trimOutputLeft" aria-hidden="true"></a></h3><p>• <strong>trimOutputLeft</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L47">src/liquid-options.ts:47</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L48">src/liquid-options.ts:48</a></em></p>
 <p>Similar to <code>trimOutputRight</code>, whereas the <code>\n</code> is exclusive. Defaults to <code>false</code>. See Whitespace Control for details.</p>
 <hr>
 <h3 id="Optional-trimOutputRight" class="article-heading"><a href="#Optional-trimOutputRight" class="headerlink" title="Optional trimOutputRight"></a><code>Optional</code> trimOutputRight<a class="article-anchor" href="#Optional-trimOutputRight" aria-hidden="true"></a></h3><p>• <strong>trimOutputRight</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L45">src/liquid-options.ts:45</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L46">src/liquid-options.ts:46</a></em></p>
 <p>Strip blank characters (including <code></code>, <code>\t</code>, and <code>\r</code>) from the right of values (<code>&#123;&#123; &#125;&#125;</code>) until <code>\n</code> (inclusive). Defaults to <code>false</code>.</p>
 <hr>
 <h3 id="Optional-trimTagLeft" class="article-heading"><a href="#Optional-trimTagLeft" class="headerlink" title="Optional trimTagLeft"></a><code>Optional</code> trimTagLeft<a class="article-anchor" href="#Optional-trimTagLeft" aria-hidden="true"></a></h3><p>• <strong>trimTagLeft</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L43">src/liquid-options.ts:43</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L44">src/liquid-options.ts:44</a></em></p>
 <p>Similar to <code>trimTagRight</code>, whereas the <code>\n</code> is exclusive. Defaults to <code>false</code>. See Whitespace Control for details.</p>
 <hr>
 <h3 id="Optional-trimTagRight" class="article-heading"><a href="#Optional-trimTagRight" class="headerlink" title="Optional trimTagRight"></a><code>Optional</code> trimTagRight<a class="article-anchor" href="#Optional-trimTagRight" aria-hidden="true"></a></h3><p>• <strong>trimTagRight</strong>? : <em>undefined | false | true</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L41">src/liquid-options.ts:41</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L42">src/liquid-options.ts:42</a></em></p>
 <p>Strip blank characters (including <code></code>, <code>\t</code>, and <code>\r</code>) from the right of tags (<code>&#123;% %&#125;</code>) until <code>\n</code> (inclusive). Defaults to <code>false</code>.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-12-11T18:20:36.851Z" itemprop="dateModified">上次更新：2022-12-11</time>
+                <time class="article-footer-updated" datetime="2022-12-11T18:34:21.199Z" itemprop="dateModified">上次更新：2022-12-11</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
