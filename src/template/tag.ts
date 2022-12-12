@@ -9,7 +9,7 @@ export type TagRenderReturn = Generator<unknown, unknown, unknown> | Promise<unk
 
 export abstract class Tag extends TemplateImpl<TagToken> implements Template {
   public name: string
-  protected liquid: Liquid
+  public liquid: Liquid
 
   public constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token)

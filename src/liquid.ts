@@ -76,15 +76,15 @@ export class Liquid {
     return this.renderToNodeStream(templates, scope, renderOptions)
   }
 
-  public _evalValue (str: string, scope?: object): IterableIterator<any> {
+  public _evalValue (str: string, scope?: object | Context): IterableIterator<any> {
     const value = new Value(str, this)
-    const ctx = new Context(scope, this.options)
+    const ctx = scope instanceof Context ? scope : new Context(scope, this.options)
     return value.value(ctx, false)
   }
-  public async evalValue (str: string, scope?: object): Promise<any> {
+  public async evalValue (str: string, scope?: object | Context): Promise<any> {
     return toPromise(this._evalValue(str, scope))
   }
-  public evalValueSync (str: string, scope?: object): any {
+  public evalValueSync (str: string, scope?: object | Context): any {
     return toValueSync(this._evalValue(str, scope))
   }
 
