@@ -1,3 +1,10 @@
+## [10.3.1](https://github.com/harttle/liquidjs/compare/v10.3.0...v10.3.1) (2022-12-12)
+
+
+### Bug Fixes
+
+* support `Context` as `evalValue` parameter, [#568](https://github.com/harttle/liquidjs/issues/568) ([0f4916b](https://github.com/harttle/liquidjs/commit/0f4916bc5a93f5e744e4246336c68f2e89774272))
+
 # [10.3.0](https://github.com/harttle/liquidjs/compare/v10.2.0...v10.3.0) (2022-12-11)
 
 
