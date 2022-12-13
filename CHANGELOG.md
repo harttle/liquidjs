@@ -1,3 +1,10 @@
+## [10.3.2](https://github.com/harttle/liquidjs/compare/v10.3.1...v10.3.2) (2022-12-13)
+
+
+### Bug Fixes
+
+* re-export error classes, [#569](https://github.com/harttle/liquidjs/issues/569) ([2663ee1](https://github.com/harttle/liquidjs/commit/2663ee16a066c74cbd387fe40154fdeb2136f35a))
+
 ## [10.3.1](https://github.com/harttle/liquidjs/compare/v10.3.0...v10.3.1) (2022-12-12)
 
 
