@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 export const version = '[VI]{version}[/VI]'
 export * as TypeGuards from './util/type-guards'
-export { toValue, TimezoneDate, createTrie, Trie, toPromise, toValueSync, assert, ParseError, TokenizationError, AssertionError } from './util'
+export { toValue, TimezoneDate, createTrie, Trie, toPromise, toValueSync, assert, LiquidError, ParseError, RenderError, UndefinedVariableError, TokenizationError, AssertionError } from './util'
 export { Drop } from './drop'
 export { Emitter } from './emitters'
 export { defaultOperators, Operators, evalToken, evalQuotedToken, Expression, isFalsy, isTruthy } from './render'
