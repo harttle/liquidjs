@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-      "types": [
-        "node"
-      ]
+    "target": "es6",
+    "moduleResolution": "node",
+    "types": [
+      "node"
+    ]
   }
 }

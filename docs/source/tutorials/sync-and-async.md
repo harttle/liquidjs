@@ -24,67 +24,93 @@ The synchronous version of methods contains a `Sync` suffix:
 
 ## Implement Sync-Compatible Tags 
 
-### Requirements
+LiquidJS uses a generator-based async implementation to support both async and sync in one piece of tag implementation. For example, below `UpperTag` can be used in both `engine.renderSync()` and `engine.render()`.
 
-All builtin tags are *sync-compatible* and safe to use for both sync and async APIs. To make your custom tag *sync-compatible*, you'll need to avoid return a `Promise`. That means the `render(context, emitter)`:
+```typescript
+import { TagToken, Context, Emitter, TopLevelToken, Value, Tag, Liquid } from 'liquidjs'
 
-- Should not directly `return <Promise>`, and
-- Should not be declared as `async`.
+// Usage: {% upper "alice" %}
+// Output: ALICE
+engine.registerTag('upper', class UpperTag extends Tag {
+  private value: Value
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(token, remainTokens, liquid)
+    this.value = new Value(token.args, liquid)
+  }
+  * render (ctx: Context, emitter: Emitter) {
+    const title = yield this.value.value(ctx)
+    emitter.write(title.toUpperCase())
+  }
+})
+```
+
+All builtin tags are implemented this way and safe to use in both sync and async (I'll call it *sync-compatible*). To make your custom tag *sync-compatible*, you'll need to:
+
+- declare render function as `* render()`, in which
+- do not directly `return <Promise>`, and
+- do not call any APIs that returns a Promise.
+
+## Call APIs that return a Promise
+
+But LiquidJS is Promise-friendly, right? You can still call Promise-based functions and wait for that Promise within tag implementations. Just replace `await` with `yield`. e.g. we're calling `fs.readFile()` which returns a `Promise`:
+
+```typescript
+  * render (ctx: Context, emitter: Emitter) {
+    const file = yield this.value.value(ctx)
+    const title = yield fs.readFile(file, 'utf8')
+    emitter.write(title.toUpperCase())
+  }
+```
+
+Now that this `* render()` calls an API that returns a Promise, so it's no longer *sync-compatible*.
 
 {% note info Non Sync-Compatible Tags %}
 Non <em>sync-compatible</em> tags are also valid tags, will work just fine for asynchronous API calls. When called synchronously, tags that return a <code>Promise</code> will be rendered as <code>[object Promise]</code>.
 {% endnote %}
 
-### Await Promises
-But LiquidJS is Promise-friendly, right? You can still call Promise-based functions and wait for that Promise within tag implementations. Just replace `await` with `yield` and keep `* render()` instead of `async render()`. e.g.
+## Convert LiquidJS async Generator to Promise
+
+You can convert a Generator to Promise by [toPromise][toPromise], for example:
 
 ```typescript
-import { TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
+import { TagToken, Context, Emitter, TopLevelToken, Value, Tag, Liquid, toPromise } from 'liquidjs'
 
 // Usage: {% upper "alice" %}
 // Output: ALICE
-engine.registerTag('upper', {
-    parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
-        this.str = tagToken.args
-    },
-    * render: function(ctx: Context) {
-        // _evalValue will behave synchronously when called by synchronous API
-        // in which case `ctx.sync == true`
-        var str = yield this.liquid._evalValue(this.str, ctx)
-        return str.toUpperCase()
-    }
+engine.registerTag('upper', class UpperTag extends Tag {
+  private value: Value
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(token, remainTokens, liquid)
+    this.value = new Value(token.args, liquid)
+  }
+  async render (ctx: Context, emitter: Emitter) {
+    const title = await toPromise(this.value.value(ctx))
+    emitter.write(title.toUpperCase())
+  }
 })
 ```
 
-See this JSFiddle: <http://jsfiddle.net/ctj364up/6/>.
+## Async only Tags
 
-## Async-only Tags
-
-For tags that intended to be used only by async API, or those cannot be implemented synchronously, there's no difference between using generator-base syntax or async syntax. I'll call them *async-only tags*.
-
-For example, if the above `this.liquid._evalValue()` doesn't respect `ctx.sync` and always returns a Promise, even if the tag is implemented using `* render()` and `yield this.liquid._evalValue()`, it will be rendered as `<object Promise>` anyway.
-
-For *async-only tags*, you can use async syntax at will. Be careful some APIs in LiquidJS return Promises and others return Generators. You'll need [toPromise][toPromise] API to convert a Generator to a Promise, for example:
+If your tag is intend to be used only asynchronously, it can be declared as `async render()` so you can use `await` in its implementation directly:
 
 ```typescript
-import { TagToken, Context, Emitter, TopLevelToken, toPromise } from 'liquidjs'
+import { toPromise, TagToken, Context, Emitter, TopLevelToken, Value, Tag, Liquid } from 'liquidjs'
 
 // Usage: {% upper "alice" %}
 // Output: ALICE
-engine.registerTag('upper', {
-    parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
-        this.str = tagToken.args; // name
-    },
-    render: async function(ctx: Context) {
-        var str = await toPromise(this.liquid._evalValue(this.str, ctx));
-        // Or use the alternate API that returns a Promise
-        // var str = await this.liquid.evalValue(this.str, ctx);
-        return str.toUpperCase()
-    }
-});
+engine.registerTag('upper', class UpperTag extends Tag {
+  private value: Value
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(token, remainTokens, liquid)
+    this.value = new Value(token.args, liquid)
+  }
+  async render (ctx: Context, emitter: Emitter) {
+    const title = await toPromise(this.value.value(ctx))
+    emitter.write(`<h1>${title}</h1>`)
+  }
+})
 ```
-
-See this JSFiddle: <http://jsfiddle.net/ctj364up/5/>.
 
 [Liquid]: /api/classes/liquid_.liquid.html
 [toPromise]: /api/modules/liquid_.html#toPromise

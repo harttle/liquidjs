@@ -1,4 +1,4 @@
-const { Liquid } = require('liquidjs')
+const { Liquid, Tag, Value } = require('liquidjs')
 
 const engine = new Liquid({
   extname: '.liquid',
@@ -11,13 +11,13 @@ const engine = new Liquid({
   partials: './partials'
 })
 
-engine.registerTag('header', {
-  parse: function (token) {
-    const [key, val] = token.args.split(':')
-    this[key] = val
-  },
-  render: async function (scope, emitter) {
-    const title = await this.liquid.evalValue(this.content, scope)
+engine.registerTag('header', class HeaderTag extends Tag {
+  constructor (token, remainTokens, liquid) {
+    super(token, remainTokens, liquid)
+    this.value = new Value(token.args, liquid)
+  }
+  * render (ctx, emitter) {
+    const title = yield this.value.value(ctx)
     emitter.write(`<h1>${title}</h1>`)
   }
 })

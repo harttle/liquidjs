@@ -6,14 +6,14 @@ title: Register Filters/Tags
 
 ```typescript
 // Usage: {% upper name %}
-import { TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
+import { Value, TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
 
 engine.registerTag('upper', {
     parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
-        this.str = tagToken.args; // name
+        this.value = new Value(token.args, liquid)
     },
     render: function*(ctx: Context) {
-        const str = yield this.liquid.evalValue(this.str, ctx); // 'alice'
+        const str = yield this.value.value(ctx); // 'alice'
         return str.toUpperCase() // 'ALICE'
     }
 });
@@ -41,7 +41,7 @@ engine.registerTag('upper', class UpperTag extends Tag {
 });
 ```
 
-See existing tag implementations here: <https://github.com/harttle/liquidjs/tree/master/src/builtin/tags>
+See existing tag implementations here: <https://github.com/harttle/liquidjs/tree/master/src/tags>
 See demo example here: https://github.com/harttle/liquidjs/blob/master/demo/typescript/index.ts
 
 ## Register Filters
@@ -58,7 +58,7 @@ Filter arguments will be passed to the registered filter function, for example:
 engine.registerFilter('add', (initial, arg1, arg2) => initial + arg1 + arg2)
 ```
 
-See existing filter implementations here: <https://github.com/harttle/liquidjs/tree/master/src/builtin/filters>
+See existing filter implementations here: <https://github.com/harttle/liquidjs/tree/master/src/filters>
 
 ## Unregister Tags/Filters
 

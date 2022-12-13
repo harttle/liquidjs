@@ -8,17 +8,6 @@ const engine = new Liquid({
   extname: '.liquid'
 })
 
-engine.registerTag('header', {
-  parse: function (token) {
-    const [key, val] = token.args.split(':')
-    this[key] = val
-  },
-  render: function (ctx) {
-    const title = this.liquid.evalValue(this.content, ctx)
-    return `<h1>${title}</h1>`
-  }
-})
-
 function demo () {
   console.log('         demo')
   console.log('------------------------')

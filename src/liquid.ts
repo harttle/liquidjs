@@ -79,7 +79,7 @@ export class Liquid {
   public _evalValue (str: string, scope?: object | Context): IterableIterator<any> {
     const value = new Value(str, this)
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options)
-    return value.value(ctx, false)
+    return value.value(ctx)
   }
   public async evalValue (str: string, scope?: object | Context): Promise<any> {
     return toPromise(this._evalValue(str, scope))

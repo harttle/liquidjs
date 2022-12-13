@@ -1,5 +1,5 @@
 {% layout 'html.liquid' %}
-{%header content: title | capitalize%}
+{%header title | capitalize%}
 <ul>
   {% for todo in todos %}
     {% render 'todo.liquid' with todo, index: forloop.index%}
