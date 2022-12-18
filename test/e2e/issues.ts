@@ -1,4 +1,4 @@
-import { Tokenizer, Context, Liquid, Drop, toValueSync } from '../..'
+import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync } from '../..'
 import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import * as sinon from 'sinon'
@@ -345,5 +345,21 @@ describe('Issues', function () {
     `
     const html = await liquid.parseAndRender(tpl)
     expect(html).to.match(/^\s*This is a love or luck potion.\s+This is a strength or health or love potion.\s*$/)
+  })
+  it('#570 tag registration compatible to v9', async () => {
+    const liquid = new Liquid()
+    liquid.registerTag('metadata_file', {
+      parse (tagToken: TagToken, remainTokens: TopLevelToken[]) {
+        this.str = tagToken.args
+      },
+      async render (ctx: Context) {
+        const content = await Promise.resolve(`{{${this.str}}}`)
+        return this.liquid.parseAndRender(content.toString(), ctx)
+      }
+    })
+    const tpl = '{% metadata_file foo %}'
+    const ctx = { foo: 'FOO' }
+    const html = await liquid.parseAndRender(tpl, ctx)
+    expect(html).to.equal('FOO')
   })
 })

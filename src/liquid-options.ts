@@ -1,6 +1,6 @@
 import { assert, isArray, isString, isFunction } from './util'
 import { LRU, LiquidCache } from './cache'
-import { FS } from './fs/fs'
+import { FS, LookupType } from './fs'
 import * as fs from './fs/node'
 import { defaultOperators, Operators } from './render'
 import { json } from './filters/misc'
@@ -89,6 +89,10 @@ export interface RenderOptions {
    * Same as `ownPropertyOnly` on LiquidOptions, but only for current render() call
    */
   ownPropertyOnly?: boolean;
+}
+
+export interface RenderFileOptions extends RenderOptions {
+  lookupType?: LookupType;
 }
 
 interface NormalizedOptions extends LiquidOptions {

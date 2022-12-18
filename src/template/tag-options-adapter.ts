@@ -7,8 +7,9 @@ import { Context } from '../context'
 import type { Liquid } from '../liquid'
 
 export interface TagImplOptions {
-  parse?: (this: Tag, token: TagToken, remainingTokens: TopLevelToken[]) => void;
-  render: (this: Tag, ctx: Context, emitter: Emitter, hash: Record<string, any>) => TagRenderReturn;
+  [key: string]: any
+  parse?: (this: Tag & TagImplOptions, token: TagToken, remainingTokens: TopLevelToken[]) => void;
+  render: (this: Tag & TagImplOptions, ctx: Context, emitter: Emitter, hash: Record<string, any>) => TagRenderReturn;
 }
 
 export function createTagClass (options: TagImplOptions): TagClass {

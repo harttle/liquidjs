@@ -57,6 +57,10 @@ describe('Liquid', function () {
       const html = await engine.parseAndRender(src, { foo: Promise.resolve('FOO') })
       expect(html).to.equal('FOO')
     })
+    it('should parse and render with Context', async function () {
+      const html = await engine.parseAndRender('{{foo}}', new Context({ foo: 'FOO' }))
+      expect(html).to.equal('FOO')
+    })
   })
   describe('#parseAndRenderSync', function () {
     const engine = new Liquid()
@@ -144,6 +148,11 @@ describe('Liquid', function () {
       const ctx = new Context()
       const str = await engine.evalValue('"foo"', ctx)
       expect(str).to.equal('foo')
+    })
+    it('should support plain scope', async function () {
+      const engine = new Liquid()
+      const str = await engine.evalValue('foo', { foo: 'FOO' })
+      expect(str).to.equal('FOO')
     })
   })
   describe('#evalValueSync', function () {
