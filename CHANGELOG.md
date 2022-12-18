@@ -1,3 +1,10 @@
+## [10.3.3](https://github.com/harttle/liquidjs/compare/v10.3.2...v10.3.3) (2022-12-18)
+
+
+### Bug Fixes
+
+* type compatible with v9 tag definition, support `Context` as scope in various render APIs, [#570](https://github.com/harttle/liquidjs/issues/570) ([fb6a9f8](https://github.com/harttle/liquidjs/commit/fb6a9f8717cd57522d53687da7e4718b28a7f68a))
+
 ## [10.3.2](https://github.com/harttle/liquidjs/compare/v10.3.1...v10.3.2) (2022-12-13)
 
 
