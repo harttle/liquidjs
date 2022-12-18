@@ -127,7 +127,7 @@ Last
 The `forloop.index`, `forloop.index0`, `forloop.rindex` and `forloop.rindex0` property:
 
 Input
-```
+```liquid
 index index0 rindex rindex0
 {% for i in (1..5) %}
   {{- forloop.index }}     {{ forloop.index0 }}      {{ forloop.rindex }}      {{ forloop.rindex0 }}
@@ -142,6 +142,27 @@ index index0 rindex rindex0
 3     2      3      2
 4     3      2      1
 5     4      1      0
+```
+
+The `forloop.parentloop` property is available when `for` loops are nested:
+
+Input
+```liquid
+index parentloop.index
+{% for i in (1..2) -%}
+  {% for j in (3..4) -%}
+    {{ forloop.index }}     {{ forloop.parentloop.index }}
+  {% endfor -%}
+{% endfor -%}
+```
+
+Output
+```
+index parentloop.index
+1     1
+2     1
+1     2
+2     2
 ```
 
 ## Parameters

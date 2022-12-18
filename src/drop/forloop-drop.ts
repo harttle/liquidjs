@@ -1,13 +1,16 @@
 import { Drop } from './drop'
+import { NULL, NullDrop } from './null-drop'
 
 export class ForloopDrop extends Drop {
   protected i = 0
   public name: string
   public length: number
-  public constructor (length: number, collection: string, variable: string) {
+  public parentloop: ForloopDrop | NullDrop
+  public constructor (length: number, collection: string, variable: string, parentloop?: ForloopDrop) {
     super()
     this.length = length
     this.name = `${variable}-${collection}`
+    this.parentloop = parentloop ?? NULL
   }
   public next () {
     this.i++

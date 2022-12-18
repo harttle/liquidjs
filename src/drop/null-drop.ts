@@ -22,3 +22,5 @@ export class NullDrop extends Drop implements Comparable {
     return null
   }
 }
+
+export const NULL = new NullDrop()

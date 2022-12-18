@@ -1,6 +1,7 @@
 import { Hash, ValueToken, Liquid, Tag, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { toEnumerable } from '../util/collection'
 import { ForloopDrop } from '../drop/forloop-drop'
+import { NULL } from '../drop'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -66,8 +67,14 @@ export default class extends Tag {
     }, collection)
 
     ctx.setRegister(continueKey, (hash['offset'] || 0) + collection.length)
-    const scope = { forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) }
+
+    const forloopRegister = ctx.getRegister('forloops', [])
+    const parentloop = forloopRegister[forloopRegister.length - 1] ?? NULL
+    const drop = new ForloopDrop(collection.length, this.collection.getText(), this.variable, parentloop)
+    const scope = { forloop: drop }
+
     ctx.push(scope)
+    forloopRegister.push(drop)
     for (const item of collection) {
       scope[this.variable] = item
       yield r.renderTemplates(this.templates, ctx, emitter)
@@ -78,6 +85,7 @@ export default class extends Tag {
       emitter['continue'] = false
       scope.forloop.next()
     }
+    forloopRegister.pop()
     ctx.pop()
   }
 }

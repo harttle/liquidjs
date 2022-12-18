@@ -46,7 +46,7 @@ describe('tags/for', function () {
   it('should output forloop', async function () {
     const src = '{%for i in (1..1)%}{{forloop}}{%endfor%}'
     const html = await liquid.parseAndRender(src, scope)
-    return expect(html).to.equal('{"i":0,"length":1,"name":"i-(1..1)"}')
+    return expect(html).to.equal('{"i":0,"length":1,"name":"i-(1..1)","parentloop":{}}')
   })
   it('should output forloop collection name', async function () {
     const src = '{%for c in alpha%}{{forloop.name}}-{{c}}{%endfor%}'
@@ -364,6 +364,50 @@ describe('tags/for', function () {
       const src = '{% for i in someDrop %}{{forloop.name}} {%else%}EMPTY{%endfor%}'
       const html = liquid.parseAndRenderSync(src, { someDrop: new MockIterableDrop() })
       return expect(html).to.equal('i-someDrop i-someDrop i-someDrop ')
+    })
+  })
+
+  describe('parentloop', function () {
+    it('should handle no parent forloop', async function () {
+      const src = '{% for i in (1..2)%}{{ forloop.parentloop.index }}{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('')
+    })
+    it('should support access to a parent forloop', async function () {
+      const src = '{% for i in (1..2)%}' +
+        '{% for j in (1..2) %}' +
+        '{{ i }} {{j}} {{ forloop.parentloop.index }} {{ forloop.index }} ' +
+        '{% endfor %}' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('1 1 1 1 1 2 1 2 2 1 2 1 2 2 2 2 ')
+    })
+    it('should support access to a parentloop\'s parent forloop', async function () {
+      const src = '{% for i in (1..2) %}' +
+        '{% for j in (1..2) %}' +
+        '{% for k in (1..2) %}' +
+        'i={{ forloop.parentloop.parentloop.index }} ' +
+        'j={{ forloop.parentloop.index }} ' +
+        'k={{ forloop.index }} ' +
+        '{% endfor %}' +
+        '{% endfor %}' +
+        '{% endfor %}'
+      const want = 'i=1 j=1 k=1 i=1 j=1 k=2 ' +
+        'i=1 j=2 k=1 i=1 j=2 k=2 ' +
+        'i=2 j=1 k=1 i=2 j=1 k=2 ' +
+        'i=2 j=2 k=1 i=2 j=2 k=2 '
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal(want)
+    })
+    it('should let parentloop go out of scope', async function () {
+      const src = '{% for i in (1..2)%}' +
+        '{% for j in (1..2) %}' +
+        '{{ i }} {{ j }} ' +
+        '{% endfor %}' +
+        '{{ forloop.parentloop.index }}' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('1 1 1 2 2 1 2 2 ')
     })
   })
 })
