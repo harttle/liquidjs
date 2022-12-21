@@ -46,7 +46,7 @@ describe('tags/for', function () {
   it('should output forloop', async function () {
     const src = '{%for i in (1..1)%}{{forloop}}{%endfor%}'
     const html = await liquid.parseAndRender(src, scope)
-    return expect(html).to.equal('{"i":0,"length":1,"name":"i-(1..1)","parentloop":{}}')
+    return expect(html).to.equal('{"i":0,"length":1,"name":"i-(1..1)","parentloop":null}')
   })
   it('should output forloop collection name', async function () {
     const src = '{%for c in alpha%}{{forloop.name}}-{{c}}{%endfor%}'
@@ -369,9 +369,42 @@ describe('tags/for', function () {
 
   describe('parentloop', function () {
     it('should handle no parent forloop', async function () {
-      const src = '{% for i in (1..2)%}{{ forloop.parentloop.index }}{% endfor %}'
+      const src = '{% for i in (1..2)%}{{ forloop.parentloop }}{% endfor %}'
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).to.equal('')
+    })
+    it('should fail when accessing null parentloop properties with strict variables', async function () {
+      const src = '{% for i in (1..2)%}{{ forloop.parentloop.index }}{% endfor %}'
+      const strictEngine = new Liquid({
+        strictVariables: true
+      })
+      return expect(strictEngine.parseAndRender(src, scope))
+        .to.be.rejectedWith(/undefined variable/)
+    })
+    it('should support comparing parent forloop to nil', async function () {
+      const src = '{% for i in (1..2)%}' +
+        '{% if forloop.parentloop == nil %}' +
+        'no parentloop ' +
+        '{% else %}' +
+        '{{ forloop.parentloop.index }}' +
+        '{% endif %}' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).to.equal('no parentloop no parentloop ')
+    })
+    it('should support comparing parent forloop to nil with strict variables', async function () {
+      const src = '{% for i in (1..2)%}' +
+        '{% if forloop.parentloop == nil %}' +
+        'no parentloop ' +
+        '{% else %}' +
+        '{{ forloop.parentloop.index }}' +
+        '{% endif %}' +
+        '{% endfor %}'
+      const strictEngine = new Liquid({
+        strictVariables: true
+      })
+      const html = await strictEngine.parseAndRender(src, scope)
+      return expect(html).to.equal('no parentloop no parentloop ')
     })
     it('should support access to a parent forloop', async function () {
       const src = '{% for i in (1..2)%}' +

@@ -21,6 +21,9 @@ export class NullDrop extends Drop implements Comparable {
   public valueOf () {
     return null
   }
+  public toJSON () {
+    return null
+  }
 }
 
 export const NULL = new NullDrop()

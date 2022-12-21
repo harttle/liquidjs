@@ -1,7 +1,6 @@
 import { Hash, ValueToken, Liquid, Tag, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { toEnumerable } from '../util/collection'
 import { ForloopDrop } from '../drop/forloop-drop'
-import { NULL } from '../drop'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -69,7 +68,7 @@ export default class extends Tag {
     ctx.setRegister(continueKey, (hash['offset'] || 0) + collection.length)
 
     const forloopRegister = ctx.getRegister('forloops', [])
-    const parentloop = forloopRegister[forloopRegister.length - 1] ?? NULL
+    const parentloop = forloopRegister[forloopRegister.length - 1]
     const drop = new ForloopDrop(collection.length, this.collection.getText(), this.variable, parentloop)
     const scope = { forloop: drop }
 
