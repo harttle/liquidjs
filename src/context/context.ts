@@ -39,8 +39,8 @@ export class Context {
     this.environments = env
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
   }
-  public getRegister (key: string, defaultValue?: any) {
-    return (this.registers[key] = this.registers[key] || (defaultValue ?? {}))
+  public getRegister (key: string, defaultValue = {}) {
+    return (this.registers[key] = this.registers[key] || defaultValue)
   }
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)
