@@ -93,8 +93,8 @@
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <h2 id="Type-aliases" class="article-heading"><a href="#Type-aliases" class="headerlink" title="Type aliases"></a>Type aliases<a class="article-anchor" href="#Type-aliases" aria-hidden="true"></a></h2><h3 id="OperatorHandler" class="article-heading"><a href="#OperatorHandler" class="headerlink" title="OperatorHandler"></a>OperatorHandler<a class="article-anchor" href="#OperatorHandler" aria-hidden="true"></a></h3><p>Ƭ <strong>OperatorHandler</strong>: <em>function</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L6">src/render/operator.ts:6</a></em></p>
+                <h2 id="Type-aliases" class="article-heading"><a href="#Type-aliases" class="headerlink" title="Type aliases"></a>Type aliases<a class="article-anchor" href="#Type-aliases" aria-hidden="true"></a></h2><h3 id="BinaryOperatorHandler" class="article-heading"><a href="#BinaryOperatorHandler" class="headerlink" title="BinaryOperatorHandler"></a>BinaryOperatorHandler<a class="article-anchor" href="#BinaryOperatorHandler" aria-hidden="true"></a></h3><p>Ƭ <strong>BinaryOperatorHandler</strong>: <em>function</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L7">src/render/operator.ts:7</a></em></p>
 <h4 id="Type-declaration" class="article-heading"><a href="#Type-declaration" class="headerlink" title="Type declaration:"></a>Type declaration:<a class="article-anchor" href="#Type-declaration" aria-hidden="true"></a></h4><p>▸ (<code>lhs</code>: any, <code>rhs</code>: any, <code>ctx</code>: <a href="../classes/context_context_.context.html">Context</a>): <em>boolean</em></p>
 <p><strong>Parameters:</strong></p>
 <table>
@@ -118,11 +118,35 @@
 </tr>
 </tbody></table>
 <hr>
+<h3 id="OperatorHandler" class="article-heading"><a href="#OperatorHandler" class="headerlink" title="OperatorHandler"></a>OperatorHandler<a class="article-anchor" href="#OperatorHandler" aria-hidden="true"></a></h3><p>Ƭ <strong>OperatorHandler</strong>: <em><a href="render_operator_.html#unaryoperatorhandler">UnaryOperatorHandler</a> | <a href="render_operator_.html#binaryoperatorhandler">BinaryOperatorHandler</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L8">src/render/operator.ts:8</a></em></p>
+<hr>
 <h3 id="Operators" class="article-heading"><a href="#Operators" class="headerlink" title="Operators"></a>Operators<a class="article-anchor" href="#Operators" aria-hidden="true"></a></h3><p>Ƭ <strong>Operators</strong>: <em>Record‹string, <a href="render_operator_.html#operatorhandler">OperatorHandler</a>›</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L7">src/render/operator.ts:7</a></em></p>
-<h2 id="Object-literals" class="article-heading"><a href="#Object-literals" class="headerlink" title="Object literals"></a>Object literals<a class="article-anchor" href="#Object-literals" aria-hidden="true"></a></h2><h3 id="Const-defaultOperators" class="article-heading"><a href="#Const-defaultOperators" class="headerlink" title="Const defaultOperators"></a><code>Const</code> defaultOperators<a class="article-anchor" href="#Const-defaultOperators" aria-hidden="true"></a></h3><h3 id="▪-defaultOperators-object" class="article-heading"><a href="#▪-defaultOperators-object" class="headerlink" title="▪ defaultOperators: object"></a>▪ <strong>defaultOperators</strong>: <em>object</em><a class="article-anchor" href="#▪-defaultOperators-object" aria-hidden="true"></a></h3><p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L9">src/render/operator.ts:9</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L9">src/render/operator.ts:9</a></em></p>
+<hr>
+<h3 id="UnaryOperatorHandler" class="article-heading"><a href="#UnaryOperatorHandler" class="headerlink" title="UnaryOperatorHandler"></a>UnaryOperatorHandler<a class="article-anchor" href="#UnaryOperatorHandler" aria-hidden="true"></a></h3><p>Ƭ <strong>UnaryOperatorHandler</strong>: <em>function</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L6">src/render/operator.ts:6</a></em></p>
+<h4 id="Type-declaration-1" class="article-heading"><a href="#Type-declaration-1" class="headerlink" title="Type declaration:"></a>Type declaration:<a class="article-anchor" href="#Type-declaration-1" aria-hidden="true"></a></h4><p>▸ (<code>operand</code>: any, <code>ctx</code>: <a href="../classes/context_context_.context.html">Context</a>): <em>boolean</em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>operand</code></td>
+<td>any</td>
+</tr>
+<tr>
+<td><code>ctx</code></td>
+<td><a href="../classes/context_context_.context.html">Context</a></td>
+</tr>
+</tbody></table>
+<h2 id="Object-literals" class="article-heading"><a href="#Object-literals" class="headerlink" title="Object literals"></a>Object literals<a class="article-anchor" href="#Object-literals" aria-hidden="true"></a></h2><h3 id="Const-defaultOperators" class="article-heading"><a href="#Const-defaultOperators" class="headerlink" title="Const defaultOperators"></a><code>Const</code> defaultOperators<a class="article-anchor" href="#Const-defaultOperators" aria-hidden="true"></a></h3><h3 id="▪-defaultOperators-object" class="article-heading"><a href="#▪-defaultOperators-object" class="headerlink" title="▪ defaultOperators: object"></a>▪ <strong>defaultOperators</strong>: <em>object</em><a class="article-anchor" href="#▪-defaultOperators-object" aria-hidden="true"></a></h3><p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L11">src/render/operator.ts:11</a></em></p>
 <h3 id class="article-heading"><a href="#" class="headerlink" title="!="></a>!=<a class="article-anchor" href="#" aria-hidden="true"></a></h3><p>▸ <strong>!=</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L15">src/render/operator.ts:15</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L17">src/render/operator.ts:17</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -142,7 +166,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="lt" class="article-heading"><a href="#lt" class="headerlink" title="&lt;"></a>&lt;<a class="article-anchor" href="#lt" aria-hidden="true"></a></h3><p>▸ <strong>&lt;</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L25">src/render/operator.ts:25</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L27">src/render/operator.ts:27</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -162,7 +186,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="lt-1" class="article-heading"><a href="#lt-1" class="headerlink" title="&lt;="></a>&lt;=<a class="article-anchor" href="#lt-1" aria-hidden="true"></a></h3><p>▸ <strong>&lt;=</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L35">src/render/operator.ts:35</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L37">src/render/operator.ts:37</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -182,7 +206,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="-1" class="article-heading"><a href="#-1" class="headerlink" title="=="></a>==<a class="article-anchor" href="#-1" aria-hidden="true"></a></h3><p>▸ <strong>==</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L10">src/render/operator.ts:10</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L12">src/render/operator.ts:12</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -202,7 +226,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="gt" class="article-heading"><a href="#gt" class="headerlink" title="&gt;"></a>&gt;<a class="article-anchor" href="#gt" aria-hidden="true"></a></h3><p>▸ <strong>&gt;</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L20">src/render/operator.ts:20</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L22">src/render/operator.ts:22</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -222,7 +246,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="gt-1" class="article-heading"><a href="#gt-1" class="headerlink" title="&gt;="></a>&gt;=<a class="article-anchor" href="#gt-1" aria-hidden="true"></a></h3><p>▸ <strong>&gt;=</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L30">src/render/operator.ts:30</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L32">src/render/operator.ts:32</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -242,7 +266,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="and" class="article-heading"><a href="#and" class="headerlink" title="and"></a>and<a class="article-anchor" href="#and" aria-hidden="true"></a></h3><p>▸ <strong>and</strong>(<code>l</code>: any, <code>r</code>: any, <code>ctx</code>: <a href="../classes/context_context_.context.html">Context</a>): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L45">src/render/operator.ts:45</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L48">src/render/operator.ts:48</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -266,7 +290,7 @@
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="contains" class="article-heading"><a href="#contains" class="headerlink" title="contains"></a>contains<a class="article-anchor" href="#contains" aria-hidden="true"></a></h3><p>▸ <strong>contains</strong>(<code>l</code>: any, <code>r</code>: any): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L40">src/render/operator.ts:40</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L42">src/render/operator.ts:42</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -285,8 +309,28 @@
 </tr>
 </tbody></table>
 <p><strong>Returns:</strong> <em>boolean</em></p>
+<h3 id="not" class="article-heading"><a href="#not" class="headerlink" title="not"></a>not<a class="article-anchor" href="#not" aria-hidden="true"></a></h3><p>▸ <strong>not</strong>(<code>v</code>: any, <code>ctx</code>: <a href="../classes/context_context_.context.html">Context</a>): <em>boolean</em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L47">src/render/operator.ts:47</a></em></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>v</code></td>
+<td>any</td>
+</tr>
+<tr>
+<td><code>ctx</code></td>
+<td><a href="../classes/context_context_.context.html">Context</a></td>
+</tr>
+</tbody></table>
+<p><strong>Returns:</strong> <em>boolean</em></p>
 <h3 id="or" class="article-heading"><a href="#or" class="headerlink" title="or"></a>or<a class="article-anchor" href="#or" aria-hidden="true"></a></h3><p>▸ <strong>or</strong>(<code>l</code>: any, <code>r</code>: any, <code>ctx</code>: <a href="../classes/context_context_.context.html">Context</a>): <em>boolean</em></p>
-<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L46">src/render/operator.ts:46</a></em></p>
+<p><em>Defined in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/src/render/operator.ts#L49">src/render/operator.ts:49</a></em></p>
 <p><strong>Parameters:</strong></p>
 <table>
 <thead>
@@ -312,7 +356,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2022-12-18T04:53:38.990Z" itemprop="dateModified">Last updated: 2022-12-18</time>
+                <time class="article-footer-updated" datetime="2023-01-02T17:38:04.146Z" itemprop="dateModified">Last updated: 2023-01-02</time>
                 <a href="../classes/liquid_.liquid.html" class="article-footer-next" title="sidebar.api.Liquid"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -321,7 +365,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">Contents</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Type-aliases"><span class="toc-text">Type aliases</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#OperatorHandler"><span class="toc-text">OperatorHandler</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration"><span class="toc-text">Type declaration:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Operators"><span class="toc-text">Operators</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-literals"><span class="toc-text">Object literals</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Const-defaultOperators"><span class="toc-text">Const defaultOperators</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%96%AA-defaultOperators-object"><span class="toc-text">▪ defaultOperators: object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">!&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt"><span class="toc-text">&lt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-1"><span class="toc-text">&lt;&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-text">&#x3D;&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt"><span class="toc-text">&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-1"><span class="toc-text">&gt;&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#and"><span class="toc-text">and</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#or"><span class="toc-text">or</span></a></li></ol></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Type-aliases"><span class="toc-text">Type aliases</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#BinaryOperatorHandler"><span class="toc-text">BinaryOperatorHandler</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration"><span class="toc-text">Type declaration:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OperatorHandler"><span class="toc-text">OperatorHandler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Operators"><span class="toc-text">Operators</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UnaryOperatorHandler"><span class="toc-text">UnaryOperatorHandler</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-declaration-1"><span class="toc-text">Type declaration:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-literals"><span class="toc-text">Object literals</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Const-defaultOperators"><span class="toc-text">Const defaultOperators</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%96%AA-defaultOperators-object"><span class="toc-text">▪ defaultOperators: object</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text">!&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt"><span class="toc-text">&lt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lt-1"><span class="toc-text">&lt;&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-text">&#x3D;&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt"><span class="toc-text">&gt;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gt-1"><span class="toc-text">&gt;&#x3D;</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#and"><span class="toc-text">and</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#not"><span class="toc-text">not</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#or"><span class="toc-text">or</span></a></li></ol></li></ol>
               </div>
               <a href="#" id="article-toc-top">Back to Top</a>
             </div>
@@ -335,7 +379,7 @@
     <footer id="footer" class="wrapper">
   <div class="inner">
     <div id="footer-copyright">
-      &copy; 2022 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      &copy; 2023 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
       Documentation licensed under <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>.
     </div>
     <div id="footer-links">
