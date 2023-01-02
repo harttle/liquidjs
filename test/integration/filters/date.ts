@@ -6,6 +6,9 @@ describe('filters/date', function () {
     const date = new Date()
     return test('{{ date | date:"%a %b %d %Y"}}', { date }, date.toDateString())
   })
+  it('should support "now"', function () {
+    return test('{{ "now" | date }}', /\w+, January \d+, 2023 at \d+:\d\d [ap]m [-+]\d\d\d\d/)
+  })
   it('should create a new Date when given "now"', function () {
     return test('{{ "now" | date: "%Y"}}', (new Date()).getFullYear().toString())
   })
@@ -63,6 +66,9 @@ describe('filters/date', function () {
     })
     it('should support timezone offset argument', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", 360}}', '1990-12-31T17:00:00')
+    })
+    it('should support timezone without format', function () {
+      return test('{{ "2022-12-08T03:22:18.000Z" | date: nil, "America/Cayman" }}', 'Wednesday, December 7, 2022 at 10:22 pm -0500')
     })
     it('should support timezone name argument', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }}', '1991-01-01T04:30:00')

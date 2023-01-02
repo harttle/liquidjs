@@ -362,4 +362,19 @@ describe('Issues', function () {
     const html = await liquid.parseAndRender(tpl, ctx)
     expect(html).to.equal('FOO')
   })
+  it('#573 date filter should return parsed input when no format is provided', async () => {
+    const liquid = new Liquid()
+    liquid.registerTag('metadata_file', {
+      parse (tagToken: TagToken, remainTokens: TopLevelToken[]) {
+        this.str = tagToken.args
+      },
+      async render (ctx: Context) {
+        const content = await Promise.resolve(`{{${this.str}}}`)
+        return this.liquid.parseAndRender(content.toString(), ctx)
+      }
+    })
+    const tpl = `{{ 'now' | date }}`
+    const html = await liquid.parseAndRender(tpl)
+    expect(html).to.match(/\w+, January \d+, 2023 at \d+:\d\d [ap]m [-+]\d\d\d\d/)
+  })
 })
