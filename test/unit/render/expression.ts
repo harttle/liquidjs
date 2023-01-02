@@ -154,6 +154,13 @@ describe('Expression', function () {
       const ctx = new Context({ obj: { foo: 'FOO' }, keys: { "what's this": 'foo' } })
       expect(await toPromise(create('obj[keys["what\'s this"]]').evaluate(ctx, false))).to.equal('FOO')
     })
+    it('should support not', async function () {
+      expect(await toPromise(create('not 1 < 2').evaluate(ctx))).to.equal(false)
+    })
+    it('not should have higher precedence than and/or', async function () {
+      expect(await toPromise(create('not 1 < 2 or not 1 > 2').evaluate(ctx))).to.equal(true)
+      expect(await toPromise(create('not 1 < 2 and not 1 > 2').evaluate(ctx))).to.equal(false)
+    })
   })
 
   describe('sync', function () {

@@ -377,4 +377,16 @@ describe('Issues', function () {
     const html = await liquid.parseAndRender(tpl)
     expect(html).to.match(/\w+, January \d+, 2023 at \d+:\d\d [ap]m [-+]\d\d\d\d/)
   })
+  it('#575 Add support for Not operator', async () => {
+    const liquid = new Liquid()
+    const tpl = `
+    {% if link and not button %}
+      <a href="{{ link }}">Lot more code here</a>
+    {% else %}
+      <div>Lot more code here</div>
+    {% endif %}`
+    const ctx = { link: 'https://example.com', button: false }
+    const html = await liquid.parseAndRender(tpl, ctx)
+    expect(html.trim()).to.equal('<a href="https://example.com">Lot more code here</a>')
+  })
 })

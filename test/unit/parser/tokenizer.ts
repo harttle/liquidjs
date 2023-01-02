@@ -397,9 +397,11 @@ describe('Tokenizer', function () {
     it('should read expression `a ==`', () => {
       const exp = [...new Tokenizer('a ==').readExpressionTokens()]
 
-      expect(exp).to.have.lengthOf(1)
+      expect(exp).to.have.lengthOf(2)
       expect(exp[0]).to.be.instanceOf(PropertyAccessToken)
       expect(exp[0].getText()).to.deep.equal('a')
+      expect(exp[1]).to.be.instanceOf(OperatorToken)
+      expect(exp[1].getText()).to.deep.equal('==')
     })
     it('should read expression `a==b`', () => {
       const exp = new Tokenizer('a==b').readExpressionTokens()

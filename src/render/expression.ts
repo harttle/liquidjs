@@ -1,8 +1,8 @@
-import { RangeToken, OperatorToken, Token, LiteralToken, NumberToken, PropertyAccessToken, QuotedToken } from '../tokens'
+import { RangeToken, OperatorToken, Token, LiteralToken, NumberToken, PropertyAccessToken, QuotedToken, OperatorType, operatorTypes } from '../tokens'
 import { isQuotedToken, isWordToken, isNumberToken, isLiteralToken, isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, literalValues, assert } from '../util'
 import { parseStringLiteral } from '../parser'
-import { Context } from '../context'
-import { Operators } from '../render'
+import type { Context } from '../context'
+import type { UnaryOperatorHandler } from '../render'
 
 export class Expression {
   private postfix: Token[]
@@ -16,8 +16,13 @@ export class Expression {
     for (const token of this.postfix) {
       if (isOperatorToken(token)) {
         const r = operands.pop()
-        const l = operands.pop()
-        const result = yield evalOperatorToken(ctx.opts.operators, token, l, r, ctx)
+        let result
+        if (operatorTypes[token.operator] === OperatorType.Unary) {
+          result = yield (ctx.opts.operators[token.operator] as UnaryOperatorHandler)(r, ctx)
+        } else {
+          const l = operands.pop()
+          result = yield ctx.opts.operators[token.operator](l, r, ctx)
+        }
         operands.push(result)
       } else {
         operands.push(yield evalToken(token, ctx, lenient && this.postfix.length === 1))
@@ -56,11 +61,6 @@ function evalNumberToken (token: NumberToken) {
 
 export function evalQuotedToken (token: QuotedToken) {
   return parseStringLiteral(token.getText())
-}
-
-function evalOperatorToken (operators: Operators, token: OperatorToken, lhs: any, rhs: any, ctx: Context) {
-  const impl = operators[token.operator]
-  return impl(lhs, rhs, ctx)
 }
 
 function evalLiteralToken (token: LiteralToken) {

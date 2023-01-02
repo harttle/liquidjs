@@ -1,9 +1,11 @@
 import { isComparable } from '../drop/comparable'
 import { Context } from '../context'
 import { isFunction, toValue } from '../util'
-import { isTruthy } from '../render/boolean'
+import { isFalsy, isTruthy } from '../render/boolean'
 
-export type OperatorHandler = (lhs: any, rhs: any, ctx: Context) => boolean;
+export type UnaryOperatorHandler = (operand: any, ctx: Context) => boolean;
+export type BinaryOperatorHandler = (lhs: any, rhs: any, ctx: Context) => boolean;
+export type OperatorHandler = UnaryOperatorHandler | BinaryOperatorHandler;
 export type Operators = Record<string, OperatorHandler>
 
 export const defaultOperators: Operators = {
@@ -42,6 +44,7 @@ export const defaultOperators: Operators = {
     r = toValue(r)
     return l && isFunction(l.indexOf) ? l.indexOf(r) > -1 : false
   },
+  'not': (v: any, ctx: Context) => isFalsy(toValue(v), ctx),
   'and': (l: any, r: any, ctx: Context) => isTruthy(toValue(l), ctx) && isTruthy(toValue(r), ctx),
   'or': (l: any, r: any, ctx: Context) => isTruthy(toValue(l), ctx) || isTruthy(toValue(r), ctx)
 }

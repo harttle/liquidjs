@@ -1,16 +1,35 @@
 import { Token } from './token'
 import { TokenKind } from '../parser'
 
-export const precedence = {
-  '==': 1,
-  '!=': 1,
-  '>': 1,
-  '<': 1,
-  '>=': 1,
-  '<=': 1,
-  'contains': 1,
+export const enum OperatorType {
+  Binary,
+  Unary
+}
+
+export const operatorPrecedences = {
+  '==': 2,
+  '!=': 2,
+  '>': 2,
+  '<': 2,
+  '>=': 2,
+  '<=': 2,
+  'contains': 2,
+  'not': 1,
   'and': 0,
   'or': 0
+}
+
+export const operatorTypes = {
+  '==': OperatorType.Binary,
+  '!=': OperatorType.Binary,
+  '>': OperatorType.Binary,
+  '<': OperatorType.Binary,
+  '>=': OperatorType.Binary,
+  '<=': OperatorType.Binary,
+  'contains': OperatorType.Binary,
+  'not': OperatorType.Unary,
+  'and': OperatorType.Binary,
+  'or': OperatorType.Binary
 }
 
 export class OperatorToken extends Token {
@@ -26,6 +45,6 @@ export class OperatorToken extends Token {
   }
   getPrecedence () {
     const key = this.getText()
-    return key in precedence ? precedence[key] : 1
+    return key in operatorPrecedences ? operatorPrecedences[key] : 1
   }
 }

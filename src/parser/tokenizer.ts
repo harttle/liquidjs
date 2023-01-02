@@ -26,20 +26,18 @@ export class Tokenizer {
   }
 
   * readExpressionTokens (): IterableIterator<Token> {
-    const operand = this.readValue()
-    if (!operand) return
-
-    yield operand
-
     while (this.p < this.N) {
       const operator = this.readOperator()
-      if (!operator) return
-
+      if (operator) {
+        yield operator
+        continue
+      }
       const operand = this.readValue()
-      if (!operand) return
-
-      yield operator
-      yield operand
+      if (operand) {
+        yield operand
+        continue
+      }
+      return
     }
   }
   readOperator (): OperatorToken | undefined {
