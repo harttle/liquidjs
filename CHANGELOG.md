@@ -1,3 +1,11 @@
+# [10.4.0](https://github.com/harttle/liquidjs/compare/v10.3.3...v10.4.0) (2023-01-02)
+
+
+### Features
+
+* support `not` operator, [#575](https://github.com/harttle/liquidjs/issues/575) ([3f21382](https://github.com/harttle/liquidjs/commit/3f21382d43cafa1e32162e58adabd22d5c3709ed))
+* support calling `date` without format string, [#573](https://github.com/harttle/liquidjs/issues/573) ([aafaa0b](https://github.com/harttle/liquidjs/commit/aafaa0b4f9e84f466fbcc2cb2ae37fe8704c5272))
+
 ## [10.3.3](https://github.com/harttle/liquidjs/compare/v10.3.2...v10.3.3) (2022-12-18)
 
 
