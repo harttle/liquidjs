@@ -32,12 +32,14 @@ export class Context {
    * Throw when accessing undefined variable?
    */
   public strictVariables: boolean;
+  public ownPropertyOnly: boolean;
   public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}) {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
     this.environments = env
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
+    this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})
@@ -74,7 +76,7 @@ export class Context {
   public * _getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
     if (isString(paths)) paths = paths.split('.')
     for (let i = 0; i < paths.length; i++) {
-      scope = yield readProperty(scope as object, paths[i], this.opts.ownPropertyOnly)
+      scope = yield readProperty(scope as object, paths[i], this.ownPropertyOnly)
       if (isNil(scope) && this.strictVariables) {
         throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
       }
