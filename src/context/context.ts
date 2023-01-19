@@ -38,6 +38,7 @@ export class Context {
     this.globals = renderOptions.globals ?? opts.globals
     this.environments = env
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
+    this.opts.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})
