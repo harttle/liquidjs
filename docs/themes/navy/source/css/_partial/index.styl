@@ -171,7 +171,7 @@
     background: var(--color-link-hover)
     color: #fff
 
-#sponsors-wrap, #contributors-wrap
+#backers-wrap, #sponsors-wrap, #contributors-wrap
   background: var(--color-navy-lighter)
   border-top: 1px solid #161d24
   border-bottom: 1px solid #161d24
@@ -211,10 +211,8 @@
       background: #fff
       color: var(--color-navy-lighter)
 
-#sponsors-wrap
-  background: var(--color-content-bg)
+#sponsors-wrap, #backers-wrap
   border: none
-  text-align: right
   overflow: hidden;
   .inner
     h3
@@ -222,7 +220,7 @@
     p
       color: var(--color-gray)
     .open-collective
-      margin: 0 auto
+      max-width: 100%
     .description a
       color: #333
       &:hover
@@ -236,3 +234,7 @@
         &:hover
           background: #fff
           color: var(--color-navy-lighter)
+
+#backers-wrap
+  text-align: right
+  background: var(--color-content-bg)

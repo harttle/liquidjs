@@ -43,14 +43,21 @@
     </div>
   </div>
 </div>
+<div id="backers-wrap">
+  <div class="wrapper">
+    <div class="inner">
+      <h3>{{__('index.backers.title')}}</h3>
+      <p class="description">{{__('index.backers.description')}}</p>
+      <img src="https://opencollective.com/liquidjs/individuals.svg">
+    </div>
+  </div>
+</div>
 <div id="sponsors-wrap">
   <div class="wrapper">
     <div class="inner">
       <h3>{{__('index.sponsors.title')}}</h3>
       <p class="description">{{__('index.sponsors.description')}}</p>
-      <div class="open-collective">
-        <object type="image/svg+xml" data="https://opencollective.com/liquidjs/tiers/backer.svg?avatarHeight=72"></object>
-      </div>
+      <img class="open-collective" src="https://opencollective.com/liquidjs/organizations.svg">
     </div>
   </div>
 </div>

@@ -11,9 +11,12 @@ index:
   contributors:
     title: Contributors
     description: 'LiquidJS follows the <a href="https://github.com/all-contributors/all-contributors">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guildelines here</a>! Thanks goes to these wonderful people:'
-  sponsors:
+  backers:
     title: Backers
     description: 'Love LiquidJS and want to contribute? <a href="https://opencollective.com/liquidjs">Become a backer</a>. Find out more <a href="tutorials/contribution-guidelines.html#Financial-Support">how to contribute</a>!'
+  sponsors:
+    title: Sponsors
+    description: 'If LiquidJS is benefiting your business/company, please <a href="https://opencollective.com/liquidjs">sponsor us</a> to make it better!'
 
 playground:
   title: Playground
