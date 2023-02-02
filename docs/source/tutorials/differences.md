@@ -31,7 +31,9 @@ Though we're trying to be compatible with the Ruby version, there are still some
 * Trailing unmatched characters inside filters are allowed in shopify/liquid but not in LiquidJS. It means filter arguments without a colon like `{%raw%}{{ "a b" | split " "}}{%endraw%}` will throw an error in LiquidJS. This is intended to improve Liquid usability, see [#208][#208] and [#212][#212].
 * LiquidJS has additional tags: [layout][layout] and corresponding `block` tag.
 * LiquidJS has additional filters: [json][json].
+* LiquidJS [date][date] filter supports `%q` for date ordinals like `{{ '2023/02/02' | date: '%d%q of %b'}}` => `02nd of Feb`
 
+[date]: https://liquidjs.com/filters/date.html
 [layout]: https://liquidjs.com/tags/layout.html
 [json]: https://liquidjs.com/filters/json.html
 [#26]: https://github.com/harttle/liquidjs/pull/26
