@@ -375,7 +375,8 @@ describe('Issues', function () {
     })
     const tpl = `{{ 'now' | date }}`
     const html = await liquid.parseAndRender(tpl)
-    expect(html).to.match(/\w+, January \d+, 2023 at \d+:\d\d [ap]m [-+]\d\d\d\d/)
+    // sample: Thursday, February 2, 2023 at 6:25 pm +0000
+    expect(html).to.match(/\w+, \w+ \d+, \d\d\d\d at \d+:\d\d [ap]m [-+]\d\d\d\d/)
   })
   it('#575 Add support for Not operator', async () => {
     const liquid = new Liquid()
