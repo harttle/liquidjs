@@ -7,7 +7,8 @@ describe('filters/date', function () {
     return test('{{ date | date:"%a %b %d %Y"}}', { date }, date.toDateString())
   })
   it('should support "now"', function () {
-    return test('{{ "now" | date }}', /\w+, January \d+, 2023 at \d+:\d\d [ap]m [-+]\d\d\d\d/)
+    // sample: Thursday, February 2, 2023 at 6:25 pm +0000
+    return test('{{ "now" | date }}', /\w+, \w+ \d+, \d\d\d\d at \d+:\d\d [ap]m [-+]\d\d\d\d/)
   })
   it('should create a new Date when given "now"', function () {
     return test('{{ "now" | date: "%Y"}}', (new Date()).getFullYear().toString())
