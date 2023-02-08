@@ -27,7 +27,6 @@ program
   .option('--extname <string>', 'use a default filename extension when resolving partials and layouts')
   .option('--jekyll-include', 'use jekyll-style include (pass parameters to include variable of current scope)')
   .option('--js-truthy', 'use JavaScript-style truthiness')
-  .option('--keep-output-type', 'keep value type when writing output')
   .option('--layouts <path...>', 'directories from where to resolve layouts (defaults to --root)')
   .option('--lenient-if', 'do not throw on undefined variables in conditional expressions (when using --strict-variables)')
   .option('--no-dynamic-paths', 'always treat file paths for partials and layouts as a literal value')
