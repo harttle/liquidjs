@@ -42,7 +42,13 @@ Or use the UMD bundle from jsDelivr:
 <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
 ```
 
-More details, refer to [The Setup Guide][setup].
+Or render directly from CLI using npx:
+
+```bash
+npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
+```
+
+For more details, refer to the [Setup Guide][setup].
 
 ## Related Projects
 

@@ -53,20 +53,43 @@ Pre-built UMD bundles are also available:
 
 ## LiquidJS in CLI
 
-LiquidJS is also available from CLI:
+LiquidJS can also be used to render a template directly from CLI using `npx`:
 
 ```bash
-echo '{{"hello" | capitalize}}' | npx liquidjs
+npx liquidjs --template '{{"hello" | capitalize}}'
 ```
 
-If you pass a path to a JSON file or a JSON string as the first argument, it will be used as the context for your template.
+You can either pass the template inline (shown above) or you can read it from a file like so:
 
 ```bash
-echo 'Hello, {{ name }}.' | npx liquidjs '{"name": "Snake"}'
+npx liquidjs --template ./some-template.liquid
 ```
+
+You can also pass a context, either inline or from a path or piped through `stdin`. The following three are equivalent:
+
+```bash
+npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
+npx liquidjs --template 'Hello, {{ name }}!' --context ./some-context.json
+echo '{"name": "Snake"}' | npx liquidjs --template 'Hello, {{ name }}!'
+```
+
+The rendered output is written to `stdout` by default, but you can also specify an output file (if the file exists, it will be overwritten):
+
+```bash
+npx liquidjs --template '{{"hello" | capitalize}}' --output ./hello.txt
+```
+
+You can also pass a number of options to customize template rendering behavior. For example, the `--js-truthy` option can be used to enable JavaScript truthiness:
+
+```bash
+npx liquidjs --template ./some-template.liquid --js-truthy
+```
+
+Most of the [options available through the JavaScript API][options] are also available from the CLI. For help on available options, use `npx liquidjs --help`.
 
 ## Miscellaneous
 
 A ReactJS demo is also added by [@stevenanthonyrevo](https://github.com/stevenanthonyrevo), see [liquidjs/demo/reactjs/](https://github.com/harttle/liquidjs/blob/master/demo/reactjs/).
 
 [intro]: ./intro-to-liquid.html
+[options]: ./options.md
