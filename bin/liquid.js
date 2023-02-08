@@ -6,7 +6,7 @@ const Liquid = require('..').Liquid
 // Preserve compatibility by falling back to legacy CLI behavior if:
 // - stdin is redirected (i.e. not connected to a terminal)
 // - there are either no arguments, or only a single argument which does not start with a dash
-// TODO: Remove this fallback for 3.0
+// TODO: Remove this fallback for 11.0
 
 if (!process.stdin.isTTY) {
   if (process.argv.length === 2 || (process.argv.length === 3 && !process.argv[2].startsWith('-'))) {
@@ -20,7 +20,7 @@ const { program } = require('commander')
 program
   .name('npx liquidjs')
   .description('Render a Liquid template')
-  .requiredOption('-t, --template <path | liquid>', 'liquid template to render (as path or inline)')
+  .requiredOption('-t, --template <path | liquid>', 'liquid template to render (as path or inline)') // TODO: Change to argument in 11.0
   .option('-c, --context <path | json>', 'input context in JSON format (as path or inline; omit to read from stdin)')
   .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
   .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
@@ -96,7 +96,7 @@ function resolvePathOption (option) {
   return content
 }
 
-// TODO: Remove for 3.0
+// TODO: Remove for 11.0
 function renderLegacy () {
   process.stderr.write('Reading template from stdin. This mode will be removed in next major version, use --template option instead.\n')
   const contextArg = process.argv.slice(2)[0]
