@@ -4,18 +4,21 @@ const fs = require('fs/promises')
 const Liquid = require('..').Liquid
 
 // Preserve compatibility by falling back to legacy CLI behavior if:
-// - stdin is redirected (i.e. not connected to a terminal)
+// - stdin is redirected (i.e. not connected to a terminal) AND
 // - there are either no arguments, or only a single argument which does not start with a dash
 // TODO: Remove this fallback for 11.0
 
-if (!process.stdin.isTTY) {
-  if (process.argv.length === 2 || (process.argv.length === 3 && !process.argv[2].startsWith('-'))) {
-    renderLegacy()
-    return
-  }
+let renderPromise = null
+if (!process.stdin.isTTY && (process.argv.length === 2 || (process.argv.length === 3 && !process.argv[2].startsWith('-')))) {
+  renderPromise = renderLegacy()
+} else {
+  renderPromise = render()
 }
 
-render()
+renderPromise.catch(err => {
+  process.stderr.write(`${err.message}\n`)
+  process.exitCode = 1
+})
 
 async function render () {
   const { program } = require('commander')
@@ -23,8 +26,8 @@ async function render () {
   program
     .name('liquidjs')
     .description('Render a Liquid template')
-    .requiredOption('-t, --template <path | liquid>', 'liquid template to render (as path or inline)') // TODO: Change to argument in 11.0
-    .option('-c, --context <path | json>', 'input context in JSON format (as path or inline; omit to read from stdin)')
+    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (@- to read from stdin)') // TODO: Change to argument in 11.0
+    .option('-c, --context <json | @path>', 'input context in JSON format (@- to read from stdin)')
     .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
     .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
     .option('--extname <string>', 'use a default filename extension when resolving partials and layouts')
@@ -54,56 +57,48 @@ async function render () {
     .parse()
 
   const options = program.opts()
-  const template = await resolvePathOption(options.template)
-  const context = await resolveContext(options.context)
 
+  if (Object.values(options).filter((value) => value === '@-').length > 1) {
+    throw new Error(`The stdin input specifier '@-' must only be used once.`)
+  }
+
+  const template = await resolveInputOption(options.template)
+  const context = await resolveContext(options.context)
   const liquid = new Liquid(options)
   const output = liquid.parseAndRenderSync(template, context)
   if (options.output) {
     await fs.writeFile(options.output, output)
   } else {
     process.stdout.write(output)
-    process.stdout.write('\n')
   }
 }
 
 async function resolveContext (contextOption) {
   let contextJson = '{}'
   if (contextOption) {
-    contextJson = await resolvePathOption(contextOption)
-  } else if (!process.stdin.isTTY) { // Read context from stdin if not connected to a terminal
-    contextJson = await readStream(process.stdin)
+    contextJson = await resolveInputOption(contextOption)
   }
   const context = JSON.parse(contextJson)
   return context
 }
 
-async function resolvePathOption (option) {
+async function resolveInputOption (option) {
   let content = null
   if (option) {
-    const stat = await fs.stat(option, { throwIfNoEntry: false })
-    if (stat && stat.isFile) {
-      content = await fs.readFile(option, 'utf8')
+    if (option === '@-') {
+      content = await readStream(process.stdin)
+    } else if (option.startsWith('@')) {
+      const filePath = option.slice(1)
+      const stat = await fs.stat(filePath, { throwIfNoEntry: false })
+      if (!stat || !stat.isFile) {
+        throw new Error(`'${filePath}' does not exist or is not a file`)
+      }
+      content = await fs.readFile(filePath, 'utf8')
     } else {
       content = option
     }
   }
   return content
-}
-
-// TODO: Remove for 11.0
-async function renderLegacy () {
-  process.stderr.write('Reading template from stdin. This mode will be removed in next major version, use --template option instead.\n')
-  const contextArg = process.argv.slice(2)[0]
-  let context = {}
-  if (contextArg) {
-    const contextJson = await resolvePathOption(contextArg)
-    context = JSON.parse(contextJson)
-  }
-  const template = await readStream(process.stdin)
-  const liquid = new Liquid()
-  const output = liquid.parseAndRenderSync(template, context)
-  process.stdout.write(output)
 }
 
 async function readStream (stream) {
@@ -112,4 +107,33 @@ async function readStream (stream) {
     chunks.push(chunk)
   }
   return Buffer.concat(chunks).toString('utf8')
+}
+
+// TODO: Remove for 11.0
+async function renderLegacy () {
+  process.stderr.write('Reading template from stdin. This mode will be removed in next major version, use --template option instead.\n')
+  const contextArg = process.argv.slice(2)[0]
+  let context = {}
+  if (contextArg) {
+    const contextJson = await resolveInputOptionLegacy(contextArg)
+    context = JSON.parse(contextJson)
+  }
+  const template = await readStream(process.stdin)
+  const liquid = new Liquid()
+  const output = liquid.parseAndRenderSync(template, context)
+  process.stdout.write(output)
+}
+
+// TODO: Remove for 11.0
+async function resolveInputOptionLegacy (option) {
+  let content = null
+  if (option) {
+    const stat = await fs.stat(option).catch(e => null)
+    if (stat && stat.isFile) {
+      content = await fs.readFile(option, 'utf8')
+    } else {
+      content = option
+    }
+  }
+  return content
 }
