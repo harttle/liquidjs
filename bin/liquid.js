@@ -21,7 +21,7 @@ async function render () {
   const { program } = require('commander')
 
   program
-    .name('npx liquidjs')
+    .name('liquidjs')
     .description('Render a Liquid template')
     .requiredOption('-t, --template <path | liquid>', 'liquid template to render (as path or inline)') // TODO: Change to argument in 11.0
     .option('-c, --context <path | json>', 'input context in JSON format (as path or inline; omit to read from stdin)')
@@ -32,9 +32,9 @@ async function render () {
     .option('--js-truthy', 'use JavaScript-style truthiness')
     .option('--layouts <path...>', 'directories from where to resolve layouts (defaults to --root)')
     .option('--lenient-if', 'do not throw on undefined variables in conditional expressions (when using --strict-variables)')
-    .option('--no-dynamic-paths', 'always treat file paths for partials and layouts as a literal value')
-    .option('--no-greedy-trim', 'disable greedy matching for --trim* options')
-    .option('--no-relative-paths', 'require absolute file paths for partials and layouts')
+    .option('--no-dynamic-partials', 'always treat file paths for partials and layouts as a literal value')
+    .option('--no-greedy', 'disable greedy matching for --trim* options')
+    .option('--no-relative-reference', 'require absolute file paths for partials and layouts')
     .option('--ordered-filter-parameters', 'respect parameter order when using filters')
     .option('--output-delimiter-left <string>', 'left delimiter to use for liquid outputs')
     .option('--output-delimiter-right <string>', 'right delimiter to use for liquid outputs')
@@ -56,16 +56,8 @@ async function render () {
   const options = program.opts()
   const template = await resolvePathOption(options.template)
   const context = await resolveContext(options.context)
-  const liquidOptions = Object.fromEntries(Object.entries(options).map(([key, value]) => {
-    switch (key) { // Remap options where CLI names differ from property names
-      case 'dynamicPaths': return ['dynamicPartials', value]
-      case 'greedyTrim': return ['greedy', value]
-      case 'relativePaths': return ['relativeReference', value]
-      default: return [key, value]
-    }
-  }))
 
-  const liquid = new Liquid(liquidOptions)
+  const liquid = new Liquid(options)
   const output = liquid.parseAndRenderSync(template, context)
   if (options.output) {
     await fs.writeFile(options.output, output)
