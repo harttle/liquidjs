@@ -1,3 +1,15 @@
+# [10.5.0](https://github.com/harttle/liquidjs/compare/v10.4.0...v10.5.0) (2023-02-14)
+
+
+### Bug Fixes
+
+* "ownPropertyOnly" not respected when passed via "renderOptions" ([d489916](https://github.com/harttle/liquidjs/commit/d489916231779149e110183400e3e597b8ee02ba))
+
+
+### Features
+
+* Adds support for options to CLI and improves usability ([#586](https://github.com/harttle/liquidjs/issues/586)) ([24c8a1e](https://github.com/harttle/liquidjs/commit/24c8a1e3722e5359f02934e2814f9abfa888ee86))
+
 # [10.4.0](https://github.com/harttle/liquidjs/compare/v10.3.3...v10.4.0) (2023-01-02)
 
 
