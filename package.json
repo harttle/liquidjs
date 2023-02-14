@@ -111,6 +111,9 @@
     "typedoc-plugin-markdown": "^2.2.17",
     "typescript": "^4.5.3"
   },
+  "dependencies": {
+    "commander": "^10.0.0"
+  },
   "release": {
     "branch": "master",
     "plugins": [
@@ -160,6 +163,5 @@
       "pre-commit": "npm run check",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "dependencies": {}
+  }
 }
