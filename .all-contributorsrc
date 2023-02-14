@@ -522,6 +522,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "slavivanov",
+      "name": "Slav Ivanov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/713329?v=4",
+      "profile": "http://slavv.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "DaRosenberg",
+      "name": "Daniel Rosenberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3889090?v=4",
+      "profile": "http://www.orgflow.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

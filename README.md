@@ -70,6 +70,7 @@ If you personally like LiquidJS and find it useful to you, you can buy me a coff
 If LiquidJS is benefiting your business/company, please sponsor us to contribute to our effort!
 
 <img src="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72">
+
 ## Contributors ✨
 
 Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to these wonderful people:
@@ -150,6 +151,10 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/hongl-1"><img src="https://avatars.githubusercontent.com/u/101576612?v=4?s=100" width="100px;" alt="hongl"/><br /><sub><b>hongl</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=hongl-1" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zxx-457"><img src="https://avatars.githubusercontent.com/u/114141362?v=4?s=100" width="100px;" alt="zxx-457"/><br /><sub><b>zxx-457</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=zxx-457" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/prassie"><img src="https://avatars.githubusercontent.com/u/1357831?v=4?s=100" width="100px;" alt="prassie"/><br /><sub><b>prassie</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=prassie" title="Documentation">📖</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://slavv.com/"><img src="https://avatars.githubusercontent.com/u/713329?v=4?s=100" width="100px;" alt="Slav Ivanov"/><br /><sub><b>Slav Ivanov</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=slavivanov" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.orgflow.io/"><img src="https://avatars.githubusercontent.com/u/3889090?v=4?s=100" width="100px;" alt="Daniel Rosenberg"/><br /><sub><b>Daniel Rosenberg</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=DaRosenberg" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
