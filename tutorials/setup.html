@@ -130,17 +130,33 @@ engine
 <blockquote class="note warn"><strong class="note-title">Compatibility</strong><p>You may need a <a href="https://github.com/taylorhakes/promise-polyfill" rel="external nofollow noreferrer" target="_blank">Promise polyfill</a> for legacy browsers like IE and Android UC, see <a href="http://caniuse.com/#feat=promises" rel="external nofollow noreferrer" target="_blank">caniuse statistics</a>. </p>
 </blockquote>
 
-<h2 id="LiquidJS-in-CLI" class="article-heading"><a href="#LiquidJS-in-CLI" class="headerlink" title="LiquidJS in CLI"></a>LiquidJS in CLI<a class="article-anchor" href="#LiquidJS-in-CLI" aria-hidden="true"></a></h2><p>LiquidJS is also available from CLI:</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'&#123;&#123;"hello" | capitalize&#125;&#125;'</span> <span class="token operator">|</span> npx liquidjs<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="LiquidJS-in-CLI" class="article-heading"><a href="#LiquidJS-in-CLI" class="headerlink" title="LiquidJS in CLI"></a>LiquidJS in CLI<a class="article-anchor" href="#LiquidJS-in-CLI" aria-hidden="true"></a></h2><p>LiquidJS can also be used to render a template directly from CLI using <code>npx</code>:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx liquidjs --template <span class="token string">'&#123;&#123;"hello" | capitalize&#125;&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>If you pass a path to a JSON file or a JSON string as the first argument, it will be used as the context for your template.</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'Hello, &#123;&#123; name &#125;&#125;.'</span> <span class="token operator">|</span> npx liquidjs <span class="token string">'&#123;"name": "Snake"&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>You can either pass the template inline (as shown above) or you can read it from a file by using the <code>@</code> character followed by a path, like so:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx liquidjs --template @./some-template.liquid<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
+<p>You can also use the <code>@-</code> syntax to read the template from <code>stdin</code>:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'&#123;&#123;"hello" | capitalize&#125;&#125;'</span> <span class="token operator">|</span> npx liquidjs --template @-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>A context can be passed in the same ways (i.e. inline, from a path or piped through <code>stdin</code>). The following three are equivalent:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx liquidjs --template <span class="token string">'Hello, &#123;&#123; name &#125;&#125;!'</span> --context <span class="token string">'&#123;"name": "Snake"&#125;'</span>
+npx liquidjs --template <span class="token string">'Hello, &#123;&#123; name &#125;&#125;!'</span> --context @./some-context.json
+<span class="token builtin class-name">echo</span> <span class="token string">'&#123;"name": "Snake"&#125;'</span> <span class="token operator">|</span> npx liquidjs --template <span class="token string">'Hello, &#123;&#123; name &#125;&#125;!'</span> --context @-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>Note that you can only use the <code>stdin</code> specifier <code>@-</code> for a single argument. If you try to use it for both <code>--template</code> and <code>--context</code> you will get an error.</p>
+<p>The rendered output is written to <code>stdout</code> by default, but you can also specify an output file (if the file exists, it will be overwritten):</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx liquidjs --template <span class="token string">'&#123;&#123;"hello" | capitalize&#125;&#125;'</span> --output ./hello.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>You can also pass a number of options to customize template rendering behavior. For example, the <code>--js-truthy</code> option can be used to enable JavaScript truthiness:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">npx liquidjs --template @./some-template.liquid --js-truthy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>Most of the <a href="./options.md">options available through the JavaScript API</a> are also available from the CLI. For help on available options, use <code>npx liquidjs --help</code>.</p>
 <h2 id="Miscellaneous" class="article-heading"><a href="#Miscellaneous" class="headerlink" title="Miscellaneous"></a>Miscellaneous<a class="article-anchor" href="#Miscellaneous" aria-hidden="true"></a></h2><p>A ReactJS demo is also added by <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/stevenanthonyrevo">@stevenanthonyrevo</a>, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/demo/reactjs/">liquidjs/demo/reactjs/</a>.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-02-04T03:31:50.091Z" itemprop="dateModified">Last updated: 2023-02-04</time>
+                <time class="article-footer-updated" datetime="2023-02-14T15:00:59.334Z" itemprop="dateModified">Last updated: 2023-02-14</time>
                 <a href="intro-to-liquid.html" class="article-footer-prev" title="Intro to Liquid"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="options.html" class="article-footer-next" title="Options"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
