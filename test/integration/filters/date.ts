@@ -103,4 +103,22 @@ describe('filters/date', function () {
       return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
     })
   })
+  describe('dateFormat', function () {
+    const optsWithoutDateFormat: LiquidOptions = { timezoneOffset: 360 } // -06:00
+    // date.DEFAULT_FMT: '%A, %B %-e, %Y at %-l:%M %P %z'
+    it('should use default format for date filters without format argument', function () {
+      return test('{{ "2022-12-08T03:22:18.000Z" | date }}', 'Wednesday, December 7, 2022 at 9:22 pm -0600', undefined, optsWithoutDateFormat)
+    })
+    it('should use given date filter format argument and NOT default format', function () {
+      return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S" }}', '1990-12-31T17:00:00', undefined, optsWithoutDateFormat)
+    })
+
+    const optsWithDateFormat: LiquidOptions = { timezoneOffset: -330, dateFormat: '%d%q of %b %Y at %I:%M %P' } // -06:00, 31st of Dec 1990 at 11:00 pm
+    it('should use configured `options.dateFormat` for date filters without format argument', function () {
+      return test('{{ "2022-12-08T13:30:18.000Z" | date }}', '08th of Dec 2022 at 07:00 pm', undefined, optsWithDateFormat)
+    })
+    it('should use given date filter format argument and NOT `options.dateFormat`', function () {
+      return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S" }}', '1991-01-01T04:30:00', undefined, optsWithDateFormat)
+    })
+  })
 })
