@@ -151,6 +151,7 @@
 <p>例如，空字符串在 JavaScript 中为假（<code>jsTruthy</code> 为 <code>true</code> 时），在 Shopify 真值表中为真。</p>
 <h2 id="时间日期和时区" class="article-heading"><a href="#时间日期和时区" class="headerlink" title="时间日期和时区"></a>时间日期和时区<a class="article-anchor" href="#时间日期和时区" aria-hidden="true"></a></h2><p><strong>timezoneOffset</strong> 用来指定一个和你当地时区不同的时区，所有日期和时间输出时都转换到这个指定的时区。例如设置 <code>timezoneOffset: 0</code> 将会把所有日期按照 UTC/GMT 00:00 来输出。</p>
 <p><strong>preserveTimezones</strong> 是一个布尔值，只影响时间戳字面量。当设置为 <code>true</code> 时，所有字面量的时间戳字符串会在输出时保持原状，即不论输入时采取怎样的时区，输出时仍然采用那一时区（和 Shopify Liquid 的行为一致）。注意这是一个解析器参数，渲染时传入的数据中的日期的输出不会受此参数影响。注意 <code>preserveTimezones</code> 比 <code>timezoneOffset</code> 的优先级更高。</p>
+<p><strong>dateFormat</strong> 用于指定输出日期的默认格式. <code>%A, %B %-e, %Y at %-l:%M %P %z</code> 如果未指定，将使用. 例如，设置 <code>dateFormat: %Y-%m-%dT%H:%M:%S:%LZ</code> 以输出 [JavaSrcipt Date.toJson()][<a target="_blank" rel="noopener external nofollow noreferrer" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON]">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON]</a> 格式.</p>
 <h2 id="换行和缩进" class="article-heading"><a href="#换行和缩进" class="headerlink" title="换行和缩进"></a>换行和缩进<a class="article-anchor" href="#换行和缩进" aria-hidden="true"></a></h2><p><strong>greedy</strong>, <strong>trimOutputLeft</strong>, <strong>trimOutputRight</strong>, <strong>trimTagLeft</strong>, <strong>trimTagRight</strong> 选项用来移除 Liquid 语法周围的换行和缩进，详情请参考 <a href="./whitespace-control.html">Whitespace Control</a>。</p>
 <h2 id="自定义分隔符" class="article-heading"><a href="#自定义分隔符" class="headerlink" title="自定义分隔符"></a>自定义分隔符<a class="article-anchor" href="#自定义分隔符" aria-hidden="true"></a></h2><p><strong>outputDelimiterLeft</strong>, <strong>outputDelimiterRight</strong>, <strong>tagDelimiterLeft</strong>, <strong>tagDelimiterRight</strong> 用来自定义 LiquidJS 中 <a href="./intro-to-liquid.html">标签和过滤器</a> 的分隔符。例如设置了 <code>outputDelimiterLeft: &lt;%=, outputDelimiterRight: %&gt;</code> 后我们可以避免跟其他模板引擎冲突：</p>
 <pre class="line-numbers language-ejs" data-language="ejs"><code class="language-ejs"><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%=</span><span class="token language-javascript"> username <span class="token operator">|</span> append<span class="token operator">:</span> <span class="token string">", welcome to LiquidJS!"</span> </span><span class="token delimiter punctuation">%></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -165,7 +166,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-02-14T15:00:59.338Z" itemprop="dateModified">上次更新：2023-02-14</time>
+                <time class="article-footer-updated" datetime="2023-02-22T15:56:57.481Z" itemprop="dateModified">上次更新：2023-02-22</time>
                 <a href="setup.html" class="article-footer-prev" title="安装"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="render-file.html" class="article-footer-next" title="文件渲染"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
