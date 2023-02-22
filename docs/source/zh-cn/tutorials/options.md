@@ -106,6 +106,7 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 
 **preserveTimezones** 是一个布尔值，只影响时间戳字面量。当设置为 `true` 时，所有字面量的时间戳字符串会在输出时保持原状，即不论输入时采取怎样的时区，输出时仍然采用那一时区（和 Shopify Liquid 的行为一致）。注意这是一个解析器参数，渲染时传入的数据中的日期的输出不会受此参数影响。注意 `preserveTimezones` 比 `timezoneOffset` 的优先级更高。
 
+**dateFormat** 用于指定输出日期的默认格式. `%A, %B %-e, %Y at %-l:%M %P %z` 如果未指定，将使用. 例如，设置 `dateFormat: %Y-%m-%dT%H:%M:%S:%LZ` 以输出 [JavaSrcipt Date.toJson()][https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON] 格式.
 
 ## 换行和缩进
 

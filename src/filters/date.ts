@@ -8,7 +8,7 @@ export function date (this: FilterImpl, v: string | Date, format?: string, timez
   let date: LiquidDate
   v = toValue(v)
   format = toValue(format)
-  if (isNil(format)) format = DEFAULT_FMT
+  if (isNil(format)) format = opts.dateFormat ?? DEFAULT_FMT
   else format = stringify(format)
   if (v === 'now' || v === 'today') {
     date = new Date()
