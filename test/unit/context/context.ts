@@ -128,6 +128,14 @@ describe('Context', function () {
       ctx.push({ foo: Object.create({ bar: 'BAR' }) })
       return expect(ctx.get(['foo', 'bar'])).to.equal(undefined)
     })
+    it('should use prototype when ownPropertyOnly=false', function () {
+      ctx = new Context({ foo: Object.create({ bar: 'BAR' }) }, { ownPropertyOnly: false } as any)
+      return expect(ctx.get(['foo', 'bar'])).to.equal('BAR')
+    })
+    it('renderOptions.ownPropertyOnly should override options.ownPropertyOnly', function () {
+      ctx = new Context({ foo: Object.create({ bar: 'BAR' }) }, { ownPropertyOnly: false } as any, { ownPropertyOnly: true })
+      return expect(ctx.get(['foo', 'bar'])).to.equal(undefined)
+    })
     it('should return undefined for Array.prototype.reduce', function () {
       ctx.push({ foo: [] })
       return expect(ctx.get(['foo', 'reduce'])).to.equal(undefined)

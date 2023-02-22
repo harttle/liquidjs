@@ -120,6 +120,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   strictVariables: boolean;
   ownPropertyOnly: boolean;
   lenientIf: boolean;
+  dateFormat: string;
   trimTagRight: boolean;
   trimTagLeft: boolean;
   trimOutputRight: boolean;
@@ -146,6 +147,7 @@ export const defaultOptions: NormalizedFullOptions = {
   fs: fs,
   dynamicPartials: true,
   jsTruthy: false,
+  dateFormat: '%A, %B %-e, %Y at %-l:%M %P %z',
   trimTagRight: false,
   trimTagLeft: false,
   trimOutputRight: false,

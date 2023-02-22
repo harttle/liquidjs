@@ -1,14 +1,12 @@
 import { toValue, stringify, isString, isNumber, TimezoneDate, LiquidDate, strftime, isNil } from '../util'
 import { FilterImpl } from '../template'
 
-const DEFAULT_FMT = '%A, %B %-e, %Y at %-l:%M %P %z'
-
 export function date (this: FilterImpl, v: string | Date, format?: string, timezoneOffset?: number | string) {
   const opts = this.context.opts
   let date: LiquidDate
   v = toValue(v)
   format = toValue(format)
-  if (isNil(format)) format = opts.dateFormat ?? DEFAULT_FMT
+  if (isNil(format)) format = opts.dateFormat
   else format = stringify(format)
   if (v === 'now' || v === 'today') {
     date = new Date()
