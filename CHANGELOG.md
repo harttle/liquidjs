@@ -1,3 +1,10 @@
+# [10.6.0](https://github.com/harttle/liquidjs/compare/v10.5.0...v10.6.0) (2023-02-22)
+
+
+### Features
+
+* LiquidOptions.dateFormat to override default date format ([#587](https://github.com/harttle/liquidjs/issues/587)) ([3fb6646](https://github.com/harttle/liquidjs/commit/3fb66465c6fe1bf4dc2e1ace9157c23d0fc8f859))
+
 # [10.5.0](https://github.com/harttle/liquidjs/compare/v10.4.0...v10.5.0) (2023-02-14)
 
 
