@@ -1,3 +1,11 @@
+## [10.6.1](https://github.com/harttle/liquidjs/compare/v10.6.0...v10.6.1) (2023-03-02)
+
+
+### Bug Fixes
+
+* [expression] apply value equal for arrays, [#589](https://github.com/harttle/liquidjs/issues/589) ([9c0dc5f](https://github.com/harttle/liquidjs/commit/9c0dc5fa39a31d477a5c5a2c5212034174bf0516))
+* strip_html for multi line <script>/<style>/comments, [#70](https://github.com/harttle/liquidjs/issues/70) ([42d2590](https://github.com/harttle/liquidjs/commit/42d25902e855d3c06d5ead071bf55604f495c205))
+
 # [10.6.0](https://github.com/harttle/liquidjs/compare/v10.5.0...v10.6.0) (2023-02-22)
 
 
