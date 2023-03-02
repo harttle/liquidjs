@@ -4,7 +4,9 @@ import { Liquid } from '../../../src/liquid'
 
 describe('filters/html', function () {
   let liquid: Liquid
-  beforeEach(() => liquid = new Liquid())
+  beforeEach(() => {
+    liquid = new Liquid()
+  })
   describe('escape', function () {
     it('should escape \' and &', function () {
       return test('{{ "Have you read \'James & the Giant Peach\'?" | escape }}',

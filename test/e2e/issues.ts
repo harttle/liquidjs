@@ -390,7 +390,7 @@ describe('Issues', function () {
     const html = await liquid.parseAndRender(tpl, ctx)
     expect(html.trim()).to.equal('<a href="https://example.com">Lot more code here</a>')
   })
-  it('#70 strip multiline content of <style>', async() => {
+  it('#70 strip multiline content of <style>', async () => {
     const str = `
     <style type="text/css">
       .test-one-line {display: none;}
@@ -400,13 +400,13 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(template, { str })
     expect(html).to.match(/^\s*$/)
   })
-  it('#589 Arrays should compare values', async() => {
+  it('#589 Arrays should compare values', async () => {
     const engine = new Liquid()
     const template = `
     {% assign people1 = "alice, bob, carol" | split: ", " -%}
     {% assign people2 = "alice, bob, carol" | split: ", " -%}
     {% if people1 == people2 %}true{%else%}false{% endif %}
-    `;
+    `
     const html = await engine.parseAndRender(template)
     expect(html).to.contain('true')
   })

@@ -2,7 +2,7 @@ import { isComparable } from '../drop/comparable'
 import { Context } from '../context'
 import { isFunction, toValue } from '../util'
 import { isFalsy, isTruthy } from '../render/boolean'
-import { isArray } from '../util/underscore';
+import { isArray } from '../util/underscore'
 
 export type UnaryOperatorHandler = (operand: any, ctx: Context) => boolean;
 export type BinaryOperatorHandler = (lhs: any, rhs: any, ctx: Context) => boolean;
@@ -42,7 +42,7 @@ export const defaultOperators: Operators = {
   'or': (l: any, r: any, ctx: Context) => isTruthy(toValue(l), ctx) || isTruthy(toValue(r), ctx)
 }
 
-function equal(lhs: any, rhs: any): boolean {
+function equal (lhs: any, rhs: any): boolean {
   if (isComparable(lhs)) return lhs.equals(rhs)
   if (isComparable(rhs)) return rhs.equals(lhs)
   lhs = toValue(lhs)
@@ -53,7 +53,7 @@ function equal(lhs: any, rhs: any): boolean {
   return lhs === rhs
 }
 
-function arrayEqual(lhs: any[], rhs: any[]): boolean {
+function arrayEqual (lhs: any[], rhs: any[]): boolean {
   if (lhs.length !== rhs.length) return false
   return !lhs.some((value, i) => !equal(value, rhs[i]))
 }

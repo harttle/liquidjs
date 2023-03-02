@@ -57,7 +57,7 @@ describe('Expression', function () {
       const ctx = new Context({
         arr1: [1, 2],
         arr2: [1, 2],
-        arr3: [1, 2, 3],
+        arr3: [1, 2, 3]
       })
       expect(await toPromise(create('arr1==arr2').evaluate(ctx, false))).to.equal(true)
       expect(await toPromise(create('arr1==arr3').evaluate(ctx, false))).to.equal(false)
