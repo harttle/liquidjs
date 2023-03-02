@@ -390,4 +390,14 @@ describe('Issues', function () {
     const html = await liquid.parseAndRender(tpl, ctx)
     expect(html.trim()).to.equal('<a href="https://example.com">Lot more code here</a>')
   })
+  it('#70 strip multiline content of <style>', async() => {
+    const str = `
+    <style type="text/css">
+      .test-one-line {display: none;}
+    </style>`
+    const engine = new Liquid()
+    const template = '{{ str | strip_html }}'
+    const html = await engine.parseAndRender(template, { str })
+    expect(html).to.match(/^\s*$/)
+  })
 })

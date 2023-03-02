@@ -1,6 +1,10 @@
 import { test } from '../../stub/render'
+import { expect } from 'chai'
+import { Liquid } from '../../../src/liquid'
 
 describe('filters/html', function () {
+  let liquid: Liquid
+  beforeEach(() => liquid = new Liquid())
   describe('escape', function () {
     it('should escape \' and &', function () {
       return test('{{ "Have you read \'James & the Giant Peach\'?" | escape }}',
@@ -43,13 +47,25 @@ describe('filters/html', function () {
       return test('{{ "<!--Have you read-->Ulysses?" | strip_html }}',
         'Ulysses?')
     })
+    it('should strip multiline comments', function () {
+      expect(liquid.parseAndRenderSync('{{"<!--foo\r\nbar \ncoo\t  \r\n  -->"|strip_html}}')).to.equal('')
+    })
     it('should strip all style tags and their contents', function () {
       return test('{{ "<style>cite { font-style: italic; }</style><cite>Ulysses<cite>?" | strip_html }}',
         'Ulysses?')
     })
+    it('should strip multiline styles', function () {
+      expect(liquid.parseAndRenderSync('{{"<style> \n.header {\r\n  color: black;\r\n}\n</style>" | strip_html}}')).to.equal('')
+    })
     it('should strip all scripts tags and their contents', function () {
       return test('{{ "<script async>console.log(\'hello world\')</script><cite>Ulysses<cite>?" | strip_html }}',
         'Ulysses?')
+    })
+    it('should strip multiline scripts', function () {
+      expect(liquid.parseAndRenderSync('{{ "<script> \nfoo\r\nbar\n</script>" | strip_html }}')).to.equal('')
+    })
+    it('should not strip non-matched <script>', function () {
+      expect(liquid.parseAndRenderSync('{{ "<script></script>text<script></script>" | strip_html }}')).to.equal('text')
     })
     it('should strip until empty', function () {
       return test('{{"<br/><br />< p ></p></ p >" | strip_html }}', '')

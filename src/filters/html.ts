@@ -32,5 +32,5 @@ export function newline_to_br (v: string) {
 }
 
 export function strip_html (v: string) {
-  return stringify(v).replace(/<script.*?<\/script>|<!--.*?-->|<style.*?<\/style>|<.*?>/g, '')
+  return stringify(v).replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<.*?>|<!--[\s\S]*?-->/g, '')
 }
