@@ -400,4 +400,14 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(template, { str })
     expect(html).to.match(/^\s*$/)
   })
+  it('#589 Arrays should compare values', async() => {
+    const engine = new Liquid()
+    const template = `
+    {% assign people1 = "alice, bob, carol" | split: ", " -%}
+    {% assign people2 = "alice, bob, carol" | split: ", " -%}
+    {% if people1 == people2 %}true{%else%}false{% endif %}
+    `;
+    const html = await engine.parseAndRender(template)
+    expect(html).to.contain('true')
+  })
 })
