@@ -160,7 +160,7 @@
 <h2 id="Strict" class="article-heading"><a href="#Strict" class="headerlink" title="Strict"></a>Strict<a class="article-anchor" href="#Strict" aria-hidden="true"></a></h2><p><strong>strictFilters</strong> is used to assert filter existence. If set to <code>false</code>, undefined filters will be skipped. Otherwise, undefined filters will cause a parse exception. Defaults to <code>false</code>.</p>
 <p><strong>strictVariables</strong> is used to assert variable existence.  If set to <code>false</code>, undefined variables will be rendered as empty string.  Otherwise, undefined variables will cause a render exception. Defaults to <code>false</code>.</p>
 <p><strong>lenientIf</strong> modifies the behavior of <code>strictVariables</code> to allow handling optional variables. If set to <code>true</code>, an undefined variable will <em>not</em> cause an exception in the following two situations: a) it is the condition to an <code>if</code>, <code>elsif</code>, or <code>unless</code> tag; b) it occurs right before a <code>default</code> filter. Irrelevant if <code>strictVariables</code> is not set. Defaults to <code>false</code>.</p>
-<p><strong>ownPropertyOnly</strong> hides scope variables from prototypes, useful when you’re passing a not sanitized object into LiquidJS or need to hide prototypes from templates. Defaults to <code>false</code>.</p>
+<p><strong>ownPropertyOnly</strong> hides scope variables from prototypes, useful when you’re passing a not sanitized object into LiquidJS or need to hide prototypes from templates. Defaults to <code>true</code>.</p>
 <blockquote class="note info"><strong class="note-title">Non-existent Tags</strong><p>Non-existent tags always throw errors during parsing and this behavior can not be customized.</p>
 </blockquote>
 
@@ -168,7 +168,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-03-02T16:15:24.851Z" itemprop="dateModified">Last updated: 2023-03-02</time>
+                <time class="article-footer-updated" datetime="2023-03-03T16:26:52.161Z" itemprop="dateModified">Last updated: 2023-03-03</time>
                 <a href="setup.html" class="article-footer-prev" title="Setup"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="render-file.html" class="article-footer-next" title="Render Files"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
