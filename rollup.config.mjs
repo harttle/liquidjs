@@ -42,17 +42,17 @@ const input = './src/index.ts'
 const browserFS = {
   include: './src/liquid-options.ts',
   delimiters: ['', ''],
-  './fs/node': './fs/browser'
+  './fs/fs-impl': './build/fs-impl-browser'
 }
 const browserStream = {
   include: './src/emitters/index.ts',
   delimiters: ['', ''],
-  './streamed-emitter': './streamed-emitter-browser'
+  './streamed-emitter': '../build/streamed-emitter-browser'
 }
 const esmRequire = {
   include: './src/fs/node.ts',
   delimiters: ['', ''],
-  './node-require': './node-require.mjs'
+  './node-require': '../build/node-require.mjs'
 }
 
 const nodeCjs = {

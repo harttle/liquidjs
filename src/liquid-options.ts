@@ -1,7 +1,7 @@
 import { assert, isArray, isString, isFunction } from './util'
 import { LRU, LiquidCache } from './cache'
 import { FS, LookupType } from './fs'
-import * as fs from './fs/node'
+import * as fs from './fs/fs-impl'
 import { defaultOperators, Operators } from './render'
 import { json } from './filters/misc'
 import { escape } from './filters/html'
@@ -180,8 +180,8 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
     options.cache = cache
   }
   options = { ...defaultOptions, ...(options.jekyllInclude ? { dynamicPartials: false } : {}), ...options }
-  if (!options.fs!.dirname && options.relativeReference) {
-    console.warn('[LiquidJS] `fs.dirname` is required for relativeReference, set relativeReference to `false` to suppress this warning, or provide implementation for `fs.dirname`')
+  if ((!options.fs!.dirname || !options.fs!.sep) && options.relativeReference) {
+    console.warn('[LiquidJS] `fs.dirname` and `fs.sep` are required for relativeReference, set relativeReference to `false` to suppress this warning')
     options.relativeReference = false
   }
   options.root = normalizeDirectoryList(options.root)
