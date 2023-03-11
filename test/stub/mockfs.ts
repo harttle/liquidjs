@@ -1,5 +1,5 @@
 import { isString, forOwn } from '../../src/util/underscore'
-import * as fs from '../../src/fs/node'
+import * as fs from '../../src/fs/fs-impl'
 import { resolve } from 'path'
 
 interface FileDescriptor {

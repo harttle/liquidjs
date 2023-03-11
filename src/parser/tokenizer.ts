@@ -199,10 +199,9 @@ export class Tokenizer {
   }
 
   /**
-   * @deprecated
+   * @deprecated use #readIdentifier instead
    */
   readWord () {
-    console.warn('Tokenizer#readWord() will be removed, use #readIdentifier instead')
     return this.readIdentifier()
   }
 
