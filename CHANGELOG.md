@@ -1,3 +1,10 @@
+## [10.6.2](https://github.com/harttle/liquidjs/compare/v10.6.1...v10.6.2) (2023-03-19)
+
+
+### Bug Fixes
+
+* sample FS in render-file.md ([#594](https://github.com/harttle/liquidjs/issues/594)) ([4542ddc](https://github.com/harttle/liquidjs/commit/4542ddcfc3d5e245112a119bf22f0e00cb925791))
+
 ## [10.6.1](https://github.com/harttle/liquidjs/compare/v10.6.0...v10.6.1) (2023-03-02)
 
 
