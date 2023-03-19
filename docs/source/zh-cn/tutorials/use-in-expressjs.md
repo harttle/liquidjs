@@ -61,12 +61,12 @@ var engine = new Liquid({
 
 `cache` 还可以是一个数字表示最大缓存的模板数量，也可以是一个自定义的缓存实现，详情请参考 [cache 选项][cache]。
 
-[cache]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-cache
+[cache]: /api/interfaces/LiquidOptions.html#cache
 [express-views]: http://expressjs.com/en/guide/using-template-engines.html
-[parseFile]: ../../api/classes/liquid_.liquid.html#parseFile
-[parseFileSync]: ../../api/classes/liquid_.liquid.html#parseFileSync
+[parseFile]: /api/classes/Liquid.html#parseFile
+[parseFileSync]: /api/classes/Liquid.html#parseFileSync
 [layout]: https://help.shopify.com/en/themes/liquid/tags/theme-tags#layout
 [include]: https://help.shopify.com/themes/liquid/tags/theme-tags#include
-[root]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
+[root]: /api/interfaces/LiquidOptions.html#root
 [render-a-file]: ./render-a-file.html
 [Caching]: ./caching.html

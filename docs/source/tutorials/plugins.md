@@ -43,5 +43,5 @@ Here's a list of plugins that backfill those features. Feel free to add yours, t
 * Sections Tags (WIP): https://github.com/harttle/liquidjs-section-tags
 * Color Filters: https://github.com/harttle/liquidjs-color-filters
 
-[liquid]: ../api/classes/liquid_.liquid.html
+[liquid]: /api/classes/Liquid.html
 [register]: /harttle/liquidjs/wiki/Register-Filters-Tags

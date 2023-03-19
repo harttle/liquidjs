@@ -11,7 +11,7 @@ title: date
 * The input is firstly converted to `Date` object via [new Date()][jsDate]
 * Date format can be provided individually as a filter option
     * If not provided, then `%A, %B %-e, %Y at %-l:%M %P %z` format will be used as default format
-    * Override this using [`dateFormat`](/api/interfaces/liquid_options_.liquidoptions.html#Optional-dateFormat) LiquidJS option, to set your preferred default format for all date filters
+    * Override this using [`dateFormat`](/api/interfaces/LiquidOptions.html#dateFormat) LiquidJS option, to set your preferred default format for all date filters
 
 ### Examples
 ```liquid
@@ -26,7 +26,7 @@ title: date
 * By default, dates will be converted to local timezone before output
 * You can override that by,
     * setting a timezone for each individual `date` filter via the second parameter
-    * using the [`timezoneOffset`](/api/interfaces/liquid_options_.liquidoptions.html#Optional-timezoneOffset) LiquidJS option
+    * using the [`timezoneOffset`](/api/interfaces/LiquidOptions.html#timezoneOffset) LiquidJS option
         * Its default value is your local timezone offset which can be obtained by `new Date().getTimezoneOffset()`
         * Offset can be set as,
             * minutes: `-360` means `'+06:00'` and `360` means `'-06:00'`

@@ -62,5 +62,5 @@ Footer
 </ul>
 {% endnote %}
 
-[extname]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
-[root]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
+[extname]: /api/interfaces/LiquidOptions.html#extname
+[root]: /api/interfaces/LiquidOptions.html#root

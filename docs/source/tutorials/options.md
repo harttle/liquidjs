@@ -12,7 +12,7 @@ const engine = new Liquid({
 ```
 
 {% note info API Document %}
-Following is an overview for all the options, for exact types and signatures please refer to <a href="https://liquidjs.com/api/interfaces/liquid_options_.liquidoptions.html" target="_self">LiquidOptions | API</a>.
+Following is an overview for all the options, for exact types and signatures please refer to <a href="https://liquidjs.com/api/interfaces/LiquidOptions.html" target="_self">LiquidOptions | API</a>.
 {% endnote %}
 
 ## cache
@@ -140,7 +140,7 @@ Non-existent tags always throw errors during parsing and this behavior can not b
 
 Parameter orders are ignored by default, for ea `{% for i in (1..8) reversed limit:3 %}` will always perform `limit` before `reversed`, even if `reversed` occurs before `limit`. To make parameter order respected, set **orderedFilterParameters** to `true`. Its default value is `false`.
 
-[liquid]: ../api/classes/liquid_.liquid.html
+[liquid]: /api/classes/Liquid.html
 [caching]: ./caching.html
 [abstract-fs]: ./render-file.html#Abstract-File-System
 [render-file]: ./render-file.html
@@ -150,4 +150,4 @@ Parameter orders are ignored by default, for ea `{% for i in (1..8) reversed lim
 [layout]: ../tags/layout.html
 [wc]: ./whitespace-control.html
 [intro]: ./intro-to-liquid.html
-[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude
+[jekyllInclude]: /api/interfaces/LiquidOptions.html#jekyllInclude

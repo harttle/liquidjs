@@ -100,14 +100,14 @@ const engine = new Liquid({
 });
 ```
 
-[fs]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-fs
-[ifs]: https://github.com/harttle/liquidjs/blob/master/src/fs/ifs.ts
-[fs-node]: https://github.com/harttle/liquidjs/blob/master/src/fs/node.ts
-[fs-browser]: https://github.com/harttle/liquidjs/blob/master/src/fs/browser.ts
+[fs]: /api/interfaces/LiquidOptions.html#fs
+[ifs]: /api/interfaces/FS.html
+[fs-node]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs-impl.ts
+[fs-browser]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs-impl-browser.ts
 [layout]: https://help.shopify.com/en/themes/liquid/tags/theme-tags#layout
 [include]: https://help.shopify.com/themes/liquid/tags/theme-tags#include
-[renderFile]: ../../api/classes/liquid_.liquid.html#renderFile
-[renderFileSync]: ../../api/classes/liquid_.liquid.html#renderFilesync
-[parseFile]: ../../api/classes/liquid_.liquid.html#parseFile
-[parseFileSync]: ../../api/classes/liquid_.liquid.html#parseFileSync
-[root]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
+[renderFile]: /api/classes/Liquid.html#renderFile
+[renderFileSync]: /api/classes/Liquid.html#renderFileSync
+[parseFile]: /api/classes/Liquid.html#parseFile
+[parseFileSync]: /api/classes/Liquid.html#parseFileSync
+[root]: /api/interfaces/LiquidOptions.html#root

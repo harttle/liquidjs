@@ -6,6 +6,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "declaration": true,
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "downlevelIteration": true,

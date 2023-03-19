@@ -96,5 +96,5 @@ Rendering `{% random from:2, to:max %}` in scope `{ max: 10 }` will generate a r
 
 
 [register-tags]: /tutorials/register-filters-tags.html
-[Tokenizer]: /api/classes/parser_tokenizer_.tokenizer.html
-[Hash]: /api/classes/template_tag_hash_.hash.html
+[Tokenizer]: /api/classes/Tokenizer.html
+[Hash]: /api/classes/Hash.html

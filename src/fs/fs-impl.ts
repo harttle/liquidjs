@@ -3,8 +3,9 @@ import { sep, resolve as nodeResolve, extname, dirname as nodeDirname } from 'pa
 import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
 import { requireResolve } from './node-require'
 
+type NodeReadFile = (file: string, encoding: string, cb: ((err: Error | null, result: string) => void)) => void
 const statAsync = promisify(stat)
-const readFileAsync = promisify<string, string, string>(nodeReadFile)
+const readFileAsync = promisify<string, string, string>(nodeReadFile as NodeReadFile)
 
 export async function exists (filepath: string) {
   try {

@@ -112,5 +112,5 @@ engine.registerTag('upper', class UpperTag extends Tag {
 })
 ```
 
-[Liquid]: /api/classes/liquid_.liquid.html
-[toPromise]: /api/modules/liquid_.html#toPromise
+[Liquid]: /api/classes/Liquid.html
+[toPromise]: /api/functions/toPromise.html

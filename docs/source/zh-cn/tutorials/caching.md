@@ -47,8 +47,9 @@ engine.renderFileSync('hello', {name: 'alice'})
 engine.renderFileSync('hello', {name: 'bob'})
 ```
 
-[parse]: ../../api/classes/liquid_.liquid.html#parse
-[parseFile]: ../../api/classes/liquid_.liquid.html#parseFile
-[parseFileSync]: ../../api/classes/liquid_.liquid.html#parseFileSync
-[renderFile]: ../../api/classes/liquid_.liquid.html#renderFile
-[renderFileSync]: ../../api/classes/liquid_.liquid.html#renderFilesync
+[parse]: /api/classes/Liquid.html#parse
+[cache]: /api/interfaces/LiquidOptions.html#cache
+[parseFile]: /api/classes/Liquid.html#parseFile
+[parseFileSync]: /api/classes/Liquid.html#parseFileSync
+[renderFile]: /api/classes/Liquid.html#renderFile
+[renderFileSync]: /api/classes/Liquid.html#renderFileSync

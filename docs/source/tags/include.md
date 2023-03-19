@@ -104,7 +104,7 @@ Note that we're referencing the first parameter by `include.header` instead of `
 </article>
 ```
 
-[extname]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
-[root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
-[dynamicPartials]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-dynamicPartials
-[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude
+[extname]: /api/interfaces/LiquidOptions.html#extname
+[root]: /api/interfaces/LiquidOptions.html#root
+[dynamicPartials]: /api/interfaces/LiquidOptions.html#dynamicPartials
+[jekyllInclude]: /api/interfaces/LiquidOptions.html#jekyllInclude

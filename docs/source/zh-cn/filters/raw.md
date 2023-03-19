@@ -4,7 +4,7 @@ title: raw
 
 {% since %}v9.37.0{% endsince %}
 
-直接返回变量的值。配合 [outputEscape](/api/interfaces/liquid_options_.liquidoptions.html#Optional-outputEscape) 参数使用。
+直接返回变量的值。配合 [outputEscape](/api/interfaces/LiquidOptions.html#outputEscape) 参数使用。
 
 {% note info 自动转义 %}
 默认情况下 `outputEscape` 为 `undefined`，这意味着 LiquidJS 输出不会默认转义，因此这时使用 `raw` 没有意义。
