@@ -85,7 +85,7 @@ var engine = new Liquid({
         existsSync () {
             return true
         },
-        exists () {
+        async exists () {
             return true
         },
         contains () {
