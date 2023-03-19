@@ -48,7 +48,7 @@
       <a href="/zh-cn/" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="搜索...">
@@ -105,7 +105,7 @@ app<span class="token punctuation">.</span><span class="token function">set</spa
 <blockquote class="note info"><strong class="note-title">示例</strong><p>这是一个在 Express.js 中使用 LiquidJS 的例子：<a href="https://github.com/harttle/liquidjs/blob/master/demo/express/" rel="external nofollow noreferrer" target="_blank">liquidjs/demo/express/</a>.</p>
 </blockquote>
 
-<h2 id="模板查找" class="article-heading"><a href="#模板查找" class="headerlink" title="模板查找"></a>模板查找<a class="article-anchor" href="#模板查找" aria-hidden="true"></a></h2><p>LiquidJS 仍然会去 <a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">root</a> 指定的目录查找（参考 <a href="./render-a-file.html">Render A Template File</a>），也会去 Express.js 的 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://expressjs.com/en/guide/using-template-engines.html"><code>views</code></a> 选项指定的目录里（上述例子中是 <code>./views</code>）去查找。例如你有这样的目录结构：</p>
+<h2 id="模板查找" class="article-heading"><a href="#模板查找" class="headerlink" title="模板查找"></a>模板查找<a class="article-anchor" href="#模板查找" aria-hidden="true"></a></h2><p>LiquidJS 仍然会去 <a href="/api/interfaces/LiquidOptions.html#root">root</a> 指定的目录查找（参考 <a href="./render-a-file.html">Render A Template File</a>），也会去 Express.js 的 <a target="_blank" rel="noopener external nofollow noreferrer" href="http://expressjs.com/en/guide/using-template-engines.html"><code>views</code></a> 选项指定的目录里（上述例子中是 <code>./views</code>）去查找。例如你有这样的目录结构：</p>
 <pre class="line-numbers language-none"><code class="language-none">.
 ├── views1&#x2F;
 │ └── hello.liquid
@@ -126,17 +126,17 @@ app<span class="token punctuation">.</span><span class="token function">set</spa
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'hello'</span><span class="token punctuation">)</span>
 res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'world'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h2 id="缓存" class="article-heading"><a href="#缓存" class="headerlink" title="缓存"></a>缓存<a class="article-anchor" href="#缓存" aria-hidden="true"></a></h2><p>直接把 <a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-cache">cache 选项</a> 设为 <code>true</code> 即可开启模板缓存，参考 <a href="./caching.html">缓存</a> 一文。推荐在生产环境中开启缓存，可以用如下代码：</p>
+<h2 id="缓存" class="article-heading"><a href="#缓存" class="headerlink" title="缓存"></a>缓存<a class="article-anchor" href="#缓存" aria-hidden="true"></a></h2><p>直接把 <a href="/api/interfaces/LiquidOptions.html#cache">cache 选项</a> 设为 <code>true</code> 即可开启模板缓存，参考 <a href="./caching.html">缓存</a> 一文。推荐在生产环境中开启缓存，可以用如下代码：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
     <span class="token literal-property property">cache</span><span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">NODE_ENV</span> <span class="token operator">===</span> <span class="token string">'production'</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><code>cache</code> 还可以是一个数字表示最大缓存的模板数量，也可以是一个自定义的缓存实现，详情请参考 <a href="../../api/interfaces/liquid_options_.liquidoptions.html#Optional-cache">cache 选项</a>。</p>
+<p><code>cache</code> 还可以是一个数字表示最大缓存的模板数量，也可以是一个自定义的缓存实现，详情请参考 <a href="/api/interfaces/LiquidOptions.html#cache">cache 选项</a>。</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-03-19T15:42:58.537Z" itemprop="dateModified">上次更新：2023-03-19</time>
+                <time class="article-footer-updated" datetime="2023-03-19T16:51:21.945Z" itemprop="dateModified">上次更新：2023-03-19</time>
                 <a href="partials-and-layouts.html" class="article-footer-prev" title="引用/继承"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="caching.html" class="article-footer-next" title="缓存"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -176,7 +176,7 @@ res<span class="token punctuation">.</span><span class="token function">render</
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">

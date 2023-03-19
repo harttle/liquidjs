@@ -48,7 +48,7 @@
       <a href="/zh-cn/" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="搜索...">
@@ -94,7 +94,7 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <p>LiquidJS 支持同步调用也支持异步调用，支持 Promise。为了同异步复用一套标签和过滤器，LiquidJS 标签用生成器来实现。</p>
-<h2 id="同异步-API" class="article-heading"><a href="#同异步-API" class="headerlink" title="同异步 API"></a>同异步 API<a class="article-anchor" href="#同异步-API" aria-hidden="true"></a></h2><p><a href="/api/classes/liquid_.liquid.html">Liquid</a> 上主要的方法都支持同步和异步，下面这些方法返回 <code>Promise</code>：</p>
+<h2 id="同异步-API" class="article-heading"><a href="#同异步-API" class="headerlink" title="同异步 API"></a>同异步 API<a class="article-anchor" href="#同异步-API" aria-hidden="true"></a></h2><p><a href="/api/classes/Liquid.html">Liquid</a> 上主要的方法都支持同步和异步，下面这些方法返回 <code>Promise</code>：</p>
 <ul>
 <li><code>render()</code></li>
 <li><code>renderFile()</code></li>
@@ -141,7 +141,7 @@ engine<span class="token punctuation">.</span><span class="token function">regis
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>现在 <code>* render()</code> 调用了一个返回 Promise 的 API，它就不再兼容同步了。不兼容同步的标签也仍然是合法标签，在异步 API 下也会正常运行。被同步调用时，返回 <code>Promise</code> 的标签会被渲染成 <code>[object Promise]</code>。</p>
-<h2 id="把-LiquidJS-生成器转换成-Promise" class="article-heading"><a href="#把-LiquidJS-生成器转换成-Promise" class="headerlink" title="把 LiquidJS 生成器转换成 Promise"></a>把 LiquidJS 生成器转换成 Promise<a class="article-anchor" href="#把-LiquidJS-生成器转换成-Promise" aria-hidden="true"></a></h2><p>有些 LiquidJS API 会返回 <code>Promise</code>，有些会返回生成器。你可以用 <a href="/api/modules/liquid_.html#toPromise">toPromise</a> 来把生成器转换为 <code>Promise</code>，比如：</p>
+<h2 id="把-LiquidJS-生成器转换成-Promise" class="article-heading"><a href="#把-LiquidJS-生成器转换成-Promise" class="headerlink" title="把 LiquidJS 生成器转换成 Promise"></a>把 LiquidJS 生成器转换成 Promise<a class="article-anchor" href="#把-LiquidJS-生成器转换成-Promise" aria-hidden="true"></a></h2><p>有些 LiquidJS API 会返回 <code>Promise</code>，有些会返回生成器。你可以用 <a href="/api/functions/toPromise.html">toPromise</a> 来把生成器转换为 <code>Promise</code>，比如：</p>
 <pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> TagToken<span class="token punctuation">,</span> Context<span class="token punctuation">,</span> Emitter<span class="token punctuation">,</span> TopLevelToken<span class="token punctuation">,</span> Value<span class="token punctuation">,</span> Tag<span class="token punctuation">,</span> Liquid<span class="token punctuation">,</span> toPromise <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'liquidjs'</span>
 
 <span class="token comment">// Usage: &#123;% upper "alice" %&#125;</span>
@@ -178,7 +178,7 @@ engine<span class="token punctuation">.</span><span class="token function">regis
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-03-19T15:42:58.537Z" itemprop="dateModified">上次更新：2023-03-19</time>
+                <time class="article-footer-updated" datetime="2023-03-19T16:51:21.945Z" itemprop="dateModified">上次更新：2023-03-19</time>
                 <a href="render-tag-content.html" class="article-footer-prev" title="渲染标签内容"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="whitespace-control.html" class="article-footer-next" title="换行和缩进"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -218,7 +218,7 @@ engine<span class="token punctuation">.</span><span class="token function">regis
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">

@@ -48,7 +48,7 @@
       <a href="../index.html" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="../tutorials/intro-to-liquid.html" class="main-nav-link">Tutorials</a><a href="../tags/overview.html" class="main-nav-link">Tags</a><a href="../filters/overview.html" class="main-nav-link">Filters</a><a href="../playground.html" class="main-nav-link">Playground</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <a href="../tutorials/intro-to-liquid.html" class="main-nav-link">Tutorials</a><a href="../tags/overview.html" class="main-nav-link">Tags</a><a href="../filters/overview.html" class="main-nav-link">Filters</a><a href="../playground.html" class="main-nav-link">Playground</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="Search...">
@@ -95,7 +95,7 @@
               <div class="article-content" itemprop="articleBody">
                 <p class="since">v9.2.0</p>
 
-<h2 id="Render-a-Template" class="article-heading"><a href="#Render-a-Template" class="headerlink" title="Render a Template"></a>Render a Template<a class="article-anchor" href="#Render-a-Template" aria-hidden="true"></a></h2><p>Render a partial template from partials directory specified by <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-partials">partials</a> or <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-root">root</a>.</p>
+<h2 id="Render-a-Template" class="article-heading"><a href="#Render-a-Template" class="headerlink" title="Render a Template"></a>Render a Template<a class="article-anchor" href="#Render-a-Template" aria-hidden="true"></a></h2><p>Render a partial template from partials directory specified by <a href="/api/interfaces/LiquidOptions.html#partials">partials</a> or <a href="/api/interfaces/LiquidOptions.html#root">root</a>.</p>
 <pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid">// index.liquid
 Contents
 <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'footer.liquid'</span> <span class="token delimiter punctuation">%&#125;</span></span>
@@ -107,7 +107,7 @@ Footer
 Contents
 Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>If <a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname">extname</a> option is set, the above <code>.liquid</code> extension becomes optional:</p>
+<p>If <a href="/api/interfaces/LiquidOptions.html#extname">extname</a> option is set, the above <code>.liquid</code> extension becomes optional:</p>
 <pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'footer'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <blockquote class="note info"><strong class="note-title">Variable Scope</strong><p>When a partial template is rendered, the code inside it can’t access its parent’s variables and its variables won’t be accessible by its parent. This encapsulation makes partials easier to understand and maintain.</p>
@@ -117,14 +117,14 @@ Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> my_variable <span class="token operator">=</span> <span class="token string">'apples'</span> <span class="token delimiter punctuation">%&#125;</span></span>
 <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">'name'</span><span class="token punctuation">,</span> my_variable<span class="token operator">:</span> my_variable<span class="token punctuation">,</span> my_other_variable<span class="token operator">:</span> <span class="token string">'oranges'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p><a href="../api/interfaces/liquid_options_.liquidoptions.html#Optional-globals">globals</a> don’t need to be passed down. They are accessible from all files.</p>
+<p><a href="/api/interfaces/LiquidOptions.html#globals">globals</a> don’t need to be passed down. They are accessible from all files.</p>
 <h2 id="Outputs-amp-Filters" class="article-heading"><a href="#Outputs-amp-Filters" class="headerlink" title="Outputs &amp; Filters"></a>Outputs &amp; Filters<a class="article-anchor" href="#Outputs-amp-Filters" aria-hidden="true"></a></h2><p>When filename is specified as literal string, it supports Liquid output and filter syntax. Useful when concatenating strings for a complex filename.</p>
 <pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> <span class="token string">"prefix/&#123;&#123;name | append: \"</span><span class="token punctuation">.</span>html\<span class="token string">"&#125;&#125;"</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <blockquote class="note info"><strong class="note-title">Escaping</strong><p>In LiquidJS, <code>&quot;</code> within quoted string literals need to be escaped. Adding a slash before the quote, e.g. <code>\&quot;</code>. Using Jekyll-like filenames can make this easier, see below.</p>
 </blockquote>
 
-<h2 id="Jekyll-like-Filenames" class="article-heading"><a href="#Jekyll-like-Filenames" class="headerlink" title="Jekyll-like Filenames"></a>Jekyll-like Filenames<a class="article-anchor" href="#Jekyll-like-Filenames" aria-hidden="true"></a></h2><p>Setting <a href="../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, file names are specified as literal string. And it also supports Liquid outputs and filters.</p>
+<h2 id="Jekyll-like-Filenames" class="article-heading"><a href="#Jekyll-like-Filenames" class="headerlink" title="Jekyll-like Filenames"></a>Jekyll-like Filenames<a class="article-anchor" href="#Jekyll-like-Filenames" aria-hidden="true"></a></h2><p>Setting <a href="/api/interfaces/LiquidOptions.html#dynamicPartials">dynamicPartials</a> to <code>false</code> will enable Jekyll-like filenames, file names are specified as literal string. And it also supports Liquid outputs and filters.</p>
 <pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">render</span> prefix/&#123;&#123; <span class="token object">page</span><span class="token punctuation">.</span>my_variable &#125;&#125;/suffix <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>This way, you don’t need to escape <code>&quot;</code> in the filename expression.</p>
@@ -146,7 +146,7 @@ Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-03-19T15:42:58.533Z" itemprop="dateModified">Last updated: 2023-03-19</time>
+                <time class="article-footer-updated" datetime="2023-03-19T16:51:21.941Z" itemprop="dateModified">Last updated: 2023-03-19</time>
                 <a href="raw.html" class="article-footer-prev" title="sidebar.tags.raw"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="tablerow.html" class="article-footer-next" title="sidebar.tags.tablerow"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -186,7 +186,7 @@ Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="../tutorials/intro-to-liquid.html" class="mobile-nav-link">Tutorials</a><a href="../tags/overview.html" class="mobile-nav-link">Tags</a><a href="../filters/overview.html" class="mobile-nav-link">Filters</a><a href="../playground.html" class="mobile-nav-link">Playground</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <a href="../tutorials/intro-to-liquid.html" class="mobile-nav-link">Tutorials</a><a href="../tags/overview.html" class="mobile-nav-link">Tags</a><a href="../filters/overview.html" class="mobile-nav-link">Filters</a><a href="../playground.html" class="mobile-nav-link">Playground</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">

@@ -48,7 +48,7 @@
       <a href="/zh-cn/" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="main-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="搜索...">
@@ -95,7 +95,7 @@
               <div class="article-content" itemprop="articleBody">
                 <p>在典型的网站项目中，同一个模板文件可能会反复地用不同数据去渲染。在生产环境下模板文件的内容不太会发生变化（除非重新部署了服务），因此可以把从磁盘读取的文件内容和解析得到的模板结构（AST）缓存下来重复使用来节省渲染时间。</p>
 <p>LiquidJS 在这一方面比较灵活，提供了多种不同的方式来达到提升性能的目的。</p>
-<h2 id="手动缓存" class="article-heading"><a href="#手动缓存" class="headerlink" title="手动缓存"></a>手动缓存<a class="article-anchor" href="#手动缓存" aria-hidden="true"></a></h2><p><a href="../../api/classes/liquid_.liquid.html#parse">.parse()</a>, <a href="../../api/classes/liquid_.liquid.html#parseFile">.parseFile()</a>, <a href="../../api/classes/liquid_.liquid.html#parseFileSync">.parseFileSync()</a> API 可以用来把字符串或文件解析成模板。得到的模板可以用不同的数据去重复地渲染得到不同的 HTML。</p>
+<h2 id="手动缓存" class="article-heading"><a href="#手动缓存" class="headerlink" title="手动缓存"></a>手动缓存<a class="article-anchor" href="#手动缓存" aria-hidden="true"></a></h2><p><a href="/api/classes/Liquid.html#parse">.parse()</a>, <a href="/api/classes/Liquid.html#parseFile">.parseFile()</a>, <a href="/api/classes/Liquid.html#parseFileSync">.parseFileSync()</a> API 可以用来把字符串或文件解析成模板。得到的模板可以用不同的数据去重复地渲染得到不同的 HTML。</p>
 <p>从字符串解析：</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> tpl <span class="token operator">=</span> engine<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token string">'&#123;&#123;name | capitalize&#125;&#125;'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -109,7 +109,7 @@ engine<span class="token punctuation">.</span><span class="token function">rende
 engine<span class="token punctuation">.</span><span class="token function">renderSync</span><span class="token punctuation">(</span>tpl<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'bob'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span> <span class="token comment">// 'Bob'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>上述代码中字符串或文件只被解析了一次，可以反复利用去渲染不同的数据。有很多模板文件时可以把 <code>tpl</code> 变量存在 <code>Map</code> 中，后续再 <code>.render()</code> 时直接从 Map 中拿出解析好的模板去渲染。</p>
-<h2 id="cache-选项" class="article-heading"><a href="#cache-选项" class="headerlink" title="cache 选项"></a><code>cache</code> 选项<a class="article-anchor" href="#cache-选项" aria-hidden="true"></a></h2><p>如果你只用 <code>.renderFile()</code> 和 <code>.renderFileSync()</code> 也可以直接设置 [cache][cache] 选项，LiquidJS 会帮你缓存。</p>
+<h2 id="cache-选项" class="article-heading"><a href="#cache-选项" class="headerlink" title="cache 选项"></a><code>cache</code> 选项<a class="article-anchor" href="#cache-选项" aria-hidden="true"></a></h2><p>如果你只用 <code>.renderFile()</code> 和 <code>.renderFileSync()</code> 也可以直接设置 <a href="/api/interfaces/LiquidOptions.html#cache">cache</a> 选项，LiquidJS 会帮你缓存。</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
     <span class="token literal-property property">cache</span><span class="token operator">:</span> <span class="token boolean">true</span>
@@ -124,7 +124,7 @@ engine<span class="token punctuation">.</span><span class="token function">rende
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-03-19T15:42:58.537Z" itemprop="dateModified">上次更新：2023-03-19</time>
+                <time class="article-footer-updated" datetime="2023-03-19T16:51:21.945Z" itemprop="dateModified">上次更新：2023-03-19</time>
                 <a href="use-in-expressjs.html" class="article-footer-prev" title="Express.js 中使用"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="register-filters-tags.html" class="article-footer-next" title="注册标签/过滤器"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -164,7 +164,7 @@ engine<span class="token punctuation">.</span><span class="token function">rende
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/liquid_.liquid.html" class="mobile-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">
