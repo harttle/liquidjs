@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: |
           npm ci
-          npm run build:docs
+          npm run build
       - name: Publish
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with: 
