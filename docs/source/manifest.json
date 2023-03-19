@@ -47,7 +47,7 @@
     },
     {
       "name": "API",
-      "url": "/api/classes/liquid_.liquid.html",
+      "url": "/api/classes/Liquid.html",
       "description": "TypeScript doc for LiquidJS classes and interfaces"
     }
   ],

@@ -68,7 +68,7 @@ Here's a demo for browsers: [demo/browser](https://github.com/harttle/liquidjs/t
 
 ## Abstract File System
 
-LiquidJS defines an abstract file system interface in [src/fs/fs.ts][ifs] and the default implementation is [src/fs/node.ts][fs-node] for Node.js and [src/fs/browser.ts][fs-browser] for the browser bundle.
+LiquidJS defines an abstract file system interface in [src/fs/fs.ts][ifs] and the default implementation is [src/fs/fs-impl.ts][fs-node] for Node.js and [src/build/fs-impl-browser.ts][fs-browser] for the browser bundle.
 
 The `Liquid` constructor provides a [fs][fs] option to specify the file system implementation. It's supposed to be used to define customized template fetching logic, i.e. fetch template from a database table, like:
 
@@ -100,14 +100,14 @@ var engine = new Liquid({
 
 {% note warn Path Traversal Vulnerability %}The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you'll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.{% endnote %}
 
-[fs]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-fs
-[ifs]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs.ts
-[fs-node]: https://github.com/harttle/liquidjs/blob/master/src/fs/node.ts
-[fs-browser]: https://github.com/harttle/liquidjs/blob/master/src/fs/browser.ts
+[fs]: /api/interfaces/LiquidOptions.html#fs
+[ifs]: /api/interfaces/FS.html
+[fs-node]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs-impl.ts
+[fs-browser]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs-impl-browser.ts
 [layout]: https://help.shopify.com/en/themes/liquid/tags/theme-tags#layout
 [include]: https://help.shopify.com/themes/liquid/tags/theme-tags#include
-[renderFile]: ../api/classes/liquid_.liquid.html#renderFile
-[renderFileSync]: ../api/classes/liquid_.liquid.html#renderFilesync
-[parseFile]: ../api/classes/liquid_.liquid.html#parseFile
-[parseFileSync]: ../api/classes/liquid_.liquid.html#parseFileSync
-[root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
+[renderFile]: /api/classes/Liquid.html#renderFile
+[renderFileSync]: /api/classes/Liquid.html#renderFileSync
+[parseFile]: /api/classes/Liquid.html#parseFile
+[parseFileSync]: /api/classes/Liquid.html#parseFileSync
+[root]: /api/interfaces/LiquidOptions.html#root

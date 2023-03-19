@@ -52,5 +52,5 @@ harttle
 
 [shopify/liquid]: https://github.com/Shopify/liquid
 [liquidjs]: https://github.com/harttle/liquidjs
-[options]: ../../api/interfaces/liquid_options_.liquidoptions.html
-[greedy]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-greedy
+[options]: /api/interfaces/LiquidOptions.html
+[greedy]: /api/interfaces/LiquidOptions.html#greedy

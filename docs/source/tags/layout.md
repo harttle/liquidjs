@@ -101,7 +101,7 @@ This way, you don't need to escape `"` in the filename expression.
 {% layout prefix/{{name | append: ".html"}} %}
 ```
 
-[extname]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
-[root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
-[layouts]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-layouts
-[dynamicPartials]: ../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials
+[extname]: /api/interfaces/LiquidOptions.html#extname
+[root]: /api/interfaces/LiquidOptions.html#root
+[layouts]: /api/interfaces/LiquidOptions.html#layouts
+[dynamicPartials]: /api/interfaces/LiquidOptions.html#dynamicPartials

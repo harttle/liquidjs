@@ -47,7 +47,7 @@
     },
     {
       "name": "API",
-      "url": "/zh-cn/api/classes/liquid_.liquid.html",
+      "url": "/api/classes/Liquid.html",
       "description": "LiquidJS 类和接口的 TypeScript 文档"
     }
   ],

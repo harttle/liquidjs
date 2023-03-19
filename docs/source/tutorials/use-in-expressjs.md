@@ -59,12 +59,12 @@ var engine = new Liquid({
 });
 ```
 
-[cache]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-cache
+[cache]: /api/interfaces/LiquidOptions.html#cache
 [express-views]: http://expressjs.com/en/guide/using-template-engines.html
-[parseFile]: ../api/classes/liquid_.liquid.html#parseFile
-[parseFileSync]: ../api/classes/liquid_.liquid.html#parseFileSync
+[parseFile]: /api/classes/Liquid.html#parseFile
+[parseFileSync]: /api/classes/Liquid.html#parseFileSync
 [layout]: https://help.shopify.com/en/themes/liquid/tags/theme-tags#layout
 [include]: https://help.shopify.com/themes/liquid/tags/theme-tags#include
-[root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
+[root]: /api/interfaces/LiquidOptions.html#root
 [render-a-file]: ./render-a-file.html
 [Caching]: ./caching.html

@@ -12,7 +12,7 @@ const engine = new Liquid({
 ```
 
 {% note info API 文档 %}
-下面的所有选项的概述，希望了解具体的类型和签名，请前往 <a href="https://liquidjs.com/api/interfaces/liquid_options_.liquidoptions.html" target="_self">LiquidOptions | API</a>.
+下面的所有选项的概述，希望了解具体的类型和签名，请前往 <a href="https://liquidjs.com/api/interfaces/LiquidOptions.html" target="_self">LiquidOptions | API</a>.
 {% endnote %}
 
 ## 缓存
@@ -136,7 +136,7 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 
 默认会忽略参数出现的顺序，例如 `{% for i in (1..8) reversed limit:3 %}` 里总是会先执行 `limit` 再执行 `reversed`，虽然 `reversed` 先出现。为了让 LiquidJS 按顺序执行参数，需要设置 **orderedFilterParameters** 为 `true`。它的默认值为 `false`。
 
-[liquid]: ../api/classes/liquid_.liquid.html
+[liquid]: /api/classes/Liquid.html
 [caching]: ./caching.html
 [abstract-fs]: ./render-file.html#Abstract-File-System
 [render-file]: ./render-file.html
@@ -146,4 +146,4 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 [layout]: ../tags/layout.html
 [wc]: ./whitespace-control.html
 [intro]: ./intro-to-liquid.html
-[jekyllInclude]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-jekyllInclude
+[jekyllInclude]: /api/interfaces/LiquidOptions.html#jekyllInclude

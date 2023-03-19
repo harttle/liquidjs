@@ -133,5 +133,5 @@ engine.registerTag('repeat', {
 [async]: ./sync-and-async.html
 [for]: ../tags/for.html
 [if]: ../tags/if.html
-[ParseStream]: ../api/classes/parser_parse_stream_.parsestream.html
+[ParseStream]: /api/classes/ParseStream.html
 [parameter]: ./parse-parameters.html

@@ -94,8 +94,8 @@ In the example above, the partial template will be rendered once for each `varia
 {% note tip The forloop object %} When using the for parameter, the <a href="./for.html#forloop">forloop</a> object is accessible within the snippet.{% endnote %}
 
 [forloop]: ./for.html
-[extname]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
-[root]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
-[partials]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-partials
-[globals]: ../api/interfaces/liquid_options_.liquidoptions.html#Optional-globals
-[dynamicPartials]: ../api/interfaces/liquid_options_.liquidoptions.html#dynamicPartials
+[extname]: /api/interfaces/LiquidOptions.html#extname
+[root]: /api/interfaces/LiquidOptions.html#root
+[partials]: /api/interfaces/LiquidOptions.html#partials
+[globals]: /api/interfaces/LiquidOptions.html#globals
+[dynamicPartials]: /api/interfaces/LiquidOptions.html#dynamicPartials

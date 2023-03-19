@@ -45,5 +45,5 @@ engine.parseAndRender('{{ "foo" | upup }}').then(console.log)
 * Sections 标签（开发中）： https://github.com/harttle/liquidjs-section-tags
 * 颜色过滤器： https://github.com/harttle/liquidjs-color-filters
 
-[liquid]: ../../api/classes/liquid_.liquid.html
+[liquid]: /api/classes/Liquid.html
 [register]: ./register-filters-tags.html

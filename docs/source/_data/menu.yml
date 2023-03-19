@@ -2,4 +2,4 @@ tutorials: /tutorials/intro-to-liquid.html
 tags: /tags/overview.html
 filters: /filters/overview.html
 playground: /playground.html
-api: /api/classes/liquid_.liquid.html
+api: /api/classes/Liquid.html

@@ -60,6 +60,6 @@ title: Render
 
 {% note tip forloop 对象 %} 使用 for 参数时，在子模板中可以访问 <a href="./for.html#forloop">forloop</a> 对象。{% endnote %}
 
-[extname]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-extname
-[root]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-root
-[globals]: ../../api/interfaces/liquid_options_.liquidoptions.html#Optional-globals
+[extname]: /api/interfaces/LiquidOptions.html#extname
+[root]: /api/interfaces/LiquidOptions.html#root
+[globals]: /api/interfaces/LiquidOptions.html#globals
