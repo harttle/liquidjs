@@ -1,7 +1,7 @@
 name: Check
 on: [push, pull_request]
 jobs:
-  release:
+  check:
     name: Check
     runs-on: ubuntu-18.04
     steps:
@@ -28,3 +28,9 @@ jobs:
       - name: Performance
         run: |
           npm run perf:diff
+      - name: Archive npm failure logs
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: npm-logs
+          path: ~/.npm/_logs
