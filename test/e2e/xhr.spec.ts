@@ -1,6 +1,6 @@
 import * as sinon from 'sinon'
 import { JSDOM } from 'jsdom'
-import type { Liquid } from '../..'
+import type { Liquid } from '../../src/liquid'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
 
 describe('xhr', () => {
