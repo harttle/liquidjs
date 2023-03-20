@@ -549,6 +549,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bangank36",
+      "name": "BaNgan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10071857?v=4",
+      "profile": "https://github.com/bangank36",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
