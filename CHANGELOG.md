@@ -1,3 +1,15 @@
+# [10.7.0](https://github.com/harttle/liquidjs/compare/v10.6.2...v10.7.0) (2023-03-21)
+
+
+### Bug Fixes
+
+* update remove.md ([#601](https://github.com/harttle/liquidjs/issues/601)) ([1bddd60](https://github.com/harttle/liquidjs/commit/1bddd60b0191032d324526292027bc7fcd190dc1))
+
+
+### Features
+
+* JSON format by `space` in `json` filter ([7b87ea8](https://github.com/harttle/liquidjs/commit/7b87ea82d3d63420e548743c5a84a073f0cdad22))
+
 ## [10.6.2](https://github.com/harttle/liquidjs/compare/v10.6.1...v10.6.2) (2023-03-19)
 
 
