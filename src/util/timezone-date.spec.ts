@@ -26,7 +26,7 @@ describe('TimezoneDate', () => {
   })
   it('should support .toLocaleTimeString()', () => {
     const date = new TimezoneDate('2021-10-06T00:00:00.001+00:00', -480)
-    expect(date.toLocaleTimeString('en-US')).toBe('8:00:00 AM')
+    expect(date.toLocaleTimeString('en-US')).toMatch(/^8:00:00\sAM$/)
     expect(() => date.toLocaleDateString()).not.toThrow()
   })
   it('should support .toLocaleDateString()', () => {

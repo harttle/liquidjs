@@ -24,5 +24,10 @@ describe('filters/object', function () {
     it('should stringify number', async () => expect(await liquid.parseAndRender('{{2 | json}}')).toBe('2'))
     it('should stringify object', async () => expect(await liquid.parseAndRender('{{obj | json}}', { obj: { foo: 'bar' } })).toBe('{"foo":"bar"}'))
     it('should stringify array', async () => expect(await liquid.parseAndRender('{{arr | json}}', { arr: [-2, 'a'] })).toBe('[-2,"a"]'))
+    it('should support space', () => {
+      const scope = { obj: { foo: 'foo', bar: 'bar' } }
+      const result = '{\n    "foo": "foo",\n    "bar": "bar"\n}'
+      expect(liquid.parseAndRenderSync('{{obj | json: 4}}', scope)).toBe(result)
+    })
   })
 })

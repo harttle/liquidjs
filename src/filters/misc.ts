@@ -9,8 +9,8 @@ export function Default<T1 extends boolean, T2> (this: FilterImpl, value: T1, de
   return isFalsy(value, this.context) ? defaultValue : value
 }
 
-export function json (value: any) {
-  return JSON.stringify(value)
+export function json (value: any, space = 0) {
+  return JSON.stringify(value, null, space)
 }
 
 export const raw = {
