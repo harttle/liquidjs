@@ -1,3 +1,11 @@
+## [10.7.1](https://github.com/harttle/liquidjs/compare/v10.7.0...v10.7.1) (2023-04-24)
+
+
+### Bug Fixes
+
+* incorrect timezone correction for DST dates, fixes [#604](https://github.com/harttle/liquidjs/issues/604) ([33b3c01](https://github.com/harttle/liquidjs/commit/33b3c010af0cd17a303621331feab0119ca840ce))
+* timezoneOffset ignored in date when preserveTimezones is enabled, fixes [#605](https://github.com/harttle/liquidjs/issues/605) ([21ee27b](https://github.com/harttle/liquidjs/commit/21ee27b57503f9d57f228973e1699972484e6089))
+
 # [10.7.0](https://github.com/harttle/liquidjs/compare/v10.6.2...v10.7.0) (2023-03-21)
 
 
