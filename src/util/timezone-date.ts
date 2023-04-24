@@ -2,7 +2,6 @@ import { LiquidDate } from './liquid-date'
 
 // one minute in milliseconds
 const OneMinute = 60000
-const hostTimezoneOffset = new Date().getTimezoneOffset()
 const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
 
 /**
@@ -22,7 +21,7 @@ export class TimezoneDate implements LiquidDate {
       : new Date(init)
     this.timezoneOffset = timezoneOffset
 
-    const diff = (hostTimezoneOffset - this.timezoneOffset) * OneMinute
+    const diff = (this.date.getTimezoneOffset() - this.timezoneOffset) * OneMinute
     const time = this.date.getTime() + diff
     this.displayDate = new Date(time)
   }
@@ -56,22 +55,16 @@ export class TimezoneDate implements LiquidDate {
     return this.displayDate.getFullYear()
   }
   toLocaleString (locale?: string, init?: any) {
-    if (locale === undefined) {
-      return this.displayDate.toLocaleString(locale)
+    if (init?.timeZone) {
+      return this.date.toLocaleString(locale, init)
     }
-    return this.date.toLocaleString(locale, init)
+    return this.displayDate.toLocaleString(locale, init)
   }
-  toLocaleTimeString (locale?: string, init?: any) {
-    if (locale === undefined) {
-      return this.displayDate.toLocaleTimeString(locale)
-    }
-    return this.date.toLocaleTimeString(locale, init)
+  toLocaleTimeString (locale?: string) {
+    return this.displayDate.toLocaleTimeString(locale)
   }
-  toLocaleDateString (locale?: string, init?: any) {
-    if (locale === undefined) {
-      return this.displayDate.toLocaleDateString(locale)
-    }
-    return this.date.toLocaleDateString(locale, init)
+  toLocaleDateString (locale?: string) {
+    return this.displayDate.toLocaleDateString(locale)
   }
   getTimezoneOffset () {
     return this.timezoneOffset!

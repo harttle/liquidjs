@@ -20,7 +20,9 @@ jobs:
       - name: Test
         run: |
           npm run lint
-          npm run test
+          TZ=Etc/GMT npm run test
+          TZ=Asia/Shanghai npm run test
+          TZ=America/New_York npm run test
       - name: Coverage
         uses: coverallsapp/github-action@v1.1.2
         with:
