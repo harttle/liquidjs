@@ -406,4 +406,24 @@ describe('Issues', function () {
     const html = await engine.parseAndRender(template)
     expect(html).toContain('true')
   })
+  it('#604 date filter appears to add DST correction to UTC dates', () => {
+    const engine = new Liquid({
+      timezoneOffset: 'Etc/GMT'
+    })
+
+    const html = engine.parseAndRenderSync(
+      '{{ "2023-04-05T12:00:00Z" | date: "%Y-%m-%dT%H:%M:%S%z", "Etc/GMT" }}' +
+      '{{ "2023-01-05T12:00:00Z" | date: "%Y-%m-%dT%H:%M:%S%z", 0 }}' +
+      '{{ "2023-01-05T12:00:00Z" | date: "%Y-%m-%dT%H:%M:%S%z", "Etc/GMT" }}' +
+      '{{ "2023-01-05T12:00:00Z" | date: "%Y-%m-%dT%H:%M:%S%z" }}' +
+      '{{ "2023-01-05T12:00:00+0000" | date: "%Y-%m-%dT%H:%M:%S%z", 0 }}'
+    )
+    const expected =
+      '2023-04-05T12:00:00+0000' +
+      '2023-01-05T12:00:00+0000' +
+      '2023-01-05T12:00:00+0000' +
+      '2023-01-05T12:00:00+0000' +
+      '2023-01-05T12:00:00+0000'
+    expect(html).toEqual(expected)
+  })
 })

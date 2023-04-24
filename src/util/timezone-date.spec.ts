@@ -24,6 +24,12 @@ describe('TimezoneDate', () => {
     const date = new TimezoneDate('2021-12-07T00:00:00.001+08:00', -480)
     expect(date.getDay()).toBe(2)
   })
+  it('should support .toLocaleString()', () => {
+    const date = new TimezoneDate('2021-10-06T00:00:00.001+00:00', -480)
+    expect(date.toLocaleString('en-US')).toMatch(/8:00:00\sAM$/)
+    expect(date.toLocaleString('en-US', { timeZone: 'America/New_York' })).toMatch(/8:00:00\sPM$/)
+    expect(() => date.toLocaleString()).not.toThrow()
+  })
   it('should support .toLocaleTimeString()', () => {
     const date = new TimezoneDate('2021-10-06T00:00:00.001+00:00', -480)
     expect(date.toLocaleTimeString('en-US')).toMatch(/^8:00:00\sAM$/)
