@@ -1,4 +1,5 @@
 import { LiquidOptions } from '../../../src/liquid-options'
+import { Liquid } from '.././../../src/liquid'
 import { test } from '../../stub/render'
 
 describe('filters/date', function () {
@@ -98,9 +99,14 @@ describe('filters/date', function () {
       const scope = { date: new Date('1990-12-31T23:00:00Z') }
       return test('{{ date | date: "%z"}}', scope, '-0600', opts)
     })
-    it('should work with `preserveTimezones`', function () {
+    it('opts.timezoneOffset should work with `preserveTimezones`', function () {
       const opts: LiquidOptions = { timezoneOffset: 600, preserveTimezones: true }
       return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
+    })
+    it('timezoneOffset should work with `preserveTimezones`', async () => {
+      const liquid = new Liquid({ preserveTimezones: true })
+      const html = liquid.parseAndRenderSync('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }}')
+      expect(html).toEqual('1991-01-01T04:30:00')
     })
   })
   describe('dateFormat', function () {

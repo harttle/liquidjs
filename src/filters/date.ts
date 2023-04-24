@@ -26,7 +26,7 @@ export function date (this: FilterImpl, v: string | Date, format?: string, timez
   if (!isValidDate(date)) return v
   if (timezoneOffset !== undefined) {
     date = new TimezoneDate(date, parseTimezoneOffset(date, timezoneOffset))
-  } else if (opts.timezoneOffset !== undefined) {
+  } else if (!(date instanceof TimezoneDate) && opts.timezoneOffset !== undefined) {
     date = new TimezoneDate(date, parseTimezoneOffset(date, opts.timezoneOffset))
   }
   return strftime(date, format)

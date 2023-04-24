@@ -15,51 +15,63 @@ const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
 export class TimezoneDate implements LiquidDate {
   private timezoneOffset: number
   private date: Date
+  private displayDate: Date
   constructor (init: string | number | Date | TimezoneDate, timezoneOffset: number) {
-    if (init instanceof TimezoneDate) {
-      this.date = init.date
-      timezoneOffset = init.timezoneOffset
-    } else {
-      const diff = (hostTimezoneOffset - timezoneOffset) * OneMinute
-      const time = new Date(init).getTime() + diff
-      this.date = new Date(time)
-    }
+    this.date = init instanceof TimezoneDate
+      ? init.date
+      : new Date(init)
     this.timezoneOffset = timezoneOffset
+
+    const diff = (hostTimezoneOffset - this.timezoneOffset) * OneMinute
+    const time = this.date.getTime() + diff
+    this.displayDate = new Date(time)
   }
 
   getTime () {
-    return this.date.getTime()
+    return this.displayDate.getTime()
   }
 
   getMilliseconds () {
-    return this.date.getMilliseconds()
+    return this.displayDate.getMilliseconds()
   }
   getSeconds () {
-    return this.date.getSeconds()
+    return this.displayDate.getSeconds()
   }
   getMinutes () {
-    return this.date.getMinutes()
+    return this.displayDate.getMinutes()
   }
   getHours () {
-    return this.date.getHours()
+    return this.displayDate.getHours()
   }
   getDay () {
-    return this.date.getDay()
+    return this.displayDate.getDay()
   }
   getDate () {
-    return this.date.getDate()
+    return this.displayDate.getDate()
   }
   getMonth () {
-    return this.date.getMonth()
+    return this.displayDate.getMonth()
   }
   getFullYear () {
-    return this.date.getFullYear()
+    return this.displayDate.getFullYear()
   }
-  toLocaleTimeString (locale?: string) {
-    return this.date.toLocaleTimeString(locale)
+  toLocaleString (locale?: string, init?: any) {
+    if (locale === undefined) {
+      return this.displayDate.toLocaleString(locale)
+    }
+    return this.date.toLocaleString(locale, init)
   }
-  toLocaleDateString (locale?: string) {
-    return this.date.toLocaleDateString(locale)
+  toLocaleTimeString (locale?: string, init?: any) {
+    if (locale === undefined) {
+      return this.displayDate.toLocaleTimeString(locale)
+    }
+    return this.date.toLocaleTimeString(locale, init)
+  }
+  toLocaleDateString (locale?: string, init?: any) {
+    if (locale === undefined) {
+      return this.displayDate.toLocaleDateString(locale)
+    }
+    return this.date.toLocaleDateString(locale, init)
   }
   getTimezoneOffset () {
     return this.timezoneOffset!
@@ -87,8 +99,8 @@ export class TimezoneDate implements LiquidDate {
     // has a timezone specified
     if (m && m[2] && m[3] && m[4]) {
       const [, , sign, hours, minutes] = m
-      const delta = (sign === '+' ? -1 : 1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
-      return new TimezoneDate(+new Date(dateString), delta)
+      const offset = (sign === '+' ? -1 : 1) * (parseInt(hours, 10) * 60 + parseInt(minutes, 10))
+      return new TimezoneDate(+new Date(dateString), offset)
     }
     return new Date(dateString)
   }
