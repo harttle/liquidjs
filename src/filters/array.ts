@@ -54,6 +54,10 @@ export function concat<T1, T2> (v: T1[], arg: T2[] = []): (T1 | T2)[] {
   return toArray(v).concat(arg)
 }
 
+export function push<T> (v: T[], arg: T): T[] {
+  return concat(v, [arg])
+}
+
 export function slice<T> (v: T[] | string, begin: number, length = 1): T[] | string {
   v = toValue(v)
   if (isNil(v)) return []
