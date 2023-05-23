@@ -57,7 +57,7 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
-    assert(this.peek() === '|', () => `unexpected token at ${this.snapshot()}`)
+    assert(this.peek() === '|', () => `expected "|" before filter`)
     this.p++
     const begin = this.p
     const name = this.readIdentifier()
@@ -72,6 +72,10 @@ export class Tokenizer {
         this.skipBlank()
         assert(this.end() || this.peek() === ',' || this.peek() === '|', () => `unexpected character ${this.snapshot()}`)
       } while (this.peek() === ',')
+    } else if (this.peek() === '|' || this.end()) {
+      // do nothing
+    } else {
+      throw new Error('expected ":" after filter name')
     }
     return new FilterToken(name.getText(), args, this.input, begin, this.p, this.file)
   }

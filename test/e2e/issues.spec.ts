@@ -426,4 +426,9 @@ describe('Issues', function () {
       '2023-01-05T12:00:00+0000'
     expect(html).toEqual(expected)
   })
+  it('#610 should throw missing ":" after filter name', () => {
+    const engine = new Liquid()
+    const fn = () => engine.parseAndRenderSync("{%- assign module = '' | split '' -%}")
+    expect(fn).toThrow(/expected ":" after filter name/)
+  })
 })
