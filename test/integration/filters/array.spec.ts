@@ -104,6 +104,20 @@ describe('filters/array', function () {
       expect(html).toBe('abc')
     })
   })
+  describe('sample', function () {
+    it('should return full array sample', () => test(
+      '{{ "hello,world" | split: "," | sample | size }}',
+      '2'
+    ))
+    it('should return full array sample even if excess count', () => test(
+      '{{ "hello,world" | split: "," | sample: 10 | size }}',
+      '2'
+    ))
+    it('should return partial array sample', () => test(
+      '{{ "hello,world" | split: "," | sample: 1 | size }}',
+      '1'
+    ))
+  })
   describe('size', function () {
     it('should return string length', () => test(
       '{{ "Ground control to Major Tom." | size }}',
