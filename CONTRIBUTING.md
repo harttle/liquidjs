@@ -1,7 +1,7 @@
 # Contributing
 
 1. Build everything and run tests to learn how to do both:
-  - `npm run build:dist`
+  - `npm run build`
   - `npm run test`
 
   Tests won't at first unless you've done a build at least once.
@@ -14,6 +14,16 @@
 
 3. Create a pull request
   - Ensure the build runs because the Husky pre-commit hook checks it
+    - `npm run check` checks runs the build, tests, lint and perf tests
+    - `commitlint` checks the commit message format
+    
+    If there is a problem you will see it in the pre-commit hook output.
+    In VS Code, this output will be shown in a new file in a new tab if the
+    pre-commit hook fails.
+    If you want to check the commit message without using the VS Code Source
+    Control UI, you can run `echo "feat: my commit message" > npx commitlint`
+    directly.
+    
   - `git switch -c your_branch_name` (do this in your fork not the main repo)
   - `git add .`
   - `git commit -m "feat: Adding my change"`
