@@ -1,7 +1,7 @@
 # Contributing
 
 1. Build everything and run tests to learn how to do both:
-  - `npm run build`
+  - `npm run build:dist`
   - `npm run test`
 
   Tests won't at first unless you've done a build at least once.
