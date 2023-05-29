@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    alias sedi="sed -i ''"
-else
-    alias sedi="sed -i"
-fi
+# Run `sed` in a way that's compatible with both macOS (BSD) and Linux (GNU)
+sedi() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "$@"
+    else
+        sed -i "$@"
+    fi
+}
 
 cd docs
 cp ../CHANGELOG.md source/tutorials/changelog.md
