@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
-REPLACE_START_RAW='s/{%/{% raw %}{%{% endraw %}/g'
-REPLACE_END_RAW='s/{{/{% raw %}{{{% endraw %}/g'
-ESCAPE_QUOT='1 s/"/\&quot;/g'
-ESCAPE_LT='1 s/</\&lt;/g'
-ESCAPE_GT='1 s/>/\&gt;/g'
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    alias sedi="sed -i ''"
+else
+    alias sedi="sed -i"
+fi
 
 cd docs
 cp ../CHANGELOG.md source/tutorials/changelog.md
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' -e "$REPLACE_START_RAW" -e "$REPLACE_END_RAW" -e "$ESCAPE_QUOT" -e "$ESCAPE_LT" -e "$ESCAPE_GT" source/tutorials/changelog.md
-else
-    sed -i -e "$REPLACE_START_RAW" -e "$REPLACE_END_RAW" -e "$ESCAPE_QUOT" -e "$ESCAPE_LT" -e "$ESCAPE_GT" source/tutorials/changelog.md
-fi
+sedi \
+    -e 's/{%/{% raw %}{%{% endraw %}/g' \
+    -e 's/{{/{% raw %}{{{% endraw %}/g' \
+    -e '1 s/"/\&quot;/g' \
+    -e '1 s/</\&lt;/g' \
+    -e '1 s/>/\&gt;/g' \
+    source/tutorials/changelog.md
 cp source/tutorials/changelog.md source/zh-cn/tutorials/changelog.md
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
