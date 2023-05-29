@@ -92,6 +92,27 @@ describe('filters/array', function () {
     })
   })
 
+  describe('push', () => {
+    it('should push arg value', async () => {
+      const scope = { val: ['hey'], arg: 'foo' }
+      await test('{{ val | push: arg | join: "," }}', scope, 'hey,foo')
+    })
+    it('should support undefined left value', async () => {
+      const scope = { arg: 'foo' }
+      await test('{{ notDefined | push: arg | join: "," }}', scope, 'foo')
+    })
+    it('should ignore nil left value', async () => {
+      const scope = { undefinedValue: undefined, nullValue: null, arg: 'foo' }
+      await test('{{ undefinedValue | push: arg | join: "," }}', scope, 'foo')
+      await test('{{ nullValue | push: arg | join: "," }}', scope, 'foo')
+    })
+    it('should ignore nil right value', async () => {
+      const scope = { nullValue: null }
+      await test('{{ nullValue | push | join: "," }}', scope, '')
+      await test('{{ nullValue | push: nil | join: "," }}', scope, '')
+    })
+  })
+
   describe('reverse', function () {
     it('should support reverse', () => test(
       '{{ "Ground control to Major Tom." | split: "" | reverse | join: "" }}',
