@@ -1,7 +1,6 @@
 import { toEnumerable } from '../util/collection'
 import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
-import { Tokenizer } from '../parser/tokenizer'
 
 export default class extends Tag {
   variable: string
@@ -10,20 +9,18 @@ export default class extends Tag {
   collection: ValueToken
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
-    const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
+    const variable = this.tokenizer.readIdentifier()
+    this.tokenizer.skipBlank()
 
-    const variable = tokenizer.readIdentifier()
-    tokenizer.skipBlank()
-
-    const predicate = tokenizer.readIdentifier()
-    const collectionToken = tokenizer.readValue()
+    const predicate = this.tokenizer.readIdentifier()
+    const collectionToken = this.tokenizer.readValue()
     if (predicate.content !== 'in' || !collectionToken) {
       throw new Error(`illegal tag: ${tagToken.getText()}`)
     }
 
     this.variable = variable.content
     this.collection = collectionToken
-    this.args = new Hash(tokenizer.remaining())
+    this.args = new Hash(this.tokenizer.remaining())
     this.templates = []
 
     let p

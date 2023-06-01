@@ -1,14 +1,14 @@
 import { Token } from './token'
 import { TokenKind } from '../parser'
-import { last } from '../util'
+import { TYPES, BLANK } from '../util'
 
 export abstract class DelimitedToken extends Token {
   public trimLeft = false
   public trimRight = false
-  public content: string
+  public contentRange: [number, number]
   public constructor (
     kind: TokenKind,
-    content: string,
+    [contentBegin, contentEnd]: [number, number],
     input: string,
     begin: number,
     end: number,
@@ -17,16 +17,19 @@ export abstract class DelimitedToken extends Token {
     file?: string
   ) {
     super(kind, input, begin, end, file)
-    this.content = this.getText()
-    const tl = content[0] === '-'
-    const tr = last(content) === '-'
-    this.content = content
-      .slice(
-        tl ? 1 : 0,
-        tr ? -1 : content.length
-      )
-      .trim()
+    const tl = input[contentBegin] === '-'
+    const tr = input[contentEnd - 1] === '-'
+
+    let l = tl ? contentBegin + 1 : contentBegin
+    let r = tr ? contentEnd - 1 : contentEnd
+    while (l < r && (TYPES[input.charCodeAt(l)] & BLANK)) l++
+    while (r > l && (TYPES[input.charCodeAt(r - 1)] & BLANK)) r--
+
+    this.contentRange = [l, r]
     this.trimLeft = tl || trimLeft
     this.trimRight = tr || trimRight
+  }
+  get content () {
+    return this.input.slice(this.contentRange[0], this.contentRange[1])
   }
 }

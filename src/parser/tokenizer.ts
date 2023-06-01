@@ -1,5 +1,5 @@
-import { TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
-import { Trie, createTrie, ellipsis, literalValues, assert, TokenizationError, TYPES, QUOTE, BLANK, IDENTIFIER } from '../util'
+import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
+import { Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, IDENTIFIER } from '../util'
 import { Operators, Expression } from '../render'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { FilterArg } from './filter-arg'
@@ -7,7 +7,7 @@ import { matchOperator } from './match-operator'
 import { whiteSpaceCtrl } from './whitespace-ctrl'
 
 export class Tokenizer {
-  p = 0
+  p: number
   N: number
   private rawBeginAt = -1
   private opTrie: Trie
@@ -15,9 +15,11 @@ export class Tokenizer {
   constructor (
     public input: string,
     operators: Operators = defaultOptions.operators,
-    public file?: string
+    public file?: string,
+    private range?: [number, number]
   ) {
-    this.N = input.length
+    this.p = range ? range[0] : 0
+    this.N = range ? range[1] : input.length
     this.opTrie = createTrie(operators)
   }
 
@@ -46,6 +48,13 @@ export class Tokenizer {
     if (end === -1) return
     return new OperatorToken(this.input, this.p, (this.p = end), this.file)
   }
+  readFilteredValue (): FilteredValueToken {
+    const begin = this.p
+    const initial = this.readExpression()
+    this.assert(initial.valid(), `invalid value expression: ${this.snapshot()}`)
+    const filters = this.readFilters()
+    return new FilteredValueToken(initial, filters, this.input, begin, this.p, this.file)
+  }
   readFilters (): FilterToken[] {
     const filters = []
     while (true) {
@@ -57,11 +66,14 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
-    assert(this.peek() === '|', () => `expected "|" before filter`)
+    this.assert(this.peek() === '|', `expected "|" before filter`)
     this.p++
     const begin = this.p
     const name = this.readIdentifier()
-    if (!name.size()) return null
+    if (!name.size()) {
+      this.assert(this.end(), `expected filter name`)
+      return null
+    }
     const args = []
     this.skipBlank()
     if (this.peek() === ':') {
@@ -70,12 +82,12 @@ export class Tokenizer {
         const arg = this.readFilterArg()
         arg && args.push(arg)
         this.skipBlank()
-        assert(this.end() || this.peek() === ',' || this.peek() === '|', () => `unexpected character ${this.snapshot()}`)
+        this.assert(this.end() || this.peek() === ',' || this.peek() === '|', () => `unexpected character ${this.snapshot()}`)
       } while (this.peek() === ',')
     } else if (this.peek() === '|' || this.end()) {
       // do nothing
     } else {
-      throw new Error('expected ":" after filter name')
+      throw this.error('expected ":" after filter name')
     }
     return new FilterToken(name.getText(), args, this.input, begin, this.p, this.file)
   }
@@ -121,7 +133,7 @@ export class Tokenizer {
     const { file, input } = this
     const begin = this.p
     if (this.readToDelimiter(options.tagDelimiterRight) === -1) {
-      throw this.mkError(`tag ${this.snapshot(begin)} not closed`, begin)
+      throw this.error(`tag ${this.snapshot(begin)} not closed`, begin)
     }
     const token = new TagToken(input, begin, this.p, options, file)
     if (token.name === 'raw') this.rawBeginAt = begin
@@ -145,7 +157,7 @@ export class Tokenizer {
     const { outputDelimiterRight } = options
     const begin = this.p
     if (this.readToDelimiter(outputDelimiterRight) === -1) {
-      throw this.mkError(`output ${this.snapshot(begin)} not closed`, begin)
+      throw this.error(`output ${this.snapshot(begin)} not closed`, begin)
     }
     return new OutputToken(input, begin, this.p, options, file)
   }
@@ -174,32 +186,38 @@ export class Tokenizer {
         this.p++
       }
     }
-    throw this.mkError(`raw ${this.snapshot(this.rawBeginAt)} not closed`, begin)
+    throw this.error(`raw ${this.snapshot(this.rawBeginAt)} not closed`, begin)
   }
 
   readLiquidTagTokens (options: NormalizedFullOptions = defaultOptions): LiquidTagToken[] {
     const tokens: LiquidTagToken[] = []
     while (this.p < this.N) {
       const token = this.readLiquidTagToken(options)
-      if (token.name) tokens.push(token)
+      token && tokens.push(token)
     }
     return tokens
   }
 
-  readLiquidTagToken (options: NormalizedFullOptions): LiquidTagToken {
-    const { file, input } = this
+  readLiquidTagToken (options: NormalizedFullOptions): LiquidTagToken | undefined {
+    this.skipBlank()
+    if (this.end()) return
+
     const begin = this.p
-    let end = this.N
-    if (this.readToDelimiter('\n') !== -1) end = this.p
-    return new LiquidTagToken(input, begin, end, options, file)
+    this.readToDelimiter('\n')
+    const end = this.p
+    return new LiquidTagToken(this.input, begin, end, options, this.file)
   }
 
-  mkError (msg: string, begin: number) {
-    return new TokenizationError(msg, new IdentifierToken(this.input, begin, this.N, this.file))
+  error (msg: string, pos: number = this.p) {
+    return new TokenizationError(msg, new IdentifierToken(this.input, pos, this.N, this.file))
+  }
+
+  assert (pred: unknown, msg: string | (() => string), pos?: number) {
+    if (!pred) throw this.error(typeof msg === 'function' ? msg() : msg, pos)
   }
 
   snapshot (begin: number = this.p) {
-    return JSON.stringify(ellipsis(this.input.slice(begin), 16))
+    return JSON.stringify(ellipsis(this.input.slice(begin, this.N), 32))
   }
 
   /**
@@ -212,7 +230,7 @@ export class Tokenizer {
   readIdentifier (): IdentifierToken {
     this.skipBlank()
     const begin = this.p
-    while (this.peekType() & IDENTIFIER) ++this.p
+    while (!this.end() && this.peekType() & IDENTIFIER) ++this.p
     return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
@@ -250,7 +268,7 @@ export class Tokenizer {
   }
 
   remaining () {
-    return this.input.slice(this.p)
+    return this.input.slice(this.p, this.N)
   }
 
   advance (i = 1) {
@@ -323,7 +341,7 @@ export class Tokenizer {
 
   readValueOrThrow (): ValueToken {
     const value = this.readValue()
-    assert(value, () => `unexpected token ${this.snapshot()}, value expected`)
+    this.assert(value, () => `unexpected token ${this.snapshot()}, value expected`)
     return value!
   }
 
@@ -372,8 +390,8 @@ export class Tokenizer {
     return TYPES[this.input.charCodeAt(this.p + n)]
   }
 
-  peek (n = 0) {
-    return this.input[this.p + n]
+  peek (n = 0): string {
+    return this.p + n >= this.N ? '' : this.input[this.p + n]
   }
 
   skipBlank () {

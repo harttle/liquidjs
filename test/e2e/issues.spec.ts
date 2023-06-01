@@ -254,7 +254,7 @@ describe('Issues', function () {
   })
   it('#519 should throw parse error for invalid assign expression', () => {
     const engine = new Liquid()
-    expect(() => engine.parse('{% assign headshot = https://testurl.com/not_enclosed_in_quotes.jpg %}')).toThrow(/unexpected token at ":/)
+    expect(() => engine.parse('{% assign headshot = https://testurl.com/not_enclosed_in_quotes.jpg %}')).toThrow(/expected "|" before filter, line:1, col:27/)
   })
   it('#527 export Liquid Expression', () => {
     const tokenizer = new Tokenizer('a > b')

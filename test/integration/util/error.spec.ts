@@ -25,11 +25,12 @@ describe('error', function () {
         '   1| 1st',
         '   2| 2nd',
         '>> 3| X{% . a %} Y',
+        '          ^',
         '   4| 4th',
         'TokenizationError'
       ]
       await expect(engine.parseAndRender(html.join('\n'))).rejects.toMatchObject({
-        message: 'illegal tag syntax, line:3, col:2',
+        message: 'illegal tag syntax, tag name expected, line:3, col:5',
         stack: expect.stringContaining(message.join('\n')),
         name: 'TokenizationError'
       })
@@ -61,7 +62,7 @@ describe('error', function () {
     it('should throw error with [line, col] if tag unmatched', async function () {
       await expect(engine.parseAndRender('1\n2\nfoo{% assign a = 4 }\n4')).rejects.toMatchObject({
         name: 'TokenizationError',
-        message: 'tag "{% assign a =..." not closed, line:3, col:4'
+        message: 'tag "{% assign a = 4 }\\n4" not closed, line:3, col:4'
       })
     })
   })
@@ -122,6 +123,7 @@ describe('error', function () {
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
+        '       ^',
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
@@ -150,6 +152,7 @@ describe('error', function () {
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
+        '       ^',
         '   5| 5th',
         '   6| {%block%}{%endblock%}',
         '   7| 7th',
@@ -171,6 +174,7 @@ describe('error', function () {
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
+        '       ^',
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
@@ -207,9 +211,15 @@ describe('error', function () {
       })
     })
     it('should throw ParseError when tag not closed', async function () {
-      await expect(engine.parseAndRender('{% if %}')).rejects.toMatchObject({
+      await expect(engine.parseAndRender('{% if true %}')).rejects.toMatchObject({
         name: 'ParseError',
-        message: expect.stringContaining('tag {% if %} not closed')
+        message: expect.stringContaining('tag {% if true %} not closed')
+      })
+    })
+    it('should throw ParseError when tag value not specified', async function () {
+      await expect(engine.parseAndRender('{% if %}{% endif %}')).rejects.toMatchObject({
+        name: 'TokenizationError',
+        message: 'invalid value expression: "", line:1, col:1'
       })
     })
     it('should throw ParseError when tag parse throws', async function () {
@@ -238,6 +248,7 @@ describe('error', function () {
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{% a %} {% enda %} Y',
+        '       ^',
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',
@@ -255,6 +266,7 @@ describe('error', function () {
       const message = [
         '   1| 1st',
         '>> 2| X{% a %} {% enda %} Y',
+        '       ^',
         '   3| 3rd',
         '   4| 4th',
         'ParseError: tag "a" not found'
@@ -300,6 +312,7 @@ describe('error', function () {
         '   2| 2nd',
         '   3| 3rd',
         '>> 4| X{%throwingTag%} Y',
+        '       ^',
         '   5| 5th',
         '   6| 6th',
         '   7| 7th',

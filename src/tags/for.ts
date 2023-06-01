@@ -1,4 +1,4 @@
-import { Hash, ValueToken, Liquid, Tag, Tokenizer, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { toEnumerable } from '../util/collection'
 import { ForloopDrop } from '../drop/forloop-drop'
 
@@ -15,17 +15,16 @@ export default class extends Tag {
 
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
-    const variable = tokenizer.readIdentifier()
-    const inStr = tokenizer.readIdentifier()
-    const collection = tokenizer.readValue()
+    const variable = this.tokenizer.readIdentifier()
+    const inStr = this.tokenizer.readIdentifier()
+    const collection = this.tokenizer.readValue()
     if (!variable.size() || inStr.content !== 'in' || !collection) {
       throw new Error(`illegal tag: ${token.getText()}`)
     }
 
     this.variable = variable.content
     this.collection = collection
-    this.hash = new Hash(tokenizer.remaining())
+    this.hash = new Hash(this.tokenizer.remaining())
     this.templates = []
     this.elseTemplates = []
 

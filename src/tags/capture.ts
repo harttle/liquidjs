@@ -1,4 +1,4 @@
-import { Liquid, Tag, Tokenizer, assert, Template, Context, TagToken, TopLevelToken } from '..'
+import { Liquid, Tag, Template, Context, TagToken, TopLevelToken } from '..'
 import { evalQuotedToken } from '../render'
 import { isTagToken } from '../util'
 
@@ -7,9 +7,7 @@ export default class extends Tag {
   templates: Template[] = []
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
-    const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
-    this.variable = readVariableName(tokenizer)!
-    assert(this.variable, () => `${tagToken.args} not valid identifier`)
+    this.variable = this.readVariableName()
 
     while (remainTokens.length) {
       const token = remainTokens.shift()!
@@ -23,11 +21,11 @@ export default class extends Tag {
     const html = yield r.renderTemplates(this.templates, ctx)
     ctx.bottom()[this.variable] = html
   }
-}
-
-function readVariableName (tokenizer: Tokenizer) {
-  const word = tokenizer.readIdentifier().content
-  if (word) return word
-  const quoted = tokenizer.readQuoted()
-  if (quoted) return evalQuotedToken(quoted)
+  private readVariableName () {
+    const word = this.tokenizer.readIdentifier().content
+    if (word) return word
+    const quoted = this.tokenizer.readQuoted()
+    if (quoted) return evalQuotedToken(quoted)
+    throw this.tokenizer.error('invalid capture name')
+  }
 }

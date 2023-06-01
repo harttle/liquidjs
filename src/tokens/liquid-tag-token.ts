@@ -1,11 +1,14 @@
 import { DelimitedToken } from './delimited-token'
-import { TokenizationError } from '../util'
 import { NormalizedFullOptions } from '../liquid-options'
 import { Tokenizer, TokenKind } from '../parser'
 
+/**
+ * LiquidTagToken is different from TagToken by not having delimiters `{%` or `%}`
+ */
 export class LiquidTagToken extends DelimitedToken {
   public name: string
   public args: string
+  public tokenizer: Tokenizer
   public constructor (
     input: string,
     begin: number,
@@ -13,20 +16,13 @@ export class LiquidTagToken extends DelimitedToken {
     options: NormalizedFullOptions,
     file?: string
   ) {
-    const value = input.slice(begin, end)
-    super(TokenKind.Tag, value, input, begin, end, false, false, file)
+    super(TokenKind.Tag, [begin, end], input, begin, end, false, false, file)
 
-    if (!/\S/.test(value)) {
-      // A line that contains only whitespace.
-      this.name = ''
-      this.args = ''
-    } else {
-      const tokenizer = new Tokenizer(this.content, options.operators)
-      this.name = tokenizer.readTagName()
-      if (!this.name) throw new TokenizationError(`illegal liquid tag syntax`, this)
+    this.tokenizer = new Tokenizer(input, options.operators, file, this.contentRange)
+    this.name = this.tokenizer.readTagName()
+    this.tokenizer.assert(this.name, 'illegal liquid tag syntax')
 
-      tokenizer.skipBlank()
-      this.args = tokenizer.remaining()
-    }
+    this.tokenizer.skipBlank()
+    this.args = this.tokenizer.remaining()
   }
 }

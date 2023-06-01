@@ -1,12 +1,11 @@
 import { isNumber, stringify } from '../util'
-import { Tag, Liquid, TopLevelToken, Tokenizer, Emitter, TagToken, Context } from '..'
+import { Tag, Liquid, TopLevelToken, Emitter, TagToken, Context } from '..'
 
 export default class extends Tag {
   private variable: string
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
-    this.variable = tokenizer.readIdentifier().content
+    this.variable = this.tokenizer.readIdentifier().content
   }
   render (context: Context, emitter: Emitter) {
     const scope = context.environments

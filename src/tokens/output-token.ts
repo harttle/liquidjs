@@ -11,7 +11,7 @@ export class OutputToken extends DelimitedToken {
     file?: string
   ) {
     const { trimOutputLeft, trimOutputRight, outputDelimiterLeft, outputDelimiterRight } = options
-    const value = input.slice(begin + outputDelimiterLeft.length, end - outputDelimiterRight.length)
-    super(TokenKind.Output, value, input, begin, end, trimOutputLeft, trimOutputRight, file)
+    const valueRange: [number, number] = [begin + outputDelimiterLeft.length, end - outputDelimiterRight.length]
+    super(TokenKind.Output, valueRange, input, begin, end, trimOutputLeft, trimOutputRight, file)
   }
 }

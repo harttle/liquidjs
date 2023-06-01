@@ -24,6 +24,7 @@
     "postversion": "npm run build:dist",
     "build": "npm run build:dist && npm run build:docs",
     "build:dist": "rollup -c rollup.config.mjs",
+    "build:cjs": "BUNDLES=cjs rollup -c rollup.config.mjs",
     "build:docs": "bin/build-docs.sh"
   },
   "bin": {

@@ -42,8 +42,8 @@ describe('tags/render', function () {
       '/parent.html': '{%render%}'
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
-      expect(e.name).toBe('ParseError')
-      expect(e.message).toMatch(/illegal argument ""/)
+      expect(e.name).toBe('TokenizationError')
+      expect(e.message).toMatch(/illegal file path/)
     })
   })
 
@@ -53,7 +53,7 @@ describe('tags/render', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).toBe('RenderError')
-      expect(e.message).toMatch(/illegal filename "undefined"/)
+      expect(e.message).toMatch(/illegal file path/)
     })
   })
 

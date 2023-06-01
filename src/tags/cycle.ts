@@ -1,27 +1,26 @@
-import { Tokenizer, assert, TopLevelToken, Liquid, ValueToken, evalToken, Emitter, TagToken, Context, Tag } from '..'
+import { TopLevelToken, Liquid, ValueToken, evalToken, Emitter, TagToken, Context, Tag } from '..'
 
 export default class extends Tag {
   private candidates: ValueToken[] = []
   private group?: ValueToken
-  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
-    super(tagToken, remainTokens, liquid)
-    const tokenizer = new Tokenizer(tagToken.args, this.liquid.options.operators)
-    const group = tokenizer.readValue()
-    tokenizer.skipBlank()
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+    super(token, remainTokens, liquid)
+    const group = this.tokenizer.readValue()
+    this.tokenizer.skipBlank()
 
     if (group) {
-      if (tokenizer.peek() === ':') {
+      if (this.tokenizer.peek() === ':') {
         this.group = group
-        tokenizer.advance()
+        this.tokenizer.advance()
       } else this.candidates.push(group)
     }
 
-    while (!tokenizer.end()) {
-      const value = tokenizer.readValue()
+    while (!this.tokenizer.end()) {
+      const value = this.tokenizer.readValue()
       if (value) this.candidates.push(value)
-      tokenizer.readTo(',')
+      this.tokenizer.readTo(',')
     }
-    assert(this.candidates.length, () => `empty candidates: ${tagToken.getText()}`)
+    this.tokenizer.assert(this.candidates.length, () => `empty candidates: "${token.getText()}"`)
   }
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {

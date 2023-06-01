@@ -5,6 +5,7 @@ import { TopLevelToken, OutputToken } from '../tokens'
 import { Template, Output, HTML } from '../template'
 import { LiquidCache } from '../cache'
 import { FS, Loader, LookupType } from '../fs'
+import { LiquidError } from '../util/error'
 import type { Liquid } from '../liquid'
 
 export class Parser {
@@ -47,6 +48,7 @@ export class Parser {
       }
       return new HTML(token)
     } catch (e) {
+      if (e instanceof LiquidError) throw e
       throw new ParseError(e as Error, token)
     }
   }

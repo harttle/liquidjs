@@ -11,7 +11,7 @@ describe('tags/cycle', function () {
 
   it('should throw when cycle candidates empty', function () {
     return expect(liquid.parseAndRender('{%cycle%}'))
-      .rejects.toThrow(/empty candidates/)
+      .rejects.toThrow('empty candidates: "{%cycle%}", line:1, col:8')
   })
 
   it('should support cycle in for block', async function () {
