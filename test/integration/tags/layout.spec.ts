@@ -23,8 +23,8 @@ describe('tags/layout', function () {
       '/parent.html': '{%layout%}'
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
-      expect(e.name).toBe('ParseError')
-      expect(e.message).toMatch(/illegal argument ""/)
+      expect(e.name).toBe('TokenizationError')
+      expect(e.message).toMatch(/illegal file path/)
     })
   })
   it('should throw when filename resolved to falsy', function () {
@@ -33,7 +33,7 @@ describe('tags/layout', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).toBe('RenderError')
-      expect(e.message).toContain('illegal filename "undefined"')
+      expect(e.message).toContain('illegal file path')
     })
   })
   it('should handle layout none', async function () {

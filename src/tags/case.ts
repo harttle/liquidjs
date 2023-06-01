@@ -1,4 +1,4 @@
-import { ValueToken, Liquid, Tokenizer, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
+import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 
 export default class extends Tag {
   value: Value
@@ -6,7 +6,7 @@ export default class extends Tag {
   elseTemplates: Template[] = []
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
-    this.value = new Value(tagToken.args, this.liquid)
+    this.value = new Value(this.tokenizer.readFilteredValue(), this.liquid)
     this.elseTemplates = []
 
     let p: Template[] = []
@@ -14,11 +14,10 @@ export default class extends Tag {
       .on('tag:when', (token: TagToken) => {
         p = []
 
-        const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
         const values: ValueToken[] = []
-        while (!tokenizer.end()) {
-          values.push(tokenizer.readValueOrThrow())
-          tokenizer.readTo(',')
+        while (!token.tokenizer.end()) {
+          values.push(token.tokenizer.readValueOrThrow())
+          token.tokenizer.readTo(',')
         }
         this.branches.push({
           values,

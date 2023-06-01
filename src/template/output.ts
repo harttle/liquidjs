@@ -3,6 +3,7 @@ import { Template, TemplateImpl } from '../template'
 import { Context } from '../context/context'
 import { Emitter } from '../emitters/emitter'
 import { OutputToken } from '../tokens/output-token'
+import { Tokenizer } from '../parser'
 import { Liquid } from '../liquid'
 import { Filter } from './filter'
 
@@ -10,7 +11,8 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   value: Value
   public constructor (token: OutputToken, liquid: Liquid) {
     super(token)
-    this.value = new Value(token.content, liquid)
+    const tokenizer = new Tokenizer(token.input, liquid.options.operators, token.file, token.contentRange)
+    this.value = new Value(tokenizer.readFilteredValue(), liquid)
     const filters = this.value.filters
     const outputEscape = liquid.options.outputEscape
     if (!filters[filters.length - 1]?.raw && outputEscape) {

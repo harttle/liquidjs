@@ -64,6 +64,8 @@
       <td align="center" valign="top" width="0%"><a href="http://slavv.com/"><img src="https://avatars.githubusercontent.com/u/713329?v=4?s=100" width="100px;" alt="Slav Ivanov"/></a></td>
       <td align="center" valign="top" width="0%"><a href="http://www.orgflow.io/"><img src="https://avatars.githubusercontent.com/u/3889090?v=4?s=100" width="100px;" alt="Daniel Rosenberg"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://github.com/bobgubko"><img src="https://avatars.githubusercontent.com/u/733312?v=4?s=100" width="100px;" alt="bobgubko"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://github.com/bangank36"><img src="https://avatars.githubusercontent.com/u/10071857?v=4?s=100" width="100px;" alt="BaNgan"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://github.com/mahyar-pasarzangene"><img src="https://avatars.githubusercontent.com/u/16485039?v=4?s=100" width="100px;" alt="Mahyar Pasarzangene"/></a></td>
     </tr>
   </tbody>
 </table>

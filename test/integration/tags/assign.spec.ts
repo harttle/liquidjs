@@ -1,12 +1,12 @@
 import { Liquid } from '../../../src/liquid'
-import { ParseError } from '../../../src'
+import { TokenizationError } from '../../../src'
 
 describe('tags/assign', function () {
   const liquid = new Liquid()
   it('should throw when variable name illegal', function () {
     const src = '{% assign / %}'
     const ctx = {}
-    return expect(liquid.parseAndRender(src, ctx)).rejects.toThrow(/illegal/)
+    return expect(liquid.parseAndRender(src, ctx)).rejects.toThrow(/expected variable name/)
   })
   it('should support assign to a string', async function () {
     const src = '{% assign foo="bar" %}{{foo}}'
@@ -15,8 +15,8 @@ describe('tags/assign', function () {
   })
   it('should throw when variable value illegal', function () {
     const src = '{% assign foo = “bar” %}'
-    expect(() => liquid.parse(src)).toThrow(/unexpected token at "“bar”"/)
-    expect(() => liquid.parse(src)).toThrow(ParseError)
+    expect(() => liquid.parse(src)).toThrow(/invalid value expression: "“bar”"/)
+    expect(() => liquid.parse(src)).toThrow(TokenizationError)
   })
   it('should support assign to a number', async function () {
     const src = '{% assign foo=10086 %}{{foo}}'

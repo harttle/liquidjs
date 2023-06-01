@@ -89,13 +89,9 @@ export function uniq<T> (arr: T[]): T[] {
   })
 }
 
-export function sample<T> (v: T[] | string, count: number | undefined = undefined): T[] | string {
+export function sample<T> (v: T[] | string, count: number | undefined = undefined): (T | string)[] {
   v = toValue(v)
   if (isNil(v)) return []
-  if (!isArray(v)) {
-    v = stringify(v)
-    return [...v].sort(() => Math.random()).slice(0, count).join('')
-  }
-
+  if (!isArray(v)) v = stringify(v)
   return [...v].sort(() => Math.random()).slice(0, count)
 }

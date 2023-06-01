@@ -1,4 +1,4 @@
-import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, Tokenizer, evalToken, Hash, Emitter, TagToken, Context } from '..'
+import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
 import { BlockMode, Scope } from '../context'
 import { parseFilePath, renderFilePath } from './render'
 
@@ -7,8 +7,7 @@ export default class extends Tag {
   private hash: Hash
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
-    const args = token.args
-    const tokenizer = new Tokenizer(args, this.liquid.options.operators)
+    const { tokenizer } = token
     this['file'] = parseFilePath(tokenizer, this.liquid)
     this['currentFile'] = token.file
 
@@ -27,7 +26,7 @@ export default class extends Tag {
     const { liquid, hash, withVar } = this
     const { renderer } = liquid
     const filepath = (yield renderFilePath(this['file'], ctx, liquid)) as string
-    assert(filepath, () => `illegal filename "${filepath}"`)
+    assert(filepath, () => `illegal file path "${filepath}"`)
 
     const saved = ctx.saveRegister('blocks', 'blockMode')
     ctx.setRegister('blocks', {})

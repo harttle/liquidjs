@@ -30,6 +30,9 @@ export class Expression {
     }
     return operands[0]
   }
+  public valid () {
+    return !!this.postfix.length
+  }
 }
 
 export function * evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {

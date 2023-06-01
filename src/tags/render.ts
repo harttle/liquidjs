@@ -11,8 +11,7 @@ export default class extends Tag {
   private hash: Hash
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
-    const args = token.args
-    const tokenizer = new Tokenizer(args, this.liquid.options.operators)
+    const tokenizer = this.tokenizer
     this.file = parseFilePath(tokenizer, this.liquid)
     this.currentFile = token.file
     while (!tokenizer.end()) {
@@ -50,7 +49,7 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const { liquid, hash } = this
     const filepath = (yield renderFilePath(this['file'], ctx, liquid)) as string
-    assert(filepath, () => `illegal filename "${filepath}"`)
+    assert(filepath, () => `illegal file path "${filepath}"`)
 
     const childCtx = new Context({}, ctx.opts, { sync: ctx.sync, globals: ctx.globals, strictVariables: ctx.strictVariables })
     const scope = childCtx.bottom()
@@ -86,8 +85,8 @@ export default class extends Tag {
 export function parseFilePath (tokenizer: Tokenizer, liquid: Liquid): ParsedFileName {
   if (liquid.options.dynamicPartials) {
     const file = tokenizer.readValue()
-    if (file === undefined) throw new TypeError(`illegal argument "${tokenizer.input}"`)
-    if (file.getText() === 'none') return
+    tokenizer.assert(file, 'illegal file path')
+    if (file!.getText() === 'none') return
     if (TypeGuards.isQuotedToken(file)) {
       // for filenames like "files/{{file}}", eval as liquid template
       const templates = liquid.parse(evalQuotedToken(file))

@@ -118,7 +118,7 @@ describe('Tokenizer', function () {
     it('should throw when {% raw %} not closed', function () {
       const html = '{%raw%} {%endraw {%raw%}'
       const tokenizer = new Tokenizer(html)
-      expect(() => tokenizer.readTopLevelTokens()).toThrow('raw "{%raw%} {%end..." not closed, line:1, col:8')
+      expect(() => tokenizer.readTopLevelTokens()).toThrow('raw "{%raw%} {%endraw {%raw%}" not closed, line:1, col:8')
     })
     it('should read output token', function () {
       const html = '<p>{{foo | date: "%Y-%m-%d"}}</p>'
@@ -191,7 +191,7 @@ describe('Tokenizer', function () {
     it('should throw if tag not closed', function () {
       const html = '{% assign foo = bar {{foo}}'
       const tokenizer = new Tokenizer(html)
-      expect(() => tokenizer.readTopLevelTokens()).toThrow(/tag "{% assign foo..." not closed/)
+      expect(() => tokenizer.readTopLevelTokens()).toThrow('tag "{% assign foo = bar {{foo}}" not closed, line:1, col:1')
     })
     it('should throw if output not closed', function () {
       const tokenizer = new Tokenizer('{{name}')

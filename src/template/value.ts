@@ -2,6 +2,7 @@ import { Filter } from './filter'
 import { Expression } from '../render'
 import { Tokenizer } from '../parser'
 import { assert } from '../util'
+import type { FilteredValueToken } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
 
@@ -12,10 +13,12 @@ export class Value {
   /**
    * @param str the value to be valuated, eg.: "foobar" | truncate: 3
    */
-  public constructor (str: string, liquid: Liquid) {
-    const tokenizer = new Tokenizer(str, liquid.options.operators)
-    this.initial = tokenizer.readExpression()
-    this.filters = tokenizer.readFilters().map(({ name, args }) => new Filter(name, this.getFilter(liquid, name), args, liquid))
+  public constructor (input: string | FilteredValueToken, liquid: Liquid) {
+    const token: FilteredValueToken = typeof input === 'string'
+      ? new Tokenizer(input, liquid.options.operators).readFilteredValue()
+      : input
+    this.initial = token.initial
+    this.filters = token.filters.map(({ name, args }) => new Filter(name, this.getFilter(liquid, name), args, liquid))
   }
   public * value (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {
     lenient = lenient || (ctx.opts.lenientIf && this.filters.length > 0 && this.filters[0].name === 'default')

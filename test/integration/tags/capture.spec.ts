@@ -26,7 +26,7 @@ describe('tags/capture', function () {
   it('should throw on invalid identifier', function () {
     const src = '{% capture = %}{%endcapture%}'
     return expect(liquid.parseAndRender(src))
-      .rejects.toThrow(/= not valid identifier/)
+      .rejects.toThrow('invalid capture name, line:1, col:12')
   })
 
   it('should throw when capture not closed', function () {

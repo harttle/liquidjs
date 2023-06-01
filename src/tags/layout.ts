@@ -1,4 +1,4 @@
-import { Scope, Template, Liquid, Tag, assert, Tokenizer, Emitter, Hash, TagToken, TopLevelToken, Context } from '..'
+import { Scope, Template, Liquid, Tag, assert, Emitter, Hash, TagToken, TopLevelToken, Context } from '..'
 import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
@@ -9,10 +9,9 @@ export default class extends Tag {
   file?: ParsedFileName
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
-    const tokenizer = new Tokenizer(token.args, this.liquid.options.operators)
-    this.file = parseFilePath(tokenizer, this.liquid)
+    this.file = parseFilePath(this.tokenizer, this.liquid)
     this['currentFile'] = token.file
-    this.args = new Hash(tokenizer.remaining())
+    this.args = new Hash(this.tokenizer.remaining())
     this.templates = this.liquid.parser.parseTokens(remainTokens)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
@@ -24,7 +23,7 @@ export default class extends Tag {
       return
     }
     const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
-    assert(filepath, () => `illegal filename "${filepath}"`)
+    assert(filepath, () => `illegal file path "${filepath}"`)
     const templates = (yield liquid._parseLayoutFile(filepath, ctx.sync, this['currentFile'])) as Template[]
 
     // render remaining contents and store rendered results

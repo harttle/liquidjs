@@ -3,27 +3,32 @@ import { Token } from '../tokens/token'
 import { Template } from '../template/template'
 
 export abstract class LiquidError extends Error {
-  private token: Token
-  public context: string
-  private originalError: Error
-  public constructor (err: Error, token: Token) {
-    super(err.message)
-    this.originalError = err
-    this.token = token
-    this.context = ''
+  private token!: Token
+  public context = ''
+  private originalError?: Error
+  public constructor (err: Error | string, token: Token) {
+    super(typeof err === 'string' ? err : err.message)
+    if (typeof err !== 'string') this.defineUnEnumerable('originalError', err)
+    this.defineUnEnumerable('token', token)
+  }
+  private defineUnEnumerable (property: string, value: unknown) {
+    Object.defineProperty(this, property, {
+      value: value,
+      enumerable: false
+    })
   }
   protected update () {
-    const err = this.originalError
-    this.context = mkContext(this.token)
-    this.message = mkMessage(err.message, this.token)
+    this.defineUnEnumerable('context', mkContext(this.token))
+    this.message = mkMessage(this.message, this.token)
     this.stack = this.message + '\n' + this.context +
-      '\n' + this.stack + '\nFrom ' + err.stack
+      '\n' + this.stack
+    if (this.originalError) this.stack += '\nFrom ' + this.originalError.stack
   }
 }
 
 export class TokenizationError extends LiquidError {
   public constructor (message: string, token: Token) {
-    super(new Error(message), token)
+    super(message, token)
     this.name = 'TokenizationError'
     super.update()
   }
@@ -80,7 +85,7 @@ export class AssertionError extends Error {
 }
 
 function mkContext (token: Token) {
-  const [line] = token.getPosition()
+  const [line, col] = token.getPosition()
   const lines = token.input.split('\n')
   const begin = Math.max(line - 2, 1)
   const end = Math.min(line + 3, lines.length)
@@ -88,10 +93,17 @@ function mkContext (token: Token) {
   const context = _
     .range(begin, end + 1)
     .map(lineNumber => {
-      const indicator = (lineNumber === line) ? '>> ' : '   '
+      const rowIndicator = (lineNumber === line) ? '>> ' : '   '
       const num = _.padStart(String(lineNumber), String(end).length)
-      const text = lines[lineNumber - 1]
-      return `${indicator}${num}| ${text}`
+      let text = `${rowIndicator}${num}| `
+
+      const colIndicator = lineNumber === line
+        ? '\n' + _.padStart('^', col + text.length)
+        : ''
+
+      text += lines[lineNumber - 1]
+      text += colIndicator
+      return text
     })
     .join('\n')
 

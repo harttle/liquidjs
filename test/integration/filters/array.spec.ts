@@ -22,7 +22,7 @@ describe('filters/array', function () {
     it('should throw when comma missing', async () => {
       const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
         '{{ beatles | join " and " }}'
-      return expect(render(src)).rejects.toThrow('unexpected token at "\\" and \\"", line:1, col:65')
+      return expect(render(src)).rejects.toThrow('expected ":" after filter name, line:1, col:83')
     })
   })
   describe('last', () => {
@@ -137,6 +137,14 @@ describe('filters/array', function () {
     it('should return partial array sample', () => test(
       '{{ "hello,world" | split: "," | sample: 1 | size }}',
       '1'
+    ))
+    it('should sample nil value', () => test(
+      '{{ nil | sample: 2 }}',
+      ''
+    ))
+    it('should sample string characters', () => test(
+      '{{ "aaa" | sample: 2 }}',
+      'aa'
     ))
   })
   describe('size', function () {
