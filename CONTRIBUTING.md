@@ -29,3 +29,36 @@
   - `git commit -m "feat: Adding my change"`
   - `git push`
   - Go to GitHub and find your fork, open a PR against the upstream from it
+
+## Playground
+
+The Playground runs off the `docs` directory.
+`npm run:docs` is used to build it and that's included in `npm run build`.
+
+To start the site locally, go to `docs` and run `npm start`, then visit
+http://localhost:4000/playground.html.
+
+At the moment, the Playground uses the latest NPM version of the LiquidJS
+library instead of using the built artifact produced by `npm run build:dist`
+(also included in `npm run build`).
+
+To use the Playground with the local build of the library, make these changes:
+
+- Copy `dist/liquid.browser.min.js` to `docs/public/js/liquid.browser.min.js`
+- Open `docs/themes/navy/layout/partial/after_footer.swig`
+- Remove `https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js` line
+- Add `{{ js('liquid.browser.min.js') }}` line before `{{ js('js/main') }}` line
+- Refresh the Playground site for the changes to take effect
+- Replace `liquid.browser.min.js` each time after making changes and building
+
+```diff
+ {% if page.layout === 'playground' %}
+-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.4.8/src-min/ace.js"></script>
+ {% endif %}
+ 
++{{ js('js/liquid.browser.min.js') }}
+ {{ js('js/main') }}
+ 
+ <script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+```
