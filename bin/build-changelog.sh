@@ -20,12 +20,7 @@ sedi \
   source/tutorials/changelog.md
 cp source/tutorials/changelog.md source/zh-cn/tutorials/changelog.md
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  sed -i '' -e '1i\
+sedi -e '1i\
  ---\ntitle: Changelog\nauto: true\n---\n' source/tutorials/changelog.md
-  sed -i '' -e '1i\
+sedi -e '1i\
  ---\ntitle: 更新日志\nauto: true\n---\n' source/zh-cn/tutorials/changelog.md
-else
-  sed -i '1i ---\ntitle: Changelog\nauto: true\n---\n' source/tutorials/changelog.md
-  sed -i '1i ---\ntitle: 更新日志\nauto: true\n---\n' source/zh-cn/tutorials/changelog.md
-fi
