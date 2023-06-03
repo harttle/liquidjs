@@ -8,17 +8,11 @@ Starring LiquidJS is the most important and easiest way to support us: boost its
 
 ## Show Me Your Code
 
-**Code Style**: LiquidJS applies [standard](https://github.com/standard/eslint-config-standard) and [@typescript-eslint/recommended](https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/recommended.json) rules, make sure it's still valid before commit:
+Getting started and building is described in [CONTRIBUTING.md](https://github.com/harttle/liquidjs/blob/master/CONTRIBUTING.md).
 
-```bash
-npm run lint
-```
+**Code Style**: LiquidJS applies [standard](https://github.com/standard/eslint-config-standard) and [@typescript-eslint/recommended](https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/recommended.json) rules.
 
-**Testing**: Make sure test cases pass with your patch merged:
-
-```bash
-npm test
-```
+**Testing**: Make sure test cases pass with your patch merged by running `npm test`
 
 **Commit Message**: Please align to [the Angular Commit Message Guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits), especially note the [type identifier](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type), on which semantic-release bot depends.
 
@@ -26,7 +20,7 @@ npm test
 
 ## Financial Support
 
-LiquidJS is Open Source and Free. To help it live and thrive, please consider contribute on [Open Collective][oc] or [Patreon][pt]. To acknowledge your contribution, your name and avatar will be listed here, on LiquidJS [homepage](https://liquidjs.com/) and on [Github README][liquidjs]. Please provide your Github ID by openning an issue or contacting me through Twitter (harttleharttle), I can help add you into [the contributors table](https://github.com/harttle/liquidjs#contributors-).
+LiquidJS is Open Source and Free. To help it live and thrive, please consider contribute on [Open Collective][oc]. To acknowledge your contribution, your name and avatar will be listed here, on LiquidJS [homepage](https://liquidjs.com/) and on [Github README][liquidjs]. Please provide your Github ID by openning an issue or contacting me through Twitter (harttleharttle), I can help add you into [the contributors table](https://github.com/harttle/liquidjs#contributors-).
 
 ### Backers
 If you personally like LiquidJS and find it's useful to you, you can become a backer!
@@ -38,8 +32,7 @@ If LiquidJS is benefiting your business/company, please sponsor us to make it be
 
 <object type="image/svg+xml" data="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72"></object>
 
-[oc]: https://opencollective.com/liquidjs/contribute/backer-ii-10666/checkout
-[pt]: https://www.patreon.com/harttle
+[oc]: https://opencollective.com/liquidjs/contribute/backer-10665/checkout
 [shopify/liquid]: https://shopify.github.io/liquid/
 [caniuse-promises]: http://caniuse.com/#feat=promises
 [pp]: https://github.com/taylorhakes/promise-polyfill
