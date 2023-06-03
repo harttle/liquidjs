@@ -1,3 +1,18 @@
+# [10.8.0](https://github.com/harttle/liquidjs/compare/v10.7.1...v10.8.0) (2023-06-03)
+
+
+### Bug Fixes
+
+* proper error message for filter syntax error, [#610](https://github.com/harttle/liquidjs/issues/610) ([0480d33](https://github.com/harttle/liquidjs/commit/0480d3317d0e46519ad2adf4ac43f53cddf467c6))
+* sed invocations to work out of the box on macOS ([#615](https://github.com/harttle/liquidjs/issues/615)) ([87d4cc7](https://github.com/harttle/liquidjs/commit/87d4cc7e14ece14161285a740be63afc8a88b63c))
+
+
+### Features
+
+* Add support for the Jekyll sample filter ([#612](https://github.com/harttle/liquidjs/issues/612)) ([ba8b842](https://github.com/harttle/liquidjs/commit/ba8b84245266589e43c0e70d99e12b981d349809))
+* introduce a matrix with latest Ubuntu and macOS to test the build on macOS as well ([82ba548](https://github.com/harttle/liquidjs/commit/82ba54845f4cd4e1e7660c1557e3cfaa22d68924)), closes [#615](https://github.com/harttle/liquidjs/issues/615)
+* precise line/col for tokenization Error, [#613](https://github.com/harttle/liquidjs/issues/613) ([e347e60](https://github.com/harttle/liquidjs/commit/e347e603d76c039cec191d417deab34e7ef1f9a7))
+
 ## [10.7.1](https://github.com/harttle/liquidjs/compare/v10.7.0...v10.7.1) (2023-04-24)
 
 
