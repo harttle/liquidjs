@@ -7,18 +7,16 @@ export abstract class LiquidError extends Error {
   public context = ''
   private originalError?: Error
   public constructor (err: Error | string, token: Token) {
+    /**
+     * note: for ES5 targeting, `this` will be replaced by return value of Error(),
+     * thus everything on `this` will be lost, avoid calling `LiquidError` methods here
+     */
     super(typeof err === 'string' ? err : err.message)
-    if (typeof err !== 'string') this.defineUnEnumerable('originalError', err)
-    this.defineUnEnumerable('token', token)
-  }
-  private defineUnEnumerable (property: string, value: unknown) {
-    Object.defineProperty(this, property, {
-      value: value,
-      enumerable: false
-    })
+    if (typeof err !== 'string') Object.defineProperty(this, 'originalError', { value: err, enumerable: false })
+    Object.defineProperty(this, 'token', { value: token, enumerable: false })
   }
   protected update () {
-    this.defineUnEnumerable('context', mkContext(this.token))
+    Object.defineProperty(this, 'context', { value: mkContext(this.token), enumerable: false })
     this.message = mkMessage(this.message, this.token)
     this.stack = this.message + '\n' + this.context +
       '\n' + this.stack
