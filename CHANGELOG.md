@@ -1,3 +1,10 @@
+## [10.8.1](https://github.com/harttle/liquidjs/compare/v10.8.0...v10.8.1) (2023-06-04)
+
+
+### Bug Fixes
+
+* incorrect error message for browser UMD bundle ([3a67eb7](https://github.com/harttle/liquidjs/commit/3a67eb7f1cc7e54d2ec94a985eca4c1f147cdd61))
+
 # [10.8.0](https://github.com/harttle/liquidjs/compare/v10.7.1...v10.8.0) (2023-06-03)
 
 
