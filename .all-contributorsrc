@@ -567,6 +567,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "TomasHubelbauer",
+      "name": "Tomáš Hübelbauer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6831144?v=4",
+      "profile": "https://hubelbauer.net/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
