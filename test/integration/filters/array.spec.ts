@@ -1,6 +1,8 @@
 import { test, render } from '../../stub/render'
+import { Liquid } from '../../../src/liquid'
 
 describe('filters/array', function () {
+  const engine = new Liquid()
   describe('index', function () {
     it('should support index', function () {
       const src = '{% assign beatles = "John, Paul, George, Ringo" | split: ", " %}' +
@@ -97,6 +99,10 @@ describe('filters/array', function () {
       const scope = { val: ['hey'], arg: 'foo' }
       await test('{{ val | push: arg | join: "," }}', scope, 'hey,foo')
     })
+    it('should not change original array', async () => {
+      const scope = { val: ['hey'], arg: 'foo' }
+      await test('{{ val | push: arg | join: "," }} {{ val | push: arg | join: "," }}', scope, 'hey,foo hey,foo')
+    })
     it('should support undefined left value', async () => {
       const scope = { arg: 'foo' }
       await test('{{ notDefined | push: arg | join: "," }}', scope, 'foo')
@@ -126,17 +132,18 @@ describe('filters/array', function () {
     })
   })
   describe('sample', function () {
-    it('should return full array sample', () => test(
-      '{{ "hello,world" | split: "," | sample | size }}',
-      '2'
-    ))
+    it('should return one item if count not specified', async () => {
+      const template = '{{ "hello,world" | split: "," | sample }}'
+      const result = await engine.parseAndRender(template)
+      expect(result).toMatch(/hello|world/)
+    })
     it('should return full array sample even if excess count', () => test(
       '{{ "hello,world" | split: "," | sample: 10 | size }}',
       '2'
     ))
     it('should return partial array sample', () => test(
       '{{ "hello,world" | split: "," | sample: 1 | size }}',
-      '1'
+      '5'
     ))
     it('should sample nil value', () => test(
       '{{ nil | sample: 2 }}',
