@@ -4,6 +4,8 @@
  * * prefer stringify() to String() since `undefined`, `null` should eval ''
  */
 import { assert, escapeRegExp, stringify } from '../util'
+import { marked } from 'marked'
+import { sanitize } from 'isomorphic-dompurify'
 
 export function append (v: string, arg: string) {
   assert(arguments.length === 2, 'append expect 2 arguments')
@@ -29,6 +31,10 @@ export function downcase (v: string) {
 
 export function upcase (str: string) {
   return stringify(str).toUpperCase()
+}
+
+export function markdownify (str: string) {
+  return sanitize(marked.parse(stringify(str) ?? ''))
 }
 
 export function remove (v: string, arg: string) {

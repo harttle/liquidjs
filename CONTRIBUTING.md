@@ -23,7 +23,17 @@
     If you want to check the commit message without using the VS Code Source
     Control UI, you can run `echo "feat: my commit message" > npx commitlint`
     directly.
-    
+  
+  - Ensue `package-lock.json` is using the lockfile format version 1
+
+    This only applies if your change introduces new NPM dependencies.
+    This package maintains compatibility with Node 14+ and the corresponding NPM
+    version.
+    If you are using newer Node/NPM version, it will likely create a lockfile v2
+    or v3.
+    Convert to lockfile v1 using the following command before creating a PR:
+    `npm install --lockfile-version 1 --package-lock-only`
+
   - `git switch -c your_branch_name` (do this in your fork not the main repo)
   - `git add .`
   - `git commit -m "feat: Adding my change"`

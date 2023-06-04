@@ -82,6 +82,11 @@ describe('filters/string', function () {
     it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
     it('should return empty for undefined', () => test('{{ foo | upcase }}', ''))
   })
+  describe('markdownify', function () {
+    it('should support markdownify', () => test('{{ "`code span` and *bold text*" | markdownify }}', '<p><code>code span</code> and <em>bold text</em></p>\n'))
+    it('should protect against cross-site scripting attacks', () => test('{{ "<img src=x onerror=alert(1)>" | markdownify }}', '<img src="x">'))
+    it('should return empty for undefined', () => test('{{ foo | markdownify }}', ''))
+  })
   it('should support lstrip', async () => {
     const src = '{{ "          So much room for activities!          " | lstrip }}'
     await test(src, 'So much room for activities!          ')
