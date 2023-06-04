@@ -1,0 +1,33 @@
+name: Performance Check
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+jobs:
+  performance:
+    name: Performance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-${{ inputs.os }}
+          path: dist
+      - name: Check Performance
+        run: npm run perf:diff
+      - name: Archive npm failure logs
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: npm-logs
+          path: ~/.npm/_logs

@@ -1,11 +1,16 @@
 {
+  "extends": ["../.eslintrc.json"],
   "env": {
     "mocha": true
   },
   "plugins": [
     "mocha"
   ],
+  "parserOptions": {
+    "project": "test/tsconfig.json"
+  },
   "rules": {
+    "deprecation/deprecation": "off",
     "@typescript-eslint/no-var-requires": "off",
     "no-unused-expressions": "off",
     "no-new": "off"

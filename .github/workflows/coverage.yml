@@ -1,8 +1,8 @@
-name: Docs
+name: Test Coverage
 on: [workflow_dispatch, workflow_call]
 jobs:
-  docs:
-    name: Docs
+  coverage:
+    name: Test Coverage
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -13,16 +13,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '14'
-      - name: Build
-        run: |
-          npm ci
-          npm run build:docs
-      - name: Publish
-        if: github.ref == 'refs/heads/master'
-        uses: JamesIves/github-pages-deploy-action@4.1.4
-        with: 
-          branch: gh-pages
-          folder: docs/public
+      - name: Install dependencies
+        run: npm ci
+      - name: Test
+        run: npm run test:coverage
+      - name: Coverage
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Archive npm failure logs
         uses: actions/upload-artifact@v3
         if: failure()

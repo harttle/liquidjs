@@ -1,0 +1,28 @@
+name: CI Build
+on:
+  push:
+    branches:
+      - 'master'
+      - 'test'
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    uses: ./.github/workflows/build.yml
+    with:
+      os: ${{ matrix.os }}
+  lint:
+    uses: ./.github/workflows/lint.yml
+  test:
+    needs: build
+    uses: ./.github/workflows/test.yml
+  coverage:
+    uses: ./.github/workflows/coverage.yml
+  performance:
+    needs: build
+    uses: ./.github/workflows/performance.yml
+    with:
+      os: ubuntu-latest
+  docs:
+    uses: ./.github/workflows/docs.yml

@@ -1,0 +1,40 @@
+name: Build
+on:
+  workflow_call:
+    inputs:
+      os:
+        required: true
+        type: string
+      bundles:
+        required: false
+        type: string
+env:
+  BUNDLES: ${{ inputs.bundles }}
+jobs:
+  build:
+    name: Build
+    runs-on: ${{ inputs.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-${{ inputs.os }}
+          path: dist
+      - name: Archive npm failure logs
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: npm-logs
+          path: ~/.npm/_logs
