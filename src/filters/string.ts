@@ -34,7 +34,7 @@ export function upcase (str: string) {
 }
 
 export function markdownify (str: string) {
-  return sanitize(marked.parse(stringify(str) ?? ''))
+  return sanitize(marked.parse(stringify(str)))
 }
 
 export function remove (v: string, arg: string) {
