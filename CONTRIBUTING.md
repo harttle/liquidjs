@@ -23,8 +23,8 @@
     If you want to check the commit message without using the VS Code Source
     Control UI, you can run `echo "feat: my commit message" > npx commitlint`
     directly.
-  
-  - Ensue `package-lock.json` is using the lockfile format version 1
+
+  - Ensure `package-lock.json` is using the lockfile format version 1
 
     This only applies if your change introduces new NPM dependencies.
     This package maintains compatibility with Node 14+ and the corresponding NPM
@@ -36,7 +36,7 @@
 
   - `git switch -c your_branch_name` (do this in your fork not the main repo)
   - `git add .`
-  - `git commit -m "feat: Adding my change"`
+  - `git commit -m "feat: adding my change"`
   - `git push`
   - Go to GitHub and find your fork, open a PR against the upstream from it
 
