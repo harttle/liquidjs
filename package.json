@@ -15,16 +15,16 @@
   },
   "scripts": {
     "lint": "eslint \"**/*.mjs\" \"**/*.ts\" .",
-    "check": "npm run build && npm test && npm run lint && npm run perf:diff",
-    "test": "jest --coverage",
+    "check": "npm run build && npm run build:docs && npm test && npm run lint && npm run perf:diff",
+    "test": "jest",
+    "test:coverage": "jest --coverage src test/integration",
     "test:e2e": "jest test/e2e",
-    "perf": "cd benchmark && npm ci && npm start",
     "perf:diff": "bin/perf-diff.sh",
     "perf:engines": "cd benchmark && npm run engines",
-    "postversion": "npm run build:dist",
-    "build": "npm run build:dist && npm run build:docs",
-    "build:dist": "rollup -c rollup.config.mjs",
+    "build": "rollup -c rollup.config.mjs",
     "build:cjs": "BUNDLES=cjs rollup -c rollup.config.mjs",
+    "build:min": "BUNDLES=min rollup -c rollup.config.mjs",
+    "build:umd": "BUNDLES=umd rollup -c rollup.config.mjs",
     "build:docs": "bin/build-docs.sh"
   },
   "bin": {

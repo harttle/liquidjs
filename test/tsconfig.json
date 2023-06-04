@@ -13,6 +13,5 @@
     "strict": true,
     "suppressImplicitAnyIndexErrors": true
   },
-  "all": true,
-  "exclude": [ "node_modules", "dist", "demo", "test" ]
+  "all": true
 }

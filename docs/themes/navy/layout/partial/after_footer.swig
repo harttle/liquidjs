@@ -1,5 +1,5 @@
 {% if page.layout === 'playground' %}
-<script src="https://cdn.jsdelivr.net/npm/liquidjs@latest/dist/liquid.browser.min.js"></script>
+{{ js('js/liquid.browser.min.js') }}
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/ace.js"></script>
 {% endif %}
 
