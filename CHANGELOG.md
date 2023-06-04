@@ -1,3 +1,10 @@
+## [10.8.2](https://github.com/harttle/liquidjs/compare/v10.8.1...v10.8.2) (2023-06-04)
+
+
+### Bug Fixes
+
+* sample filter randomness and count=1 case ([fcb930f](https://github.com/harttle/liquidjs/commit/fcb930f0ddf2489fa74cd323f24398d7e9f7717f))
+
 ## [10.8.1](https://github.com/harttle/liquidjs/compare/v10.8.0...v10.8.1) (2023-06-04)
 
 
