@@ -32,13 +32,30 @@ describe('util/strftime', function () {
       })
     })
     it('should format %q as date suffix', function () {
-      const st = new Date('2016-03-01 03:05:03')
-      const nd = new Date('2016-03-02 03:05:03')
-      const rd = new Date('2016-03-03 03:05:03')
-      expect(t(st, '%q')).toBe('st')
-      expect(t(nd, '%q')).toBe('nd')
-      expect(t(rd, '%q')).toBe('rd')
+      const first = new Date('2016-03-01 03:05:03')
+      const second = new Date('2016-03-02 03:05:03')
+      const third = new Date('2016-03-03 03:05:03')
+
+      const eleventh = new Date('2016-03-11 03:05:03')
+      const twelfth = new Date('2016-03-12 03:05:03')
+      const thirteenth = new Date('2016-03-13 03:05:03')
+
+      const twentyfirst = new Date('2016-03-21 03:05:03')
+      const twentysecond = new Date('2016-03-22 03:05:03')
+      const twentythird = new Date('2016-03-23 03:05:03')
+
+      expect(t(first, '%q')).toBe('st')
+      expect(t(second, '%q')).toBe('nd')
+      expect(t(third, '%q')).toBe('rd')
       expect(t(now, '%q')).toBe('th')
+
+      expect(t(eleventh, '%q')).toBe('th')
+      expect(t(twelfth, '%q')).toBe('th')
+      expect(t(thirteenth, '%q')).toBe('th')
+
+      expect(t(twentyfirst, '%q')).toBe('st')
+      expect(t(twentysecond, '%q')).toBe('nd')
+      expect(t(twentythird, '%q')).toBe('rd')
     })
   })
 
