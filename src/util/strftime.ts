@@ -11,12 +11,6 @@ const dayNames = [
 ]
 const monthNamesShort = monthNames.map(abbr)
 const dayNamesShort = dayNames.map(abbr)
-const suffixes = {
-  1: 'st',
-  2: 'nd',
-  3: 'rd',
-  'default': 'th'
-}
 interface FormatOptions {
   flags: object;
   width?: string;
@@ -52,9 +46,30 @@ function isLeapYear (d: LiquidDate) {
   return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)))
 }
 function getSuffix (d: LiquidDate) {
-  const str = d.getDate().toString()
-  const index = parseInt(str.slice(-1))
-  return suffixes[index] || suffixes['default']
+  const date = d.getDate()
+
+  let suffix = 'th'
+
+  switch (date) {
+    case 11:
+    case 12:
+    case 13:
+      break
+    default:
+      switch (date % 10) {
+        case 1:
+          suffix = 'st'
+          break
+        case 2:
+          suffix = 'nd'
+          break
+        case 3:
+          suffix = 'rd'
+          break
+      }
+  }
+
+  return suffix
 }
 function century (d: LiquidDate) {
   return parseInt(d.getFullYear().toString().substring(0, 2), 10)
