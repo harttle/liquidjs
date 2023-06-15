@@ -577,8 +577,18 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "jgarber623",
+      "name": "Jason Garber",
+      "avatar_url": "https://avatars.githubusercontent.com/u/73866?v=4",
+      "profile": "https://sixtwothree.org",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs"
 }
