@@ -1,3 +1,10 @@
+## [10.8.3](https://github.com/harttle/liquidjs/compare/v10.8.2...v10.8.3) (2023-06-16)
+
+
+### Bug Fixes
+
+* strftime getSuffix works for all dates ([0b4e2a9](https://github.com/harttle/liquidjs/commit/0b4e2a99790347bea0ab5f7d651f2330e3054601))
+
 ## [10.8.2](https://github.com/harttle/liquidjs/compare/v10.8.1...v10.8.2) (2023-06-04)
 
 
