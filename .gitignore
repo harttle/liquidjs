@@ -13,7 +13,6 @@ node_modules/
 # tmp
 docs/public/js/liquid.browser.min.js
 dist/
-demo/*/package-lock.json
 demo/*/yarn.json
 
 # editors

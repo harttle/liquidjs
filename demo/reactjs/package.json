@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "html-react-parser": "^0.4.7",
-    "liquidjs": "^9.1.0",
+    "liquidjs": "^10.8.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-promise": "^2.0.3",
