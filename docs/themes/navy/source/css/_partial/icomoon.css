@@ -34,9 +34,6 @@ i {
 .icon-opencollective:before {
   content: "\e903";
 }
-.icon-patreon:before {
-  content: "\e904";
-}
 .icon-search:before {
   content: "\f002";
 }
