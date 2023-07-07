@@ -1,3 +1,10 @@
+## [10.8.4](https://github.com/harttle/liquidjs/compare/v10.8.3...v10.8.4) (2023-07-07)
+
+
+### Bug Fixes
+
+* allow quotes in inline comment tag, fixes [#628](https://github.com/harttle/liquidjs/issues/628) ([bf425c3](https://github.com/harttle/liquidjs/commit/bf425c3adb929e68fa234bee8397560a436595bb))
+
 ## [10.8.3](https://github.com/harttle/liquidjs/compare/v10.8.2...v10.8.3) (2023-06-16)
 
 
