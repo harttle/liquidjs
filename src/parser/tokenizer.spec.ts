@@ -199,15 +199,6 @@ describe('Tokenizer', function () {
     })
   })
   describe('#readTagToken()', () => {
-    it('should skip quoted delimiters', function () {
-      const html = '{% assign a = "%} {% }} {{" %}'
-      const tokenizer = new Tokenizer(html)
-      const token = tokenizer.readTagToken()
-
-      expect(token).toBeInstanceOf(TagToken)
-      expect(token.name).toBe('assign')
-      expect(token.args).toBe('a = "%} {% }} {{"')
-    })
   })
   describe('#readOutputToken()', () => {
     it('should skip quoted delimiters', function () {

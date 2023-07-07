@@ -140,9 +140,10 @@ export class Tokenizer {
     return token
   }
 
-  readToDelimiter (delimiter: string) {
+  readToDelimiter (delimiter: string, respectQuoted = false) {
+    this.skipBlank()
     while (this.p < this.N) {
-      if ((this.peekType() & QUOTE)) {
+      if (respectQuoted && (this.peekType() & QUOTE)) {
         this.readQuoted()
         continue
       }
@@ -156,7 +157,7 @@ export class Tokenizer {
     const { file, input } = this
     const { outputDelimiterRight } = options
     const begin = this.p
-    if (this.readToDelimiter(outputDelimiterRight) === -1) {
+    if (this.readToDelimiter(outputDelimiterRight, true) === -1) {
       throw this.error(`output ${this.snapshot(begin)} not closed`, begin)
     }
     return new OutputToken(input, begin, this.p, options, file)

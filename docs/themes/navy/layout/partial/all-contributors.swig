@@ -67,6 +67,7 @@
       <td align="center" valign="top" width="0%"><a href="https://github.com/bangank36"><img src="https://avatars.githubusercontent.com/u/10071857?v=4?s=100" width="100px;" alt="BaNgan"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://github.com/mahyar-pasarzangene"><img src="https://avatars.githubusercontent.com/u/16485039?v=4?s=100" width="100px;" alt="Mahyar Pasarzangene"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://hubelbauer.net/"><img src="https://avatars.githubusercontent.com/u/6831144?v=4?s=100" width="100px;" alt="Tomáš Hübelbauer"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://sixtwothree.org"><img src="https://avatars.githubusercontent.com/u/73866?v=4?s=100" width="100px;" alt="Jason Garber"/></a></td>
     </tr>
   </tbody>
 </table>

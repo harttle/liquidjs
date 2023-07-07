@@ -17,6 +17,16 @@ describe('tags/inline-comment', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).toBe('foo')
   })
+  it('should allow single quotes', async function () {
+    const src = "B{% # that's %}A"
+    const html = await liquid.parseAndRender(src)
+    return expect(html).toBe('BA')
+  })
+  it('should allow double quotes', async function () {
+    const src = 'B{% # that"s %}A'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).toBe('BA')
+  })
   it('should handle hash without trailing whitespace', async function () {
     const src = '{% #some comment %}'
     const html = await liquid.parseAndRender(src)

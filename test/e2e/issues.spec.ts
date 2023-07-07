@@ -431,4 +431,27 @@ describe('Issues', function () {
     const fn = () => engine.parseAndRenderSync("{%- assign module = '' | split '' -%}")
     expect(fn).toThrow(/expected ":" after filter name/)
   })
+  it('#628 Single or double quote breaks comments', () => {
+    const template = `{%- liquid
+  # Show a message that's customized to the product type
+
+  assign product_type = product.type | downcase
+  assign message = ''
+
+  case product_type
+    when 'health'
+      assign message = 'This is a health potion!'
+    when 'love'
+      assign message = 'This is a love potion!'
+    else
+      assign message = 'This is a potion!'
+  endcase
+
+  echo message
+-%}`
+    const engine = new Liquid()
+    const product = { type: 'love' }
+    const result = engine.parseAndRenderSync(template, { product })
+    expect(result).toEqual('This is a love potion!')
+  })
 })
