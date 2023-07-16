@@ -20,7 +20,7 @@ Star 是支持 LiquidJS 最重要的方式，也是最简单的方式：通过�
 
 ## 资金支持
 
-LiquidJS 是开源和免费的，但支持 [Open Collective][oc] 赞助，作为感谢你的名字和头像（或 Logo）会展示在这里，[LiquidJS 首页](https://liquidjs.com/)和 [Github README][liquidjs]。
+LiquidJS 是开源和免费的，但支持 [Open Collective][oc] 和 [Github Sponsors](https://github.com/sponsors/harttle) 赞助，请通过 Twitter (harttleharttle) 或邮件 (harttleharttle at gmail) 联系我，把您加到 [贡献者列表](https://github.com/harttle/liquidjs#contributors-) 中。
 
 ### 支持者
 如果你喜欢 LiquidJS，希望支持我们，你可以成为 Open Collective Backer！

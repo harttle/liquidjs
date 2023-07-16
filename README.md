@@ -11,7 +11,7 @@ A simple, expressive and safe [Shopify][shopify/liquid] / Github Pages compatibl
 
 * [Documentation][doc]
 * Please star [LiquidJS on GitHub][github]!
-* Support [LiquidJS on Open Collective][oc] or [Patreon][patreon]
+* Financial support via [LiquidJS on Open Collective][oc], or [Github Sponsors](https://github.com/sponsors/harttle)
 
 <p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
 
@@ -57,15 +57,20 @@ For more details, refer to the [Setup Guide][setup].
 - [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
 - [Semgrep](https://github.com/returntocorp/semgrep): Lightweight static analysis for many languages.
 - [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
+- [Mitosis](https://github.com/BuilderIO/mitosis): Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more.
+- [Pattern Lab](https://patternlab.io/): a frontend workshop environment that helps you build, view, test, and showcase your design system's UI components.
+- [Builder.io](https://www.builder.io/m/developers): the first and only headless CMS with a visual editor that lets you drag and drop with your components, directly within your current site or app. Completely API-driven, for cleaner code and simpler workflows.
 - [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction): a secure, enterprise-grade, low-code software as a service (SaaS) platform for creating, hosting, and administering modern external-facing business websites.
 - [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal): an automatically generated, fully customizable website with the documentation of your APIs.
 
+Feel free to create a PR or contact me to add your use case into this list!
+
 ## Financial Support
 
-If you love LiquidJS or your company is using LiquidJS? Please consider [support us on Open Collective or Patreon][financial-support].
+If you love LiquidJS or your company is using LiquidJS, please consider [financial support][financial-support].
 
 ### Backers
-If you personally like LiquidJS and find it useful to you, you can buy me a coffee!
+If you personally like LiquidJS and find it useful to you, buy me a coffee!💖
 
 <img src="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72">
 
@@ -167,6 +172,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a><br /><a href="#financial-Checkout-Blocks" title="Financial">💵</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.dropkiq.com/"><img src="https://avatars.githubusercontent.com/u/69064?v=4?s=100" width="100px;" alt="Adam Darrah"/><br /><sub><b>Adam Darrah</b></sub></a><br /><a href="#financial-akdarrah" title="Financial">💵</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.11ty.dev/"><img src="https://avatars.githubusercontent.com/u/35147177?v=4?s=100" width="100px;" alt="Eleventy"/><br /><sub><b>Eleventy</b></sub></a><br /><a href="#financial-11ty" title="Financial">💵</a></td>
     </tr>
   </tbody>
 </table>
@@ -181,7 +187,6 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
 [setup]: https://liquidjs.com/tutorials/setup.html
 [doc]: https://liquidjs.com
 [github]: https://github.com/harttle/liquidjs
-[patreon]: https://www.patreon.com/harttle
 [oc]: https://opencollective.com/liquidjs/
 [contribution]: https://liquidjs.com/tutorials/contribution-guidelines.html
 [financial-support]: https://liquidjs.com/tutorials/contribution-guidelines.html#Financial-Support
