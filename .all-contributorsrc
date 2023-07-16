@@ -586,6 +586,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Checkout-Blocks",
+      "name": "Checkout Blocks",
+      "avatar_url": "https://avatars.githubusercontent.com/u/114603307?v=4",
+      "profile": "https://www.checkoutblocks.com/",
+      "contributions": [
+        "financial"
+      ]
+    },
+    {
+      "login": "akdarrah",
+      "name": "Adam Darrah",
+      "avatar_url": "https://avatars.githubusercontent.com/u/69064?v=4",
+      "profile": "https://www.dropkiq.com/",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,

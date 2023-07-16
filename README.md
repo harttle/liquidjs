@@ -50,12 +50,15 @@ npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
 
 For more details, refer to the [Setup Guide][setup].
 
-## Related Projects
+## Who's Using LiquidJS?
 
-* [@11ty/eleventy](https://www.npmjs.com/package/@11ty/eleventy): A simpler static site generator. An alternative to Jekyll. Written in JavaScript. Transforms a directory of templates (of varying types) into HTML.
-* [gulp-liquidjs](https://www.npmjs.com/package/@tuanpham-dev/gulp-liquidjs): A shopify compatible Liquid template engine for Gulp using liquidjs.
-* [grunt-liquify](https://www.npmjs.com/package/grunt-liquify): A Grunt task to process Liquid using liquidjs. Use it to add Liquid magic to your scripts and css assets.
-* [react-liquid](https://github.com/aquibm/react-liquid#readme): Liquid templating language component for React
+- [Eleventy](https://www.11ty.dev/): Eleventy, a simpler static site generator.
+- [Opensense](https://www.opensense.com/): The smarter way to send email.
+- [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
+- [Semgrep](https://github.com/returntocorp/semgrep): Lightweight static analysis for many languages.
+- [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
+- [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction): a secure, enterprise-grade, low-code software as a service (SaaS) platform for creating, hosting, and administering modern external-facing business websites.
+- [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal): an automatically generated, fully customizable website with the documentation of your APIs.
 
 ## Financial Support
 
@@ -160,6 +163,10 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mahyar-pasarzangene"><img src="https://avatars.githubusercontent.com/u/16485039?v=4?s=100" width="100px;" alt="Mahyar Pasarzangene"/><br /><sub><b>Mahyar Pasarzangene</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=mahyar-pasarzangene" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://hubelbauer.net/"><img src="https://avatars.githubusercontent.com/u/6831144?v=4?s=100" width="100px;" alt="Tomáš Hübelbauer"/><br /><sub><b>Tomáš Hübelbauer</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=TomasHubelbauer" title="Code">💻</a> <a href="https://github.com/harttle/liquidjs/commits?author=TomasHubelbauer" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sixtwothree.org"><img src="https://avatars.githubusercontent.com/u/73866?v=4?s=100" width="100px;" alt="Jason Garber"/><br /><sub><b>Jason Garber</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jgarber623" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a><br /><a href="#financial-Checkout-Blocks" title="Financial">💵</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.dropkiq.com/"><img src="https://avatars.githubusercontent.com/u/69064?v=4?s=100" width="100px;" alt="Adam Darrah"/><br /><sub><b>Adam Darrah</b></sub></a><br /><a href="#financial-akdarrah" title="Financial">💵</a></td>
     </tr>
   </tbody>
 </table>
