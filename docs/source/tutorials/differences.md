@@ -4,9 +4,9 @@ title: Differences with Shopify/liquid
 
 ## Compatibility
 
-Being compatible the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify, Jekyll and thus Github Pages, as you can see it's one of the most popular template engines in Ruby. There're lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
+Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus Github Pages). As you can see it's one of the most popular template engines in Ruby. There're lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
 
-So "being compatible" means serve developers from Shopify and Jekyll well:
+So "being compatible" means serving developers from Shopify and Jekyll well:
 
 - **Well-formed Liquid template should work just fine in LiquidJS**. For example, `forloop.index` should be 1-indexed, `nil` should be rendered as empty string rather than `undefined`, etc. Although some features (e.g. [#236][#236]) are not feasible in JavaScript, at least we're trying to implement all the semantics of Liquid language.
 - **All filters and tags in [shopify/liquid][ruby-liquid] are supposed to be built in LiquidJS**. But not those business-logic specific tags/filters typically defined by Shopify platform. Those features should be maintained as [plugins][plugins]. For filters/tags that are not business-logic specific, like `{% layout %}`, and extremely useful, feel free to file an issue.
