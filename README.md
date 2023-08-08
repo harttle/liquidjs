@@ -173,6 +173,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a><br /><a href="#financial-Checkout-Blocks" title="Financial">💵</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.dropkiq.com/"><img src="https://avatars.githubusercontent.com/u/69064?v=4?s=100" width="100px;" alt="Adam Darrah"/><br /><sub><b>Adam Darrah</b></sub></a><br /><a href="#financial-akdarrah" title="Financial">💵</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.11ty.dev/"><img src="https://avatars.githubusercontent.com/u/35147177?v=4?s=100" width="100px;" alt="Eleventy"/><br /><sub><b>Eleventy</b></sub></a><br /><a href="#financial-11ty" title="Financial">💵</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://nickreilingh.com/"><img src="https://avatars.githubusercontent.com/u/2458645?v=4?s=100" width="100px;" alt="Nick Reilingh"/><br /><sub><b>Nick Reilingh</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=NReilingh" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
