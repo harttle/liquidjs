@@ -203,6 +203,10 @@ describe('filters/string', function () {
       return test('{{ "I strained to see the train through the rain" | remove_last: "rain" }}',
         'I strained to see the train through the ')
     })
+    it('should remove the last occurrence of substring in the middle of a string', function () {
+      return test('{{ "I strained to see the train through the rain and fog" | remove_last: "rain" }}',
+        'I strained to see the train through the  and fog')
+    })
     it('should handle substring not found', function () {
       return test('{{ "I strained to see the train through the rain" | remove_last: "no such thing" }}',
         'I strained to see the train through the rain')
