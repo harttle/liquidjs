@@ -44,7 +44,7 @@ export function remove_last (v: string, l: string) {
   const pattern = String(l)
   const index = str.lastIndexOf(pattern)
   if (index === -1) return str
-  return str.substring(0, index) + str.substring(index + pattern.length + 1)
+  return str.substring(0, index) + str.substring(index + pattern.length)
 }
 
 export function rstrip (str: string, chars?: string) {
