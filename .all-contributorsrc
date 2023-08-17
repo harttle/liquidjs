@@ -622,6 +622,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "ebobby",
+      "name": "Francisco Soto",
+      "avatar_url": "https://avatars.githubusercontent.com/u/170356?v=4",
+      "profile": "http://ebobby.org",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
