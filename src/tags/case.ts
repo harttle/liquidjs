@@ -17,7 +17,12 @@ export default class extends Tag {
         const values: ValueToken[] = []
         while (!token.tokenizer.end()) {
           values.push(token.tokenizer.readValueOrThrow())
-          token.tokenizer.readTo(',')
+          token.tokenizer.skipBlank()
+          if (token.tokenizer.peek() === ',') {
+            token.tokenizer.readTo(',')
+          } else {
+            token.tokenizer.readTo('or')
+          }
         }
         this.branches.push({
           values,

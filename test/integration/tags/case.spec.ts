@@ -75,4 +75,20 @@ describe('tags/case', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).toBe('firstsecond')
   })
+  it('should support case with multiple values separated by or', async function () {
+    const src = '{% case 3 %}' +
+            '{% when 1 or 2 or 3 %}1 or 2 or 3' +
+            '{% else %}not 1 or 2 or 3' +
+            '{%endcase%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).toBe('1 or 2 or 3')
+  })
+  it('should support case with multiple strings separated by or', async function () {
+    const src = '{% case "or" %}' +
+            '{% when "and" or "or" %}and or or' +
+            '{% else %}not and or or' +
+            '{%endcase%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).toBe('and or or')
+  })
 })
