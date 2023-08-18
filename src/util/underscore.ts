@@ -63,6 +63,10 @@ export function isNil (value: any): boolean {
   return value == null
 }
 
+export function isUndefined (value: any): boolean {
+  return value === undefined
+}
+
 export function isArray (value: any): value is any[] {
   // be compatible with IE 8
   return toString.call(value) === '[object Array]'

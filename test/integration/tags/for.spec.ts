@@ -59,6 +59,12 @@ describe('tags/for', function () {
     const html = await liquid.parseAndRender(src, scope)
     return expect(html).toBe('str-"string"-string')
   })
+  it('should not report undefined variable on null value', async function () {
+    const engine = new Liquid({ strictVariables: true })
+    const src = '{% assign hello = "hello,world" | split: "," | concat: null %}{% for i in hello %}{{ i }},{% endfor %}'
+    const html = await engine.parseAndRender(src, scope)
+    return expect(html).toBe('hello,world,,')
+  })
   describe('illegal', function () {
     it('should reject when for not closed', function () {
       const src = '{%for c in alpha%}{{c}}'

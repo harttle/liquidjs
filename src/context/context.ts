@@ -2,7 +2,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
-import { isArray, isNil, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync } from '../util'
+import { isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync } from '../util'
 
 type PropertyKey = string | number;
 
@@ -80,7 +80,7 @@ export class Context {
     if (isString(paths)) paths = paths.split('.')
     for (let i = 0; i < paths.length; i++) {
       scope = yield readProperty(scope as object, paths[i], this.ownPropertyOnly)
-      if (isNil(scope) && this.strictVariables) {
+      if (this.strictVariables && isUndefined(scope)) {
         throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
       }
     }
