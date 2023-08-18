@@ -100,4 +100,4 @@ Most of the [options available through the JavaScript API][options] are also ava
 A ReactJS demo is also added by [@stevenanthonyrevo](https://github.com/stevenanthonyrevo), see [liquidjs/demo/reactjs/](https://github.com/harttle/liquidjs/blob/master/demo/reactjs/).
 
 [intro]: ./intro-to-liquid.html
-[options]: ./options.md
+[options]: ./options.html
