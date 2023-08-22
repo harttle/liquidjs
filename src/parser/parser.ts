@@ -48,7 +48,7 @@ export class Parser {
       }
       return new HTML(token)
     } catch (e) {
-      if (e instanceof LiquidError) throw e
+      if (LiquidError.is(e)) throw e
       throw new ParseError(e as Error, token)
     }
   }
