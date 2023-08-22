@@ -1,12 +1,15 @@
 import { Token } from './token'
-import { IdentifierToken } from './identifier-token'
 import { TokenKind } from '../parser'
 
 export class NumberToken extends Token {
+  public number: number
   constructor (
-    public whole: IdentifierToken,
-    public decimal?: IdentifierToken
+    public input: string,
+    public begin: number,
+    public end: number,
+    public file?: string
   ) {
-    super(TokenKind.Number, whole.input, whole.begin, decimal ? decimal.end : whole.end, whole.file)
+    super(TokenKind.Number, input, begin, end, file)
+    this.number = Number(this.getText())
   }
 }

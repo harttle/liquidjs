@@ -39,27 +39,27 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
   if (isLiteralToken(token)) return evalLiteralToken(token)
-  if (isNumberToken(token)) return evalNumberToken(token)
-  if (isWordToken(token)) return token.getText()
+  if (isNumberToken(token)) return token.number
+  if (isWordToken(token)) return token.content
   if (isQuotedToken(token)) return evalQuotedToken(token)
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
   const props: string[] = []
+  const variable = token.variable ? yield evalToken(token.variable, ctx, lenient) : undefined
   for (const prop of token.props) {
     props.push((yield evalToken(prop, ctx, false)) as unknown as string)
   }
   try {
-    return yield ctx._get([token.propertyName, ...props])
+    if (token.variable) {
+      return yield ctx._getFromScope(variable, props)
+    } else {
+      return yield ctx._get(props)
+    }
   } catch (e) {
     if (lenient && (e as Error).name === 'InternalUndefinedVariableError') return null
     throw (new UndefinedVariableError(e as Error, token))
   }
-}
-
-function evalNumberToken (token: NumberToken) {
-  const str = token.whole.content + '.' + (token.decimal ? token.decimal.content : '')
-  return Number(str)
 }
 
 export function evalQuotedToken (token: QuotedToken) {

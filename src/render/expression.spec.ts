@@ -162,12 +162,34 @@ describe('Expression', function () {
       const ctx = new Context({ obj: { foo: 'FOO' }, keys: { "what's this": 'foo' } })
       expect(await toPromise(create('obj[keys["what\'s this"]]').evaluate(ctx, false))).toBe('FOO')
     })
+    it('should allow bracket quoted property access', async function () {
+      const ctx = new Context({ 'foo bar': { coo: 'FOO BAR' } })
+      expect(await toPromise(create('["foo bar"].coo').evaluate(ctx, false))).toBe('FOO BAR')
+    })
     it('should support not', async function () {
       expect(await toPromise(create('not 1 < 2').evaluate(ctx))).toBe(false)
     })
     it('not should have higher precedence than and/or', async function () {
       expect(await toPromise(create('not 1 < 2 or not 1 > 2').evaluate(ctx))).toBe(true)
       expect(await toPromise(create('not 1 < 2 and not 1 > 2').evaluate(ctx))).toBe(false)
+    })
+    it('should allow variable as squared sub property key', async function () {
+      const ctx = new Context({ 'foo': { bar: 'BAR' }, 'key': 'bar' })
+      expect(await toPromise(create('foo[key]').evaluate(ctx))).toBe('BAR')
+    })
+    it('should allow propertyAccessToken  as squared sub property key', async function () {
+      const ctx = new Context({ 'foo': { bar: 'BAR', key: 'bar' } })
+      expect(await toPromise(create('foo[foo.key]').evaluate(ctx))).toBe('BAR')
+    })
+    it('should allow nested squared property read', async function () {
+      const ctx = new Context({ 'foo': { bar: 'BAR', key: 'bar' } })
+      expect(await toPromise(create('foo[foo["key"]]').evaluate(ctx))).toBe('BAR')
+    })
+    it('should allow string as property read variable', async function () {
+      expect(await toPromise(create('"foo"[2]').evaluate(ctx))).toBe('o')
+    })
+    it('should allow range as property read variable', async function () {
+      expect(await toPromise(create('(3..5).size').evaluate(ctx))).toBe(3)
     })
   })
 
