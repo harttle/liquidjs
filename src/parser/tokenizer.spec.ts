@@ -21,19 +21,19 @@ describe('Tokenizer', function () {
     const token: NumberToken = new Tokenizer('123').readValueOrThrow() as any
     expect(token).toBeInstanceOf(NumberToken)
     expect(token.getText()).toBe('123')
-    expect(token.number).toBe(123)
+    expect(token.value).toBe(123)
   })
   it('should read negative number', () => {
     const token: NumberToken = new Tokenizer('-123').readValueOrThrow() as any
     expect(token).toBeInstanceOf(NumberToken)
     expect(token.getText()).toBe('-123')
-    expect(token.number).toBe(-123)
+    expect(token.value).toBe(-123)
   })
   it('should read float number', () => {
     const token: NumberToken = new Tokenizer('1.23').readValueOrThrow() as any
     expect(token).toBeInstanceOf(NumberToken)
     expect(token.getText()).toBe('1.23')
-    expect(token.number).toBe(1.23)
+    expect(token.value).toBe(1.23)
   })
   it('should treat 1.2.3 as property read', () => {
     const token: PropertyAccessToken = new Tokenizer('1.2.3').readValueOrThrow() as any

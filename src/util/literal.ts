@@ -9,3 +9,6 @@ export const literalValues = {
   'empty': new EmptyDrop(),
   'blank': new BlankDrop()
 }
+
+export type LiteralKey = keyof typeof literalValues
+export type LiteralValue = typeof literalValues[LiteralKey]

@@ -1,6 +1,6 @@
 import { Context } from '../context'
 import { toPromise } from '../util'
-import { IdentifierToken, NumberToken, QuotedToken } from '../tokens'
+import { NumberToken, QuotedToken } from '../tokens'
 import { Filter } from './filter'
 
 describe('filter', function () {

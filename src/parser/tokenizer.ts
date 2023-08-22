@@ -1,6 +1,6 @@
 import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
-import { TrieNode, isQuotedToken, isWordToken, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, IDENTIFIER, NUMBER, SIGN } from '../util'
+import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, IDENTIFIER, NUMBER, SIGN } from '../util'
 import { Operators, Expression } from '../render'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { FilterArg } from './filter-arg'
@@ -11,7 +11,7 @@ export class Tokenizer {
   N: number
   private rawBeginAt = -1
   private opTrie: Trie<OperatorHandler>
-  private literalTrie: Trie<typeof literalValues[keyof typeof literalValues]>
+  private literalTrie: Trie<LiteralValue>
 
   constructor (
     public input: string,
@@ -306,7 +306,7 @@ export class Tokenizer {
     this.skipBlank()
     const begin = this.p
     const variable = this.readLiteral() || this.readQuoted() || this.readRange() || this.readNumber()
-    const props: (QuotedToken | IdentifierToken)[] = []
+    const props: (ValueToken | IdentifierToken)[] = []
     while (true) {
       if (this.peek() === '[') {
         this.p++

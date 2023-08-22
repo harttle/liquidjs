@@ -1,6 +1,5 @@
-import { RangeToken, OperatorToken, Token, LiteralToken, NumberToken, PropertyAccessToken, QuotedToken, OperatorType, operatorTypes } from '../tokens'
+import { QuotedToken, RangeToken, OperatorToken, Token, LiteralToken, PropertyAccessToken, OperatorType, operatorTypes } from '../tokens'
 import { isQuotedToken, isWordToken, isNumberToken, isLiteralToken, isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, literalValues, assert } from '../util'
-import { parseStringLiteral } from '../parser'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 
@@ -39,9 +38,9 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
   if (isLiteralToken(token)) return evalLiteralToken(token)
-  if (isNumberToken(token)) return token.number
+  if (isNumberToken(token)) return token.value
+  if (isQuotedToken(token)) return token.value
   if (isWordToken(token)) return token.content
-  if (isQuotedToken(token)) return evalQuotedToken(token)
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
@@ -62,12 +61,12 @@ function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, le
   }
 }
 
-export function evalQuotedToken (token: QuotedToken) {
-  return parseStringLiteral(token.getText())
-}
-
 function evalLiteralToken (token: LiteralToken) {
   return literalValues[token.literal]
+}
+
+export function evalQuotedToken (token: QuotedToken) {
+  return token.value
 }
 
 function * evalRangeToken (token: RangeToken, ctx: Context) {

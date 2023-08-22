@@ -1,7 +1,9 @@
 import { Tokenizer } from '../parser'
 import { Drop } from '../drop'
+import { QuotedToken } from '../tokens'
 import { Context } from '../context'
 import { toPromise, toValueSync } from '../util'
+import { evalQuotedToken } from './expression'
 
 describe('Expression', function () {
   const ctx = new Context({})
@@ -32,7 +34,9 @@ describe('Expression', function () {
       expect(await toPromise(create('"foo"').evaluate(ctx, false))).toBe('foo')
       expect(await toPromise(create('false').evaluate(ctx, false))).toBe(false)
     })
-
+    it('should support evalQuotedToken()', async function () {
+      expect(evalQuotedToken(new QuotedToken('"foo"', 0, 5))).toBe('foo')
+    })
     it('should eval property access', async function () {
       const ctx = new Context({
         foo: { bar: 'BAR' },
