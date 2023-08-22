@@ -1,3 +1,17 @@
+# [10.9.0](https://github.com/harttle/liquidjs/compare/v10.8.4...v10.9.0) (2023-08-22)
+
+
+### Bug Fixes
+
+* case should allow multiple values separated by or ([b8e7e2d](https://github.com/harttle/liquidjs/commit/b8e7e2d9467b17ca786e6fb422e9579dd178de76))
+* for throws undefined var with a null value with strictVariables ([dc6a301](https://github.com/harttle/liquidjs/commit/dc6a3013874872ac85f1fbe5184c74631122d851))
+* remove_last was eating an extra character ([fc27313](https://github.com/harttle/liquidjs/commit/fc2731376f8ef59ac7160f97cef1fb5d94f053db))
+
+
+### Features
+
+* more flexible squared property read expression, fixes [#643](https://github.com/harttle/liquidjs/issues/643) ([#646](https://github.com/harttle/liquidjs/issues/646)) ([660d9be](https://github.com/harttle/liquidjs/commit/660d9be55f8eac16ca5ac77fd0b38b0d7f94961e))
+
 ## [10.8.4](https://github.com/harttle/liquidjs/compare/v10.8.3...v10.8.4) (2023-07-07)
 
 
