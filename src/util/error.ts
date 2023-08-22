@@ -2,6 +2,11 @@ import * as _ from './underscore'
 import { Token } from '../tokens/token'
 import { Template } from '../template/template'
 
+/**
+ * targeting ES5, extends Error won't create a proper prototype chain, need a trait to kee track of classes
+ */
+const TRAIT = '__liquidClass__'
+
 export abstract class LiquidError extends Error {
   private token!: Token
   public context = ''
@@ -14,6 +19,7 @@ export abstract class LiquidError extends Error {
     super(typeof err === 'string' ? err : err.message)
     if (typeof err !== 'string') Object.defineProperty(this, 'originalError', { value: err, enumerable: false })
     Object.defineProperty(this, 'token', { value: token, enumerable: false })
+    Object.defineProperty(this, TRAIT, { value: 'LiquidError', enumerable: false })
   }
   protected update () {
     Object.defineProperty(this, 'context', { value: mkContext(this.token), enumerable: false })
@@ -21,6 +27,9 @@ export abstract class LiquidError extends Error {
     this.stack = this.message + '\n' + this.context +
       '\n' + this.stack
     if (this.originalError) this.stack += '\nFrom ' + this.originalError.stack
+  }
+  static is (obj: unknown): obj is LiquidError {
+    return obj?.[TRAIT] === 'LiquidError'
   }
 }
 

@@ -1,7 +1,9 @@
 import { Token } from './token'
 import { TokenKind } from '../parser'
+import { literalValues, LiteralValue } from '../util'
 
 export class LiteralToken extends Token {
+  public content: LiteralValue
   public literal: string
   public constructor (
     public input: string,
@@ -11,5 +13,6 @@ export class LiteralToken extends Token {
   ) {
     super(TokenKind.Literal, input, begin, end, file)
     this.literal = this.getText()
+    this.content = literalValues[this.literal]
   }
 }

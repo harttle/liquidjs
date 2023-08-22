@@ -1,16 +1,17 @@
 import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
-import { Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, IDENTIFIER } from '../util'
+import { OperatorHandler } from '../render/operator'
+import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, IDENTIFIER, NUMBER, SIGN } from '../util'
 import { Operators, Expression } from '../render'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { FilterArg } from './filter-arg'
-import { matchOperator } from './match-operator'
 import { whiteSpaceCtrl } from './whitespace-ctrl'
 
 export class Tokenizer {
   p: number
   N: number
   private rawBeginAt = -1
-  private opTrie: Trie
+  private opTrie: Trie<OperatorHandler>
+  private literalTrie: Trie<LiteralValue>
 
   constructor (
     public input: string,
@@ -21,6 +22,7 @@ export class Tokenizer {
     this.p = range ? range[0] : 0
     this.N = range ? range[1] : input.length
     this.opTrie = createTrie(operators)
+    this.literalTrie = createTrie(literalValues)
   }
 
   readExpression () {
@@ -44,9 +46,21 @@ export class Tokenizer {
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
-    const end = matchOperator(this.input, this.p, this.opTrie)
+    const end = this.matchTrie(this.opTrie)
     if (end === -1) return
     return new OperatorToken(this.input, this.p, (this.p = end), this.file)
+  }
+  matchTrie<T> (trie: Trie<T>) {
+    let node: TrieNode<T> = trie
+    let i = this.p
+    let info
+    while (node[this.input[i]] && i < this.N) {
+      node = node[this.input[i++]]
+      if (node['end']) info = node
+    }
+    if (!info) return -1
+    if (info['needBoundary'] && (this.peekType(i - this.p) & IDENTIFIER)) return -1
+    return i
   }
   readFilteredValue (): FilteredValueToken {
     const begin = this.p
@@ -272,8 +286,8 @@ export class Tokenizer {
     return this.input.slice(this.p, this.N)
   }
 
-  advance (i = 1) {
-    this.p += i
+  advance (step = 1) {
+    this.p += step
   }
 
   end () {
@@ -289,43 +303,68 @@ export class Tokenizer {
   }
 
   readValue (): ValueToken | undefined {
-    const value = this.readQuoted() || this.readRange()
-    if (value) return value
-
-    if (this.peek() === '[') {
-      this.p++
-      const prop = this.readQuoted()
-      if (!prop) return
-      if (this.peek() !== ']') return
-      this.p++
-      return new PropertyAccessToken(prop, [], this.p)
-    }
-
-    const variable = this.readIdentifier()
-    if (!variable.size()) return
-
-    let isNumber = variable.isNumber(true)
-    const props: (QuotedToken | IdentifierToken)[] = []
+    this.skipBlank()
+    const begin = this.p
+    const variable = this.readLiteral() || this.readQuoted() || this.readRange() || this.readNumber()
+    const props: (ValueToken | IdentifierToken)[] = []
     while (true) {
       if (this.peek() === '[') {
-        isNumber = false
         this.p++
         const prop = this.readValue() || new IdentifierToken(this.input, this.p, this.p, this.file)
-        this.readTo(']')
+        this.assert(this.readTo(']') !== -1, '[ not closed')
         props.push(prop)
-      } else if (this.peek() === '.' && this.peek(1) !== '.') { // skip range syntax
+        continue
+      }
+      if (!variable && !props.length) {
+        const prop = this.readIdentifier()
+        if (prop.size()) {
+          props.push(prop)
+          continue
+        }
+      }
+      if (this.peek() === '.' && this.peek(1) !== '.') { // skip range syntax
         this.p++
         const prop = this.readIdentifier()
         if (!prop.size()) break
-        if (!prop.isNumber()) isNumber = false
         props.push(prop)
+        continue
+      }
+      break
+    }
+    if (!props.length) return variable
+    return new PropertyAccessToken(variable, props, this.input, begin, this.p)
+  }
+
+  readNumber (): NumberToken | undefined {
+    this.skipBlank()
+    let decimalFound = false
+    let digitFound = false
+    let n = 0
+    if (this.peekType() & SIGN) n++
+    while (this.p + n <= this.N) {
+      if (this.peekType(n) & NUMBER) {
+        digitFound = true
+        n++
+      } else if (this.peek(n) === '.' && this.peek(n + 1) !== '.') {
+        if (decimalFound || !digitFound) return
+        decimalFound = true
+        n++
       } else break
     }
-    if (!props.length && literalValues.hasOwnProperty(variable.content)) {
-      return new LiteralToken(this.input, variable.begin, variable.end, this.file)
+    if (digitFound && !(this.peekType(n) & IDENTIFIER)) {
+      const num = new NumberToken(this.input, this.p, this.p + n, this.file)
+      this.advance(n)
+      return num
     }
-    if (isNumber) return new NumberToken(variable, props[0] as IdentifierToken)
-    return new PropertyAccessToken(variable, props, this.p)
+  }
+
+  readLiteral (): LiteralToken | undefined {
+    this.skipBlank()
+    const end = this.matchTrie(this.literalTrie)
+    if (end === -1) return
+    const literal = new LiteralToken(this.input, this.p, end, this.file)
+    this.p = end
+    return literal
   }
 
   readRange (): RangeToken | undefined {
@@ -388,7 +427,7 @@ export class Tokenizer {
   }
 
   peekType (n = 0) {
-    return TYPES[this.input.charCodeAt(this.p + n)]
+    return this.p + n >= this.N ? 0 : TYPES[this.input.charCodeAt(this.p + n)]
   }
 
   peek (n = 0): string {

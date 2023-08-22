@@ -454,4 +454,14 @@ describe('Issues', function () {
     const result = engine.parseAndRenderSync(template, { product })
     expect(result).toEqual('This is a love potion!')
   })
+  it('#643 Error When Accessing Subproperty of Bracketed Reference', () => {
+    const engine = new Liquid()
+    const tpl = '{{ ["Key String with Spaces"].subpropertyKey }}'
+    const ctx = {
+      'Key String with Spaces': {
+        subpropertyKey: 'FOO'
+      }
+    }
+    expect(engine.parseAndRenderSync(tpl, ctx)).toEqual('FOO')
+  })
 })

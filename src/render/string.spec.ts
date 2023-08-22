@@ -1,4 +1,4 @@
-import { parseStringLiteral } from './parse-string-literal'
+import { parseStringLiteral } from './string'
 
 describe('parseStringLiteral()', function () {
   it('should parse octal escape', () => {

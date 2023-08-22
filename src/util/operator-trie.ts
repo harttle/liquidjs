@@ -1,22 +1,25 @@
-import { Operators, OperatorHandler } from '../render/operator'
 import { IDENTIFIER, TYPES } from '../util/character'
 
-interface TrieLeafNode {
-  handler: OperatorHandler;
+interface TrieInput<T> {
+  [key: string]: T
+}
+
+interface TrieLeafNode<T> {
+  data: T;
   end: true;
   needBoundary?: true;
 }
 
-export interface Trie {
-  [key: string]: Trie | TrieLeafNode;
+export interface Trie<T> {
+  [key: string]: Trie<T> | TrieLeafNode<T>;
 }
 
-export type TrieNode = Trie | TrieLeafNode
+export type TrieNode<T> = Trie<T> | TrieLeafNode<T>
 
-export function createTrie (operators: Operators): Trie {
-  const trie: Trie = {}
-  for (const [name, handler] of Object.entries(operators)) {
-    let node: Trie | TrieLeafNode = trie
+export function createTrie<T = any> (input: TrieInput<T>): Trie<T> {
+  const trie: Trie<T> = {}
+  for (const [name, data] of Object.entries(input)) {
+    let node: Trie<T> | TrieLeafNode<T> = trie
 
     for (let i = 0; i < name.length; i++) {
       const c = name[i]
@@ -29,7 +32,7 @@ export function createTrie (operators: Operators): Trie {
       node = node[c]
     }
 
-    node.handler = handler
+    node.data = data
     node.end = true
   }
   return trie

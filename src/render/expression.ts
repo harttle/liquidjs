@@ -1,6 +1,5 @@
-import { RangeToken, OperatorToken, Token, LiteralToken, NumberToken, PropertyAccessToken, QuotedToken, OperatorType, operatorTypes } from '../tokens'
-import { isQuotedToken, isWordToken, isNumberToken, isLiteralToken, isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, literalValues, assert } from '../util'
-import { parseStringLiteral } from '../parser'
+import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes } from '../tokens'
+import { isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 
@@ -36,38 +35,32 @@ export class Expression {
 }
 
 export function * evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
+  if (!token) return
+  if ('content' in token) return token.content
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
-  if (isLiteralToken(token)) return evalLiteralToken(token)
-  if (isNumberToken(token)) return evalNumberToken(token)
-  if (isWordToken(token)) return token.getText()
-  if (isQuotedToken(token)) return evalQuotedToken(token)
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
   const props: string[] = []
+  const variable = yield evalToken(token.variable, ctx, lenient)
   for (const prop of token.props) {
     props.push((yield evalToken(prop, ctx, false)) as unknown as string)
   }
   try {
-    return yield ctx._get([token.propertyName, ...props])
+    if (token.variable) {
+      return yield ctx._getFromScope(variable, props)
+    } else {
+      return yield ctx._get(props)
+    }
   } catch (e) {
     if (lenient && (e as Error).name === 'InternalUndefinedVariableError') return null
     throw (new UndefinedVariableError(e as Error, token))
   }
 }
 
-function evalNumberToken (token: NumberToken) {
-  const str = token.whole.content + '.' + (token.decimal ? token.decimal.content : '')
-  return Number(str)
-}
-
 export function evalQuotedToken (token: QuotedToken) {
-  return parseStringLiteral(token.getText())
-}
-
-function evalLiteralToken (token: LiteralToken) {
-  return literalValues[token.literal]
+  return token.content
 }
 
 function * evalRangeToken (token: RangeToken, ctx: Context) {

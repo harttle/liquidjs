@@ -1,5 +1,7 @@
 import { LiquidTagToken, HTMLToken, QuotedToken, OutputToken, TagToken, OperatorToken, RangeToken, PropertyAccessToken, NumberToken, IdentifierToken } from '../tokens'
 import { Tokenizer } from './tokenizer'
+import { defaultOperators } from '../render/operator'
+import { createTrie } from '../util/operator-trie'
 
 describe('Tokenizer', function () {
   it('should read quoted', () => {
@@ -15,12 +17,31 @@ describe('Tokenizer', function () {
     // eslint-disable-next-line deprecation/deprecation
     expect(new Tokenizer('foo bar').readWord()).toHaveProperty('content', 'foo')
   })
-  it('should read number value', () => {
-    const token: NumberToken = new Tokenizer('2.33.2').readValueOrThrow() as any
+  it('should read integer number', () => {
+    const token: NumberToken = new Tokenizer('123').readValueOrThrow() as any
     expect(token).toBeInstanceOf(NumberToken)
-    expect(token.whole.getText()).toBe('2')
-    expect(token.decimal!.getText()).toBe('33')
-    expect(token.getText()).toBe('2.33')
+    expect(token.getText()).toBe('123')
+    expect(token.content).toBe(123)
+  })
+  it('should read negative number', () => {
+    const token: NumberToken = new Tokenizer('-123').readValueOrThrow() as any
+    expect(token).toBeInstanceOf(NumberToken)
+    expect(token.getText()).toBe('-123')
+    expect(token.content).toBe(-123)
+  })
+  it('should read float number', () => {
+    const token: NumberToken = new Tokenizer('1.23').readValueOrThrow() as any
+    expect(token).toBeInstanceOf(NumberToken)
+    expect(token.getText()).toBe('1.23')
+    expect(token.content).toBe(1.23)
+  })
+  it('should treat 1.2.3 as property read', () => {
+    const token: PropertyAccessToken = new Tokenizer('1.2.3').readValueOrThrow() as any
+    expect(token).toBeInstanceOf(PropertyAccessToken)
+    expect(token.props).toHaveLength(3)
+    expect(token.props[0].getText()).toBe('1')
+    expect(token.props[1].getText()).toBe('2')
+    expect(token.props[2].getText()).toBe('3')
   })
   it('should read quoted value', () => {
     const value = new Tokenizer('"foo"a').readValue()
@@ -33,11 +54,7 @@ describe('Tokenizer', function () {
   it('should read quoted property access value', () => {
     const value = new Tokenizer('["a prop"]').readValue()
     expect(value).toBeInstanceOf(PropertyAccessToken)
-    expect((value as PropertyAccessToken).variable.getText()).toBe('"a prop"')
-  })
-  it('should throw for broken quoted property access', () => {
-    const tokenizer = new Tokenizer('[5]')
-    expect(() => tokenizer.readValueOrThrow()).toThrow()
+    expect((value as QuotedToken).getText()).toBe('["a prop"]')
   })
   it('should throw for incomplete quoted property access', () => {
     const tokenizer = new Tokenizer('["a prop"')
@@ -277,10 +294,10 @@ describe('Tokenizer', function () {
 
       const pa: PropertyAccessToken = token!.args[0] as any
       expect(token!.args[0]).toBeInstanceOf(PropertyAccessToken)
-      expect((pa.variable as any).content).toBe('arr')
-      expect(pa.props).toHaveLength(1)
-      expect(pa.props[0]).toBeInstanceOf(NumberToken)
-      expect(pa.props[0].getText()).toBe('0')
+      expect(pa.props).toHaveLength(2)
+      expect((pa.props[0] as any).content).toBe('arr')
+      expect(pa.props[1]).toBeInstanceOf(NumberToken)
+      expect(pa.props[1].getText()).toBe('0')
     })
     it('should read a filter with obj.foo argument', function () {
       const tokenizer = new Tokenizer('| plus: obj.foo')
@@ -290,10 +307,10 @@ describe('Tokenizer', function () {
 
       const pa: PropertyAccessToken = token!.args[0] as any
       expect(token!.args[0]).toBeInstanceOf(PropertyAccessToken)
-      expect((pa.variable as any).content).toBe('obj')
-      expect(pa.props).toHaveLength(1)
-      expect(pa.props[0]).toBeInstanceOf(IdentifierToken)
-      expect(pa.props[0].getText()).toBe('foo')
+      expect(pa.props).toHaveLength(2)
+      expect((pa.props[0] as any).content).toBe('obj')
+      expect(pa.props[1]).toBeInstanceOf(IdentifierToken)
+      expect(pa.props[1].getText()).toBe('foo')
     })
     it('should read a filter with obj["foo"] argument', function () {
       const tokenizer = new Tokenizer('| plus: obj["good luck"]')
@@ -304,8 +321,8 @@ describe('Tokenizer', function () {
       const pa: PropertyAccessToken = token!.args[0] as any
       expect(token!.args[0]).toBeInstanceOf(PropertyAccessToken)
       expect(pa.getText()).toBe('obj["good luck"]')
-      expect((pa.variable as any).content).toBe('obj')
-      expect(pa.props[0].getText()).toBe('"good luck"')
+      expect((pa.props[0] as any).content).toBe('obj')
+      expect(pa.props[1].getText()).toBe('"good luck"')
     })
   })
   describe('#readFilters()', () => {
@@ -341,7 +358,7 @@ describe('Tokenizer', function () {
       expect(tokens[2].args).toHaveLength(1)
       expect(tokens[2].args[0]).toBeInstanceOf(PropertyAccessToken)
       expect((tokens[2].args[0] as any).getText()).toBe('foo[a.b["c d"]]')
-      expect((tokens[2].args[0] as any).props[0].getText()).toBe('a.b["c d"]')
+      expect((tokens[2].args[0] as any).props[1].getText()).toBe('a.b["c d"]')
     })
   })
   describe('#readExpression()', () => {
@@ -358,10 +375,10 @@ describe('Tokenizer', function () {
       expect(exp).toHaveLength(1)
       const pa = exp[0] as PropertyAccessToken
       expect(pa).toBeInstanceOf(PropertyAccessToken)
-      expect((pa.variable as any).content).toEqual('a')
-      expect(pa.props).toHaveLength(2)
+      expect(pa.props).toHaveLength(3)
+      expect((pa.props[0] as any).content).toEqual('a')
 
-      const [p1, p2] = pa.props
+      const [, p1, p2] = pa.props
       expect(p1).toBeInstanceOf(IdentifierToken)
       expect(p1.getText()).toBe('')
       expect(p2).toBeInstanceOf(PropertyAccessToken)
@@ -373,8 +390,8 @@ describe('Tokenizer', function () {
       expect(exp).toHaveLength(1)
       const pa = exp[0] as PropertyAccessToken
       expect(pa).toBeInstanceOf(PropertyAccessToken)
-      expect((pa.variable as any).content).toEqual('a')
-      expect(pa.props).toHaveLength(0)
+      expect(pa.props).toHaveLength(1)
+      expect((pa.props[0] as any).content).toEqual('a')
     })
     it('should read expression `a ==`', () => {
       const exp = [...new Tokenizer('a ==').readExpressionTokens()]
@@ -479,6 +496,30 @@ describe('Tokenizer', function () {
 
       expect(rhs).toBeInstanceOf(QuotedToken)
       expect(rhs.getText()).toEqual('"\\""')
+    })
+  })
+  describe('#matchTrie()', function () {
+    const opTrie = createTrie(defaultOperators)
+    it('should match contains', () => {
+      expect(new Tokenizer('contains').matchTrie(opTrie)).toBe(8)
+    })
+    it('should match comparision', () => {
+      expect(new Tokenizer('>').matchTrie(opTrie)).toBe(1)
+      expect(new Tokenizer('>=').matchTrie(opTrie)).toBe(2)
+      expect(new Tokenizer('<').matchTrie(opTrie)).toBe(1)
+      expect(new Tokenizer('<=').matchTrie(opTrie)).toBe(2)
+    })
+    it('should match binary logic', () => {
+      expect(new Tokenizer('and').matchTrie(opTrie)).toBe(3)
+      expect(new Tokenizer('or').matchTrie(opTrie)).toBe(2)
+    })
+    it('should not match if word not terminate', () => {
+      expect(new Tokenizer('true1').matchTrie(opTrie)).toBe(-1)
+      expect(new Tokenizer('containsa').matchTrie(opTrie)).toBe(-1)
+    })
+    it('should match if word boundary found', () => {
+      expect(new Tokenizer('>=1').matchTrie(opTrie)).toBe(2)
+      expect(new Tokenizer('contains b').matchTrie(opTrie)).toBe(8)
     })
   })
   describe('#readLiquidTagTokens', () => {

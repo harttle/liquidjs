@@ -1,6 +1,6 @@
 import { Context } from '../context'
 import { toPromise } from '../util'
-import { IdentifierToken, NumberToken, QuotedToken } from '../tokens'
+import { NumberToken, QuotedToken } from '../tokens'
 import { Filter } from './filter'
 
 describe('filter', function () {
@@ -13,7 +13,7 @@ describe('filter', function () {
 
   it('should call filter impl with correct arguments', async function () {
     const spy = jest.fn()
-    const thirty = new NumberToken(new IdentifierToken('30', 0, 2), undefined)
+    const thirty = new NumberToken('30', 0, 2, undefined)
     const filter = new Filter('foo', spy, [thirty], liquid)
     await toPromise(filter.render('foo', ctx))
     expect(spy).toHaveBeenCalledWith('foo', 30)
@@ -23,7 +23,7 @@ describe('filter', function () {
       const val = yield this.context._get([valStr])
       return `${this.liquid.testVersion}: ${val + diff}`
     })
-    const ten = new NumberToken(new IdentifierToken('10', 0, 2), undefined)
+    const ten = new NumberToken('10', 0, 2, undefined)
     const filter = new Filter('add', spy, [ten], liquid)
     const val = await toPromise(filter.render('thirty', ctx))
     expect(val).toEqual('1.0: 40')
@@ -33,12 +33,12 @@ describe('filter', function () {
   })
 
   it('should render filters with argument', async function () {
-    const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
+    const two = new NumberToken('2', 0, 1, undefined)
     expect(await toPromise(new Filter('add', (a: number, b: number) => a + b, [two], liquid).render(3, ctx))).toBe(5)
   })
 
   it('should render filters with multiple arguments', async function () {
-    const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
+    const two = new NumberToken('2', 0, 1, undefined)
     const c = new QuotedToken('"c"', 0, 3)
     expect(await toPromise(new Filter('add', (a: number, b: number, c: number) => a + b + c, [two, c], liquid).render(3, ctx))).toBe('5c')
   })
@@ -49,7 +49,7 @@ describe('filter', function () {
   })
 
   it('should support key value pairs', async function () {
-    const two = new NumberToken(new IdentifierToken('2', 0, 1), undefined)
+    const two = new NumberToken('2', 0, 1, undefined)
     expect(await toPromise(new Filter('add', (a: number, b: number[]) => b[0] + ':' + (a + b[1]), [['num', two]], liquid).render(3, ctx))).toBe('num:5')
   })
 })
