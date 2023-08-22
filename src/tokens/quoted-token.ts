@@ -3,7 +3,7 @@ import { TokenKind } from '../parser'
 import { parseStringLiteral } from '../render/string'
 
 export class QuotedToken extends Token {
-  public readonly value: string
+  public readonly content: string
   constructor (
     public input: string,
     public begin: number,
@@ -11,6 +11,6 @@ export class QuotedToken extends Token {
     public file?: string
   ) {
     super(TokenKind.Quoted, input, begin, end, file)
-    this.value = parseStringLiteral(this.getText())
+    this.content = parseStringLiteral(this.getText())
   }
 }

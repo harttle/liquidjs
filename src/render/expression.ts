@@ -1,5 +1,5 @@
-import { QuotedToken, RangeToken, OperatorToken, Token, LiteralToken, PropertyAccessToken, OperatorType, operatorTypes } from '../tokens'
-import { isQuotedToken, isWordToken, isNumberToken, isLiteralToken, isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, literalValues, assert } from '../util'
+import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes } from '../tokens'
+import { isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 
@@ -35,17 +35,15 @@ export class Expression {
 }
 
 export function * evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
+  if (!token) return
+  if ('content' in token) return token.content
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
-  if (isLiteralToken(token)) return evalLiteralToken(token)
-  if (isNumberToken(token)) return token.value
-  if (isQuotedToken(token)) return token.value
-  if (isWordToken(token)) return token.content
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
   const props: string[] = []
-  const variable = token.variable ? yield evalToken(token.variable, ctx, lenient) : undefined
+  const variable = yield evalToken(token.variable, ctx, lenient)
   for (const prop of token.props) {
     props.push((yield evalToken(prop, ctx, false)) as unknown as string)
   }
@@ -61,12 +59,8 @@ function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, le
   }
 }
 
-function evalLiteralToken (token: LiteralToken) {
-  return literalValues[token.literal]
-}
-
 export function evalQuotedToken (token: QuotedToken) {
-  return token.value
+  return token.content
 }
 
 function * evalRangeToken (token: RangeToken, ctx: Context) {

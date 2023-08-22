@@ -2,7 +2,7 @@ import { Token } from './token'
 import { TokenKind } from '../parser'
 
 export class NumberToken extends Token {
-  public value: number
+  public content: number
   constructor (
     public input: string,
     public begin: number,
@@ -10,6 +10,6 @@ export class NumberToken extends Token {
     public file?: string
   ) {
     super(TokenKind.Number, input, begin, end, file)
-    this.value = Number(this.getText())
+    this.content = Number(this.getText())
   }
 }
