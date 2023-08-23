@@ -1,3 +1,10 @@
+## [10.9.1](https://github.com/harttle/liquidjs/compare/v10.9.0...v10.9.1) (2023-08-23)
+
+
+### Bug Fixes
+
+* map filter allow nil results in strict mode, fixes [#647](https://github.com/harttle/liquidjs/issues/647) ([45adbd7](https://github.com/harttle/liquidjs/commit/45adbd7008296a94da04d21a35917f744a0f4109))
+
 # [10.9.0](https://github.com/harttle/liquidjs/compare/v10.8.4...v10.9.0) (2023-08-22)
 
 
