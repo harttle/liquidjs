@@ -76,11 +76,11 @@ export class Context {
   public getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
     return toValueSync(this._getFromScope(scope, paths))
   }
-  public * _getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
+  public * _getFromScope (scope: unknown, paths: PropertyKey[] | string, strictVariables = this.strictVariables): IterableIterator<unknown> {
     if (isString(paths)) paths = paths.split('.')
     for (let i = 0; i < paths.length; i++) {
       scope = yield readProperty(scope as object, paths[i], this.ownPropertyOnly)
-      if (this.strictVariables && isUndefined(scope)) {
+      if (strictVariables && isUndefined(scope)) {
         throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
       }
     }

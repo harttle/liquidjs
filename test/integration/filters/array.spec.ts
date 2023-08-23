@@ -58,6 +58,14 @@ describe('filters/array', function () {
       const post = { category: 'foo' }
       return test('{{post | map: "category"}}', { post }, 'foo')
     })
+    it('should allow nil results in strictVariables mode', function () {
+      const engine = new Liquid({ strictVariables: true })
+      const ctx = {
+        posts: [{ category: 'foo' }, { title: 'bar' }]
+      }
+      const result = engine.parseAndRenderSync('{{posts | map: "category" | json}}', ctx)
+      expect(result).toEqual('["foo",null]')
+    })
     it('should support nested property', function () {
       const tpl = '{{ arr | map: "name.first" | join }}'
       const a = { name: { first: 'Alice' } }

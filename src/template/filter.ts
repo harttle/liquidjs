@@ -27,6 +27,6 @@ export class Filter {
       if (isKeyValuePair(arg)) argv.push([arg[0], yield evalToken(arg[1], context)])
       else argv.push(yield evalToken(arg, context))
     }
-    return this.handler.apply({ context, liquid: this.liquid }, [value, ...argv])
+    return yield this.handler.apply({ context, liquid: this.liquid }, [value, ...argv])
   }
 }

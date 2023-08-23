@@ -31,7 +31,10 @@ describe('filter', function () {
   it('should render a simple filter', async function () {
     expect(await toPromise(new Filter('upcase', (x: string) => x.toUpperCase(), [], liquid).render('foo', ctx))).toBe('FOO')
   })
-
+  it('should reject promise when filter throws', async function () {
+    const filter = new Filter('foo', function * () { throw new Error('intended') }, [], liquid)
+    expect(toPromise(filter.render('foo', ctx))).rejects.toMatch('intended')
+  })
   it('should render filters with argument', async function () {
     const two = new NumberToken('2', 0, 1, undefined)
     expect(await toPromise(new Filter('add', (a: number, b: number) => a + b, [two], liquid).render(3, ctx))).toBe(5)

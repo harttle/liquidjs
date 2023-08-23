@@ -38,7 +38,7 @@ export const size = (v: string | any[]) => (v && v.length) || 0
 export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
   const results = []
   for (const item of toArray(toValue(arr))) {
-    results.push(yield this.context._getFromScope(item, stringify(property).split('.')))
+    results.push(yield this.context._getFromScope(item, stringify(property), false))
   }
   return results
 }
