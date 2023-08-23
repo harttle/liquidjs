@@ -14,7 +14,7 @@ export function * sort<T> (this: FilterImpl, arr: T[], property?: string): Itera
   for (const item of toArray(toValue(arr))) {
     values.push([
       item,
-      property ? yield this.context._getFromScope(item, stringify(property).split('.')) : item
+      property ? yield this.context._getFromScope(item, stringify(property).split('.'), false) : item
     ])
   }
   return values.sort((lhs, rhs) => {
@@ -70,7 +70,7 @@ export function * where<T extends object> (this: FilterImpl, arr: T[], property:
   const values: unknown[] = []
   arr = toArray(toValue(arr))
   for (const item of arr) {
-    values.push(yield this.context._getFromScope(item, stringify(property).split('.')))
+    values.push(yield this.context._getFromScope(item, stringify(property).split('.'), false))
   }
   return arr.filter((_, i) => {
     if (expected === undefined) return isTruthy(values[i], this.context)
