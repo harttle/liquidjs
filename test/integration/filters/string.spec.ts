@@ -137,6 +137,12 @@ describe('filters/string', function () {
             '{{ string_with_newlines | strip_newlines }}',
     'Hellothere')
   })
+  it('should support strip_newlines on Windows newlines ', function () {
+    return test('{% capture string_with_newlines %}\n' +
+            'Hello\r\nthere\n{% endcapture %}' +
+            '{{ string_with_newlines | strip_newlines }}',
+    'Hellothere')
+  })
   describe('truncate', function () {
     it('should truncate when string too long', function () {
       return test('{{ "Ground control to Major Tom." | truncate: 20 }}',

@@ -30,7 +30,7 @@ describe('filters/html', function () {
     it('should support string_with_newlines', function () {
       const src = '{% capture string_with_newlines %}\n' +
               'Hello\n' +
-              'there\n' +
+              'there\r\n' +
               '{% endcapture %}' +
               '{{ string_with_newlines | newline_to_br }}'
       const dst = '<br />\n' +

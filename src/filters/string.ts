@@ -74,7 +74,7 @@ export function strip (v: string, chars?: string) {
 }
 
 export function strip_newlines (v: string) {
-  return stringify(v).replace(/\n/g, '')
+  return stringify(v).replace(/\r?\n/gm, '')
 }
 
 export function capitalize (str: string) {

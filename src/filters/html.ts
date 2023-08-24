@@ -28,7 +28,7 @@ export function escape_once (str: string) {
 }
 
 export function newline_to_br (v: string) {
-  return stringify(v).replace(/\n/g, '<br />\n')
+  return stringify(v).replace(/\r?\n/gm, '<br />\n')
 }
 
 export function strip_html (v: string) {
