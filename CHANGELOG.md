@@ -1,3 +1,11 @@
+## [10.9.2](https://github.com/harttle/liquidjs/compare/v10.9.1...v10.9.2) (2023-08-28)
+
+
+### Bug Fixes
+
+* handle windows newlines on `newline_to_br` and `strip_newlines` ([88aa63f](https://github.com/harttle/liquidjs/commit/88aa63fd58b5a5824c031acc6f3e4072bedd262f))
+* sort and where bug when using `strictVariables` ([8af682d](https://github.com/harttle/liquidjs/commit/8af682d2ca68de99bafd4a7055e4912eeb318f57))
+
 ## [10.9.1](https://github.com/harttle/liquidjs/compare/v10.9.0...v10.9.1) (2023-08-23)
 
 
