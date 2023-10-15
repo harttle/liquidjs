@@ -1,3 +1,10 @@
+## [10.9.3](https://github.com/harttle/liquidjs/compare/v10.9.2...v10.9.3) (2023-10-15)
+
+
+### Bug Fixes
+
+* package version in released files ([67a5b22](https://github.com/harttle/liquidjs/commit/67a5b229ca9ccabb4aee42bbb5c9f03d4076786a))
+
 ## [10.9.2](https://github.com/harttle/liquidjs/compare/v10.9.1...v10.9.2) (2023-08-28)
 
 
