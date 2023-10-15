@@ -1,19 +1,8 @@
 name: Release
 on: workflow_dispatch
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-    uses: ./.github/workflows/build.yml
-    with:
-      os: ${{ matrix.os }}
-  test:
-    needs: build
-    uses: ./.github/workflows/test.yml
   release:
     name: Release
-    needs: [build, test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,11 +15,6 @@ jobs:
           node-version: '18'
       - name: Install Dependencies
         run: npm ci
-      - name: Download artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: dist-ubuntu-latest
-          path: dist
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

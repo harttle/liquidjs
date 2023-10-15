@@ -21,6 +21,7 @@
     "test:e2e": "jest test/e2e",
     "perf:diff": "bin/perf-diff.sh",
     "perf:engines": "cd benchmark && npm run engines",
+    "version": "npm run build && npm test",
     "build": "rollup -c rollup.config.mjs",
     "build:cjs": "BUNDLES=cjs rollup -c rollup.config.mjs",
     "build:min": "BUNDLES=min rollup -c rollup.config.mjs",
