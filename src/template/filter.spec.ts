@@ -33,7 +33,9 @@ describe('filter', function () {
   })
   it('should reject promise when filter throws', async function () {
     const filter = new Filter('foo', function * () { throw new Error('intended') }, [], liquid)
-    expect(toPromise(filter.render('foo', ctx))).rejects.toMatch('intended')
+    expect(toPromise(filter.render('foo', ctx))).rejects.toMatchObject({
+      message: 'intended'
+    })
   })
   it('should render filters with argument', async function () {
     const two = new NumberToken('2', 0, 1, undefined)
