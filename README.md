@@ -176,6 +176,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="http://nickreilingh.com/"><img src="https://avatars.githubusercontent.com/u/2458645?v=4?s=100" width="100px;" alt="Nick Reilingh"/><br /><sub><b>Nick Reilingh</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=NReilingh" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://ebobby.org"><img src="https://avatars.githubusercontent.com/u/170356?v=4?s=100" width="100px;" alt="Francisco Soto"/><br /><sub><b>Francisco Soto</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=ebobby" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.davidlj95.com"><img src="https://avatars.githubusercontent.com/u/8050648?v=4?s=100" width="100px;" alt="David LJ"/><br /><sub><b>David LJ</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=davidlj95" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/RasmusWL"><img src="https://avatars.githubusercontent.com/u/1054041?v=4?s=100" width="100px;" alt="Rasmus Wriedt Larsen"/><br /><sub><b>Rasmus Wriedt Larsen</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=RasmusWL" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
