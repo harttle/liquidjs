@@ -135,7 +135,7 @@ engine<span class="token punctuation">.</span><span class="token function">regis
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>Calling this tag in scope <code>&#123; bar: &quot;bar&quot;, obj: &#123; coo: &quot;coo&quot; &#125; &#125;</code> yields exactly the same result as the first example. See this JSFiddle: <a target="_blank" rel="noopener external nofollow noreferrer" href="http://jsfiddle.net/ctj364up/3/">http://jsfiddle.net/ctj364up/3/</a></p>
-<blockquote class="note info"><strong class="note-title">Async ans Promises</strong><p>Async calls in LiquidJS are implemented by generators directly, for we can call generators in synchronous manner so this tag implementation is also valid for <code>renderSync()</code>, <code>parseAndRenderSync()</code>, <code>renderFileSync()</code>. If you need to await a promise in tag implementation, simply replace <code>await somePromise</code> with <code>yield somePromise</code> and keep <code>* render()</code> instead of <code>async render()</code> will do the trick. See <a href="/tutorials/sync-and-async.html">Sync and Async</a> for more details.</p>
+<blockquote class="note info"><strong class="note-title">Async and Promises</strong><p>Async calls in LiquidJS are implemented by generators directly, for we can call generators in synchronous manner so this tag implementation is also valid for <code>renderSync()</code>, <code>parseAndRenderSync()</code>, <code>renderFileSync()</code>. If you need to await a promise in tag implementation, simply replace <code>await somePromise</code> with <code>yield somePromise</code> and keep <code>* render()</code> instead of <code>async render()</code> will do the trick. See <a href="/tutorials/sync-and-async.html">Sync and Async</a> for more details.</p>
 </blockquote>
 
 <h2 id="Parse-Key-Value-Pairs-as-Named-Parameters" class="article-heading"><a href="#Parse-Key-Value-Pairs-as-Named-Parameters" class="headerlink" title="Parse Key-Value Pairs as Named Parameters"></a>Parse Key-Value Pairs as Named Parameters<a class="article-anchor" href="#Parse-Key-Value-Pairs-as-Named-Parameters" aria-hidden="true"></a></h2><p>Named parameters become very handy when there’re optional parameters or lots of parameters, in which case the order of parameters is not important. This is exactly what <a href="/api/classes/Hash.html">Hash</a> class is invented for.</p>
@@ -162,7 +162,7 @@ engine<span class="token punctuation">.</span><span class="token function">regis
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2023-10-15T13:00:57.990Z" itemprop="dateModified">Last updated: 2023-10-15</time>
+                <time class="article-footer-updated" datetime="2023-10-31T11:55:41.358Z" itemprop="dateModified">Last updated: 2023-10-31</time>
                 <a href="access-scope-in-filters.html" class="article-footer-prev" title="Access Scope in Filters"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="render-tag-content.html" class="article-footer-next" title="Render Tag Content"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
