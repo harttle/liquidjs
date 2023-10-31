@@ -60,7 +60,7 @@ engine.registerTag('random', {
 
 Calling this tag in scope `{ bar: "bar", obj: { coo: "coo" } }` yields exactly the same result as the first example. See this JSFiddle: <http://jsfiddle.net/ctj364up/3/>
 
-{% note info Async ans Promises %}
+{% note info Async and Promises %}
 Async calls in LiquidJS are implemented by generators directly, for we can call generators in synchronous manner so this tag implementation is also valid for `renderSync()`, `parseAndRenderSync()`, `renderFileSync()`. If you need to await a promise in tag implementation, simply replace `await somePromise` with `yield somePromise` and keep `* render()` instead of `async render()` will do the trick. See <a href="/tutorials/sync-and-async.html">Sync and Async</a> for more details.
 {% endnote %}
 
