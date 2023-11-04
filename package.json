@@ -26,6 +26,7 @@
     "build:cjs": "BUNDLES=cjs rollup -c rollup.config.mjs",
     "build:min": "BUNDLES=min rollup -c rollup.config.mjs",
     "build:umd": "BUNDLES=umd rollup -c rollup.config.mjs",
+    "build:charmap": "./bin/character-gen.js > src/util/character.ts",
     "build:docs": "bin/build-docs.sh"
   },
   "bin": {

@@ -464,4 +464,9 @@ describe('Issues', function () {
     }
     expect(engine.parseAndRenderSync(tpl, ctx)).toEqual('FOO')
   })
+  it('#655 Error in the tokenization process due to an invalid value expression', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{{ÜLKE}}', { ÜLKE: 'Türkiye' })
+    expect(result).toEqual('Türkiye')
+  })
 })

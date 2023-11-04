@@ -68,6 +68,13 @@
       <td align="center" valign="top" width="0%"><a href="https://github.com/mahyar-pasarzangene"><img src="https://avatars.githubusercontent.com/u/16485039?v=4?s=100" width="100px;" alt="Mahyar Pasarzangene"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://hubelbauer.net/"><img src="https://avatars.githubusercontent.com/u/6831144?v=4?s=100" width="100px;" alt="Tomáš Hübelbauer"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://sixtwothree.org"><img src="https://avatars.githubusercontent.com/u/73866?v=4?s=100" width="100px;" alt="Jason Garber"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://www.dropkiq.com/"><img src="https://avatars.githubusercontent.com/u/69064?v=4?s=100" width="100px;" alt="Adam Darrah"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://www.11ty.dev/"><img src="https://avatars.githubusercontent.com/u/35147177?v=4?s=100" width="100px;" alt="Eleventy"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="http://nickreilingh.com/"><img src="https://avatars.githubusercontent.com/u/2458645?v=4?s=100" width="100px;" alt="Nick Reilingh"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="http://ebobby.org"><img src="https://avatars.githubusercontent.com/u/170356?v=4?s=100" width="100px;" alt="Francisco Soto"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://www.davidlj95.com"><img src="https://avatars.githubusercontent.com/u/8050648?v=4?s=100" width="100px;" alt="David LJ"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://github.com/RasmusWL"><img src="https://avatars.githubusercontent.com/u/1054041?v=4?s=100" width="100px;" alt="Rasmus Wriedt Larsen"/></a></td>
     </tr>
   </tbody>
 </table>

@@ -1,4 +1,4 @@
-import { IDENTIFIER, TYPES } from '../util/character'
+import { isWord } from '../util/character'
 
 interface TrieInput<T> {
   [key: string]: T
@@ -25,7 +25,7 @@ export function createTrie<T = any> (input: TrieInput<T>): Trie<T> {
       const c = name[i]
       node[c] = node[c] || {}
 
-      if (i === name.length - 1 && (TYPES[name.charCodeAt(i)] & IDENTIFIER)) {
+      if (i === name.length - 1 && isWord(name[i])) {
         node[c].needBoundary = true
       }
 
