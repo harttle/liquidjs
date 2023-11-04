@@ -1,3 +1,10 @@
+## [10.9.4](https://github.com/harttle/liquidjs/compare/v10.9.3...v10.9.4) (2023-11-04)
+
+
+### Bug Fixes
+
+* allow unicode to be identifiers, fixes [#655](https://github.com/harttle/liquidjs/issues/655) ([dd7616a](https://github.com/harttle/liquidjs/commit/dd7616acb9a71b77f39d2fa24b6f68a7caef87f1))
+
 ## [10.9.3](https://github.com/harttle/liquidjs/compare/v10.9.2...v10.9.3) (2023-10-15)
 
 
