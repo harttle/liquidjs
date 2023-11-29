@@ -47,6 +47,7 @@ sidebar:
     access_scope_in_filters: Access Scope in Filters
     parse_parameters: Parse Parameters
     render_tag_content: Render Tag Content
+    drops: Liquid Drops
     sync_and_async: Sync and Async
     whitespace: Whitespace Control
     plugins: Plugins

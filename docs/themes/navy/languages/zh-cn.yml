@@ -44,6 +44,7 @@ sidebar:
     access_scope_in_filters: 过滤器里访问上下文
     parse_parameters: 参数解析
     render_tag_content: 渲染标签内容
+    drops: Liquid Drop
     sync_and_async: 同步和异步
     whitespace: 换行和缩进
     plugins: 插件
