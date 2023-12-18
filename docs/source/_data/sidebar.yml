@@ -70,6 +70,7 @@ filters:
   strip: strip.html
   strip_html: strip_html.html
   strip_newlines: strip_newlines.html
+  sum: sum.html
   times: times.html
   truncate: truncate.html
   truncatewords: truncatewords.html
