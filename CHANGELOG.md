@@ -1,3 +1,10 @@
+# [10.10.0](https://github.com/harttle/liquidjs/compare/v10.9.4...v10.10.0) (2023-12-19)
+
+
+### Features
+
+* Array sum filter ([#661](https://github.com/harttle/liquidjs/issues/661)) ([629d958](https://github.com/harttle/liquidjs/commit/629d958b86a97ddf2921d2285b7c9ea83430004e))
+
 ## [10.9.4](https://github.com/harttle/liquidjs/compare/v10.9.3...v10.9.4) (2023-11-04)
 
 
