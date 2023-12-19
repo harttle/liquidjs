@@ -74,6 +74,44 @@ describe('filters/array', function () {
       return test(tpl, { arr: [a, b, c] }, 'Alice Bob Carol')
     })
   })
+  describe('sum', () => {
+    it('should support sum with no args', function () {
+      const ages = [21, null, -4, '4.5', 13.25, undefined, 0]
+      return test('{{ages | sum}}', { ages }, '34.75')
+    })
+    it('should support sum with property', function () {
+      const ages = [21, null, -4, '4.5', 13.25, undefined, 0].map(x => ({ age: x }))
+      return test('{{ages | sum: "age"}}', { ages }, '34.75')
+    })
+    it('should support sum with nested property', function () {
+      const ages = [21, null, -4, '4.5', 13.25, undefined, 0].map(x => ({ age: { first: x } }))
+      return test('{{ages | sum: "age.first"}}', { ages }, '34.75')
+    })
+    it('should support non-array input', function () {
+      const age = 21.5
+      return test('{{age | sum}}', { age }, '21.5')
+    })
+    it('should coerce missing property to zero', function () {
+      const ages = [{ qty: 1 }, { qty: 2, cnt: 3 }, { cnt: 4 }]
+      return test('{{ages | sum}} {{ages | sum: "cnt"}} {{ages | sum: "other"}}', { ages }, '0 7 0')
+    })
+    it('should coerce indexable non-map values to zero', function () {
+      const input = [1, 'foo', { quantity: 3 }]
+      return test('{{input | sum}}', { input }, '1')
+    })
+    it('should coerce unindexable values to zero', function () {
+      const input = [1, null, { quantity: 2 }]
+      return test('{{input | sum}}', { input }, '1')
+    })
+    it('should coerce true to 1', function () {
+      const input = [1, true, null, { quantity: 2 }]
+      return test('{{input | sum}}', { input }, '2')
+    })
+    it('should not support nested arrays', function () {
+      const ages = [1, [2, [3, 4]]]
+      return test('{{ages | sum}}', { ages }, '1')
+    })
+  })
   describe('compact', () => {
     it('should compact array', function () {
       const posts = [{ category: 'foo' }, { category: 'bar' }, { foo: 'bar' }]

@@ -43,6 +43,15 @@ export function * map (this: FilterImpl, arr: Scope[], property: string): Iterab
   return results
 }
 
+export function * sum (this: FilterImpl, arr: Scope[], property?: string): IterableIterator<unknown> {
+  let sum = 0
+  for (const item of toArray(toValue(arr))) {
+    const data = Number(property ? yield this.context._getFromScope(item, stringify(property), false) : item)
+    sum += Number.isNaN(data) ? 0 : data
+  }
+  return sum
+}
+
 export function compact<T> (this: FilterImpl, arr: T[]) {
   arr = toValue(arr)
   return toArray(arr).filter(x => !isNil(toValue(x)))
