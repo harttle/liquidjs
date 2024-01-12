@@ -9,7 +9,7 @@
     "./dist/liquid.node.cjs.js": "./dist/liquid.browser.umd.js",
     "./dist/liquid.node.esm.js": "./dist/liquid.browser.esm.js"
   },
-  "types": "dist/src/index.d.ts",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=14"
   },
