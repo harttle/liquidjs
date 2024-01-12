@@ -18,11 +18,12 @@ const treeshake = {
 const tsconfig = (target) => ({
   check: true,
   tsconfigOverride: {
-    include: [ 'src' ],
-    exclude: [ 'test', 'benchmark' ],
+    include: ['src'],
+    exclude: ['test', 'benchmark'],
     compilerOptions: {
       target,
-      module: 'ES2015'
+      module: 'ES2015',
+      rootDir: 'src'
     }
   }
 })
