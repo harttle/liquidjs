@@ -1,8 +1,8 @@
 import { isComparable } from '../drop/comparable'
 import { Context } from '../context'
-import { isFunction, toValue } from '../util'
+import { toValue } from '../util'
 import { isFalsy, isTruthy } from '../render/boolean'
-import { isArray } from '../util/underscore'
+import { isArray, isString } from '../util/underscore'
 
 export type UnaryOperatorHandler = (operand: any, ctx: Context) => boolean;
 export type BinaryOperatorHandler = (lhs: any, rhs: any, ctx: Context) => boolean;
@@ -34,8 +34,9 @@ export const defaultOperators: Operators = {
   },
   'contains': (l: any, r: any) => {
     l = toValue(l)
-    r = toValue(r)
-    return l && isFunction(l.indexOf) ? l.indexOf(r) > -1 : false
+    if (l && isArray(l)) return l.some((i) => equal(i, r))
+    if (l && isString(l)) return l.indexOf(toValue(r)) > -1
+    return false
   },
   'not': (v: any, ctx: Context) => isFalsy(toValue(v), ctx),
   'and': (l: any, r: any, ctx: Context) => isTruthy(toValue(l), ctx) && isTruthy(toValue(r), ctx),
