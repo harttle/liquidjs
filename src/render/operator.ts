@@ -34,8 +34,8 @@ export const defaultOperators: Operators = {
   },
   'contains': (l: any, r: any) => {
     l = toValue(l)
-    if (l && isArray(l)) return l.some((i) => equal(i, r))
-    if (l && isString(l)) return l.indexOf(toValue(r)) > -1
+    if (isArray(l)) return l.some((i) => equal(i, r))
+    if (isString(l)) return l.indexOf(toValue(r)) > -1
     return false
   },
   'not': (v: any, ctx: Context) => isFalsy(toValue(v), ctx),
