@@ -469,4 +469,9 @@ describe('Issues', function () {
     const result = engine.parseAndRenderSync('{{ÜLKE}}', { ÜLKE: 'Türkiye' })
     expect(result).toEqual('Türkiye')
   })
+  it('#667 should throw if \'else if\' is used instead of \'elsif\'', () => {
+    const engine = new Liquid()
+    const tpl = '{% if true %}true{% else if false %}false{% endif %}'
+    expect(() => engine.parse(tpl)).toThrow('unexpected token: " if false"')
+  })
 })

@@ -19,6 +19,7 @@ export class TagToken extends DelimitedToken {
     this.tokenizer = new Tokenizer(input, options.operators, file, this.contentRange)
     this.name = this.tokenizer.readTagName()
     this.tokenizer.assert(this.name, `illegal tag syntax, tag name expected`)
+    this.tokenizer.assert(this.name !== 'else' || this.contentRange[1] - this.contentRange[0] === 4, () => `unexpected token: ${this.tokenizer.snapshot()}`)
     this.tokenizer.skipBlank()
   }
   get args (): string {
