@@ -147,6 +147,20 @@ describe('Expression', function () {
       const ctx = new Context({ x: 'XXX', X: new TemplateDrop() })
       expect(await toPromise(create('x contains X').evaluate(ctx, false))).toBe(true)
     })
+    it('should support Drops for "x contains "x"" when x is an array', async () => {
+      class TemplateDrop extends Drop {
+        valueOf () { return 'X' }
+      }
+      const ctx = new Context({ x: [new TemplateDrop()], X: 'X' })
+      expect(await toPromise(create('x contains X').evaluate(ctx, false))).toBe(true)
+    })
+    it('should support Drops for "x contains "x"" when x is an array on both operands', async () => {
+      class TemplateDrop extends Drop {
+        valueOf () { return 'X' }
+      }
+      const ctx = new Context({ x: [new TemplateDrop()], X: new TemplateDrop() })
+      expect(await toPromise(create('x contains X').evaluate(ctx, false))).toBe(true)
+    })
     it('should support value and !=', async function () {
       const ctx = new Context({ empty: '' })
       expect(await toPromise(create('empty and empty != ""').evaluate(ctx, false))).toBe(false)
