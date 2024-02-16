@@ -31,7 +31,11 @@ export default class extends Tag {
       })
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endcase', () => stream.stop())
-      .on('template', (tpl: Template) => p.push(tpl))
+      .on('template', (tpl: Template) => {
+        if (p !== this.elseTemplates || (p === this.elseTemplates && p.length === 0)) {
+          p.push(tpl)
+        }
+      })
       .on('end', () => {
         throw new Error(`tag ${tagToken.getText()} not closed`)
       })

@@ -6,7 +6,7 @@ export default class extends Tag {
 
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
-    let p
+    let p: Template[] = []
     liquid.parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
         value: new Value(tagToken.args, this.liquid),
@@ -18,7 +18,11 @@ export default class extends Tag {
       }))
       .on('tag:else', () => (p = this.elseTemplates))
       .on('tag:endif', function () { this.stop() })
-      .on('template', (tpl: Template) => p.push(tpl))
+      .on('template', (tpl: Template) => {
+        if (p !== this.elseTemplates || (p === this.elseTemplates && p.length === 0)) {
+          p.push(tpl)
+        }
+      })
       .on('end', () => { throw new Error(`tag ${tagToken.getText()} not closed`) })
       .start()
   }
