@@ -477,4 +477,12 @@ describe('Issues', function () {
     '{% else %}don\'t show{% endif %}', {})
     expect(result).toEqual('show this')
   })
+  it('#672 Should not render an elseif after an else branch', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% if false %}don\'t show' +
+      '{% else %}show' +
+      '{% elsif true %}don\'t show' +
+    '{% endif %}', {})
+    expect(result).toEqual('show')
+  })
 })

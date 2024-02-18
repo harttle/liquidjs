@@ -13,10 +13,16 @@ export default class extends Tag {
         value: new Value(tagToken.args, this.liquid),
         templates: (p = [])
       }))
-      .on('tag:elsif', (token: TagToken) => this.branches.push({
-        value: new Value(token.args, this.liquid),
-        templates: (p = [])
-      }))
+      .on('tag:elsif', (token: TagToken) => {
+        if (elseCount > 0) {
+          p = []
+          return
+        }
+        this.branches.push({
+          value: new Value(token.args, this.liquid),
+          templates: (p = [])
+        })
+      })
       .on('tag:else', () => {
         elseCount++
         p = this.elseTemplates

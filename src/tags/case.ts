@@ -35,7 +35,6 @@ export default class extends Tag {
         })
       })
       .on('tag:else', () => {
-        p = []
         elseCount++
         p = this.elseTemplates
       })

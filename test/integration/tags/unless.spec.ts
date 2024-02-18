@@ -62,6 +62,14 @@ describe('tags/unless', function () {
     '{% endunless %}', {})
     expect(html).toEqual('')
   })
+  it('should not render an elseif after an else branch', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% unless true %}don\'t show' +
+      '{% else %}show' +
+      '{% elsif true %}don\'t show' +
+    '{% endunless %}', {})
+    expect(result).toEqual('show')
+  })
 
   describe('sync support', function () {
     it('should render else when predicate yields true', function () {
