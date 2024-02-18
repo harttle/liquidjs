@@ -75,6 +75,8 @@
       <td align="center" valign="top" width="0%"><a href="http://ebobby.org"><img src="https://avatars.githubusercontent.com/u/170356?v=4?s=100" width="100px;" alt="Francisco Soto"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://www.davidlj95.com"><img src="https://avatars.githubusercontent.com/u/8050648?v=4?s=100" width="100px;" alt="David LJ"/></a></td>
       <td align="center" valign="top" width="0%"><a href="https://github.com/RasmusWL"><img src="https://avatars.githubusercontent.com/u/1054041?v=4?s=100" width="100px;" alt="Rasmus Wriedt Larsen"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://github.com/brunodccarvalho"><img src="https://avatars.githubusercontent.com/u/24962950?v=4?s=100" width="100px;" alt="Bruno Carvalho"/></a></td>
+      <td align="center" valign="top" width="0%"><a href="https://github.com/fupengl"><img src="https://avatars.githubusercontent.com/u/20211964?v=4?s=100" width="100px;" alt="傅鹏"/></a></td>
     </tr>
   </tbody>
 </table>

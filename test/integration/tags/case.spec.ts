@@ -91,4 +91,32 @@ describe('tags/case', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).toBe('and or or')
   })
+  it('should not render anything after an else branch', async function () {
+    const html = await liquid.parseAndRenderSync('{% assign value = "this" %}' +
+    '{% case true %}' +
+      '{% when false %}don\'t show' +
+      '{% else %}show {{ value }}' +
+      '{% else %}don\'t show' +
+    '{% endcase %}', {})
+    expect(html).toEqual('show this')
+  })
+  it('should not render anything after an else branch even when first else branch is empty', async function () {
+    const html = await liquid.parseAndRenderSync('{% case true %}' +
+      '{% when false %}don\'t show' +
+      '{% else %}' +
+      '{% else %}don\'t show' +
+    '{% endcase %}', {})
+    expect(html).toEqual('')
+  })
+  it('should not render anything after an else branch even when there are \'when\' conditions', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% assign value = "this" %}' +
+    '{% case true -%}' +
+      '{% when false -%}don\'t show' +
+      '{% else %}show {{ value }}' +
+      '{% else %}don\'t show' +
+      '{%- when true -%}don\'t show' +
+    '{%- endcase %}', {})
+    expect(result).toEqual('show this')
+  })
 })

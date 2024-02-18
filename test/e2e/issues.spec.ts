@@ -469,19 +469,12 @@ describe('Issues', function () {
     const result = engine.parseAndRenderSync('{{ÜLKE}}', { ÜLKE: 'Türkiye' })
     expect(result).toEqual('Türkiye')
   })
-  it('#670 Does not render multiple `else` branches in the same if conditional', () => {
+  it('#670 Should not render anything after an else branch', () => {
     const engine = new Liquid()
-    const result = engine.parseAndRenderSync(`{% if false %}don't show{% else %}show{% else %}don't show{% endif %}`, {})
-    expect(result).toEqual('show')
-  })
-  it('#670 Does not render multiple `else` branches in the same unless conditional', () => {
-    const engine = new Liquid()
-    const result = engine.parseAndRenderSync(`{% unless true %}don't show{% else %}show{% else %}don't show{% endunless %}`, {})
-    expect(result).toEqual('show')
-  })
-  it('#670 Does not render multiple `else` branches in the same case conditional', () => {
-    const engine = new Liquid()
-    const result = engine.parseAndRenderSync(`{% case true %}{% when false %}don't show{% else %}show{% else %}don't show{% endcase %}`, {})
-    expect(result).toEqual('show')
+    const result = engine.parseAndRenderSync('{% assign value = "this" %}' +
+      '{% if false %}don\'t show' +
+      '{% else %}show {{ value }}' +
+    '{% else %}don\'t show{% endif %}', {})
+    expect(result).toEqual('show this')
   })
 })

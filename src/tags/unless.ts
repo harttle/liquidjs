@@ -6,6 +6,7 @@ export default class extends Tag {
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
     let p: Template[] = []
+    let elseCount = 0
     this.liquid.parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
         value: new Value(tagToken.args, this.liquid),
@@ -17,10 +18,13 @@ export default class extends Tag {
         test: isTruthy,
         templates: (p = [])
       }))
-      .on('tag:else', () => (p = this.elseTemplates))
+      .on('tag:else', () => {
+        elseCount++
+        p = this.elseTemplates
+      })
       .on('tag:endunless', function () { this.stop() })
       .on('template', (tpl: Template) => {
-        if (p !== this.elseTemplates || (p === this.elseTemplates && p.length === 0)) {
+        if (p !== this.elseTemplates || (p === this.elseTemplates && elseCount === 1)) {
           p.push(tpl)
         }
       })
