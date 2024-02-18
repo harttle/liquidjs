@@ -143,4 +143,12 @@ describe('tags/if', function () {
     const html = await liquid.parseAndRender(src, scope)
     return expect(html).toBe('success')
   })
+  it('should not render anything after an else branch even when first else branch is empty', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% if false %}don\'t show' +
+      '{% else %}' +
+      '{% else %}don\'t show' +
+    '%{% endif %}', {})
+    expect(result).toEqual('')
+  })
 })

@@ -47,6 +47,29 @@ describe('tags/unless', function () {
       Inside wonderland
       After wonderland`)
   })
+  it('should not render anything after an else branch', async function () {
+    const html = await liquid.parseAndRenderSync('{% assign value = "this" %}' +
+      '{% unless true %}don\'t show' +
+      '{% else %}show {{ value }}' +
+      '{% else %}don\'t show' +
+    '{% endunless %}', {})
+    expect(html).toEqual('show this')
+  })
+  it('should not render anything after an else branch even when first else branch is empty', async function () {
+    const html = await liquid.parseAndRenderSync('{% unless true %}don\'t show' +
+      '{% else %}' +
+      '{% else %}don\'t show' +
+    '{% endunless %}', {})
+    expect(html).toEqual('')
+  })
+  it('should not render an elseif after an else branch', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% unless true %}don\'t show' +
+      '{% else %}show' +
+      '{% elsif true %}don\'t show' +
+    '{% endunless %}', {})
+    expect(result).toEqual('show')
+  })
 
   describe('sync support', function () {
     it('should render else when predicate yields true', function () {

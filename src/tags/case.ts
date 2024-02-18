@@ -10,8 +10,13 @@ export default class extends Tag {
     this.elseTemplates = []
 
     let p: Template[] = []
+    let elseCount = 0
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('tag:when', (token: TagToken) => {
+        if (elseCount > 0) {
+          return
+        }
+
         p = []
 
         const values: ValueToken[] = []
@@ -29,9 +34,16 @@ export default class extends Tag {
           templates: p
         })
       })
-      .on('tag:else', () => (p = this.elseTemplates))
+      .on('tag:else', () => {
+        elseCount++
+        p = this.elseTemplates
+      })
       .on('tag:endcase', () => stream.stop())
-      .on('template', (tpl: Template) => p.push(tpl))
+      .on('template', (tpl: Template) => {
+        if (p !== this.elseTemplates || elseCount === 1) {
+          p.push(tpl)
+        }
+      })
       .on('end', () => {
         throw new Error(`tag ${tagToken.getText()} not closed`)
       })

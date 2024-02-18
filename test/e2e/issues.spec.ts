@@ -469,4 +469,20 @@ describe('Issues', function () {
     const result = engine.parseAndRenderSync('{{ÜLKE}}', { ÜLKE: 'Türkiye' })
     expect(result).toEqual('Türkiye')
   })
+  it('#670 Should not render anything after an else branch', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% assign value = "this" %}' +
+      '{% if false %}don\'t show' +
+      '{% else %}show {{ value }}' +
+    '{% else %}don\'t show{% endif %}', {})
+    expect(result).toEqual('show this')
+  })
+  it('#672 Should not render an elseif after an else branch', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync('{% if false %}don\'t show' +
+      '{% else %}show' +
+      '{% elsif true %}don\'t show' +
+    '{% endif %}', {})
+    expect(result).toEqual('show')
+  })
 })
