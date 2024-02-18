@@ -1,3 +1,11 @@
+## [10.10.1](https://github.com/harttle/liquidjs/compare/v10.10.0...v10.10.1) (2024-02-18)
+
+
+### Bug Fixes
+
+* in conditionals, don't render anything after an else branch ([#671](https://github.com/harttle/liquidjs/issues/671)) ([f816955](https://github.com/harttle/liquidjs/commit/f81695570491ede77975de2c26a07612a2d62c28))
+* Rely on equal for computing contains ([#668](https://github.com/harttle/liquidjs/issues/668)) ([1937aa1](https://github.com/harttle/liquidjs/commit/1937aa1f1dce01ee6332f39a6e658e85cbe4f30b))
+
 # [10.10.0](https://github.com/harttle/liquidjs/compare/v10.9.4...v10.10.0) (2023-12-19)
 
 
