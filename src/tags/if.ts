@@ -29,7 +29,7 @@ export default class extends Tag {
       })
       .on('tag:endif', function () { this.stop() })
       .on('template', (tpl: Template) => {
-        if (p !== this.elseTemplates || (p === this.elseTemplates && elseCount === 1)) {
+        if (p !== this.elseTemplates || elseCount === 1) {
           p.push(tpl)
         }
       })
