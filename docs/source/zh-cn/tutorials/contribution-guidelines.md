@@ -22,16 +22,6 @@ Star 是支持 LiquidJS 最重要的方式，也是最简单的方式：通过�
 
 LiquidJS 是开源和免费的，但支持 [Open Collective][oc] 和 [Github Sponsors](https://github.com/sponsors/harttle) 赞助，请通过 Twitter (harttleharttle) 或邮件 (harttleharttle at gmail) 联系我，把您加到 [贡献者列表](https://github.com/harttle/liquidjs#contributors-) 中。
 
-### 支持者
-如果你喜欢 LiquidJS，希望支持我们，你可以成为 Open Collective Backer！
-
-<object type="image/svg+xml" data="https://opencollective.com/liquidjs/backers.svg?avatarHeight=72"></object>
-
-### 赞助商
-如果你的公司/业务在使用 LiquidJS，请考虑赞助我们！让 LiquidJS 变得更好，以及保持开放和免费！
-
-<object type="image/svg+xml" data="https://opencollective.com/liquidjs/sponsors.svg?avatarHeight=72"></object>
-
 [oc]: https://opencollective.com/liquidjs/
 [shopify/liquid]: https://shopify.github.io/liquid/
 [caniuse-promises]: http://caniuse.com/#feat=promises

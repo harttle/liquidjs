@@ -321,8 +321,7 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/2703309?v=4",
       "profile": "https://github.com/amit777",
       "contributions": [
-        "code",
-        "financial"
+        "code"
       ]
     },
     {
@@ -585,33 +584,6 @@
       "profile": "https://sixtwothree.org",
       "contributions": [
         "code"
-      ]
-    },
-    {
-      "login": "Checkout-Blocks",
-      "name": "Checkout Blocks",
-      "avatar_url": "https://avatars.githubusercontent.com/u/114603307?v=4",
-      "profile": "https://www.checkoutblocks.com/",
-      "contributions": [
-        "financial"
-      ]
-    },
-    {
-      "login": "akdarrah",
-      "name": "Adam Darrah",
-      "avatar_url": "https://avatars.githubusercontent.com/u/69064?v=4",
-      "profile": "https://www.dropkiq.com/",
-      "contributions": [
-        "financial"
-      ]
-    },
-    {
-      "login": "11ty",
-      "name": "Eleventy",
-      "avatar_url": "https://avatars.githubusercontent.com/u/35147177?v=4",
-      "profile": "https://www.11ty.dev/",
-      "contributions": [
-        "financial"
       ]
     },
     {

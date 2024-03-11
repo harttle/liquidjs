@@ -171,7 +171,7 @@
     background: var(--color-link-hover)
     color: #fff
 
-#backers-wrap, #sponsors-wrap, #contributors-wrap
+#sponsors-wrap, #contributors-wrap
   background: var(--color-navy-lighter)
   border-top: 1px solid #161d24
   border-bottom: 1px solid #161d24
@@ -192,28 +192,20 @@
       text-decoration: none
 
 #contributors-wrap
-  .all-contributors
-    tr
-      display: flex
-      flex-wrap: wrap
-    td
-      margin: 10px 2px 0
-      a img
-        display: inline-block
-        height: 72px
-        width: 72px
-        background: var(--color-gray)
-        border-radius: 50%
-        margin-bottom: 10px
   .description a
     color: #fff
     &:hover
       background: #fff
       color: var(--color-navy-lighter)
 
-#sponsors-wrap, #backers-wrap
+#sponsors-wrap
   border: none
+  text-align: right
+  background: var(--color-content-bg)
   overflow: hidden;
+  .contributors
+    display: flex;
+    justify-content: right;
   .inner
     h3
       color: var(--color-default)
@@ -235,6 +227,16 @@
           background: #fff
           color: var(--color-navy-lighter)
 
-#backers-wrap
-  text-align: right
-  background: var(--color-content-bg)
+.contributors
+  tr
+    display: flex
+    flex-wrap: wrap
+  td
+    margin: 10px 2px 0
+    a img
+      display: inline-block
+      height: 72px
+      width: 72px
+      background: var(--color-gray)
+      border-radius: 50%
+      margin-bottom: 10px

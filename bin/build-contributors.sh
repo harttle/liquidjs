@@ -9,6 +9,7 @@ sedi() {
   fi
 }
 
+# create docs/themes/navy/layout/partial/all-contributors.swig
 cp .all-contributorsrc docs/.all-contributorsrc
 sedi \
   -e 's/README.md/docs\/themes\/navy\/layout\/partial\/all-contributors.swig/g' \
@@ -17,3 +18,11 @@ sedi \
 
 all-contributors --config docs/.all-contributorsrc generate
 sedi 's/<br \/>.*<\/td>/<\/a><\/td>/g' docs/themes/navy/layout/partial/all-contributors.swig
+
+# create docs/themes/navy/layout/partial/financial-contributors.swig
+awk '/FINANCIAL-CONTRIBUTORS-BEGIN/{flag=1;next}/FINANCIAL-CONTRIBUTORS-END/{flag=0}flag' README.md | \
+  sed 's/<br \/>.*<\/td>/<\/a><\/td>/g' | \
+  sed 's/width="[^"]*"//g' | \
+  tr -d '\n' | \
+  sed 's/<\/tr>\s*<tr>//g' \
+  > docs/themes/navy/layout/partial/financial-contributors.swig

@@ -19,7 +19,6 @@
       </select>
     </div>
     <a href="https://github.com/{{ config.github }}" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">Github</span></a>
-    <a href="https://opencollective.com/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-opencollective"></i> <span class="icon-nav-title">Support</span></a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>

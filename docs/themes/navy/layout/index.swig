@@ -37,18 +37,9 @@
     <div class="inner">
       <h3>{{__('index.contributors.title')}}</h3>
       <p class="description">{{__('index.contributors.description')}}</p>
-      <div class="all-contributors">
+      <div class="contributors">
         {{ partial('partial/all-contributors') }}
       </div>
-    </div>
-  </div>
-</div>
-<div id="backers-wrap">
-  <div class="wrapper">
-    <div class="inner">
-      <h3>{{__('index.backers.title')}}</h3>
-      <p class="description">{{__('index.backers.description')}}</p>
-      <img src="https://opencollective.com/liquidjs/individuals.svg">
     </div>
   </div>
 </div>
@@ -57,7 +48,9 @@
     <div class="inner">
       <h3>{{__('index.sponsors.title')}}</h3>
       <p class="description">{{__('index.sponsors.description')}}</p>
-      <img class="open-collective" src="https://opencollective.com/liquidjs/organizations.svg">
+      <div class="contributors">
+        {{ partial('partial/financial-contributors') }}
+      </div>
     </div>
   </div>
 </div>
