@@ -485,4 +485,18 @@ describe('Issues', function () {
     '{% endif %}', {})
     expect(result).toEqual('show')
   })
+  it('#675 10.10.1 Operator: contains regression', () => {
+    const engine = new Liquid()
+    class StrictStringForLiquid {
+      constructor (private value: string) {}
+      indexOf (other: unknown) {
+        return this.value.indexOf(String(other))
+      }
+    }
+    const result = engine.parseAndRenderSync('{{ str contains sub }}', {
+      str: new StrictStringForLiquid('string'),
+      sub: 'str'
+    })
+    expect(result).toEqual('true')
+  })
 })
