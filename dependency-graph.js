@@ -51,7 +51,11 @@ function createDependencyTree(text) {
  * @param {*} graph = the current dependency graph
  */
 function parseTemplate(template, engine, graph) {
-  if (template.name === "assign") {
+  if (
+    template.name === "assign" ||
+    template.name === "parseAssign" ||
+    template.name === "assignVar"
+  ) {
     const dependencyData = parseAssign(template, engine);
     dependencyData.dependsOn.forEach(function (dependency) {
       const affectedVariables = graph[dependency] || [];
@@ -61,7 +65,11 @@ function parseTemplate(template, engine, graph) {
       graph[dependency] = affectedVariables;
     });
   } else if (template.name === "if") {
-    parseIf(template, engine, graph);
+    parseIf(template, engine, graph, parseTemplate);
+  } else if (template.name === "unless") {
+    parseUnless(template, engine, graph, parseTemplate);
+  } else if (template.name === "for") {
+    parseFor(template, engine, graph, parseTemplate);
   }
 }
 
@@ -112,15 +120,35 @@ function parseAssign(assignTemplate, engine) {
   };
 }
 
-function parseIf(ifTemplate, engine, graph) {
+function parseIf(ifTemplate, engine, accumulator, callback) {
   const impl = ifTemplate.tagImpl;
   impl.branches.forEach(function (branch) {
     branch.templates.forEach(function (tpl) {
-      parseTemplate(tpl, engine, graph);
+      callback(tpl, engine, accumulator);
     });
   });
   impl.elseTemplates.forEach(function (tpl) {
-    parseTemplate(tpl, engine, graph);
+    callback(tpl, engine, accumulator);
+  });
+}
+
+function parseUnless(unlessTemplate, engine, accumulator, callback) {
+  const impl = unlessTemplate.tagImpl;
+  impl.templates.forEach(function (tpl) {
+    callback(tpl, engine, accumulator);
+  });
+  impl.elseTemplates.forEach(function (tpl) {
+    callback(tpl, engine, accumulator);
+  });
+}
+
+function parseFor(forTemplate, engine, accumulator, callback) {
+  const impl = forTemplate.tagImpl;
+  impl.templates.forEach(function (tpl) {
+    callback(tpl, engine, accumulator);
+  });
+  impl.elseTemplates.forEach(function (tpl) {
+    callback(tpl, engine, accumulator);
   });
 }
 
@@ -182,21 +210,21 @@ function getAffectedVariables(tree, inputVar) {
 /**
  * Checks for cyclic dependency in the input graph.
  * Returns the cyclic path if found otherwise returns `[]`
- * 
+ *
  * Iterate over all keys in the graph and run `dfs()`.
  * If a cycle is found, error will be thrown and further execution stop.
  * In case of error, `.pop()` won't be called after any `dfs()`, so `cycle` array will have the cyclic path.
  *
  * @param {*} graph The dependency tree created using `createDependencyTree`
- * @return {*} 
+ * @return {*}
  */
 function checkForCyclicDependency(graph) {
   let cycle = [];
   const UNVISITED = 0;
   const VISITING = 1;
   const VISITED = 2;
-  const statusMap = new Map(Object.keys(graph).map(key => [key, UNVISITED]));
-  
+  const statusMap = new Map(Object.keys(graph).map((key) => [key, UNVISITED]));
+
   /**
    * Utility function for depth first search.
    * Updates `cycle` to keep track of potential circular dependency.
@@ -206,18 +234,18 @@ function checkForCyclicDependency(graph) {
    * @return {undefined} Nothing is returned
    * @throws {Error} If a cycle is encountered while doing DFS
    */
-  function dfs(node, neighbours){
-    if(statusMap.get(node) === VISITED){
+  function dfs(node, neighbours) {
+    if (statusMap.get(node) === VISITED) {
       return;
     }
 
-    if(statusMap.get(node) === VISITING){
-      throw new Error('The graph contains cyclic dependency for ' + node);
+    if (statusMap.get(node) === VISITING) {
+      throw new Error("The graph contains cyclic dependency for " + node);
     }
 
     statusMap.set(node, VISITING);
 
-    neighbours.forEach(neighbour => {
+    neighbours.forEach((neighbour) => {
       cycle.push(neighbour);
       dfs(neighbour, graph[neighbour] || []);
       cycle.pop();
@@ -226,11 +254,11 @@ function checkForCyclicDependency(graph) {
     statusMap.set(node, VISITED);
   }
 
-  // By using try-catch, we stop error from going up the chain any more and return cycle array 
+  // By using try-catch, we stop error from going up the chain any more and return cycle array
   const entries = Object.entries(graph);
   try {
     entries.forEach(([node, neighbours]) => {
-      if(statusMap.get(node) === UNVISITED){
+      if (statusMap.get(node) === UNVISITED) {
         cycle.push(node);
         dfs(node, neighbours);
         cycle.pop();
@@ -249,11 +277,75 @@ function checkForCyclicDependency(graph) {
   return cycle.reverse();
 }
 
+/**
+ * The actual method that is called recursively till we figure out
+ * all the variables that are assigned a value.
+ *
+ * Note: The `assignedVarsArr` arg is mutated in-place.
+ */
+function _internal_getAssignedVars(template, engine, assignedVarsArr) {
+  if (
+    template.name === "assign" ||
+    template.name === "parseAssign" ||
+    template.name === "assignVar"
+  ) {
+    const dependencyData = parseAssign(template, engine);
+    if (
+      typeof dependencyData.defined === "string" &&
+      dependencyData.defined.length > 0
+    ) {
+      assignedVarsArr.push(dependencyData.defined);
+    }
+  } else if (template.name === "if") {
+    parseIf(template, engine, assignedVarsArr, _internal_getAssignedVars);
+  } else if (template.name === "unless") {
+    parseUnless(template, engine, assignedVarsArr, _internal_getAssignedVars);
+  } else if (template.name === "for") {
+    parseFor(template, engine, assignedVarsArr, _internal_getAssignedVars);
+  }
+}
+
+/**
+ * Returns a list of all variables that are assigned a value in the given computation expression.
+ * If any of `assign`, `parseAssign` or `assignVar` tags are used, it is considered an assignment.
+ *
+ * Example -
+ * ```
+ *  assign x = a + z
+ *
+ *
+ *  if p > q
+ *  assignVar y = x | times: 3
+ *  endif
+ *
+ *  for row in allRows
+ *  parseAssign z = '{"value": 0, "type": "USD"}'
+ *  endfor
+ *
+ * ```
+ *
+ * for `getAssignedVariables()` returns => `[x,y,z]`
+ *
+ * @param expression : The liquid expression string that needs to be analyzed
+ */
+function getAssignedVariables(expression) {
+  const engine = createEngine();
+  const templates = getTemplates(expression, engine);
+  const assignedArr = [];
+
+  templates.forEach(function (tpl) {
+    _internal_getAssignedVars(tpl, engine, assignedArr);
+  });
+
+  return Array.from(new Set(assignedArr));
+}
+
 module.exports = {
   parseAssign,
   getTemplates,
   createEngine,
   createDependencyTree,
   getAffectedVariables,
-  checkForCyclicDependency
+  checkForCyclicDependency,
+  getAssignedVariables,
 };
