@@ -29,10 +29,14 @@ LiquidJS 一直很重视兼容于 Ruby 版本的 Liquid。Liquid 模板语言最
 * 对象的迭代顺序。JavaScript 对象的迭代顺序是插入顺序和数字键递增顺序的组合，但 Ruby Hash 中只是插入顺序（JavaScript 字面量 Object 和 Ruby 字面量 Hash 的插入顺序解释也不同）。
 * 排序稳定性。shopify/liquid 和 LiquidJS 都没有定义 [sort][sort] 过滤器的稳定性在，它取决于 Ruby/JavaScript 内置的排序算法，在 Node.js 12+ 和 Google Chrome 70+ LiquidJS 的排序是 [稳定的][stable-sort]。
 * shopify/liquid 允许过滤器尾部的未匹配字符，但 LiquidJS 不允许。这就是说如果过滤器参数前忘记写冒号比如 `{%raw%}{{ "a b" | split " "}}{%endraw%}` LiquidJS 会抛出异常。这是为了提升 Liquid 模板的易用性，参考 [#208][#208] 和 [#212][#212]。
-* LiquidJS 有额外的标签：[layout][layout] 和相应的 `block`。
-* LiquidJS 有额外的过滤器：[json][json]。
+* LiquidJS 比 [Liquid 语言][liquid] 有更多的标签和过滤器：
+    * LiquidJS 自己定义的标签：[layout][layout]、[render][render] 和相应的 `block`。
+    * LiquidJS 自己定义的过滤器：[json][json]。
+    * 从 [Shopify][shopify-tags] 借来的不依赖 Shopify 平台的标签/过滤器。
+    * 从 [Jekyll][jekyll-filters] 借来的不依赖 Jekyll 框架的标签/过滤器。
 
-[layout]: https://liquidjs.com/tags/layout.html
+[layout]: ../tags/layout.html
+[render]: ../tags/render.html
 [json]: https://liquidjs.com/filters/json.html
 [#26]: https://github.com/harttle/liquidjs/pull/26
 [#59]: https://github.com/harttle/liquidjs/issues/59
@@ -46,3 +50,6 @@ LiquidJS 一直很重视兼容于 Ruby 版本的 Liquid。Liquid 模板语言最
 [plugins]: ./plugins.html#插件列表
 [ruby-liquid]: https://github.com/Shopify/liquid
 [afs]: https://liquidjs.com/tutorials/render-file.html#Abstract-File-System
+[liquid]: https://shopify.github.io/liquid/basics/introduction/
+[shopify-tags]: https://shopify.dev/docs/api/liquid/tags
+[jekyll-filters]: https://jekyllrb.com/docs/liquid/filters/

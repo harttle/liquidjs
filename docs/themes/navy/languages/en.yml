@@ -40,6 +40,7 @@ sidebar:
 
     advanced: Advanced
     caching: Caching
+    escaping: Escaping
     registeration: Register Filters/Tags
     access_scope_in_filters: Access Scope in Filters
     parse_parameters: Parse Parameters

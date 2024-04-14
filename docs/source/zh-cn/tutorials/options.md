@@ -100,6 +100,14 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 
 例如，空字符串在 JavaScript 中为假（`jsTruthy` 为 `true` 时），在 Shopify 真值表中为真。
 
+## outputEscape
+
+[outputEscape][outputEscape] 用来自动转义输出。它的值可以是 `"escape"`、`"json"` 或 `(val: unknown) => string`，默认为 `undefined`。
+
+- 如果被输出的变量不被信任，可以设置 `outputEscape: "escape"` 来自动把它们 HTML 转义。如果要直接输出则需要使用 [raw][raw] 过滤器。
+- 如果你在用 LiquidJS 来生产 JSON 文件，可以设置为 `"json"`。
+- `outputEscape` 甚至可以是函数，你可以借此控制整个 LiquidJS 的变量输出。注意函数的输入不一定是字符串，因为过滤器的返回值可以不是字符串，你的函数将会接到这个值。
+
 ## 时间日期和时区
 
 **timezoneOffset** 用来指定一个和你当地时区不同的时区，所有日期和时间输出时都转换到这个指定的时区。例如设置 `timezoneOffset: 0` 将会把所有日期按照 UTC/GMT 00:00 来输出。
@@ -147,3 +155,5 @@ LiquidJS 把这个选项默认值设为 <code>true</code> 以兼容于 shopify/l
 [wc]: ./whitespace-control.html
 [intro]: ./intro-to-liquid.html
 [jekyllInclude]: /api/interfaces/LiquidOptions.html#jekyllInclude
+[raw]: ../filters/raw.html
+[outputEscape]: /api/interfaces/LiquidOptions.html#outputEscape

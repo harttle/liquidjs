@@ -8,6 +8,7 @@ tutorials:
     express: use-in-expressjs.html
   advanced:
     caching: caching.html
+    escaping: escaping.html
     registeration: register-filters-tags.html
     access_scope_in_filters: access-scope-in-filters.html
     parse_parameters: parse-parameters.html
@@ -40,8 +41,12 @@ filters:
   downcase: downcase.html
   escape: escape.html
   escape_once: escape_once.html
+  find: find.html
+  find_exp: find_exp.html
   first: first.html
   floor: floor.html
+  group_by: group_by.html
+  group_by_exp: group_by_exp.html
   join: join.html
   json: json.html
   last: last.html

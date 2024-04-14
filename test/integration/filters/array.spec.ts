@@ -447,5 +447,109 @@ describe('filters/array', function () {
       await test('{{obj | where: "foo", "FOO" }}', scope, '[object Object]')
       await test('{{obj | where: "foo", "BAR" }}', scope, '')
     })
+    it('should support nested dynamic property', function () {
+      const products = [
+        { meta: { details: { class: 'A' } }, order: 1 },
+        { meta: { details: { class: 'B' } }, order: 2 },
+        { meta: { details: { class: 'B' } }, order: 3 }
+      ]
+      return test(`{% assign selected = products | where: 'meta.details["class"]', exp %}
+        {% for item in selected -%}
+        - {{ item.order }}
+        {% endfor %}`, { products, exp: 'B' }, `
+        - 2
+        - 3
+        `)
+    })
+    it('should support escape in property', function () {
+      const array = [
+        { foo: { "'": 'foo' }, order: 1 },
+        { foo: { "'": 'foo' }, order: 2 },
+        { foo: { "'": 'bar' }, order: 3 }
+      ]
+      return test(`{% assign selected = array | where: 'foo["\\'"]', "foo" %}
+        {% for item in selected -%}
+        - {{ item.order }}
+        {% endfor %}`, { array }, `
+        - 1
+        - 2
+        `)
+    })
+  })
+  describe('group_by', function () {
+    const members = [
+      { graduation_year: 2003, name: 'Jay' },
+      { graduation_year: 2003, name: 'John' },
+      { graduation_year: 2004, name: 'Jack' }
+    ]
+    it('should support group by property', function () {
+      const expected = [{
+        name: 2003,
+        items: [
+          { graduation_year: 2003, name: 'Jay' },
+          { graduation_year: 2003, name: 'John' }
+        ]
+      }, {
+        name: 2004,
+        items: [
+          { graduation_year: 2004, name: 'Jack' }
+        ]
+      }]
+      return test(
+        `{{ members | group_by: "graduation_year" | json}}`,
+        { members },
+        JSON.stringify(expected))
+    })
+  })
+  describe('group_by_exp', function () {
+    const members = [
+      { graduation_year: 2013, name: 'Jay' },
+      { graduation_year: 2014, name: 'John' },
+      { graduation_year: 2009, name: 'Jack' }
+    ]
+    it('should support group by expression', function () {
+      const expected = [{
+        name: '201',
+        items: [
+          { graduation_year: 2013, name: 'Jay' },
+          { graduation_year: 2014, name: 'John' }
+        ]
+      }, {
+        name: '200',
+        items: [
+          { graduation_year: 2009, name: 'Jack' }
+        ]
+      }]
+      return test(
+        `{{ members | group_by_exp: "item", "item.graduation_year | truncate: 3, ''" | json}}`,
+        { members },
+        JSON.stringify(expected))
+    })
+  })
+  describe('find', function () {
+    const members = [
+      { graduation_year: 2013, name: 'Jay' },
+      { graduation_year: 2014, name: 'John' },
+      { graduation_year: 2014, name: 'Jack' }
+    ]
+    it('should support find by property', function () {
+      return test(
+        `{{ members | find: "graduation_year", 2014 | json }}`,
+        { members },
+        `{"graduation_year":2014,"name":"John"}`)
+    })
+  })
+  describe('find_exp', function () {
+    const members = [
+      { graduation_year: 2013, name: 'Jay' },
+      { graduation_year: 2014, name: 'John' },
+      { graduation_year: 2014, name: 'Jack' }
+    ]
+    it('should support find by expression', function () {
+      return test(
+        `{{ members | find_exp: "item", "item.graduation_year == 2014" | json }}`,
+        { members },
+        `{"graduation_year":2014,"name":"John"}`)
+    })
   })
 })

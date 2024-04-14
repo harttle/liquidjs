@@ -17,7 +17,7 @@ export class Tokenizer {
     public input: string,
     operators: Operators = defaultOptions.operators,
     public file?: string,
-    private range?: [number, number]
+    range?: [number, number]
   ) {
     this.p = range ? range[0] : 0
     this.N = range ? range[1] : input.length
@@ -249,6 +249,11 @@ export class Tokenizer {
     return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
+  readNonEmptyIdentifier (): IdentifierToken | undefined {
+    const id = this.readIdentifier()
+    return id.size() ? id : undefined
+  }
+
   readTagName (): string {
     this.skipBlank()
     // Handle inline comment tags
@@ -269,8 +274,8 @@ export class Tokenizer {
     this.skipBlank()
     if (this.peek() === ',') ++this.p
     const begin = this.p
-    const name = this.readIdentifier()
-    if (!name.size()) return
+    const name = this.readNonEmptyIdentifier()
+    if (!name) return
     let value
 
     this.skipBlank()
@@ -306,6 +311,20 @@ export class Tokenizer {
     this.skipBlank()
     const begin = this.p
     const variable = this.readLiteral() || this.readQuoted() || this.readRange() || this.readNumber()
+    const props = this.readProperties(!variable)
+    if (!props.length) return variable
+    return new PropertyAccessToken(variable, props, this.input, begin, this.p)
+  }
+
+  readScopeValue (): ValueToken | undefined {
+    this.skipBlank()
+    const begin = this.p
+    const props = this.readProperties()
+    if (!props.length) return undefined
+    return new PropertyAccessToken(undefined, props, this.input, begin, this.p)
+  }
+
+  private readProperties (isBegin = true): (ValueToken | IdentifierToken)[] {
     const props: (ValueToken | IdentifierToken)[] = []
     while (true) {
       if (this.peek() === '[') {
@@ -315,24 +334,23 @@ export class Tokenizer {
         props.push(prop)
         continue
       }
-      if (!variable && !props.length) {
-        const prop = this.readIdentifier()
-        if (prop.size()) {
+      if (isBegin && !props.length) {
+        const prop = this.readNonEmptyIdentifier()
+        if (prop) {
           props.push(prop)
           continue
         }
       }
       if (this.peek() === '.' && this.peek(1) !== '.') { // skip range syntax
         this.p++
-        const prop = this.readIdentifier()
-        if (!prop.size()) break
+        const prop = this.readNonEmptyIdentifier()
+        if (!prop) break
         props.push(prop)
         continue
       }
       break
     }
-    if (!props.length) return variable
-    return new PropertyAccessToken(variable, props, this.input, begin, this.p)
+    return props
   }
 
   readNumber (): NumberToken | undefined {

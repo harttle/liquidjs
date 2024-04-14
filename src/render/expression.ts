@@ -43,12 +43,12 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
   const props: string[] = []
-  const variable = yield evalToken(token.variable, ctx, lenient)
   for (const prop of token.props) {
     props.push((yield evalToken(prop, ctx, false)) as unknown as string)
   }
   try {
     if (token.variable) {
+      const variable = yield evalToken(token.variable, ctx, lenient)
       return yield ctx._getFromScope(variable, props)
     } else {
       return yield ctx._get(props)

@@ -79,4 +79,29 @@ Featured product: {{ new_shirt.title }}
 Featured product: Hawaiian print sweater vest
 ```
 
+此外 `property` 可以是任意合法的变量表达式，就像在**输出**结构中一样，只是它的上下文是数组的每一个元素。对于下面的 `products` 数组：
+
+```javascript
+const products = [
+    { meta: { details: { class: 'A' } }, order: 1 },
+    { meta: { details: { class: 'B' } }, order: 2 },
+    { meta: { details: { class: 'B' } }, order: 3 }
+]
+```
+
+输入
+```liquid
+{% assign selected = products | where: 'meta.details["class"]', "B" %}
+{% for item in selected -%}
+- {{ item.order }}
+{% endfor %}
+```
+
+输出
+```text
+- 2
+- 3
+```
+
+
 [truthy]: ../tutorials/truthy-and-falsy.html
