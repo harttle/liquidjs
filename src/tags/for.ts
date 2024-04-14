@@ -1,5 +1,5 @@
 import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
-import { toEnumerable } from '../util/collection'
+import { toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
