@@ -16,7 +16,7 @@ In the meantime, it's now implemented in JavaScript, that means it has to be mor
 * **Async as first-class citizen**. Filters and tags can be implemented asynchronously by return a `Promise`.
 * **Also can be sync**. For scenarios that are not I/O intensive, render synchronously can be much faster. You can call synchronous APIs like `.renderSync()` as long as all the filters and tags in template support to be rendered synchronously. All builtin filters/tags support both sync and async render.
 * **[Abstract file system][afs]**. Along with async feature, LiquidJS can be used to serve templates stored in Databases [#414][#414], on remote HTTP server [#485][#485], and so on.
-* **Additional tags and filters** like `layout` and `json`.
+* **Additional tags and filters** like `layout` and `json`, see below for details.
 
 ## Differences
 
@@ -29,11 +29,16 @@ Though we're trying to be compatible with the Ruby version, there are still some
 * Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.
 * Sort stability. The [sort][sort] stability is also not defined in both shopify/liquid and LiquidJS, but it's [considered stable][stable-sort] for LiquidJS in Node.js 12+ and Google Chrome 70+.
 * Trailing unmatched characters inside filters are allowed in shopify/liquid but not in LiquidJS. It means filter arguments without a colon like `{%raw%}{{ "a b" | split " "}}{%endraw%}` will throw an error in LiquidJS. This is intended to improve Liquid usability, see [#208][#208] and [#212][#212].
-* LiquidJS has additional tags: [layout][layout] and corresponding `block` tag.
+* LiquidJS has more tags/filters than [the Liquid language][liquid]:
+    * LiquidJS-defined tags: [layout][layout], [render][render] and corresponding `block` tag.
+    * LiquidJS-defined filters: [json][json].
+    * Tags/filters that don't depend on Shopify platform are borrowed from [Shopify][shopify-tags].
+    * Tags/filters that don't depend on Jekyll framework are borrowed from [Jekyll][jekyll-filters]
 * LiquidJS [date][date] filter supports `%q` for date ordinals like `{{ '2023/02/02' | date: '%d%q of %b'}}` => `02nd of Feb`
 
 [date]: https://liquidjs.com/filters/date.html
-[layout]: https://liquidjs.com/tags/layout.html
+[layout]: ../tags/layout.html
+[render]: ../tags/render.html
 [json]: https://liquidjs.com/filters/json.html
 [#26]: https://github.com/harttle/liquidjs/pull/26
 [#59]: https://github.com/harttle/liquidjs/issues/59
@@ -47,3 +52,6 @@ Though we're trying to be compatible with the Ruby version, there are still some
 [plugins]: ./plugins.html#Plugin-List
 [ruby-liquid]: https://github.com/Shopify/liquid
 [afs]: https://liquidjs.com/tutorials/render-file.html#Abstract-File-System
+[liquid]: https://shopify.github.io/liquid/basics/introduction/
+[shopify-tags]: https://shopify.dev/docs/api/liquid/tags
+[jekyll-filters]: https://jekyllrb.com/docs/liquid/filters/

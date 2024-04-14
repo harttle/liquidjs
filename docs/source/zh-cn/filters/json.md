@@ -16,3 +16,24 @@ title: json
 ```text
 ["foo","bar","coo"]
 ```
+
+## 格式化
+
+{% since %}v10.11.0{% endsince %}
+
+可以指定一个 `space` 参数来格式化 JSON。
+
+Input
+```liquid
+{% assign arr = "foo bar coo" | split: " " %}
+{{ arr | json: 4 }}
+```
+
+Output
+```text
+[
+    "foo",
+    "bar",
+    "coo"
+]
+```

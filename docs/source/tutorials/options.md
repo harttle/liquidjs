@@ -102,6 +102,14 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
 
+## outputEscape
+
+[outputEscape][outputEscape] can be used to automatically escape output strings. It can be one of `"escape"`, `"json"`, or `(val: unknown) => string`, defaults to `undefined`.
+
+- For untrusted output variables, set `outputEscape: "escape"` makes them be HTML escaped by default. You'll need [raw][raw] filter for direct output.
+- `"json"` is useful when you're using LiquidJS to create valid JSON files.
+- It can even be a function which allows you to control what variables are output throughout LiquidJS. Please note the input can be any type other than string, e.g. an filter returned an non-string value.
+
 ## Date
 
 **timezoneOffset** is used to specify a different timezone to output dates, your local timezone will be used if not specified. For example, set `timezoneOffset: 0` to output all dates in UTC/GMT 00:00.
@@ -151,3 +159,5 @@ Parameter orders are ignored by default, for ea `{% for i in (1..8) reversed lim
 [wc]: ./whitespace-control.html
 [intro]: ./intro-to-liquid.html
 [jekyllInclude]: /api/interfaces/LiquidOptions.html#jekyllInclude
+[raw]: ../filters/raw.html
+[outputEscape]: /api/interfaces/LiquidOptions.html#outputEscape

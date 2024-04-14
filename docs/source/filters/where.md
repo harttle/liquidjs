@@ -79,4 +79,28 @@ Output
 Featured product: Hawaiian print sweater vest
 ```
 
+Additionally, `property` can be any valid Liquid variable expression as used in output syntax, except that the scope of this expression is within each item. For the following `products` array:
+
+```javascript
+const products = [
+    { meta: { details: { class: 'A' } }, order: 1 },
+    { meta: { details: { class: 'B' } }, order: 2 },
+    { meta: { details: { class: 'B' } }, order: 3 }
+]
+```
+
+Input
+```liquid
+{% assign selected = products | where: 'meta.details["class"]', "B" %}
+{% for item in selected -%}
+- {{ item.order }}
+{% endfor %}
+```
+
+Ouput
+```text
+- 2
+- 3
+```
+
 [truthy]: ../tutorials/truthy-and-falsy.html

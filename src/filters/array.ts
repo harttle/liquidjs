@@ -1,8 +1,8 @@
 import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, hasOwnProperty } from '../util'
-import { isTruthy } from '../render'
-import { FilterImpl } from '../template'
-import { Scope } from '../context'
-import { isComparable } from '../drop'
+import { equals, evalToken, isTruthy } from '../render'
+import { Value, FilterImpl } from '../template'
+import { Context, Scope } from '../context'
+import { Tokenizer } from '../parser'
 
 export const join = argumentsToValue((v: any[], arg: string) => toArray(v).join(arg === undefined ? ' ' : arg))
 export const last = argumentsToValue((v: any) => isArray(v) ? arrayLast(v) : '')
@@ -92,14 +92,55 @@ export function slice<T> (v: T[] | string, begin: number, length = 1): T[] | str
 export function * where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
   const values: unknown[] = []
   arr = toArray(arr)
+  const token = new Tokenizer(stringify(property)).readScopeValue()
   for (const item of arr) {
-    values.push(yield this.context._getFromScope(item, stringify(property).split('.'), false))
+    values.push(yield evalToken(token, new Context(item)))
   }
   return arr.filter((_, i) => {
     if (expected === undefined) return isTruthy(values[i], this.context)
-    if (isComparable(expected)) return expected.equals(values[i])
-    return values[i] === expected
+    return equals(values[i], expected)
   })
+}
+
+export function * group_by<T extends object> (arr: T[], property: string): IterableIterator<unknown> {
+  const map = new Map()
+  arr = toArray(arr)
+  const token = new Tokenizer(stringify(property)).readScopeValue()
+  for (const item of arr) {
+    const key = yield evalToken(token, new Context(item))
+    if (!map.has(key)) map.set(key, [])
+    map.get(key).push(item)
+  }
+  return [...map.entries()].map(([name, items]) => ({ name, items }))
+}
+
+export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
+  const map = new Map()
+  const keyTemplate = new Value(stringify(exp), this.liquid)
+  for (const item of toArray(arr)) {
+    const key = yield keyTemplate.value(new Context({ [itemName]: item }))
+    if (!map.has(key)) map.set(key, [])
+    map.get(key).push(item)
+  }
+  return [...map.entries()].map(([name, items]) => ({ name, items }))
+}
+
+export function * find<T extends object> (this: FilterImpl, arr: T[], property: string, expected: string): IterableIterator<unknown> {
+  const token = new Tokenizer(stringify(property)).readScopeValue()
+  for (const item of toArray(arr)) {
+    const value = yield evalToken(token, new Context(item))
+    if (equals(value, expected)) return item
+  }
+  return null
+}
+
+export function * find_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
+  const predicate = new Value(stringify(exp), this.liquid)
+  for (const item of toArray(arr)) {
+    const value = yield predicate.value(new Context({ [itemName]: item }))
+    if (value) return item
+  }
+  return null
 }
 
 export function uniq<T> (arr: T[]): T[] {

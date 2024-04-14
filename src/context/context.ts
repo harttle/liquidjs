@@ -2,7 +2,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
-import { isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync } from '../util'
+import { isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject } from '../util'
 
 type PropertyKey = string | number;
 
@@ -37,7 +37,7 @@ export class Context {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
-    this.environments = env
+    this.environments = isObject(env) ? env : Object(env)
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
   }
