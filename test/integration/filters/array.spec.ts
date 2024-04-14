@@ -158,10 +158,53 @@ describe('filters/array', function () {
       await test('{{ undefinedValue | push: arg | join: "," }}', scope, 'foo')
       await test('{{ nullValue | push: arg | join: "," }}', scope, 'foo')
     })
-    it('should ignore nil right value', async () => {
-      const scope = { nullValue: null }
-      await test('{{ nullValue | push | join: "," }}', scope, '')
-      await test('{{ nullValue | push: nil | join: "," }}', scope, '')
+    it('should support nil right value', async () => {
+      const scope = { nullValue: [] }
+      await test('{{ nullValue | push | size }}', scope, '1')
+      await test('{{ nullValue | push: nil | size }}', scope, '1')
+    })
+  })
+
+  describe('pop', () => {
+    it('should support pop', async () => {
+      const scope = { val: ['hey', 'you'] }
+      await test('{{ val | pop | join: "," }}', scope, 'hey')
+    })
+    it('should not change original array', async () => {
+      const scope = { val: ['hey', 'you'] }
+      await test('{{ val | pop | join: "," }} {{ val| join: "," }}', scope, 'hey hey,you')
+    })
+    it('should support nil left value', async () => {
+      await test('{{ notDefined | pop | join: "," }}', {}, '')
+    })
+  })
+
+  describe('unshift', () => {
+    it('should support unshift', async () => {
+      const scope = { val: ['you'] }
+      await test('{{ val | unshift: "hey" | join: ", " }}', scope, 'hey, you')
+    })
+    it('should not change original array', async () => {
+      const scope = { val: ['you'] }
+      await test('{{ val | unshift: "hey" | join: "," }} {{ val | join: "," }}', scope, 'hey,you you')
+    })
+    it('should support nil right value', async () => {
+      const scope = { val: [] }
+      await test('{{ val | unshift: nil | size }}', scope, '1')
+    })
+  })
+
+  describe('shift', () => {
+    it('should support pop', async () => {
+      const scope = { val: ['hey', 'you'] }
+      await test('{{ val | shift }}', scope, 'you')
+    })
+    it('should not change original array', async () => {
+      const scope = { val: ['hey', 'you'] }
+      await test('{{ val | shift }} {{ val | join: ","}}', scope, 'you hey,you')
+    })
+    it('should support nil left value', async () => {
+      await test('{{ notDefined | pop }}', {}, '')
     })
   })
 

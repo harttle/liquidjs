@@ -1,4 +1,4 @@
-import { toEnumerable } from '../util/collection'
+import { toEnumerable } from '../util'
 import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 

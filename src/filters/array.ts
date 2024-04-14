@@ -11,7 +11,7 @@ export const reverse = argumentsToValue((v: any[]) => [...toArray(v)].reverse())
 
 export function * sort<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
   const values: [T, string | number][] = []
-  for (const item of toArray(toValue(arr))) {
+  for (const item of toArray(arr)) {
     values.push([
       item,
       property ? yield this.context._getFromScope(item, stringify(property).split('.'), false) : item
@@ -25,7 +25,6 @@ export function * sort<T> (this: FilterImpl, arr: T[], property?: string): Itera
 }
 
 export function sort_natural<T> (input: T[], property?: string) {
-  input = toValue(input)
   const propertyString = stringify(property)
   const compare = property === undefined
     ? caseInsensitiveCompare
@@ -37,7 +36,7 @@ export const size = (v: string | any[]) => (v && v.length) || 0
 
 export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
   const results = []
-  for (const item of toArray(toValue(arr))) {
+  for (const item of toArray(arr)) {
     results.push(yield this.context._getFromScope(item, stringify(property), false))
   }
   return results
@@ -45,7 +44,7 @@ export function * map (this: FilterImpl, arr: Scope[], property: string): Iterab
 
 export function * sum (this: FilterImpl, arr: Scope[], property?: string): IterableIterator<unknown> {
   let sum = 0
-  for (const item of toArray(toValue(arr))) {
+  for (const item of toArray(arr)) {
     const data = Number(property ? yield this.context._getFromScope(item, stringify(property), false) : item)
     sum += Number.isNaN(data) ? 0 : data
   }
@@ -53,18 +52,33 @@ export function * sum (this: FilterImpl, arr: Scope[], property?: string): Itera
 }
 
 export function compact<T> (this: FilterImpl, arr: T[]) {
-  arr = toValue(arr)
   return toArray(arr).filter(x => !isNil(toValue(x)))
 }
 
 export function concat<T1, T2> (v: T1[], arg: T2[] = []): (T1 | T2)[] {
-  v = toValue(v)
-  arg = toArray(arg).map(v => toValue(v))
-  return toArray(v).concat(arg)
+  return toArray(v).concat(toArray(arg))
 }
 
 export function push<T> (v: T[], arg: T): T[] {
   return concat(v, [arg])
+}
+
+export function unshift<T> (v: T[], arg: T): T[] {
+  const clone = [...toArray(v)]
+  clone.unshift(arg)
+  return clone
+}
+
+export function pop<T> (v: T[]): T[] {
+  const clone = [...toArray(v)]
+  clone.pop()
+  return clone
+}
+
+export function shift<T> (v: T[]): T[] {
+  const clone = [...toArray(v)]
+  clone.shift()
+  return clone
 }
 
 export function slice<T> (v: T[] | string, begin: number, length = 1): T[] | string {
@@ -77,7 +91,7 @@ export function slice<T> (v: T[] | string, begin: number, length = 1): T[] | str
 
 export function * where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
   const values: unknown[] = []
-  arr = toArray(toValue(arr))
+  arr = toArray(arr)
   for (const item of arr) {
     values.push(yield this.context._getFromScope(item, stringify(property).split('.'), false))
   }

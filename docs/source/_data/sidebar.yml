@@ -51,6 +51,7 @@ filters:
   modulo: modulo.html
   newline_to_br: newline_to_br.html
   plus: plus.html
+  pop: pop.html
   push: push.html
   prepend: prepend.html
   raw: raw.html
@@ -63,6 +64,7 @@ filters:
   reverse: reverse.html
   round: round.html
   rstrip: rstrip.html
+  shift: shift.html
   size: size.html
   slice: slice.html
   sort: sort.html
@@ -76,6 +78,7 @@ filters:
   truncate: truncate.html
   truncatewords: truncatewords.html
   uniq: uniq.html
+  unshift: unshift.html
   upcase: upcase.html
   url_decode: url_decode.html
   url_encode: url_encode.html

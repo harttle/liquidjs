@@ -63,7 +63,7 @@ describe('tags/for', function () {
     const engine = new Liquid({ strictVariables: true })
     const src = '{% assign hello = "hello,world" | split: "," | concat: null %}{% for i in hello %}{{ i }},{% endfor %}'
     const html = await engine.parseAndRender(src, scope)
-    return expect(html).toBe('hello,world,,')
+    return expect(html).toBe('hello,world,')
   })
   describe('illegal', function () {
     it('should reject when for not closed', function () {
