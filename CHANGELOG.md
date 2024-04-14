@@ -1,3 +1,11 @@
+# [10.11.0](https://github.com/harttle/liquidjs/compare/v10.10.2...v10.11.0) (2024-04-14)
+
+
+### Features
+
+* group_by/group_by_exp/find/find_exp from Jekyll, [#443](https://github.com/harttle/liquidjs/issues/443) ([2b713b7](https://github.com/harttle/liquidjs/commit/2b713b721d1f355309a70ebb5846169c6c03c523))
+* pop/shift/unshift filters from Jekyll ([258780e](https://github.com/harttle/liquidjs/commit/258780e9a87ce87534a6bb4336725cb1d38a2998))
+
 ## [10.10.2](https://github.com/harttle/liquidjs/compare/v10.10.1...v10.10.2) (2024-03-21)
 
 
