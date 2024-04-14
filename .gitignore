@@ -12,6 +12,7 @@ node_modules/
 
 # tmp
 docs/public/js/liquid.browser.min.js
+docs/themes/navy/layout/partial/all-contributors.swig
 dist/
 demo/*/yarn.json
 
