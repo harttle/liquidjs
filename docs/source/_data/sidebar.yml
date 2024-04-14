@@ -51,6 +51,7 @@ filters:
   modulo: modulo.html
   newline_to_br: newline_to_br.html
   plus: plus.html
+  push: push.html
   prepend: prepend.html
   raw: raw.html
   remove: remove.html
