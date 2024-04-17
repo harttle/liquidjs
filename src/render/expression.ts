@@ -24,7 +24,7 @@ export class Expression {
         }
         operands.push(result)
       } else {
-        operands.push(yield evalToken(token, ctx, lenient && this.postfix.length === 1))
+        operands.push(yield evalToken(token, ctx, lenient))
       }
     }
     return operands[0]
