@@ -55,10 +55,15 @@ describe('LiquidOptions#strict*', function () {
       const html = await engine.render(tpl, ctx)
       return expect(html).toBe('beforeXafter')
     })
-    it('should still throw with an undefined variable in a compound `if` expression', function () {
-      const tpl = engine.parse('{% if notdefined == 15 %}a{% endif %}')
-      const fhtml = engine.render(tpl, ctx)
-      return expect(fhtml).rejects.toThrow(/undefined variable: notdefined/)
+    it('should not throw with an undefined variable in a compound `if` expression', async function () {
+      const tpl = engine.parse('before{% if notdefined == 15 %}X{% else %}Y{% endif %}after')
+      const html = await engine.render(tpl, ctx)
+      return expect(html).toBe('beforeYafter')
+    })
+    it('should correctly evaluate undefined variable in a compound `if` expression', async function () {
+      const tpl = engine.parse('before{% if notdefined != "value" %}X{% else %}Y{% endif %}after')
+      const html = await engine.render(tpl, ctx)
+      return expect(html).toBe('beforeXafter')
     })
     it('should allow an undefined variable when before the `default` filter', async function () {
       const tpl = engine.parse('{{notdefined | default: "a" | tolower}}')
