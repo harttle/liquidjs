@@ -34,6 +34,7 @@ LiquidJS 一直很重视兼容于 Ruby 版本的 Liquid。Liquid 模板语言最
     * LiquidJS 自己定义的过滤器：[json][json]。
     * 从 [Shopify][shopify-tags] 借来的不依赖 Shopify 平台的标签/过滤器。
     * 从 [Jekyll][jekyll-filters] 借来的不依赖 Jekyll 框架的标签/过滤器。
+* 有些过滤器和标签表现不同：比如 [date][date]。
 
 [layout]: ../tags/layout.html
 [render]: ../tags/render.html

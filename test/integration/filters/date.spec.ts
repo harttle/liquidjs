@@ -108,6 +108,24 @@ describe('filters/date', function () {
       const html = liquid.parseAndRenderSync('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }}')
       expect(html).toEqual('1991-01-01T04:30:00')
     })
+    it('should use runtime default timezone when not specified', async () => {
+      const liquid = new Liquid()
+      const html = liquid.parseAndRenderSync('{{ "1990-12-31T23:00:00Z" | date: "%Z" }}')
+      expect(html).toEqual(Intl.DateTimeFormat().resolvedOptions().timeZone)
+    })
+    it('should use in-place timezoneOffset as timezone name', async () => {
+      const liquid = new Liquid({ preserveTimezones: true })
+      const html = liquid.parseAndRenderSync('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S %Z", "Asia/Colombo" }}')
+      expect(html).toEqual('1991-01-01T04:30:00 Asia/Colombo')
+    })
+    it('should use options.timezoneOffset as default timezone name', function () {
+      const opts: LiquidOptions = { timezoneOffset: 'Australia/Brisbane' }
+      return test('{{ "1990-12-31T23:00:00.000Z" | date: "%Y-%m-%dT%H:%M:%S %Z"}}', '1991-01-01T10:00:00 Australia/Brisbane', undefined, opts)
+    })
+    it('should use given timezone offset number as timezone name', function () {
+      const opts: LiquidOptions = { preserveTimezones: true }
+      return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S %:Z"}}', '1990-12-31T23:00:00 +02:30', undefined, opts)
+    })
   })
   describe('dateFormat', function () {
     const optsWithoutDateFormat: LiquidOptions = { timezoneOffset: 360 } // -06:00

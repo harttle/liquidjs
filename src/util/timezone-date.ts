@@ -1,4 +1,5 @@
 import { LiquidDate } from './liquid-date'
+import { isString } from './underscore'
 
 // one minute in milliseconds
 const OneMinute = 60000
@@ -13,13 +14,15 @@ const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
  */
 export class TimezoneDate implements LiquidDate {
   private timezoneOffset: number
+  private timezoneName: string
   private date: Date
   private displayDate: Date
-  constructor (init: string | number | Date | TimezoneDate, timezoneOffset: number) {
+  constructor (init: string | number | Date | TimezoneDate, timezone: number | string) {
     this.date = init instanceof TimezoneDate
       ? init.date
       : new Date(init)
-    this.timezoneOffset = timezoneOffset
+    this.timezoneOffset = isString(timezone) ? TimezoneDate.getTimezoneOffset(timezone, this.date) : timezone
+    this.timezoneName = isString(timezone) ? timezone : ''
 
     const diff = (this.date.getTimezoneOffset() - this.timezoneOffset) * OneMinute
     const time = this.date.getTime() + diff
@@ -69,6 +72,9 @@ export class TimezoneDate implements LiquidDate {
   getTimezoneOffset () {
     return this.timezoneOffset!
   }
+  getTimezoneName () {
+    return this.timezoneName
+  }
 
   /**
    * Create a Date object fixed to it's declared Timezone. Both
@@ -96,5 +102,13 @@ export class TimezoneDate implements LiquidDate {
       return new TimezoneDate(+new Date(dateString), offset)
     }
     return new Date(dateString)
+  }
+  private static getTimezoneOffset (timezoneName: string, date = new Date()) {
+    const localDateString = date.toLocaleString('en-US', { timeZone: timezoneName })
+    const utcDateString = date.toLocaleString('en-US', { timeZone: 'UTC' })
+
+    const localDate = new Date(localDateString)
+    const utcDate = new Date(utcDateString)
+    return (+utcDate - +localDate) / (60 * 1000)
   }
 }

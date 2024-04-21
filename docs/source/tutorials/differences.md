@@ -33,8 +33,8 @@ Though we're trying to be compatible with the Ruby version, there are still some
     * LiquidJS-defined tags: [layout][layout], [render][render] and corresponding `block` tag.
     * LiquidJS-defined filters: [json][json].
     * Tags/filters that don't depend on Shopify platform are borrowed from [Shopify][shopify-tags].
-    * Tags/filters that don't depend on Jekyll framework are borrowed from [Jekyll][jekyll-filters]
-* LiquidJS [date][date] filter supports `%q` for date ordinals like `{{ '2023/02/02' | date: '%d%q of %b'}}` => `02nd of Feb`
+    * Tags/filters that don't depend on Jekyll framework are borrowed from [Jekyll][jekyll-filters].
+* Some tags/filters behave differently: [date][date] filter.
 
 [date]: https://liquidjs.com/filters/date.html
 [layout]: ../tags/layout.html

@@ -14,6 +14,7 @@ export interface LiquidDate {
   getMonth(): number;
   getFullYear(): number;
   getTimezoneOffset(): number;
+  getTimezoneName?(): string;
   toLocaleTimeString(): string;
   toLocaleDateString(): string;
 }
