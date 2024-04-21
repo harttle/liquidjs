@@ -195,6 +195,9 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/fupengl"><img src="https://avatars.githubusercontent.com/u/20211964?v=4?s=100" width="100px;" alt="傅鹏"/><br /><sub><b>傅鹏</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=fupengl" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/joel-hamilton"><img src="https://avatars.githubusercontent.com/u/12899024?v=4?s=100" width="100px;" alt="Joel Hamilton"/><br /><sub><b>Joel Hamilton</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=joel-hamilton" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amedve"><img src="https://avatars.githubusercontent.com/u/23156422?v=4?s=100" width="100px;" alt="Max Medve"/><br /><sub><b>Max Medve</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=amedve" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
