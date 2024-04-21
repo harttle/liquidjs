@@ -3,15 +3,15 @@ title: date
 ---
 {% since %}v1.9.1{% endsince %}
 
-# Format
-* Converts a timestamp into another date format
-* LiquidJS tries to be conformant with Shopify/Liquid which is using Ruby's core [Time#strftime(string)](http://www.ruby-doc.org/core/Time.html#method-i-strftime)
-  * Refer [format flags](https://ruby-doc.org/core/strftime_formatting_rdoc.html)
-  * Not all options are supported though - refer [differences here](/tutorials/differences.html#Differences)
-* The input is firstly converted to `Date` object via [new Date()][jsDate]
-* Date format can be provided individually as a filter option
-    * If not provided, then `%A, %B %-e, %Y at %-l:%M %P %z` format will be used as default format
-    * Override this using [`dateFormat`](/api/interfaces/LiquidOptions.html#dateFormat) LiquidJS option, to set your preferred default format for all date filters
+Date filter is used to convert a timestamp into the specified format.
+
+* LiquidJS tries to conform to Shopify/Liquid, which uses Ruby's core [Time#strftime(string)](http://www.ruby-doc.org/core/Time.html#method-i-strftime). There're differences with [Ruby's format flags](https://ruby-doc.org/core/strftime_formatting_rdoc.html):
+  * `%Z` (since v10.11.1) works when there's a passed-in timezone name from `LiquidOption` or in-place value (see TimeZone below). If passed-in timezone is an offset number instead of string, it'll behave like `%z`. If there's none passed-in timezone, it returns [the runtime's default time zone](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#timezone).
+  * LiquidJS provides an additional `%q` flag for date ordinals. e.g. `{{ '2023/02/02' | date: '%d%q of %b'}}` => `02nd of Feb`
+* Date literals are firstly converted to `Date` object via [new Date()][jsDate], that means literal values are considered in runtime's time zone by default.
+* The format filter argument is optional:
+    * If not provided, it defaults to `%A, %B %-e, %Y at %-l:%M %P %z`.
+    * The above default can be overridden by [`dateFormat`](/api/interfaces/LiquidOptions.html#dateFormat) LiquidJS option.
 
 ### Examples
 ```liquid
@@ -23,16 +23,14 @@ title: date
 ```
 
 # TimeZone
-* By default, dates will be converted to local timezone before output
-* You can override that by,
-    * setting a timezone for each individual `date` filter via the second parameter
-    * using the [`timezoneOffset`](/api/interfaces/LiquidOptions.html#timezoneOffset) LiquidJS option
-        * Its default value is your local timezone offset which can be obtained by `new Date().getTimezoneOffset()`
+* During output, LiquidJS uses local timezone which can override by:
+    * setting a timezone in-place when calling `date` filter, or
+    * setting the [`timezoneOffset`](/api/interfaces/LiquidOptions.html#timezoneOffset) LiquidJS option
+        * It defaults to runtime's time one.
         * Offset can be set as,
             * minutes: `-360` means `'+06:00'` and `360` means `'-06:00'`
             * timeZone ID: `Asia/Colombo` or `America/New_York`
-        * Use minutes for better performance with repeated processing of templates with many dates like, converting template for each email recipient
-    * Refer [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for TZ database values
+    * See [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for TZ database values
 
 ### Examples
 ```liquid
@@ -40,7 +38,6 @@ title: date
 {{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", 360 }} => 1990-12-31T17:00:00
 {{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "Asia/Colombo" }} => 1991-01-01T04:30:00
 ```
-
 
 # Input
 * `date` works on strings if they contain well-formatted dates

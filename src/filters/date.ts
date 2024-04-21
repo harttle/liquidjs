@@ -25,23 +25,13 @@ export function date (this: FilterImpl, v: string | Date, format?: string, timez
   }
   if (!isValidDate(date)) return v
   if (timezoneOffset !== undefined) {
-    date = new TimezoneDate(date, parseTimezoneOffset(date, timezoneOffset))
+    date = new TimezoneDate(date, timezoneOffset)
   } else if (!(date instanceof TimezoneDate) && opts.timezoneOffset !== undefined) {
-    date = new TimezoneDate(date, parseTimezoneOffset(date, opts.timezoneOffset))
+    date = new TimezoneDate(date, opts.timezoneOffset)
   }
   return strftime(date, format)
 }
 
 function isValidDate (date: any): date is Date {
   return (date instanceof Date || date instanceof TimezoneDate) && !isNaN(date.getTime())
-}
-
-/**
- * need pass in a `date` because offset is dependent on whether DST is active
- */
-function parseTimezoneOffset (date: Date, timeZone: string | number) {
-  if (isNumber(timeZone)) return timeZone
-  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }))
-  const tzDate = new Date(date.toLocaleString('en-US', { timeZone }))
-  return (utcDate.getTime() - tzDate.getTime()) / 6e4
 }

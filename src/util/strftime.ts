@@ -105,6 +105,15 @@ const padChars = {
   p: ' ',
   P: ' '
 }
+function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
+  const nOffset = Math.abs(d.getTimezoneOffset())
+  const h = Math.floor(nOffset / 60)
+  const m = nOffset % 60
+  return (d.getTimezoneOffset() > 0 ? '-' : '+') +
+    padStart(h, 2, '0') +
+    (opts.flags[':'] ? ':' : '') +
+    padStart(m, 2, '0')
+}
 const formatCodes = {
   a: (d: LiquidDate) => dayNamesShort[d.getDay()],
   A: (d: LiquidDate) => dayNames[d.getDay()],
@@ -140,14 +149,12 @@ const formatCodes = {
   X: (d: LiquidDate) => d.toLocaleTimeString(),
   y: (d: LiquidDate) => d.getFullYear().toString().slice(2, 4),
   Y: (d: LiquidDate) => d.getFullYear(),
-  z: (d: LiquidDate, opts: FormatOptions) => {
-    const nOffset = Math.abs(d.getTimezoneOffset())
-    const h = Math.floor(nOffset / 60)
-    const m = nOffset % 60
-    return (d.getTimezoneOffset() > 0 ? '-' : '+') +
-      padStart(h, 2, '0') +
-      (opts.flags[':'] ? ':' : '') +
-      padStart(m, 2, '0')
+  z: getTimezoneOffset,
+  Z: (d: LiquidDate, opts: FormatOptions) => {
+    if (d.getTimezoneName) {
+      return d.getTimezoneName() || getTimezoneOffset(d, opts)
+    }
+    return (typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : '')
   },
   't': () => '\t',
   'n': () => '\n',
