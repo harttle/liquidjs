@@ -1,3 +1,11 @@
+## [10.11.1](https://github.com/harttle/liquidjs/compare/v10.11.0...v10.11.1) (2024-04-21)
+
+
+### Bug Fixes
+
+* allow %Z for TimezoneDate, update docs accordingly [#684](https://github.com/harttle/liquidjs/issues/684) ([e09657c](https://github.com/harttle/liquidjs/commit/e09657c52b5e9920256d73f99455e2e81cadf065))
+* Allow `lenientIf` for multiple operands (issue [#682](https://github.com/harttle/liquidjs/issues/682)) ([#683](https://github.com/harttle/liquidjs/issues/683)) ([490ff43](https://github.com/harttle/liquidjs/commit/490ff4309cc231a25be23df5374a5d032aac144e))
+
 # [10.11.0](https://github.com/harttle/liquidjs/compare/v10.10.2...v10.11.0) (2024-04-14)
 
 
