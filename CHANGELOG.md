@@ -1,3 +1,15 @@
+# [10.12.0](https://github.com/harttle/liquidjs/compare/v10.11.1...v10.12.0) (2024-04-28)
+
+
+### Bug Fixes
+
+* case/when array equality, [#673](https://github.com/harttle/liquidjs/issues/673) ([2b63035](https://github.com/harttle/liquidjs/commit/2b630353c478368cb36dbfcb38961b25bf48249e))
+
+
+### Features
+
+* introduce where_exp filter from Jekyll ([8c7cef9](https://github.com/harttle/liquidjs/commit/8c7cef9f95cda765164ada8d58af7d402b3d3143))
+
 ## [10.11.1](https://github.com/harttle/liquidjs/compare/v10.11.0...v10.11.1) (2024-04-21)
 
 
