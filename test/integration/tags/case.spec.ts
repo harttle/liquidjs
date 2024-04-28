@@ -119,4 +119,17 @@ describe('tags/case', function () {
     '{%- endcase %}', {})
     expect(result).toEqual('show this')
   })
+  it('should apply value equal for arrays', () => {
+    const engine = new Liquid()
+    const result = engine.parseAndRenderSync(`
+      {%- assign x = "a,b,c" | split: "," %}
+      {%- assign y = "a,b,c" | split: "," %}
+      {% case x %}{% when y %}TRUE{% else %}FALSE{% endcase %}
+      {% if x == y %}TRUE{% else %}FALSE{% endif %}
+    `)
+    expect(result).toEqual(`
+      TRUE
+      TRUE
+    `)
+  })
 })
