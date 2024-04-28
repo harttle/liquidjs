@@ -91,6 +91,7 @@ Special thanks to the following sponsors!
       <td align="center" valign="top" width="14.28%"><a href="https://opencollective.com/khaled-salem"><img src="https://images.opencollective.com/khaled-salem/avatar/256.png?height=256" width="100px;" alt="Khaled Salem"/><br /><sub><b>Khaled Salem</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sentry.io/"><img src="https://avatars.githubusercontent.com/u/1396951?v=4?s=100" width="100px;" alt="Sentry"/><br /><sub><b>Sentry</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://customer.io/"><img src="https://avatars.githubusercontent.com/u/1152079?v=4?s=100" width="100px;" alt="Customer IO"/><br /><sub><b>Customer IO</b></sub></a></td>
     </tr>
   </tbody>
 </table>

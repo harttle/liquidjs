@@ -28,7 +28,6 @@
     "hexo-uglify": "^1.0.0"
   },
   "devDependencies": {
-    "all-contributors-cli": "^6.8.1",
     "eslint": "^6.0.1",
     "eslint-config-hexo": "^4.0.0"
   },
