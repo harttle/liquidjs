@@ -476,6 +476,28 @@ describe('filters/array', function () {
         `)
     })
   })
+  describe('where_exp', function () {
+    const products = [
+      { title: 'Vacuum', type: 'living room' },
+      { title: 'Spatula', type: 'kitchen' },
+      { title: 'Television', type: 'living room' },
+      { title: 'Garlic press', type: 'kitchen' },
+      { title: 'Coffee mug', available: true },
+      { title: 'Limited edition sneakers', available: false },
+      { title: 'Boring sneakers', available: true }
+    ]
+    it('should support filter by exp', function () {
+      return test(`{% assign kitchen_products = products | where_exp: "item", "item.type == 'kitchen'" %}
+        Kitchen products:
+        {% for product in kitchen_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Kitchen products:
+        - Spatula
+        - Garlic press
+        `)
+    })
+  })
   describe('group_by', function () {
     const members = [
       { graduation_year: 2003, name: 'Jay' },

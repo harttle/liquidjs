@@ -102,6 +102,16 @@ export function * where<T extends object> (this: FilterImpl, arr: T[], property:
   })
 }
 
+export function * where_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
+  const filtered: unknown[] = []
+  const keyTemplate = new Value(stringify(exp), this.liquid)
+  for (const item of toArray(arr)) {
+    const value = yield keyTemplate.value(new Context({ [itemName]: item }))
+    if (value) filtered.push(item)
+  }
+  return filtered
+}
+
 export function * group_by<T extends object> (arr: T[], property: string): IterableIterator<unknown> {
   const map = new Map()
   arr = toArray(arr)
