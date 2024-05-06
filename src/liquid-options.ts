@@ -3,7 +3,7 @@ import { LRU, LiquidCache } from './cache'
 import { FS, LookupType } from './fs'
 import * as fs from './fs/fs-impl'
 import { defaultOperators, Operators } from './render'
-import { json } from './filters/misc'
+import misc from './filters/misc'
 import { escape } from './filters/html'
 
 type OutputEscape = (value: any) => string
@@ -193,7 +193,7 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
 
 function getOutputEscapeFunction (nameOrFunction: OutputEscapeOption): OutputEscape {
   if (nameOrFunction === 'escape') return escape
-  if (nameOrFunction === 'json') return json
+  if (nameOrFunction === 'json') return misc.json
   assert(isFunction(nameOrFunction), '`outputEscape` need to be of type string or function')
   return nameOrFunction
 }

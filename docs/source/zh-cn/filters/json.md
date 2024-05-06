@@ -23,13 +23,13 @@ title: json
 
 可以指定一个 `space` 参数来格式化 JSON。
 
-Input
+输入
 ```liquid
 {% assign arr = "foo bar coo" | split: " " %}
 {{ arr | json: 4 }}
 ```
 
-Output
+输出
 ```text
 [
     "foo",

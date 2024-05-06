@@ -112,3 +112,8 @@ export function truncatewords (v: string, words = 15, o = '...') {
   if (arr.length >= words) ret += o
   return ret
 }
+
+export function normalize_whitespace (v: string) {
+  v = stringify(v)
+  return v.replace(/\s+/g, ' ')
+}

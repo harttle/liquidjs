@@ -47,14 +47,17 @@ filters:
   floor: floor.html
   group_by: group_by.html
   group_by_exp: group_by_exp.html
+  inspect: inspect.html
   join: join.html
   json: json.html
+  jsonify: jsonify.html
   last: last.html
   lstrip: lstrip.html
   map: map.html
   minus: minus.html
   modulo: modulo.html
   newline_to_br: newline_to_br.html
+  normalize_whitespace: normalize_whitespace.html
   plus: plus.html
   pop: pop.html
   push: push.html
@@ -80,6 +83,7 @@ filters:
   strip_newlines: strip_newlines.html
   sum: sum.html
   times: times.html
+  to_integer: to_integer.html
   truncate: truncate.html
   truncatewords: truncatewords.html
   uniq: uniq.html

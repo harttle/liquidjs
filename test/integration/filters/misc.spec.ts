@@ -30,4 +30,33 @@ describe('filters/object', function () {
       expect(liquid.parseAndRenderSync('{{obj | json: 4}}', scope)).toBe(result)
     })
   })
+  describe('jsonify', function () {
+    it('should stringify string', async () => expect(await liquid.parseAndRender('{{"foo" | jsonify}}')).toBe('"foo"'))
+  })
+  describe('inspect', function () {
+    it('should inspect string', async () => expect(await liquid.parseAndRender('{{"foo" | inspect}}')).toBe('"foo"'))
+    it('should inspect object', () => {
+      const text = '{{foo | inspect}}'
+      const foo = { bar: 'bar' }
+      const expected = '{"bar":"bar"}'
+      return expect(liquid.parseAndRenderSync(text, { foo })).toBe(expected)
+    })
+    it('should inspect cyclic object', () => {
+      const text = '{{foo | inspect}}'
+      const foo: any = { bar: 'bar' }
+      foo.foo = foo
+      const expected = '{"bar":"bar","foo":"[Circular]"}'
+      return expect(liquid.parseAndRenderSync(text, { foo })).toBe(expected)
+    })
+    it('should support space argument', () => {
+      const text = '{{foo | inspect: 4}}'
+      const foo: any = { bar: 'bar' }
+      foo.foo = foo
+      const expected = '{\n    "bar": "bar",\n    "foo": "[Circular]"\n}'
+      return expect(liquid.parseAndRenderSync(text, { foo })).toBe(expected)
+    })
+  })
+  describe('to_integer', function () {
+    it('should stringify string', () => expect(liquid.parseAndRenderSync('{{ "123" | to_integer | json }}')).toBe('123'))
+  })
 })
