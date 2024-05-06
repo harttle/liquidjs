@@ -10,10 +10,10 @@ LiquidJS 共支持 40+ 个过滤器，可以分为如下几类：
 类别 | 过滤器
 --- | ---
 数学 | plus, minus, modulo, times, floor, ceil, round, divided_by, abs, at_least, at_most
-字符串 | append, prepend, capitalize, upcase, downcase, strip, lstrip, rstrip, strip_newlines, split, replace, replace_first, replace_last, remove, remove_first, remove_last, truncate, truncatewords
+字符串 | append, prepend, capitalize, upcase, downcase, strip, lstrip, rstrip, strip_newlines, split, replace, replace_first, replace_last, remove, remove_first, remove_last, truncate, truncatewords, normalize_whitespace
 HTML/URI | escape, escape_once, url_encode, url_decode, strip_html, newline_to_br
 数组 | slice, map, sort, sort_natural, uniq, where, where_exp, group_by, group_by_exp, find, find_exp, first, last, join, reverse, concat, compact, size, push, pop, shift, unshift
 日期 | date
-其他 | default, json
+其他 | default, json, jsonify, inspect, raw, to_integer
 
 [shopify/liquid]: https://github.com/Shopify/liquid

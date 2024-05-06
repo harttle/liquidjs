@@ -1,6 +1,8 @@
 import { test } from '../../stub/render'
+import { Liquid } from '../../../src/liquid'
 
 describe('filters/string', function () {
+  const liquid = new Liquid()
   describe('append', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
@@ -226,6 +228,14 @@ describe('filters/string', function () {
     it('should handle substring not found', function () {
       return test('{{ "Take my protein pills and put my helmet on" | replace_last: "no such thing", "your" }}',
         'Take my protein pills and put my helmet on')
+    })
+  })
+  describe('normalize_whitespace', () => {
+    it('should replace " \n " with " "', () => {
+      expect(liquid.parseAndRenderSync('{{ "a \n b" | normalize_whitespace }}')).toEqual('a b')
+    })
+    it('should replace multiple occurrences', () => {
+      expect(liquid.parseAndRenderSync('{{ "a \n b  c" | normalize_whitespace }}')).toEqual('a b c')
     })
   })
 })
