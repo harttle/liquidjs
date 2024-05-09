@@ -36,6 +36,10 @@ filters:
   compact: compact.html
   concat: concat.html
   date: date.html
+  date_to_long_string: date_to_long_string.html
+  date_to_rfc822: date_to_rfc822.html
+  date_to_string: date_to_string.html
+  date_to_xmlschema: date_to_xmlschema.html
   default: default.html
   divided_by: divided_by.html
   downcase: downcase.html
