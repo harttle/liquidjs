@@ -33,6 +33,7 @@ filters:
   at_most: at_most.html
   capitalize: capitalize.html
   ceil: ceil.html
+  cgi_escape: cgi_escape.html
   compact: compact.html
   concat: concat.html
   date: date.html
@@ -93,10 +94,12 @@ filters:
   uniq: uniq.html
   unshift: unshift.html
   upcase: upcase.html
+  uri_escape: uri_escape.html
   url_decode: url_decode.html
   url_encode: url_encode.html
   where: where.html
   where_exp: where_exp.html
+  xml_escape: xml_escape.html
 
 tags:
   overview: overview.html
