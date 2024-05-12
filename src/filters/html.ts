@@ -19,6 +19,10 @@ export function escape (str: string) {
   return stringify(str).replace(/&|<|>|"|'/g, m => escapeMap[m])
 }
 
+export function xml_escape (str: string) {
+  return escape(str)
+}
+
 function unescape (str: string) {
   return stringify(str).replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m])
 }
