@@ -29,6 +29,7 @@ filters:
   overview: overview.html
   abs: abs.html
   append: append.html
+  array_to_sentence_string: array_to_sentence_string.html
   at_least: at_least.html
   at_most: at_most.html
   capitalize: capitalize.html
@@ -63,6 +64,7 @@ filters:
   modulo: modulo.html
   newline_to_br: newline_to_br.html
   normalize_whitespace: normalize_whitespace.html
+  number_of_words: number_of_words.html
   plus: plus.html
   pop: pop.html
   push: push.html
