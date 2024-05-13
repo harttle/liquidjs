@@ -1,3 +1,14 @@
+# [10.13.0](https://github.com/harttle/liquidjs/compare/v10.12.0...v10.13.0) (2024-05-13)
+
+
+### Features
+
+* array_to_sentence_string and number_of_words filters from Jekyll, [#443](https://github.com/harttle/liquidjs/issues/443) ([50253a9](https://github.com/harttle/liquidjs/commit/50253a98caf5356d3c33e148be66f34fbe75a204))
+* date filters from Jekyll ([4955e75](https://github.com/harttle/liquidjs/commit/4955e75be7f38a3fd15e71f2c192cff6f0d6e2d5))
+* escape filters from Jekyll, [#443](https://github.com/harttle/liquidjs/issues/443) ([b12eb8a](https://github.com/harttle/liquidjs/commit/b12eb8ab4b58b002459725b6c0ed00159cdc15e6))
+* jsonify, inspect, to_integer, normalize_whitespace filters ([842b45c](https://github.com/harttle/liquidjs/commit/842b45c96a46290a1e1ba43fc5cc7a465f4ba9de))
+* slugify filter from Jekyll, [#443](https://github.com/harttle/liquidjs/issues/443) ([47ddc11](https://github.com/harttle/liquidjs/commit/47ddc1193b84bbdeb8d48457bb5aead24d5aff77))
+
 # [10.12.0](https://github.com/harttle/liquidjs/compare/v10.11.1...v10.12.0) (2024-04-28)
 
 
