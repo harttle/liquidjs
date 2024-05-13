@@ -42,4 +42,53 @@ describe('filters/url', () => {
       expect(html).toEqual(reserved)
     })
   })
+
+  describe('slugify', () => {
+    describe('slugify', () => {
+      it('should slugify with default mode', () => {
+        const html = liquid.parseAndRenderSync('{{ "The _config.yml file" | slugify }}')
+        expect(html).toEqual('the-config-yml-file')
+      })
+
+      it('should slugify with pretty mode', () => {
+        const html = liquid.parseAndRenderSync('{{ "The _config.yml file" | slugify: "pretty" }}')
+        expect(html).toEqual('the-_config.yml-file')
+      })
+
+      it('should slugify with ascii mode', () => {
+        const html = liquid.parseAndRenderSync('{{ "The _cönfig.yml file" | slugify: "ascii" }}')
+        expect(html).toEqual('the-c-nfig-yml-file')
+      })
+
+      it('should slugify with latin mode', () => {
+        const html = liquid.parseAndRenderSync('{{ "The cönfig.yml file" | slugify: "latin" }}')
+        expect(html).toEqual('the-config-yml-file')
+      })
+
+      it('should slugify with none mode', () => {
+        const html = liquid.parseAndRenderSync('{{ "The _config.yml file" | slugify: "none" }}')
+        expect(html).toEqual('the _config.yml file')
+      })
+
+      it('should slugify with invalid mode', () => {
+        const html = liquid.parseAndRenderSync('{{ "The _config.yml file" | slugify: "invalid_mode" }}')
+        expect(html).toEqual('the _config.yml file')
+      })
+
+      it('should slugify with empty string', () => {
+        const html = liquid.parseAndRenderSync('{{ "" | slugify }}')
+        expect(html).toEqual('')
+      })
+
+      it('should slugify with cased=false', () => {
+        const html = liquid.parseAndRenderSync('{{ "Test String" | slugify: "pretty", false }}')
+        expect(html).toEqual('test-string')
+      })
+
+      it('should slugify with cased=true', () => {
+        const html = liquid.parseAndRenderSync('{{ "Test String" | slugify: "pretty", true }}')
+        expect(html).toEqual('Test-String')
+      })
+    })
+  })
 })

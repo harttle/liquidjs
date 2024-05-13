@@ -82,6 +82,7 @@ filters:
   shift: shift.html
   size: size.html
   slice: slice.html
+  slugify: slugify.html
   sort: sort.html
   sort_natural: sort_natural.html
   split: split.html
