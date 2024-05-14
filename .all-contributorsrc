@@ -657,6 +657,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cossssmin",
+      "name": "Cosmin Popovici",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1656595?v=4",
+      "profile": "https://maizzle.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
