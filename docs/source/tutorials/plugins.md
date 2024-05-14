@@ -36,7 +36,7 @@ engine
 
 ## Plugin List
 
-Since this library excludes certain features that are available on the Shopify platform but not on the [Shopify/liquid](https://github.com/Shopify/liquid/) repo, see <https://github.com/harttle/liquidjs#differences-and-limitations>.
+Since this library excludes certain features that are available on the Shopify platform but not on the [Shopify/liquid](https://github.com/Shopify/liquid/) repo, see [Differences with Shopify/liquid][differences].
 
 Here's a list of plugins that backfill those features. Feel free to add yours, this file is publicly editable.
 
@@ -45,3 +45,4 @@ Here's a list of plugins that backfill those features. Feel free to add yours, t
 
 [liquid]: /api/classes/Liquid.html
 [register]: /harttle/liquidjs/wiki/Register-Filters-Tags
+[differences]: /tutorials/differences.html
