@@ -666,6 +666,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "admtnnr",
+      "name": "Adam Tanner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27502?v=4",
+      "profile": "https://github.com/admtnnr",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
