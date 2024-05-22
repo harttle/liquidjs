@@ -83,4 +83,20 @@ describe('drop/drop', function () {
     const html = await liquid.parseAndRender(tpl, { address, customer })
     expect(html).toBe('test')
   })
+  it('should support returning supported value types from liquidMethodMissing', async function () {
+    class DynamicTypeDrop extends Drop {
+      liquidMethodMissing (key: string) {
+        switch (key) {
+          case 'number': return 42
+          case 'string': return 'foo'
+          case 'boolean': return true
+          case 'array': return [1, 2, 3]
+          case 'object': return { foo: 'bar' }
+          case 'drop': return new CustomDrop()
+        }
+      }
+    }
+    const html = await liquid.parseAndRender(`{{obj.number}} {{obj.string}} {{obj.boolean}} {{obj.array | first}} {{obj.object.foo}} {{obj.drop.getName}}`, { obj: new DynamicTypeDrop() })
+    expect(html).toBe('42 foo true 1 bar GET NAME')
+  })
 })
