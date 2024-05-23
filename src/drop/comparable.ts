@@ -10,11 +10,11 @@ export interface Comparable {
 
 export function isComparable (arg: any): arg is Comparable {
   return (
-    arg && 
-    isFunction(arg.equals) && 
-    isFunction(arg.gt) && 
-    isFunction(arg.geq) && 
-    isFunction(arg.lt) && 
+    arg &&
+    isFunction(arg.equals) &&
+    isFunction(arg.gt) &&
+    isFunction(arg.geq) &&
+    isFunction(arg.lt) &&
     isFunction(arg.leq)
-  );
+  )
 }
