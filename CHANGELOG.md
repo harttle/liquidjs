@@ -1,3 +1,11 @@
+## [10.13.1](https://github.com/harttle/liquidjs/compare/v10.13.0...v10.13.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* allow liquidMethodMissing to return any supported value type ([#698](https://github.com/harttle/liquidjs/issues/698)) ([0983f2c](https://github.com/harttle/liquidjs/commit/0983f2c42012b2b97258d0cdcb07b6d43c904814))
+* isComparable full interface check ([#701](https://github.com/harttle/liquidjs/issues/701)) ([55e144a](https://github.com/harttle/liquidjs/commit/55e144a0298047349d55d8483a46b2513303d940))
+
 # [10.13.0](https://github.com/harttle/liquidjs/compare/v10.12.0...v10.13.0) (2024-05-13)
 
 
