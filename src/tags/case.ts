@@ -1,4 +1,5 @@
 import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
+import { equals } from '../render'
 
 export default class extends Tag {
   value: Value
@@ -58,7 +59,7 @@ export default class extends Tag {
     for (const branch of this.branches) {
       for (const valueToken of branch.values) {
         const value = yield evalToken(valueToken, ctx, ctx.opts.lenientIf)
-        if (target === value) {
+        if (equals(target, value)) {
           yield r.renderTemplates(branch.templates, ctx, emitter)
           branchHit = true
           break

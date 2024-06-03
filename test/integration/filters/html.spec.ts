@@ -26,6 +26,12 @@ describe('filters/html', function () {
     it('should escape nil value to empty string', () =>
       test('{{ undefinedValue | escape_once }}', ''))
   })
+  describe('xml_escape', function () {
+    it('should xml_escape \' and &', function () {
+      return test('{{ "Have you read \'James & the Giant Peach\'?" | xml_escape }}',
+        'Have you read &#39;James &amp; the Giant Peach&#39;?')
+    })
+  })
   describe('newline_to_br', function () {
     it('should support string_with_newlines', function () {
       const src = '{% capture string_with_newlines %}\n' +

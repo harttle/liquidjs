@@ -16,7 +16,7 @@ In the meantime, it's now implemented in JavaScript, that means it has to be mor
 * **Async as first-class citizen**. Filters and tags can be implemented asynchronously by return a `Promise`.
 * **Also can be sync**. For scenarios that are not I/O intensive, render synchronously can be much faster. You can call synchronous APIs like `.renderSync()` as long as all the filters and tags in template support to be rendered synchronously. All builtin filters/tags support both sync and async render.
 * **[Abstract file system][afs]**. Along with async feature, LiquidJS can be used to serve templates stored in Databases [#414][#414], on remote HTTP server [#485][#485], and so on.
-* **Additional tags and filters** like `layout` and `json`, see below for details.
+* **Additional tags and filters** like `layout` and `json`, `inspect`, `where_exp`, `group_by`, etc., see below for details.
 
 ## Differences
 
@@ -31,7 +31,7 @@ Though we're trying to be compatible with the Ruby version, there are still some
 * Trailing unmatched characters inside filters are allowed in shopify/liquid but not in LiquidJS. It means filter arguments without a colon like `{%raw%}{{ "a b" | split " "}}{%endraw%}` will throw an error in LiquidJS. This is intended to improve Liquid usability, see [#208][#208] and [#212][#212].
 * LiquidJS has more tags/filters than [the Liquid language][liquid]:
     * LiquidJS-defined tags: [layout][layout], [render][render] and corresponding `block` tag.
-    * LiquidJS-defined filters: [json][json].
+    * LiquidJS-defined filters: [json][json], group_by, group_by_exp, where_exp, jsonify, inspect, etc.
     * Tags/filters that don't depend on Shopify platform are borrowed from [Shopify][shopify-tags].
     * Tags/filters that don't depend on Jekyll framework are borrowed from [Jekyll][jekyll-filters].
 * Some tags/filters behave differently: [date][date] filter.

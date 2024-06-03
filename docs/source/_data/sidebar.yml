@@ -29,13 +29,19 @@ filters:
   overview: overview.html
   abs: abs.html
   append: append.html
+  array_to_sentence_string: array_to_sentence_string.html
   at_least: at_least.html
   at_most: at_most.html
   capitalize: capitalize.html
   ceil: ceil.html
+  cgi_escape: cgi_escape.html
   compact: compact.html
   concat: concat.html
   date: date.html
+  date_to_long_string: date_to_long_string.html
+  date_to_rfc822: date_to_rfc822.html
+  date_to_string: date_to_string.html
+  date_to_xmlschema: date_to_xmlschema.html
   default: default.html
   divided_by: divided_by.html
   downcase: downcase.html
@@ -47,14 +53,18 @@ filters:
   floor: floor.html
   group_by: group_by.html
   group_by_exp: group_by_exp.html
+  inspect: inspect.html
   join: join.html
   json: json.html
+  jsonify: jsonify.html
   last: last.html
   lstrip: lstrip.html
   map: map.html
   minus: minus.html
   modulo: modulo.html
   newline_to_br: newline_to_br.html
+  normalize_whitespace: normalize_whitespace.html
+  number_of_words: number_of_words.html
   plus: plus.html
   pop: pop.html
   push: push.html
@@ -72,6 +82,7 @@ filters:
   shift: shift.html
   size: size.html
   slice: slice.html
+  slugify: slugify.html
   sort: sort.html
   sort_natural: sort_natural.html
   split: split.html
@@ -80,14 +91,18 @@ filters:
   strip_newlines: strip_newlines.html
   sum: sum.html
   times: times.html
+  to_integer: to_integer.html
   truncate: truncate.html
   truncatewords: truncatewords.html
   uniq: uniq.html
   unshift: unshift.html
   upcase: upcase.html
+  uri_escape: uri_escape.html
   url_decode: url_decode.html
   url_encode: url_encode.html
   where: where.html
+  where_exp: where_exp.html
+  xml_escape: xml_escape.html
 
 tags:
   overview: overview.html

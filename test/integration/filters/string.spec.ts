@@ -1,6 +1,8 @@
 import { test } from '../../stub/render'
+import { Liquid } from '../../../src/liquid'
 
 describe('filters/string', function () {
+  const liquid = new Liquid()
   describe('append', function () {
     it('should return "-3abc" for -3, "abc"',
       () => test('{{ -3 | append: "abc" }}', '-3abc'))
@@ -226,6 +228,110 @@ describe('filters/string', function () {
     it('should handle substring not found', function () {
       return test('{{ "Take my protein pills and put my helmet on" | replace_last: "no such thing", "your" }}',
         'Take my protein pills and put my helmet on')
+    })
+  })
+  describe('normalize_whitespace', () => {
+    it('should replace " \n " with " "', () => {
+      expect(liquid.parseAndRenderSync('{{ "a \n b" | normalize_whitespace }}')).toEqual('a b')
+    })
+    it('should replace multiple occurrences', () => {
+      expect(liquid.parseAndRenderSync('{{ "a \n b  c" | normalize_whitespace }}')).toEqual('a b c')
+    })
+  })
+  describe('number_of_words', () => {
+    it('should count words of Latin sentence', async () => {
+      const html = await liquid.parseAndRender('{{ "I\'m not hungry" | number_of_words: "auto"}}')
+      expect(html).toEqual('3')
+    })
+
+    it('should count words of mixed sentence', async () => {
+      const html = await liquid.parseAndRender('{{ "Hello world!" | number_of_words }}')
+      expect(html).toEqual('2')
+    })
+
+    it('should count words of CJK sentence', async () => {
+      const html = await liquid.parseAndRender('{{ "你好hello世界world" | number_of_words }}')
+      expect(html).toEqual('1')
+    })
+
+    it('should count words of CJK sentence with mode "cjk"', async () => {
+      const html = await liquid.parseAndRender('{{ "你好hello世界world" | number_of_words: "cjk" }}')
+      expect(html).toEqual('6')
+    })
+
+    it('should count words of CJK sentence with mode "auto"', async () => {
+      const html = await liquid.parseAndRender('{{ "你好hello世界world" | number_of_words: "auto" }}')
+      expect(html).toEqual('6')
+    })
+    it('should handle empty input', async () => {
+      const html = await liquid.parseAndRender('{{ "" | number_of_words }}')
+      expect(html).toEqual('0')
+    })
+
+    it('should handle input with only whitespace', async () => {
+      const html = await liquid.parseAndRender('{{ "   " | number_of_words }}')
+      expect(html).toEqual('0')
+    })
+
+    it('should count words with punctuation marks', async () => {
+      const html = await liquid.parseAndRender('{{ "Hello! This is a test." | number_of_words }}')
+      expect(html).toEqual('5')
+    })
+
+    it('should count words with special characters', async () => {
+      const html = await liquid.parseAndRender('{{ "This is a test with special characters: !@#$%^&*()-_+=`~[]{};:\'\\"\\|<,>.?/" | number_of_words }}')
+      expect(html).toEqual('8')
+    })
+
+    it('should count words with multiple spaces between words', async () => {
+      const html = await liquid.parseAndRender('{{ "   Hello    world!    " | number_of_words }}')
+      expect(html).toEqual('2')
+    })
+
+    it('should count words with mixed CJK characters', async () => {
+      const html = await liquid.parseAndRender('{{ "你好こんにちは안녕하세요" | number_of_words: "cjk" }}')
+      expect(html).toEqual('12')
+    })
+  })
+  describe('array_to_sentence_string', () => {
+    it('should handle an empty array', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string }}', { arr: [] })
+      expect(html).toEqual('')
+    })
+
+    it('should handle an array with one element', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string }}', { arr: ['apple'] })
+      expect(html).toEqual('apple')
+    })
+
+    it('should handle an array with two elements', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string }}', { arr: ['apple', 'banana'] })
+      expect(html).toEqual('apple and banana')
+    })
+
+    it('should handle an array with more than two elements', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string }}', { arr: ['apple', 'banana', 'orange'] })
+      expect(html).toEqual('apple, banana, and orange')
+    })
+
+    it('should handle an array with custom connector', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string: "or" }}', { arr: ['apple', 'banana', 'orange'] })
+      expect(html).toEqual('apple, banana, or orange')
+    })
+
+    it('should handle an array of numbers', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string }}', { arr: [1, 2, 3] })
+      expect(html).toEqual('1, 2, and 3')
+    })
+
+    it('should handle an array of mixed types', async () => {
+      const html = await liquid.parseAndRender('{{ arr | array_to_sentence_string }}', { arr: ['apple', 2, 'orange'] })
+      expect(html).toEqual('apple, 2, and orange')
+    })
+
+    it('should handle an array of mixed types', async () => {
+      const html = await liquid.parseAndRender('{{ "foo,bar,baz" | split: "," | array_to_sentence_string }}')
+      expect(html).toEqual('foo, bar, and baz')
     })
   })
 })

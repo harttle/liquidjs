@@ -91,6 +91,7 @@ Special thanks to the following sponsors!
       <td align="center" valign="top" width="14.28%"><a href="https://opencollective.com/khaled-salem"><img src="https://images.opencollective.com/khaled-salem/avatar/256.png?height=256" width="100px;" alt="Khaled Salem"/><br /><sub><b>Khaled Salem</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sentry.io/"><img src="https://avatars.githubusercontent.com/u/1396951?v=4?s=100" width="100px;" alt="Sentry"/><br /><sub><b>Sentry</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://customer.io/"><img src="https://avatars.githubusercontent.com/u/1152079?v=4?s=100" width="100px;" alt="Customer IO"/><br /><sub><b>Customer IO</b></sub></a></td>
     </tr>
   </tbody>
 </table>
@@ -197,6 +198,9 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/amedve"><img src="https://avatars.githubusercontent.com/u/23156422?v=4?s=100" width="100px;" alt="Max Medve"/><br /><sub><b>Max Medve</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=amedve" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://maizzle.com"><img src="https://avatars.githubusercontent.com/u/1656595?v=4?s=100" width="100px;" alt="Cosmin Popovici"/><br /><sub><b>Cosmin Popovici</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=cossssmin" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/admtnnr"><img src="https://avatars.githubusercontent.com/u/27502?v=4?s=100" width="100px;" alt="Adam Tanner"/><br /><sub><b>Adam Tanner</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=admtnnr" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/GuillermoCasalCaro"><img src="https://avatars.githubusercontent.com/u/18685581?v=4?s=100" width="100px;" alt="Guillermo Casal Caro"/><br /><sub><b>Guillermo Casal Caro</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=GuillermoCasalCaro" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

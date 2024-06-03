@@ -657,6 +657,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "cossssmin",
+      "name": "Cosmin Popovici",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1656595?v=4",
+      "profile": "https://maizzle.com",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "admtnnr",
+      "name": "Adam Tanner",
+      "avatar_url": "https://avatars.githubusercontent.com/u/27502?v=4",
+      "profile": "https://github.com/admtnnr",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "GuillermoCasalCaro",
+      "name": "Guillermo Casal Caro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18685581?v=4",
+      "profile": "https://github.com/GuillermoCasalCaro",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

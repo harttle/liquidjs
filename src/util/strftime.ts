@@ -45,31 +45,16 @@ function isLeapYear (d: LiquidDate) {
   const year = d.getFullYear()
   return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)))
 }
-function getSuffix (d: LiquidDate) {
+function ordinal (d: LiquidDate) {
   const date = d.getDate()
+  if ([11, 12, 13].includes(date)) return 'th'
 
-  let suffix = 'th'
-
-  switch (date) {
-    case 11:
-    case 12:
-    case 13:
-      break
-    default:
-      switch (date % 10) {
-        case 1:
-          suffix = 'st'
-          break
-        case 2:
-          suffix = 'nd'
-          break
-        case 3:
-          suffix = 'rd'
-          break
-      }
+  switch (date % 10) {
+    case 1: return 'st'
+    case 2: return 'nd'
+    case 3: return 'rd'
+    default: return 'th'
   }
-
-  return suffix
 }
 function century (d: LiquidDate) {
   return parseInt(d.getFullYear().toString().substring(0, 2), 10)
@@ -138,7 +123,7 @@ const formatCodes = {
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
   P: (d: LiquidDate) => (d.getHours() < 12 ? 'am' : 'pm'),
-  q: (d: LiquidDate) => getSuffix(d),
+  q: (d: LiquidDate) => ordinal(d),
   s: (d: LiquidDate) => Math.round(d.getTime() / 1000),
   S: (d: LiquidDate) => d.getSeconds(),
   u: (d: LiquidDate) => d.getDay() || 7,

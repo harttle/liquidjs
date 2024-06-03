@@ -83,4 +83,40 @@ describe('drop/drop', function () {
     const html = await liquid.parseAndRender(tpl, { address, customer })
     expect(html).toBe('test')
   })
+  it('should correctly evaluate custom Drop objects with equals function without full Comparable implementation', async () => {
+    class TestDrop extends Drop {
+      value: string;
+      constructor () {
+        super()
+        this.value = 'test'
+      }
+      equals (rhs: string): boolean {
+        return this.valueOf() === rhs
+      }
+      valueOf (): string {
+        return this.value
+      }
+    }
+    const address = new TestDrop()
+    const customer = { default_address: new TestDrop() }
+    const tpl = `{{ address >= customer.default_address }}`
+    const html = await liquid.parseAndRender(tpl, { address, customer })
+    expect(html).toBe('true')
+  })
+  it('should support returning supported value types from liquidMethodMissing', async function () {
+    class DynamicTypeDrop extends Drop {
+      liquidMethodMissing (key: string) {
+        switch (key) {
+          case 'number': return 42
+          case 'string': return 'foo'
+          case 'boolean': return true
+          case 'array': return [1, 2, 3]
+          case 'object': return { foo: 'bar' }
+          case 'drop': return new CustomDrop()
+        }
+      }
+    }
+    const html = await liquid.parseAndRender(`{{obj.number}} {{obj.string}} {{obj.boolean}} {{obj.array | first}} {{obj.object.foo}} {{obj.drop.getName}}`, { obj: new DynamicTypeDrop() })
+    expect(html).toBe('42 foo true 1 bar GET NAME')
+  })
 })
