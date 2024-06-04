@@ -1,5 +1,6 @@
 import { isTruthy, isFalsy } from './boolean'
 import { Context } from '../context'
+import { Drop } from '..'
 
 describe('boolean Shopify', function () {
   describe('.isTruthy()', function () {
@@ -8,7 +9,13 @@ describe('boolean Shopify', function () {
         jsTruthy: false
       }
     } as unknown as Context
-    //
+
+    class BooleanDrop extends Drop {
+      public valueOf () {
+        return false
+      }
+    }
+
     // Spec: https://shopify.github.io/liquid/basics/truthy-and-falsy/
     it('true is truthy', function () {
       expect(isTruthy(true, ctx)).toBeTruthy()
@@ -39,6 +46,9 @@ describe('boolean Shopify', function () {
     })
     it('[] is truthy', function () {
       expect(isTruthy([], ctx)).toBeTruthy()
+    })
+    it('drop valueOf determines truthy', function () {
+      expect(isTruthy(new BooleanDrop(), ctx)).toBeFalsy()
     })
   })
 })
