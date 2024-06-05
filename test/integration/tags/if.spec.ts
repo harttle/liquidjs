@@ -1,4 +1,4 @@
-import { Liquid } from '../../../src/liquid'
+import { Liquid, Drop } from '../../../src'
 
 describe('tags/if', function () {
   const liquid = new Liquid()
@@ -7,6 +7,12 @@ describe('tags/if', function () {
     two: 2,
     emptyString: '',
     emptyArray: []
+  }
+
+  class BooleanDrop extends Drop {
+    public valueOf () {
+      return false
+    }
   }
 
   it('should throw if not closed', function () {
@@ -142,6 +148,12 @@ describe('tags/if', function () {
     const scope = { 'var': Promise.resolve('var') }
     const html = await liquid.parseAndRender(src, scope)
     return expect(html).toBe('success')
+  })
+  it('should support drop as condition variable', async () => {
+    const src = `{% if drop %}yes{% else %}no{% endif %}`
+    const scope = { drop: new BooleanDrop() }
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).toBe('no')
   })
   it('should not render anything after an else branch even when first else branch is empty', () => {
     const engine = new Liquid()
