@@ -6,7 +6,7 @@ In a typical website project, we'll have a directory of view templates and they'
 
 LiquidJS provides multiple ways to cache the parsed templates to improve performance.
 
-## Programmaticly
+## Programmatically
 
 The [.parse()][parse], [.parseFile()][parseFile], [.parseFileSync()][parseFileSync] APIs are used to parse templates from string or files. The result template can be then rendered multiple times with different context.
 
