@@ -6,12 +6,12 @@
 [![DUB license](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/harttle/liquidjs)
 
-A simple, expressive and safe [Shopify][shopify/liquid] / Github Pages compatible template engine in pure JavaScript.
-**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community so that [Jekyll sites](https://jekyllrb.com), [Github Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
+A simple, expressive and safe [Shopify][shopify/liquid] / GitHub Pages compatible template engine in pure JavaScript.
+**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community so that [Jekyll sites](https://jekyllrb.com), [GitHub Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
 
 * [Documentation][doc]
 * Please star [LiquidJS on GitHub][github]!
-* Financial support via [Github Sponsors](https://github.com/sponsors/harttle), or [LiquidJS on Open Collective][oc]
+* Financial support via [GitHub Sponsors](https://github.com/sponsors/harttle), or [LiquidJS on Open Collective][oc]
 
 <p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
 
@@ -69,7 +69,7 @@ Feel free to create a PR or contact me to add your use case into this list!
 
 If you personally love LiquidJS or it's benefiting your business, please consider financially support us:
 
-- via [Github Sponsors](https://github.com/sponsors/harttle), or
+- via [GitHub Sponsors](https://github.com/sponsors/harttle), or
 - via [LiquidJS on Open Collective][oc]
 
 Special thanks to the following sponsors!
