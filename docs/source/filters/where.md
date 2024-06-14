@@ -97,7 +97,7 @@ Input
 {% endfor %}
 ```
 
-Ouput
+Output
 ```text
 - 2
 - 3
