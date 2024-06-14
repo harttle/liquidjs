@@ -5,7 +5,7 @@ title: date
 
 Date filter is used to convert a timestamp into the specified format.
 
-* LiquidJS tries to conform to Shopify/Liquid, which uses Ruby's core [Time#strftime(string)](http://www.ruby-doc.org/core/Time.html#method-i-strftime). There're differences with [Ruby's format flags](https://ruby-doc.org/core/strftime_formatting_rdoc.html):
+* LiquidJS tries to conform to Shopify/Liquid, which uses Ruby's core [Time#strftime(string)](https://www.ruby-doc.org/core/Time.html#method-i-strftime). There're differences with [Ruby's format flags](https://ruby-doc.org/core/strftime_formatting_rdoc.html):
   * `%Z` (since v10.11.1) works when there's a passed-in timezone name from `LiquidOption` or in-place value (see TimeZone below). If passed-in timezone is an offset number instead of string, it'll behave like `%z`. If there's none passed-in timezone, it returns [the runtime's default time zone](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/resolvedOptions#timezone).
   * LiquidJS provides an additional `%q` flag for date ordinals. e.g. `{{ '2023/02/02' | date: '%d%q of %b'}}` => `02nd of Feb`
 * Date literals are firstly converted to `Date` object via [new Date()][jsDate], that means literal values are considered in runtime's time zone by default.

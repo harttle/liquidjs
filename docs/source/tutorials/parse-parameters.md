@@ -23,7 +23,7 @@ engine.registerTag('random', {
 })
 ```
 
-Here's a JSFiddle version: <http://jsfiddle.net/ctj364up/2/>
+Here's a JSFiddle version: <https://jsfiddle.net/ctj364up/2/>
 
 ## Parse Parameters as Values
 
@@ -58,7 +58,7 @@ engine.registerTag('random', {
 })
 ```
 
-Calling this tag in scope `{ bar: "bar", obj: { coo: "coo" } }` yields exactly the same result as the first example. See this JSFiddle: <http://jsfiddle.net/ctj364up/3/>
+Calling this tag in scope `{ bar: "bar", obj: { coo: "coo" } }` yields exactly the same result as the first example. See this JSFiddle: <https://jsfiddle.net/ctj364up/3/>
 
 {% note info Async and Promises %}
 Async calls in LiquidJS are implemented by generators directly, for we can call generators in synchronous manner so this tag implementation is also valid for `renderSync()`, `parseAndRenderSync()`, `renderFileSync()`. If you need to await a promise in tag implementation, simply replace `await somePromise` with `yield somePromise` and keep `* render()` instead of `async render()` will do the trick. See <a href="/tutorials/sync-and-async.html">Sync and Async</a> for more details.
@@ -92,7 +92,7 @@ engine.registerTag('random', {
 })
 ```
 
-Rendering `{% random from:2, to:max %}` in scope `{ max: 10 }` will generate a random number in the range [2, 10]. See this JSFiddle: <http://jsfiddle.net/ctj364up/4/>
+Rendering `{% random from:2, to:max %}` in scope `{ max: 10 }` will generate a random number in the range [2, 10]. See this JSFiddle: <https://jsfiddle.net/ctj364up/4/>
 
 
 [register-tags]: /tutorials/register-filters-tags.html

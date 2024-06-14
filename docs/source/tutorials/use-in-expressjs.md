@@ -60,7 +60,7 @@ var engine = new Liquid({
 ```
 
 [cache]: /api/interfaces/LiquidOptions.html#cache
-[express-views]: http://expressjs.com/en/guide/using-template-engines.html
+[express-views]: https://expressjs.com/en/guide/using-template-engines.html
 [parseFile]: /api/classes/Liquid.html#parseFile
 [parseFileSync]: /api/classes/Liquid.html#parseFileSync
 [layout]: https://help.shopify.com/en/themes/liquid/tags/theme-tags#layout

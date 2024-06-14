@@ -49,7 +49,7 @@ Pre-built UMD bundles are also available:
 
 {% note info Working Demo %} Here's a living demo on jsFiddle: <a href="https://jsfiddle.net/pd4jhzLs/1/" target="_blank">jsfiddle.net/pd4jhzLs/1/</a>, and the source code is also available in <a href="https://github.com/harttle/liquidjs/blob/master/demo/browser/" target="_blank">liquidjs/demo/browser/</a>.{% endnote %}
 
-{% note warn Compatibility %} You may need a <a href="https://github.com/taylorhakes/promise-polyfill" target="_blank">Promise polyfill</a> for legacy browsers like IE and Android UC, see <a href="http://caniuse.com/#feat=promises" target="_blank">caniuse statistics</a>. {% endnote %}
+{% note warn Compatibility %} You may need a <a href="https://github.com/taylorhakes/promise-polyfill" target="_blank">Promise polyfill</a> for legacy browsers like IE and Android UC, see <a href="https://caniuse.com/#feat=promises" target="_blank">caniuse statistics</a>. {% endnote %}
 
 ## LiquidJS in CLI
 

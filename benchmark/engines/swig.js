@@ -1,7 +1,7 @@
 const swig = require('swig')
 
 swig.setFilter('url', function (path) {
-  return `http://example.com${path}`
+  return `https://example.com${path}`
 })
 
 swig.setFilter('prepend', function (input, arg) {

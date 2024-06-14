@@ -5,7 +5,7 @@ function capitalize (str) {
   return str[0].toUpperCase() + str.slice(1).toLowerCase()
 }
 function url (path) {
-  return `http://example.com${path}`
+  return `https://example.com${path}`
 }
 function renderTodoIcon (id) {
   return <img title="risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices" src="http://images.example.com/{id}.png"/>

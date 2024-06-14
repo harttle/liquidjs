@@ -1,4 +1,4 @@
-<head prefix="og: http://ogp.me/ns#">
+<head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
   <title>{% if page.title %}{{ page.title }} | {% endif %}{{ config.title }}</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">

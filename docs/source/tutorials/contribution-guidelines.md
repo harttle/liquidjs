@@ -24,7 +24,7 @@ LiquidJS is Open Source and Free. To help it live and thrive, especially when Li
 
 [oc]: https://opencollective.com/liquidjs/contribute/backer-10665/checkout
 [shopify/liquid]: https://shopify.github.io/liquid/
-[caniuse-promises]: http://caniuse.com/#feat=promises
+[caniuse-promises]: https://caniuse.com/#feat=promises
 [pp]: https://github.com/taylorhakes/promise-polyfill
 [tutorial]: https://shopify.github.io/liquid/basics/introduction/
 [liquidjs]: https://github.com/harttle/liquidjs

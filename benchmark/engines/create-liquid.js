@@ -7,7 +7,7 @@ function createEngine (pkg) {
     cache: true,
     extname: '.liquid'
   })
-  liquid.registerFilter('url', path => `http://example.com${path}`)
+  liquid.registerFilter('url', path => `https://example.com${path}`)
   return {
     load: path => liquid.parse(readFileSync(path + '.liquid', 'utf8')),
     render: (tpl, data) => liquid.renderSync(tpl, data)
