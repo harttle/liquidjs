@@ -24,7 +24,7 @@ export interface LiquidOptions {
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
   cache?: boolean | number | LiquidCache;
-  /** Use Javascript Truthiness. Defaults to `false`. */
+  /** Use JavaScript Truthiness. Defaults to `false`. */
   jsTruthy?: boolean;
   /** If set, treat the `filepath` parameter in `{%include filepath %}` and `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`. */
   dynamicPartials?: boolean;
