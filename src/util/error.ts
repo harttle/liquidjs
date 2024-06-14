@@ -3,7 +3,7 @@ import { Token } from '../tokens/token'
 import { Template } from '../template/template'
 
 /**
- * targeting ES5, extends Error won't create a proper prototype chain, need a trait to kee track of classes
+ * targeting ES5, extends Error won't create a proper prototype chain, need a trait to keep track of classes
  */
 const TRAIT = '__liquidClass__'
 
