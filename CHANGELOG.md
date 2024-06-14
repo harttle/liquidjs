@@ -1201,7 +1201,7 @@ supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist
 
 ### BREAKING CHANGES
 
-* Options and method names in JavaScript API are now renamed to cammelCase, for a complete list see #109
+* Options and method names in JavaScript API are now renamed to camelCase, for a complete list see #109
 
 ## [7.5.1](https://github.com/harttle/liquidjs/compare/v7.5.0...v7.5.1) (2019-03-05)
 
