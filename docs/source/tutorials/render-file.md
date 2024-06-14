@@ -52,7 +52,7 @@ var engine = new Liquid({
 
 {% note tip Relative Paths %}Relative paths in <code>root</code> will be resolved against <code>cwd()</code>.{% endnote %}
 
-When `{% raw %}{% render "foo" %}{% endraw %}` is renderd or `liquid.renderFile('foo')` is called, the following files will be looked up and the first existing file will be used:
+When `{% raw %}{% render "foo" %}{% endraw %}` is rendered or `liquid.renderFile('foo')` is called, the following files will be looked up and the first existing file will be used:
 
 - `cwd()`/views/foo.liquid
 - `cwd()`/views/partials/foo.liquid

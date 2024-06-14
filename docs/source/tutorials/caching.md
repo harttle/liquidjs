@@ -28,7 +28,7 @@ engine.renderSync(tpl, {name: 'alice'}) // 'Alice'
 engine.renderSync(tpl, {name: 'bob'}) // 'Bob'
 ```
 
-The template string/file is parsed only once and renderd multiple times using different context. Templates for different files can be stored into a `Map` and can be retrieved directly for subsequent renders.
+The template string/file is parsed only once and rendered multiple times using different context. Templates for different files can be stored into a `Map` and can be retrieved directly for subsequent renders.
 
 ## The `cache` Option
 
