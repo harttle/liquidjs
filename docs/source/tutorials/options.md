@@ -140,8 +140,8 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 
 **ownPropertyOnly** hides scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates. Defaults to `true`.
 
-{% note info Non-existent Tags %}
-Non-existent tags always throw errors during parsing and this behavior cannot be customized.
+{% note info Nonexistent Tags %}
+Nonexistent tags always throw errors during parsing and this behavior cannot be customized.
 {% endnote %}
 
 ## Parameter Order
