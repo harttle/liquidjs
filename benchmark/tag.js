@@ -10,7 +10,7 @@ function tag () {
     new Benchmark.Suite('tag')
       .add('if', test('{% if "foobar" %}foo{% endif %}'))
       .add('unless', test('{%unless "foo"%}true{%else%}false{%endunless%}'))
-      .add('for', test('{% for i in (1..3) %}{{fooloop.index}}{% endfor %}'))
+      .add('for', test('{% for i in (1..3) %}{{forloop.index}}{% endfor %}'))
       .add('switch', test('{%case 3%}{% when 1 %}1{% when 2 %}2{% when 3 %}3{%endcase%}'))
       .add('assign', test('{%assign a="foo bar"%}'))
       .add('capture', test('{%capture foo%}what is this{%endcapture%}'))
