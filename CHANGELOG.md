@@ -1068,7 +1068,7 @@
 
 * Tag#render now returns void, use emitter argument
 to write rendered html.
-* ship to Node.js 8, the dist/liquid.cjs.js (main) nolonger
+* ship to Node.js 8, the dist/liquid.cjs.js (main) no longer
 supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist/liquid.js (ES5 umd) and liquid.min.js (minified ES5 umd)
 * remove default export, now should be used like import
 {Liquid} from 'liquidjs'
