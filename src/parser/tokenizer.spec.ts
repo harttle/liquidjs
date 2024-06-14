@@ -503,7 +503,7 @@ describe('Tokenizer', function () {
     it('should match contains', () => {
       expect(new Tokenizer('contains').matchTrie(opTrie)).toBe(8)
     })
-    it('should match comparision', () => {
+    it('should match comparison', () => {
       expect(new Tokenizer('>').matchTrie(opTrie)).toBe(1)
       expect(new Tokenizer('>=').matchTrie(opTrie)).toBe(2)
       expect(new Tokenizer('<').matchTrie(opTrie)).toBe(1)
