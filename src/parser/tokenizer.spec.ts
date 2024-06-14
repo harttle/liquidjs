@@ -69,7 +69,7 @@ describe('Tokenizer', function () {
     expect(hash2!.name.content).toBe('foo')
     expect(hash2!.value!.getText()).toBe('a[ "bar"]')
   })
-  it('should read multiple hashs', () => {
+  it('should read multiple hashes', () => {
     const hashes = new Tokenizer(', limit: 3 reverse offset:off').readHashes()
     expect(hashes).toHaveLength(3)
     const [limit, reverse, offset] = hashes
