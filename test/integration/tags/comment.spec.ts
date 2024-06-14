@@ -22,7 +22,7 @@ describe('tags/comment', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).toBe('')
   })
-  it('should ignore un-balenced tag tokens', async function () {
+  it('should ignore unbalanced tag tokens', async function () {
     const src = '{% comment %}{%if true%}true{%else%}false{% endcomment %}'
     const html = await liquid.parseAndRender(src)
     return expect(html).toBe('')
