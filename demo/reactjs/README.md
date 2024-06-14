@@ -2317,7 +2317,7 @@ MyDirectory in /tmp/build_1234/src
 
 It means you need to ensure that the lettercase of the file or directory you `import` matches the one you see on your filesystem or on GitHub.
 
-This is important because Linux (the operating system used by Heroku) is case sensitive. So `MyDirectory` and `mydirectory` are two distinct directories and thus, even though the project builds locally, the difference in case breaks the `import` statements on Heroku remotes.
+This is important because Linux (the operating system used by Heroku) is case-sensitive. So `MyDirectory` and `mydirectory` are two distinct directories and thus, even though the project builds locally, the difference in case breaks the `import` statements on Heroku remotes.
 
 ##### "Could not find a required file."
 
@@ -2466,7 +2466,7 @@ If you are completely sure that you didn't terminate the process, consider [addi
 
 ### `npm run build` fails on Heroku
 
-This may be a problem with case sensitive filenames.
+This may be a problem with case-sensitive filenames.
 Please refer to [this section](#resolving-heroku-deployment-errors).
 
 ### Moment.js locales are missing
