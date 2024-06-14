@@ -15,7 +15,7 @@ title: case
   {% when "cookie", "biscuit" %}
      This is a cookie
   {% else %}
-     This is not a cake nor a cookie
+     This is neither a cake nor a cookie
 {% endcase %}
 ```
 
