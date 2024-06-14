@@ -58,7 +58,7 @@ export interface LiquidOptions {
   outputDelimiterRight?: string;
   /** Whether input strings to date filter preserve the given timezone **/
   preserveTimezones?: boolean;
-  /** Whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`. */
+  /** Whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimmed regardless of line breaks. Defaults to `true`. */
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
   fs?: FS;
