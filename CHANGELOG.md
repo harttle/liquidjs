@@ -1177,7 +1177,7 @@ supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist
 
 ### Performance Improvements
 
-* use polymophism instead duck test ([82d7673](https://github.com/harttle/liquidjs/commit/82d7673))
+* use polymorphism instead duck test ([82d7673](https://github.com/harttle/liquidjs/commit/82d7673))
 
 ## [8.0.1](https://github.com/harttle/liquidjs/compare/v8.0.0...v8.0.1) (2019-03-22)
 
