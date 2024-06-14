@@ -1113,7 +1113,7 @@ supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist
 
 ### Features
 
-* at_least, at_most, sort_naturual for [#132](https://github.com/harttle/liquidjs/issues/132) ([e6f5f1c](https://github.com/harttle/liquidjs/commit/e6f5f1c))
+* at_least, at_most, sort_natural for [#132](https://github.com/harttle/liquidjs/issues/132) ([e6f5f1c](https://github.com/harttle/liquidjs/commit/e6f5f1c))
 
 # [8.3.0](https://github.com/harttle/liquidjs/compare/v8.2.4...v8.3.0) (2019-06-27)
 
