@@ -37,7 +37,7 @@ describe('render', function () {
         done()
       })
     })
-    it('should render to html stream asyncly', function (done) {
+    it('should render to html stream asynchronously', function (done) {
       const scope = new Context()
       class CustomTag extends Tag {
         render () {
