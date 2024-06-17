@@ -20,11 +20,11 @@ Getting started and building is described in [CONTRIBUTING.md](https://github.co
 
 ## Financial Support
 
-LiquidJS is Open Source and Free. To help it live and thrive, especially when LiquidJS is benefiting your business, please consider contribute on [Github Sponsors](https://github.com/sponsors/harttle) or [Open Collective][oc]. If I'm missing anything, find me via Twitter (harttleharttle) or email (harttleharttle at gmail), to add you into [the contributors table](https://github.com/harttle/liquidjs#contributors-).
+LiquidJS is Open Source and Free. To help it live and thrive, especially when LiquidJS is benefiting your business, please consider contribute on [GitHub Sponsors](https://github.com/sponsors/harttle) or [Open Collective][oc]. If I'm missing anything, find me via Twitter (harttleharttle) or email (harttleharttle at gmail), to add you into [the contributors table](https://github.com/harttle/liquidjs#contributors-).
 
 [oc]: https://opencollective.com/liquidjs/contribute/backer-10665/checkout
 [shopify/liquid]: https://shopify.github.io/liquid/
-[caniuse-promises]: http://caniuse.com/#feat=promises
+[caniuse-promises]: https://caniuse.com/#feat=promises
 [pp]: https://github.com/taylorhakes/promise-polyfill
 [tutorial]: https://shopify.github.io/liquid/basics/introduction/
 [liquidjs]: https://github.com/harttle/liquidjs

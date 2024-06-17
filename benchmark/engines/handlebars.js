@@ -12,7 +12,7 @@ handlebars.registerHelper('concat', function (...args) {
 })
 
 handlebars.registerHelper('url', function (path) {
-  return `http://example.com${path}`
+  return `https://example.com${path}`
 })
 
 handlebars.registerHelper('inc', function (num) {

@@ -113,10 +113,10 @@ describe('xhr', () => {
     })
     it('should support with url', async () => {
       engine = new LiquidUMD({
-        root: 'https://foo.com/bar/',
+        root: 'https://example.com/bar/',
         extname: '.html'
       })
-      server.respondWith('GET', 'https://foo.com/bar/hello.html',
+      server.respondWith('GET', 'https://example.com/bar/hello.html',
         [200, { 'Content-Type': 'text/plain' }, 'hello {{name}}'])
       const html = await engine.renderFile('hello.html', { name: 'alice5' })
       return expect(html).toBe('hello alice5')

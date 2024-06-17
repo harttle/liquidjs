@@ -40,7 +40,7 @@ describe('utils/async', () => {
       const result = await toPromise(foo())
       expect(result).toBe('foo')
     })
-    it('should reject Promise if dependency throws syncly', done => {
+    it('should reject Promise if dependency throws synchronously', done => {
       function * foo (): Generator<Generator<never>> {
         return yield bar()
       }
@@ -72,7 +72,7 @@ describe('utils/async', () => {
     })
   })
   describe('#toValueSync()', function () {
-    it('should throw Error if dependency throws syncly', () => {
+    it('should throw Error if dependency throws synchronously', () => {
       function * foo (): Generator<Generator<never>> {
         return yield bar()
       }

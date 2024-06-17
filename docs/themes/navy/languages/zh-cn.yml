@@ -41,7 +41,7 @@ sidebar:
     advanced: 高级主题
     caching: 缓存
     escaping: 转义
-    registeration: 注册标签/过滤器
+    registration: 注册标签/过滤器
     access_scope_in_filters: 过滤器里访问上下文
     parse_parameters: 参数解析
     render_tag_content: 渲染标签内容

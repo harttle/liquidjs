@@ -4,7 +4,7 @@ title: Differences with Shopify/liquid
 
 ## Compatibility
 
-Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus Github Pages). As you can see it's one of the most popular template engines in Ruby. There're lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
+Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it's one of the most popular template engines in Ruby. There're lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
 
 So "being compatible" means serving developers from Shopify and Jekyll well:
 

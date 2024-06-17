@@ -172,7 +172,7 @@ describe('util/strftime', function () {
     it('should escape %t as \\t', function () {
       expect(t(now, '%t')).toBe('\t')
     })
-    it('should retain un-recognized formaters', function () {
+    it('should retain un-recognized formatters', function () {
       expect(t(now, '%o')).toBe('%o')
     })
   })

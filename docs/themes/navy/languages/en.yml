@@ -10,7 +10,7 @@ index:
   get_started: Get Started
   contributors:
     title: Contributors
-    description: 'LiquidJS follows the <a href="https://github.com/all-contributors/all-contributors">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guildelines here</a>! Thanks goes to these wonderful people:'
+    description: 'LiquidJS follows the <a href="https://github.com/all-contributors/all-contributors">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guidelines here</a>! Thanks goes to these wonderful people:'
   sponsors:
     title: Sponsors
     description: 'If you personally love LiquidJS or it&#39;s benefiting your business, please <a href="https://github.com/sponsors/harttle">sponsor us</a>!'
@@ -41,7 +41,7 @@ sidebar:
     advanced: Advanced
     caching: Caching
     escaping: Escaping
-    registeration: Register Filters/Tags
+    registration: Register Filters/Tags
     access_scope_in_filters: Access Scope in Filters
     parse_parameters: Parse Parameters
     render_tag_content: Render Tag Content
@@ -67,4 +67,4 @@ sidebar:
     enums: Enums
     interfaces: Interfaces
 footer:
-  license: 'Documentation licensed under <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.'
+  license: 'Documentation licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.'

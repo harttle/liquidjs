@@ -23,7 +23,7 @@ engine.registerFilter('fullURL', function (path) {
 })
 ```
 
-See this JSFiddle: <http://jsfiddle.net/ctj364up/1/>
+See this JSFiddle: <https://jsfiddle.net/ctj364up/1/>
 
 {% note warn Arrow Functions %}
 <code>this</code> in arrow functions is bound to current JavaScript context, you'll need to use <code>function(){}</code> instead of <code>()=>{}</code> syntax to access <code>this.context</code> correctly.

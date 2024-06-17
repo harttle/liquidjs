@@ -33,8 +33,8 @@ describe('filters/url', () => {
 
   describe('uri_escape', () => {
     it('should escape unsupported chars for uri', () => {
-      const html = liquid.parseAndRenderSync('{{ "http://foo.com/?q=foo, \\\\bar?" | uri_escape }}')
-      expect(html).toEqual('http://foo.com/?q=foo,%20%5Cbar?')
+      const html = liquid.parseAndRenderSync('{{ "https://example.com/?q=foo, \\\\bar?" | uri_escape }}')
+      expect(html).toEqual('https://example.com/?q=foo,%20%5Cbar?')
     })
     it('should not escape reserved characters', () => {
       const reserved = "!#$&'()*+,/:;=?@[]"

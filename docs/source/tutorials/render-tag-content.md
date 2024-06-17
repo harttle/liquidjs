@@ -57,7 +57,7 @@ engine.registerTag('wrap', {
 })
 ```
 
-`.renderTemplates()` can be async, we need `yield` to wait it complete. More details on async in LiquidJS, please refer to [Sync and Async][async]. Other parts of `render()` method is quite straightforward. Here's a JSFiddle version: <http://jsfiddle.net/por0zcn1/3/>
+`.renderTemplates()` can be async, we need `yield` to wait it complete. More details on async in LiquidJS, please refer to [Sync and Async][async]. Other parts of `render()` method is quite straightforward. Here's a JSFiddle version: <https://jsfiddle.net/por0zcn1/3/>
 
 ## Using ParseStream
 
@@ -75,7 +75,7 @@ parse(tagToken, remainTokens) {
 }
 ```
 
-Here's a JSFiddle version: <http://jsfiddle.net/por0zcn1/4/>. For simplicity, the following examples are implemented using `ParseStream`.
+Here's a JSFiddle version: <https://jsfiddle.net/por0zcn1/4/>. For simplicity, the following examples are implemented using `ParseStream`.
 
 ## Manipulate the Context
 
@@ -123,7 +123,7 @@ engine.registerTag('repeat', {
 })
 ```
 
-The `parse()` is exactly the same as `wrap` tag, we repeat the content simply by calling `.renderTemplates(this.tpls)` twice during `render()`. Here's the JSFiddle: <http://jsfiddle.net/por0zcn1/2/>
+The `parse()` is exactly the same as `wrap` tag, we repeat the content simply by calling `.renderTemplates(this.tpls)` twice during `render()`. Here's the JSFiddle: <https://jsfiddle.net/por0zcn1/2/>
 
 {% note warn Use Push & Pop in Pairs %}
 `context.push()` and `context.pop()` have to be used in pairs. Failing to `pop()` the *Scope* you pushed will leak the *Scope* to latter templates and may corrupt the *Context* stack.

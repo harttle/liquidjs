@@ -98,7 +98,7 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 ## jsTruthy
 
-**jsTruthy** is used to use standard Javascript truthiness rather than the Shopify.
+**jsTruthy** is used to use standard JavaScript truthiness rather than the Shopify.
 
 it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
 
@@ -140,8 +140,8 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 
 **ownPropertyOnly** hides scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates. Defaults to `true`.
 
-{% note info Non-existent Tags %}
-Non-existent tags always throw errors during parsing and this behavior can not be customized.
+{% note info Nonexistent Tags %}
+Nonexistent tags always throw errors during parsing and this behavior cannot be customized.
 {% endnote %}
 
 ## Parameter Order

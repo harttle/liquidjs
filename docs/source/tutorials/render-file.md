@@ -52,18 +52,18 @@ var engine = new Liquid({
 
 {% note tip Relative Paths %}Relative paths in <code>root</code> will be resolved against <code>cwd()</code>.{% endnote %}
 
-When `{% raw %}{% render "foo" %}{% endraw %}` is renderd or `liquid.renderFile('foo')` is called, the following files will be looked up and the first existing file will be used:
+When `{% raw %}{% render "foo" %}{% endraw %}` is rendered or `liquid.renderFile('foo')` is called, the following files will be looked up and the first existing file will be used:
 
 - `cwd()`/views/foo.liquid
 - `cwd()`/views/partials/foo.liquid
 
-If none of the above files exists, an `ENOENT` error will be throwed. Here's a demo for Node.js: [demo/nodejs](https://github.com/harttle/liquidjs/tree/master/demo/nodejs).
+If none of the above files exists, an `ENOENT` error will be thrown. Here's a demo for Node.js: [demo/nodejs](https://github.com/harttle/liquidjs/tree/master/demo/nodejs).
 
 When LiquidJS is used in browser, say current location is <https://example.com/bar/index.html>, only the first `root` will be used and the file to be fetched is:
 
 - <https://example.com/bar/foo.liquid>
 
-If fetch fails, a 404/500 error or network failures for example, an `ENOENT` error will be throwed.
+If fetch fails, a 404/500 error or network failures for example, an `ENOENT` error will be thrown.
 Here's a demo for browsers: [demo/browser](https://github.com/harttle/liquidjs/tree/master/demo/browser).
 
 ## Abstract File System

@@ -9,7 +9,7 @@ tutorials:
   advanced:
     caching: caching.html
     escaping: escaping.html
-    registeration: register-filters-tags.html
+    registration: register-filters-tags.html
     access_scope_in_filters: access-scope-in-filters.html
     parse_parameters: parse-parameters.html
     render_tag_content: render-tag-content.html

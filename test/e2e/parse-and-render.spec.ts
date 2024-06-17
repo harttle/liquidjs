@@ -53,7 +53,7 @@ describe('.parseAndRender()', function () {
     return expect(html).toBe('apples')
   })
   it('should support nil(null, undefined) literal', async function () {
-    const src = '{% if notexist == nil %}true{% endif %}'
+    const src = '{% if nonexistent == nil %}true{% endif %}'
     const html = await engine.parseAndRender(src)
     expect(html).toBe('true')
   })

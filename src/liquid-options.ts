@@ -24,7 +24,7 @@ export interface LiquidOptions {
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */
   cache?: boolean | number | LiquidCache;
-  /** Use Javascript Truthiness. Defaults to `false`. */
+  /** Use JavaScript Truthiness. Defaults to `false`. */
   jsTruthy?: boolean;
   /** If set, treat the `filepath` parameter in `{%include filepath %}` and `{%layout filepath%}` as a variable, otherwise as a literal value. Defaults to `true`. */
   dynamicPartials?: boolean;
@@ -58,7 +58,7 @@ export interface LiquidOptions {
   outputDelimiterRight?: string;
   /** Whether input strings to date filter preserve the given timezone **/
   preserveTimezones?: boolean;
-  /** Whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimed regardless of line breaks. Defaults to `true`. */
+  /** Whether `trim*Left`/`trim*Right` is greedy. When set to `true`, all consecutive blank characters including `\n` will be trimmed regardless of line breaks. Defaults to `true`. */
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
   fs?: FS;

@@ -381,7 +381,7 @@ This works for any library, not just `react-router-dom`.
 ## Importing a Component
 
 This project setup supports ES6 modules thanks to Webpack.<br>
-While you can still use `require()` and `module.exports`, we encourage you to use [`import` and `export`](http://exploringjs.com/es6/ch_modules.html) instead.
+While you can still use `require()` and `module.exports`, we encourage you to use [`import` and `export`](https://exploringjs.com/es6/ch_modules.html) instead.
 
 For example:
 
@@ -414,7 +414,7 @@ class DangerButton extends Component {
 export default DangerButton;
 ```
 
-Be aware of the [difference between default and named exports](http://stackoverflow.com/questions/36795819/react-native-es-6-when-should-i-use-curly-braces-for-import/36796281#36796281). It is a common source of mistakes.
+Be aware of the [difference between default and named exports](https://stackoverflow.com/questions/36795819/react-native-es-6-when-should-i-use-curly-braces-for-import/36796281#36796281). It is a common source of mistakes.
 
 We suggest that you stick to using default imports and exports when a module only exports a single thing (for example, a component). That’s what you get when you use `export default Button` and `import Button from './Button'`.
 
@@ -422,15 +422,15 @@ Named exports are useful for utility modules that export several functions. A mo
 
 Learn more about ES6 modules:
 
-- [When to use the curly braces?](http://stackoverflow.com/questions/36795819/react-native-es-6-when-should-i-use-curly-braces-for-import/36796281#36796281)
-- [Exploring ES6: Modules](http://exploringjs.com/es6/ch_modules.html)
+- [When to use the curly braces?](https://stackoverflow.com/questions/36795819/react-native-es-6-when-should-i-use-curly-braces-for-import/36796281#36796281)
+- [Exploring ES6: Modules](https://exploringjs.com/es6/ch_modules.html)
 - [Understanding ES6: Modules](https://leanpub.com/understandinges6/read#leanpub-auto-encapsulating-code-with-modules)
 
 ## Code Splitting
 
 Instead of downloading the entire app before users can use it, code splitting allows you to split your code into small chunks which you can then load on demand.
 
-This project setup supports code splitting via [dynamic `import()`](http://2ality.com/2017/01/import-operator.html#loading-code-on-demand). Its [proposal](https://github.com/tc39/proposal-dynamic-import) is in stage 3. The `import()` function-like form takes the module name as an argument and returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which always resolves to the namespace object of the module.
+This project setup supports code splitting via [dynamic `import()`](https://2ality.com/2017/01/import-operator.html#loading-code-on-demand). Its [proposal](https://github.com/tc39/proposal-dynamic-import) is in stage 3. The `import()` function-like form takes the module name as an argument and returns a [`Promise`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which always resolves to the namespace object of the module.
 
 Here is an example:
 
@@ -476,7 +476,7 @@ You can also use it with `async` / `await` syntax if you prefer it.
 
 ### With React Router
 
-If you are using React Router check out [this tutorial](http://serverless-stack.com/chapters/code-splitting-in-create-react-app.html) on how to use code splitting with it. You can find the companion GitHub repository [here](https://github.com/AnomalyInnovations/serverless-stack-demo-client/tree/code-splitting-in-create-react-app).
+If you are using React Router check out [this tutorial](https://serverless-stack.com/chapters/code-splitting-in-create-react-app.html) on how to use code splitting with it. You can find the companion GitHub repository [here](https://github.com/AnomalyInnovations/serverless-stack-demo-client/tree/code-splitting-in-create-react-app).
 
 Also check out the [Code Splitting](https://reactjs.org/docs/code-splitting.html) section in React documentation.
 
@@ -602,7 +602,7 @@ This project setup minifies your CSS and adds vendor prefixes to it automaticall
 
 Support for new CSS features like the [`all` property](https://developer.mozilla.org/en-US/docs/Web/CSS/all), [`break` properties](https://www.w3.org/TR/css-break-3/#breaking-controls), [custom properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables), and [media query ranges](https://www.w3.org/TR/mediaqueries-4/#range-context) are automatically polyfilled to add support for older browsers.
 
-You can customize your target support browsers by adjusting the `browserslist` key in `package.json` accoring to the [Browserslist specification](https://github.com/browserslist/browserslist#readme).
+You can customize your target support browsers by adjusting the `browserslist` key in `package.json` according to the [Browserslist specification](https://github.com/browserslist/browserslist#readme).
 
 For example, this:
 
@@ -671,7 +671,7 @@ This works in CSS too:
 }
 ```
 
-Webpack finds all relative module references in CSS (they start with `./`) and replaces them with the final paths from the compiled bundle. If you make a typo or accidentally delete an important file, you will see a compilation error, just like when you import a non-existent JavaScript module. The final filenames in the compiled bundle are generated by Webpack from content hashes. If the file content changes in the future, Webpack will give it a different name in production so you don’t need to worry about long-term caching of assets.
+Webpack finds all relative module references in CSS (they start with `./`) and replaces them with the final paths from the compiled bundle. If you make a typo or accidentally delete an important file, you will see a compilation error, just like when you import a nonexistent JavaScript module. The final filenames in the compiled bundle are generated by Webpack from content hashes. If the file content changes in the future, Webpack will give it a different name in production so you don’t need to worry about long-term caching of assets.
 
 Please be advised that this is also a custom feature of Webpack.
 
@@ -755,7 +755,7 @@ The `public` folder is useful as a workaround for a number of less common cases:
 
 - You need a file with a specific name in the build output, such as [`manifest.webmanifest`](https://developer.mozilla.org/en-US/docs/Web/Manifest).
 - You have thousands of images and need to dynamically reference their paths.
-- You want to include a small script like [`pace.js`](http://github.hubspot.com/pace/docs/welcome/) outside of the bundled code.
+- You want to include a small script like [`pace.js`](https://github.hubspot.com/pace/docs/welcome/) outside of the bundled code.
 - Some library may be incompatible with Webpack and you have no other option but to include it as a `<script>` tag.
 
 Note that if you add a `<script>` that declares global variables, you also need to read the next section on using them.
@@ -813,7 +813,7 @@ Now you are ready to use the imported reactstrap components within your componen
 Sometimes you might need to tweak the visual styles of Bootstrap (or equivalent package).<br>
 As of `react-scripts@2.0.0` you can import `.scss` files. This makes it possible to use a package's built-in Sass variables for global style preferences.
 
-To customize Bootstrap, create a file called `src/custom.scss` (or similar) and import the Bootstrap source stylesheet. Add any overrides _before_ the imported file(s). You can reference [Bootstrap's documentation](http://getbootstrap.com/docs/4.1/getting-started/theming/#css-variables) for the names of the available variables.
+To customize Bootstrap, create a file called `src/custom.scss` (or similar) and import the Bootstrap source stylesheet. Add any overrides _before_ the imported file(s). You can reference [Bootstrap's documentation](https://getbootstrap.com/docs/4.1/getting-started/theming/#css-variables) for the names of the available variables.
 
 ```scss
 // Override default variables before the import
@@ -1138,7 +1138,7 @@ To tell the development server to proxy any unknown requests to your API server 
 
 This way, when you `fetch('/api/todos')` in development, the development server will recognize that it’s not a static asset, and will proxy your request to `http://localhost:4000/api/todos` as a fallback. The development server will **only** attempt to send requests without `text/html` in its `Accept` header to the proxy.
 
-Conveniently, this avoids [CORS issues](http://stackoverflow.com/questions/21854516/understanding-ajax-cors-and-security-considerations) and error messages like this in development:
+Conveniently, this avoids [CORS issues](https://stackoverflow.com/questions/21854516/understanding-ajax-cors-and-security-considerations) and error messages like this in development:
 
 ```
 Fetch API cannot load http://localhost:4000/api/todos. No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'http://localhost:3000' is therefore not allowed access. If an opaque response serves your needs, set the request's mode to 'no-cors' to fetch the resource with CORS disabled.
@@ -1150,7 +1150,7 @@ The `proxy` option supports HTTP, HTTPS and WebSocket connections.<br>
 If the `proxy` option is **not** flexible enough for you, alternatively you can:
 
 - [Configure the proxy yourself](#configuring-the-proxy-manually)
-- Enable CORS on your server ([here’s how to do it for Express](http://enable-cors.org/server_expressjs.html)).
+- Enable CORS on your server ([here’s how to do it for Express](https://enable-cors.org/server_expressjs.html)).
 - Use [environment variables](#adding-custom-environment-variables) to inject the right server host and port into your app.
 
 ### "Invalid Host Header" Errors After Configuring Proxy
@@ -1324,7 +1324,7 @@ When you run `npm test`, Jest will launch in the watch mode. Every time you save
 
 The watcher includes an interactive command-line interface with the ability to run all tests, or focus on a search pattern. It is designed this way so that you can keep it open and enjoy fast re-runs. You can learn the commands from the “Watch Usage” note that the watcher prints after every run:
 
-![Jest watch mode](http://facebook.github.io/jest/img/blog/15-watch.gif)
+![Jest watch mode](https://facebook.github.io/jest/img/blog/15-watch.gif)
 
 ### Version Control Integration
 
@@ -1373,7 +1373,7 @@ This test mounts a component and makes sure that it didn’t throw during render
 
 When you encounter bugs caused by changing components, you will gain a deeper insight into which parts of them are worth testing in your application. This might be a good time to introduce more specific tests asserting specific expected output or behavior.
 
-If you’d like to test components in isolation from the child components they render, we recommend using [`shallow()` rendering API](http://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](http://airbnb.io/enzyme/). To install it, run:
+If you’d like to test components in isolation from the child components they render, we recommend using [`shallow()` rendering API](https://airbnb.io/enzyme/docs/api/shallow.html) from [Enzyme](https://airbnb.io/enzyme/). To install it, run:
 
 ```sh
 npm install --save enzyme enzyme-adapter-react-16 react-test-renderer
@@ -1412,9 +1412,9 @@ it('renders without crashing', () => {
 });
 ```
 
-Unlike the previous smoke test using `ReactDOM.render()`, this test only renders `<App>` and doesn’t go deeper. For example, even if `<App>` itself renders a `<Button>` that throws, this test will pass. Shallow rendering is great for isolated unit tests, but you may still want to create some full rendering tests to ensure the components integrate correctly. Enzyme supports [full rendering with `mount()`](http://airbnb.io/enzyme/docs/api/mount.html), and you can also use it for testing state changes and component lifecycle.
+Unlike the previous smoke test using `ReactDOM.render()`, this test only renders `<App>` and doesn’t go deeper. For example, even if `<App>` itself renders a `<Button>` that throws, this test will pass. Shallow rendering is great for isolated unit tests, but you may still want to create some full rendering tests to ensure the components integrate correctly. Enzyme supports [full rendering with `mount()`](https://airbnb.io/enzyme/docs/api/mount.html), and you can also use it for testing state changes and component lifecycle.
 
-You can read the [Enzyme documentation](http://airbnb.io/enzyme/) for more testing techniques. Enzyme documentation uses Chai and Sinon for assertions but you don’t have to use them because Jest provides built-in `expect()` and `jest.fn()` for spies.
+You can read the [Enzyme documentation](https://airbnb.io/enzyme/) for more testing techniques. Enzyme documentation uses Chai and Sinon for assertions but you don’t have to use them because Jest provides built-in `expect()` and `jest.fn()` for spies.
 
 Here is an example from Enzyme documentation that asserts specific output, rewritten to use Jest matchers:
 
@@ -1431,8 +1431,8 @@ it('renders welcome message', () => {
 });
 ```
 
-All Jest matchers are [extensively documented here](http://facebook.github.io/jest/docs/en/expect.html).<br>
-Nevertheless you can use a third-party assertion library like [Chai](http://chaijs.com/) if you want to, as described below.
+All Jest matchers are [extensively documented here](https://facebook.github.io/jest/docs/en/expect.html).<br>
+Nevertheless you can use a third-party assertion library like [Chai](https://chaijs.com/) if you want to, as described below.
 
 Additionally, you might find [jest-enzyme](https://github.com/blainekasten/enzyme-matchers) helpful to simplify your tests with readable matchers. The above `contains` code can be written more simply with jest-enzyme.
 
@@ -1462,7 +1462,7 @@ import 'jest-enzyme';
 
 We recommend that you use `expect()` for assertions and `jest.fn()` for spies. If you are having issues with them please [file those against Jest](https://github.com/facebook/jest/issues/new), and we’ll fix them. We intend to keep making them better for React, supporting, for example, [pretty-printing React elements as JSX](https://github.com/facebook/jest/pull/1566).
 
-However, if you are used to other libraries, such as [Chai](http://chaijs.com/) and [Sinon](http://sinonjs.org/), or if you have existing code using them that you’d like to port over, you can import them normally like this:
+However, if you are used to other libraries, such as [Chai](https://chaijs.com/) and [Sinon](https://sinonjs.org/), or if you have existing code using them that you’d like to port over, you can import them normally like this:
 
 ```js
 import sinon from 'sinon';
@@ -1509,7 +1509,7 @@ Similarly, `fit()` lets you focus on a specific test without running any other t
 Jest has an integrated coverage reporter that works well with ES6 and requires no configuration.<br>
 Run `npm test -- --coverage` (note extra `--` in the middle) to include a coverage report like this:
 
-![coverage report](http://i.imgur.com/5bFhnTS.png)
+![coverage report](https://i.imgur.com/5bFhnTS.png)
 
 Note that tests run much slower with coverage so it is recommended to run it separately from your normal workflow.
 
@@ -1640,18 +1640,18 @@ To help you make up your mind, here is a list of APIs that **need jsdom**:
 - Any browser globals like `window` and `document`
 - [`ReactDOM.render()`](https://facebook.github.io/react/docs/top-level-api.html#reactdom.render)
 - [`TestUtils.renderIntoDocument()`](https://facebook.github.io/react/docs/test-utils.html#renderintodocument) ([a shortcut](https://github.com/facebook/react/blob/34761cf9a252964abfaab6faf74d473ad95d1f21/src/test/ReactTestUtils.js#L83-L91) for the above)
-- [`mount()`](http://airbnb.io/enzyme/docs/api/mount.html) in [Enzyme](http://airbnb.io/enzyme/index.html)
+- [`mount()`](https://airbnb.io/enzyme/docs/api/mount.html) in [Enzyme](https://airbnb.io/enzyme/index.html)
 
 In contrast, **jsdom is not needed** for the following APIs:
 
 - [`TestUtils.createRenderer()`](https://facebook.github.io/react/docs/test-utils.html#shallow-rendering) (shallow rendering)
-- [`shallow()`](http://airbnb.io/enzyme/docs/api/shallow.html) in [Enzyme](http://airbnb.io/enzyme/index.html)
+- [`shallow()`](https://airbnb.io/enzyme/docs/api/shallow.html) in [Enzyme](https://airbnb.io/enzyme/index.html)
 
-Finally, jsdom is also not needed for [snapshot testing](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
+Finally, jsdom is also not needed for [snapshot testing](https://facebook.github.io/jest/blog/2016/07/27/jest-14.html).
 
 ### Snapshot Testing
 
-Snapshot testing is a feature of Jest that automatically generates text snapshots of your components and saves them on the disk so if the UI output changes, you get notified without manually writing any assertions on the component output. [Read more about snapshot testing.](http://facebook.github.io/jest/blog/2016/07/27/jest-14.html)
+Snapshot testing is a feature of Jest that automatically generates text snapshots of your components and saves them on the disk so if the UI output changes, you get notified without manually writing any assertions on the component output. [Read more about snapshot testing.](https://facebook.github.io/jest/blog/2016/07/27/jest-14.html)
 
 ### Editor Integration
 
@@ -1735,7 +1735,7 @@ Usually, it’s hard to see these states without running a sample app or some ex
 
 Create React App doesn’t include any tools for this by default, but you can easily add [Storybook for React](https://storybook.js.org) ([source](https://github.com/storybooks/storybook)) or [React Styleguidist](https://react-styleguidist.js.org/) ([source](https://github.com/styleguidist/react-styleguidist)) to your project. **These are third-party tools that let you develop components and see all their states in isolation from your app**.
 
-![Storybook for React Demo](http://i.imgur.com/7CIAWpB.gif)
+![Storybook for React Demo](https://i.imgur.com/7CIAWpB.gif)
 
 You can also deploy your Storybook or style guide as a static app. This way, everyone in your team can view and review different states of UI components without starting a backend server or creating an account in your app.
 
@@ -1820,7 +1820,7 @@ following in their [`src/index.js`](src/index.js) file:
 ```js
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
+// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 ```
 
@@ -1854,7 +1854,7 @@ following into account:
 
 1. Service workers [require HTTPS](https://developers.google.com/web/fundamentals/getting-started/primers/service-workers#you_need_https),
    although to facilitate local testing, that policy
-   [does not apply to `localhost`](http://stackoverflow.com/questions/34160509/options-for-testing-service-workers-via-http/34161385#34161385).
+   [does not apply to `localhost`](https://stackoverflow.com/questions/34160509/options-for-testing-service-workers-via-http/34161385#34161385).
    If your production web server does not support HTTPS, then the service worker
    registration will fail, but the rest of your web app will remain functional.
 
@@ -1970,7 +1970,7 @@ serve -h
 
 You don’t necessarily need a static server in order to run a Create React App project in production. It works just as fine integrated into an existing dynamic one.
 
-Here’s a programmatic example using [Node](https://nodejs.org/) and [Express](http://expressjs.com/):
+Here’s a programmatic example using [Node](https://nodejs.org/) and [Express](https://expressjs.com/):
 
 ```javascript
 const express = require('express');
@@ -2018,7 +2018,7 @@ If you’re using [Apache HTTP Server](https://httpd.apache.org/), you need to c
 
 It will get copied to the `build` folder when you run `npm run build`.
 
-If you’re using [Apache Tomcat](http://tomcat.apache.org/), you need to follow [this Stack Overflow answer](https://stackoverflow.com/a/41249464/4878474).
+If you’re using [Apache Tomcat](https://tomcat.apache.org/), you need to follow [this Stack Overflow answer](https://stackoverflow.com/a/41249464/4878474).
 
 Now requests to `/todos/42` will be handled correctly both in development and in production.
 
@@ -2029,7 +2029,7 @@ service worker navigation routing can be configured or disabled by
 [`eject`ing](#npm-run-eject) and then modifying the
 [`navigateFallback`](https://github.com/GoogleChrome/sw-precache#navigatefallback-string)
 and [`navigateFallbackWhitelist`](https://github.com/GoogleChrome/sw-precache#navigatefallbackwhitelist-arrayregexp)
-options of the `SWPreachePlugin` [configuration](../config/webpack.config.prod.js).
+options of the `SWPrecachePlugin` [configuration](../config/webpack.config.prod.js).
 
 When users install your app to the homescreen of their device the default configuration will make a shortcut to `/index.html`. This may not work for client-side routers which expect the app to be served from `/`. Edit the web app manifest at [`public/manifest.json`](public/manifest.json) and change `start_url` to match the required URL scheme, for example:
 
@@ -2043,7 +2043,7 @@ By default, Create React App produces a build assuming your app is hosted at the
 To override this, specify the `homepage` in your `package.json`, for example:
 
 ```js
-  "homepage": "http://mywebsite.com/relativepath",
+  "homepage": "https://example.com/relativepath",
 ```
 
 This will let Create React App correctly infer the root path to use in the generated HTML file.
@@ -2068,7 +2068,7 @@ If you are not using the HTML5 `pushState` history API or not using client-side 
   "homepage": ".",
 ```
 
-This will make sure that all the asset paths are relative to `index.html`. You will then be able to move your app from `http://mywebsite.com` to `http://mywebsite.com/relativepath` or even `http://mywebsite.com/relative/path` without having to rebuild it.
+This will make sure that all the asset paths are relative to `index.html`. You will then be able to move your app from `https://example.com` to `https://example.com/relativepath` or even `https://example.com/relative/path` without having to rebuild it.
 
 ### Customizing Environment Variables for Arbitrary Build Environments
 
@@ -2077,7 +2077,7 @@ You can create an arbitrary build environment by creating a custom `.env` file a
 For example, to create a build environment for a staging environment:
 
 1. Create a file called `.env.staging`
-1. Set environment variables as you would any other `.env` file (e.g. `REACT_APP_API_URL=http://api-staging.example.com`)
+1. Set environment variables as you would any other `.env` file (e.g. `REACT_APP_API_URL=https://api-staging.example.com`)
 1. Install [env-cmd](https://www.npmjs.com/package/env-cmd)
    ```sh
    $ npm install env-cmd --save
@@ -2201,7 +2201,7 @@ or for a GitHub user page:
 or for a custom domain page:
 
 ```json
-  "homepage": "https://mywebsite.com",
+  "homepage": "https://example.com",
 ```
 
 Create React App uses the `homepage` field to determine the root URL in the built HTML file.
@@ -2259,7 +2259,7 @@ npm run deploy
 
 Finally, make sure **GitHub Pages** option in your GitHub project settings is set to use the `gh-pages` branch:
 
-<img src="http://i.imgur.com/HUjEr9l.png" width="500" alt="gh-pages branch setting">
+<img src="https://i.imgur.com/HUjEr9l.png" width="500" alt="gh-pages branch setting">
 
 #### Step 5: Optionally, configure the domain
 
@@ -2268,14 +2268,14 @@ You can configure a custom domain with GitHub Pages by adding a `CNAME` file to 
 Your CNAME file should look like this:
 
 ```
-mywebsite.com
+example.com
 ```
 
 #### Notes on client-side routing
 
-GitHub Pages doesn’t support routers that use the HTML5 `pushState` history API under the hood (for example, React Router using `browserHistory`). This is because when there is a fresh page load for a url like `http://user.github.io/todomvc/todos/42`, where `/todos/42` is a frontend route, the GitHub Pages server returns 404 because it knows nothing of `/todos/42`. If you want to add a router to a project hosted on GitHub Pages, here are a couple of solutions:
+GitHub Pages doesn’t support routers that use the HTML5 `pushState` history API under the hood (for example, React Router using `browserHistory`). This is because when there is a fresh page load for a url like `https://user.github.io/todomvc/todos/42`, where `/todos/42` is a frontend route, the GitHub Pages server returns 404 because it knows nothing of `/todos/42`. If you want to add a router to a project hosted on GitHub Pages, here are a couple of solutions:
 
-- You could switch from using HTML5 history API to routing with hashes. If you use React Router, you can switch to `hashHistory` for this effect, but the URL will be longer and more verbose (for example, `http://user.github.io/todomvc/#/todos/42?_k=yknaj`). [Read more](https://reacttraining.com/react-router/web/api/Router) about different history implementations in React Router.
+- You could switch from using HTML5 history API to routing with hashes. If you use React Router, you can switch to `hashHistory` for this effect, but the URL will be longer and more verbose (for example, `https://user.github.io/todomvc/#/todos/42?_k=yknaj`). [Read more](https://reacttraining.com/react-router/web/api/Router) about different history implementations in React Router.
 - Alternatively, you can use a trick to teach GitHub Pages to handle 404 by redirecting to your `index.html` page with a special redirect parameter. You would need to add a `404.html` file with the redirection code to the `build` folder before deploying your project, and you’ll need to add code handling the redirect parameter to `index.html`. You can find a detailed explanation of this technique [in this guide](https://github.com/rafrex/spa-github-pages).
 
 #### Troubleshooting
@@ -2317,7 +2317,7 @@ MyDirectory in /tmp/build_1234/src
 
 It means you need to ensure that the lettercase of the file or directory you `import` matches the one you see on your filesystem or on GitHub.
 
-This is important because Linux (the operating system used by Heroku) is case sensitive. So `MyDirectory` and `mydirectory` are two distinct directories and thus, even though the project builds locally, the difference in case breaks the `import` statements on Heroku remotes.
+This is important because Linux (the operating system used by Heroku) is case-sensitive. So `MyDirectory` and `mydirectory` are two distinct directories and thus, even though the project builds locally, the difference in case breaks the `import` statements on Heroku remotes.
 
 ##### "Could not find a required file."
 
@@ -2442,7 +2442,7 @@ We recommend deleting `node_modules` in your project and running `npm install` (
 - [facebook/watchman#358](https://github.com/facebook/watchman/issues/358)
 - [ember-cli/ember-cli#6259](https://github.com/ember-cli/ember-cli/issues/6259)
 
-It is reported that installing Watchman 4.7.0 or newer fixes the issue. If you use [Homebrew](http://brew.sh/), you can run these commands to update it:
+It is reported that installing Watchman 4.7.0 or newer fixes the issue. If you use [Homebrew](https://brew.sh/), you can run these commands to update it:
 
 ```
 watchman shutdown-server
@@ -2466,7 +2466,7 @@ If you are completely sure that you didn't terminate the process, consider [addi
 
 ### `npm run build` fails on Heroku
 
-This may be a problem with case sensitive filenames.
+This may be a problem with case-sensitive filenames.
 Please refer to [this section](#resolving-heroku-deployment-errors).
 
 ### Moment.js locales are missing

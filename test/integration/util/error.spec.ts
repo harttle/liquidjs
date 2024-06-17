@@ -83,7 +83,7 @@ describe('error', function () {
         }
       })
       engine.registerFilter('throwingFilter', () => {
-        throw new Error('throwed by filter')
+        throw new Error('thrown by filter')
       })
     })
     it('should throw RenderError when tag throws', async function () {
@@ -104,7 +104,7 @@ describe('error', function () {
       const src = '{{1|throwingFilter}}'
       await expect(engine.parseAndRender(src)).rejects.toMatchObject({
         name: 'RenderError',
-        message: expect.stringContaining('throwed by filter')
+        message: expect.stringContaining('thrown by filter')
       })
     })
     it('should not throw when variable undefined by default', async function () {

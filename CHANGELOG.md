@@ -1068,7 +1068,7 @@
 
 * Tag#render now returns void, use emitter argument
 to write rendered html.
-* ship to Node.js 8, the dist/liquid.cjs.js (main) nolonger
+* ship to Node.js 8, the dist/liquid.cjs.js (main) no longer
 supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist/liquid.js (ES5 umd) and liquid.min.js (minified ES5 umd)
 * remove default export, now should be used like import
 {Liquid} from 'liquidjs'
@@ -1113,7 +1113,7 @@ supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist
 
 ### Features
 
-* at_least, at_most, sort_naturual for [#132](https://github.com/harttle/liquidjs/issues/132) ([e6f5f1c](https://github.com/harttle/liquidjs/commit/e6f5f1c))
+* at_least, at_most, sort_natural for [#132](https://github.com/harttle/liquidjs/issues/132) ([e6f5f1c](https://github.com/harttle/liquidjs/commit/e6f5f1c))
 
 # [8.3.0](https://github.com/harttle/liquidjs/compare/v8.2.4...v8.3.0) (2019-06-27)
 
@@ -1177,7 +1177,7 @@ supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist
 
 ### Performance Improvements
 
-* use polymophism instead duck test ([82d7673](https://github.com/harttle/liquidjs/commit/82d7673))
+* use polymorphism instead duck test ([82d7673](https://github.com/harttle/liquidjs/commit/82d7673))
 
 ## [8.0.1](https://github.com/harttle/liquidjs/compare/v8.0.0...v8.0.1) (2019-03-22)
 
@@ -1201,7 +1201,7 @@ supports Node.js 6, other bundles are also provided via dist/liquid.esm.js, dist
 
 ### BREAKING CHANGES
 
-* Options and method names in JavaScript API are now renamed to cammelCase, for a complete list see #109
+* Options and method names in JavaScript API are now renamed to camelCase, for a complete list see #109
 
 ## [7.5.1](https://github.com/harttle/liquidjs/compare/v7.5.0...v7.5.1) (2019-03-05)
 

@@ -189,7 +189,7 @@ For arrays and strings, LiquidJS checks their `.length` property. For objects, L
 `nil` Drop is used to check whether a variable is not defined or defined as `null` or `undefined`, essentially equivalent to JavaScript `== null` check.
 
 ```liquid
-{% if notexist == nil %}
+{% if nonexistent == nil %}
     null variable
 {% endif %}
 ```

@@ -8,12 +8,12 @@ title: uri_escape
 
 输入
 ```liquid
-{{ "http://foo.com/?q=foo, \bar?" | uri_escape }}
+{{ "https://example.com/?q=foo, \bar?" | uri_escape }}
 ```
 
 输出
 ```text
-http://foo.com/?q=foo,%20%5Cbar?
+https://example.com/?q=foo,%20%5Cbar?
 ```
 
 [reserved]: https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters
