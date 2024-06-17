@@ -29,6 +29,7 @@
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="LiquidOptions.html#cache" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="#FF984D" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="12" id="icon-1024-path"></rect><path d="M9.354 16V7.24H12.174C12.99 7.24 13.638 7.476 14.118 7.948C14.606 8.412 14.85 9.036 14.85 9.82C14.85 10.604 14.606 11.232 14.118 11.704C13.638 12.168 12.99 12.4 12.174 12.4H10.434V16H9.354ZM10.434 11.428H12.174C12.646 11.428 13.022 11.284 13.302 10.996C13.59 10.7 13.734 10.308 13.734 9.82C13.734 9.324 13.59 8.932 13.302 8.644C13.022 8.356 12.646 8.212 12.174 8.212H10.434V11.428Z" fill="var(--color-text)" id="icon-1024-text"></path></svg><span>cache?</span></a>
+<a href="LiquidOptions.html#catchAllErrors" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>catch<wbr/>All<wbr/>Errors?</span></a>
 <a href="LiquidOptions.html#dateFormat" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>date<wbr/>Format?</span></a>
 <a href="LiquidOptions.html#dynamicPartials" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>dynamic<wbr/>Partials?</span></a>
 <a href="LiquidOptions.html#extname" class="tsd-index-link tsd-kind-property tsd-parent-kind-interface"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg><span>extname?</span></a>
@@ -69,13 +70,20 @@
 </div><aside class="tsd-sources">
 <ul>
 <li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L26">src/liquid-options.ts:26</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="catchAllErrors" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>catch<wbr/>All<wbr/>Errors</span><a href="#catchAllErrors" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
+<div class="tsd-signature">catch<wbr/>All<wbr/>Errors<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Catch all errors instead of exit upon one. Please note that render errors won&#39;t be reached when parse fails.</p>
+</div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L36">src/liquid-options.ts:36</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="dateFormat" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>date<wbr/>Format</span><a href="#dateFormat" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">date<wbr/>Format<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
 <div class="tsd-comment tsd-typography"><p>Default date format to use if the date filter doesn&#39;t include a format. Defaults to <code>%A, %B %-e, %Y at %-l:%M %P %z</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L42">src/liquid-options.ts:42</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L44">src/liquid-options.ts:44</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="dynamicPartials" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>dynamic<wbr/>Partials</span><a href="#dynamicPartials" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">dynamic<wbr/>Partials<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -96,21 +104,21 @@
 <div class="tsd-comment tsd-typography"><p><code>fs</code> is used to override the default file-system module with a custom implementation.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L64">src/liquid-options.ts:64</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L66">src/liquid-options.ts:66</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="globals" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>globals</span><a href="#globals" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">globals<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">object</span></div>
 <div class="tsd-comment tsd-typography"><p>the global scope passed down to all partial and layout templates, i.e. templates included by <code>include</code>, <code>layout</code> and <code>render</code> tags.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L66">src/liquid-options.ts:66</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L68">src/liquid-options.ts:68</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="greedy" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>greedy</span><a href="#greedy" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">greedy<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Whether <code>trim*Left</code>/<code>trim*Right</code> is greedy. When set to <code>true</code>, all consecutive blank characters including <code>\n</code> will be trimmed regardless of line breaks. Defaults to <code>true</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L62">src/liquid-options.ts:62</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L64">src/liquid-options.ts:64</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="jekyllInclude" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>jekyll<wbr/>Include</span><a href="#jekyllInclude" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">jekyll<wbr/>Include<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -131,7 +139,7 @@
 <div class="tsd-comment tsd-typography"><p>Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to <code>false</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L68">src/liquid-options.ts:68</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L70">src/liquid-options.ts:70</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="layouts" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>layouts</span><a href="#layouts" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">layouts<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
@@ -145,49 +153,49 @@
 <div class="tsd-comment tsd-typography"><p>Modifies the behavior of <code>strictVariables</code>. If set, a single undefined variable will <em>not</em> cause an exception in the context of the <code>if</code>/<code>elsif</code>/<code>unless</code> tag and the <code>default</code> filter. Instead, it will evaluate to <code>false</code> and <code>null</code>, respectively. Irrelevant if <code>strictVariables</code> is not set. Defaults to <code>false</code>. *</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L38">src/liquid-options.ts:38</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L40">src/liquid-options.ts:40</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="operators" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>operators</span><a href="#operators" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">operators<span class="tsd-signature-symbol">?:</span> <a href="../types/Operators.html" class="tsd-signature-type" data-tsd-kind="Type alias">Operators</a></div>
 <div class="tsd-comment tsd-typography"><p>An object of operators for conditional statements. Defaults to the regular Liquid operators.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L72">src/liquid-options.ts:72</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L74">src/liquid-options.ts:74</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="orderedFilterParameters" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>ordered<wbr/>Filter<wbr/>Parameters</span><a href="#orderedFilterParameters" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">ordered<wbr/>Filter<wbr/>Parameters<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Respect parameter order when using filters like &quot;for ... reversed limit&quot;, Defaults to <code>false</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L74">src/liquid-options.ts:74</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L76">src/liquid-options.ts:76</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="outputDelimiterLeft" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>output<wbr/>Delimiter<wbr/>Left</span><a href="#outputDelimiterLeft" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">output<wbr/>Delimiter<wbr/>Left<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
 <div class="tsd-comment tsd-typography"><p>The left delimiter for liquid outputs. *</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L56">src/liquid-options.ts:56</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L58">src/liquid-options.ts:58</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="outputDelimiterRight" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>output<wbr/>Delimiter<wbr/>Right</span><a href="#outputDelimiterRight" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">output<wbr/>Delimiter<wbr/>Right<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
 <div class="tsd-comment tsd-typography"><p>The right delimiter for liquid outputs. *</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L58">src/liquid-options.ts:58</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L60">src/liquid-options.ts:60</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="outputEscape" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>output<wbr/>Escape</span><a href="#outputEscape" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">output<wbr/>Escape<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">OutputEscapeOption</span></div>
 <div class="tsd-comment tsd-typography"><p>Default escape filter applied to output values, when set, you&#39;ll have to add <code>| raw</code> for values don&#39;t need to be escaped. Defaults to <code>undefined</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L70">src/liquid-options.ts:70</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L72">src/liquid-options.ts:72</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="ownPropertyOnly" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>own<wbr/>Property<wbr/>Only</span><a href="#ownPropertyOnly" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">own<wbr/>Property<wbr/>Only<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Hide scope variables from prototypes, useful when you&#39;re passing a not sanitized object into LiquidJS or need to hide prototypes from templates.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L36">src/liquid-options.ts:36</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L38">src/liquid-options.ts:38</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="partials" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>partials</span><a href="#partials" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">partials<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
@@ -201,7 +209,7 @@
 <div class="tsd-comment tsd-typography"><p>Whether input strings to date filter preserve the given timezone *</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L60">src/liquid-options.ts:60</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L62">src/liquid-options.ts:62</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="relativeReference" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>relative<wbr/>Reference</span><a href="#relativeReference" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">relative<wbr/>Reference<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -236,49 +244,49 @@
 <div class="tsd-comment tsd-typography"><p>The left delimiter for liquid tags. *</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L52">src/liquid-options.ts:52</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L54">src/liquid-options.ts:54</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="tagDelimiterRight" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>tag<wbr/>Delimiter<wbr/>Right</span><a href="#tagDelimiterRight" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">tag<wbr/>Delimiter<wbr/>Right<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span></div>
 <div class="tsd-comment tsd-typography"><p>The right delimiter for liquid tags. *</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L54">src/liquid-options.ts:54</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L56">src/liquid-options.ts:56</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="timezoneOffset" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>timezone<wbr/>Offset</span><a href="#timezoneOffset" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">timezone<wbr/>Offset<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 <div class="tsd-comment tsd-typography"><p>JavaScript timezone name or timezoneOffset for <code>date</code> filter, default to local time. That means if you&#39;re in Australia (UTC+10), it&#39;ll default to <code>-600</code> or <code>Australia/Lindeman</code></p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L40">src/liquid-options.ts:40</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L42">src/liquid-options.ts:42</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="trimOutputLeft" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>trim<wbr/>Output<wbr/>Left</span><a href="#trimOutputLeft" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">trim<wbr/>Output<wbr/>Left<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Similar to <code>trimOutputRight</code>, whereas the <code>\n</code> is exclusive. Defaults to <code>false</code>. See Whitespace Control for details.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L50">src/liquid-options.ts:50</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L52">src/liquid-options.ts:52</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="trimOutputRight" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>trim<wbr/>Output<wbr/>Right</span><a href="#trimOutputRight" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">trim<wbr/>Output<wbr/>Right<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Strip blank characters (including <code> </code>, <code>\t</code>, and <code>\r</code>) from the right of values (<code>{{ }}</code>) until <code>\n</code> (inclusive). Defaults to <code>false</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L48">src/liquid-options.ts:48</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L50">src/liquid-options.ts:50</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="trimTagLeft" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>trim<wbr/>Tag<wbr/>Left</span><a href="#trimTagLeft" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">trim<wbr/>Tag<wbr/>Left<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Similar to <code>trimTagRight</code>, whereas the <code>\n</code> is exclusive. Defaults to <code>false</code>. See Whitespace Control for details.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L46">src/liquid-options.ts:46</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L48">src/liquid-options.ts:48</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface"><a id="trimTagRight" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>trim<wbr/>Tag<wbr/>Right</span><a href="#trimTagRight" aria-label="Permalink" class="tsd-anchor-icon"><svg class="icon icon-tabler icon-tabler-link" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#icon-anchor-a"></use><use href="#icon-anchor-b"></use><use href="#icon-anchor-c"></use></svg></a></h3>
 <div class="tsd-signature">trim<wbr/>Tag<wbr/>Right<span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
 <div class="tsd-comment tsd-typography"><p>Strip blank characters (including <code> </code>, <code>\t</code>, and <code>\r</code>) from the right of tags (<code>{% %}</code>) until <code>\n</code> (inclusive). Defaults to <code>false</code>.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L44">src/liquid-options.ts:44</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/harttle/liquidjs/blob/master/src/liquid-options.ts#L46">src/liquid-options.ts:46</a></li></ul></aside></section></section></div>
 <div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 <div class="tsd-navigation settings">
 <details class="tsd-index-accordion"><summary class="tsd-accordion-summary">
@@ -306,6 +314,7 @@
 <li class="current tsd-kind-interface"><a href="LiquidOptions.html" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><rect fill="var(--color-icon-background)" stroke="var(--color-ts-interface)" stroke-width="1.5" x="1" y="1" width="22" height="22" rx="6" id="icon-256-path"></rect><path d="M9.51 16V15.016H11.298V8.224H9.51V7.24H14.19V8.224H12.402V15.016H14.19V16H9.51Z" fill="var(--color-text)" id="icon-256-text"></path></svg><span>Liquid<wbr/>Options</span></a>
 <ul>
 <li class="tsd-kind-property tsd-parent-kind-interface"><a href="LiquidOptions.html#cache" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>cache?</a></li>
+<li class="tsd-kind-property tsd-parent-kind-interface"><a href="LiquidOptions.html#catchAllErrors" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>catch<wbr/>All<wbr/>Errors?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface"><a href="LiquidOptions.html#dateFormat" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>date<wbr/>Format?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface"><a href="LiquidOptions.html#dynamicPartials" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>dynamic<wbr/>Partials?</a></li>
 <li class="tsd-kind-property tsd-parent-kind-interface"><a href="LiquidOptions.html#extname" class="tsd-index-link"><svg class="tsd-kind-icon" width="24" height="24" viewBox="0 0 24 24"><use href="#icon-1024-path"></use><use href="#icon-1024-text"></use></svg>extname?</a></li>
