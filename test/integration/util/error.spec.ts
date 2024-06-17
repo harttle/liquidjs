@@ -1,18 +1,28 @@
 import { RenderError } from '../../../src/util/error'
 import { Liquid } from '../../../src/liquid'
-import * as path from 'path'
+import { resolve } from 'path'
 import { mock, restore } from '../../stub/mockfs'
+import { throwIntendedError, rejectIntendedError } from '../../stub/util'
 
-let engine = new Liquid()
 const strictEngine = new Liquid({
   strictVariables: true,
   strictFilters: true
 })
+const strictCatchingEngine = new Liquid({
+  catchAllErrors: true,
+  strictVariables: true,
+  strictFilters: true
+})
+strictEngine.registerTag('throwingTag', { render: throwIntendedError })
+strictEngine.registerFilter('throwingFilter', throwIntendedError)
+strictCatchingEngine.registerTag('throwingTag', { render: throwIntendedError })
+strictCatchingEngine.registerFilter('throwingFilter', throwIntendedError)
 
 describe('error', function () {
   afterEach(restore)
 
   describe('TokenizationError', function () {
+    const engine = new Liquid()
     it('should throw TokenizationError when tag illegal', async function () {
       await expect(engine.parseAndRender('{% . a %}', {})).rejects.toMatchObject({
         name: 'TokenizationError',
@@ -68,43 +78,34 @@ describe('error', function () {
   })
 
   describe('RenderError', function () {
+    let engine: Liquid
     beforeEach(function () {
       engine = new Liquid({
         root: '/'
       })
-      engine.registerTag('throwingTag', {
-        render: function () {
-          throw new Error('intended render error')
-        }
-      })
-      engine.registerTag('rejectingTag', {
-        render: async function () {
-          throw new Error('intended render reject')
-        }
-      })
-      engine.registerFilter('throwingFilter', () => {
-        throw new Error('thrown by filter')
-      })
+      engine.registerTag('throwingTag', { render: throwIntendedError })
+      engine.registerTag('rejectingTag', { render: rejectIntendedError })
+      engine.registerFilter('throwingFilter', throwIntendedError)
     })
     it('should throw RenderError when tag throws', async function () {
       const src = '{%throwingTag%}'
       await expect(engine.parseAndRender(src)).rejects.toMatchObject({
         name: 'RenderError',
-        message: expect.stringContaining('intended render error')
+        message: expect.stringContaining('intended error')
       })
     })
     it('should throw RenderError when tag rejects', async function () {
       const src = '{%rejectingTag%}'
       await expect(engine.parseAndRender(src)).rejects.toMatchObject({
         name: 'RenderError',
-        message: expect.stringContaining('intended render reject')
+        message: expect.stringContaining('intended reject')
       })
     })
     it('should throw RenderError when filter throws', async function () {
       const src = '{{1|throwingFilter}}'
       await expect(engine.parseAndRender(src)).rejects.toMatchObject({
         name: 'RenderError',
-        message: expect.stringContaining('thrown by filter')
+        message: expect.stringContaining('intended error')
       })
     })
     it('should not throw when variable undefined by default', async function () {
@@ -113,8 +114,8 @@ describe('error', function () {
     })
     it('should throw RenderError when variable not defined', async function () {
       await expect(strictEngine.parseAndRender('{{a}}')).rejects.toMatchObject({
-        name: 'RenderError',
-        message: expect.stringContaining('undefined variable: a')
+        name: 'UndefinedVariableError',
+        message: 'undefined variable: a, line:1, col:3'
       })
     })
     it('should contain template context in err.stack', async function () {
@@ -131,7 +132,7 @@ describe('error', function () {
       ]
       await expect(engine.parseAndRender(html.join('\n'))).rejects.toMatchObject({
         name: 'RenderError',
-        message: 'intended render error, line:4, col:2',
+        message: 'intended error, line:4, col:2',
         stack: expect.stringContaining(message.join('\n'))
       })
     })
@@ -160,7 +161,7 @@ describe('error', function () {
       ]
       await expect(engine.parseAndRender(html)).rejects.toMatchObject({
         name: 'RenderError',
-        message: `intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`,
+        message: `intended error, file:${resolve('/throwing-tag.html')}, line:4, col:2`,
         stack: expect.stringContaining(message.join('\n'))
       })
     })
@@ -182,25 +183,69 @@ describe('error', function () {
       ]
       await expect(engine.parseAndRender(html)).rejects.toMatchObject({
         name: 'RenderError',
-        message: `intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`,
+        message: `intended error, file:${resolve('/throwing-tag.html')}, line:4, col:2`,
         stack: expect.stringContaining(message.join('\n'))
       })
     })
     it('should contain stack in err.stack', async function () {
       await expect(engine.parseAndRender('{%rejectingTag%}')).rejects.toMatchObject({
-        message: expect.stringContaining('intended render reject'),
+        message: expect.stringContaining('intended reject'),
         stack: expect.stringMatching(/at .*:\d+:\d+/)
       })
     })
   })
 
+  describe('catchAllErrors', function () {
+    it('should catch render errors', async function () {
+      const template = '{{foo}}\n{{"hello" | throwingFilter}}\n{% throwingTag %}'
+      return expect(strictCatchingEngine.parseAndRender(template)).rejects.toMatchObject({
+        name: 'LiquidErrors',
+        message: '3 errors found, line:1, col:3',
+        errors: [{
+          name: 'UndefinedVariableError',
+          message: 'undefined variable: foo, line:1, col:3'
+        }, {
+          name: 'RenderError',
+          message: 'intended error, line:2, col:1'
+        }, {
+          name: 'RenderError',
+          message: 'intended error, line:3, col:1'
+        }]
+      })
+    })
+    it('should catch some parse errors', async function () {
+      const template = '{{"foo" | filter foo }}'
+      return expect(strictCatchingEngine.parseAndRender(template)).rejects.toMatchObject({
+        name: 'LiquidErrors',
+        message: '1 error found, line:1, col:18',
+        errors: [{
+          name: 'TokenizationError',
+          message: 'expected ":" after filter name, line:1, col:18'
+        }]
+      })
+    })
+    it('should catch parse errors from filter/tag', async function () {
+      const template = '{{"foo" | nonExistFilter }} {% nonExistTag %}'
+      return expect(strictCatchingEngine.parseAndRender(template)).rejects.toMatchObject({
+        name: 'LiquidErrors',
+        message: '2 errors found, line:1, col:1',
+        errors: [{
+          name: 'ParseError',
+          message: 'undefined filter: nonExistFilter, line:1, col:1'
+        }, {
+          name: 'ParseError',
+          message: 'tag "nonExistTag" not found, line:1, col:29'
+        }]
+      })
+    })
+  })
+
   describe('ParseError', function () {
+    let engine: Liquid
     beforeEach(function () {
       engine = new Liquid()
       engine.registerTag('throwsOnParse', {
-        parse: function () {
-          throw new Error('intended parse error')
-        },
+        parse: throwIntendedError,
         render: () => ''
       })
     })
@@ -225,7 +270,7 @@ describe('error', function () {
     it('should throw ParseError when tag parse throws', async function () {
       await expect(engine.parseAndRender('{%throwsOnParse%}')).rejects.toMatchObject({
         name: 'ParseError',
-        message: expect.stringContaining('intended parse error')
+        message: expect.stringContaining('intended error')
       })
     })
     it('should throw ParseError when tag not found', async function () {
@@ -294,14 +339,14 @@ describe('error', function () {
       })
       engine.registerTag('throwingTag', {
         render: function () {
-          throw new Error('intended render error')
+          throw new Error('intended error')
         }
       })
     })
     it('should throw RenderError when tag throws', function () {
       const src = '{%throwingTag%}'
       expect(() => engine.parseAndRenderSync(src)).toThrow(RenderError)
-      expect(() => engine.parseAndRenderSync(src)).toThrow(/intended render error/)
+      expect(() => engine.parseAndRenderSync(src)).toThrow(/intended error/)
     })
     it('should contain original error info for {% include %}', function () {
       mock({
@@ -323,7 +368,7 @@ describe('error', function () {
         throw new Error('expected throw')
       } catch (err) {
         expect(err).toHaveProperty('name', 'RenderError')
-        expect(err).toHaveProperty('message', `intended render error, file:${path.resolve('/throwing-tag.html')}, line:4, col:2`)
+        expect(err).toHaveProperty('message', `intended error, file:${resolve('/throwing-tag.html')}, line:4, col:2`)
         expect(err).toHaveProperty('stack', expect.stringContaining(message.join('\n')))
       }
     })

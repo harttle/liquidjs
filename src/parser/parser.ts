@@ -5,7 +5,7 @@ import { TopLevelToken, OutputToken } from '../tokens'
 import { Template, Output, HTML } from '../template'
 import { LiquidCache } from '../cache'
 import { FS, Loader, LookupType } from '../fs'
-import { LiquidError } from '../util/error'
+import { LiquidError, LiquidErrors } from '../util/error'
 import type { Liquid } from '../liquid'
 
 export class Parser {
@@ -31,9 +31,16 @@ export class Parser {
   public parseTokens (tokens: TopLevelToken[]) {
     let token
     const templates: Template[] = []
+    const errors: LiquidError[] = []
     while ((token = tokens.shift())) {
-      templates.push(this.parseToken(token, tokens))
+      try {
+        templates.push(this.parseToken(token, tokens))
+      } catch (err) {
+        if (this.liquid.options.catchAllErrors) errors.push(err as LiquidError)
+        else throw err
+      }
     }
+    if (errors.length) throw new LiquidErrors(errors)
     return templates
   }
   public parseToken (token: TopLevelToken, remainTokens: TopLevelToken[]) {

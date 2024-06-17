@@ -8,7 +8,7 @@ import { Template } from '../template/template'
 const TRAIT = '__liquidClass__'
 
 export abstract class LiquidError extends Error {
-  private token!: Token
+  public token!: Token
   public context = ''
   private originalError?: Error
   public constructor (err: Error | string, token: Token) {
@@ -59,6 +59,19 @@ export class RenderError extends LiquidError {
   }
   public static is (obj: any): obj is RenderError {
     return obj.name === 'RenderError'
+  }
+}
+
+export class LiquidErrors extends LiquidError {
+  public constructor (public errors: RenderError[]) {
+    super(errors[0], errors[0].token)
+    this.name = 'LiquidErrors'
+    const s = errors.length > 1 ? 's' : ''
+    this.message = `${errors.length} error${s} found`
+    super.update()
+  }
+  public static is (obj: any): obj is LiquidErrors {
+    return obj.name === 'LiquidErrors'
   }
 }
 
