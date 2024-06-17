@@ -2043,7 +2043,7 @@ By default, Create React App produces a build assuming your app is hosted at the
 To override this, specify the `homepage` in your `package.json`, for example:
 
 ```js
-  "homepage": "http://mywebsite.com/relativepath",
+  "homepage": "https://example.com/relativepath",
 ```
 
 This will let Create React App correctly infer the root path to use in the generated HTML file.
@@ -2068,7 +2068,7 @@ If you are not using the HTML5 `pushState` history API or not using client-side 
   "homepage": ".",
 ```
 
-This will make sure that all the asset paths are relative to `index.html`. You will then be able to move your app from `http://mywebsite.com` to `http://mywebsite.com/relativepath` or even `http://mywebsite.com/relative/path` without having to rebuild it.
+This will make sure that all the asset paths are relative to `index.html`. You will then be able to move your app from `https://example.com` to `https://example.com/relativepath` or even `https://example.com/relative/path` without having to rebuild it.
 
 ### Customizing Environment Variables for Arbitrary Build Environments
 
@@ -2201,7 +2201,7 @@ or for a GitHub user page:
 or for a custom domain page:
 
 ```json
-  "homepage": "http://mywebsite.com",
+  "homepage": "https://example.com",
 ```
 
 Create React App uses the `homepage` field to determine the root URL in the built HTML file.
@@ -2268,14 +2268,14 @@ You can configure a custom domain with GitHub Pages by adding a `CNAME` file to 
 Your CNAME file should look like this:
 
 ```
-mywebsite.com
+example.com
 ```
 
 #### Notes on client-side routing
 
-GitHub Pages doesn’t support routers that use the HTML5 `pushState` history API under the hood (for example, React Router using `browserHistory`). This is because when there is a fresh page load for a url like `http://user.github.io/todomvc/todos/42`, where `/todos/42` is a frontend route, the GitHub Pages server returns 404 because it knows nothing of `/todos/42`. If you want to add a router to a project hosted on GitHub Pages, here are a couple of solutions:
+GitHub Pages doesn’t support routers that use the HTML5 `pushState` history API under the hood (for example, React Router using `browserHistory`). This is because when there is a fresh page load for a url like `https://user.github.io/todomvc/todos/42`, where `/todos/42` is a frontend route, the GitHub Pages server returns 404 because it knows nothing of `/todos/42`. If you want to add a router to a project hosted on GitHub Pages, here are a couple of solutions:
 
-- You could switch from using HTML5 history API to routing with hashes. If you use React Router, you can switch to `hashHistory` for this effect, but the URL will be longer and more verbose (for example, `http://user.github.io/todomvc/#/todos/42?_k=yknaj`). [Read more](https://reacttraining.com/react-router/web/api/Router) about different history implementations in React Router.
+- You could switch from using HTML5 history API to routing with hashes. If you use React Router, you can switch to `hashHistory` for this effect, but the URL will be longer and more verbose (for example, `https://user.github.io/todomvc/#/todos/42?_k=yknaj`). [Read more](https://reacttraining.com/react-router/web/api/Router) about different history implementations in React Router.
 - Alternatively, you can use a trick to teach GitHub Pages to handle 404 by redirecting to your `index.html` page with a special redirect parameter. You would need to add a `404.html` file with the redirection code to the `build` folder before deploying your project, and you’ll need to add code handling the redirect parameter to `index.html`. You can find a detailed explanation of this technique [in this guide](https://github.com/rafrex/spa-github-pages).
 
 #### Troubleshooting
