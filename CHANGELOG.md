@@ -1,3 +1,15 @@
+# [10.14.0](https://github.com/harttle/liquidjs/compare/v10.13.1...v10.14.0) (2024-06-17)
+
+
+### Bug Fixes
+
+* use drop `valueOf` when evaluated as condition ([#705](https://github.com/harttle/liquidjs/issues/705)) ([a7da93f](https://github.com/harttle/liquidjs/commit/a7da93ff0f2c1c66f9c85b45ffcc1326c23254c7))
+
+
+### Features
+
+* support catching all errors, [#220](https://github.com/harttle/liquidjs/issues/220) ([#710](https://github.com/harttle/liquidjs/issues/710)) ([3b5627b](https://github.com/harttle/liquidjs/commit/3b5627b04072b1d6703ef5ba782a3a0f26fd2a60))
+
 ## [10.13.1](https://github.com/harttle/liquidjs/compare/v10.13.0...v10.13.1) (2024-05-24)
 
 
