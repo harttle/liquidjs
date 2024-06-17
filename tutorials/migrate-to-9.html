@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head prefix="og: http://ogp.me/ns#">
+<head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
   <title>Migrate to LiquidJS 9 | LiquidJS</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="LiquidJS is a simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.">
+  <meta name="description" content="LiquidJS is a simple, expressive and safe Shopify / GitHub Pages compatible template engine in pure JavaScript.">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
   <link rel="manifest" href="/manifest.json">
   <!-- Canonical links -->
@@ -64,7 +64,7 @@
         
       </select>
     </div>
-    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">Github</span></a>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">GitHub</span></a>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
@@ -81,7 +81,7 @@
     <strong class="sidebar-title">Getting Started</strong><a href="intro-to-liquid.html" class="sidebar-link">Intro to Liquid</a><a href="setup.html" class="sidebar-link">Setup</a><a href="options.html" class="sidebar-link">Options</a><a href="render-file.html" class="sidebar-link">Render Files</a><a href="partials-and-layouts.html" class="sidebar-link">Includes and Layouts</a><a href="use-in-expressjs.html" class="sidebar-link">Use in Express.js</a><strong class="sidebar-title">Advanced</strong><a href="caching.html" class="sidebar-link">Caching</a><a href="escaping.html" class="sidebar-link">Escaping</a><a href="register-filters-tags.html" class="sidebar-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="sidebar-link">Access Scope in Filters</a><a href="parse-parameters.html" class="sidebar-link">Parse Parameters</a><a href="render-tag-content.html" class="sidebar-link">Render Tag Content</a><a href="drops.html" class="sidebar-link">Liquid Drops</a><a href="sync-and-async.html" class="sidebar-link">Sync and Async</a><a href="whitespace-control.html" class="sidebar-link">Whitespace Control</a><a href="plugins.html" class="sidebar-link">Plugins</a><a href="operators.html" class="sidebar-link">Operators</a><a href="truthy-and-falsy.html" class="sidebar-link">Truthy and Falsy</a><strong class="sidebar-title">Miscellaneous</strong><a href="migrate-to-9.html" class="sidebar-link current">Migrate to LiquidJS 9</a><a href="changelog.html" class="sidebar-link">Changelog</a><a href="differences.html" class="sidebar-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="sidebar-link">Contribution Guidelines</a>
   </div>
 </aside>
-      <article class="article-container" itemscope itemtype="http://schema.org/Article">
+      <article class="article-container" itemscope itemtype="https://schema.org/Article">
         <div class="article-inner">
           <div class="article">
             <div class="inner">
@@ -111,12 +111,12 @@
 <h2 id="BREAKING-CHANGES" class="article-heading"><a href="#BREAKING-CHANGES" class="headerlink" title="BREAKING CHANGES"></a>BREAKING CHANGES<a class="article-anchor" href="#BREAKING-CHANGES" aria-hidden="true"></a></h2><ul>
 <li>LiquidJS no longer has a default export, use <code>import &#123;Liquid&#125; from &#39;liquidjs&#39;</code> instead. The <code>window.Liquid</code> for the UMD bundle is also changed to <code>window.liquidjs.Liquid</code>;</li>
 <li>The duplicate static method <code>Liquid.evalValue</code> is removed, use the instance method <code>liquid.evalValue</code> instead;</li>
-<li>Shipped to Node.js 8, the CJS bundle (main entry in Node.js) nolonger supports Node.js &leq; 6. ESM (dist/liquid.node.esm.js) and UMD (dist/liquid.browser.umd.js, dist/liquid.browser.min.js) bundles are not affected.</li>
+<li>Shipped to Node.js 8, the CJS bundle (main entry in Node.js) no longer supports Node.js &leq; 6. ESM (dist/liquid.node.esm.js) and UMD (dist/liquid.browser.umd.js, dist/liquid.browser.min.js) bundles are not affected.</li>
 </ul>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-06-05T00:28:37.859Z" itemprop="dateModified">Last updated: 2024-06-05</time>
+                <time class="article-footer-updated" datetime="2024-06-17T09:20:04.483Z" itemprop="dateModified">Last updated: 2024-06-17</time>
                 <a href="truthy-and-falsy.html" class="article-footer-prev" title="Truthy and Falsy"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="changelog.html" class="article-footer-next" title="Changelog"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -140,7 +140,7 @@
   <div class="inner">
     <div id="footer-copyright">
       &copy; 2024 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
-      Documentation licensed under <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>.
+      Documentation licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>.
     </div>
     <div id="footer-links">
       <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
