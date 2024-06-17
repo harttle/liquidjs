@@ -1,4 +1,4 @@
-import { toPromise, RenderError } from '../util'
+import { toPromise, RenderError, LiquidErrors, LiquidError } from '../util'
 import { Context } from '../context'
 import { Template } from '../template'
 import { Emitter, KeepingTypeEmitter, StreamedEmitter, SimpleEmitter } from '../emitters'
@@ -14,6 +14,7 @@ export class Render {
     if (!emitter) {
       emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter() : new SimpleEmitter()
     }
+    const errors = []
     for (const tpl of templates) {
       try {
         // if tpl.render supports emitter, it'll return empty `html`
@@ -22,9 +23,13 @@ export class Render {
         html && emitter.write(html)
         if (emitter['break'] || emitter['continue']) break
       } catch (e) {
-        const err = RenderError.is(e) ? e : new RenderError(e as Error, tpl)
-        throw err
+        const err = LiquidError.is(e) ? e : new RenderError(e as Error, tpl)
+        if (ctx.opts.catchAllErrors) errors.push(err)
+        else throw err
       }
+    }
+    if (errors.length) {
+      throw new LiquidErrors(errors)
     }
     return emitter.buffer
   }
