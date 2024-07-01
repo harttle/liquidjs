@@ -55,6 +55,7 @@ var filters = {
   last: v => v[v.length - 1],
   lstrip: v => stringify(v).replace(/^\s+/, ""),
   map: (arr, arg) => arr.map(v => v[arg]),
+  sum: (arr, arg) => arr.reduce((acc, v) => acc + (v[arg] ?? v), 0),
   minus: (v, arg) => subtract(v, arg),
   modulo: bindFixed((v, arg) => v % arg),
   newline_to_br: v => v.replace(/\n/g, "<br />"),
