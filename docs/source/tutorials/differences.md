@@ -34,7 +34,7 @@ Though we're trying to be compatible with the Ruby version, there are still some
     * LiquidJS-defined filters: [json][json], group_by, group_by_exp, where_exp, jsonify, inspect, etc.
     * Tags/filters that don't depend on Shopify platform are borrowed from [Shopify][shopify-tags].
     * Tags/filters that don't depend on Jekyll framework are borrowed from [Jekyll][jekyll-filters].
-* Some tags/filters behave differently: [date][date] filter.
+* Some tags/filters behave differently: [date][date] filter, malformed tags (like duplicated `else`, extra args for `endif`) throw errors in LiquidJS. 
 
 [date]: https://liquidjs.com/filters/date.html
 [layout]: ../tags/layout.html

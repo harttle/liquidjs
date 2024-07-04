@@ -471,19 +471,11 @@ describe('Issues', function () {
   })
   it('#670 Should not render anything after an else branch', () => {
     const engine = new Liquid()
-    const result = engine.parseAndRenderSync('{% assign value = "this" %}' +
-      '{% if false %}don\'t show' +
-      '{% else %}show {{ value }}' +
-    '{% else %}don\'t show{% endif %}', {})
-    expect(result).toEqual('show this')
+    expect(() => engine.parseAndRenderSync('{% assign value = "this" %}{% if false %}{% else %}{% else %}{% endif %}')).toThrow('duplicated else')
   })
   it('#672 Should not render an elseif after an else branch', () => {
     const engine = new Liquid()
-    const result = engine.parseAndRenderSync('{% if false %}don\'t show' +
-      '{% else %}show' +
-      '{% elsif true %}don\'t show' +
-    '{% endif %}', {})
-    expect(result).toEqual('show')
+    expect(() => engine.parseAndRenderSync('{% if false %}{% else %}{% elsif true %}{% endif %}')).toThrow('unexpected elsif after else')
   })
   it('#675 10.10.1 Operator: contains regression', () => {
     const engine = new Liquid()

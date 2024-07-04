@@ -1,10 +1,10 @@
 import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
-import { toEnumerable } from '../util'
+import { assertEmpty, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
-type valueof<T> = T[keyof T]
+type valueOf<T> = T[keyof T]
 
 export default class extends Tag {
   variable: string
@@ -31,12 +31,10 @@ export default class extends Tag {
     let p
     const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
-      .on('tag:else', () => (p = this.elseTemplates))
-      .on('tag:endfor', () => stream.stop())
+      .on<TagToken>('tag:else', tag => { assertEmpty(tag.args); p = this.elseTemplates })
+      .on<TagToken>('tag:endfor', tag => { assertEmpty(tag.args); stream.stop() })
       .on('template', (tpl: Template) => p.push(tpl))
-      .on('end', () => {
-        throw new Error(`tag ${token.getText()} not closed`)
-      })
+      .on('end', () => { throw new Error(`tag ${token.getText()} not closed`) })
 
     stream.start()
   }
@@ -58,7 +56,7 @@ export default class extends Tag {
       ? Object.keys(hash).filter(x => MODIFIERS.includes(x))
       : MODIFIERS.filter(x => hash[x] !== undefined)
 
-    collection = modifiers.reduce((collection, modifier: valueof<typeof MODIFIERS>) => {
+    collection = modifiers.reduce((collection, modifier: valueOf<typeof MODIFIERS>) => {
       if (modifier === 'offset') return offset(collection, hash['offset'])
       if (modifier === 'limit') return limit(collection, hash['limit'])
       return reversed(collection)

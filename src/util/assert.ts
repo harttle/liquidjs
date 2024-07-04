@@ -8,3 +8,7 @@ export function assert <T> (predicate: T | null | undefined, message?: string | 
     throw new AssertionError(msg)
   }
 }
+
+export function assertEmpty<T> (predicate: T | null | undefined, message = `unexpected ${JSON.stringify(predicate)}`) {
+  assert(!predicate, message)
+}

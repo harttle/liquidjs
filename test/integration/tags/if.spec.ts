@@ -26,6 +26,12 @@ describe('tags/if', function () {
     return expect(html).toBe('')
   })
 
+  it('should throw for additional args', function () {
+    const src = "{% if foo %} foo {% else foo = 'blah' %} {% endif %}"
+    return expect(liquid.parseAndRender(src, scope))
+      .rejects.toThrow(`unexpected "foo = 'blah'", line:1, col:1`)
+  })
+
   describe('single value as condition', function () {
     it('should support boolean', async function () {
       const src = '{% if false %}1{%elsif true%}2{%else%}3{%endif%}'
@@ -155,12 +161,12 @@ describe('tags/if', function () {
     const html = await liquid.parseAndRender(src, scope)
     return expect(html).toBe('no')
   })
-  it('should not render anything after an else branch even when first else branch is empty', () => {
-    const engine = new Liquid()
-    const result = engine.parseAndRenderSync('{% if false %}don\'t show' +
-      '{% else %}' +
-      '{% else %}don\'t show' +
-    '%{% endif %}', {})
-    expect(result).toEqual('')
+  it('should throw for duplicated else', () => {
+    expect(() => liquid.parseAndRenderSync('{% if false %}{% else %}{% else %}{% endif %}'))
+      .toThrow(`duplicated else`)
+  })
+  it('should throw for unexpected elsif', () => {
+    expect(() => liquid.parseAndRenderSync('{% if false %}{% else %}{% elsif true %}{% endif %}'))
+      .toThrow(`unexpected elsif after else`)
   })
 })

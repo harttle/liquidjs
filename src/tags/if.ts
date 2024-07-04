@@ -1,38 +1,32 @@
 import { Liquid, Tag, Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template } from '..'
+import { assert, assertEmpty } from '../util'
 
 export default class extends Tag {
   branches: { value: Value, templates: Template[] }[] = []
-  elseTemplates: Template[] = []
+  elseTemplates: Template[] | undefined
 
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(tagToken, remainTokens, liquid)
     let p: Template[] = []
-    let elseCount = 0
     liquid.parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
         value: new Value(tagToken.args, this.liquid),
         templates: (p = [])
       }))
       .on('tag:elsif', (token: TagToken) => {
-        if (elseCount > 0) {
-          p = []
-          return
-        }
+        assert(!this.elseTemplates, 'unexpected elsif after else')
         this.branches.push({
           value: new Value(token.args, this.liquid),
           templates: (p = [])
         })
       })
-      .on('tag:else', () => {
-        elseCount++
-        p = this.elseTemplates
-      })
-      .on('tag:endif', function () { this.stop() })
-      .on('template', (tpl: Template) => {
-        if (p !== this.elseTemplates || elseCount === 1) {
-          p.push(tpl)
-        }
-      })
+      .on<TagToken>('tag:else', tag => {
+      assertEmpty(tag.args)
+      assert(!this.elseTemplates, 'duplicated else')
+      p = this.elseTemplates = []
+    })
+      .on<TagToken>('tag:endif', function (tag) { assertEmpty(tag.args); this.stop() })
+      .on('template', (tpl: Template) => p.push(tpl))
       .on('end', () => { throw new Error(`tag ${tagToken.getText()} not closed`) })
       .start()
   }
@@ -47,6 +41,6 @@ export default class extends Tag {
         return
       }
     }
-    yield r.renderTemplates(this.elseTemplates, ctx, emitter)
+    yield r.renderTemplates(this.elseTemplates || [], ctx, emitter)
   }
 }

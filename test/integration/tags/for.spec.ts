@@ -78,10 +78,10 @@ describe('tags/for', function () {
         .rejects.toThrow('illegal tag: {%for c alpha%}, line:1, col:1')
     })
 
-    it('should reject when inner templates rejected', function () {
-      const src = '{%for c in alpha%}{%throwingTag%}{%endfor%}'
+    it('should throw for additional args', function () {
+      const src = "{% for f in foo %} foo {% else foo = 'blah' %} {% endfor %}"
       return expect(liquid.parseAndRender(src, scope))
-        .rejects.toThrow(/intended render error/)
+        .rejects.toThrow(`unexpected "foo = 'blah'", line:1, col:1`)
     })
   })
 
