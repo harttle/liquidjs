@@ -46,7 +46,40 @@ var ctx = {
   currency_loop_1: {value: 1000, type: "INR"},
   currency_loop_2: {value: 100, type: "INR"},
   loop_counter: 2,
-  loop_i: 1
+  loop_i: 1,
+  arr_invalid: null,
+  arr_empty: [],
+  arr_numbers: [1, 2, 3, 4, 5],
+  arr_numbers_with_mixed_datatypes: [undefined, 1, null, 2, {}, 3, 'a', 5, true],
+  dynamic_table_with_numbers: [{cost: 100, quantity: 2}, {cost: 200, quantity: 3}, {cost: 300, quantity: 4}],
+  dynamic_table_with_null: [{cost: 100, quantity: 2}, {cost: 200, quantity: 3}, {cost: null, quantity: 4}],
+  dynamic_table_with_empty: [{cost: 100, quantity: 2}, {cost: 200, quantity: 3}, {}]
+}
+
+// This is added separately in ctx because we are using existing ctx items as individual items in array
+ctx = {
+  ...ctx,
+  arr_duration: [ctx.duration_10_weeks, ctx.duration_20_days, ctx.duration_2_months, ctx.duration_3_years],
+  arr_duration_with_val_null_1: [ctx.duration_10_weeks, ctx.duration_20_days, ctx.duration_val_null],
+  arr_duration_with_val_null_2: [ctx.duration_10_weeks, ctx.duration_val_null, ctx.duration_20_days],
+  arr_duration_with_val_null_3: [ctx.duration_val_null, ctx.duration_10_weeks, ctx.duration_20_days],
+  arr_duration_with_number_1: [ctx.duration_10_weeks, ctx.duration_20_days, 3],
+  arr_duration_with_number_2: [3, ctx.duration_10_weeks, ctx.duration_20_days],
+  arr_duration_with_null: [ctx.duration_10_weeks, null, ctx.duration_20_days],
+  arr_date_with_duration: [ctx.from_date, ctx.duration_10_weeks, ctx.duration_20_days],
+  arr_two_dates: [ctx.from_date, ctx.duration_10_weeks, ctx.to_date],
+  arr_currency: [ctx.currency_thousand, ctx.currency_hundred, ctx.currency_ten],
+  arr_currency_with_decimal: [ctx.currency_thousand, ctx.currency_decimal, ctx.currency_decimal_2],
+  arr_currency_with_val_null_1: [ctx.currency_thousand, ctx.currency_hundred, ctx.currency_val_null],
+  arr_currency_with_val_null_2: [ctx.currency_thousand, ctx.currency_val_null, ctx.currency_hundred],
+  arr_currency_with_val_null_3: [ctx.currency_val_null, ctx.currency_hundred, ctx.currency_ten],
+  arr_currency_with_number_1: [ctx.currency_thousand, ctx.currency_hundred, 3],
+  arr_currency_with_number_2: [3, ctx.currency_thousand, ctx.currency_hundred],
+  arr_currency_with_null: [ctx.currency_thousand, null, ctx.currency_hundred],
+  dynamic_table_with_duration: [{time: ctx.duration_10_weeks}, {time: ctx.duration_20_days}, {time: ctx.duration_2_months}],
+  dynamic_table_with_duration_with_val_null: [{time: ctx.duration_10_weeks}, {time: ctx.duration_20_days}, {time: ctx.duration_val_null}],
+  dynamic_table_with_currency: [{price: ctx.currency_thousand}, {price: ctx.currency_hundred}, {price: ctx.currency_ten}],
+  dynamic_table_with_currency_with_val_null: [{price: ctx.currency_thousand}, {price: ctx.currency_val_null}, {price: ctx.currency_ten}]
 }
 
 function test (src, dst) {
@@ -562,6 +595,135 @@ describe('filters', function () {
     it('should return {type: "DAYS", value: 0, days: 0};', () => {
       const dst = {type: "DAYS", value: 0, days: 0};
       return test('{{ duration_2_months | plus: duration_val_null }}', JSON.stringify(dst))
+    })
+  })
+
+  describe('sumArray', function () {
+    // Invalid array
+    it('should throw error for invalid array', () => {
+      return checkForError('{{ arr_invalid | sumArray }}', 'Input is not an array')
+    })
+
+    // Empty array
+    it('should return "0" for empty array', () => test('{{ arr_empty | sumArray }}', '0'))
+    it('should return default value for empty array', () => test('{{ arr_empty | sumArray: undefined, 10 }}', '10'))
+
+    // Numeric arrays
+    it('should return "15" for array [1, 2, 3, 4, 5]', () => test('{{ arr_numbers | sumArray }}', '15'))
+    it('should return "6" for array with mixed datatypes [undefined, 1, null, 2, {}, 3, "a", 5, true]', () => test('{{ arr_numbers_with_mixed_datatypes | sumArray }}', '6'))
+
+    // Duration arrays
+    it('should return total days for duration array', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 1245, 'days': 1245})
+      return test('{{ arr_duration | sumArray: }}', expectedResult)
+    })
+
+    it('should handle duration with val_null at last position', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 0, 'days': 0})
+      return test('{{ arr_duration_with_val_null_1 | sumArray }}', expectedResult)
+    })
+
+    it('should handle duration with val_null at middle position', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 20, 'days': 20})
+      return test('{{ arr_duration_with_val_null_2 | sumArray }}', expectedResult)
+    })
+
+    it('should handle duration with val_null at first position', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 20, 'days': 20})
+      return test('{{ arr_duration_with_val_null_3 | sumArray }}', expectedResult)
+    })
+
+    it('should handle duration with number at different positions', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 93, 'days': 93})
+      return test('{{ arr_duration_with_number_1 | sumArray }}', expectedResult) &&
+            test('{{ arr_duration_with_number_2 | sumArray }}', expectedResult)
+    })
+
+    it('should handle duration with null', () => {
+      const expectedResult = 'null'
+      return test('{{ arr_duration_with_null | sumArray }}', expectedResult)
+    })
+
+    // Date with duration
+    it('should return date after adding durations to date', () => {
+      const expectedResult = new Date(moment(ctx.from_date).add(90, 'days')).toDateString()
+      return test(`{% assign result = arr_date_with_duration | sumArray %}{{ result | date: "%a %b %d %Y" }}`, expectedResult)
+    })
+
+    it('should handle array with two dates and durations', () => {
+      const expectedResult = 'null'
+      return test('{{ arr_two_dates | sumArray }}', expectedResult)
+    })
+
+    // Currency arrays
+    it('should return total value for currency array', () => {
+      const expectedResult = JSON.stringify({ value: 1110, type: 'INR' })
+      return test('{{ arr_currency | sumArray }}', expectedResult)
+    })
+
+    it('should handle currency with decimal values', () => {
+      const expectedResult = JSON.stringify({ value: 1028.023, type: 'INR' })
+      return test('{{ arr_currency_with_decimal | sumArray }}', expectedResult)
+    })
+
+    it('should handle currency with val_null at different positions', () => {
+      const expectedResult = JSON.stringify({ value: 110, type: 'INR' })
+      return test('{{ arr_currency_with_val_null_1 | sumArray }}', expectedResult) &&
+            test('{{ arr_currency_with_val_null_2 | sumArray }}', expectedResult) &&
+            test('{{ arr_currency_with_val_null_3 | sumArray }}', expectedResult)
+    })
+
+    it('should handle currency with number at different positions', () => {
+      const expectedResult = JSON.stringify({ value: 1103, type: 'INR' })
+      return test('{{ arr_currency_with_number_1 | sumArray }}', expectedResult) &&
+            test('{{ arr_currency_with_number_2 | sumArray }}', expectedResult)
+    })
+
+    it('should handle currency with null', () => {
+      const expectedResult = 'null'
+      return test('{{ arr_currency_with_null | sumArray }}', expectedResult)
+    })
+
+    // Dynamic table with numbers
+    it('should return total cost for dynamic table with numbers', () => {
+      return test('{{ dynamic_table_with_numbers | sumArray: "cost" }}', '600')
+    })
+
+    // Dynamic table with null
+    it('should handle dynamic table with null', () => {
+      return test('{{ dynamic_table_with_null | sumArray: "cost" }}', '300')
+    })
+
+    // Dynamic table with empty object
+    it('should handle dynamic table with empty object', () => {
+      return test('{{ dynamic_table_with_empty | sumArray: "cost" }}', '300')
+    })
+
+    // Dynamic table with duration
+    it('should return total duration for dynamic table', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 150, 'days': 150})
+      return test('{{ dynamic_table_with_duration | sumArray: "time" }}', expectedResult)
+    })
+
+    it('should handle dynamic table with duration and val_null', () => {
+      const expectedResult = JSON.stringify({'type': 'DAYS', 'value': 0, 'days': 0})
+      return test('{{ dynamic_table_with_duration_with_val_null | sumArray: "time" }}', expectedResult)
+    })
+
+    // Dynamic table with currency
+    it('should return total price for dynamic table', () => {
+      const expectedResult = JSON.stringify({ value: 1110, type: 'INR' })
+      return test('{{ dynamic_table_with_currency | sumArray: "price" }}', expectedResult)
+    })
+
+    it('should handle dynamic table with currency and val_null', () => {
+      const expectedResult = JSON.stringify({ value: 1010, type: 'INR' })
+      return test('{{ dynamic_table_with_currency_with_val_null | sumArray: "price" }}', expectedResult)
+    })
+
+    // Dynamic table with invalid column
+    it('should handle dynamic table with invalid column', () => {
+      return checkForError('{{ dynamic_table_with_currency | sumArray: 0 }}', 'Invalid key for sumArray filter')
     })
   })
 

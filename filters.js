@@ -55,6 +55,7 @@ var filters = {
   last: v => v[v.length - 1],
   lstrip: v => stringify(v).replace(/^\s+/, ""),
   map: (arr, arg) => arr.map(v => v[arg]),
+  sumArray: (arr, key, defaultSum) => sumArray(arr, key, defaultSum),
   minus: (v, arg) => subtract(v, arg),
   modulo: bindFixed((v, arg) => v % arg),
   newline_to_br: v => v.replace(/\n/g, "<br />"),
@@ -524,6 +525,41 @@ function toDuration(durValue, durType) {
     }
   }
   throw new Error("invalid duration value or type");
+}
+
+/**
+ * Sums the elements of an array, optionally summing the values of a specified key in each object.
+ *
+ * @param {Array} arr - The array to sum.
+ * @param {string} [key] - The key whose values should be summed (optional).
+ * @param {number} [defaultSum=0] - The default sum to return if the array is empty.
+ * @returns {number|object} The sum of the array elements or the sum of the specified key's values.
+ * @throws {Error} If the input is not an array or if the key is invalid.
+ */
+function sumArray (arr, key, defaultSum = 0) {
+  if (!Array.isArray(arr)) {
+    // Check if input is an array
+    throw new Error('Input is not an array')
+  }
+
+  if (arr.length === 0) {
+    // Return the default sum if the array is empty
+    return defaultSum
+  }
+
+  if (key === undefined) {
+    // If no key is provided, sum the elements directly
+    return arr.reduce((acc, item) => performOperations(acc, item, 'ADD'))
+  }
+
+  if (!_.isString(key)) {
+    // Check if the key is a string
+    throw new Error('Invalid key for sumArray filter')
+  }
+
+  // If a valid key is provided, sum the values of that key from the array objects
+  const values = arr.map(item => item[key])
+  return values.reduce((acc, item) => performOperations(acc, item, 'ADD'))
 }
 
 registerAll.filters = filters;
