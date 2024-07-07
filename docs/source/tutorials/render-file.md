@@ -100,6 +100,23 @@ var engine = new Liquid({
 
 {% note warn Path Traversal Vulnerability %}The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you'll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.{% endnote %}
 
+## In-memory Template
+
+To facilitate rendering w/o files, there's a `templates` option to specify a mapping of filenames and their content. LiquidJS will read templates from the mapping.
+
+```typescript
+const engine = new Liquid({
+  templates: {
+    'views/entry': 'header {% include "../partials/footer" %}',
+    'partials/footer': 'footer'
+  }
+})
+engine.renderFileSync('views/entry'))
+// Result: 'header footer'
+```
+
+Note that file system options like `root`, `layouts`, `partials`, `relativeReference` will be ignored when `templates` is specified.
+
 [fs]: /api/interfaces/LiquidOptions.html#fs
 [ifs]: /api/interfaces/FS.html
 [fs-node]: https://github.com/harttle/liquidjs/blob/master/src/fs/fs-impl.ts

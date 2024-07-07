@@ -49,4 +49,34 @@ describe('LiquidOptions#fs', function () {
     } as any)
     expect(engine.options.relativeReference).toBe(false)
   })
+  it('should render from in-memory templates', () => {
+    const engine = new Liquid({
+      templates: {
+        entry: '{% layout "main" %}entry',
+        main: 'header {% block %}{% endblock %} footer'
+      }
+    })
+    expect(engine.renderFileSync('entry')).toEqual('header entry footer')
+  })
+  it('should render relative in-memory templates', () => {
+    const engine = new Liquid({
+      templates: {
+        'views/entry': 'header {% include "../partials/footer" %}',
+        'partials/footer': 'footer'
+      }
+    })
+    expect(engine.renderFileSync('views/entry')).toEqual('header footer')
+  })
+  it('should ignore root/layouts/partials', () => {
+    const engine = new Liquid({
+      root: '/foo/bar/',
+      layouts: '/foo/bar/',
+      partials: '/foo/bar/',
+      templates: {
+        entry: '{% layout "main" %}entry',
+        main: 'header {% block %}{% endblock %} footer'
+      }
+    })
+    expect(engine.renderFileSync('entry')).toEqual('header entry footer')
+  })
 })

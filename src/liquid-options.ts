@@ -5,6 +5,7 @@ import * as fs from './fs/fs-impl'
 import { defaultOperators, Operators } from './render'
 import misc from './filters/misc'
 import { escape } from './filters/html'
+import { MapFS } from './fs/map-fs'
 
 type OutputEscape = (value: any) => string
 type OutputEscapeOption = 'escape' | 'json' | OutputEscape
@@ -64,6 +65,8 @@ export interface LiquidOptions {
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
   fs?: FS;
+  /** Render from in-memory `templates` mapping instead of file system. File system related options like `fs`, 'root', and `relativeReference` will be ignored when `templates` is specified. */
+  templates?: {[key: string]: string};
   /** the global scope passed down to all partial and layout templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
   /** Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to `false`. */
@@ -190,6 +193,11 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
   options.partials = normalizeDirectoryList(options.partials)
   options.layouts = normalizeDirectoryList(options.layouts)
   options.outputEscape = options.outputEscape && getOutputEscapeFunction(options.outputEscape)
+  if (options.templates) {
+    options.fs = new MapFS(options.templates)
+    options.relativeReference = true
+    options.root = options.partials = options.layouts = '.'
+  }
   return options as NormalizedFullOptions
 }
 
