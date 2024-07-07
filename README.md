@@ -92,6 +92,7 @@ Special thanks to the following sponsors!
       <td align="center" valign="top" width="14.28%"><a href="https://sentry.io/"><img src="https://avatars.githubusercontent.com/u/1396951?v=4?s=100" width="100px;" alt="Sentry"/><br /><sub><b>Sentry</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://customer.io/"><img src="https://avatars.githubusercontent.com/u/1152079?v=4?s=100" width="100px;" alt="Customer IO"/><br /><sub><b>Customer IO</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/15fathoms"><img src="https://avatars.githubusercontent.com/u/79156039?v=4?s=100" width="100px;" alt="Emmanuel Cartelli"/><br /><sub><b>Emmanuel Cartelli</b></sub></a><br /></td>
     </tr>
   </tbody>
 </table>
