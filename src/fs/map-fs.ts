@@ -32,10 +32,12 @@ export class MapFS {
   resolve (dir: string, file: string, ext: string) {
     file += ext
     if (dir === '.') return file
-    const segments = dir.split(this.sep)
+    const segments = dir.split(/\/+/)
     for (const segment of file.split(this.sep)) {
       if (segment === '.' || segment === '') continue
-      else if (segment === '..') segments.pop()
+      else if (segment === '..') {
+        if (segments.length > 1 || segments[0] !== '') segments.pop()
+      }
       else segments.push(segment)
     }
     return segments.join(this.sep)
