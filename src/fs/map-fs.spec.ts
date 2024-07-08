@@ -14,4 +14,13 @@ describe('MapFS', () => {
   it('should resolve exceeding root', () => {
     expect(fs.resolve('foo/bar', '../../../coo', '')).toEqual('coo')
   })
+  it('should resolve from absolute path', () => {
+    expect(fs.resolve('/foo/bar', '../../coo', '')).toEqual('/coo')
+  })
+  it('should resolve exceeding root from absolute path', () => {
+    expect(fs.resolve('/foo/bar', '../../../coo', '')).toEqual('/coo')
+  })
+  it('should resolve from invalid path', () => {
+    expect(fs.resolve('foo//bar', '../coo', '')).toEqual('foo/coo')
+  })
 })
