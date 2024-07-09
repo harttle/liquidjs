@@ -1,18 +1,19 @@
 import { Liquid, Tag, Template, Context, TagToken, TopLevelToken } from '..'
+import { Parser } from '../parser'
 import { evalQuotedToken } from '../render'
 import { isTagToken } from '../util'
 
 export default class extends Tag {
   variable: string
   templates: Template[] = []
-  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
     this.variable = this.readVariableName()
 
     while (remainTokens.length) {
       const token = remainTokens.shift()!
       if (isTagToken(token) && token.name === 'endcapture') return
-      this.templates.push(liquid.parser.parseToken(token, remainTokens))
+      this.templates.push(parser.parseToken(token, remainTokens))
     }
     throw new Error(`tag ${tagToken.getText()} not closed`)
   }

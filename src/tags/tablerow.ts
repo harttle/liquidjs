@@ -1,13 +1,14 @@
 import { toEnumerable } from '../util'
 import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
+import { Parser } from '../parser'
 
 export default class extends Tag {
   variable: string
   args: Hash
   templates: Template[]
   collection: ValueToken
-  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
     const variable = this.tokenizer.readIdentifier()
     this.tokenizer.skipBlank()
@@ -24,7 +25,7 @@ export default class extends Tag {
     this.templates = []
 
     let p
-    const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
+    const stream: ParseStream = parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
       .on('tag:endtablerow', () => stream.stop())
       .on('template', (tpl: Template) => p.push(tpl))

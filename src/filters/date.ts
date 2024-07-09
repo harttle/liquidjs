@@ -3,6 +3,8 @@ import { FilterImpl } from '../template'
 import { LiquidOptions } from '../liquid-options'
 
 export function date (this: FilterImpl, v: string | Date, format?: string, timezoneOffset?: number | string) {
+  const size = ((v as string)?.length ?? 0) + (format?.length ?? 0) + ((timezoneOffset as string)?.length ?? 0)
+  this.context.memoryLimit.use(size)
   const date = parseDate(v, this.context.opts, timezoneOffset)
   if (!date) return v
   format = toValue(format)

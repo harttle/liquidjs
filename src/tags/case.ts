@@ -1,18 +1,19 @@
 import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
+import { Parser } from '../parser'
 import { equals } from '../render'
 
 export default class extends Tag {
   value: Value
   branches: { values: ValueToken[], templates: Template[] }[] = []
   elseTemplates: Template[] = []
-  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
     this.value = new Value(this.tokenizer.readFilteredValue(), this.liquid)
     this.elseTemplates = []
 
     let p: Template[] = []
     let elseCount = 0
-    const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
+    const stream: ParseStream = parser.parseStream(remainTokens)
       .on('tag:when', (token: TagToken) => {
         if (elseCount > 0) {
           return

@@ -19,6 +19,7 @@ tutorials:
     plugins: plugins.html
     operators: operators.html
     truth: truthy-and-falsy.html
+    dos: dos.html
   miscellaneous:
     migration9: migrate-to-9.html
     changelog: changelog.html

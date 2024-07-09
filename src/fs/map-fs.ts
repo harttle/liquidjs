@@ -37,8 +37,7 @@ export class MapFS {
       if (segment === '.' || segment === '') continue
       else if (segment === '..') {
         if (segments.length > 1 || segments[0] !== '') segments.pop()
-      }
-      else segments.push(segment)
+      } else segments.push(segment)
     }
     return segments.join(this.sep)
   }
