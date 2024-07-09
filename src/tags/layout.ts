@@ -2,17 +2,18 @@ import { Scope, Template, Liquid, Tag, assert, Emitter, Hash, TagToken, TopLevel
 import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
+import { Parser } from '../parser'
 
 export default class extends Tag {
   args: Hash
   templates: Template[]
   file?: ParsedFileName
-  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(token, remainTokens, liquid)
-    this.file = parseFilePath(this.tokenizer, this.liquid)
+    this.file = parseFilePath(this.tokenizer, this.liquid, parser)
     this['currentFile'] = token.file
     this.args = new Hash(this.tokenizer.remaining())
-    this.templates = this.liquid.parser.parseTokens(remainTokens)
+    this.templates = parser.parseTokens(remainTokens)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
     const { liquid, args, file } = this

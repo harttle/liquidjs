@@ -77,6 +77,12 @@ export interface LiquidOptions {
   operators?: Operators;
   /** Respect parameter order when using filters like "for ... reversed limit", Defaults to `false`. */
   orderedFilterParameters?: boolean;
+  /** For DoS handling, limit total length of templates parsed in one `parse()` call. A typical PC can handle 1e8 (100M) characters without issues. */
+  parseLimit?: number;
+  /** For DoS handling, limit total time (in ms) for each `render()` call. */
+  renderLimit?: number;
+  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue. */
+  memoryLimit?: number;
 }
 
 export interface RenderOptions {
@@ -96,6 +102,12 @@ export interface RenderOptions {
    * Same as `ownPropertyOnly` on LiquidOptions, but only for current render() call
    */
   ownPropertyOnly?: boolean;
+  /** For DoS handling, limit total renders of tag/HTML/output in one `render()` call. A typical PC can handle 1e5 renders of typical templates per second. */
+  templateLimit?: number;
+  /** For DoS handling, limit total time (in ms) for each `render()` call. */
+  renderLimit?: number;
+  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue.. */
+  memoryLimit?: number;
 }
 
 export interface RenderFileOptions extends RenderOptions {
@@ -139,6 +151,9 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   globals: object;
   keepOutputType: boolean;
   operators: Operators;
+  parseLimit: number;
+  renderLimit: number;
+  memoryLimit: number;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -169,7 +184,10 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   keepOutputType: false,
-  operators: defaultOperators
+  operators: defaultOperators,
+  memoryLimit: Infinity,
+  parseLimit: Infinity,
+  renderLimit: Infinity
 }
 
 export function normalize (options: LiquidOptions): NormalizedFullOptions {
@@ -193,6 +211,9 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
   options.partials = normalizeDirectoryList(options.partials)
   options.layouts = normalizeDirectoryList(options.layouts)
   options.outputEscape = options.outputEscape && getOutputEscapeFunction(options.outputEscape)
+  options.parseLimit = options.parseLimit || Infinity
+  options.renderLimit = options.renderLimit || Infinity
+  options.memoryLimit = options.memoryLimit || Infinity
   if (options.templates) {
     options.fs = new MapFS(options.templates)
     options.relativeReference = true

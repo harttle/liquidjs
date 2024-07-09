@@ -2,7 +2,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
-import { isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject } from '../util'
+import { isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter } from '../util'
 
 type PropertyKey = string | number;
 
@@ -33,13 +33,17 @@ export class Context {
    */
   public strictVariables: boolean;
   public ownPropertyOnly: boolean;
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}) {
+  public memoryLimit: Limiter;
+  public renderLimit: Limiter;
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { memoryLimit, renderLimit }: { [key: string]: Limiter } = {}) {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
     this.environments = isObject(env) ? env : Object(env)
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
+    this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
+    this.renderLimit = renderLimit ?? new Limiter('template render', performance.now() + (renderOptions.templateLimit ?? opts.renderLimit))
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})
@@ -95,6 +99,16 @@ export class Context {
   public bottom () {
     return this.scopes[0]
   }
+  public spawn (scope = {}) {
+    return new Context(scope, this.opts, {
+      sync: this.sync,
+      globals: this.globals,
+      strictVariables: this.strictVariables
+    }, {
+      renderLimit: this.renderLimit,
+      memoryLimit: this.memoryLimit
+    })
+  }
   private findScope (key: string | number) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
@@ -108,7 +122,7 @@ export class Context {
 export function readProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
   obj = toLiquid(obj)
   if (isNil(obj)) return obj
-  if (isArray(obj) && key < 0) return obj[obj.length + +key]
+  if (isArray(obj) && (key as number) < 0) return obj[obj.length + +key]
   const value = readJSProperty(obj, key, ownPropertyOnly)
   if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key)
   if (isFunction(value)) return value.call(obj)

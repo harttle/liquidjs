@@ -1,13 +1,14 @@
 import { Liquid, Tag, Value, TopLevelToken, Template, Emitter, isTruthy, isFalsy, Context, TagToken } from '..'
+import { Parser } from '../parser'
 
 export default class extends Tag {
   branches: { value: Value, test: (val: any, ctx: Context) => boolean, templates: Template[] }[] = []
   elseTemplates: Template[] = []
-  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
     let p: Template[] = []
     let elseCount = 0
-    this.liquid.parser.parseStream(remainTokens)
+    parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
         value: new Value(tagToken.args, this.liquid),
         test: isFalsy,

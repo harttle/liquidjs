@@ -11,18 +11,23 @@ import { LiquidOptions, normalizeDirectoryList, NormalizedFullOptions, normalize
 export class Liquid {
   public readonly options: NormalizedFullOptions
   public readonly renderer = new Render()
+  /**
+   * @deprecated will be removed. In tags use `this.parser` instead
+   */
   public readonly parser: Parser
   public readonly filters: Record<string, FilterImplOptions> = {}
   public readonly tags: Record<string, TagClass> = {}
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = normalize(opts)
+    // eslint-disable-next-line deprecation/deprecation
     this.parser = new Parser(this)
     forOwn(tags, (conf: TagClass, name: string) => this.registerTag(name, conf))
     forOwn(filters, (handler: FilterImplOptions, name: string) => this.registerFilter(name, handler))
   }
   public parse (html: string, filepath?: string): Template[] {
-    return this.parser.parse(html, filepath)
+    const parser = new Parser(this)
+    return parser.parse(html, filepath)
   }
 
   public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<any> {
@@ -52,19 +57,19 @@ export class Liquid {
   }
 
   public _parsePartialFile (file: string, sync?: boolean, currentFile?: string) {
-    return this.parser.parseFile(file, sync, LookupType.Partials, currentFile)
+    return new Parser(this).parseFile(file, sync, LookupType.Partials, currentFile)
   }
   public _parseLayoutFile (file: string, sync?: boolean, currentFile?: string) {
-    return this.parser.parseFile(file, sync, LookupType.Layouts, currentFile)
+    return new Parser(this).parseFile(file, sync, LookupType.Layouts, currentFile)
   }
   public _parseFile (file: string, sync?: boolean, lookupType?: LookupType, currentFile?: string): Generator<unknown, Template[]> {
-    return this.parser.parseFile(file, sync, lookupType, currentFile)
+    return new Parser(this).parseFile(file, sync, lookupType, currentFile)
   }
   public async parseFile (file: string, lookupType?: LookupType): Promise<Template[]> {
-    return toPromise<Template[]>(this.parser.parseFile(file, false, lookupType))
+    return toPromise<Template[]>(new Parser(this).parseFile(file, false, lookupType))
   }
   public parseFileSync (file: string, lookupType?: LookupType): Template[] {
-    return toValueSync<Template[]>(this.parser.parseFile(file, true, lookupType))
+    return toValueSync<Template[]>(new Parser(this).parseFile(file, true, lookupType))
   }
   public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<any> {
     const templates = (yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)) as Template[]

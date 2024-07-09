@@ -178,8 +178,8 @@ export function caseInsensitiveCompare (a: any, b: any) {
   return 0
 }
 
-export function argumentsToValue<F extends (...args: any) => any> (fn: F) {
-  return (...args: Parameters<F>) => fn(...args.map(toValue))
+export function argumentsToValue<F extends (...args: any) => any, T> (fn: F) {
+  return function (this: T, ...args: Parameters<F>) { return fn.call(this, ...args.map(toValue)) }
 }
 
 export function escapeRegExp (text: string) {

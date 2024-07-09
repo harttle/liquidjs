@@ -51,6 +51,7 @@ sidebar:
     plugins: Plugins
     operators: Operators
     truth: Truthy and Falsy
+    dos: DoS
 
     miscellaneous: Miscellaneous
     migration9: 'Migrate to LiquidJS 9'

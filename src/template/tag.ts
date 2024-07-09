@@ -1,6 +1,6 @@
 import { TemplateImpl } from './template-impl'
 import type { Emitter } from '../emitters/emitter'
-import type { Tokenizer } from '../parser'
+import type { Parser, Tokenizer } from '../parser'
 import type { Context } from '../context/context'
 import type { TopLevelToken, TagToken } from '../tokens'
 import type { Template } from './template'
@@ -23,5 +23,5 @@ export abstract class Tag extends TemplateImpl<TagToken> implements Template {
 }
 
 export interface TagClass {
-  new(token: TagToken, tokens: TopLevelToken[], liquid: Liquid): Tag
+  new(token: TagToken, tokens: TopLevelToken[], liquid: Liquid, parser: Parser): Tag
 }

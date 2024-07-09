@@ -1,4 +1,4 @@
-import { toPromise, assert, isTagToken, isOutputToken, ParseError } from '../util'
+import { Limiter, toPromise, assert, isTagToken, isOutputToken, ParseError } from '../util'
 import { Tokenizer } from './tokenizer'
 import { ParseStream } from './parse-stream'
 import { TopLevelToken, OutputToken } from '../tokens'
@@ -15,6 +15,7 @@ export class Parser {
   private fs: FS
   private cache?: LiquidCache
   private loader: Loader
+  private parseLimit: Limiter
 
   public constructor (liquid: Liquid) {
     this.liquid = liquid
@@ -22,8 +23,10 @@ export class Parser {
     this.fs = this.liquid.options.fs
     this.parseFile = this.cache ? this._parseFileCached : this._parseFile
     this.loader = new Loader(this.liquid.options)
+    this.parseLimit = new Limiter('parse length', liquid.options.parseLimit)
   }
   public parse (html: string, filepath?: string): Template[] {
+    this.parseLimit.use(html.length)
     const tokenizer = new Tokenizer(html, this.liquid.options.operators, filepath)
     const tokens = tokenizer.readTopLevelTokens(this.liquid.options)
     return this.parseTokens(tokens)
@@ -48,7 +51,7 @@ export class Parser {
       if (isTagToken(token)) {
         const TagClass = this.liquid.tags[token.name]
         assert(TagClass, `tag "${token.name}" not found`)
-        return new TagClass(token, remainTokens, this.liquid)
+        return new TagClass(token, remainTokens, this.liquid, this)
       }
       if (isOutputToken(token)) {
         return new Output(token as OutputToken, this.liquid)
@@ -78,6 +81,6 @@ export class Parser {
   }
   private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], string> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)
-    return this.liquid.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
+    return this.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
   }
 }

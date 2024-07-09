@@ -2,6 +2,7 @@ import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
 import { toEnumerable } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
+import { Parser } from '../parser'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -9,10 +10,10 @@ export default class extends Tag {
   private file: ParsedFileName
   private currentFile?: string
   private hash: Hash
-  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(token, remainTokens, liquid)
     const tokenizer = this.tokenizer
-    this.file = parseFilePath(tokenizer, this.liquid)
+    this.file = parseFilePath(tokenizer, this.liquid, parser)
     this.currentFile = token.file
     while (!tokenizer.end()) {
       tokenizer.skipBlank()
@@ -51,7 +52,7 @@ export default class extends Tag {
     const filepath = (yield renderFilePath(this['file'], ctx, liquid)) as string
     assert(filepath, () => `illegal file path "${filepath}"`)
 
-    const childCtx = new Context({}, ctx.opts, { sync: ctx.sync, globals: ctx.globals, strictVariables: ctx.strictVariables })
+    const childCtx = ctx.spawn()
     const scope = childCtx.bottom()
     __assign(scope, yield hash.render(ctx))
     if (this['with']) {
@@ -82,20 +83,20 @@ export default class extends Tag {
  * @return Token for expression (not quoted)
  * @throws TypeError if cannot read next token
  */
-export function parseFilePath (tokenizer: Tokenizer, liquid: Liquid): ParsedFileName {
+export function parseFilePath (tokenizer: Tokenizer, liquid: Liquid, parser: Parser): ParsedFileName {
   if (liquid.options.dynamicPartials) {
     const file = tokenizer.readValue()
     tokenizer.assert(file, 'illegal file path')
     if (file!.getText() === 'none') return
     if (TypeGuards.isQuotedToken(file)) {
       // for filenames like "files/{{file}}", eval as liquid template
-      const templates = liquid.parse(evalQuotedToken(file))
+      const templates = parser.parse(evalQuotedToken(file))
       return optimize(templates)
     }
     return file
   }
   const tokens = [...tokenizer.readFileNameTemplate(liquid.options)]
-  const templates = optimize(liquid.parser.parseTokens(tokens))
+  const templates = optimize(parser.parseTokens(tokens))
   return templates === 'none' ? undefined : templates
 }
 

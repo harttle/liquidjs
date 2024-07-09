@@ -2,18 +2,19 @@ import { BlockMode } from '../context'
 import { isTagToken } from '../util'
 import { BlockDrop } from '../drop'
 import { Liquid, TagToken, TopLevelToken, Template, Context, Emitter, Tag } from '..'
+import { Parser } from '../parser'
 
 export default class extends Tag {
   block: string
   templates: Template[] = []
-  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(token, remainTokens, liquid)
     const match = /\w+/.exec(token.args)
     this.block = match ? match[0] : ''
     while (remainTokens.length) {
       const token = remainTokens.shift()!
       if (isTagToken(token) && token.name === 'endblock') return
-      const template = liquid.parser.parseToken(token, remainTokens)
+      const template = parser.parseToken(token, remainTokens)
       this.templates.push(template)
     }
     throw new Error(`tag ${token.getText()} not closed`)

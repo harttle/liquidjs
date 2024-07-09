@@ -1,6 +1,7 @@
 import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { assertEmpty, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
+import { Parser } from '../parser'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -13,7 +14,7 @@ export default class extends Tag {
   templates: Template[]
   elseTemplates: Template[]
 
-  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+  constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(token, remainTokens, liquid)
     const variable = this.tokenizer.readIdentifier()
     const inStr = this.tokenizer.readIdentifier()
@@ -29,7 +30,7 @@ export default class extends Tag {
     this.elseTemplates = []
 
     let p
-    const stream: ParseStream = this.liquid.parser.parseStream(remainTokens)
+    const stream: ParseStream = parser.parseStream(remainTokens)
       .on('start', () => (p = this.templates))
       .on<TagToken>('tag:else', tag => { assertEmpty(tag.args); p = this.elseTemplates })
       .on<TagToken>('tag:endfor', tag => { assertEmpty(tag.args); stream.stop() })
