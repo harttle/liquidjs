@@ -1,3 +1,16 @@
+# [10.15.0](https://github.com/harttle/liquidjs/compare/v10.14.0...v10.15.0) (2024-07-09)
+
+
+### Bug Fixes
+
+* report error for malformed else/elsif/endif/endfor, [#713](https://github.com/harttle/liquidjs/issues/713) ([22b5a12](https://github.com/harttle/liquidjs/commit/22b5a123333a066aaf7dff580df061e7cd6aa7b2))
+
+
+### Features
+
+* DoS prevention, [#250](https://github.com/harttle/liquidjs/issues/250) ([e443068](https://github.com/harttle/liquidjs/commit/e443068cb9281883ff0fe9f755a15f52ada4e7e2))
+* support in-memory template mapping, inspired by [@jg-rp](https://github.com/jg-rp) [#714](https://github.com/harttle/liquidjs/issues/714) ([df27ac6](https://github.com/harttle/liquidjs/commit/df27ac694739496982012432077fe28b1476662a))
+
 # [10.14.0](https://github.com/harttle/liquidjs/compare/v10.13.1...v10.14.0) (2024-06-17)
 
 
