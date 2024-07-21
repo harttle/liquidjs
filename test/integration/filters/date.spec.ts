@@ -1,21 +1,80 @@
 import { LiquidOptions } from '../../../src/liquid-options'
 import { Liquid } from '.././../../src/liquid'
 import { test } from '../../stub/render'
+import { disableIntl } from '../../stub/no-intl'
 
 describe('filters/date', function () {
+  const liquid = new Liquid({ locale: 'en-US' })
+
+  describe('constructor', () => {
+    it('should create a new Date when given "now"', function () {
+      return test('{{ "now" | date: "%Y"}}', (new Date()).getFullYear().toString())
+    })
+    it('should create a new Date when given "today"', function () {
+      return test('{{ "today" | date: "%Y"}}', (new Date()).getFullYear().toString())
+    })
+    it('should create from number', async function () {
+      const time = new Date('2017-03-07T12:00:00').getTime() / 1000
+      return test('{{ time | date: "%Y-%m-%dT%H:%M:%S" }}', { time }, '2017-03-07T12:00:00')
+    })
+    it('should create from number-like string', async function () {
+      const time = String(new Date('2017-03-07T12:00:00').getTime() / 1000)
+      return test('{{ time | date: "%Y-%m-%dT%H:%M:%S" }}', { time }, '2017-03-07T12:00:00')
+    })
+    it('should treat nil as 0', () => {
+      expect(liquid.parseAndRenderSync('{{ nil | date: "%Y-%m-%dT%H:%M:%S", "Asia/Shanghai" }}')).toEqual('1970-01-01T08:00:00')
+    })
+    it('should treat undefined as invalid', () => {
+      expect(liquid.parseAndRenderSync('{{ num | date: "%Y-%m-%dT%H:%M:%S", "Asia/Shanghai" }}', { num: undefined })).toEqual('')
+    })
+  })
+
   it('should support date: %a %b %d %Y', function () {
     const date = new Date()
     return test('{{ date | date:"%a %b %d %Y"}}', { date }, date.toDateString())
   })
+  describe('%a', () => {
+    it('should support short week day', () => {
+      const tpl = '{{ "2024-07-21T20:24:00.000Z" | date: "%a", "Asia/Shanghai" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('Mon')
+    })
+    it('should support short week day with timezone', () => {
+      const tpl = '{{ "2024-07-21T20:24:00.000Z" | date: "%a", "America/New_York" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('Sun')
+    })
+    it('should support short week day with locale', () => {
+      const liquid = new Liquid({ locale: 'zh-CN' })
+      const tpl = '{{ "2024-07-21T20:24:00.000Z" | date: "%a", "America/New_York" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('周日')
+    })
+  })
+  describe('%b', () => {
+    it('should support short month', () => {
+      const tpl = '{{ "2024-07-31T20:24:00.000Z" | date: "%b", "Asia/Shanghai" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('Aug')
+    })
+    it('should support short week day with locale', () => {
+      const liquid = new Liquid({ locale: 'zh-CN' })
+      const tpl = '{{ "2024-07-31T20:24:00.000Z" | date: "%b", "Asia/Shanghai" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('8月')
+    })
+  })
+  describe('Intl compatibility', () => {
+    disableIntl()
+    it('should use English if Intl not supported', () => {
+      const liquid = new Liquid()
+      const tpl = '{{ "2024-07-31T20:24:00.000Z" | date: "%b", "Asia/Shanghai" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('Aug')
+    })
+    it('should use English if Intl not supported even for other locales', () => {
+      const liquid = new Liquid({ locale: 'zh-CN' })
+      const tpl = '{{ "2024-07-31T20:24:00.000Z" | date: "%b", "Asia/Shanghai" }}'
+      expect(liquid.parseAndRenderSync(tpl)).toEqual('Aug')
+    })
+  })
   it('should support "now"', function () {
     // sample: Thursday, February 2, 2023 at 6:25 pm +0000
     return test('{{ "now" | date }}', /\w+, \w+ \d+, \d\d\d\d at \d+:\d\d [ap]m [-+]\d\d\d\d/)
-  })
-  it('should create a new Date when given "now"', function () {
-    return test('{{ "now" | date: "%Y"}}', (new Date()).getFullYear().toString())
-  })
-  it('should create a new Date when given "today"', function () {
-    return test('{{ "today" | date: "%Y"}}', (new Date()).getFullYear().toString())
   })
   it('should parse as Date when given a timezoneless string', function () {
     return test('{{ "1991-02-22T00:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1991-02-22T00:00:00')
@@ -44,14 +103,6 @@ describe('filters/date', function () {
   })
   it('should render object as string', function () {
     return test('{{ obj | date: "%Y"}}', { obj: {} }, '[object Object]')
-  })
-  it('should create from number', async function () {
-    const time = new Date('2017-03-07T12:00:00').getTime() / 1000
-    return test('{{ time | date: "%Y-%m-%dT%H:%M:%S" }}', { time }, '2017-03-07T12:00:00')
-  })
-  it('should create from number-like string', async function () {
-    const time = String(new Date('2017-03-07T12:00:00').getTime() / 1000)
-    return test('{{ time | date: "%Y-%m-%dT%H:%M:%S" }}', { time }, '2017-03-07T12:00:00')
   })
   it('should support manipulation', async function () {
     return test('{{ date | date: "%s" | minus : 604800  | date: "%Y-%m-%dT%H:%M:%S"}}',
@@ -179,6 +230,10 @@ describe('filters/date_to_string', function () {
   it('should support ordinal, US', function () {
     const output = liquid.parseAndRenderSync('{{ "2008-11-07T13:07:54-08:00" | date_to_string: "ordinal", "US" }}')
     expect(output).toEqual('Nov 7th, 2008')
+  })
+  it('should render none if not valid', function () {
+    const output = liquid.parseAndRenderSync('{{ "hello" | date_to_string: "ordinal", "US" }}')
+    expect(output).toEqual('hello')
   })
 })
 

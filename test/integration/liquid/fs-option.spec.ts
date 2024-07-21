@@ -9,7 +9,7 @@ describe('LiquidOptions#fs', function () {
     existsSync: (x: string) => !x.match(/not-exist/),
     readFile: (x: string) => Promise.resolve(`content for ${x}`),
     readFileSync: (x: string) => `content for ${x}`,
-    fallback: (x: string) => '/root/files/fallback',
+    fallback: (_x: string) => '/root/files/fallback',
     resolve: (base: string, path: string) => base + '/' + path
   }
   beforeEach(function () {
@@ -49,7 +49,7 @@ describe('LiquidOptions#fs', function () {
     } as any)
     expect(engine.options.relativeReference).toBe(false)
   })
-  it('should render from in-memory templates', () => {
+  it('should render from in-memory templates', async () => {
     const engine = new Liquid({
       templates: {
         entry: '{% layout "main" %}entry',
@@ -57,6 +57,7 @@ describe('LiquidOptions#fs', function () {
       }
     })
     expect(engine.renderFileSync('entry')).toEqual('header entry footer')
+    await expect(engine.renderFile('entry')).resolves.toEqual('header entry footer')
   })
   it('should render relative in-memory templates', () => {
     const engine = new Liquid({

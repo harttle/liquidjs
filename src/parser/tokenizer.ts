@@ -143,7 +143,7 @@ export class Tokenizer {
     return new HTMLToken(this.input, begin, this.p, this.file)
   }
 
-  readTagToken (options: NormalizedFullOptions = defaultOptions): TagToken {
+  readTagToken (options: NormalizedFullOptions): TagToken {
     const { file, input } = this
     const begin = this.p
     if (this.readToDelimiter(options.tagDelimiterRight) === -1) {

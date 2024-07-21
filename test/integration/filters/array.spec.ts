@@ -475,6 +475,15 @@ describe('filters/array', function () {
         - 2
         `)
     })
+    it('should render none if args not specified', function () {
+      return test(`{% assign kitchen_products = products | where %}
+        Kitchen products:
+        {% for product in kitchen_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Kitchen products:
+        `)
+    })
   })
   describe('where_exp', function () {
     const products = [
@@ -560,6 +569,12 @@ describe('filters/array', function () {
         { members },
         `{"graduation_year":2014,"name":"John"}`)
     })
+    it('should render none if not found', function () {
+      return test(
+        `{{ members | find: "graduation_year", 2018 | json }}`,
+        { members },
+        ``)
+    })
   })
   describe('find_exp', function () {
     const members = [
@@ -572,6 +587,12 @@ describe('filters/array', function () {
         `{{ members | find_exp: "item", "item.graduation_year == 2014" | json }}`,
         { members },
         `{"graduation_year":2014,"name":"John"}`)
+    })
+    it('should render none if not found', function () {
+      return test(
+        `{{ members | find_exp: "item", "item.graduation_year == 2018" | json }}`,
+        { members },
+        ``)
     })
   })
 })
