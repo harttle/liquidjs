@@ -43,7 +43,7 @@ export class Context {
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
     this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
-    this.renderLimit = renderLimit ?? new Limiter('template render', performance.now() + (renderOptions.templateLimit ?? opts.renderLimit))
+    this.renderLimit = renderLimit ?? new Limiter('template render', performance.now() + (renderOptions.renderLimit ?? opts.renderLimit))
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})

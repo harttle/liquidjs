@@ -27,7 +27,7 @@ export class Loader {
       const rRelativePath = new RegExp(['.' + sep, '..' + sep, './', '../'].map(prefix => escapeRegex(prefix)).join('|'))
       this.shouldLoadRelative = (referencedFile: string) => rRelativePath.test(referencedFile)
     } else {
-      this.shouldLoadRelative = (referencedFile: string) => false
+      this.shouldLoadRelative = (_referencedFile: string) => false
     }
     this.contains = this.options.fs.contains || (() => true)
   }

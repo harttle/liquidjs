@@ -1,4 +1,5 @@
 import { assert, isArray, isString, isFunction } from './util'
+import { getDateTimeFormat } from './util/intl'
 import { LRU, LiquidCache } from './cache'
 import { FS, LookupType } from './fs'
 import * as fs from './fs/fs-impl'
@@ -43,6 +44,8 @@ export interface LiquidOptions {
   timezoneOffset?: number | string;
   /** Default date format to use if the date filter doesn't include a format. Defaults to `%A, %B %-e, %Y at %-l:%M %P %z`. */
   dateFormat?: string;
+  /** Default locale, will be used by date filter. Defaults to system locale. */
+  locale?: string;
   /** Strip blank characters (including ` `, `\t`, and `\r`) from the right of tags (`{% %}`) until `\n` (inclusive). Defaults to `false`. */
   trimTagRight?: boolean;
   /** Similar to `trimTagRight`, whereas the `\n` is exclusive. Defaults to `false`. See Whitespace Control for details. */
@@ -138,6 +141,7 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   ownPropertyOnly: boolean;
   lenientIf: boolean;
   dateFormat: string;
+  locale: string;
   trimTagRight: boolean;
   trimTagLeft: boolean;
   trimOutputRight: boolean;
@@ -168,6 +172,7 @@ export const defaultOptions: NormalizedFullOptions = {
   dynamicPartials: true,
   jsTruthy: false,
   dateFormat: '%A, %B %-e, %Y at %-l:%M %P %z',
+  locale: '',
   trimTagRight: false,
   trimTagLeft: false,
   trimOutputRight: false,
@@ -211,9 +216,9 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
   options.partials = normalizeDirectoryList(options.partials)
   options.layouts = normalizeDirectoryList(options.layouts)
   options.outputEscape = options.outputEscape && getOutputEscapeFunction(options.outputEscape)
-  options.parseLimit = options.parseLimit || Infinity
-  options.renderLimit = options.renderLimit || Infinity
-  options.memoryLimit = options.memoryLimit || Infinity
+  if (!options.locale) {
+    options.locale = getDateTimeFormat()?.().resolvedOptions().locale ?? 'en-US'
+  }
   if (options.templates) {
     options.fs = new MapFS(options.templates)
     options.relativeReference = true

@@ -1,6 +1,6 @@
-import { toValue, stringify, isString, isNumber, TimezoneDate, LiquidDate, strftime, isNil } from '../util'
+import { toValue, stringify, isString, isNumber, LiquidDate, strftime, isNil } from '../util'
 import { FilterImpl } from '../template'
-import { LiquidOptions } from '../liquid-options'
+import { NormalizedFullOptions } from '../liquid-options'
 
 export function date (this: FilterImpl, v: string | Date, format?: string, timezoneOffset?: number | string) {
   const size = ((v as string)?.length ?? 0) + (format?.length ?? 0) + ((timezoneOffset as string)?.length ?? 0)
@@ -40,33 +40,25 @@ function stringify_date (this: FilterImpl, v: string | Date, month_type: string,
   return strftime(date, `%d ${month_type} %Y`)
 }
 
-function parseDate (v: string | Date, opts: LiquidOptions, timezoneOffset?: number | string): LiquidDate | undefined {
-  let date: LiquidDate
+function parseDate (v: string | Date, opts: NormalizedFullOptions, timezoneOffset?: number | string): LiquidDate | undefined {
+  let date: LiquidDate | undefined
+  const defaultTimezoneOffset = timezoneOffset ?? opts.timezoneOffset
+  const locale = opts.locale
   v = toValue(v)
   if (v === 'now' || v === 'today') {
-    date = new Date()
+    date = new LiquidDate(Date.now(), locale, defaultTimezoneOffset)
   } else if (isNumber(v)) {
-    date = new Date(v * 1000)
+    date = new LiquidDate(v * 1000, locale, defaultTimezoneOffset)
   } else if (isString(v)) {
     if (/^\d+$/.test(v)) {
-      date = new Date(+v * 1000)
-    } else if (opts.preserveTimezones) {
-      date = TimezoneDate.createDateFixedToTimezone(v)
+      date = new LiquidDate(+v * 1000, locale, defaultTimezoneOffset)
+    } else if (opts.preserveTimezones && timezoneOffset === undefined) {
+      date = LiquidDate.createDateFixedToTimezone(v, locale)
     } else {
-      date = new Date(v)
+      date = new LiquidDate(v, locale, defaultTimezoneOffset)
     }
   } else {
-    date = v
+    date = new LiquidDate(v, locale, defaultTimezoneOffset)
   }
-  if (!isValidDate(date)) return
-  if (timezoneOffset !== undefined) {
-    date = new TimezoneDate(date, timezoneOffset)
-  } else if (!(date instanceof TimezoneDate) && opts.timezoneOffset !== undefined) {
-    date = new TimezoneDate(date, opts.timezoneOffset)
-  }
-  return date
-}
-
-function isValidDate (date: any): date is Date {
-  return (date instanceof Date || date instanceof TimezoneDate) && !isNaN(date.getTime())
+  return date.valid() ? date : undefined
 }

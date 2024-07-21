@@ -33,6 +33,12 @@ describe('DoS related', function () {
       await expect(limit10.parseAndRender(src)).rejects.toThrow('template render limit exceeded')
       await expect(limit20.parseAndRender(src)).resolves.toBe('1,2,3,4,5,')
     })
+    it('should support reset when calling render', async () => {
+      const src = '{% for i in (1..5) %}{{i}},{% endfor %}'
+      const liquid = new Liquid({ renderLimit: 0.01 })
+      await expect(liquid.parseAndRender(src)).rejects.toThrow('template render limit exceeded')
+      await expect(liquid.parseAndRender(src, {}, { renderLimit: 1e6 })).resolves.toBe('1,2,3,4,5,')
+    })
     it('should take partials into account', async () => {
       mock({
         '/small': '{% for i in (1..5) %}{{i}}{% endfor %}',
@@ -49,6 +55,12 @@ describe('DoS related', function () {
       const liquid = new Liquid({ memoryLimit: 100 })
       await expect(liquid.parseAndRender('{{ array | slice: 0, 3 | join }}', { array })).resolves.toBe('0 0 0')
       await expect(liquid.parseAndRender('{{ array | slice: 0, 300 | join }}', { array })).rejects.toThrow('memory alloc limit exceeded, line:1, col:1')
+    })
+    it('should support reset when calling render', async () => {
+      const array = Array(1e3).fill(0)
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ array | slice: 0, 300 | join }}', { array })).rejects.toThrow('memory alloc limit exceeded, line:1, col:1')
+      await expect(liquid.parseAndRender('{{ array | slice: 0, 300 | join }}', { array }, { memoryLimit: 1e3 })).resolves.toBe(Array(300).fill(0).join(' '))
     })
     it('should throw for too many array iteration in tags', async () => {
       const array = ['a']

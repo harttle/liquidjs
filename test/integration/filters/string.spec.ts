@@ -243,25 +243,38 @@ describe('filters/string', function () {
       const html = await liquid.parseAndRender('{{ "I\'m not hungry" | number_of_words: "auto"}}')
       expect(html).toEqual('3')
     })
-
+    it('should count words of empty sentence', async () => {
+      const html = await liquid.parseAndRender('{{ "" | number_of_words }}')
+      expect(html).toEqual('0')
+    })
     it('should count words of mixed sentence', async () => {
       const html = await liquid.parseAndRender('{{ "Hello world!" | number_of_words }}')
       expect(html).toEqual('2')
     })
-
     it('should count words of CJK sentence', async () => {
       const html = await liquid.parseAndRender('{{ "你好hello世界world" | number_of_words }}')
       expect(html).toEqual('1')
     })
-
+    it('should count words of Latin sentence in CJK mode', async () => {
+      const html = await liquid.parseAndRender('{{ "I\'m not hungry" | number_of_words: "cjk"}}')
+      expect(html).toEqual('3')
+    })
+    it('should count words of empty sentence in CJK mode', async () => {
+      const html = await liquid.parseAndRender('{{ "" | number_of_words: "cjk"}}')
+      expect(html).toEqual('0')
+    })
     it('should count words of CJK sentence with mode "cjk"', async () => {
       const html = await liquid.parseAndRender('{{ "你好hello世界world" | number_of_words: "cjk" }}')
       expect(html).toEqual('6')
     })
 
-    it('should count words of CJK sentence with mode "auto"', async () => {
+    it('should count words of mixed sentence with mode "auto"', async () => {
       const html = await liquid.parseAndRender('{{ "你好hello世界world" | number_of_words: "auto" }}')
       expect(html).toEqual('6')
+    })
+    it('should count words of CJK sentence with mode "auto"', async () => {
+      const html = await liquid.parseAndRender('{{ "你好世界" | number_of_words: "auto" }}')
+      expect(html).toEqual('4')
     })
     it('should handle empty input', async () => {
       const html = await liquid.parseAndRender('{{ "" | number_of_words }}')

@@ -175,7 +175,6 @@ export function * find<T extends object> (this: FilterImpl, arr: T[], property: 
     const value = yield evalToken(token, this.context.spawn(item))
     if (equals(value, expected)) return item
   }
-  return null
 }
 
 export function * find_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
@@ -185,7 +184,6 @@ export function * find_exp<T extends object> (this: FilterImpl, arr: T[], itemNa
     const value = yield predicate.value(this.context.spawn({ [itemName]: item }))
     if (value) return item
   }
-  return null
 }
 
 export function uniq<T> (this: FilterImpl, arr: T[]): T[] {

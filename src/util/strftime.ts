@@ -2,23 +2,10 @@ import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
-const monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-  'September', 'October', 'November', 'December'
-]
-const dayNames = [
-  'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-]
-const monthNamesShort = monthNames.map(abbr)
-const dayNamesShort = dayNames.map(abbr)
 interface FormatOptions {
   flags: object;
   width?: string;
   modifier?: string;
-}
-
-function abbr (str: string) {
-  return str.slice(0, 3)
 }
 
 // prototype extensions
@@ -77,19 +64,8 @@ const padWidths = {
   W: 2
 }
 
-// default to '0'
-const padChars = {
-  a: ' ',
-  A: ' ',
-  b: ' ',
-  B: ' ',
-  c: ' ',
-  e: ' ',
-  k: ' ',
-  l: ' ',
-  p: ' ',
-  P: ' '
-}
+const padSpaceChars = new Set('aAbBceklpP')
+
 function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
   const nOffset = Math.abs(d.getTimezoneOffset())
   const h = Math.floor(nOffset / 60)
@@ -100,10 +76,10 @@ function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
     padStart(m, 2, '0')
 }
 const formatCodes = {
-  a: (d: LiquidDate) => dayNamesShort[d.getDay()],
-  A: (d: LiquidDate) => dayNames[d.getDay()],
-  b: (d: LiquidDate) => monthNamesShort[d.getMonth()],
-  B: (d: LiquidDate) => monthNames[d.getMonth()],
+  a: (d: LiquidDate) => d.getShortWeekdayName(),
+  A: (d: LiquidDate) => d.getLongWeekdayName(),
+  b: (d: LiquidDate) => d.getShortMonthName(),
+  B: (d: LiquidDate) => d.getLongMonthName(),
   c: (d: LiquidDate) => d.toLocaleString(),
   C: (d: LiquidDate) => century(d),
   d: (d: LiquidDate) => d.getDate(),
@@ -135,12 +111,7 @@ const formatCodes = {
   y: (d: LiquidDate) => d.getFullYear().toString().slice(2, 4),
   Y: (d: LiquidDate) => d.getFullYear(),
   z: getTimezoneOffset,
-  Z: (d: LiquidDate, opts: FormatOptions) => {
-    if (d.getTimezoneName) {
-      return d.getTimezoneName() || getTimezoneOffset(d, opts)
-    }
-    return (typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone : '')
-  },
+  Z: (d: LiquidDate, opts: FormatOptions) => d.getTimeZoneName() || getTimezoneOffset(d, opts),
   't': () => '\t',
   'n': () => '\n',
   '%': () => '%'
@@ -166,7 +137,7 @@ function format (d: LiquidDate, match: RegExpExecArray) {
   const flags = {}
   for (const flag of flagStr) flags[flag] = true
   let ret = String(convert(d, { flags, width, modifier }))
-  let padChar = padChars[conversion] || '0'
+  let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
   let padWidth = width || padWidths[conversion] || 0
   if (flags['^']) ret = ret.toUpperCase()
   else if (flags['#']) ret = changeCase(ret)

@@ -1,9 +1,9 @@
 import { strftime as t } from './strftime'
-import { DateWithTimezone } from '../../test/stub/date-with-timezone'
+import { DateWithTimezone, TestDate } from '../../test/stub/date'
 
 describe('util/strftime', function () {
-  const now = new Date('2016-01-04 13:15:23')
-  const then = new Date('2016-03-06 03:05:03')
+  const now = new TestDate('2016-01-04 13:15:23')
+  const then = new TestDate('2016-03-06 03:05:03')
 
   describe('Date (Year, Month, Day)', () => {
     it('should format %C as century', function () {
@@ -23,26 +23,26 @@ describe('util/strftime', function () {
         expect(t(then, '%j')).toBe('066')
       })
       it('should take count of leap years', function () {
-        const date = new Date('2001 03 01')
+        const date = new TestDate('2001 03 01')
         expect(t(date, '%j')).toBe('060')
       })
       it('should take count of leap years', function () {
-        const date = new Date('2000 03 01')
+        const date = new TestDate('2000 03 01')
         expect(t(date, '%j')).toBe('061')
       })
     })
     it('should format %q as date suffix', function () {
-      const first = new Date('2016-03-01 03:05:03')
-      const second = new Date('2016-03-02 03:05:03')
-      const third = new Date('2016-03-03 03:05:03')
+      const first = new TestDate('2016-03-01 03:05:03')
+      const second = new TestDate('2016-03-02 03:05:03')
+      const third = new TestDate('2016-03-03 03:05:03')
 
-      const eleventh = new Date('2016-03-11 03:05:03')
-      const twelfth = new Date('2016-03-12 03:05:03')
-      const thirteenth = new Date('2016-03-13 03:05:03')
+      const eleventh = new TestDate('2016-03-11 03:05:03')
+      const twelfth = new TestDate('2016-03-12 03:05:03')
+      const thirteenth = new TestDate('2016-03-13 03:05:03')
 
-      const twentyfirst = new Date('2016-03-21 03:05:03')
-      const twentysecond = new Date('2016-03-22 03:05:03')
-      const twentythird = new Date('2016-03-23 03:05:03')
+      const twentyfirst = new TestDate('2016-03-21 03:05:03')
+      const twentysecond = new TestDate('2016-03-22 03:05:03')
+      const twentythird = new TestDate('2016-03-23 03:05:03')
 
       expect(t(first, '%q')).toBe('st')
       expect(t(second, '%q')).toBe('nd')
@@ -64,7 +64,7 @@ describe('util/strftime', function () {
       expect(t(now, '%I')).toBe('01')
     })
     it('should format %I as 12 for 00:00', function () {
-      const date = new Date('2016-01-01 00:00:00')
+      const date = new TestDate('2016-01-01 00:00:00')
       expect(t(date, '%I')).toBe('12')
     })
     it('should format %k as space padded hour', function () {
@@ -74,14 +74,14 @@ describe('util/strftime', function () {
       expect(t(now, '%l')).toBe(' 1')
     })
     it('should format %l as 12 for 00:00', function () {
-      const date = new Date('2016-01-01 00:00:00')
+      const date = new TestDate('2016-01-01 00:00:00')
       expect(t(date, '%l')).toBe('12')
     })
     it('should format %L as 0 padded millisecond', function () {
       expect(t(then, '%L')).toBe('000')
     })
     it('should format %N as fractional seconds digits', function () {
-      const time = new Date('2019-12-15 01:21:00.129')
+      const time = new TestDate('2019-12-15 01:21:00.129')
       expect(t(time, '%N')).toBe('129000000')
       expect(t(time, '%2N')).toBe('12')
       expect(t(time, '%10N')).toBe('1290000000')

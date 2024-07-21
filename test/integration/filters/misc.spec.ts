@@ -43,9 +43,9 @@ describe('filters/object', function () {
     })
     it('should inspect cyclic object', () => {
       const text = '{{foo | inspect}}'
-      const foo: any = { bar: 'bar' }
+      const foo: any = { bar: { coo: 'coo' } }
       foo.foo = foo
-      const expected = '{"bar":"bar","foo":"[Circular]"}'
+      const expected = '{"bar":{"coo":"coo"},"foo":"[Circular]"}'
       return expect(liquid.parseAndRenderSync(text, { foo })).toBe(expected)
     })
     it('should support space argument', () => {
