@@ -1,3 +1,10 @@
+# [10.16.0](https://github.com/harttle/liquidjs/compare/v10.15.0...v10.16.0) (2024-07-21)
+
+
+### Features
+
+* locale support for date filter, [#567](https://github.com/harttle/liquidjs/issues/567) ([#723](https://github.com/harttle/liquidjs/issues/723)) ([e4aeb02](https://github.com/harttle/liquidjs/commit/e4aeb023fddf5ead90db209599cfd99450274658))
+
 # [10.15.0](https://github.com/harttle/liquidjs/compare/v10.14.0...v10.15.0) (2024-07-09)
 
 
