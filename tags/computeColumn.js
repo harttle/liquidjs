@@ -22,10 +22,13 @@ module.exports = function (liquid) {
     render: async function (context) {
       const table = context.get(this.tableName);
       assert(Array.isArray(table), `${this.tableName} is not an array`);
+
+      // storing originalContext to revert the variables changed other than table variable in the end
       const originalContext = context.getAll();
 
       for (let i = 0; i < table.length; i++) {
         const row = table[i];
+        // creating a local temporary scope in context for row, so self keyword can refer to row
         context.push({ self: row, $$answer: undefined });
         try {
           await liquid.renderer.renderTemplates(this.templates, context);
@@ -39,7 +42,7 @@ module.exports = function (liquid) {
         } finally {
           context.pop();
 
-          // Reset context to original state after each iteration
+          // Reset context to original state after each iteration for all variables other than table variable
           Object.keys(originalContext).forEach((key) => {
             if (key !== this.tableName) {
               context.set(key, originalContext[key]);
