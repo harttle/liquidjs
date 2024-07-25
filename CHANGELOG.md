@@ -1,3 +1,10 @@
+## [10.16.1](https://github.com/harttle/liquidjs/compare/v10.16.0...v10.16.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* parser throws on non-string input, [#726](https://github.com/harttle/liquidjs/issues/726) ([21a8223](https://github.com/harttle/liquidjs/commit/21a822348f3c315dae56fba2674ad3db0cf2f80d))
+
 # [10.16.0](https://github.com/harttle/liquidjs/compare/v10.15.0...v10.16.0) (2024-07-21)
 
 
