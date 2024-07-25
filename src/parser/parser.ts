@@ -26,6 +26,7 @@ export class Parser {
     this.parseLimit = new Limiter('parse length', liquid.options.parseLimit)
   }
   public parse (html: string, filepath?: string): Template[] {
+    html = String(html)
     this.parseLimit.use(html.length)
     const tokenizer = new Tokenizer(html, this.liquid.options.operators, filepath)
     const tokens = tokenizer.readTopLevelTokens(this.liquid.options)
