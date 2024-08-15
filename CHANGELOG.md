@@ -1,3 +1,10 @@
+## [10.16.2](https://github.com/harttle/liquidjs/compare/v10.16.1...v10.16.2) (2024-08-15)
+
+
+### Bug Fixes
+
+* support for NodeJS 14 ([85bd0d3](https://github.com/harttle/liquidjs/commit/85bd0d35a6d949a02db49ba546407fe5be17db5e))
+
 ## [10.16.1](https://github.com/harttle/liquidjs/compare/v10.16.0...v10.16.1) (2024-07-25)
 
 
