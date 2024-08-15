@@ -5,8 +5,19 @@ jobs:
     name: Test
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
         timezone: [Etc/GMT, Asia/Shanghai, America/New_York]
+        node-version: [22]
+        include:
+          - os: macos-latest
+            timezone: America/New_York
+            node-versoin: 22
+          - os: ubuntu-latest
+            timezone: Etc/GMT
+            node-version: 16
+          - os: ubuntu-latest
+            timezone: Asia/Shanghai
+            node-version: 14
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -16,7 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
       - name: Install dependencies
         run: npm ci
       - name: Download artifacts
