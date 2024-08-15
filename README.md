@@ -203,6 +203,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/admtnnr"><img src="https://avatars.githubusercontent.com/u/27502?v=4?s=100" width="100px;" alt="Adam Tanner"/><br /><sub><b>Adam Tanner</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=admtnnr" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/GuillermoCasalCaro"><img src="https://avatars.githubusercontent.com/u/18685581?v=4?s=100" width="100px;" alt="Guillermo Casal Caro"/><br /><sub><b>Guillermo Casal Caro</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=GuillermoCasalCaro" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jsoref"><img src="https://avatars.githubusercontent.com/u/2119212?v=4?s=100" width="100px;" alt="Josh Soref"/><br /><sub><b>Josh Soref</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jsoref" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://vrugtehagel.nl"><img src="https://avatars.githubusercontent.com/u/41021050?v=4?s=100" width="100px;" alt="Koen"/><br /><sub><b>Koen</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=vrugtehagel" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
