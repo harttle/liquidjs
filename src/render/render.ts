@@ -1,3 +1,4 @@
+import { performance } from 'node:perf_hooks'
 import { toPromise, RenderError, LiquidErrors, LiquidError } from '../util'
 import { Context } from '../context'
 import { Template } from '../template'

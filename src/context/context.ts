@@ -1,3 +1,4 @@
+import { performance } from 'node:perf_hooks'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
