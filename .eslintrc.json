@@ -23,6 +23,7 @@
     "prefer-const": 2,
     "no-unused-vars": "off",
     "indent": "off",
+    "no-mixed-operators": "off",
     "no-dupe-class-members": "off",
     "no-useless-constructor": "off",
     "@typescript-eslint/indent": ["error", 2],

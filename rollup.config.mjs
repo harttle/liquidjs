@@ -50,6 +50,10 @@ const browserStream = {
   delimiters: ['', ''],
   './streamed-emitter': '../build/streamed-emitter-browser'
 }
+const browserPerf = {
+  include: ['./src/context/context.ts', './src/render/render.ts'],
+  'node:perf_hooks': '../build/perf_hooks-browser'
+}
 const esmRequire = {
   include: './src/fs/node.ts',
   delimiters: ['', ''],
@@ -95,6 +99,7 @@ const browserEsm = {
     versionInjection,
     replace(browserFS),
     replace(browserStream),
+    replace(browserPerf),
     typescript(tsconfig('es6'))
   ],
   treeshake,
@@ -113,6 +118,7 @@ const browserUmd = {
     versionInjection,
     replace(browserFS),
     replace(browserStream),
+    replace(browserPerf),
     typescript(tsconfig('es5'))
   ],
   treeshake,
@@ -131,6 +137,7 @@ const browserMin = {
     versionInjection,
     replace(browserFS),
     replace(browserStream),
+    replace(browserPerf),
     typescript(tsconfig('es5')),
     uglify()
   ],

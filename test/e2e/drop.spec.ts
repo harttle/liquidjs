@@ -1,8 +1,7 @@
-import { Liquid } from '../../src/liquid'
-import { Drop } from '../../src/drop/drop'
+import { Drop, Liquid } from '../..'
 
 class SettingsDrop extends Drop {
-  private foo = 'FOO'
+  public foo = 'FOO'
   public bar () {
     return 'BAR'
   }
