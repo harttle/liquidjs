@@ -25,19 +25,19 @@ describe('DoS related', function () {
   })
   describe('#renderLimit', () => {
     it('should throw when rendering too many templates', async () => {
-      const src = '{% for i in (1..5) %}{{i}},{% endfor %}'
+      const src = '{% for i in (1..1000) %}{{i}},{% endfor %}'
       const noLimit = new Liquid()
-      const limit10 = new Liquid({ renderLimit: 0.01 })
-      const limit20 = new Liquid({ renderLimit: 1000 })
-      await expect(noLimit.parseAndRender(src)).resolves.toBe('1,2,3,4,5,')
-      await expect(limit10.parseAndRender(src)).rejects.toThrow('template render limit exceeded')
-      await expect(limit20.parseAndRender(src)).resolves.toBe('1,2,3,4,5,')
+      const limitSmall = new Liquid({ renderLimit: 0.01 })
+      const limitLarge = new Liquid({ renderLimit: 2e4 })
+      await expect(noLimit.parseAndRender(src)).resolves.toMatch(/^1,2,3,4,5,.*,999,1000,$/)
+      await expect(limitSmall.parseAndRender(src)).rejects.toThrow('template render limit exceeded')
+      await expect(limitLarge.parseAndRender(src)).resolves.toMatch(/^1,2,3,4,5,.*,999,1000,$/)
     })
     it('should support reset when calling render', async () => {
-      const src = '{% for i in (1..5) %}{{i}},{% endfor %}'
+      const src = '{% for i in (1..1000) %}{{i}},{% endfor %}'
       const liquid = new Liquid({ renderLimit: 0.01 })
       await expect(liquid.parseAndRender(src)).rejects.toThrow('template render limit exceeded')
-      await expect(liquid.parseAndRender(src, {}, { renderLimit: 1e6 })).resolves.toBe('1,2,3,4,5,')
+      await expect(liquid.parseAndRender(src, {}, { renderLimit: 1e6 })).resolves.toMatch(/^1,2,3,4,5,.*,999,1000,$/)
     })
     it('should take partials into account', async () => {
       mock({
