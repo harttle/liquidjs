@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="../css/navy.css">
 
   <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
   <div id="container">
@@ -96,21 +96,17 @@
 
 <p>The opposite of <code>if</code> – executes a block of code only if a certain condition is <strong>not</strong> met.</p>
 <p>Input</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">unless</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token operator">==</span> <span class="token string">"Awesome Shoes"</span> <span class="token delimiter punctuation">%&#125;</span></span>
-  These shoes are not awesome.
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endunless</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% unless product.title == &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endunless %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">These shoes are not awesome.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">These shoes are not awesome.</span><br></pre></td></tr></table></figure>
 
 <p>This would be the equivalent of doing the following:</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">if</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token operator">!=</span> <span class="token string">"Awesome Shoes"</span> <span class="token delimiter punctuation">%&#125;</span></span>
-  These shoes are not awesome.
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endif</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% if product.title != &quot;Awesome Shoes&quot; %&#125;</span><br><span class="line">  These shoes are not awesome.</span><br><span class="line">&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-16T15:41:05.834Z" itemprop="dateModified">Last updated: 2024-08-16</time>
+                <time class="article-footer-updated" datetime="2024-08-16T16:55:41.721Z" itemprop="dateModified">Last updated: 2024-08-16</time>
                 <a href="tablerow.html" class="article-footer-prev" title="sidebar.tags.tablerow"><i class="icon-chevron-left"></i><span>Prev</span></a>
               </footer>
             </div>

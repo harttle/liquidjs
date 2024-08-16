@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="../../css/navy.css">
 
   <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
   <div id="container">
@@ -48,7 +48,7 @@
       <a href="/zh-cn/" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="../tutorials/intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
+      <a href="../tutorials/intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="搜索...">
@@ -97,84 +97,39 @@
 <p>按照数组中对象的属性值来过滤得到新数组，如果未指定第二个参数（属性值）则过滤得到所有属性值为 <a href="../tutorials/truthy-and-falsy.html">truthy</a> 的对象。</p>
 <p>下面的例子中，假设你有一个 <code>products</code> 列表并且希望展示其中的厨房产品。使用 <code>where</code> 过滤器可以得到一个只包含 <code>&quot;type&quot;</code> 属性值为 <code>&quot;kitchen&quot;</code> 的元素的数组。</p>
 <p>输入</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid">All products:
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> products <span class="token delimiter punctuation">%&#125;</span></span>
-- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> kitchen_products <span class="token operator">=</span> products <span class="token operator">|</span> <span class="token function filter">where</span><span class="token operator">:</span> <span class="token string">"type"</span><span class="token punctuation">,</span> <span class="token string">"kitchen"</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-Kitchen products:
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> kitchen_products <span class="token delimiter punctuation">%&#125;</span></span>
-- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign kitchen_products = products | where: &quot;type&quot;, &quot;kitchen&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">&#123;% for product in kitchen_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">All products:
-- Vacuum
-- Spatula
-- Television
-- Garlic press
-
-Kitchen products:
-- Spatula
-- Garlic press<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Vacuum</span><br><span class="line">- Spatula</span><br><span class="line">- Television</span><br><span class="line">- Garlic press</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">- Spatula</span><br><span class="line">- Garlic press</span><br></pre></td></tr></table></figure>
 
 <p>如果你有一个产品列表且希望只显示可用的产品，可以用 <code>where</code> 过滤器但不指定目标值，LiquidJS 会过滤得到 <code>&quot;available&quot;</code> 值为 <a href="../tutorials/truthy-and-falsy.html">truthy</a> 的产品列表。</p>
 <p>输入</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid">All products:
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> products <span class="token delimiter punctuation">%&#125;</span></span>
-- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> available_products <span class="token operator">=</span> products <span class="token operator">|</span> <span class="token function filter">where</span><span class="token operator">:</span> <span class="token string">"available"</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-Available products:
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> available_products <span class="token delimiter punctuation">%&#125;</span></span>
-- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign available_products = products | where: &quot;available&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Available products:</span><br><span class="line">&#123;% for product in available_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">All products:
-- Coffee mug
-- Limited edition sneakers
-- Boring sneakers
-
-Available products:
-- Coffee mug
-- Boring sneakers<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Coffee mug</span><br><span class="line">- Limited edition sneakers</span><br><span class="line">- Boring sneakers</span><br><span class="line"></span><br><span class="line">Available products:</span><br><span class="line">- Coffee mug</span><br><span class="line">- Boring sneakers</span><br></pre></td></tr></table></figure>
 
 <p><code>where</code> 后面再加一个 <code>first</code> 可以用来得到单个元素。例如，你要展示秋季系列里的单个 T-shirt。</p>
 <p>输入</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> new_shirt <span class="token operator">=</span> products <span class="token operator">|</span> <span class="token function filter">where</span><span class="token operator">:</span> <span class="token string">"type"</span><span class="token punctuation">,</span> <span class="token string">"shirt"</span> <span class="token operator">|</span> <span class="token function filter">first</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-Featured product: <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> new_shirt<span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% assign new_shirt = products | where: &quot;type&quot;, &quot;shirt&quot; | first %&#125;</span><br><span class="line"></span><br><span class="line">Featured product: &#123;&#123; new_shirt.title &#125;&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">Featured product: Hawaiian print sweater vest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Featured product: Hawaiian print sweater vest</span><br></pre></td></tr></table></figure>
 
 <p>此外 <code>property</code> 可以是任意合法的变量表达式，就像在<strong>输出</strong>结构中一样，只是它的上下文是数组的每一个元素。对于下面的 <code>products</code> 数组：</p>
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> products <span class="token operator">=</span> <span class="token punctuation">[</span>
-    <span class="token punctuation">&#123;</span> <span class="token literal-property property">meta</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">details</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token keyword">class</span><span class="token operator">:</span> <span class="token string">'A'</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token literal-property property">order</span><span class="token operator">:</span> <span class="token number">1</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span> <span class="token literal-property property">meta</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">details</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token keyword">class</span><span class="token operator">:</span> <span class="token string">'B'</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token literal-property property">order</span><span class="token operator">:</span> <span class="token number">2</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
-    <span class="token punctuation">&#123;</span> <span class="token literal-property property">meta</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">details</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token keyword">class</span><span class="token operator">:</span> <span class="token string">'B'</span> <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token literal-property property">order</span><span class="token operator">:</span> <span class="token number">3</span> <span class="token punctuation">&#125;</span>
-<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> products = [</span><br><span class="line">    &#123; <span class="attr">meta</span>: &#123; <span class="attr">details</span>: &#123; <span class="attr">class</span>: <span class="string">&#x27;A&#x27;</span> &#125; &#125;, <span class="attr">order</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">meta</span>: &#123; <span class="attr">details</span>: &#123; <span class="attr">class</span>: <span class="string">&#x27;B&#x27;</span> &#125; &#125;, <span class="attr">order</span>: <span class="number">2</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">meta</span>: &#123; <span class="attr">details</span>: &#123; <span class="attr">class</span>: <span class="string">&#x27;B&#x27;</span> &#125; &#125;, <span class="attr">order</span>: <span class="number">3</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
 
 <p>输入</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> selected <span class="token operator">=</span> products <span class="token operator">|</span> <span class="token function filter">where</span><span class="token operator">:</span> <span class="token string">'meta.details["class"]'</span><span class="token punctuation">,</span> <span class="token string">"B"</span> <span class="token delimiter punctuation">%&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> item <span class="token keyword">in</span> selected <span class="token delimiter punctuation">-%&#125;</span></span>
-- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> item<span class="token punctuation">.</span><span class="token object">order</span> <span class="token delimiter punctuation">&#125;&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% assign selected = products | where: &#x27;meta.details[&quot;class&quot;]&#x27;, &quot;B&quot; %&#125;</span><br><span class="line">&#123;% for item in selected -%&#125;</span><br><span class="line">- &#123;&#123; item.order &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">- 2
-- 3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- 2</span><br><span class="line">- 3</span><br></pre></td></tr></table></figure>
 
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-16T15:41:05.838Z" itemprop="dateModified">上次更新：2024-08-16</time>
+                <time class="article-footer-updated" datetime="2024-08-16T16:55:41.725Z" itemprop="dateModified">上次更新：2024-08-16</time>
                 <a href="url_encode.html" class="article-footer-prev" title="sidebar.filters.url_encode"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="where_exp.html" class="article-footer-next" title="sidebar.filters.where_exp"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -213,7 +168,7 @@ Featured product: <span class="token liquid language-liquid"><span class="token 
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="../tutorials/intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
+      <a href="../tutorials/intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">

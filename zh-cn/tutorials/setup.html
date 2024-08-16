@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="../../css/navy.css">
 
   <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
   <div id="container">
@@ -48,7 +48,7 @@
       <a href="/zh-cn/" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="搜索...">
@@ -94,32 +94,21 @@
               <div class="article-content" itemprop="articleBody">
                 <p>如果你还不了解 Liquid 模板语言，请参考 <a href="./intro-to-liquid.html">Liquid 模板语言简介</a>。</p>
 <h2 id="在-Node-js-里使用" class="article-heading"><a href="#在-Node-js-里使用" class="headerlink" title="在 Node.js 里使用"></a>在 Node.js 里使用<a class="article-anchor" href="#在-Node-js-里使用" aria-hidden="true"></a></h2><p>通过 NPM 安装：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">--save</span> liquidjs<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save liquidjs</span><br></pre></td></tr></table></figure>
 
-<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-engine
-    <span class="token punctuation">.</span><span class="token function">parseAndRender</span><span class="token punctuation">(</span><span class="token string">'&#123;&#123;name | capitalize&#125;&#125;'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span><span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">'alice'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment">// 输出 'Alice'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> &#123; <span class="title class_">Liquid</span> &#125; = <span class="built_in">require</span>(<span class="string">&#x27;liquidjs&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> engine = <span class="keyword">new</span> <span class="title class_">Liquid</span>();</span><br><span class="line"></span><br><span class="line">engine</span><br><span class="line">    .<span class="title function_">parseAndRender</span>(<span class="string">&#x27;&#123;&#123;name | capitalize&#125;&#125;&#x27;</span>, &#123;<span class="attr">name</span>: <span class="string">&#x27;alice&#x27;</span>&#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="variable language_">console</span>.<span class="property">log</span>);     <span class="comment">// 输出 &#x27;Alice&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <blockquote class="note info"><strong class="note-title">示例</strong><p>这里有一个 LiquidJS 在 Node.js 里使用的例子：<a href="https://github.com/harttle/liquidjs/blob/master/demo/nodejs/" rel="external nofollow noreferrer" target="_blank">liquidjs/demo/nodejs/</a>.</p>
 </blockquote>
 
 <p>LiquidJS 的类型定义也导出并发布到了 NPM 包里，写 TypeScript 的项目可以直接这样使用：</p>
-<pre class="line-numbers language-typescript" data-language="typescript"><code class="language-typescript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'liquidjs'</span><span class="token punctuation">;</span>
-<span class="token keyword">const</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-engine
-    <span class="token punctuation">.</span><span class="token function">parseAndRender</span><span class="token punctuation">(</span><span class="token string">'&#123;&#123;name | capitalize&#125;&#125;'</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>name<span class="token operator">:</span> <span class="token string">'alice'</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token builtin">console</span><span class="token punctuation">.</span>log<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment">// 输出 'Alice'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Liquid</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;liquidjs&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> engine = <span class="keyword">new</span> <span class="title class_">Liquid</span>();</span><br><span class="line"></span><br><span class="line">engine</span><br><span class="line">    .<span class="title function_">parseAndRender</span>(<span class="string">&#x27;&#123;&#123;name | capitalize&#125;&#125;&#x27;</span>, &#123;<span class="attr">name</span>: <span class="string">&#x27;alice&#x27;</span>&#125;)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="variable language_">console</span>.<span class="property">log</span>);     <span class="comment">// 输出 &#x27;Alice&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <blockquote class="note info"><strong class="note-title">示例</strong><p>这里有一个 LiquidJS 在 TypeScript 下的例子：<a href="https://github.com/harttle/liquidjs/blob/master/demo/typescript/" rel="external nofollow noreferrer" target="_blank">liquidjs/demo/typescript/</a>.</p>
 </blockquote>
 
 <h2 id="在浏览器里使用" class="article-heading"><a href="#在浏览器里使用" class="headerlink" title="在浏览器里使用"></a>在浏览器里使用<a class="article-anchor" href="#在浏览器里使用" aria-hidden="true"></a></h2><p>LiquidJS 预先构建了 UMD Bundle，可以通过 jsDelivr CDN 来引用：</p>
-<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>     <span class="token comment">&lt;!--生产环境--></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.umd.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>         <span class="token comment">&lt;!--开发环境--></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>     <span class="comment">&lt;!--生产环境--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.umd.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span>         <span class="comment">&lt;!--开发环境--&gt;</span></span><br></pre></td></tr></table></figure>
 
 <blockquote class="note info"><strong class="note-title">示例</strong><p>这里有一个 jsFiddle 上的在线例子：<a href="https://jsfiddle.net/x43eb0z6/" rel="external nofollow noreferrer" target="_blank">jsfiddle.net/x43eb0z6</a>，其源码也可以在 <a href="https://github.com/harttle/liquidjs/blob/master/demo/browser/" rel="external nofollow noreferrer" target="_blank">liquidjs/demo/browser/</a> 找到。</p>
 </blockquote>
@@ -128,16 +117,16 @@ engine
 </blockquote>
 
 <h2 id="在命令行里使用" class="article-heading"><a href="#在命令行里使用" class="headerlink" title="在命令行里使用"></a>在命令行里使用<a class="article-anchor" href="#在命令行里使用" aria-hidden="true"></a></h2><p>你还可以在命令行里使用 LiquidJS：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'&#123;&#123;"hello" | capitalize&#125;&#125;'</span> <span class="token operator">|</span> npx liquidjs<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&#123;&#123;&quot;hello&quot; | capitalize&#125;&#125;&#x27;</span> | npx liquidjs</span><br></pre></td></tr></table></figure>
 
 <p>模板来自标准输入，数据则来自参数，这个参数可以是一个 JSON 文件的路径，也可以是一个 JSON 字符串：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'Hello, &#123;&#123; name &#125;&#125;.'</span> <span class="token operator">|</span> npx liquidjs <span class="token string">'&#123;"name": "Snake"&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;Hello, &#123;&#123; name &#125;&#125;.&#x27;</span> | npx liquidjs <span class="string">&#x27;&#123;&quot;name&quot;: &quot;Snake&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="其他" class="article-heading"><a href="#其他" class="headerlink" title="其他"></a>其他<a class="article-anchor" href="#其他" aria-hidden="true"></a></h2><p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/stevenanthonyrevo">@stevenanthonyrevo</a> 还提供了一个 ReactJS demo，请参考 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/blob/master/demo/reactjs/">liquidjs/demo/reactjs/</a>。</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-16T15:41:05.842Z" itemprop="dateModified">上次更新：2024-08-16</time>
+                <time class="article-footer-updated" datetime="2024-08-16T16:55:41.725Z" itemprop="dateModified">上次更新：2024-08-16</time>
                 <a href="intro-to-liquid.html" class="article-footer-prev" title="Liquid 简介"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="options.html" class="article-footer-next" title="选项"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -176,7 +165,7 @@ engine
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">

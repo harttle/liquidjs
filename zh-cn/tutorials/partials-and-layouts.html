@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="../../css/navy.css">
 
   <link rel="alternate" href="../../atom.xml" title="LiquidJS" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
   <div id="container">
@@ -48,7 +48,7 @@
       <a href="/zh-cn/" id="logo">LiquidJS</a>
     </h1>
     <nav id="main-nav">
-      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="main-nav-link">教程</a><a href="../tags/overview.html" class="main-nav-link">标签</a><a href="../filters/overview.html" class="main-nav-link">过滤器</a><a href="../playground.html" class="main-nav-link">演示</a><a href="../../api/classes/Liquid.html" class="main-nav-link">API</a>
       <div id="search-input-wrap">
         <i id="search-input-icon" class="icon-search"></i>
         <input type="search" id="search-input" placeholder="搜索...">
@@ -93,37 +93,19 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <h2 id="引用模板片段" class="article-heading"><a href="#引用模板片段" class="headerlink" title="引用模板片段"></a>引用模板片段<a class="article-anchor" href="#引用模板片段" aria-hidden="true"></a></h2><p>对于如下两个模板文件：</p>
-<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 文件：color.liquid
-color: &#39;&#123;&#123; color &#125;&#125;&#39; shape: &#39;&#123;&#123; shape &#125;&#125;&#39;
-
-&#x2F;&#x2F; 文件：theme.liquid
-&#123;% assign shape &#x3D; &#39;circle&#39; %&#125;
-&#123;% include &#39;color&#39; %&#125;
-&#123;% include &#39;color&#39; with &#39;red&#39; %&#125;
-&#123;% include &#39;color&#39;, color: &#39;yellow&#39;, shape: &#39;square&#39; %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 文件：color.liquid</span><br><span class="line">color: &#x27;&#123;&#123; color &#125;&#125;&#x27; shape: &#x27;&#123;&#123; shape &#125;&#125;&#x27;</span><br><span class="line"></span><br><span class="line">// 文件：theme.liquid</span><br><span class="line">&#123;% assign shape = &#x27;circle&#x27; %&#125;</span><br><span class="line">&#123;% include &#x27;color&#x27; %&#125;</span><br><span class="line">&#123;% include &#x27;color&#x27; with &#x27;red&#x27; %&#125;</span><br><span class="line">&#123;% include &#x27;color&#x27;, color: &#x27;yellow&#x27;, shape: &#x27;square&#x27; %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>输出为：</p>
-<pre class="line-numbers language-none"><code class="language-none">color: &#39;&#39; shape: &#39;circle&#39;
-color: &#39;red&#39; shape: &#39;circle&#39;
-color: &#39;yellow&#39; shape: &#39;square&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">color: &#x27;&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;red&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;yellow&#x27; shape: &#x27;square&#x27;</span><br></pre></td></tr></table></figure>
 
 <blockquote class="note tip"><strong class="note-title">&quot;.liquid&quot; 文件扩展名</strong><p>如果设置了 <code>extname: &quot;.liquid&quot;</code> 选项，就可以省略 <code>layout</code>, <code>render</code> 和 <code>include</code> 里面文件名的 “.liquid” 后缀。详情请参考 <a href="./options.html#extname">extname 选项</a>。</p>
 </blockquote>
 
 <h2 id="布局模板（模板继承）" class="article-heading"><a href="#布局模板（模板继承）" class="headerlink" title="布局模板（模板继承）"></a>布局模板（模板继承）<a class="article-anchor" href="#布局模板（模板继承）" aria-hidden="true"></a></h2><p>对于如下两个模板文件：</p>
-<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; 文件：default-layout.liquid
-Header
-&#123;% block content %&#125;My default content&#123;% endblock %&#125;
-Footer
-
-&#x2F;&#x2F; 文件：page.liquid
-&#123;% layout &quot;default-layout&quot; %&#125;
-&#123;% block content %&#125;My page content&#123;% endblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 文件：default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// 文件：page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>渲染 <code>page.liquid</code> 将会输出：</p>
-<pre class="line-numbers language-none"><code class="language-none">Header
-My page content
-Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
 
 <blockquote class="note tip"><strong class="note-title">Block</strong><ul>
     <li>布局文件（父模板）中可以定义多个 block；</li>
@@ -132,7 +114,7 @@ Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-16T15:41:05.842Z" itemprop="dateModified">上次更新：2024-08-16</time>
+                <time class="article-footer-updated" datetime="2024-08-16T16:55:41.725Z" itemprop="dateModified">上次更新：2024-08-16</time>
                 <a href="render-file.html" class="article-footer-prev" title="文件渲染"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="use-in-expressjs.html" class="article-footer-next" title="Express.js 中使用"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -171,7 +153,7 @@ Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
   <nav id="mobile-nav">
   <div id="mobile-nav-inner">
     <ul id="mobile-nav-list">
-      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
+      <a href="intro-to-liquid.html" class="mobile-nav-link">教程</a><a href="../tags/overview.html" class="mobile-nav-link">标签</a><a href="../filters/overview.html" class="mobile-nav-link">过滤器</a><a href="../playground.html" class="mobile-nav-link">演示</a><a href="../../api/classes/Liquid.html" class="mobile-nav-link">API</a>
     </ul>
     
     <div class="mobile-sidebar-list">

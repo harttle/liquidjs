@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="../css/navy.css">
 
   <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
   <div id="container">
@@ -96,21 +96,14 @@
 
 <p>Pop an element from the array. It’s NON-DESTRUCTIVE, i.e. it does not mutate the array, but rather make a copy and mutate that.</p>
 <p>Input</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> fruits <span class="token operator">=</span> <span class="token string">"apples, oranges, peaches"</span> <span class="token operator">|</span> <span class="token function filter">split</span><span class="token operator">:</span> <span class="token string">", "</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> everything <span class="token operator">=</span> fruits <span class="token operator">|</span> <span class="token function filter">pop</span> <span class="token delimiter punctuation">%&#125;</span></span>
-
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> item <span class="token keyword">in</span> everything <span class="token delimiter punctuation">%&#125;</span></span>
-- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> item <span class="token delimiter punctuation">&#125;&#125;</span></span>
-<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;% assign fruits = &quot;apples, oranges, peaches&quot; | split: &quot;, &quot; %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign everything = fruits | pop %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% for item in everything %&#125;</span><br><span class="line">- &#123;&#123; item &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Output</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">- apples
-- oranges<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">- apples</span><br><span class="line">- oranges</span><br></pre></td></tr></table></figure>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-16T15:41:05.830Z" itemprop="dateModified">Last updated: 2024-08-16</time>
+                <time class="article-footer-updated" datetime="2024-08-16T16:55:41.717Z" itemprop="dateModified">Last updated: 2024-08-16</time>
                 <a href="plus.html" class="article-footer-prev" title="sidebar.filters.plus"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="push.html" class="article-footer-next" title="sidebar.filters.push"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

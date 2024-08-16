@@ -1,6 +1,6 @@
 'use strict'
 
-const CACHE_NAME = ''
+const CACHE_NAME = '{{site.time}}'
 const urlsToCache = [
   '/',
   '/css/navy.css',
