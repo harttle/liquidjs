@@ -17,6 +17,9 @@ jobs:
             node-version: 16
           - os: ubuntu-latest
             timezone: Asia/Shanghai
+            node-version: 15
+          - os: ubuntu-latest
+            timezone: Asia/Shanghai
             node-version: 14
     runs-on: ${{ matrix.os }}
     steps:
