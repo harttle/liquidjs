@@ -1,4 +1,4 @@
-import { performance } from 'node:perf_hooks'
+import { getPerformance } from '../util/performance'
 import { toPromise, RenderError, LiquidErrors, LiquidError } from '../util'
 import { Context } from '../context'
 import { Template } from '../template'
@@ -17,7 +17,7 @@ export class Render {
     }
     const errors = []
     for (const tpl of templates) {
-      ctx.renderLimit.check(performance.now())
+      ctx.renderLimit.check(getPerformance().now())
       try {
         // if tpl.render supports emitter, it'll return empty `html`
         const html = yield tpl.render(ctx, emitter)

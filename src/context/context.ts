@@ -1,4 +1,4 @@
-import { performance } from 'node:perf_hooks'
+import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
@@ -44,7 +44,7 @@ export class Context {
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
     this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
-    this.renderLimit = renderLimit ?? new Limiter('template render', performance.now() + (renderOptions.renderLimit ?? opts.renderLimit))
+    this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
   }
   public getRegister (key: string) {
     return (this.registers[key] = this.registers[key] || {})
