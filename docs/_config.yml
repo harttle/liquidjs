@@ -19,7 +19,9 @@ pretty_urls:
   trailing_html: false
 
 theme: navy
-skip_render: "api/**/*"
+skip_render: "api/**"
+ignore: "api/**"
+include: "api/**"
 highlight:
   enable: false
 prismjs:

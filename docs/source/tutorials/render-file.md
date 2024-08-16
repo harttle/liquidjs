@@ -68,7 +68,7 @@ Here's a demo for browsers: [demo/browser](https://github.com/harttle/liquidjs/t
 
 ## Abstract File System
 
-LiquidJS defines an abstract file system interface in [src/fs/fs.ts][ifs] and the default implementation is [src/fs/fs-impl.ts][fs-node] for Node.js and [src/build/fs-impl-browser.ts][fs-browser] for the browser bundle.
+LiquidJS defines an [abstract file system interface][ifs] and the default implementation is [src/fs/fs-impl.ts][fs-node] for Node.js and [src/build/fs-impl-browser.ts][fs-browser] for the browser bundle.
 
 The `Liquid` constructor provides a [fs][fs] option to specify the file system implementation. It's supposed to be used to define customized template fetching logic, i.e. fetch template from a database table, like:
 

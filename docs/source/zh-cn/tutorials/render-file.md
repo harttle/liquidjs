@@ -74,7 +74,7 @@ var engine = new Liquid({
 
 ## 文件系统接口
 
-LiquidJS 定义了一个文件系统接口（[src/fs/ifs.ts][ifs]），在 Node.js 下的默认实现是 [src/fs/node.ts][fs-node]，在浏览器打包文件中的默认实现是 [src/fs/browser.ts][fs-browser]。
+LiquidJS 定义了一个[文件系统接口][ifs]，在 Node.js 下的默认实现是 [src/fs/node.ts][fs-node]，在浏览器打包文件中的默认实现是 [src/fs/browser.ts][fs-browser]。
 你可以通过创建 `Liquid` 时的 [fs][fs] 参数来指定一个自定义实现来指定如何读取模板文件。比如从数据库里读取：
 
 ```javascript
