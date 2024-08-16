@@ -62,11 +62,6 @@ sidebar:
     overview: 概述
   tags:
     overview: 概述
-  api:
-    quick_entry: 快速入口
-    classes: 类
-    enums: 枚举
-    interfaces: 接口
 
 footer:
   license: '本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a> 授权。'
