@@ -11,7 +11,7 @@ A simple, expressive and safe [Shopify][shopify/liquid] / GitHub Pages compatibl
 
 * [Documentation][doc]
 * Please star [LiquidJS on GitHub][github]!
-* Financial support via [GitHub Sponsors](https://github.com/sponsors/harttle), or [LiquidJS on Open Collective][oc]
+* Financial support via [GitHub Sponsors](https://github.com/sponsors/harttle).
 
 <p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
 
@@ -62,17 +62,13 @@ For more details, refer to the [Setup Guide][setup].
 - [Builder.io](https://www.builder.io/m/developers): the first and only headless CMS with a visual editor that lets you drag and drop with your components, directly within your current site or app. Completely API-driven, for cleaner code and simpler workflows.
 - [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction): a secure, enterprise-grade, low-code software as a service (SaaS) platform for creating, hosting, and administering modern external-facing business websites.
 - [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal): an automatically generated, fully customizable website with the documentation of your APIs.
+- [WISMOlabs](https://wismolabs.com/): Post Purchase Experience platform for eCommerce retailers enhancing customer satisfaction by using LiquidJS to provide customizable post-purchase experiences through programmable email, SMS, order tracking pages, and webhooks.
 
 Feel free to create a PR or contact me to add your use case into this list!
 
 ## Financial Support
 
-If you personally love LiquidJS or it's benefiting your business, please consider financially support us:
-
-- via [GitHub Sponsors](https://github.com/sponsors/harttle), or
-- via [LiquidJS on Open Collective][oc]
-
-Special thanks to the following sponsors!
+If you personally love LiquidJS or it's benefiting your business, please consider financially support us via [GitHub Sponsors](https://github.com/sponsors/harttle). Special thanks to our sponsors!
 
 <!-- FINANCIAL-CONTRIBUTORS-BEGIN -->
 <table>
