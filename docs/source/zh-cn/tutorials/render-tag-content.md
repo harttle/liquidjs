@@ -24,7 +24,7 @@ title: 渲染标签内容
 
 首先 [注册][register-tags] 一个名为 `wrap` 的标签，把内容解析到 `this.tpls` 数组里。`parse(tagToken, remainTokens)` 中，
 
-- `tagToken` 是当前 *Token* `{% wrap %}`，
+- `tagToken` 是当前 *Token* `{%raw%}{% wrap %}{%endraw%}`，
 - `remainTokens` 是当前模板中后续所有 *Token* 的数组。
 
 我们要做的是从 `remainTokens` 里拿出来/`.shift()` 足够的标签直到遇到 `endwrap`（其实可以是任意名字，但按照惯例应该叫 `endwrap`）。如果到模板结尾都没遇到 `endwrap`，需要抛出一个标签未关闭的 `Error`。

@@ -93,7 +93,7 @@ engine.registerTag('random', {
 })
 ```
 
-在 `{ max: 10 }` 上下文上渲染 `{% random from:2, to:max %}` 将会得到 [2, 10] 范围内的随机数。见这个 JSFiddle：<http://jsfiddle.net/ctj364up/4/>。
+在 `{ max: 10 }` 上下文上渲染 `{% raw %}{% random from:2, to:max %}{% endraw %}` 将会得到 [2, 10] 范围内的随机数。见这个 JSFiddle：<http://jsfiddle.net/ctj364up/4/>。
 
 [register-tags]: /tutorials/register-filters-tags.html
 [Tokenizer]: /api/classes/Tokenizer.html

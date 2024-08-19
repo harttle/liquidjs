@@ -24,8 +24,8 @@ Expected output:
 
 Firstly, [register][register-tags] a tag with name `wrap` and parse the content into `this.tpls`. Here in `parse(tagToken, remainTokens)`,
 
-- `tagToken` is current token `{% wrap %}`, and
-- `remainTokens` is an array of all tokens following `{% wrap %}` until the end of this template file.
+- `tagToken` is current token `{%raw%}{% wrap %}{%endraw%}`, and
+- `remainTokens` is an array of all tokens following `{%raw%}{% wrap %}{%endraw%}` until the end of this template file.
 
 Basically, what we need to do is take/`.shift()` enough tags from `remainTokens` until we got a `endwrap` token (the name can be arbitrary, but in convention, we need it to be `endwrap`). And if there's no `endwrap` until the end of template file, we need to throw an tag-not-closed `Error`.
 

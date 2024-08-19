@@ -92,7 +92,7 @@ engine.registerTag('random', {
 })
 ```
 
-Rendering `{% random from:2, to:max %}` in scope `{ max: 10 }` will generate a random number in the range [2, 10]. See this JSFiddle: <https://jsfiddle.net/ctj364up/4/>
+Rendering `{% raw %}{% random from:2, to:max %}{% endraw %}` in scope `{ max: 10 }` will generate a random number in the range [2, 10]. See this JSFiddle: <https://jsfiddle.net/ctj364up/4/>
 
 
 [register-tags]: /tutorials/register-filters-tags.html
