@@ -22,13 +22,12 @@ theme: navy
 skip_render: "api/**"
 ignore: "api/**"
 include: "api/**"
-highlight:
-  enable: false
+syntax_highlighter: prismjs
 prismjs:
-  enable: true
   preprocess: true
   line_number: true
-  tab_replace: ''
+  line_threshold: 0
+  tab_replace: ""
 
 algolia:
   applicationID: 0X19J927JZ
