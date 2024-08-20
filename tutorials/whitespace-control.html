@@ -94,16 +94,19 @@
               <div class="article-content" itemprop="articleBody">
                 <p>To keep source code neat and indented, we’re adding spaces to our templates. LiquidJS offers whitespace control capabilities to eliminate these unwanted whitespaces in output HTML.</p>
 <h2 id="via-Markups" class="article-heading"><a href="#via-Markups" class="headerlink" title="via Markups"></a>via Markups<a class="article-anchor" href="#via-Markups" aria-hidden="true"></a></h2><p>By default, all tags and output markups lines will generate a NL (<code>\n</code>), and whitespaces if there’s any indentation. For example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;%  author = &quot;harttle&quot; %&#125;</span><br><span class="line">&#123;&#123; author &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span>  author <span class="token operator">=</span> <span class="token string">"harttle"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> author <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>Outputs (note the blank link):</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">harttle</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">
+harttle<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>We can include hyphens in your tag syntax (<code>{{-</code>, <code>-&#125;&#125;</code>, <code>{%-</code>, <code>-%&#125;</code>) to strip whitespace from left or right. For example:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;% assign author = &quot;harttle&quot; -%&#125;</span><br><span class="line">&#123;&#123; author &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> author <span class="token operator">=</span> <span class="token string">"harttle"</span> <span class="token delimiter punctuation">-%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> author <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>Outputs:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">harttle</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">harttle<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>In this case, the <code>-%&#125;</code> strips the whitespace from the right side of the <code>assign</code> tag.</p>
 <h2 id="via-Options" class="article-heading"><a href="#via-Options" class="headerlink" title="via Options"></a>via Options<a class="article-anchor" href="#via-Options" aria-hidden="true"></a></h2><p>Alternatively, LiquidJS provides these per engine options to enable whitespace control without sweeping changes of your templates:</p>
@@ -118,7 +121,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-19T19:36:26.426Z" itemprop="dateModified">Last updated: 2024-08-19</time>
+                <time class="article-footer-updated" datetime="2024-08-20T01:26:05.764Z" itemprop="dateModified">Last updated: 2024-08-20</time>
                 <a href="sync-and-async.html" class="article-footer-prev" title="Sync and Async"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="plugins.html" class="article-footer-next" title="Plugins"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

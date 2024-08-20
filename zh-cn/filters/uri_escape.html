@@ -96,15 +96,15 @@
 
 <p>把 URI 中的特殊字符做百分号编码，空格会变成 <code>%20</code>。<a target="_blank" rel="noopener external nofollow noreferrer" href="https://en.wikipedia.org/wiki/Percent-encoding#Types_of_URI_characters">保留字</a> 不会被转义。</p>
 <p>输入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; &quot;https://example.com/?q=foo, \bar?&quot; | uri_escape &#125;&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token string">"https://example.com/?q=foo, \bar?"</span> <span class="token operator">|</span> <span class="token function filter">uri_escape</span> <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>输出</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://example.com/?q=foo,%20%5Cbar?</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">https://example.com/?q=foo,%20%5Cbar?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-19T19:36:26.430Z" itemprop="dateModified">上次更新：2024-08-19</time>
+                <time class="article-footer-updated" datetime="2024-08-20T01:26:05.764Z" itemprop="dateModified">上次更新：2024-08-20</time>
                 <a href="upcase.html" class="article-footer-prev" title="sidebar.filters.upcase"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="url_decode.html" class="article-footer-next" title="sidebar.filters.url_decode"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

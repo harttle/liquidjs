@@ -95,23 +95,29 @@
                 <p class="since">v1.9.1</p>
 
 <h2 id="使用布局模板" class="article-heading"><a href="#使用布局模板" class="headerlink" title="使用布局模板"></a>使用布局模板<a class="article-anchor" href="#使用布局模板" aria-hidden="true"></a></h2><p>套用模板 <a href="/api/interfaces/LiquidOptions.html#root">根路径</a> 下的某个布局模板中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% layout &#x27;footer.liquid&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> layout <span class="token string">'footer.liquid'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>设置 <a href="/api/interfaces/LiquidOptions.html#extname">extname</a> 选项为 <code>&quot;.liquid&quot;</code> 后上面的 <code>.liquid</code> 后缀就可以省略了，等价于：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% layout &#x27;footer&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> layout <span class="token string">'footer'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>通过 <code>layout</code> 渲染一个子模板时，它内部的代码可以访问父模板的变量，但父模板中不能访问它里面定义的变量。</p>
 <h2 id="变量传递" class="article-heading"><a href="#变量传递" class="headerlink" title="变量传递"></a>变量传递<a class="article-anchor" href="#变量传递" aria-hidden="true"></a></h2><p>当前模板里定义的变量可以通过 <code>layout</code> 标签的参数列表传递给布局模板：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;% assign my_variable = &#x27;apples&#x27; %&#125;</span><br><span class="line">&#123;% layout &#x27;name&#x27;, my_variable: my_variable, my_other_variable: &#x27;oranges&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> my_variable <span class="token operator">=</span> <span class="token string">'apples'</span> <span class="token delimiter punctuation">%&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> layout <span class="token string">'name'</span><span class="token punctuation">,</span> my_variable<span class="token operator">:</span> my_variable<span class="token punctuation">,</span> my_other_variable<span class="token operator">:</span> <span class="token string">'oranges'</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h2 id="块" class="article-heading"><a href="#块" class="headerlink" title="块"></a>块<a class="article-anchor" href="#块" aria-hidden="true"></a></h2><p>布局模板中可以包含若干 <code>block</code> 标签，这些 <code>block</code> 渲染时会按照子模板提供的内容进行填充。例如我们有布局模板 <code>default-layout.liquid</code>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Header
+&#123;% block content %&#125;My default content&#123;% endblock %&#125;
+Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>它被子模板 <code>page.liquid</code> 通过 <code>layout</code> 标签引用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;% layout &quot;default-layout&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#123;% layout &quot;default-layout&quot; %&#125;
+&#123;% block content %&#125;My page content&#123;% endblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p><code>page.liquid</code> 的渲染结果将会是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Header
+My page content
+Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <blockquote class="note tip"><strong class="note-title">块</strong><ul>
     <li>一个布局模板中可以定义多个块；</li>
@@ -122,7 +128,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-19T19:36:26.430Z" itemprop="dateModified">上次更新：2024-08-19</time>
+                <time class="article-footer-updated" datetime="2024-08-20T01:26:05.768Z" itemprop="dateModified">上次更新：2024-08-20</time>
                 <a href="increment.html" class="article-footer-prev" title="sidebar.tags.increment"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="liquid.html" class="article-footer-next" title="sidebar.tags.liquid"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

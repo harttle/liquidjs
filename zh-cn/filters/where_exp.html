@@ -96,15 +96,33 @@
 
 <p>从数组中选择所有表达式值为真的对象。下面的例子中，假设你要从产品列表中筛选出来厨房用品。利用 <code>where_exp</code> 可以创建一个只包含 <code>&quot;type&quot;</code> 为 <code>&quot;kitchen&quot;</code> 的列表。</p>
 <p>输入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">All products:</span><br><span class="line">&#123;% for product in products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line"></span><br><span class="line">&#123;% assign kitchen_products = products | where_exp: &quot;item&quot;, &quot;item.type == &#x27;kitchen&#x27;&quot; %&#125;</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">&#123;% for product in kitchen_products %&#125;</span><br><span class="line">- &#123;&#123; product.title &#125;&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid">All products:
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> products <span class="token delimiter punctuation">%&#125;</span></span>
+- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span>
+
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">assign</span> kitchen_products <span class="token operator">=</span> products <span class="token operator">|</span> <span class="token function filter">where_exp</span><span class="token operator">:</span> <span class="token string">"item"</span><span class="token punctuation">,</span> <span class="token string">"item.type == 'kitchen'"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+
+Kitchen products:
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">for</span> <span class="token object">product</span> <span class="token keyword">in</span> kitchen_products <span class="token delimiter punctuation">%&#125;</span></span>
+- <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token delimiter punctuation">&#125;&#125;</span></span>
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endfor</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>输出</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">All products:</span><br><span class="line">- Vacuum</span><br><span class="line">- Spatula</span><br><span class="line">- Television</span><br><span class="line">- Garlic press</span><br><span class="line"></span><br><span class="line">Kitchen products:</span><br><span class="line">- Spatula</span><br><span class="line">- Garlic press</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">All products:
+- Vacuum
+- Spatula
+- Television
+- Garlic press
+
+Kitchen products:
+- Spatula
+- Garlic press<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-19T19:36:26.430Z" itemprop="dateModified">上次更新：2024-08-19</time>
+                <time class="article-footer-updated" datetime="2024-08-20T01:26:05.768Z" itemprop="dateModified">上次更新：2024-08-20</time>
                 <a href="where.html" class="article-footer-prev" title="sidebar.filters.where"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="xml_escape.html" class="article-footer-next" title="sidebar.filters.xml_escape"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

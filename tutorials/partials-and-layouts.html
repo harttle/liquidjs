@@ -93,26 +93,44 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <h2 id="Render-Partials" class="article-heading"><a href="#Render-Partials" class="headerlink" title="Render Partials"></a>Render Partials<a class="article-anchor" href="#Render-Partials" aria-hidden="true"></a></h2><p>For the following template files:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// file: color.liquid</span><br><span class="line">color: &#x27;&#123;&#123; color &#125;&#125;&#x27; shape: &#x27;&#123;&#123; shape &#125;&#125;&#x27;</span><br><span class="line"></span><br><span class="line">// file: theme.liquid</span><br><span class="line">&#123;% assign shape = &#x27;circle&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27; with &#x27;red&#x27; %&#125;</span><br><span class="line">&#123;% render &#x27;color.liquid&#x27;, color: &#x27;yellow&#x27;, shape: &#x27;square&#x27; %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; file: color.liquid
+color: &#39;&#123;&#123; color &#125;&#125;&#39; shape: &#39;&#123;&#123; shape &#125;&#125;&#39;
+
+&#x2F;&#x2F; file: theme.liquid
+&#123;% assign shape &#x3D; &#39;circle&#39; %&#125;
+&#123;% render &#39;color.liquid&#39; %&#125;
+&#123;% render &#39;color.liquid&#39; with &#39;red&#39; %&#125;
+&#123;% render &#39;color.liquid&#39;, color: &#39;yellow&#39;, shape: &#39;square&#39; %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>The output will be:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">color: &#x27;&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;red&#x27; shape: &#x27;circle&#x27;</span><br><span class="line">color: &#x27;yellow&#x27; shape: &#x27;square&#x27;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">color: &#39;&#39; shape: &#39;circle&#39;
+color: &#39;red&#39; shape: &#39;circle&#39;
+color: &#39;yellow&#39; shape: &#39;square&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>More details please refer to the <a href="../tags/render.html">render</a> tag.</p>
 <blockquote class="note tip"><strong class="note-title">The &quot;.liquid&quot; Extension</strong><p>The “.liquid” extension in <code>layout</code>, <code>render</code> and <code>include</code> can be omitted if Liquid instance is created using <code>extname: &quot;.liquid&quot;</code> option. See <a href="./options.html#extname">the extname option</a> for details.</p>
 </blockquote>
 
 <h2 id="Layout-Templates-Extends" class="article-heading"><a href="#Layout-Templates-Extends" class="headerlink" title="Layout Templates (Extends)"></a>Layout Templates (Extends)<a class="article-anchor" href="#Layout-Templates-Extends" aria-hidden="true"></a></h2><p>For the following template files:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// file: default-layout.liquid</span><br><span class="line">Header</span><br><span class="line">&#123;% block content %&#125;My default content&#123;% endblock %&#125;</span><br><span class="line">Footer</span><br><span class="line"></span><br><span class="line">// file: page.liquid</span><br><span class="line">&#123;% layout &quot;default-layout.liquid&quot; %&#125;</span><br><span class="line">&#123;% block content %&#125;My page content&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;&#x2F; file: default-layout.liquid
+Header
+&#123;% block content %&#125;My default content&#123;% endblock %&#125;
+Footer
+
+&#x2F;&#x2F; file: page.liquid
+&#123;% layout &quot;default-layout.liquid&quot; %&#125;
+&#123;% block content %&#125;My page content&#123;% endblock %&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>The output of <code>page.liquid</code>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Header</span><br><span class="line">My page content</span><br><span class="line">Footer</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Header
+My page content
+Footer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>More details please refer to the <a href="../tags/layout.html">layout</a> tag.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2024-08-19T19:36:26.426Z" itemprop="dateModified">Last updated: 2024-08-19</time>
+                <time class="article-footer-updated" datetime="2024-08-20T01:26:05.764Z" itemprop="dateModified">Last updated: 2024-08-20</time>
                 <a href="render-file.html" class="article-footer-prev" title="Render Files"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="use-in-expressjs.html" class="article-footer-next" title="Use in Express.js"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
