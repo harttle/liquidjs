@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, hasOwnProperty } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast } from '../util'
 import { equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -187,14 +187,9 @@ export function * find_exp<T extends object> (this: FilterImpl, arr: T[], itemNa
 }
 
 export function uniq<T> (this: FilterImpl, arr: T[]): T[] {
-  arr = toValue(arr)
+  arr = toArray(arr)
   this.context.memoryLimit.use(arr.length)
-  const u = {}
-  return (arr || []).filter(val => {
-    if (hasOwnProperty.call(u, String(val))) return false
-    u[String(val)] = true
-    return true
-  })
+  return [...new Set(arr)]
 }
 
 export function sample<T> (this: FilterImpl, v: T[] | string, count = 1): T | string | (T | string)[] {

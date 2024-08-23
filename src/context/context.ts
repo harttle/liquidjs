@@ -3,7 +3,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
-import { isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter } from '../util'
+import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter } from '../util'
 
 type PropertyKey = string | number;
 
@@ -133,7 +133,7 @@ export function readProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boo
   return value
 }
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
-  if (ownPropertyOnly && !Object.hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
+  if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
 }
 
@@ -148,7 +148,7 @@ function readLast (obj: Scope) {
 }
 
 function readSize (obj: Scope) {
-  if (obj.hasOwnProperty('size') || obj['size'] !== undefined) return obj['size']
+  if (hasOwnProperty.call(obj, 'size') || obj['size'] !== undefined) return obj['size']
   if (isArray(obj) || isString(obj)) return obj.length
   if (typeof obj === 'object') return Object.keys(obj).length
 }
