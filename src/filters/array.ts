@@ -6,7 +6,7 @@ import type { Scope } from '../context'
 
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
   const array = toArray(v)
-  const sep = arg === undefined ? ' ' : arg
+  const sep = isNil(arg) ? ' ' : stringify(arg)
   const complexity = array.length * (1 + sep.length)
   this.context.memoryLimit.use(complexity)
   return array.join(sep)
