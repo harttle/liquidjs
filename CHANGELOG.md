@@ -1,3 +1,11 @@
+## [10.16.4](https://github.com/harttle/liquidjs/compare/v10.16.3...v10.16.4) (2024-08-23)
+
+
+### Bug Fixes
+
+* "filter is not a function" for uniq ([68387c3](https://github.com/harttle/liquidjs/commit/68387c31ead77862a634f857a64932ef07b85188))
+* memory limit issue for join filter, fix [#737](https://github.com/harttle/liquidjs/issues/737) ([2d59cff](https://github.com/harttle/liquidjs/commit/2d59cff0a6162b462b4d97ebea4e0dbaf6146b65))
+
 ## [10.16.3](https://github.com/harttle/liquidjs/compare/v10.16.2...v10.16.3) (2024-08-16)
 
 
