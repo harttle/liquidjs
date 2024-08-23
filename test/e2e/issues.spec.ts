@@ -495,4 +495,10 @@ describe('Issues', function () {
     const liquid = new Liquid()
     expect(() => liquid.parse({} as any)).not.toThrow()
   })
+  it('Unexpected "RenderError: memory alloc limit exceeded" #737', () => {
+    const liquid = new Liquid();
+    const context = { x: ["a", "b"] };
+    const template = "{{ x | join: 5 }}"
+    expect(liquid.parseAndRender(template, context)).resolves.toEqual('a5b')
+  })
 })
