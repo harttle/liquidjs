@@ -66,6 +66,11 @@ export function toValue (value: any): any {
   return (value instanceof Drop && isFunction(value.valueOf)) ? value.valueOf() : value
 }
 
+export function toNumber (value: any): number {
+  value = Number(value)
+  return isNaN(value) ? 0 : value
+}
+
 export function isNumber (value: any): value is number {
   return typeof value === 'number'
 }
