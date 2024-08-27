@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "hello-liquid": "^1.0.0",
-    "liquidjs": "^9.28.3"
+    "liquidjs": "latest"
   }
 }

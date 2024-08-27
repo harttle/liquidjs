@@ -2,7 +2,7 @@ const { Liquid, Tag, Value } = require('liquidjs')
 
 const engine = new Liquid({
   extname: '.liquid',
-  globals: { title: 'LiquidJS Demo' },
+  globals: { title: 'NodeJS Demo for LiquidJS' },
   // root files for `.render()` and `.parse()`
   root: __dirname,
   // layout files for `{% layout %}`

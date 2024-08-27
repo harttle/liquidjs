@@ -2,7 +2,7 @@ import { Liquid } from 'liquidjs'
 
 const engine = new Liquid({
   extname: '.liquid',
-  globals: { title: 'LiquidJS Demo' },
+  globals: { title: 'Webpack Demo for LiquidJS' },
   // root files for `.render()` and `.parse()`
   root: process.cwd(),
   // layout files for `{% layout %}`

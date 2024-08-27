@@ -1,9 +1,6 @@
-# LiquidJS for Node.js
-
-## Get Started
+# Template Iteration in LiquidJS
 
 ```bash
-cd demo/nodejs
 npm install
 npm start
 ```
