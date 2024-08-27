@@ -51,14 +51,14 @@ const browserStream = {
   './streamed-emitter': '../build/streamed-emitter-browser'
 }
 const esmRequire = {
-  include: './src/fs/node.ts',
+  include: './src/fs/fs-impl.ts',
   delimiters: ['', ''],
   './node-require': '../build/node-require.mjs'
 }
 
 const nodeCjs = {
   output: [{
-    file: 'dist/liquid.node.cjs.js',
+    file: 'dist/liquid.node.js',
     format: 'cjs',
     banner
   }],
@@ -70,7 +70,7 @@ const nodeCjs = {
 
 const nodeEsm = {
   output: [{
-    file: 'dist/liquid.node.esm.js',
+    file: 'dist/liquid.node.mjs',
     format: 'esm',
     banner
   }],
@@ -86,7 +86,7 @@ const nodeEsm = {
 
 const browserEsm = {
   output: [{
-    file: 'dist/liquid.browser.esm.js',
+    file: 'dist/liquid.browser.mjs',
     format: 'esm',
     banner
   }],
