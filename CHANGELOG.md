@@ -1,3 +1,10 @@
+## [10.16.5](https://github.com/harttle/liquidjs/compare/v10.16.4...v10.16.5) (2024-08-27)
+
+
+### Bug Fixes
+
+* ESM bundle for Node.js, [#739](https://github.com/harttle/liquidjs/issues/739) ([ce84cd6](https://github.com/harttle/liquidjs/commit/ce84cd6f43c8e076ce9d2507b2b7f3395fcd1328))
+
 ## [10.16.4](https://github.com/harttle/liquidjs/compare/v10.16.3...v10.16.4) (2024-08-23)
 
 
