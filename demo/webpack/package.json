@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "hello-liquid": "^1.0.0",
-    "liquidjs": "^9.28.3"
+    "liquidjs": "latest"
   },
   "devDependencies": {
     "webpack": "^5.74.0",

@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
   const todos = ['fork and clone', 'make it better', 'make a pull request']
   res.render('todolist', {
     todos: todos,
-    title: 'Welcome to liquidjs!'
+    title: 'Welcome to LiquidJS!'
   })
 })
 

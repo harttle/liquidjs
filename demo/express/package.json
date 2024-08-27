@@ -12,6 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.14.0",
-    "liquidjs": "*"
+    "liquidjs": "latest"
   }
 }

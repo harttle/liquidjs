@@ -19,7 +19,7 @@ engine.registerTag('header', class HeaderTag extends Tag {
 
 const scope = {
   todos: ['fork and clone', 'make it better', 'make a pull request'],
-  title: 'Welcome to liquidjs!'
+  title: 'TypeScript Demo for LiquidJS!'
 }
 
 engine.renderFile('todolist', scope).then(console.log)
