@@ -3,7 +3,7 @@ import { drainStream } from '../stub/stream'
 
 describe('.renderToNodeStream()', function () {
   it('should render to stream in Node.js', done => {
-    const cjs = require('../../dist/liquid.node.cjs')
+    const cjs = require('../../dist/liquid.node')
     const engine = new cjs.Liquid()
     const tpl = engine.parseFileSync(resolve(__dirname, '../stub/root/foo.html'))
     const stream = engine.renderToNodeStream(tpl)
@@ -28,7 +28,7 @@ describe('.renderToNodeStream()', function () {
 
 describe('.renderFileToNodeStream()', function () {
   it('should render to stream in Node.js', async () => {
-    const cjs = require('../../dist/liquid.node.cjs')
+    const cjs = require('../../dist/liquid.node')
     const engine = new cjs.Liquid({
       root: resolve(__dirname, '../stub/root/')
     })

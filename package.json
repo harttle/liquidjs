@@ -2,12 +2,16 @@
   "name": "liquidjs",
   "version": "10.16.4",
   "description": "A simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.",
-  "main": "dist/liquid.node.cjs.js",
-  "module": "dist/liquid.node.esm.js",
-  "es2015": "dist/liquid.browser.esm.js",
+  "main": "dist/liquid.node.js",
+  "module": "dist/liquid.node.mjs",
+  "es2015": "dist/liquid.browser.mjs",
   "browser": {
-    "./dist/liquid.node.cjs.js": "./dist/liquid.browser.umd.js",
-    "./dist/liquid.node.esm.js": "./dist/liquid.browser.esm.js"
+    "./dist/liquid.node.js": "./dist/liquid.browser.umd.js",
+    "./dist/liquid.node.mjs": "./dist/liquid.browser.mjs"
+  },
+  "exports": {
+    "import": "./dist/liquid.node.mjs",
+    "require": "./dist/liquid.node.js"
   },
   "types": "dist/index.d.ts",
   "engines": {
@@ -19,6 +23,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage src test/integration",
     "test:e2e": "jest test/e2e",
+    "test:demo": "./test/demo/check.sh",
     "perf:diff": "bin/perf-diff.sh",
     "perf:engines": "cd benchmark && npm run engines",
     "version": "npm run build && npm test",
