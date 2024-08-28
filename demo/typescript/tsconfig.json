@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "moduleResolution": "node",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "types": [
       "node"
-    ]
-  }
+    ],
+    "outDir": "dist"
+  },
+  "include": ["*.ts"]
 }

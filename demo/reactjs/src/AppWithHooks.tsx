@@ -1,34 +1,28 @@
-/*
- * function Component with Hooks: Modify ./index.js to apply this file
- */
-import React, { useState, useLayoutEffect } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import './App.css';
 import logo from './logo.svg';
-import tplsrc from './views/showing-click-times.liquid';
-import Parser from 'html-react-parser';
+import showingClickTimes from './views/showing-click-times.liquid?raw';
 import { engine } from './engine';
 import { Context } from './Context';
 import { ClickButton } from './ClickButton';
 
-const fetchTpl = engine.getTemplate(tplsrc.toString())
+const tpl = engine.parse(showingClickTimes)
 
 export function App() {
   const [state, setState] = useState({
-    logo: logo,
-    name: 'alice',
+    logo,
+    name: 'liquid',
     clickCount: 0,
     html: ''
   });
 
   useLayoutEffect(() => {
-    fetchTpl
-      .then(tpl => engine.render(tpl, state))
-      .then(html => setState({...state, html}))
+    engine.render(tpl, state).then(html => setState({...state, html}))
   }, [state.clickCount])
 
   return (
     <div className="App">
-      {Parser(`${state.html}`)}
+      <div dangerouslySetInnerHTML={{__html: state.html}}></div>
       <Context.Provider
         value={{
           count: () => setState({...state, clickCount: state.clickCount + 1})

@@ -4,6 +4,7 @@
   "description": "liquid template parsing",
   "main": "index.ts",
   "scripts": {
+    "test": "./test.sh",
     "start": "ts-node index.ts"
   },
   "dependencies": {

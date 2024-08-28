@@ -1,7 +1,7 @@
 import { Value, Liquid, TagToken, Context, Emitter, Tag, TopLevelToken } from 'liquidjs'
 
 const engine = new Liquid({
-  root: __dirname,
+  root: process.cwd(),
   extname: '.liquid'
 })
 

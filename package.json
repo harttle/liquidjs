@@ -23,7 +23,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage src test/integration",
     "test:e2e": "jest test/e2e",
-    "test:demo": "./test/demo/check.sh",
+    "test:demo": "./test/demo/test.sh",
     "perf:diff": "bin/perf-diff.sh",
     "perf:engines": "cd benchmark && npm run engines",
     "version": "npm run build && npm test",

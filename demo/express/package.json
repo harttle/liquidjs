@@ -1,12 +1,12 @@
 {
-  "name": "express-demo",
+  "name": "liquidjs-demo-express",
   "version": "1.0.0",
   "private": true,
   "description": "Express Demo Using liquidjs",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./test.sh"
   },
   "author": "harttle",
   "license": "MIT",
