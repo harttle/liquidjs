@@ -1,20 +1,25 @@
 {
-  "name": "react-liquidjs",
+  "name": "liquidjs-demo-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "html-react-parser": "^0.4.7",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "liquidjs": "latest",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-promise": "^2.0.3",
-    "react-scripts": "2.0.4"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-promise": "^3.0.2",
+    "react-router-dom": "^6.26.1",
+    "vite": "^5.4.2",
+    "vite-plugin-svgr": "^4.2.0",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage --watch=false"
   },
   "browserslist": [
     ">0.2%",
@@ -23,6 +28,12 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.7"
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^18.3.4",
+    "@vitest/coverage-v8": "^2.0.5",
+    "jsdom": "^25.0.0",
+    "vitest": "^2.0.5"
   }
 }

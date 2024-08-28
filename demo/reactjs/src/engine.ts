@@ -1,8 +1,7 @@
-import path from 'path';
 import { Liquid } from 'liquidjs';
 
 export const engine = new Liquid({
-    root: path.resolve(__dirname, 'views/'),  // dirs to lookup layouts/includes
+    root: 'views/',
     extname: '.liquid'     // the extname used for layouts/includes, defaults 
 });
 

@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
+    "test": "./test.sh",
     "build": "webpack"
   },
   "dependencies": {

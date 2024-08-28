@@ -1,5 +1,3 @@
-import './ClickButton.css';
-import React from 'react';
 import { Context } from './Context';
 
 export function ClickButton() {

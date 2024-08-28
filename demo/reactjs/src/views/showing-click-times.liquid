@@ -1,14 +1,6 @@
 <header className="App-header">
     {{ logo | image }}
-    <h2>Welcome {{name | capitalize}}</h2>
-    <p>Edit <code>src/App.js</code> and save to reload.</p>
+    <h2 data-testid="heading">Welcome to {{name | capitalize}} (hooks)</h2>
+    <p>Edit <code>src/views/showing-click-times.liquid</code> and save to reload.</p>
     <p>You have clicked {{clickCount}} times.</p>
-    <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-    >
-        Learn React
-    </a>
 </header>

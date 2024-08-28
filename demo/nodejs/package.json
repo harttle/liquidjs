@@ -4,6 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "test": "./test.sh",
     "start": "node index.js"
   },
   "dependencies": {

@@ -7,5 +7,6 @@ LiquidJS is written in TypeScript and type definitions are available in `liquidj
 ```bash
 cd demo/typescript
 npm install
+npm run build
 npm start
 ```

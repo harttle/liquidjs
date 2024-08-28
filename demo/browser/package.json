@@ -5,6 +5,7 @@
   "description": "Liquidjs Demo for Browser Usage",
   "main": "index.html",
   "scripts": {
+    "test": "echo not implemented",
     "start": "http-server -c-1 "
   },
   "author": "harttle <yangjvn@126.com>",
