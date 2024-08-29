@@ -1,3 +1,10 @@
+## [10.16.6](https://github.com/harttle/liquidjs/compare/v10.16.5...v10.16.6) (2024-08-29)
+
+
+### Bug Fixes
+
+* expose originalError from LiquidError, [#742](https://github.com/harttle/liquidjs/issues/742) ([86f6bf0](https://github.com/harttle/liquidjs/commit/86f6bf0d3198354af23bcdb298c6625a6c5a4dde))
+
 ## [10.16.5](https://github.com/harttle/liquidjs/compare/v10.16.4...v10.16.5) (2024-08-27)
 
 
