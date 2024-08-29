@@ -10,7 +10,7 @@ const TRAIT = '__liquidClass__'
 export abstract class LiquidError extends Error {
   public token!: Token
   public context = ''
-  private originalError?: Error
+  public originalError?: Error
   public constructor (err: Error | string, token: Token) {
     /**
      * note: for ES5 targeting, `this` will be replaced by return value of Error(),

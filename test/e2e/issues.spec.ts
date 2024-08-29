@@ -1,4 +1,4 @@
-import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync } from '../..'
+import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError } from '../..'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
 
 describe('Issues', function () {
@@ -505,5 +505,14 @@ describe('Issues', function () {
     const liquid = new Liquid()
     expect(liquid.parseAndRender('{{ 113 | uniq }}')).resolves.toEqual('113')
     expect(liquid.parseAndRender("{{ '113' | uniq }}")).resolves.toEqual('113')
+  })
+  it('Exposing originalError in LiquidError #742', () => {
+    const engine = new Liquid()
+    engine.registerFilter('error', () => { throw new Error('intended') })
+    try {
+      engine.parseAndRenderSync(`{{ "foo" | error }}`)
+    } catch (err: unknown) {
+      expect(LiquidError.is(err) && err.originalError).toHaveProperty('message', 'intended')
+    }
   })
 })
