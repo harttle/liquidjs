@@ -9,10 +9,6 @@
     "./dist/liquid.node.js": "./dist/liquid.browser.umd.js",
     "./dist/liquid.node.mjs": "./dist/liquid.browser.mjs"
   },
-  "exports": {
-    "import": "./dist/liquid.node.mjs",
-    "require": "./dist/liquid.node.js"
-  },
   "types": "dist/index.d.ts",
   "engines": {
     "node": ">=14"
