@@ -1,3 +1,11 @@
+## [10.16.7](https://github.com/harttle/liquidjs/compare/v10.16.6...v10.16.7) (2024-08-29)
+
+
+### Bug Fixes
+
+* use CommonJS bundle to support default export ([2543461](https://github.com/harttle/liquidjs/commit/25434618808d8ab437ce4606d59114b4ad849f7f))
+* use cwd to resolve npm partials for Node.JS ([e5fbdfe](https://github.com/harttle/liquidjs/commit/e5fbdfe43415c9f78408f1349873c0011f639d82))
+
 ## [10.16.6](https://github.com/harttle/liquidjs/compare/v10.16.5...v10.16.6) (2024-08-29)
 
 
