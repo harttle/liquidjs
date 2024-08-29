@@ -1,1 +1,1 @@
-export const requireResolve = require.resolve
+export const requireResolve = (partial: string) => require.resolve(partial, { paths: ['.'] })
