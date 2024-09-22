@@ -91,6 +91,9 @@ If you personally love LiquidJS or it's benefiting your business, please conside
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/15fathoms"><img src="https://avatars.githubusercontent.com/u/79156039?v=4?s=100" width="100px;" alt="Emmanuel Cartelli"/><br /><sub><b>Emmanuel Cartelli</b></sub></a><br /></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/microsoft"><img src="https://avatars.githubusercontent.com/u/6154722?v=4?s=100" width="100px;" alt="Microsoft"/><br /><sub><b>Microsoft</b></sub></a><br /></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.pakstyle.pk/"><img src="https://images.opencollective.com/pakstyle/2b81605/logo/256.png?height=100" width="100px;" alt="PakStyle.pk"/><br /><sub><b>PakStyle.pk</b></sub></a></td>
+    </tr>
   </tbody>
 </table>
 <!-- FINANCIAL-CONTRIBUTORS-END -->
