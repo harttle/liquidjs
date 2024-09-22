@@ -68,6 +68,8 @@ export interface LiquidOptions {
   greedy?: boolean;
   /** `fs` is used to override the default file-system module with a custom implementation. */
   fs?: FS;
+  /** keyValue separator */
+  keyValueSeparator?: string;
   /** Render from in-memory `templates` mapping instead of file system. File system related options like `fs`, 'root', and `relativeReference` will be ignored when `templates` is specified. */
   templates?: {[key: string]: string};
   /** the global scope passed down to all partial and layout templates, i.e. templates included by `include`, `layout` and `render` tags. */
@@ -166,6 +168,7 @@ export const defaultOptions: NormalizedFullOptions = {
   partials: ['.'],
   relativeReference: true,
   jekyllInclude: false,
+  keyValueSeparator: ':',
   cache: undefined,
   extname: '',
   fs: fs,

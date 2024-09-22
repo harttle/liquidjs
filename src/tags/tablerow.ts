@@ -21,7 +21,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collectionToken
-    this.args = new Hash(this.tokenizer.remaining())
+    this.args = new Hash(this.tokenizer.remaining(), liquid.options.keyValueSeparator)
     this.templates = []
 
     let p

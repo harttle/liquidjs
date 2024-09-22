@@ -15,7 +15,7 @@ type HashValueTokens = Record<string, Token | undefined>
  */
 export class Hash {
   hash: HashValueTokens = {}
-  constructor (markup: string, jekyllStyle?: boolean) {
+  constructor (markup: string, jekyllStyle?: boolean | string) {
     const tokenizer = new Tokenizer(markup, {})
     for (const hash of tokenizer.readHashes(jekyllStyle)) {
       this.hash[hash.name.content] = hash.value
