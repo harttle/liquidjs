@@ -1,3 +1,10 @@
+# [10.17.0](https://github.com/harttle/liquidjs/compare/v10.16.7...v10.17.0) (2024-09-22)
+
+
+### Features
+
+* support custom key-value separator, [#752](https://github.com/harttle/liquidjs/issues/752) ([6aeed25](https://github.com/harttle/liquidjs/commit/6aeed2586a70a5bd4f878d2cb32547e35677458d))
+
 ## [10.16.7](https://github.com/harttle/liquidjs/compare/v10.16.6...v10.16.7) (2024-08-29)
 
 
