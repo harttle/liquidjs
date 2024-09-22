@@ -1,6 +1,6 @@
 import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
-import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord } from '../util'
+import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
 import { Operators, Expression } from '../render'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { FilterArg } from './filter-arg'
@@ -261,7 +261,7 @@ export class Tokenizer {
     return this.readIdentifier().getText()
   }
 
-  readHashes (jekyllStyle?: boolean) {
+  readHashes (jekyllStyle?: boolean | string) {
     const hashes = []
     while (true) {
       const hash = this.readHash(jekyllStyle)
@@ -270,7 +270,7 @@ export class Tokenizer {
     }
   }
 
-  readHash (jekyllStyle?: boolean): HashToken | undefined {
+  readHash (jekyllStyle?: boolean | string): HashToken | undefined {
     this.skipBlank()
     if (this.peek() === ',') ++this.p
     const begin = this.p
@@ -279,7 +279,7 @@ export class Tokenizer {
     let value
 
     this.skipBlank()
-    const sep = jekyllStyle ? '=' : ':'
+    const sep = isString(jekyllStyle) ? jekyllStyle : (jekyllStyle ? '=' : ':')
     if (this.peek() === sep) {
       ++this.p
       value = this.readValue()

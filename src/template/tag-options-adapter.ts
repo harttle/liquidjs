@@ -21,7 +21,7 @@ export function createTagClass (options: TagImplOptions): TagClass {
       }
     }
     * render (ctx: Context, emitter: Emitter): TagRenderReturn {
-      const hash = (yield new Hash(this.token.args).render(ctx)) as Record<string, any>
+      const hash = (yield new Hash(this.token.args, ctx.opts.keyValueSeparator).render(ctx)) as Record<string, any>
       return yield options.render.call(this, ctx, emitter, hash)
     }
   }

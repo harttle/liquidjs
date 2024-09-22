@@ -21,7 +21,7 @@ export default class extends Tag {
       } else tokenizer.p = begin
     } else tokenizer.p = begin
 
-    this.hash = new Hash(tokenizer.remaining(), this.liquid.options.jekyllInclude)
+    this.hash = new Hash(tokenizer.remaining(), liquid.options.jekyllInclude || liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const { liquid, hash, withVar } = this

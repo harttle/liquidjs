@@ -39,4 +39,8 @@ describe('Hash', function () {
       num3: 4
     })
   })
+  it('should support custom separator', async function () {
+    const hash = await toPromise(new Hash('num=2.3', '=').render(new Context()))
+    expect(hash.num).toBe(2.3)
+  })
 })
