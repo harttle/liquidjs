@@ -702,6 +702,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Neamar",
+      "name": "Matthieu Bacconnier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/536844?v=4",
+      "profile": "https://neamar.fr",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
