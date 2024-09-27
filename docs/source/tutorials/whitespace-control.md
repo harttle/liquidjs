@@ -41,8 +41,8 @@ Alternatively, LiquidJS provides these per engine options to enable whitespace c
 
 * `trimTagLeft`
 * `trimTagRight`
-* `trimValueLeft`
-* `trimValueRight`
+* `trimOutputLeft`
+* `trimOutputRight`
 
 [LiquidJS][liquidjs] will **NOT** trim any whitespace by default, aka. above options all default to `false`. For details of these options, see the [options][options].
 
