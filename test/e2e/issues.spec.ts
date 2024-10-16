@@ -515,4 +515,13 @@ describe('Issues', function () {
       expect(LiquidError.is(err) && err.originalError).toHaveProperty('message', 'intended')
     }
   })
+  it('getting current line number and template name from a filter #762', () => {
+    const engine = new Liquid()
+    engine.registerFilter('pos', function (val: string) {
+      const [line, col] = this.token.getPosition()
+      return `[${line},${col}] ${val}`
+    })
+    const result = engine.parseAndRenderSync(`\n{{ "foo" | pos }}`)
+    expect(result).toEqual('\n[2,12] foo')
+  })
 })
