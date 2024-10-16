@@ -80,9 +80,7 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
-    this.assert(this.peek() === '|', `expected "|" before filter`)
-    this.p++
-    const begin = this.p
+    this.assert(this.read() === '|', `expected "|" before filter`)
     const name = this.readIdentifier()
     if (!name.size()) {
       this.assert(this.end(), `expected filter name`)
@@ -103,7 +101,7 @@ export class Tokenizer {
     } else {
       throw this.error('expected ":" after filter name')
     }
-    return new FilterToken(name.getText(), args, this.input, begin, this.p, this.file)
+    return new FilterToken(name.getText(), args, this.input, name.begin, this.p, this.file)
   }
 
   readFilterArg (): FilterArg | undefined {
@@ -298,7 +296,9 @@ export class Tokenizer {
   end () {
     return this.p >= this.N
   }
-
+  read () {
+    return this.input[this.p++]
+  }
   readTo (end: string): number {
     while (this.p < this.N) {
       ++this.p

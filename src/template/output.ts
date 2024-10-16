@@ -6,6 +6,7 @@ import { OutputToken } from '../tokens/output-token'
 import { Tokenizer } from '../parser'
 import { Liquid } from '../liquid'
 import { Filter } from './filter'
+import { FilterToken } from '../tokens'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
   value: Value
@@ -16,7 +17,8 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
     const filters = this.value.filters
     const outputEscape = liquid.options.outputEscape
     if (!filters[filters.length - 1]?.raw && outputEscape) {
-      filters.push(new Filter(toString.call(outputEscape), outputEscape, [], liquid))
+      const token = new FilterToken(toString.call(outputEscape), [], '', 0, 0)
+      filters.push(new Filter(token, outputEscape, liquid))
     }
   }
   public * render (ctx: Context, emitter: Emitter): IterableIterator<unknown> {

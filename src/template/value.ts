@@ -18,7 +18,7 @@ export class Value {
       ? new Tokenizer(input, liquid.options.operators).readFilteredValue()
       : input
     this.initial = token.initial
-    this.filters = token.filters.map(({ name, args }) => new Filter(name, this.getFilter(liquid, name), args, liquid))
+    this.filters = token.filters.map(token => new Filter(token, this.getFilter(liquid, token.name), liquid))
   }
   public * value (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {
     lenient = lenient || (ctx.opts.lenientIf && this.filters.length > 0 && this.filters[0].name === 'default')
