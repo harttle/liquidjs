@@ -1,3 +1,10 @@
+# [10.18.0](https://github.com/harttle/liquidjs/compare/v10.17.0...v10.18.0) (2024-10-16)
+
+
+### Features
+
+* expose FilterToken to filter `this`, [#762](https://github.com/harttle/liquidjs/issues/762) ([d705888](https://github.com/harttle/liquidjs/commit/d705888c8d46d9dd95fcb41c0fb7bfbaf647eddd))
+
 # [10.17.0](https://github.com/harttle/liquidjs/compare/v10.16.7...v10.17.0) (2024-09-22)
 
 
