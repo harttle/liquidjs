@@ -8,28 +8,29 @@
     font-weight: 300
     margin: 40px 0 24px
 
-  .row
+  #editors
+    display: grid
+    overflow: hidden
+    margin-bottom: 16px
+    height: 75vh
+    grid-template-columns: auto auto
+    grid-template-rows: 60% 40%
+    grid-gap: 16px
+  .area-tpl
+    grid-row: 1
+    grid-column: 1
+  .area-data
+    grid-row: 2
+    grid-column: 1
+  .area-output
+    grid-column: 2
+    grid-row: 1 / -1
+  .editor-wrapper
     display: flex
-    flex-wrap: wrap;
-    justify-content: space-between
-    font-size: 1em
-    .col
-      flex: 1 1 100%
-      margin-bottom: 10px
-
-  @media mq-normal
-    .row
-      flex-wrap: nowrap;
-    .col:first-child
-      margin-right: 15px
-
-  #editorEl
-    height: 40vh
-  #dataEl
-    height: 28vh
-    margin-top: 2vh
-  #previewEl
-    height: 70vh
+    gap: 8px
+    flex-direction: column
+    .editor
+      flex-grow: 1
   .hide
     display: none
   .loader
