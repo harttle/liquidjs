@@ -71,11 +71,10 @@
   <div class="wrapper">
     <h1 class="inner">演示</h1>
     <div class="loader" role=status aria-busy=true></div>
-    <div id="editors" class="row inner hide" aria-hide=true>
-      <div class="col">
-        <div id="editorEl">{% assign people = &quot;alice, bob, carol&quot; | split: &quot;, &quot; -%}
-
-&lt;ul&gt;
+    <div id="editors" class="inner hide" aria-hide=true>
+      <div class="area-tpl editor-wrapper">
+        <h2>Template</h2>
+        <div class="editor" id="editorEl">&lt;ul&gt;
 {%- for person in people %}
   &lt;li&gt;
     &lt;a href=&quot;{{person | prepend: &quot;https://example.com/&quot;}}&quot;&gt;
@@ -85,9 +84,22 @@
 {%- endfor%}
 &lt;/ul&gt;
 </div>
-        <div id="dataEl">{}</div>
       </div>
-      <div class="col" id="previewEl">加载中...</div>
+      <div class="area-data editor-wrapper">
+        <h2>Context</h2>
+        <div class="editor" id="dataEl">{
+  &quot;people&quot;: [
+    &quot;alice&quot;,
+    &quot;bob&quot;,
+    &quot;carol&quot;
+  ]
+}
+</div>
+      </div>
+      <div class="area-output editor-wrapper">
+        <h2>Output</h2>
+        <div class="editor" id="previewEl">加载中...</div>
+      </div>
     </div>
     <p class="inner version"></p>
   </div>
