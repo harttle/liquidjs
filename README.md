@@ -75,24 +75,26 @@ If you personally love LiquidJS or it's benefiting your business, please conside
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.opensense.com/"><img src="https://images.opencollective.com/opensense-inc/bf840ae/logo/256.png?height=100" width="100px;" alt="Opensense Inc."/><br /><sub><b>Opensense</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.11ty.dev/"><img src="https://avatars.githubusercontent.com/u/35147177?v=4?s=100" width="100px;" alt="Eleventy"/><br /><sub><b>Eleventy</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://about.me/peterdehaan"><img src="https://avatars2.githubusercontent.com/u/557895?v=4?s=100" width="100px;" alt="Peter deHaan"/><br /><sub><b>Peter deHaan</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.11ty.dev/"><img src="https://avatars.githubusercontent.com/u/35147177?v=4&s=100" width="100px;" alt="Eleventy"/><br /><sub><b>Eleventy</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://about.me/peterdehaan"><img src="https://avatars2.githubusercontent.com/u/557895?v=4&s=100" width="100px;" alt="Peter deHaan"/><br /><sub><b>Peter deHaan</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://opencollective.com/touchless"><img src="https://images.opencollective.com/touchless/273bc74/logo/256.png?height=100" width="100px;" alt="Touchless"/><br /><sub><b>Touchless</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.dropkiq.com/"><img src="https://images.opencollective.com/1bertlol/43a8ea8/logo/256.png?height=100" width="100px;" alt="Adam Darrah"/><br /><sub><b>Dropkiq</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://dailycontributors.com/"><img src="https://images.opencollective.com/dailycontributors/3c2e057/logo/256.png?height=100&width=100" width="100px;" alt="Dailycontributors"/><br /><sub><b>Dailycontributors</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coni2k"><img src="https://avatars0.githubusercontent.com/u/1284601?v=4?s=100" width="100px;" alt="coni2k"/><br /><sub><b>Serkan Holat</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/coni2k"><img src="https://avatars0.githubusercontent.com/u/1284601?v=4&s=100" width="100px;" alt="coni2k"/><br /><sub><b>Serkan Holat</b></sub></a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amit777"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4?s=100" width="100px;" alt="amit777"/><br /><sub><b>amit777</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amit777"><img src="https://avatars0.githubusercontent.com/u/2703309?v=4&s=100" width="100px;" alt="amit777"/><br /><sub><b>amit777</b></sub></a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://opencollective.com/khaled-salem"><img src="https://images.opencollective.com/khaled-salem/avatar/256.png?height=256" width="100px;" alt="Khaled Salem"/><br /><sub><b>Khaled Salem</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://sentry.io/"><img src="https://avatars.githubusercontent.com/u/1396951?v=4?s=100" width="100px;" alt="Sentry"/><br /><sub><b>Sentry</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4?s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://customer.io/"><img src="https://avatars.githubusercontent.com/u/1152079?v=4?s=100" width="100px;" alt="Customer IO"/><br /><sub><b>Customer IO</b></sub></a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/15fathoms"><img src="https://avatars.githubusercontent.com/u/79156039?v=4?s=100" width="100px;" alt="Emmanuel Cartelli"/><br /><sub><b>Emmanuel Cartelli</b></sub></a><br /></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/microsoft"><img src="https://avatars.githubusercontent.com/u/6154722?v=4?s=100" width="100px;" alt="Microsoft"/><br /><sub><b>Microsoft</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://sentry.io/"><img src="https://avatars.githubusercontent.com/u/1396951?v=4&s=100" width="100px;" alt="Sentry"/><br /><sub><b>Sentry</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.checkoutblocks.com/"><img src="https://avatars.githubusercontent.com/u/114603307?v=4&s=100" width="100px;" alt="Checkout Blocks"/><br /><sub><b>Checkout Blocks</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://customer.io/"><img src="https://avatars.githubusercontent.com/u/1152079?v=4&s=100" width="100px;" alt="Customer IO"/><br /><sub><b>Customer IO</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/15fathoms"><img src="https://avatars.githubusercontent.com/u/79156039?v=4&s=100" width="100px;" alt="Emmanuel Cartelli"/><br /><sub><b>Emmanuel Cartelli</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/microsoft"><img src="https://avatars.githubusercontent.com/u/6154722?v=4&s=100" width="100px;" alt="Microsoft"/><br /><sub><b>Microsoft</b></sub></a><br /></td>
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.pakstyle.pk/"><img src="https://images.opencollective.com/pakstyle/2b81605/logo/256.png?height=100" width="100px;" alt="PakStyle.pk"/><br /><sub><b>PakStyle.pk</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://syntax.fm/"><img src="https://avatars.githubusercontent.com/u/130389858?v=4&s=100" width="100px;" alt="Syntax Podcast"/><br /><sub><b>Syntax Podcast</b></sub></a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://opencollective.com/cartelli-emmanuel"><img src="https://images.opencollective.com/cartelli-emmanuel/avatar/256.png?height=100" width="100px;" alt="Cartelli Emmanuel"/><br /><sub><b>Cartelli Emmanuel</b></sub></a></td>
     </tr>
   </tbody>
 </table>
