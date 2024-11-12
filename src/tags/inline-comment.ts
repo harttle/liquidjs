@@ -1,4 +1,5 @@
 import { TagToken, Liquid, TopLevelToken, Tag } from '..'
+import { MetaNode } from '../template/node'
 
 export default class extends Tag {
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
@@ -8,4 +9,14 @@ export default class extends Tag {
     }
   }
   render () { }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [],
+      children: [],
+      blockScope: [],
+      templateScope: []
+    }
+  }
 }

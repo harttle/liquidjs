@@ -1,7 +1,8 @@
-import { toEnumerable } from '../util'
-import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { isValueToken, toEnumerable } from '../util'
+import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream, Value } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
+import { MetaNode } from '../template/node'
 
 export default class extends Tag {
   variable: string
@@ -62,5 +63,15 @@ export default class extends Tag {
     }
     if (collection.length) emitter.write('</tr>')
     ctx.pop()
+  }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: Object.values(this.args.hash).filter(isValueToken),
+      children: this.templates,
+      blockScope: [this.variable, 'tablerowloop'],
+      templateScope: []
+    }
   }
 }

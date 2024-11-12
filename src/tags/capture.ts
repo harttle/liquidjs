@@ -1,6 +1,7 @@
 import { Liquid, Tag, Template, Context, TagToken, TopLevelToken } from '..'
 import { Parser } from '../parser'
 import { evalQuotedToken } from '../render'
+import { MetaNode } from '../template/node'
 import { isTagToken } from '../util'
 
 export default class extends Tag {
@@ -28,5 +29,15 @@ export default class extends Tag {
     const quoted = this.tokenizer.readQuoted()
     if (quoted) return evalQuotedToken(quoted)
     throw this.tokenizer.error('invalid capture name')
+  }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [],
+      children: this.templates,
+      blockScope: [],
+      templateScope: [this.variable]
+    }
   }
 }

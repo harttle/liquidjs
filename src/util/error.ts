@@ -104,6 +104,14 @@ export class AssertionError extends Error {
   }
 }
 
+export class StaticAnalysisError extends LiquidError {
+  public constructor (message: string, token: Token) {
+    super(message, token)
+    this.name = 'StaticAnalysisError'
+    super.update()
+  }
+}
+
 function mkContext (token: Token) {
   const [line, col] = token.getPosition()
   const lines = token.input.split('\n')

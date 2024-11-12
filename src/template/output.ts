@@ -7,6 +7,7 @@ import { Tokenizer } from '../parser'
 import { Liquid } from '../liquid'
 import { Filter } from './filter'
 import { FilterToken } from '../tokens'
+import { MetaNode } from './node'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
   value: Value
@@ -24,5 +25,15 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   public * render (ctx: Context, emitter: Emitter): IterableIterator<unknown> {
     const val = yield this.value.value(ctx, false)
     emitter.write(val)
+  }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [this.value],
+      children: [],
+      blockScope: [],
+      templateScope: []
+    }
   }
 }

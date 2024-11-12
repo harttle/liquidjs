@@ -1,8 +1,9 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
-import { toEnumerable } from '../util'
-import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
+import { isString, isValueToken, toEnumerable } from '../util'
+import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag, Value, ValueToken } from '..'
 import { Parser } from '../parser'
+import { MetaNode } from '../template/node'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -73,6 +74,58 @@ export default class extends Tag {
     } else {
       const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])) as Template[]
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
+    }
+  }
+
+  public node (): MetaNode {
+    const values: Array<Value | ValueToken> = []
+    const blockScope: string[] = []
+
+    for (const [k, v] of Object.entries(this.hash.hash)) {
+      blockScope.push(k)
+      if (isValueToken(v)) {
+        values.push(v)
+      }
+    }
+
+    if (isValueToken(this.file)) {
+      values.push(this.file)
+    }
+
+    if (this['with']) {
+      const { value, alias } = this['with']
+      if (isValueToken(value)) {
+        values.push(value)
+      }
+
+      if (isString(alias)) {
+        blockScope.push(alias)
+      } else if (isString(this.file)) {
+        blockScope.push(this.file)
+      }
+    }
+
+    if (this['for']) {
+      const { value, alias } = this['for']
+      if (isValueToken(value)) {
+        values.push(value)
+      }
+
+      if (isString(alias)) {
+        blockScope.push(alias)
+      } else if (isString(this.file)) {
+        blockScope.push(this.file)
+      }
+
+      blockScope.push('forloop')
+    }
+
+    return {
+      token: this.token,
+      values, // Values from this.hash and this.file
+      children: [],
+      blockScope, // Keys from this.hash and withVar
+      templateScope: []
     }
   }
 }

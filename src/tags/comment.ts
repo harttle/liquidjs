@@ -1,4 +1,5 @@
 import { Liquid, TopLevelToken, TagToken, Tag } from '..'
+import { MetaNode } from '../template/node'
 import { isTagToken } from '../util'
 
 export default class extends Tag {
@@ -11,4 +12,14 @@ export default class extends Tag {
     throw new Error(`tag ${tagToken.getText()} not closed`)
   }
   render () {}
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [],
+      children: [],
+      blockScope: [],
+      templateScope: []
+    }
+  }
 }

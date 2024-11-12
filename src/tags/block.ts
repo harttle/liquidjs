@@ -3,6 +3,7 @@ import { isTagToken } from '../util'
 import { BlockDrop } from '../drop'
 import { Liquid, TagToken, TopLevelToken, Template, Context, Emitter, Tag } from '..'
 import { Parser } from '../parser'
+import { MetaNode } from '../template/node'
 
 export default class extends Tag {
   block: string
@@ -41,5 +42,15 @@ export default class extends Tag {
     return renderChild
       ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(new BlockDrop(() => renderCurrent(superBlock, emitter)), emitter)
       : renderCurrent
+  }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [],
+      children: this.templates,
+      blockScope: [],
+      templateScope: []
+    }
   }
 }

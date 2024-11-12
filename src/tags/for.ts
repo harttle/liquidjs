@@ -1,7 +1,8 @@
-import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
-import { assertEmpty, toEnumerable } from '../util'
+import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream, Value } from '..'
+import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
+import { MetaNode } from '../template/node'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -77,6 +78,30 @@ export default class extends Tag {
       scope.forloop.next()
     }
     ctx.pop()
+  }
+
+  public node (): MetaNode {
+    const children = this.templates
+
+    if (this.elseTemplates) {
+      children.push(...this.elseTemplates)
+    }
+
+    const values: Array<Value | ValueToken> = [this.collection]
+
+    for (const v of Object.values(this.hash.hash)) {
+      if (isValueToken(v)) {
+        values.push(v)
+      }
+    }
+
+    return {
+      token: this.token,
+      values,
+      children,
+      blockScope: [this.variable, 'forloop'],
+      templateScope: []
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import { Liquid, TopLevelToken, Emitter, Value, TagToken, Context, Tag } from '..'
+import { MetaNode } from '../template/node'
 
 export default class extends Tag {
   private value?: Value
@@ -14,5 +15,16 @@ export default class extends Tag {
     if (!this.value) return
     const val = yield this.value.value(ctx, false)
     emitter.write(val)
+  }
+
+  public node (): MetaNode {
+    const values = this.value ? [this.value] : []
+    return {
+      token: this.token,
+      values,
+      children: [],
+      blockScope: [],
+      templateScope: []
+    }
   }
 }

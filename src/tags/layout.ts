@@ -1,8 +1,10 @@
-import { Scope, Template, Liquid, Tag, assert, Emitter, Hash, TagToken, TopLevelToken, Context } from '..'
+import { Scope, Template, Liquid, Tag, assert, Emitter, Hash, TagToken, TopLevelToken, Context, Value, ValueToken } from '..'
 import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
+import { MetaNode } from '../template/node'
+import { isValueToken } from '../util'
 
 export default class extends Tag {
   args: Hash
@@ -40,5 +42,29 @@ export default class extends Tag {
     ctx.push((yield args.render(ctx)) as Scope)
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
+  }
+
+  public node (): MetaNode {
+    const values: Array<Value | ValueToken> = []
+    const blockScope: string[] = []
+
+    for (const [k, v] of Object.entries(this.args.hash)) {
+      blockScope.push(k)
+      if (isValueToken(v)) {
+        values.push(v)
+      }
+    }
+
+    if (isValueToken(this.file)) {
+      values.push(this.file)
+    }
+
+    return {
+      token: this.token,
+      values, // Values from this.hash and this.file
+      children: [],
+      blockScope, // Keys from this.hash and withVar
+      templateScope: []
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 import { Parser } from '../parser'
 import { equals } from '../render'
+import { MetaNode } from '../template/node'
 
 export default class extends Tag {
   value: Value
@@ -69,6 +70,22 @@ export default class extends Tag {
     }
     if (!branchHit) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)
+    }
+  }
+
+  public node (): MetaNode {
+    const children = this.branches.flatMap(b => b.templates)
+
+    if (this.elseTemplates) {
+      children.push(...this.elseTemplates)
+    }
+
+    return {
+      token: this.token,
+      values: this.branches.flatMap(b => b.values),
+      children,
+      blockScope: [],
+      templateScope: []
     }
   }
 }

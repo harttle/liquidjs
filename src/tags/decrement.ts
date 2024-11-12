@@ -1,4 +1,5 @@
 import { Tag, Liquid, TopLevelToken, Emitter, TagToken, Context } from '..'
+import { MetaNode } from '../template/node'
 import { isNumber, stringify } from '../util'
 
 export default class extends Tag {
@@ -13,5 +14,15 @@ export default class extends Tag {
       scope[this.variable] = 0
     }
     emitter.write(stringify(--scope[this.variable]))
+  }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [],
+      children: [],
+      blockScope: [],
+      templateScope: [this.variable]
+    }
   }
 }

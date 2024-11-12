@@ -1,4 +1,6 @@
 import { Value, Liquid, TopLevelToken, TagToken, Context, Tag } from '..'
+import { MetaNode } from '../template/node'
+
 export default class extends Tag {
   private key: string
   private value: Value
@@ -16,5 +18,15 @@ export default class extends Tag {
   }
   * render (ctx: Context): Generator<unknown, void, unknown> {
     ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
+  }
+
+  public node (): MetaNode {
+    return {
+      token: this.token,
+      values: [this.value],
+      children: [],
+      blockScope: [],
+      templateScope: [this.key]
+    }
   }
 }

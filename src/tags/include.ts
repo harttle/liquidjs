@@ -1,6 +1,8 @@
-import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
+import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context, Value } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
+import { MetaNode } from '../template/node'
+import { isValueToken } from '../util'
 import { parseFilePath, renderFilePath } from './render'
 
 export default class extends Tag {
@@ -39,5 +41,35 @@ export default class extends Tag {
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.restoreRegister(saved)
+  }
+
+  public node (): MetaNode {
+    const values: Array<Value | ValueToken> = []
+    const blockScope: string[] = []
+
+    // TODO: jekyllInclude
+
+    for (const [k, v] of Object.entries(this.hash.hash)) {
+      blockScope.push(k)
+      if (isValueToken(v)) {
+        values.push(v)
+      }
+    }
+
+    if (isValueToken(this['file'])) {
+      values.push(this['file'])
+    }
+
+    if (isValueToken(this.withVar)) {
+      values.push(this.withVar)
+    }
+
+    return {
+      token: this.token,
+      values, // Values from this.hash and this.file
+      children: [],
+      blockScope, // Keys from this.hash and withVar
+      templateScope: []
+    }
   }
 }
