@@ -4,7 +4,7 @@ import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 
 export class Expression {
-  private postfix: Token[]
+  readonly postfix: Token[]
 
   public constructor (tokens: IterableIterator<Token>) {
     this.postfix = [...toPostfix(tokens)]
