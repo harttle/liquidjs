@@ -22,7 +22,8 @@ export interface VariableLocation {
 }
 
 /**
- * A string representation of a template variable along with its segments.
+ * A string representation of a template variable along with its segments
+ * and location.
  */
 export class Variable extends String {
   constructor (
@@ -84,7 +85,7 @@ export interface StaticAnalysis {
 
   /**
    * Variables that are not in scope. These could be a "global" variables that are
-   * expected to be provided by the application developer, or a possible mistakes
+   * expected to be provided by the application developer, or possible mistakes
    * from the template author.
    *
    * If a variable is referenced before and after assignment, you should expect
@@ -111,6 +112,24 @@ export function analyze (templates: Template[]): StaticAnalysis {
   const templateScope: Set<string> = new Set()
   const scope = new DummyScope(templateScope)
 
+  function updateVariables (variable: Variable): void {
+    variables.push(variable)
+
+    // Variables that are not in scope are assumed to be global, that is,
+    // provided by application developers.
+    const root = variable.segments[0]
+    if (isString(root) && !scope.has(root)) {
+      globals.push(variable)
+    }
+
+    // recurse for nested Variables
+    for (const segment of variable.segments) {
+      if (segment instanceof Variable) {
+        updateVariables(segment)
+      }
+    }
+  }
+
   function visit (template: Template): void {
     if (template.node === undefined) {
       throw new StaticAnalysisError(
@@ -123,21 +142,14 @@ export function analyze (templates: Template[]): StaticAnalysis {
 
     for (const value of node.values) {
       for (const variable of extractVariables(value)) {
-        // TODO: recurse for nested Variables
-        variables.push(variable)
-
-        // Variables that are not in scope are assumed to be global, that is,
-        // provided by application developers.
-        const root = variable.segments[0]
-        if (isString(root) && !scope.has(root)) {
-          globals.push(variable)
-        }
+        updateVariables(variable)
       }
     }
 
     for (const key of node.templateScope) {
       // Names added to the scope by tags like `assign`, `capture` and `increment`.
       templateScope.add(key)
+      // XXX: This is the row and col of the node as some names (like 'tablerow') don't have a token.
       const [row, col] = node.token.getPosition()
       locals.push(new Variable([key], { row, col, file: node.token.file }))
     }
@@ -225,7 +237,6 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
   } else if (isPropertyAccessToken(token)) {
     yield extractPropertyAccessVariable(token)
   } else if (
-    isQuotedToken(token) ||
     isNumberToken(token) ||
     isWordToken(token)
   ) {
@@ -261,10 +272,12 @@ function extractPropertyAccessVariable (token: PropertyAccessToken): Variable {
   })
 }
 
+// This is used to detect segments that can be represented with dot notation
+// when creating a string representation of VariableSegments.
 const RE_PROPERTY = /^[\u0080-\uFFFFa-zA-Z_][\u0080-\uFFFFa-zA-Z0-9_-]*$/
 
 /**
- * Return a string representation of segments using shorthand notation where possible.
+ * Return a string representation of segments using dot notation where possible.
  */
 function segmentsString (segments: VariableSegments): string {
   const buf: string[] = []
@@ -282,7 +295,7 @@ function segmentsString (segments: VariableSegments): string {
 
   for (const segment of segments.slice(1)) {
     if (segment instanceof Variable) {
-      buf.push(segmentsString(segment.segments))
+      buf.push(`[${segmentsString(segment.segments)}]`)
     } else if (isString(segment)) {
       if (segment.match(RE_PROPERTY)) {
         buf.push(`.${segment}`)
