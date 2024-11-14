@@ -35,7 +35,7 @@ describe('express()', function () {
   it('should respect express views(string)', function (done) {
     app.set('views', views)
     request(app).get('/include/bar')
-      .expect('bar')
+      .expect('BAR')
       .expect(200, done)
   })
   it('should pass error when file not found', function (done) {
@@ -63,7 +63,7 @@ describe('express()', function () {
   it('should respect express views (Array) when lookup', function (done) {
     app.set('views', [views, partials])
     request(app).get('/include/bar')
-      .expect('bar')
+      .expect('BAR')
       .expect(200, done)
   })
 })

@@ -52,4 +52,14 @@ describe('#renderFile()', function () {
     })
     return expect(engine.renderFile('/not/exist.html')).rejects.toThrow(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
   })
+  it('should handle "." as cwd', async () => {
+    engine = new Liquid({
+      root: ['.'],
+      extname: '.html'
+    })
+    process.chdir(resolve(__dirname, '../stub/views'))
+    await expect(engine.renderFile('bar')).resolves.toEqual('BAR')
+    process.chdir(resolve(__dirname, '../stub/partials'))
+    await expect(engine.renderFile('bar')).resolves.toEqual('bar')
+  })
 })
