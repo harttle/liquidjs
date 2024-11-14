@@ -1,4 +1,4 @@
-import { TemplateImpl, Template, MetaNode } from '../template'
+import { TemplateImpl, Template, StaticNode } from '../template'
 import { HTMLToken } from '../tokens'
 import { Context } from '../context'
 import { Emitter } from '../emitters'
@@ -13,7 +13,7 @@ export class HTML extends TemplateImpl<HTMLToken> implements Template {
     emitter.write(this.str)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [],

@@ -1,6 +1,6 @@
 import { Template, Emitter, Liquid, TopLevelToken, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   templates: Template[]
@@ -13,7 +13,7 @@ export default class extends Tag {
     yield this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [],

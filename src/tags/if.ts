@@ -1,7 +1,7 @@
 import { Liquid, Tag, Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template } from '..'
 import { Parser } from '../parser'
 import { assert, assertEmpty } from '../util'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   branches: { value: Value, templates: Template[] }[] = []
@@ -46,7 +46,7 @@ export default class extends Tag {
     yield r.renderTemplates(this.elseTemplates || [], ctx, emitter)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const children = this.branches.flatMap(b => b.templates)
 
     if (this.elseTemplates) {

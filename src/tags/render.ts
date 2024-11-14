@@ -3,7 +3,7 @@ import { ForloopDrop } from '../drop'
 import { isString, isValueToken, toEnumerable } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag, Value, ValueToken } from '..'
 import { Parser } from '../parser'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -77,7 +77,7 @@ export default class extends Tag {
     }
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const values: Array<Value | ValueToken> = []
     const blockScope: string[] = []
 

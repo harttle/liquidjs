@@ -1,7 +1,7 @@
 import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context, Value } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 import { isValueToken } from '../util'
 import { parseFilePath, renderFilePath } from './render'
 
@@ -43,7 +43,7 @@ export default class extends Tag {
     ctx.restoreRegister(saved)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const values: Array<Value | ValueToken> = []
     const blockScope: string[] = []
 

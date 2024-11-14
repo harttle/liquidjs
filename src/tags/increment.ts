@@ -1,6 +1,6 @@
 import { isNumber, stringify } from '../util'
 import { Tag, Liquid, TopLevelToken, Emitter, TagToken, Context } from '..'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   private variable: string
@@ -18,7 +18,7 @@ export default class extends Tag {
     emitter.write(stringify(val))
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [],

@@ -1,5 +1,5 @@
 import { Liquid, TopLevelToken, TagToken, Tag } from '..'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 import { isTagToken } from '../util'
 
 export default class extends Tag {
@@ -13,7 +13,7 @@ export default class extends Tag {
   }
   render () {}
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [],

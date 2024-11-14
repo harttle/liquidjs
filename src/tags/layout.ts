@@ -3,7 +3,7 @@ import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 import { isValueToken } from '../util'
 
 export default class extends Tag {
@@ -44,7 +44,7 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const values: Array<Value | ValueToken> = []
     const blockScope: string[] = []
 

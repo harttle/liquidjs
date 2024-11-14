@@ -1,5 +1,5 @@
 import { TopLevelToken, Liquid, ValueToken, evalToken, Emitter, TagToken, Context, Tag } from '..'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   private candidates: ValueToken[] = []
@@ -40,7 +40,7 @@ export default class extends Tag {
     return yield evalToken(candidate, ctx)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const values = this.candidates.slice()
     if (this.group) {
       values.push(this.group)

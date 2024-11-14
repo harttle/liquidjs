@@ -3,7 +3,7 @@ import { ValueToken } from '../tokens'
 import { Token } from '../tokens/token'
 import { Value } from './value'
 
-export interface MetaNode {
+export interface StaticNode {
   token: Token;
   values: Array<Value | ValueToken>;
   children: Array<Template>;

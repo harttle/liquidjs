@@ -1,12 +1,12 @@
 import { Context, Emitter, Tag } from '..'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   render (ctx: Context, emitter: Emitter) {
     emitter['break'] = true
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [],

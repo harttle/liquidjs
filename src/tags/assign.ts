@@ -1,5 +1,5 @@
 import { Value, Liquid, TopLevelToken, TagToken, Context, Tag } from '..'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   private key: string
@@ -20,7 +20,7 @@ export default class extends Tag {
     ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [this.value],

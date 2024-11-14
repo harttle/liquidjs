@@ -1,7 +1,7 @@
 import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 import { Parser } from '../parser'
 import { equals } from '../render'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   value: Value
@@ -73,7 +73,7 @@ export default class extends Tag {
     }
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const children = this.branches.flatMap(b => b.templates)
 
     if (this.elseTemplates) {

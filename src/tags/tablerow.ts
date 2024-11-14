@@ -2,7 +2,7 @@ import { isValueToken, toEnumerable } from '../util'
 import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 export default class extends Tag {
   variable: string
@@ -65,7 +65,7 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: Object.values(this.args.hash).filter(isValueToken),

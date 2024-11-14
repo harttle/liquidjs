@@ -1,7 +1,7 @@
 import { Liquid, Tag, Template, Context, TagToken, TopLevelToken } from '..'
 import { Parser } from '../parser'
 import { evalQuotedToken } from '../render'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 import { isTagToken } from '../util'
 
 export default class extends Tag {
@@ -31,7 +31,7 @@ export default class extends Tag {
     throw this.tokenizer.error('invalid capture name')
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [],

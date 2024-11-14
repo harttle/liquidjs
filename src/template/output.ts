@@ -7,7 +7,7 @@ import { Tokenizer } from '../parser'
 import { Liquid } from '../liquid'
 import { Filter } from './filter'
 import { FilterToken } from '../tokens'
-import { MetaNode } from './node'
+import { StaticNode } from './node'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
   value: Value
@@ -27,7 +27,7 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
     emitter.write(val)
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     return {
       token: this.token,
       values: [this.value],

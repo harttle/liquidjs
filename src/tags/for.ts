@@ -2,7 +2,7 @@ import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelTo
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
-import { MetaNode } from '../template/node'
+import { StaticNode } from '../template'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -80,7 +80,7 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public node (): MetaNode {
+  public node (): StaticNode {
     const children = this.templates
 
     if (this.elseTemplates) {
