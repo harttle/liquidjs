@@ -2,6 +2,7 @@ import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, Ope
 import { isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
+import { Drop } from '../drop'
 
 export class Expression {
   private postfix: Token[]
@@ -42,9 +43,9 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
-  const props: string[] = []
+  const props: (string | number | Drop)[] = []
   for (const prop of token.props) {
-    props.push((yield evalToken(prop, ctx, false)) as unknown as string)
+    props.push((yield evalToken(prop, ctx, false)) as unknown as string | number | Drop)
   }
   try {
     if (token.variable) {

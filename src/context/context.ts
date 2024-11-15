@@ -3,7 +3,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { Scope } from './scope'
-import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter } from '../util'
+import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
 
 type PropertyKey = string | number;
 
@@ -71,8 +71,8 @@ export class Context {
   public getSync (paths: PropertyKey[]): unknown {
     return toValueSync(this._get(paths))
   }
-  public * _get (paths: PropertyKey[]): IterableIterator<unknown> {
-    const scope = this.findScope(paths[0])
+  public * _get (paths: (PropertyKey | Drop)[]): IterableIterator<unknown> {
+    const scope = this.findScope(paths[0] as string) // first prop should always be a string
     return yield this._getFromScope(scope, paths)
   }
   /**
@@ -81,7 +81,7 @@ export class Context {
   public getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
     return toValueSync(this._getFromScope(scope, paths))
   }
-  public * _getFromScope (scope: unknown, paths: PropertyKey[] | string, strictVariables = this.strictVariables): IterableIterator<unknown> {
+  public * _getFromScope (scope: unknown, paths: (PropertyKey | Drop)[] | string, strictVariables = this.strictVariables): IterableIterator<unknown> {
     if (isString(paths)) paths = paths.split('.')
     for (let i = 0; i < paths.length; i++) {
       scope = yield readProperty(scope as object, paths[i], this.ownPropertyOnly)
@@ -120,8 +120,9 @@ export class Context {
   }
 }
 
-export function readProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
+export function readProperty (obj: Scope, key: (PropertyKey | Drop), ownPropertyOnly: boolean) {
   obj = toLiquid(obj)
+  key = toValue(key) as PropertyKey
   if (isNil(obj)) return obj
   if (isArray(obj) && (key as number) < 0) return obj[obj.length + +key]
   const value = readJSProperty(obj, key, ownPropertyOnly)
