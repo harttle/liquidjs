@@ -1,6 +1,7 @@
 import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 import { Parser } from '../parser'
 import { equals } from '../render'
+import { Arguments } from '../template'
 
 export default class extends Tag {
   value: Value
@@ -70,5 +71,19 @@ export default class extends Tag {
     if (!branchHit) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)
     }
+  }
+
+  public arguments (): Arguments {
+    return this.branches.flatMap(b => b.values)
+  }
+
+  public children (): Template[] {
+    const children = this.branches.flatMap(b => b.templates)
+
+    if (this.elseTemplates) {
+      children.push(...this.elseTemplates)
+    }
+
+    return children
   }
 }

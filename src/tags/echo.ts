@@ -1,4 +1,5 @@
 import { Liquid, TopLevelToken, Emitter, Value, TagToken, Context, Tag } from '..'
+import { Arguments } from '../template'
 
 export default class extends Tag {
   private value?: Value
@@ -14,5 +15,9 @@ export default class extends Tag {
     if (!this.value) return
     const val = yield this.value.value(ctx, false)
     emitter.write(val)
+  }
+
+  public arguments (): Arguments {
+    return this.value ? [this.value] : []
   }
 }

@@ -1,8 +1,9 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
-import { toEnumerable } from '../util'
+import { isString, isValueToken, toEnumerable } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -74,6 +75,50 @@ export default class extends Tag {
       const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])) as Template[]
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
     }
+  }
+
+  public arguments (): Arguments {
+    const args: Arguments = []
+
+    for (const v of Object.values(this.hash.hash)) {
+      if (isValueToken(v)) {
+        args.push(v)
+      }
+    }
+
+    if (isValueToken(this['file'])) {
+      args.push(this['file'])
+    }
+
+    if (this['for']) {
+      const { value } = this['for']
+      if (isValueToken(value)) {
+        args.push(value)
+      }
+    }
+
+    return args
+  }
+
+  public blockScope (): string[] {
+    const names: string[] = []
+
+    for (const k of Object.keys(this.hash.hash)) {
+      names.push(k)
+    }
+
+    if (this['for']) {
+      const { alias } = this['for']
+      if (isString(alias)) {
+        names.push(alias)
+      } else if (isString(this.file)) {
+        names.push(this.file)
+      }
+
+      names.push('forloop')
+    }
+
+    return names
   }
 }
 

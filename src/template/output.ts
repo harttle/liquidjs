@@ -1,5 +1,5 @@
 import { Value } from './value'
-import { Template, TemplateImpl } from '../template'
+import { Arguments, Template, TemplateImpl } from '../template'
 import { Context } from '../context/context'
 import { Emitter } from '../emitters/emitter'
 import { OutputToken } from '../tokens/output-token'
@@ -24,5 +24,9 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   public * render (ctx: Context, emitter: Emitter): IterableIterator<unknown> {
     const val = yield this.value.value(ctx, false)
     emitter.write(val)
+  }
+
+  public arguments (): Arguments {
+    return [this.value]
   }
 }

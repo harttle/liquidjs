@@ -3,6 +3,8 @@ import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
+import { isValueToken } from '../util'
 
 export default class extends Tag {
   args: Hash
@@ -40,5 +42,31 @@ export default class extends Tag {
     ctx.push((yield args.render(ctx)) as Scope)
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
+  }
+
+  public arguments (): Arguments {
+    const args: Arguments = []
+
+    for (const v of Object.values(this.args.hash)) {
+      if (isValueToken(v)) {
+        args.push(v)
+      }
+    }
+
+    if (isValueToken(this['file'])) {
+      args.push(this['file'])
+    }
+
+    return args
+  }
+
+  public blockScope (): string[] {
+    const names: string[] = []
+
+    for (const k of Object.keys(this.args.hash)) {
+      names.push(k)
+    }
+
+    return names
   }
 }

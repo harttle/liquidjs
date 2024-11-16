@@ -1,4 +1,6 @@
 import { Value, Liquid, TopLevelToken, TagToken, Context, Tag } from '..'
+import { Arguments } from '../template'
+
 export default class extends Tag {
   private key: string
   private value: Value
@@ -16,5 +18,13 @@ export default class extends Tag {
   }
   * render (ctx: Context): Generator<unknown, void, unknown> {
     ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
+  }
+
+  public arguments (): Arguments {
+    return [this.value]
+  }
+
+  public localScope (): string[] {
+    return [this.key]
   }
 }

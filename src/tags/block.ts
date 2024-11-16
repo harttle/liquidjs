@@ -42,4 +42,8 @@ export default class extends Tag {
       ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(new BlockDrop(() => renderCurrent(superBlock, emitter)), emitter)
       : renderCurrent
   }
+
+  public children (): Template[] {
+    return this.templates
+  }
 }

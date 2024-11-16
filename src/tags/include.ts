@@ -1,6 +1,8 @@
 import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
+import { isValueToken } from '../util'
 import { parseFilePath, renderFilePath } from './render'
 
 export default class extends Tag {
@@ -39,5 +41,37 @@ export default class extends Tag {
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.restoreRegister(saved)
+  }
+
+  public arguments (): Arguments {
+    const args: Arguments = []
+
+    for (const v of Object.values(this.hash.hash)) {
+      if (isValueToken(v)) {
+        args.push(v)
+      }
+    }
+
+    if (isValueToken(this['file'])) {
+      args.push(this['file'])
+    }
+
+    if (isValueToken(this.withVar)) {
+      args.push(this.withVar)
+    }
+
+    return args
+  }
+
+  public blockScope (): string[] {
+    const names: string[] = []
+
+    for (const k of Object.keys(this.hash.hash)) {
+      names.push(k)
+    }
+
+    // TODO: withVar
+
+    return names
   }
 }

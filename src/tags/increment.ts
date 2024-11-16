@@ -1,5 +1,6 @@
 import { isNumber, stringify } from '../util'
 import { Tag, Liquid, TopLevelToken, Emitter, TagToken, Context } from '..'
+import { Arguments } from '../template'
 
 export default class extends Tag {
   private variable: string
@@ -15,5 +16,13 @@ export default class extends Tag {
     const val = scope[this.variable]
     scope[this.variable]++
     emitter.write(stringify(val))
+  }
+
+  public arguments (): Arguments {
+    return [this.variable]
+  }
+
+  public localScope (): string[] {
+    return [this.variable]
   }
 }

@@ -29,4 +29,12 @@ export default class extends Tag {
     if (quoted) return evalQuotedToken(quoted)
     throw this.tokenizer.error('invalid capture name')
   }
+
+  public children (): Template[] {
+    return this.templates
+  }
+
+  public localScope (): string[] {
+    return [this.variable]
+  }
 }

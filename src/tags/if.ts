@@ -1,5 +1,6 @@
 import { Liquid, Tag, Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template } from '..'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
 import { assert, assertEmpty } from '../util'
 
 export default class extends Tag {
@@ -43,5 +44,19 @@ export default class extends Tag {
       }
     }
     yield r.renderTemplates(this.elseTemplates || [], ctx, emitter)
+  }
+
+  public children (): Template[] {
+    const children = this.branches.flatMap(b => b.templates)
+
+    if (this.elseTemplates) {
+      children.push(...this.elseTemplates)
+    }
+
+    return children
+  }
+
+  public arguments (): Arguments {
+    return this.branches.map(b => b.value)
   }
 }
