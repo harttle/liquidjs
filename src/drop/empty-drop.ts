@@ -25,4 +25,7 @@ export class EmptyDrop extends Drop implements Comparable {
   public valueOf () {
     return ''
   }
+  static is (value: unknown) {
+    return value instanceof EmptyDrop
+  }
 }

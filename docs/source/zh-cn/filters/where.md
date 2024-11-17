@@ -103,5 +103,32 @@ const products = [
 - 3
 ```
 
+## Jekyll 风格
+
+{% since %}v10.19.0{% endsince %}
+
+对于从 Jekyll 迁移到 Liquid 的用户，有一个 `jekyllWhere` 选项可以模拟 Jekyll 的 `where` 过滤器的行为。该选项默认设置为 `false`。启用后，如果 `property` 是一个数组，目标值将使用 `Array.includes` 而不是 `==` 进行匹配，这在过滤标签时特别有用。
+
+例如，以下代码：
+
+```javascript
+const pages = [
+    { tags: ["cat", "food"], title: 'Cat Food' },
+    { tags: ["dog", "food"], title: 'Dog Food' },
+]
+```
+
+输入
+```liquid
+{% assign selected = pages | where: 'tags', "cat" %}
+{% for item in selected -%}
+- {{ item.title }}
+{% endfor %}
+```
+
+输出
+```text
+Cat Food
+```
 
 [truthy]: ../tutorials/truthy-and-falsy.html
