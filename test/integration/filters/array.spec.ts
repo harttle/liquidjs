@@ -484,6 +484,28 @@ describe('filters/array', function () {
         Kitchen products:
         `)
     })
+    it('should support nil as target', () => {
+      const scope = { list: [{ foo: 'FOO' }, { bar: 'BAR', type: 2 }] }
+      return test('{{list | where: "type", nil | json}}', scope, '[{"foo":"FOO"}]')
+    })
+    it('should support empty as target', async () => {
+      const scope = { pages: [{ tags: ['FOO'] }, { tags: [] }, { title: 'foo' }] }
+      await test('{{pages | where: "tags", empty | json}}', scope, '[{"tags":[]}]')
+    })
+    it('should not match string with array', async () => {
+      const scope = { objs: [{ foo: ['FOO', 'bar'] }] }
+      await test('{{objs | where: "foo", "FOO" | json}}', scope, '[]')
+    })
+    describe('jekyll style', () => {
+      it('should not match string with array', async () => {
+        const scope = { objs: [{ foo: ['FOO', 'bar'] }] }
+        await test('{{objs | where: "foo", "FOO" | json}}', scope, '[{"foo":["FOO","bar"]}]', { jekyllWhere: true })
+      })
+      it('should support empty as target', async () => {
+        const scope = { pages: [{ tags: ['FOO'] }, { tags: [] }, { title: 'foo' }] }
+        await test('{{pages | where: "tags", empty | json}}', scope, '[{"tags":[]}]', { jekyllWhere: true })
+      })
+    })
   })
   describe('where_exp', function () {
     const products = [

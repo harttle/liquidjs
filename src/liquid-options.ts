@@ -22,6 +22,8 @@ export interface LiquidOptions {
   relativeReference?: boolean;
   /** Use jekyll style include, pass parameters to `include` variable of current scope. Defaults to `false`. */
   jekyllInclude?: boolean;
+  /** Use jekyll style where filter, enables array item match. Defaults to `false`. */
+  jekyllWhere?: boolean;
   /** Add a extname (if filepath doesn't include one) before template file lookup. Eg: setting to `".html"` will allow including file by basename. Defaults to `""`. */
   extname?: string;
   /** Whether or not to cache resolved templates. Defaults to `false`. */

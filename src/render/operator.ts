@@ -58,3 +58,7 @@ function arrayEquals (lhs: any[], rhs: any[]): boolean {
   if (lhs.length !== rhs.length) return false
   return !lhs.some((value, i) => !equals(value, rhs[i]))
 }
+
+export function arrayIncludes (arr: any[], item: any): boolean {
+  return arr.some(value => equals(value, item))
+}

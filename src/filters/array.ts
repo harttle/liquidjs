@@ -1,8 +1,9 @@
 import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast } from '../util'
-import { equals, evalToken, isTruthy } from '../render'
+import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
 import type { Scope } from '../context'
+import { EmptyDrop } from '../drop'
 
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
   const array = toArray(v)
@@ -124,9 +125,12 @@ export function * where<T extends object> (this: FilterImpl, arr: T[], property:
   for (const item of arr) {
     values.push(yield evalToken(token, this.context.spawn(item)))
   }
+  const matcher = this.context.opts.jekyllWhere
+    ? (v: any) => EmptyDrop.is(expected) ? equals(v, expected) : (isArray(v) ? arrayIncludes(v, expected) : equals(v, expected))
+    : (v: any) => equals(v, expected)
   return arr.filter((_, i) => {
     if (expected === undefined) return isTruthy(values[i], this.context)
-    return equals(values[i], expected)
+    return matcher(values[i])
   })
 }
 
