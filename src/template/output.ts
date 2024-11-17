@@ -26,7 +26,7 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
     emitter.write(val)
   }
 
-  public arguments (): Arguments {
-    return [this.value]
+  public * arguments (): Arguments {
+    yield this.value
   }
 }

@@ -30,11 +30,11 @@ export default class extends Tag {
     throw this.tokenizer.error('invalid capture name')
   }
 
-  public children (): Template[] {
+  public children (): Iterable<Template> {
     return this.templates
   }
 
-  public localScope (): string[] {
-    return [this.variable]
+  public * localScope (): Iterable<string> {
+    yield this.variable
   }
 }

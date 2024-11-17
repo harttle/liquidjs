@@ -80,29 +80,25 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public children (): Template[] {
-    const children = [...this.templates]
+  public * children (): Iterable<Template> {
+    yield * this.templates
 
     if (this.elseTemplates) {
-      children.push(...this.elseTemplates)
+      yield * this.elseTemplates
     }
-
-    return children
   }
 
-  public arguments (): Arguments {
-    const args: Arguments = [this.collection]
+  public * arguments (): Arguments {
+    yield this.collection
 
     for (const v of Object.values(this.hash.hash)) {
       if (isValueToken(v)) {
-        args.push(v)
+        yield v
       }
     }
-
-    return args
   }
 
-  public blockScope (): string[] {
+  public blockScope (): Iterable<string> {
     return [this.variable, 'forloop']
   }
 }

@@ -43,7 +43,7 @@ export default class extends Tag {
       : renderCurrent
   }
 
-  public children (): Template[] {
+  public children (): Iterable<Template> {
     return this.templates
   }
 }

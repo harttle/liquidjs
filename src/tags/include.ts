@@ -43,35 +43,23 @@ export default class extends Tag {
     ctx.restoreRegister(saved)
   }
 
-  public arguments (): Arguments {
-    const args: Arguments = []
-
-    for (const v of Object.values(this.hash.hash)) {
-      if (isValueToken(v)) {
-        args.push(v)
-      }
-    }
+  public * arguments (): Arguments {
+    yield * Object.values(this.hash.hash).filter(isValueToken)
 
     if (isValueToken(this['file'])) {
-      args.push(this['file'])
+      yield this['file']
     }
 
     if (isValueToken(this.withVar)) {
-      args.push(this.withVar)
+      yield this.withVar
     }
-
-    return args
   }
 
-  public blockScope (): string[] {
-    const names: string[] = []
-
+  public * blockScope (): Iterable<string> {
     for (const k of Object.keys(this.hash.hash)) {
-      names.push(k)
+      yield k
     }
 
     // TODO: withVar
-
-    return names
   }
 }

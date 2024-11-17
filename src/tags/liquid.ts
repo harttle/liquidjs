@@ -12,7 +12,7 @@ export default class extends Tag {
     yield this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
   }
 
-  public children (): Template[] {
+  public children (): Iterable<Template> {
     return this.templates
   }
 }

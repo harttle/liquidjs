@@ -20,11 +20,11 @@ export default class extends Tag {
     ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
   }
 
-  public arguments (): Arguments {
-    return [this.value]
+  public * arguments (): Arguments {
+    yield this.value
   }
 
-  public localScope (): string[] {
-    return [this.key]
+  public * localScope (): Iterable<string> {
+    yield this.key
   }
 }

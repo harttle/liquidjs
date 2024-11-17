@@ -77,48 +77,38 @@ export default class extends Tag {
     }
   }
 
-  public arguments (): Arguments {
-    const args: Arguments = []
-
+  public * arguments (): Arguments {
     for (const v of Object.values(this.hash.hash)) {
       if (isValueToken(v)) {
-        args.push(v)
+        yield v
       }
     }
 
     if (isValueToken(this['file'])) {
-      args.push(this['file'])
+      yield this['file']
     }
 
     if (this['for']) {
       const { value } = this['for']
       if (isValueToken(value)) {
-        args.push(value)
+        yield value
       }
     }
-
-    return args
   }
 
-  public blockScope (): string[] {
-    const names: string[] = []
-
-    for (const k of Object.keys(this.hash.hash)) {
-      names.push(k)
-    }
+  public * blockScope (): Iterable<string> {
+    yield * Object.keys(this.hash.hash)
 
     if (this['for']) {
       const { alias } = this['for']
       if (isString(alias)) {
-        names.push(alias)
+        yield alias
       } else if (isString(this.file)) {
-        names.push(this.file)
+        yield this.file
       }
 
-      names.push('forloop')
+      yield 'forloop'
     }
-
-    return names
   }
 }
 

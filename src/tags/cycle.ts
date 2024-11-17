@@ -40,13 +40,11 @@ export default class extends Tag {
     return yield evalToken(candidate, ctx)
   }
 
-  public arguments (): Arguments {
-    const args = this.candidates.slice()
+  public * arguments (): Arguments {
+    yield * this.candidates
 
     if (this.group) {
-      args.push(this.group)
+      yield this.group
     }
-
-    return args
   }
 }

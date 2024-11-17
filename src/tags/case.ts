@@ -77,13 +77,11 @@ export default class extends Tag {
     return this.branches.flatMap(b => b.values)
   }
 
-  public children (): Template[] {
-    const children = this.branches.flatMap(b => b.templates)
+  public * children (): Iterable<Template> {
+    yield * this.branches.flatMap(b => b.templates)
 
     if (this.elseTemplates) {
-      children.push(...this.elseTemplates)
+      yield * this.elseTemplates
     }
-
-    return children
   }
 }

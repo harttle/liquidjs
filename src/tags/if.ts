@@ -46,14 +46,12 @@ export default class extends Tag {
     yield r.renderTemplates(this.elseTemplates || [], ctx, emitter)
   }
 
-  public children (): Template[] {
-    const children = this.branches.flatMap(b => b.templates)
+  public * children (): Iterable<Template> {
+    yield * this.branches.flatMap(b => b.templates)
 
     if (this.elseTemplates) {
-      children.push(...this.elseTemplates)
+      yield * this.elseTemplates
     }
-
-    return children
   }
 
   public arguments (): Arguments {

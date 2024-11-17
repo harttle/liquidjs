@@ -44,29 +44,21 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public arguments (): Arguments {
-    const args: Arguments = []
-
+  public * arguments (): Arguments {
     for (const v of Object.values(this.args.hash)) {
       if (isValueToken(v)) {
-        args.push(v)
+        yield v
       }
     }
 
     if (isValueToken(this['file'])) {
-      args.push(this['file'])
+      yield this['file']
     }
-
-    return args
   }
 
-  public blockScope (): string[] {
-    const names: string[] = []
-
+  public * blockScope (): Iterable<string> {
     for (const k of Object.keys(this.args.hash)) {
-      names.push(k)
+      yield k
     }
-
-    return names
   }
 }

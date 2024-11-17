@@ -16,11 +16,11 @@ export default class extends Tag {
     emitter.write(stringify(--scope[this.variable]))
   }
 
-  public arguments (): Arguments {
-    return [this.variable]
+  public * arguments (): Arguments {
+    yield this.variable
   }
 
-  public localScope (): string[] {
-    return [this.variable]
+  public * localScope (): Iterable<string> {
+    yield this.variable
   }
 }
