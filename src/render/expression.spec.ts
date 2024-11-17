@@ -50,6 +50,16 @@ describe('Expression', function () {
       expect(await toPromise(create('foo[doo["foo"]]').evaluate(ctx, false))).toBe('BAR')
       expect(await toPromise(create('doo[coo].foo').evaluate(ctx, false))).toBe('bar')
     })
+    it('should support drops in property access', async function () {
+      class TemplateDrop extends Drop {
+        valueOf () { return 'bar' }
+      }
+      const ctx = new Context({
+        foo: { bar: 'BAR' },
+        coo: new TemplateDrop()
+      })
+      expect(await toPromise(create('foo[coo]').evaluate(ctx, false))).toBe('BAR')
+    })
   })
 
   describe('simple expression', function () {
