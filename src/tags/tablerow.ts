@@ -69,8 +69,14 @@ export default class extends Tag {
     return this.templates
   }
 
-  public arguments (): Arguments {
-    return Object.values(this.args.hash).filter(isValueToken)
+  public * arguments (): Arguments {
+    yield this.collection
+
+    for (const v of Object.values(this.args.hash)) {
+      if (isValueToken(v)) {
+        yield v
+      }
+    }
   }
 
   public blockScope (): string[] {

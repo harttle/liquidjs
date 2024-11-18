@@ -1,6 +1,6 @@
 import { Argument, Template, Value } from '.'
 import { isKeyValuePair } from '../parser/filter-arg'
-import { PropertyAccessToken, ValueToken } from '../tokens'
+import { IdentifierToken, PropertyAccessToken, ValueToken } from '../tokens'
 import {
   isNumberToken,
   isPropertyAccessToken,
@@ -139,12 +139,17 @@ export function analyze (templates: Template[]): StaticAnalysis {
     }
 
     if (template.localScope) {
-      for (const key of template.localScope()) {
-        // Names added to the scope by tags like `assign`, `capture` and `increment`.
-        templateScope.add(key)
-        // XXX: This is the row and col of the node as some names (like 'tablerow') don't have a token.
-        const [row, col] = template.token.getPosition()
-        locals.push(new Variable([key], { row, col, file: template.token.file }))
+      for (const ident of template.localScope()) {
+        if (isString(ident)) {
+          templateScope.add(ident)
+          // XXX: This is the row and col of the node as some names (like 'tablerow') don't have a token.
+          const [row, col] = template.token.getPosition()
+          locals.push(new Variable([ident], { row, col, file: template.token.file }))
+        } else {
+          templateScope.add(ident.content)
+          const [row, col] = ident.getPosition()
+          locals.push(new Variable([ident.content], { row, col, file: template.token.file }))
+        }
       }
     }
 
@@ -203,7 +208,10 @@ class DummyScope {
 }
 
 function * extractVariables (value: Argument): Generator<Variable> {
-  if (isValueToken(value)) {
+  if (value instanceof IdentifierToken) {
+    const [row, col] = value.getPosition()
+    yield new Variable([value.content], { row, col, file: value.file })
+  } else if (isValueToken(value)) {
     yield * extractValueTokenVariables(value)
   } else if (value instanceof Value) {
     yield * extractFilteredValueVariables(value)
@@ -234,10 +242,7 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
     yield * extractValueTokenVariables(token.rhs)
   } else if (isPropertyAccessToken(token)) {
     yield extractPropertyAccessVariable(token)
-  } else if (
-    isNumberToken(token) ||
-    isWordToken(token)
-  ) {
+  } else if (isWordToken(token)) {
     const [row, col] = token.getPosition()
     yield new Variable([token.content], {
       row,

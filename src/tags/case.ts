@@ -73,8 +73,9 @@ export default class extends Tag {
     }
   }
 
-  public arguments (): Arguments {
-    return this.branches.flatMap(b => b.values)
+  public * arguments (): Arguments {
+    yield this.value
+    yield * this.branches.flatMap(b => b.values)
   }
 
   public * children (): Iterable<Template> {

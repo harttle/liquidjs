@@ -1,10 +1,10 @@
 import { Context } from '../context/context'
 import { Token } from '../tokens/token'
 import { Emitter } from '../emitters/emitter'
-import { ValueToken } from '../tokens'
+import { IdentifierToken, QuotedToken, ValueToken } from '../tokens'
 import { Value } from './value'
 
-export type Argument = string | Value | ValueToken
+export type Argument = IdentifierToken | Value | ValueToken
 export type Arguments = Iterable<Argument>
 
 export interface Template {
@@ -13,5 +13,5 @@ export interface Template {
   children?(): Iterable<Template>;
   arguments?(): Arguments;
   blockScope?(): Iterable<string>;
-  localScope?(): Iterable<string>;
+  localScope?(): Iterable<string | IdentifierToken | QuotedToken>;
 }
