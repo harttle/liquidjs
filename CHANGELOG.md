@@ -1,3 +1,11 @@
+# [10.19.0](https://github.com/harttle/liquidjs/compare/v10.18.0...v10.19.0) (2024-11-17)
+
+
+### Features
+
+* allow drops in property access ([#769](https://github.com/harttle/liquidjs/issues/769)) ([11f013b](https://github.com/harttle/liquidjs/commit/11f013bf249f1366306c1f0d728d45a95eb2df1a))
+* support Jekyll style `where`, [#768](https://github.com/harttle/liquidjs/issues/768) ([9107eb1](https://github.com/harttle/liquidjs/commit/9107eb1b93f5c11dca0ee0f0d2c1c8243849c3ab))
+
 # [10.18.0](https://github.com/harttle/liquidjs/compare/v10.17.0...v10.18.0) (2024-10-16)
 
 
