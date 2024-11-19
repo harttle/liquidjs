@@ -45,11 +45,11 @@ export type VariableSegments = Array<string | number | Variable>;
 export type Variables = { [key: string]: Variable };
 
 /**
- * A custom map that groups variables by their string representation.
+ * A custom map that groups variables by the string representation of their root.
  */
 class VariableMap extends Map<Variable | string, Variable[]> {
   get (key: Variable): Variable[] {
-    const k = segmentsString(key.segments)
+    const k = segmentsString([key.segments[0]])
     if (!this.has(k)) {
       this.set(k, [])
     }
@@ -58,7 +58,7 @@ class VariableMap extends Map<Variable | string, Variable[]> {
 
   has (key: string | Variable): boolean {
     if (key instanceof Variable) {
-      return super.has(segmentsString(key.segments))
+      return super.has(segmentsString([key.segments[0]]))
     }
     return super.has(key)
   }
@@ -142,7 +142,7 @@ export function analyze (templates: Template[]): StaticAnalysis {
       for (const ident of template.localScope()) {
         if (isString(ident)) {
           templateScope.add(ident)
-          // XXX: This is the row and col of the node as some names (like 'tablerow') don't have a token.
+          // XXX: This is the row and col of the node as some names (like 'tablerowloop') don't have a token.
           const [row, col] = template.token.getPosition()
           locals.push(new Variable([ident], { row, col, file: template.token.file }))
         } else {
@@ -242,13 +242,6 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
     yield * extractValueTokenVariables(token.rhs)
   } else if (isPropertyAccessToken(token)) {
     yield extractPropertyAccessVariable(token)
-  } else if (isWordToken(token)) {
-    const [row, col] = token.getPosition()
-    yield new Variable([token.content], {
-      row,
-      col,
-      file: token.file
-    })
   }
 }
 
@@ -256,6 +249,7 @@ function extractPropertyAccessVariable (token: PropertyAccessToken): Variable {
   const segments: VariableSegments = []
 
   if (isQuotedToken(token.variable) || isNumberToken(token.variable)) {
+    // XXX: I think this is unreachable.
     segments.push(token.variable.content)
   }
 

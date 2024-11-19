@@ -65,11 +65,11 @@ describe('Variable analysis', () => {
     const template = engine.parse('{{ a.b }}')
     const analysis = analyze(template)
 
-    const v = new Variable(['a', 'b'], { row: 1, col: 4, file: undefined })
+    const a = [new Variable(['a', 'b'], { row: 1, col: 4, file: undefined })]
 
     expect(analysis).toStrictEqual({
-      variables: { 'a.b': [v] },
-      globals: { 'a.b': [v] },
+      variables: { a },
+      globals: { a },
       locals: {}
     })
   })
@@ -78,11 +78,37 @@ describe('Variable analysis', () => {
     const template = engine.parse('{{ a["b c"] }}')
     const analysis = analyze(template)
 
-    const v = new Variable(['a', 'b c'], { row: 1, col: 4, file: undefined })
+    const a = [new Variable(['a', 'b c'], { row: 1, col: 4, file: undefined })]
 
     expect(analysis).toStrictEqual({
-      variables: { "a['b c']": [v] },
-      globals: { "a['b c']": [v] },
+      variables: { a },
+      globals: { a },
+      locals: {}
+    })
+  })
+
+  it('should handle bracketed variable root', () => {
+    const template = engine.parse('{{ ["a"] }}')
+    const analysis = analyze(template)
+
+    const a = [new Variable(['a'], { row: 1, col: 4, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { a },
+      globals: { a },
+      locals: {}
+    })
+  })
+
+  it('should handle paths containing array indices', () => {
+    const template = engine.parse('{{ a[1] }}')
+    const analysis = analyze(template)
+
+    const a = [new Variable(['a', 1], { row: 1, col: 4, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { a },
+      globals: { a },
       locals: {}
     })
   })
@@ -95,8 +121,8 @@ describe('Variable analysis', () => {
     const a = new Variable(['a', bc], { row: 1, col: 4, file: undefined })
 
     expect(analysis).toStrictEqual({
-      variables: { 'a[b.c]': [a], 'b.c': [bc] },
-      globals: { 'a[b.c]': [a], 'b.c': [bc] },
+      variables: { 'a': [a], 'b': [bc] },
+      globals: { 'a': [a], 'b': [bc] },
       locals: {}
     })
   })
@@ -110,8 +136,24 @@ describe('Variable analysis', () => {
     const d = new Variable(['d', a], { row: 1, col: 4, file: undefined })
 
     expect(analysis).toStrictEqual({
-      variables: { 'd[a[b.c]]': [d], 'a[b.c]': [a], 'b.c': [bc] },
-      globals: { 'd[a[b.c]]': [d], 'a[b.c]': [a], 'b.c': [bc] },
+      variables: { 'd': [d], 'a': [a], 'b': [bc] },
+      globals: { 'd': [d], 'a': [a], 'b': [bc] },
+      locals: {}
+    })
+  })
+
+  it('should group variables by their root value', () => {
+    const template = engine.parse('{{ a.b }} {{ a.c }}')
+    const analysis = analyze(template)
+
+    const a = [
+      new Variable(['a', 'b'], { row: 1, col: 4, file: undefined }),
+      new Variable(['a', 'c'], { row: 1, col: 14, file: undefined })
+    ]
+
+    expect(analysis).toStrictEqual({
+      variables: { a },
+      globals: { a },
       locals: {}
     })
   })
@@ -147,11 +189,11 @@ describe('Variable analysis', () => {
     const template = engine.parse('{% if a %}b{% endif %}')
     const analysis = analyze(template)
 
-    const a = new Variable(['a'], { row: 1, col: 7, file: undefined })
+    const a = [new Variable(['a'], { row: 1, col: 7, file: undefined })]
 
     expect(analysis).toStrictEqual({
-      variables: { a: [a] },
-      globals: { a: [a] },
+      variables: { a },
+      globals: { a },
       locals: {}
     })
   })
@@ -160,11 +202,11 @@ describe('Variable analysis', () => {
     const template = engine.parse('{% if true %}{% if false %}{{ a }}{% endif %}{% endif %}')
     const analysis = analyze(template)
 
-    const a = new Variable(['a'], { row: 1, col: 31, file: undefined })
+    const a = [new Variable(['a'], { row: 1, col: 31, file: undefined })]
 
     expect(analysis).toStrictEqual({
-      variables: { a: [a] },
-      globals: { a: [a] },
+      variables: { a },
+      globals: { a },
       locals: {}
     })
   })
@@ -276,7 +318,7 @@ describe('Variable analysis', () => {
   it('should report variables from for tags', () => {
     const source = [
       '{% for x in (1..y) %}',
-      '  {{ x }}',
+      '  {{ x }} {{ forloop.index }} {{ forloop.first }}',
       '{% break %}',
       '{% else %}',
       '  {{ z }}',
@@ -292,9 +334,17 @@ describe('Variable analysis', () => {
     const z = [new Variable(['z'], { row: 5, col: 6, file: undefined })]
 
     expect(analysis).toStrictEqual({
-      variables: { x, y, z },
+      variables: {
+        x,
+        y,
+        z,
+        'forloop': [
+          new Variable(['forloop', 'index'], { row: 2, col: 14, file: undefined }),
+          new Variable(['forloop', 'first'], { row: 2, col: 34, file: undefined })
+        ]
+      },
       globals: { y, z },
-      locals: { }
+      locals: {}
     })
   })
 
@@ -356,7 +406,7 @@ describe('Variable analysis', () => {
     const analysis = analyze(template)
 
     const globals = {
-      'product.title': [new Variable(['product', 'title'], { row: 2, col: 6, file: undefined })],
+      'product': [new Variable(['product', 'title'], { row: 2, col: 6, file: undefined })],
       foo: [new Variable(['foo'], { row: 3, col: 10, file: undefined })]
     }
 
@@ -374,7 +424,7 @@ describe('Variable analysis', () => {
     const analysis = analyze(template)
 
     const globals = {
-      'y.z': [new Variable(['y', 'z'], { row: 1, col: 18, file: undefined })],
+      'y': [new Variable(['y', 'z'], { row: 1, col: 18, file: undefined })],
       a: [new Variable(['a'], { row: 1, col: 39, file: undefined })]
     }
 
@@ -458,4 +508,8 @@ describe('Variable analysis', () => {
   // TODO: render
   // TODO: block
   // TODO: layout
+  // TODO: custom tag
+  // TODO: localScope containing a string (all built-in tags use tokens)
+  // TODO: argument that is an IdentifierToken
+  // TODO: file names in location object
 })
