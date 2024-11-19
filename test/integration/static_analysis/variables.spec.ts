@@ -142,6 +142,21 @@ describe('Variable analysis', () => {
     })
   })
 
+  it('should report deeply nested global and local variables', () => {
+    const template = engine.parse('{% assign b = null %}{{ d[a[b.c]] }}')
+    const analysis = analyze(template)
+
+    const bc = new Variable(['b', 'c'], { row: 1, col: 29, file: undefined })
+    const a = new Variable(['a', bc], { row: 1, col: 27, file: undefined })
+    const d = new Variable(['d', a], { row: 1, col: 25, file: undefined })
+
+    expect(analysis).toStrictEqual({
+      variables: { 'd': [d], 'a': [a], 'b': [bc] },
+      globals: { 'd': [d], 'a': [a] },
+      locals: { 'b': [new Variable(['b'], { row: 1, col: 11, file: undefined })] }
+    })
+  })
+
   it('should group variables by their root value', () => {
     const template = engine.parse('{{ a.b }} {{ a.c }}')
     const analysis = analyze(template)
