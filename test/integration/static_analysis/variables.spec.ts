@@ -416,6 +416,44 @@ describe('Variable analysis', () => {
     })
   })
 
+  it('should report variables from nested tags', () => {
+    const source = [
+      '{% if a %}',
+      '  {% for x in b %}',
+      '    {% unless x == y %}',
+      '      {% if 42 == c %}',
+      '        {{ a }}, {{ y }}',
+      '      {% endif %}',
+      '    {% endunless %}',
+      '  {% endfor %}',
+      '{% endif %}'
+    ].join('\n')
+
+    const template = engine.parse(source)
+    const analysis = analyze(template)
+
+    const refs = {
+      a: [
+        new Variable(['a'], { row: 1, col: 7, file: undefined }),
+        new Variable(['a'], { row: 5, col: 12, file: undefined })
+      ],
+      b: [new Variable(['b'], { row: 2, col: 15, file: undefined })],
+      c: [new Variable(['c'], { row: 4, col: 19, file: undefined })],
+      y: [
+        new Variable(['y'], { row: 3, col: 20, file: undefined }),
+        new Variable(['y'], { row: 5, col: 21, file: undefined })
+      ]
+    }
+
+    const x = [new Variable(['x'], { row: 3, col: 15, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { ...refs, x },
+      globals: refs,
+      locals: { }
+    })
+  })
+
   // TODO: include
   // TODO: render
   // TODO: block
