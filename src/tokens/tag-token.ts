@@ -25,8 +25,4 @@ export class TagToken extends DelimitedToken {
   get args (): string {
     return this.tokenizer.input.slice(this.tokenizer.p, this.contentRange[1])
   }
-
-  public argsRange (): [number, number] {
-    return [this.tokenizer.p, this.contentRange[1]]
-  }
 }

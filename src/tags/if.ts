@@ -12,13 +12,13 @@ export default class extends Tag {
     let p: Template[] = []
     parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
-        value: new Value(tagToken, this.liquid),
+        value: new Value(tagToken.tokenizer.readFilteredValue(), this.liquid),
         templates: (p = [])
       }))
       .on('tag:elsif', (token: TagToken) => {
         assert(!this.elseTemplates, 'unexpected elsif after else')
         this.branches.push({
-          value: new Value(token, this.liquid),
+          value: new Value(token.tokenizer.readFilteredValue(), this.liquid),
           templates: (p = [])
         })
       })

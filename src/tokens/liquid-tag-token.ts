@@ -7,7 +7,6 @@ import { Tokenizer, TokenKind } from '../parser'
  */
 export class LiquidTagToken extends DelimitedToken {
   public name: string
-  public args: string
   public tokenizer: Tokenizer
   public constructor (
     input: string,
@@ -21,10 +20,9 @@ export class LiquidTagToken extends DelimitedToken {
     this.name = this.tokenizer.readTagName()
     this.tokenizer.assert(this.name, 'illegal liquid tag syntax')
     this.tokenizer.skipBlank()
-    this.args = this.tokenizer.remaining()
   }
 
-  public argsRange (): [number, number] {
-    return [this.tokenizer.p, this.contentRange[1]]
+  get args (): string {
+    return this.tokenizer.input.slice(this.tokenizer.p, this.contentRange[1])
   }
 }

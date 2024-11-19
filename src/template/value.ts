@@ -1,8 +1,8 @@
 import { Filter } from './filter'
 import { Expression } from '../render'
 import { Tokenizer } from '../parser'
-import { assert, isString, isTagToken } from '../util'
-import type { FilteredValueToken, TagToken } from '../tokens'
+import { assert } from '../util'
+import type { FilteredValueToken } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
 
@@ -13,8 +13,10 @@ export class Value {
   /**
    * @param str the value to be valuated, eg.: "foobar" | truncate: 3
    */
-  public constructor (input: string | FilteredValueToken | TagToken, liquid: Liquid) {
-    const token = this.getToken(input, liquid)
+  public constructor (input: string | FilteredValueToken, liquid: Liquid) {
+    const token: FilteredValueToken = typeof input === 'string'
+      ? new Tokenizer(input, liquid.options.operators).readFilteredValue()
+      : input
     this.initial = token.initial
     this.filters = token.filters.map(token => new Filter(token, this.getFilter(liquid, token.name), liquid))
   }
@@ -33,17 +35,5 @@ export class Value {
     const impl = liquid.filters[name]
     assert(impl || !liquid.options.strictFilters, () => `undefined filter: ${name}`)
     return impl
-  }
-
-  private getToken (input: string | FilteredValueToken | TagToken, liquid: Liquid): FilteredValueToken {
-    if (isString(input)) {
-      return new Tokenizer(input, liquid.options.operators).readFilteredValue()
-    }
-
-    if (isTagToken(input)) {
-      return new Tokenizer(input.input, liquid.options.operators, input.file, input.argsRange()).readFilteredValue()
-    }
-
-    return input
   }
 }
