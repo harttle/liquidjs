@@ -1,8 +1,8 @@
 import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
-import { Arguments } from '../template'
-import { isValueToken } from '../util'
+import { Arguments, PartialScope } from '../template'
+import { isString, isValueToken, toValueSync } from '../util'
 import { parseFilePath, renderFilePath } from './render'
 
 export default class extends Tag {
@@ -23,7 +23,7 @@ export default class extends Tag {
       } else tokenizer.p = begin
     } else tokenizer.p = begin
 
-    this.hash = new Hash(tokenizer.remaining(), liquid.options.jekyllInclude || liquid.options.keyValueSeparator)
+    this.hash = new Hash(tokenizer, liquid.options.jekyllInclude || liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const { liquid, hash, withVar } = this
@@ -43,6 +43,29 @@ export default class extends Tag {
     ctx.restoreRegister(saved)
   }
 
+  public children (partials: boolean): Iterable<Template> {
+    if (partials && isString(this['file'])) {
+      // TODO: async
+      // TODO: throw error if this.file does not exist?
+      return toValueSync(this.liquid._parsePartialFile(this['file'], true, this['currentFile']))
+    }
+
+    // XXX: We're silently ignoring dynamically named partial templates.
+    return []
+  }
+
+  public partialScope (): PartialScope | undefined {
+    if (isString(this['file'])) {
+      const names = Object.keys(this.hash.hash)
+
+      if (this.withVar) {
+        names.push(this['file'])
+      }
+
+      return { name: this['file'], isolated: false, scope: names }
+    }
+  }
+
   public * arguments (): Arguments {
     yield * Object.values(this.hash.hash).filter(isValueToken)
 
@@ -53,13 +76,5 @@ export default class extends Tag {
     if (isValueToken(this.withVar)) {
       yield this.withVar
     }
-  }
-
-  public * blockScope (): Iterable<string> {
-    for (const k of Object.keys(this.hash.hash)) {
-      yield k
-    }
-
-    // TODO: withVar
   }
 }

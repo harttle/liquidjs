@@ -103,15 +103,19 @@ export interface StaticAnalysis {
 /**
  * Statically analyze a template and report variable usage.
  */
-export function analyze (templates: Template[]): StaticAnalysis {
+export function analyzeSync (templates: Template[], partials = true): StaticAnalysis {
   const variables = new VariableMap()
   const globals = new VariableMap()
   const locals = new VariableMap()
 
   const templateScope: Set<string> = new Set()
-  const scope = new DummyScope(templateScope)
+  const rootScope = new DummyScope(templateScope)
 
-  function updateVariables (variable: Variable): void {
+  // Names of partial templates that we've already analyzed.
+  // TODO: do we need to take special measures for relative template names?
+  const seen: Set<string | undefined> = new Set()
+
+  function updateVariables (variable: Variable, scope: DummyScope): void {
     variables.push(variable)
 
     // Variables that are not in scope are assumed to be global, that is,
@@ -124,16 +128,16 @@ export function analyze (templates: Template[]): StaticAnalysis {
     // recurse for nested Variables
     for (const segment of variable.segments) {
       if (segment instanceof Variable) {
-        updateVariables(segment)
+        updateVariables(segment, scope)
       }
     }
   }
 
-  function visit (template: Template): void {
+  function visit (template: Template, scope: DummyScope, isolated = false): void {
     if (template.arguments) {
       for (const arg of template.arguments()) {
         for (const variable of extractVariables(arg)) {
-          updateVariables(variable)
+          updateVariables(variable, scope)
         }
       }
     }
@@ -148,28 +152,44 @@ export function analyze (templates: Template[]): StaticAnalysis {
         } else {
           templateScope.add(ident.content)
           const [row, col] = ident.getPosition()
-          locals.push(new Variable([ident.content], { row, col, file: template.token.file }))
+          locals.push(new Variable([ident.content], { row, col, file: ident.file }))
         }
       }
     }
 
-    if (template.blockScope) {
-      scope.push(new Set(template.blockScope()))
-    }
-
     if (template.children) {
-      for (const child of template.children()) {
-        visit(child)
-      }
-    }
+      if (template.partialScope) {
+        const partial = template.partialScope()
+        if (partial === undefined || seen.has(partial.name)) return
 
-    if (template.blockScope) {
-      scope.pop()
+        const partialScope = partial.isolated
+          ? new DummyScope(new Set(partial.scope))
+          : scope.push(new Set(partial.scope))
+
+        for (const child of template.children(partials)) {
+          visit(child, partialScope)
+          seen.add(partial.name)
+        }
+
+        partialScope.pop()
+      } else {
+        if (template.blockScope) {
+          scope.push(new Set(template.blockScope()))
+        }
+
+        for (const child of template.children(partials)) {
+          visit(child, scope)
+        }
+
+        if (template.blockScope) {
+          scope.pop()
+        }
+      }
     }
   }
 
   for (const template of templates) {
-    visit(template)
+    visit(template, rootScope)
   }
 
   return {
@@ -198,8 +218,9 @@ class DummyScope {
     return false
   }
 
-  public push (scope: Set<string>): void {
+  public push (scope: Set<string>): DummyScope {
     this.stack.push(scope)
+    return this
   }
 
   public pop (): Set<string> | undefined {
@@ -248,12 +269,17 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
 function extractPropertyAccessVariable (token: PropertyAccessToken): Variable {
   const segments: VariableSegments = []
 
+  // token is not guaranteed to have `file` set. We'll try to get it from a prop if not.
+  let file: string | undefined = token.file
+
   if (isQuotedToken(token.variable) || isNumberToken(token.variable)) {
     // XXX: I think this is unreachable.
     segments.push(token.variable.content)
+    file = file || token.variable.file
   }
 
   for (const prop of token.props) {
+    file = file || prop.file
     if (isQuotedToken(prop) || isNumberToken(prop) || isWordToken(prop)) {
       segments.push(prop.content)
     } else if (isPropertyAccessToken(prop)) {
@@ -265,7 +291,7 @@ function extractPropertyAccessVariable (token: PropertyAccessToken): Variable {
   return new Variable(segments, {
     row,
     col,
-    file: token.file
+    file
   })
 }
 

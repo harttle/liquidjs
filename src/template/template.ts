@@ -6,12 +6,14 @@ import { Value } from './value'
 
 export type Argument = IdentifierToken | Value | ValueToken
 export type Arguments = Iterable<Argument>
+export type PartialScope = { name: string, isolated: boolean, scope: Iterable<string> }
 
 export interface Template {
   token: Token;
   render(ctx: Context, emitter: Emitter): any;
-  children?(): Iterable<Template>;
+  children?(partials: boolean): Iterable<Template>;
   arguments?(): Arguments;
   blockScope?(): Iterable<string>;
   localScope?(): Iterable<string | IdentifierToken | QuotedToken>;
+  partialScope?(): PartialScope | undefined;
 }

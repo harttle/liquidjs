@@ -1,9 +1,9 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
-import { isString, isValueToken, toEnumerable } from '../util'
+import { isString, isValueToken, toEnumerable, toValueSync } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
-import { Arguments } from '../template'
+import { Arguments, PartialScope } from '../template'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -77,6 +77,34 @@ export default class extends Tag {
     }
   }
 
+  public children (partials: boolean): Iterable<Template> {
+    if (partials && isString(this['file'])) {
+      // TODO: async
+      // TODO: throw error if this.file does not exist?
+      return toValueSync(this.liquid._parsePartialFile(this['file'], true, this['currentFile']))
+    }
+
+    // XXX: We're silently ignoring dynamically named partial templates.
+    return []
+  }
+
+  public partialScope (): PartialScope | undefined {
+    if (isString(this['file'])) {
+      const names = Object.keys(this.hash.hash)
+
+      if (this['for']) {
+        const { alias } = this['for']
+        if (isString(alias)) {
+          names.push(alias)
+        } else if (isString(this.file)) {
+          names.push(this.file)
+        }
+      }
+
+      return { name: this['file'], isolated: true, scope: names }
+    }
+  }
+
   public * arguments (): Arguments {
     for (const v of Object.values(this.hash.hash)) {
       if (isValueToken(v)) {
@@ -93,21 +121,6 @@ export default class extends Tag {
       if (isValueToken(value)) {
         yield value
       }
-    }
-  }
-
-  public * blockScope (): Iterable<string> {
-    yield * Object.keys(this.hash.hash)
-
-    if (this['for']) {
-      const { alias } = this['for']
-      if (isString(alias)) {
-        yield alias
-      } else if (isString(this.file)) {
-        yield this.file
-      }
-
-      yield 'forloop'
     }
   }
 }
