@@ -811,7 +811,7 @@ describe('Variable analysis', () => {
     })
   })
 
-  it('should report analyze rendered templates in an isolated scope', () => {
+  it('should analyze rendered templates in an isolated scope', () => {
     const engine = new Liquid({ templates: { 'a': '{{ foo }}' } })
     const template = engine.parse('{% assign foo = "bar" %}{% render "a" %}{{ foo }}')
     const analysis = analyzeSync(template)
@@ -826,8 +826,122 @@ describe('Variable analysis', () => {
     })
   })
 
-  // TODO: block
-  // TODO: layout
+  it('should report variables from layout templates', () => {
+    const engine = new Liquid({ templates: { 'a': '{{ x }}{% block %}{% endblock %}{{ y }}' } })
+    const template = engine.parse('{% layout "a" %}{% block %}{{ z }}{% endblock %}')
+    const analysis = analyzeSync(template)
+
+    const x = [new Variable(['x'], { row: 1, col: 4, file: 'a' })]
+    const y = [new Variable(['y'], { row: 1, col: 36, file: 'a' })]
+    const z = [new Variable(['z'], { row: 1, col: 31, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { x, y, z },
+      globals: { x, y, z },
+      locals: { }
+    })
+  })
+
+  it('should report variables outside block tags', () => {
+    const engine = new Liquid({ templates: { 'a': '{{ x }}{% block %}{% endblock %}{{ y }}' } })
+    const template = engine.parse('{% layout "a" %}{{ b }}{% block %}{{ z }}{% endblock %}')
+    const analysis = analyzeSync(template)
+
+    const b = [new Variable(['b'], { row: 1, col: 20, file: undefined })]
+    const x = [new Variable(['x'], { row: 1, col: 4, file: 'a' })]
+    const y = [new Variable(['y'], { row: 1, col: 36, file: 'a' })]
+    const z = [new Variable(['z'], { row: 1, col: 38, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { b, x, y, z },
+      globals: { b, x, y, z },
+      locals: { }
+    })
+  })
+
+  it('should handle layout is none', () => {
+    const engine = new Liquid()
+    const template = engine.parse('{% layout none %}{% block %}{{ z }}{% endblock %}')
+    const analysis = analyzeSync(template)
+
+    const z = [new Variable(['z'], { row: 1, col: 32, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { z },
+      globals: { z },
+      locals: { }
+    })
+  })
+
+  it('should handle block.super', () => {
+    const engine = new Liquid({ templates: { 'a': '{{ x }}{% block %}{{ b }}{% endblock %}{{ y }}' } })
+    const template = engine.parse('{% layout "a" %}{% block %}{{ z }}{{ block.super }}{% endblock %}')
+    const analysis = analyzeSync(template)
+
+    const b = [new Variable(['b'], { row: 1, col: 22, file: 'a' })]
+    const x = [new Variable(['x'], { row: 1, col: 4, file: 'a' })]
+    const y = [new Variable(['y'], { row: 1, col: 43, file: 'a' })]
+    const z = [new Variable(['z'], { row: 1, col: 31, file: undefined })]
+    const block = [new Variable(['block', 'super'], { row: 1, col: 38, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { b, x, y, z, block },
+      globals: { b, x, y, z },
+      locals: { }
+    })
+  })
+
+  it('should handle recursive layout', () => {
+    const engine = new Liquid({ templates: {
+      'a': '{% layout "b" %}{% block %}{{ a }}{% endblock %}',
+      'b': '{% layout "a" %}{% block %}{{ b }}{% endblock %}'
+    } })
+    const template = engine.parse('{% layout "a" %}{{ c }}')
+    const analysis = analyzeSync(template)
+
+    const a = [new Variable(['a'], { row: 1, col: 31, file: 'a' })]
+    // const b = [new Variable(['b'], { row: 1, col: 31, file: 'b' })]
+    const c = [new Variable(['c'], { row: 1, col: 20, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { a, c },
+      globals: { a, c },
+      locals: { }
+    })
+  })
+
+  it('should ignore layouts with a dynamic name', () => {
+    const engine = new Liquid()
+    const template = engine.parse('{% layout a %}')
+    const analysis = analyzeSync(template)
+
+    const a = [new Variable(['a'], { row: 1, col: 11, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { a },
+      globals: { a },
+      locals: { }
+    })
+  })
+
+  it('should report variables from layout keyword arguments', () => {
+    const engine = new Liquid({ templates: { 'a': '{% block %}{{ x }}{% endblock %}' } })
+    const template = engine.parse('{% layout "a" x:y %}')
+    const analysis = analyzeSync(template)
+
+    const x = [new Variable(['x'], { row: 1, col: 15, file: 'a' })]
+    const y = [new Variable(['y'], { row: 1, col: 17, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { x, y },
+      globals: { y },
+      locals: { }
+    })
+  })
+
+  // TODO: JekyllInclude
+  // TODO: dynamicPartials
+  // TODO: partials with relative names
   // TODO: custom tag
   // TODO: localScope containing a string (all built-in tags use tokens)
   // TODO: argument that is an IdentifierToken

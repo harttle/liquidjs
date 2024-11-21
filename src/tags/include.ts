@@ -55,6 +55,7 @@ export default class extends Tag {
   }
 
   public partialScope (): PartialScope | undefined {
+    // TODO: JekyllInclude
     if (isString(this['file'])) {
       const names = Object.keys(this.hash.hash)
 

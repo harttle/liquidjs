@@ -160,7 +160,16 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
     if (template.children) {
       if (template.partialScope) {
         const partial = template.partialScope()
-        if (partial === undefined || seen.has(partial.name)) return
+
+        if (partial === undefined) {
+          // Layouts, for example, can have children that are not partials.
+          for (const child of template.children(partials)) {
+            visit(child, scope)
+          }
+          return
+        }
+
+        if (seen.has(partial.name)) return
 
         const partialScope = partial.isolated
           ? new DummyScope(new Set(partial.scope))

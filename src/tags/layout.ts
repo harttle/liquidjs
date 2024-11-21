@@ -3,8 +3,8 @@ import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
-import { Arguments } from '../template'
-import { isValueToken } from '../util'
+import { Arguments, PartialScope } from '../template'
+import { isString, isValueToken, toValueSync } from '../util'
 
 export default class extends Tag {
   args: Hash
@@ -44,6 +44,15 @@ export default class extends Tag {
     ctx.pop()
   }
 
+  public * children (partials: boolean): Iterable<Template> {
+    yield * this.templates
+
+    if (partials && isString(this.file)) {
+      // TODO: async
+      yield * toValueSync(this.liquid._parsePartialFile(this.file, true, this['currentFile']))
+    }
+  }
+
   public * arguments (): Arguments {
     for (const v of Object.values(this.args.hash)) {
       if (isValueToken(v)) {
@@ -51,14 +60,14 @@ export default class extends Tag {
       }
     }
 
-    if (isValueToken(this['file'])) {
-      yield this['file']
+    if (isValueToken(this.file)) {
+      yield this.file
     }
   }
 
-  public * blockScope (): Iterable<string> {
-    for (const k of Object.keys(this.args.hash)) {
-      yield k
+  public partialScope (): PartialScope | undefined {
+    if (isString(this.file)) {
+      return { name: this.file, isolated: false, scope: Object.keys(this.args.hash) }
     }
   }
 }

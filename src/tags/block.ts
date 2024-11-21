@@ -46,4 +46,8 @@ export default class extends Tag {
   public children (): Iterable<Template> {
     return this.templates
   }
+
+  public blockScope (): Iterable<string> {
+    return ['block']
+  }
 }
