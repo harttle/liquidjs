@@ -46,7 +46,7 @@ export default class extends Tag {
       tokenizer.p = begin
       break
     }
-    this.hash = new Hash(tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.hash = new Hash(tokenizer, liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const { liquid, hash } = this

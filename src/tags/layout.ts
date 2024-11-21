@@ -14,7 +14,7 @@ export default class extends Tag {
     super(token, remainTokens, liquid)
     this.file = parseFilePath(this.tokenizer, this.liquid, parser)
     this['currentFile'] = token.file
-    this.args = new Hash(this.tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.args = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = parser.parseTokens(remainTokens)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {

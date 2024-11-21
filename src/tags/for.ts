@@ -26,7 +26,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collection
-    this.hash = new Hash(this.tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.hash = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
     this.elseTemplates = []
 
