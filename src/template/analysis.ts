@@ -1,6 +1,6 @@
 import { Argument, Template, Value } from '.'
 import { isKeyValuePair } from '../parser/filter-arg'
-import { IdentifierToken, PropertyAccessToken, ValueToken } from '../tokens'
+import { PropertyAccessToken, ValueToken } from '../tokens'
 import {
   isNumberToken,
   isPropertyAccessToken,
@@ -29,7 +29,7 @@ export class Variable extends String {
     readonly segments: Array<string | number | Variable>,
     readonly location: VariableLocation
   ) {
-    super(segmentsString(segments))
+    super(segmentsString(segments, true))
   }
 }
 
@@ -47,7 +47,7 @@ export type Variables = { [key: string]: Variable };
 /**
  * A custom map that groups variables by the string representation of their root.
  */
-class VariableMap extends Map<Variable | string, Variable[]> {
+export class VariableMap extends Map<Variable | string, Variable[]> {
   get (key: Variable): Variable[] {
     const k = segmentsString([key.segments[0]])
     if (!this.has(k)) {
@@ -112,7 +112,6 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
   const rootScope = new DummyScope(templateScope)
 
   // Names of partial templates that we've already analyzed.
-  // TODO: do we need to take special measures for relative template names?
   const seen: Set<string | undefined> = new Set()
 
   function updateVariables (variable: Variable, scope: DummyScope): void {
@@ -126,14 +125,14 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
     }
 
     // recurse for nested Variables
-    for (const segment of variable.segments) {
+    for (const segment of variable.segments.slice(1)) {
       if (segment instanceof Variable) {
         updateVariables(segment, scope)
       }
     }
   }
 
-  function visit (template: Template, scope: DummyScope, isolated = false): void {
+  function visit (template: Template, scope: DummyScope): void {
     if (template.arguments) {
       for (const arg of template.arguments()) {
         for (const variable of extractVariables(arg)) {
@@ -144,16 +143,9 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
 
     if (template.localScope) {
       for (const ident of template.localScope()) {
-        if (isString(ident)) {
-          templateScope.add(ident)
-          // XXX: This is the row and col of the node as some names (like 'tablerowloop') don't have a token.
-          const [row, col] = template.token.getPosition()
-          locals.push(new Variable([ident], { row, col, file: template.token.file }))
-        } else {
-          templateScope.add(ident.content)
-          const [row, col] = ident.getPosition()
-          locals.push(new Variable([ident.content], { row, col, file: ident.file }))
-        }
+        templateScope.add(ident.content)
+        const [row, col] = ident.getPosition()
+        locals.push(new Variable([ident.content], { row, col, file: ident.file }))
       }
     }
 
@@ -238,10 +230,7 @@ class DummyScope {
 }
 
 function * extractVariables (value: Argument): Generator<Variable> {
-  if (value instanceof IdentifierToken) {
-    const [row, col] = value.getPosition()
-    yield new Variable([value.content], { row, col, file: value.file })
-  } else if (isValueToken(value)) {
+  if (isValueToken(value)) {
     yield * extractValueTokenVariables(value)
   } else if (value instanceof Value) {
     yield * extractFilteredValueVariables(value)
@@ -281,13 +270,17 @@ function extractPropertyAccessVariable (token: PropertyAccessToken): Variable {
   // token is not guaranteed to have `file` set. We'll try to get it from a prop if not.
   let file: string | undefined = token.file
 
-  if (isQuotedToken(token.variable) || isNumberToken(token.variable)) {
-    // XXX: I think this is unreachable.
-    segments.push(token.variable.content)
-    file = file || token.variable.file
+  // Here we're flattening the first segment of a path if it is a nested path.
+  const root = token.props[0]
+  file = file || root.file
+  if (isQuotedToken(root) || isNumberToken(root) || isWordToken(root)) {
+    segments.push(root.content)
+  } else if (isPropertyAccessToken(root)) {
+    // Flatten paths that start with a nested path.
+    segments.push(...extractPropertyAccessVariable(root).segments)
   }
 
-  for (const prop of token.props) {
+  for (const prop of token.props.slice(1)) {
     file = file || prop.file
     if (isQuotedToken(prop) || isNumberToken(prop) || isWordToken(prop)) {
       segments.push(prop.content)
@@ -310,15 +303,15 @@ const RE_PROPERTY = /^[\u0080-\uFFFFa-zA-Z_][\u0080-\uFFFFa-zA-Z0-9_-]*$/
 
 /**
  * Return a string representation of segments using dot notation where possible.
+ * @param segments - The property names and array indices that make up a path to a variable.
+ * @param bracketedRoot - If false (the default), don't surround the root segment with square brackets.
  */
-function segmentsString (segments: VariableSegments): string {
+function segmentsString (segments: VariableSegments, bracketedRoot = false): string {
   const buf: string[] = []
 
   const root = segments[0]
-  if (root instanceof Variable) {
-    buf.push(segmentsString(root.segments))
-  } else if (isString(root)) {
-    if (root.match(RE_PROPERTY)) {
+  if (isString(root)) {
+    if (!bracketedRoot || root.match(RE_PROPERTY)) {
       buf.push(`${root}`)
     } else {
       buf.push(`['${root}']`)

@@ -1,4 +1,4 @@
-import { Variable } from './analysis'
+import { Variable, VariableMap } from './analysis'
 
 describe('Analysis variable', () => {
   const mockLocation = { row: 1, col: 1, file: undefined }
@@ -23,5 +23,14 @@ describe('Analysis variable', () => {
   it('should have a location property', () => {
     const v = new Variable(['foo', 'bar'], mockLocation)
     expect(v.location).toStrictEqual(mockLocation)
+  })
+})
+
+describe('Variable map', () => {
+  it('should coerce variables to their string representation', () => {
+    const v = new Variable(['foo', 'bar'], { row: 1, col: 1, file: undefined })
+    const mapping = new VariableMap()
+    mapping.push(v)
+    expect(mapping.has(v)).toBe(true)
   })
 })

@@ -32,6 +32,20 @@ describe('Variable analysis', () => {
     })
   })
 
+  it('should include the template name if available', () => {
+    const engine = new Liquid({ templates: { 'a': '{{ b }}' } })
+    const template = engine.parseFileSync('a')
+    const analysis = analyzeSync(template)
+
+    const b = [new Variable(['b'], { row: 1, col: 4, file: 'a' })]
+
+    expect(analysis).toStrictEqual({
+      variables: { b },
+      globals: { b },
+      locals: {}
+    })
+  })
+
   it('should report variables in filter arguments', () => {
     const template = engine.parse('{{ a | join: b }}')
     const analysis = analyzeSync(template)
@@ -109,6 +123,32 @@ describe('Variable analysis', () => {
     expect(analysis).toStrictEqual({
       variables: { a },
       globals: { a },
+      locals: {}
+    })
+  })
+
+  it('should handle paths that start with a nested path', () => {
+    const template = engine.parse('{{ [a.b] }}')
+    const analysis = analyzeSync(template)
+
+    const a = [new Variable(['a', 'b'], { row: 1, col: 4, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { a },
+      globals: { a },
+      locals: {}
+    })
+  })
+
+  it('should handle paths that start with bracketed notation', () => {
+    const template = engine.parse('{{ ["a.b"] }}')
+    const analysis = analyzeSync(template)
+
+    const ab = [new Variable(['a.b'], { row: 1, col: 4, file: undefined })]
+
+    expect(analysis).toStrictEqual({
+      variables: { 'a.b': ab },
+      globals: { 'a.b': ab },
       locals: {}
     })
   })
@@ -958,9 +998,4 @@ describe('Variable analysis', () => {
       locals: { }
     })
   })
-
-  // TODO: custom tag
-  // TODO: localScope containing a string (all built-in tags use tokens)
-  // TODO: argument that is an IdentifierToken
-  // TODO: file names in location object
 })
