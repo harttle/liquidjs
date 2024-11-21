@@ -92,6 +92,15 @@ export default class extends Tag {
     if (isString(this['file'])) {
       const names = Object.keys(this.hash.hash)
 
+      if (this['with']) {
+        const { alias } = this['with']
+        if (isString(alias)) {
+          names.push(alias)
+        } else if (isString(this.file)) {
+          names.push(this.file)
+        }
+      }
+
       if (this['for']) {
         const { alias } = this['for']
         if (isString(alias)) {
@@ -112,8 +121,11 @@ export default class extends Tag {
       }
     }
 
-    if (isValueToken(this['file'])) {
-      yield this['file']
+    if (this['with']) {
+      const { value } = this['with']
+      if (isValueToken(value)) {
+        yield value
+      }
     }
 
     if (this['for']) {
