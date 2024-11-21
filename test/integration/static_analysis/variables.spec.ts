@@ -649,6 +649,26 @@ describe('Variable analysis', () => {
     })
   })
 
+  it('should handle jekyll style includes', () => {
+    const engine = new Liquid({ templates: { 'a': '{{ include.x | append: y }}' }, jekyllInclude: true })
+    const template = engine.parse('{% include a x=y z=42 %}{{ x }}')
+    const analysis = analyzeSync(template)
+
+    const include = [new Variable(['include', 'x'], { row: 1, col: 4, file: 'a' })]
+    const x = [new Variable(['x'], { row: 1, col: 28, file: undefined })]
+
+    const y = [
+      new Variable(['y'], { row: 1, col: 16, file: undefined }),
+      new Variable(['y'], { row: 1, col: 24, file: 'a' })
+    ]
+
+    expect(analysis).toStrictEqual({
+      variables: { include, x, y },
+      globals: { x, y },
+      locals: { }
+    })
+  })
+
   it('should report variables from rendered templates', () => {
     const engine = new Liquid({ templates: { 'a': '{{ x }}' } })
     const template = engine.parse('{% render "a" %}')
@@ -939,9 +959,6 @@ describe('Variable analysis', () => {
     })
   })
 
-  // TODO: JekyllInclude
-  // TODO: dynamicPartials
-  // TODO: partials with relative names
   // TODO: custom tag
   // TODO: localScope containing a string (all built-in tags use tokens)
   // TODO: argument that is an IdentifierToken

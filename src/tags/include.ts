@@ -55,12 +55,15 @@ export default class extends Tag {
   }
 
   public partialScope (): PartialScope | undefined {
-    // TODO: JekyllInclude
     if (isString(this['file'])) {
-      const names = Object.keys(this.hash.hash)
-
-      if (this.withVar) {
-        names.push(this['file'])
+      let names: string[]
+      if (this.liquid.options.jekyllInclude) {
+        names = ['include']
+      } else {
+        names = Object.keys(this.hash.hash)
+        if (this.withVar) {
+          names.push(this['file'])
+        }
       }
 
       return { name: this['file'], isolated: false, scope: names }
