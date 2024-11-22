@@ -80,12 +80,12 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public * children (): Iterable<Template> {
-    yield * this.templates
-
+  public * children (): Generator<unknown, Template[]> {
+    const templates = this.templates.slice()
     if (this.elseTemplates) {
-      yield * this.elseTemplates
+      templates.push(...this.elseTemplates)
     }
+    return templates
   }
 
   public * arguments (): Arguments {

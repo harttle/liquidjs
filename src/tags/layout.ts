@@ -4,7 +4,7 @@ import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
 import { Arguments, PartialScope } from '../template'
-import { isString, isValueToken, toValueSync } from '../util'
+import { isString, isValueToken } from '../util'
 
 export default class extends Tag {
   args: Hash
@@ -44,13 +44,14 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public * children (partials: boolean): Iterable<Template> {
-    yield * this.templates
+  public * children (partials: boolean): Generator<unknown, Template[]> {
+    const templates = this.templates.slice()
 
     if (partials && isString(this.file)) {
-      // TODO: async
-      yield * toValueSync(this.liquid._parsePartialFile(this.file, true, this['currentFile']))
+      templates.push(...(yield this.liquid._parsePartialFile(this.file, true, this['currentFile'])) as Template[])
     }
+
+    return templates
   }
 
   public * arguments (): Arguments {

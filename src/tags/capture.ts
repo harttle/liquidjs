@@ -34,7 +34,7 @@ export default class extends Tag {
     ctx.bottom()[this.variable] = html
   }
 
-  public children (): Iterable<Template> {
+  public * children (): Generator<unknown, Template[]> {
     return this.templates
   }
 

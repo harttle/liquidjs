@@ -33,4 +33,10 @@ describe('Variable map', () => {
     mapping.push(v)
     expect(mapping.has(v)).toBe(true)
   })
+
+  it('should return an empty array if a variable is not in the map', () => {
+    const v = new Variable(['foo', 'bar'], { row: 1, col: 1, file: undefined })
+    const mapping = new VariableMap()
+    expect(mapping.get(v)).toStrictEqual([])
+  })
 })

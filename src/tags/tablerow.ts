@@ -65,7 +65,7 @@ export default class extends Tag {
     ctx.pop()
   }
 
-  public children (): Template[] {
+  public * children (): Generator<unknown, Template[]> {
     return this.templates
   }
 

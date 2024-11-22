@@ -1,4 +1,4 @@
-import { Liquid, Variable, analyzeSync } from '../../../src'
+import { Liquid, Variable, analyze, analyzeSync } from '../../../src'
 
 describe('Variable analysis', () => {
   const engine = new Liquid()
@@ -578,7 +578,7 @@ describe('Variable analysis', () => {
   it('should ignore included templates when partials is set to false', () => {
     const engine = new Liquid({ templates: { 'a': '{{ x }}' } })
     const template = engine.parse('{% include "a" %}')
-    const analysis = analyzeSync(template, false)
+    const analysis = analyzeSync(template, { partials: false })
 
     expect(analysis).toStrictEqual({
       variables: { },
@@ -733,7 +733,7 @@ describe('Variable analysis', () => {
   it('should ignore rendered templates when partials is set to false', () => {
     const engine = new Liquid({ templates: { 'a': '{{ x }}' } })
     const template = engine.parse('{% render "a" %}')
-    const analysis = analyzeSync(template, false)
+    const analysis = analyzeSync(template, { partials: false })
 
     expect(analysis).toStrictEqual({
       variables: { },
@@ -995,6 +995,44 @@ describe('Variable analysis', () => {
     expect(analysis).toStrictEqual({
       variables: { x, y },
       globals: { y },
+      locals: { }
+    })
+  })
+
+  it('should loading child templates asynchronously', () => {
+    const source = [
+      '{% if a %}',
+      '  {% for x in b %}',
+      '    {% unless x == y %}',
+      '      {% if 42 == c %}',
+      '        {{ a }}, {{ y }}',
+      '      {% endif %}',
+      '    {% endunless %}',
+      '  {% endfor %}',
+      '{% endif %}'
+    ].join('\n')
+
+    const template = engine.parse(source)
+    const analysis = analyze(template)
+
+    const refs = {
+      a: [
+        new Variable(['a'], { row: 1, col: 7, file: undefined }),
+        new Variable(['a'], { row: 5, col: 12, file: undefined })
+      ],
+      b: [new Variable(['b'], { row: 2, col: 15, file: undefined })],
+      c: [new Variable(['c'], { row: 4, col: 19, file: undefined })],
+      y: [
+        new Variable(['y'], { row: 3, col: 20, file: undefined }),
+        new Variable(['y'], { row: 5, col: 21, file: undefined })
+      ]
+    }
+
+    const x = [new Variable(['x'], { row: 3, col: 15, file: undefined })]
+
+    expect(analysis).resolves.toStrictEqual({
+      variables: { ...refs, x },
+      globals: refs,
       locals: { }
     })
   })

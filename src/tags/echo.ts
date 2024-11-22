@@ -17,7 +17,9 @@ export default class extends Tag {
     emitter.write(val)
   }
 
-  public arguments (): Arguments {
-    return this.value ? [this.value] : []
+  public * arguments (): Arguments {
+    if (this.value) {
+      yield this.value
+    }
   }
 }

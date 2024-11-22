@@ -8,7 +8,9 @@ import {
   isRangeToken,
   isString,
   isValueToken,
-  isWordToken
+  isWordToken,
+  toPromise,
+  toValueSync
 } from '../util'
 
 /**
@@ -53,7 +55,7 @@ export class VariableMap extends Map<Variable | string, Variable[]> {
     if (!this.has(k)) {
       this.set(k, [])
     }
-    return super.get(k) || []
+    return super.get(k) as Variable[]
   }
 
   has (key: string | Variable): boolean {
@@ -73,7 +75,7 @@ export class VariableMap extends Map<Variable | string, Variable[]> {
 }
 
 /**
- * The result of calling `analyze()`.
+ * The result of calling `analyze()` or `analyzeSync()`.
  */
 export interface StaticAnalysis {
   /**
@@ -100,10 +102,18 @@ export interface StaticAnalysis {
   locals: Variables;
 }
 
-/**
- * Statically analyze a template and report variable usage.
- */
-export function analyzeSync (templates: Template[], partials = true): StaticAnalysis {
+export interface StaticAnalysisOptions {
+  /**
+   * When `true` (the default), try to load partial templates and analyze them too.
+   */
+  partials?: boolean;
+}
+
+export const defaultStaticAnalysisOptions: StaticAnalysisOptions = {
+  partials: true
+}
+
+function * _analyze (templates: Template[], partials: boolean, sync: boolean): Generator<unknown, StaticAnalysis> {
   const variables = new VariableMap()
   const globals = new VariableMap()
   const locals = new VariableMap()
@@ -114,7 +124,7 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
   // Names of partial templates that we've already analyzed.
   const seen: Set<string | undefined> = new Set()
 
-  function updateVariables (variable: Variable, scope: DummyScope): void {
+  function * updateVariables (variable: Variable, scope: DummyScope): Generator<unknown, void> {
     variables.push(variable)
 
     // Variables that are not in scope are assumed to be global, that is,
@@ -127,16 +137,16 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
     // recurse for nested Variables
     for (const segment of variable.segments.slice(1)) {
       if (segment instanceof Variable) {
-        updateVariables(segment, scope)
+        yield updateVariables(segment, scope)
       }
     }
   }
 
-  function visit (template: Template, scope: DummyScope): void {
+  function * visit (template: Template, scope: DummyScope): Generator<unknown, void> {
     if (template.arguments) {
       for (const arg of template.arguments()) {
         for (const variable of extractVariables(arg)) {
-          updateVariables(variable, scope)
+          yield updateVariables(variable, scope)
         }
       }
     }
@@ -155,8 +165,8 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
 
         if (partial === undefined) {
           // Layouts, for example, can have children that are not partials.
-          for (const child of template.children(partials)) {
-            visit(child, scope)
+          for (const child of (yield template.children(partials, sync)) as Template[]) {
+            yield visit(child, scope)
           }
           return
         }
@@ -167,8 +177,8 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
           ? new DummyScope(new Set(partial.scope))
           : scope.push(new Set(partial.scope))
 
-        for (const child of template.children(partials)) {
-          visit(child, partialScope)
+        for (const child of (yield template.children(partials, sync)) as Template[]) {
+          yield visit(child, partialScope)
           seen.add(partial.name)
         }
 
@@ -178,8 +188,8 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
           scope.push(new Set(template.blockScope()))
         }
 
-        for (const child of template.children(partials)) {
-          visit(child, scope)
+        for (const child of (yield template.children(partials, sync)) as Template[]) {
+          yield visit(child, scope)
         }
 
         if (template.blockScope) {
@@ -190,7 +200,7 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
   }
 
   for (const template of templates) {
-    visit(template, rootScope)
+    yield visit(template, rootScope)
   }
 
   return {
@@ -201,13 +211,29 @@ export function analyzeSync (templates: Template[], partials = true): StaticAnal
 }
 
 /**
+ * Statically analyze a template and report variable usage.
+ */
+export function analyze (template: Template[], options: StaticAnalysisOptions = {}): Promise<StaticAnalysis> {
+  const opts = { ...defaultStaticAnalysisOptions, ...options } as Required<StaticAnalysisOptions>
+  return toPromise(_analyze(template, opts.partials, false))
+}
+
+/**
+ * Statically analyze a template and report variable usage.
+ */
+export function analyzeSync (template: Template[], options: StaticAnalysisOptions = {}): StaticAnalysis {
+  const opts = { ...defaultStaticAnalysisOptions, ...options } as Required<StaticAnalysisOptions>
+  return toValueSync(_analyze(template, opts.partials, true))
+}
+
+/**
  * A stack to manage scopes while traversing templates during static analysis.
  */
 class DummyScope {
   private stack: Array<Set<string>>
 
-  constructor (globals?: Set<string>) {
-    this.stack = globals ? [globals] : []
+  constructor (globals: Set<string>) {
+    this.stack = [globals]
   }
 
   public has (key: string): boolean {

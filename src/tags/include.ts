@@ -2,7 +2,7 @@ import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Ha
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
 import { Arguments, PartialScope } from '../template'
-import { isString, isValueToken, toValueSync } from '../util'
+import { isString, isValueToken } from '../util'
 import { parseFilePath, renderFilePath } from './render'
 
 export default class extends Tag {
@@ -43,14 +43,10 @@ export default class extends Tag {
     ctx.restoreRegister(saved)
   }
 
-  public children (partials: boolean): Iterable<Template> {
+  public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {
     if (partials && isString(this['file'])) {
-      // TODO: async
-      // TODO: throw error if this.file does not exist?
-      return toValueSync(this.liquid._parsePartialFile(this['file'], true, this['currentFile']))
+      return (yield this.liquid._parsePartialFile(this['file'], sync, this['currentFile'])) as Template[]
     }
-
-    // XXX: We're silently ignoring dynamically named partial templates.
     return []
   }
 

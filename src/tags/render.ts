@@ -1,6 +1,6 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
-import { isString, isValueToken, toEnumerable, toValueSync } from '../util'
+import { isString, isValueToken, toEnumerable } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
 import { Arguments, PartialScope } from '../template'
@@ -77,14 +77,10 @@ export default class extends Tag {
     }
   }
 
-  public children (partials: boolean): Iterable<Template> {
+  public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {
     if (partials && isString(this['file'])) {
-      // TODO: async
-      // TODO: throw error if this.file does not exist?
-      return toValueSync(this.liquid._parsePartialFile(this['file'], true, this['currentFile']))
+      return (yield this.liquid._parsePartialFile(this['file'], sync, this['currentFile'])) as Template[]
     }
-
-    // XXX: We're silently ignoring dynamically named partial templates.
     return []
   }
 
