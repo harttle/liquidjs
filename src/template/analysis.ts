@@ -41,10 +41,9 @@ export class Variable extends String {
 export type VariableSegments = Array<string | number | Variable>;
 
 /**
- * A mapping of variable names or paths to an array of locations at which the
- * variable was found.
+ * A mapping of variable names to an array of locations at which the variable was found.
  */
-export type Variables = { [key: string]: Variable };
+export type Variables = { [key: string]: Variable[] | undefined };
 
 /**
  * A custom map that groups variables by the string representation of their root.
@@ -124,7 +123,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
   // Names of partial templates that we've already analyzed.
   const seen: Set<string | undefined> = new Set()
 
-  function * updateVariables (variable: Variable, scope: DummyScope): Generator<unknown, void> {
+  function updateVariables (variable: Variable, scope: DummyScope) {
     variables.push(variable)
 
     // Variables that are not in scope are assumed to be global, that is,
@@ -137,7 +136,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
     // recurse for nested Variables
     for (const segment of variable.segments.slice(1)) {
       if (segment instanceof Variable) {
-        yield updateVariables(segment, scope)
+        updateVariables(segment, scope)
       }
     }
   }
@@ -146,7 +145,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
     if (template.arguments) {
       for (const arg of template.arguments()) {
         for (const variable of extractVariables(arg)) {
-          yield updateVariables(variable, scope)
+          updateVariables(variable, scope)
         }
       }
     }
