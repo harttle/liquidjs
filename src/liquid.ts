@@ -1,5 +1,5 @@
 import { Context } from './context'
-import { toPromise, toValueSync, isFunction, forOwn } from './util'
+import { toPromise, toValueSync, isFunction, forOwn, isString } from './util'
 import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value, StaticAnalysisOptions, StaticAnalysis, analyze, analyzeSync, Variable } from './template'
 import { LookupType } from './fs/loader'
 import { Render } from './render'
@@ -140,74 +140,74 @@ export class Liquid {
   }
 
   /** Return an array of all variables without their properties. */
-  public async variables (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
-    const analysis = await analyze(this.parse(html, filename), options)
+  public async variables (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
+    const analysis = await analyze(isString(template) ? this.parse(template, filename) : template, options)
     return Object.keys(analysis.variables)
   }
 
   /** Return an array of all variables without their properties. */
-  public variablesSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): string[] {
-    const analysis = analyzeSync(this.parse(html, filename), options)
+  public variablesSync (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): string[] {
+    const analysis = analyzeSync(isString(template) ? this.parse(template, filename) : template, options)
     return Object.keys(analysis.variables)
   }
 
   /** Return an array of all variables including their properties/paths. */
-  public async fullVariables (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
-    const analysis = await analyze(this.parse(html, filename), options)
+  public async fullVariables (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
+    const analysis = await analyze(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.variables).flatMap((a) => a.map((v) => v.valueOf()))
   }
 
   /** Return an array of all variables including their properties/paths. */
-  public fullVariablesSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): string[] {
-    const analysis = analyzeSync(this.parse(html, filename), options)
+  public fullVariablesSync (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): string[] {
+    const analysis = analyzeSync(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.variables).flatMap((a) => a.map((v) => v.valueOf()))
   }
 
   /** Return an array of all variables, each as an array of properties/segments. */
-  public async variableSegments (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<Array<Array<string | number | Variable>>> {
-    const analysis = await analyze(this.parse(html, filename), options)
+  public async variableSegments (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Promise<Array<Array<string | number | Variable>>> {
+    const analysis = await analyze(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.variables).flatMap((a) => a.map((v) => v.segments))
   }
 
   /** Return an array of all variables, each as an array of properties/segments. */
-  public variableSegmentsSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): Array<Array<string | number | Variable>> {
-    const analysis = analyzeSync(this.parse(html, filename), options)
+  public variableSegmentsSync (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Array<Array<string | number | Variable>> {
+    const analysis = analyzeSync(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.variables).flatMap((a) => a.map((v) => v.segments))
   }
 
   /** Return an array of all expected context variables without their properties. */
-  public async globalVariables (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
-    const analysis = await analyze(this.parse(html, filename), options)
+  public async globalVariables (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
+    const analysis = await analyze(isString(template) ? this.parse(template, filename) : template, options)
     return Object.keys(analysis.globals)
   }
 
   /** Return an array of all expected context variables without their properties. */
-  public globalVariablesSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): string[] {
-    const analysis = analyzeSync(this.parse(html, filename), options)
+  public globalVariablesSync (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): string[] {
+    const analysis = analyzeSync(isString(template) ? this.parse(template, filename) : template, options)
     return Object.keys(analysis.globals)
   }
 
   /** Return an array of all expected context variables including their properties/paths. */
-  public async globalFullVariables (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
-    const analysis = await analyze(this.parse(html, filename), options)
+  public async globalFullVariables (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Promise<string[]> {
+    const analysis = await analyze(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.globals).flatMap((a) => a.map((v) => v.valueOf()))
   }
 
   /** Return an array of all expected context variables including their properties/paths. */
-  public globalFullVariablesSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): string[] {
-    const analysis = analyzeSync(this.parse(html, filename), options)
+  public globalFullVariablesSync (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): string[] {
+    const analysis = analyzeSync(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.globals).flatMap((a) => a.map((v) => v.valueOf()))
   }
 
   /** Return an array of all expected context variables, each as an array of properties/segments. */
-  public async globalVariableSegments (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<Array<Array<string | number | Variable>>> {
-    const analysis = await analyze(this.parse(html, filename), options)
+  public async globalVariableSegments (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Promise<Array<Array<string | number | Variable>>> {
+    const analysis = await analyze(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.globals).flatMap((a) => a.map((v) => v.segments))
   }
 
   /** Return an array of all expected context variables, each as an array of properties/segments. */
-  public globalVariableSegmentsSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): Array<Array<string | number | Variable>> {
-    const analysis = analyzeSync(this.parse(html, filename), options)
+  public globalVariableSegmentsSync (template: string | Template[], filename?: string, options: StaticAnalysisOptions = {}): Array<Array<string | number | Variable>> {
+    const analysis = analyzeSync(isString(template) ? this.parse(template, filename) : template, options)
     return Object.values(analysis.globals).flatMap((a) => a.map((v) => v.segments))
   }
 }
