@@ -1,6 +1,6 @@
 import { Context } from './context'
 import { toPromise, toValueSync, isFunction, forOwn } from './util'
-import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value } from './template'
+import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value, StaticAnalysisOptions, StaticAnalysis, analyze, analyzeSync } from './template'
 import { LookupType } from './fs/loader'
 import { Render } from './render'
 import { Parser } from './parser'
@@ -121,5 +121,21 @@ export class Liquid {
       }
       self.renderFile(filePath, ctx).then(html => callback(null, html) as any, callback as any)
     }
+  }
+
+  public async analyze (template: Template[], options: StaticAnalysisOptions = {}): Promise<StaticAnalysis> {
+    return analyze(template, options)
+  }
+
+  public analyzeSync (template: Template[], options: StaticAnalysisOptions = {}): StaticAnalysis {
+    return analyzeSync(template, options)
+  }
+
+  public async parseAndAnalyze (html: string, filename?: string, options: StaticAnalysisOptions = {}): Promise<StaticAnalysis> {
+    return analyze(this.parse(html, filename), options)
+  }
+
+  public parseAndAnalyzeSync (html: string, filename?: string, options: StaticAnalysisOptions = {}): StaticAnalysis {
+    return analyzeSync(this.parse(html, filename), options)
   }
 }

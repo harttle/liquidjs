@@ -229,4 +229,30 @@ describe('Liquid', function () {
       expect(drainStream(stream)).rejects.toThrow(/intended render error/)
     })
   })
+  describe('#analyze', () => {
+    const engine = new Liquid()
+    it('should analyze templates asynchronously', () => {
+      const template = engine.parse('{{ a }}{{ b }}')
+      expect(engine.analyze(template).then((a) => Object.keys(a.variables))).resolves.toStrictEqual(['a', 'b'])
+    })
+  })
+  describe('#analyzeSync', () => {
+    const engine = new Liquid()
+    it('should analyze templates synchronously', () => {
+      const template = engine.parse('{{ a }}{{ b }}')
+      expect(Object.keys(engine.analyzeSync(template).variables)).toStrictEqual(['a', 'b'])
+    })
+  })
+  describe('#parseAndAnalyze', () => {
+    const engine = new Liquid()
+    it('should parse and analyze templates asynchronously', () => {
+      expect(engine.parseAndAnalyze('{{ a }}{{ b }}').then((a) => Object.keys(a.variables))).resolves.toStrictEqual(['a', 'b'])
+    })
+  })
+  describe('#parseAndAnalyzeSync', () => {
+    const engine = new Liquid()
+    it('should analyze templates synchronously', () => {
+      expect(Object.keys(engine.parseAndAnalyzeSync('{{ a }}{{ b }}').variables)).toStrictEqual(['a', 'b'])
+    })
+  })
 })
