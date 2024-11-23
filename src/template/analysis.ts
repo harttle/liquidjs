@@ -43,7 +43,7 @@ export type VariableSegments = Array<string | number | Variable>;
 /**
  * A mapping of variable names to an array of locations at which the variable was found.
  */
-export type Variables = { [key: string]: Variable[] | undefined };
+export type Variables = { [key: string]: Variable[] };
 
 /**
  * A custom map that groups variables by the string representation of their root.
