@@ -190,3 +190,16 @@ export function argumentsToValue<F extends (...args: any) => any, T> (fn: F) {
 export function escapeRegExp (text: string) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
+
+/** Return an array containing unique elements from _array_. Works with nested arrays and objects. */
+export function * strictUniq<T> (array: Array<T>): Generator<T> {
+  const seen = new Set()
+
+  for (const element of array) {
+    const key = JSON.stringify(element)
+    if (!seen.has(key)) {
+      seen.add(key)
+      yield element
+    }
+  }
+}
