@@ -712,6 +712,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "timvandam",
+      "name": "Tim van Dam",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35376389?v=4",
+      "profile": "https://tovd.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
