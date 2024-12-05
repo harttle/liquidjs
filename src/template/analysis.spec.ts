@@ -3,16 +3,15 @@ import { Variable, VariableMap } from './analysis'
 describe('Analysis variable', () => {
   const mockLocation = { row: 1, col: 1, file: undefined }
 
-  it('should be a string object', () => {
+  it('should coerce to a string', () => {
     const v = new Variable(['foo', 'bar'], mockLocation)
-    expect(v).toBeInstanceOf(String)
-    expect(v.valueOf()).toBe('foo.bar')
+    expect(String(v)).toBe('foo.bar')
   })
 
   it('should represent nested variables', () => {
     const nested = new Variable(['bar', 1], mockLocation)
     const v = new Variable(['foo', nested], mockLocation)
-    expect(v.valueOf()).toBe('foo[bar[1]]')
+    expect(`${v}`).toBe('foo[bar[1]]')
   })
 
   it('should have a segments property', () => {

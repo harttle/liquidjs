@@ -23,15 +23,16 @@ export interface VariableLocation {
 }
 
 /**
- * A string representation of a template variable along with its segments
- * and location.
+ * A variable's segments and location, which can be coerced to a string.
  */
-export class Variable extends String {
+export class Variable {
   constructor (
     readonly segments: Array<string | number | Variable>,
     readonly location: VariableLocation
-  ) {
-    super(segmentsString(segments, true))
+  ) {}
+
+  public toString (): string {
+    return segmentsString(this.segments, true)
   }
 }
 
@@ -133,7 +134,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
       globals.push(variable)
     }
 
-    // recurse for nested Variables
+    // Recurse for nested Variables
     for (const segment of variable.segments.slice(1)) {
       if (segment instanceof Variable) {
         updateVariables(segment, scope)

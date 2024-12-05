@@ -156,13 +156,13 @@ export class Liquid {
   /** Return an array of all variables including their properties/paths. */
   public async fullVariables (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<string[]> {
     const analysis = await analyze(isString(template) ? this.parse(template) : template, options)
-    return Array.from(new Set(Object.values(analysis.variables).flatMap((a) => a.map((v) => v.valueOf()))))
+    return Array.from(new Set(Object.values(analysis.variables).flatMap((a) => a.map((v) => String(v)))))
   }
 
   /** Return an array of all variables including their properties/paths. */
   public fullVariablesSync (template: string | Template[], options: StaticAnalysisOptions = {}): string[] {
     const analysis = analyzeSync(isString(template) ? this.parse(template) : template, options)
-    return Array.from(new Set(Object.values(analysis.variables).flatMap((a) => a.map((v) => v.valueOf()))))
+    return Array.from(new Set(Object.values(analysis.variables).flatMap((a) => a.map((v) => String(v)))))
   }
 
   /** Return an array of all variables, each as an array of properties/segments. */
@@ -192,13 +192,13 @@ export class Liquid {
   /** Return an array of all expected context variables including their properties/paths. */
   public async globalFullVariables (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<string[]> {
     const analysis = await analyze(isString(template) ? this.parse(template) : template, options)
-    return Array.from(new Set(Object.values(analysis.globals).flatMap((a) => a.map((v) => v.valueOf()))))
+    return Array.from(new Set(Object.values(analysis.globals).flatMap((a) => a.map((v) => String(v)))))
   }
 
   /** Return an array of all expected context variables including their properties/paths. */
   public globalFullVariablesSync (template: string | Template[], options: StaticAnalysisOptions = {}): string[] {
     const analysis = analyzeSync(isString(template) ? this.parse(template) : template, options)
-    return Array.from(new Set(Object.values(analysis.globals).flatMap((a) => a.map((v) => v.valueOf()))))
+    return Array.from(new Set(Object.values(analysis.globals).flatMap((a) => a.map((v) => String(v)))))
   }
 
   /** Return an array of all expected context variables, each as an array of properties/segments. */
