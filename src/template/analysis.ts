@@ -47,22 +47,25 @@ export type VariableSegments = Array<string | number | Variable>;
 export type Variables = { [key: string]: Variable[] };
 
 /**
- * A custom map that groups variables by the string representation of their root.
+ * Group variables by the string representation of their root segment.
  */
-export class VariableMap extends Map<Variable | string, Variable[]> {
-  get (key: Variable): Variable[] {
-    const k = segmentsString([key.segments[0]])
-    if (!this.has(k)) {
-      this.set(k, [])
-    }
-    return super.get(k) as Variable[]
+export class VariableMap {
+  private map: Map<string, Variable[]>
+
+  constructor () {
+    this.map = new Map()
   }
 
-  has (key: string | Variable): boolean {
-    if (key instanceof Variable) {
-      return super.has(segmentsString([key.segments[0]]))
+  get (key: Variable): Variable[] {
+    const k = segmentsString([key.segments[0]])
+    if (!this.map.has(k)) {
+      this.map.set(k, [])
     }
-    return super.has(key)
+    return this.map.get(k) as Variable[]
+  }
+
+  has (key: Variable): boolean {
+    return this.map.has(segmentsString([key.segments[0]]))
   }
 
   push (variable: Variable): void {
@@ -70,7 +73,7 @@ export class VariableMap extends Map<Variable | string, Variable[]> {
   }
 
   asObject (): Variables {
-    return Object.fromEntries(this)
+    return Object.fromEntries(this.map)
   }
 }
 
