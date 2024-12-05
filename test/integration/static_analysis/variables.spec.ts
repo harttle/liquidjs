@@ -748,10 +748,11 @@ describe('Variable analysis', () => {
     const analysis = analyzeSync(template)
 
     const x = [new Variable(['x'], { row: 1, col: 4, file: 'a' })]
+    const y = [new Variable(['y'], { row: 1, col: 20, file: undefined })]
 
     expect(analysis).toStrictEqual({
-      variables: { x, y: [new Variable(['y'], { row: 1, col: 20, file: undefined })] },
-      globals: { x },
+      variables: { x, y },
+      globals: { x, y },
       locals: { y: [new Variable(['y'], { row: 1, col: 18, file: 'a' })] }
     })
   })

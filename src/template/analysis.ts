@@ -152,7 +152,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
 
     if (template.localScope) {
       for (const ident of template.localScope()) {
-        templateScope.add(ident.content)
+        scope.add(ident.content)
         const [row, col] = ident.getPosition()
         locals.push(new Variable([ident.content], { row, col, file: ident.file }))
       }
@@ -251,6 +251,10 @@ class DummyScope {
 
   public pop (): Set<string> | undefined {
     return this.stack.pop()
+  }
+
+  public add (name: string): void {
+    this.stack[0].add(name)
   }
 }
 
