@@ -65,6 +65,6 @@ describe('Static analysis', () => {
     const analysis: StaticAnalysis = analyzeSync(template, options)
     const vars: Variable[] = analysis.variables['nothing'] || []
     const v: Variable = vars[0]
-    expect(v.valueOf()).toBe('nothing')
+    expect(String(v)).toBe('nothing')
   })
 })
