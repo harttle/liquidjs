@@ -3,7 +3,7 @@ import { ForloopDrop } from '../drop'
 import { isString, isValueToken, toEnumerable } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
-import { Arguments, PartialScope } from '../template'
+import { Argument, Arguments, PartialScope } from '../template'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -86,23 +86,23 @@ export default class extends Tag {
 
   public partialScope (): PartialScope | undefined {
     if (isString(this['file'])) {
-      const names = Object.keys(this.hash.hash)
+      const names: Array<string | [string, Argument]> = Object.keys(this.hash.hash)
 
       if (this['with']) {
-        const { alias } = this['with']
+        const { value, alias } = this['with']
         if (isString(alias)) {
-          names.push(alias)
+          names.push([alias, value])
         } else if (isString(this.file)) {
-          names.push(this.file)
+          names.push([this.file, value])
         }
       }
 
       if (this['for']) {
-        const { alias } = this['for']
+        const { value, alias } = this['for']
         if (isString(alias)) {
-          names.push(alias)
+          names.push([alias, value])
         } else if (isString(this.file)) {
-          names.push(this.file)
+          names.push([this.file, value])
         }
       }
 

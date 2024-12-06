@@ -21,8 +21,13 @@ export interface PartialScope {
    */
   isolated: boolean;
 
-  /** A list of names that will be in scope for the child template. */
-  scope: Iterable<string>;
+  /**
+   * A list of names that will be in scope for the child template.
+   *
+   * If an item is a [string, Argument] tuple, the string is considered an alias
+   * for the argument.
+   */
+  scope: Iterable<string | [string, Argument]>;
 }
 
 export interface Template {

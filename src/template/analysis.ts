@@ -56,7 +56,7 @@ export class VariableMap {
     this.map = new Map()
   }
 
-  get (key: Variable): Variable[] {
+  public get (key: Variable): Variable[] {
     const k = segmentsString([key.segments[0]])
     if (!this.map.has(k)) {
       this.map.set(k, [])
@@ -64,15 +64,15 @@ export class VariableMap {
     return this.map.get(k) as Variable[]
   }
 
-  has (key: Variable): boolean {
+  public has (key: Variable): boolean {
     return this.map.has(segmentsString([key.segments[0]]))
   }
 
-  push (variable: Variable): void {
+  public push (variable: Variable): void {
     this.get(variable).push(variable)
   }
 
-  asObject (): Variables {
+  public asObject (): Variables {
     return Object.fromEntries(this.map)
   }
 }
@@ -121,24 +121,29 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
   const globals = new VariableMap()
   const locals = new VariableMap()
 
-  const templateScope: Set<string> = new Set()
-  const rootScope = new DummyScope(templateScope)
+  const rootScope = new DummyScope(new Set())
 
   // Names of partial templates that we've already analyzed.
   const seen: Set<string | undefined> = new Set()
 
   function updateVariables (variable: Variable, scope: DummyScope) {
     variables.push(variable)
+    const aliased = scope.alias(variable)
 
-    // Variables that are not in scope are assumed to be global, that is,
-    // provided by application developers.
-    const root = variable.segments[0]
-    if (isString(root) && !scope.has(root)) {
-      globals.push(variable)
+    if (aliased !== undefined) {
+      const root = aliased.segments[0]
+      if (isString(root) && !rootScope.has(root)) {
+        globals.push(aliased)
+      }
+    } else {
+      const root = variable.segments[0]
+      if (isString(root) && !scope.has(root)) {
+        globals.push(variable)
+      }
     }
 
     // Recurse for nested Variables
-    for (const segment of variable.segments.slice(1)) {
+    for (const segment of variable.segments) {
       if (segment instanceof Variable) {
         updateVariables(segment, scope)
       }
@@ -157,6 +162,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
     if (template.localScope) {
       for (const ident of template.localScope()) {
         scope.add(ident.content)
+        scope.deleteAlias(ident.content)
         const [row, col] = ident.getPosition()
         locals.push(new Variable([ident.content], { row, col, file: ident.file }))
       }
@@ -176,9 +182,23 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
 
         if (seen.has(partial.name)) return
 
+        const partialScopeNames: Set<string> = new Set()
         const partialScope = partial.isolated
-          ? new DummyScope(new Set(partial.scope))
-          : scope.push(new Set(partial.scope))
+          ? new DummyScope(partialScopeNames)
+          : scope.push(partialScopeNames)
+
+        for (const name of partial.scope) {
+          if (isString(name)) {
+            partialScopeNames.add(name)
+          } else {
+            const [alias, argument] = name
+            partialScopeNames.add(alias)
+            const variables = Array.from(extractVariables(argument))
+            if (variables.length) {
+              partialScope.setAlias(alias, variables[0].segments)
+            }
+          }
+        }
 
         for (const child of (yield template.children(partials, sync)) as Template[]) {
           yield visit(child, partialScope)
@@ -229,19 +249,25 @@ export function analyzeSync (template: Template[], options: StaticAnalysisOption
   return toValueSync(_analyze(template, opts.partials, true))
 }
 
+interface ScopeStackItem {
+  names: Set<string>;
+  aliases: Map<string, VariableSegments>;
+}
+
 /**
  * A stack to manage scopes while traversing templates during static analysis.
  */
 class DummyScope {
-  private stack: Array<Set<string>>
+  private stack: Array<ScopeStackItem>
 
   constructor (globals: Set<string>) {
-    this.stack = [globals]
+    this.stack = [{ names: globals, aliases: new Map() }]
   }
 
-  public has (key: string): boolean {
-    for (let i = this.stack.length - 1; i >= 0; i--) {
-      if (this.stack[i].has(key)) {
+  /** Return true if `name` is in scope.  */
+  public has (name: string): boolean {
+    for (const scope of this.stack) {
+      if (scope.names.has(name)) {
         return true
       }
     }
@@ -249,16 +275,49 @@ class DummyScope {
   }
 
   public push (scope: Set<string>): DummyScope {
-    this.stack.push(scope)
+    this.stack.push({ names: scope, aliases: new Map() })
     return this
   }
 
   public pop (): Set<string> | undefined {
-    return this.stack.pop()
+    return this.stack.pop()?.names
   }
 
+  // Add a name to the template scope.
   public add (name: string): void {
-    this.stack[0].add(name)
+    this.stack[0].names.add(name)
+  }
+
+  /** Return the variable that `variable` aliases, or `variable` if it doesn't alias anything. */
+  public alias (variable: Variable): Variable | undefined {
+    const root = variable.segments[0]
+    if (!isString(root)) return undefined
+    const alias = this.getAlias(root)
+    if (alias === undefined) return undefined
+    return new Variable([...alias, ...variable.segments.slice(1)], variable.location)
+  }
+
+  // TODO: `from` could be a path with multiple segments, like `include.x`.
+  public setAlias (from: string, to: VariableSegments): void {
+    this.stack[this.stack.length - 1].aliases.set(from, to)
+  }
+
+  public deleteAlias (name: string): void {
+    this.stack[this.stack.length - 1].aliases.delete(name)
+  }
+
+  private getAlias (name: string): VariableSegments | undefined {
+    for (const scope of this.stack) {
+      if (scope.aliases.has(name)) {
+        return scope.aliases.get(name)
+      }
+
+      // If a scope has defined `name`, then it masks aliases in parent scopes.
+      if (scope.names.has(name)) {
+        return undefined
+      }
+    }
+    return undefined
   }
 }
 

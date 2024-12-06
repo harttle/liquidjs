@@ -14,6 +14,16 @@ describe('Analysis variable', () => {
     expect(`${v}`).toBe('foo[bar[1]]')
   })
 
+  it('should represent bracketed segments', () => {
+    const v = new Variable(['foo', 'bar baz'], mockLocation)
+    expect(`${v}`).toBe("foo['bar baz']")
+  })
+
+  it('should represent bracketed root', () => {
+    const v = new Variable(['foo bar'], mockLocation)
+    expect(`${v}`).toBe("['foo bar']")
+  })
+
   it('should have a segments property', () => {
     const v = new Variable(['foo', 'bar'], mockLocation)
     expect(v.segments).toStrictEqual(['foo', 'bar'])

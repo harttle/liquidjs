@@ -1,7 +1,7 @@
 import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
-import { Arguments, PartialScope } from '../template'
+import { Argument, Arguments, PartialScope } from '../template'
 import { isString, isValueToken } from '../util'
 import { parseFilePath, renderFilePath } from './render'
 
@@ -52,13 +52,14 @@ export default class extends Tag {
 
   public partialScope (): PartialScope | undefined {
     if (isString(this['file'])) {
-      let names: string[]
+      let names: Array<string | [string, Argument]>
+
       if (this.liquid.options.jekyllInclude) {
         names = ['include']
       } else {
         names = Object.keys(this.hash.hash)
         if (this.withVar) {
-          names.push(this['file'])
+          names.push([this['file'], this.withVar])
         }
       }
 
