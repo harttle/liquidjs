@@ -264,7 +264,7 @@ describe('error', function () {
     it('should throw ParseError when tag value not specified', async function () {
       await expect(engine.parseAndRender('{% if %}{% endif %}')).rejects.toMatchObject({
         name: 'TokenizationError',
-        message: 'invalid value expression: "", line:1, col:1'
+        message: 'invalid value expression: "", line:1, col:6'
       })
     })
     it('should throw ParseError when tag parse throws', async function () {

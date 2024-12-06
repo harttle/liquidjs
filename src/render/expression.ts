@@ -5,7 +5,7 @@ import type { UnaryOperatorHandler } from '../render'
 import { Drop } from '../drop'
 
 export class Expression {
-  private postfix: Token[]
+  readonly postfix: Token[]
 
   public constructor (tokens: IterableIterator<Token>) {
     this.postfix = [...toPostfix(tokens)]

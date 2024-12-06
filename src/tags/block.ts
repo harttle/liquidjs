@@ -42,4 +42,12 @@ export default class extends Tag {
       ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(new BlockDrop(() => renderCurrent(superBlock, emitter)), emitter)
       : renderCurrent
   }
+
+  public * children (): Generator<unknown, Template[]> {
+    return this.templates
+  }
+
+  public blockScope (): Iterable<string> {
+    return ['block']
+  }
 }

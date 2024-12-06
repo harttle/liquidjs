@@ -3,6 +3,8 @@ import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
+import { Arguments, PartialScope } from '../template'
+import { isString, isValueToken } from '../util'
 
 export default class extends Tag {
   args: Hash
@@ -12,7 +14,7 @@ export default class extends Tag {
     super(token, remainTokens, liquid)
     this.file = parseFilePath(this.tokenizer, this.liquid, parser)
     this['currentFile'] = token.file
-    this.args = new Hash(this.tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.args = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = parser.parseTokens(remainTokens)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
@@ -40,5 +42,33 @@ export default class extends Tag {
     ctx.push((yield args.render(ctx)) as Scope)
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
+  }
+
+  public * children (partials: boolean): Generator<unknown, Template[]> {
+    const templates = this.templates.slice()
+
+    if (partials && isString(this.file)) {
+      templates.push(...(yield this.liquid._parsePartialFile(this.file, true, this['currentFile'])) as Template[])
+    }
+
+    return templates
+  }
+
+  public * arguments (): Arguments {
+    for (const v of Object.values(this.args.hash)) {
+      if (isValueToken(v)) {
+        yield v
+      }
+    }
+
+    if (isValueToken(this.file)) {
+      yield this.file
+    }
+  }
+
+  public partialScope (): PartialScope | undefined {
+    if (isString(this.file)) {
+      return { name: this.file, isolated: false, scope: Object.keys(this.args.hash) }
+    }
   }
 }

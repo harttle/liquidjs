@@ -1,7 +1,8 @@
-import { toEnumerable } from '../util'
+import { isValueToken, toEnumerable } from '../util'
 import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
 
 export default class extends Tag {
   variable: string
@@ -21,7 +22,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collectionToken
-    this.args = new Hash(this.tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.args = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
 
     let p
@@ -62,5 +63,23 @@ export default class extends Tag {
     }
     if (collection.length) emitter.write('</tr>')
     ctx.pop()
+  }
+
+  public * children (): Generator<unknown, Template[]> {
+    return this.templates
+  }
+
+  public * arguments (): Arguments {
+    yield this.collection
+
+    for (const v of Object.values(this.args.hash)) {
+      if (isValueToken(v)) {
+        yield v
+      }
+    }
+  }
+
+  public blockScope (): string[] {
+    return [this.variable, 'tablerowloop']
   }
 }

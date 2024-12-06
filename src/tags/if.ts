@@ -1,5 +1,6 @@
 import { Liquid, Tag, Value, Emitter, isTruthy, TagToken, TopLevelToken, Context, Template } from '..'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
 import { assert, assertEmpty } from '../util'
 
 export default class extends Tag {
@@ -11,13 +12,13 @@ export default class extends Tag {
     let p: Template[] = []
     parser.parseStream(remainTokens)
       .on('start', () => this.branches.push({
-        value: new Value(tagToken.args, this.liquid),
+        value: new Value(tagToken.tokenizer.readFilteredValue(), this.liquid),
         templates: (p = [])
       }))
       .on('tag:elsif', (token: TagToken) => {
         assert(!this.elseTemplates, 'unexpected elsif after else')
         this.branches.push({
-          value: new Value(token.args, this.liquid),
+          value: new Value(token.tokenizer.readFilteredValue(), this.liquid),
           templates: (p = [])
         })
       })
@@ -43,5 +44,17 @@ export default class extends Tag {
       }
     }
     yield r.renderTemplates(this.elseTemplates || [], ctx, emitter)
+  }
+
+  public * children (): Generator<unknown, Template[]> {
+    const templates = this.branches.flatMap(b => b.templates)
+    if (this.elseTemplates) {
+      templates.push(...this.elseTemplates)
+    }
+    return templates
+  }
+
+  public arguments (): Arguments {
+    return this.branches.map(b => b.value)
   }
 }

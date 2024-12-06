@@ -15,12 +15,14 @@ type HashValueTokens = Record<string, Token | undefined>
  */
 export class Hash {
   hash: HashValueTokens = {}
-  constructor (markup: string, jekyllStyle?: boolean | string) {
-    const tokenizer = new Tokenizer(markup, {})
+
+  constructor (input: string | Tokenizer, jekyllStyle?: boolean | string) {
+    const tokenizer = input instanceof Tokenizer ? input : new Tokenizer(input, {})
     for (const hash of tokenizer.readHashes(jekyllStyle)) {
       this.hash[hash.name.content] = hash.value
     }
   }
+
   * render (ctx: Context): Generator<unknown, Record<string, any>, unknown> {
     const hash = {}
     for (const key of Object.keys(this.hash)) {
