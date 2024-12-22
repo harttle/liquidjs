@@ -1,6 +1,7 @@
 import { Liquid } from '../../../src/liquid'
 import { Drop } from '../../../src/drop/drop'
 import { Scope } from '../../../src/context/scope'
+import { mock, restore } from '../../stub/mockfs'
 
 describe('tags/for', function () {
   let liquid: Liquid, scope: Scope
@@ -139,6 +140,7 @@ describe('tags/for', function () {
   })
 
   describe('continue', function () {
+    afterEach(restore)
     it('should support for with continue', async function () {
       const src = '{% for i in (1..5) %}' +
               '{% if i == 4 %}continue{% continue %}{% endif %}{{i}}' +
@@ -153,6 +155,28 @@ describe('tags/for', function () {
         '{% endfor %}'
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).toBe('123continue5')
+    })
+    it('should skip snippet for rendered continue', async function () {
+      mock({
+        'snippet.liquid': ' before{% continue %}skipped'
+      })
+      const src = '{% for i in (1..2) %}' +
+        '{% render "snippet.liquid" %}' +
+        ' after' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe(' before after before after')
+    })
+    it('should skip `for` body for included continue', async function () {
+      mock({
+        'snippet.liquid': ' before{% continue %}skipped'
+      })
+      const src = '{% for i in (1..2) %}' +
+        '{% include "snippet.liquid" %}' +
+        ' after' +
+        '{% endfor %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe(' before before')
     })
   })
   describe('break', function () {

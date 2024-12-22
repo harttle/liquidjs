@@ -25,6 +25,8 @@ export class Context {
    */
   public globals: Scope
   public sync: boolean
+  public breakCalled = false
+  public continueCalled = false
   /**
    * The normalized liquid options object
    */

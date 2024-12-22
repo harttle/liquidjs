@@ -1,7 +1,7 @@
 import { Tag, Emitter, Context } from '..'
 
 export default class extends Tag {
-  render (ctx: Context, emitter: Emitter) {
-    emitter['continue'] = true
+  render (ctx: Context, _emitter: Emitter) {
+    ctx.continueCalled = true
   }
 }

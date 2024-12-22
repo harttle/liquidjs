@@ -525,8 +525,10 @@ describe('Issues', function () {
     expect(result).toEqual('\n[2,12] foo')
   })
   it("memoryLimit doesn't work in for tag #776", () => {
-    const engine = new Liquid()
+    const engine = new Liquid({
+      memoryLimit: 1e5
+    })
     const tpl = `{% for i in (1..1000000000) %} {{'a'}} {% endfor %}`
-    expect(() => engine.parseAndRenderSync(tpl)).toThrow(/memory out/)
+    expect(() => engine.parseAndRenderSync(tpl)).toThrow('memory alloc limit exceeded, line:1, col:1')
   })
 })

@@ -68,12 +68,9 @@ export default class extends Tag {
     ctx.push(scope)
     for (const item of collection) {
       scope[this.variable] = item
+      ctx.continueCalled = ctx.breakCalled = false
       yield r.renderTemplates(this.templates, ctx, emitter)
-      if (emitter['break']) {
-        emitter['break'] = false
-        break
-      }
-      emitter['continue'] = false
+      if (ctx.breakCalled) break
       scope.forloop.next()
     }
     ctx.pop()
