@@ -60,7 +60,10 @@
   /* global liquidjs, ace */
   if (!location.pathname.match(/playground.html$/)) return;
   updateVersion(liquidjs.version);
-  const engine = new liquidjs.Liquid();
+  const engine = new liquidjs.Liquid({
+    memoryLimit: 1e5,
+    renderLimit: 1e5
+  });
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
   const preview = createEditor('previewEl', 'html');
