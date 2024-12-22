@@ -308,6 +308,16 @@ describe('Liquid', function () {
       expect(engine.variableSegmentsSync(engine.parse('{% assign c = 1 %}{{ a.b }}{{ c }}{{ c }}'))).toStrictEqual([['a', 'b'], ['c']])
     })
 
+    it('should list all variables as an array of segments with nested variables as arrays', () => {
+      expect(engine.variableSegments('{{ a[b.c].d }}')).resolves.toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+      expect(engine.variableSegments(engine.parse('{{ a[b.c].d }}'))).resolves.toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+    })
+
+    it('should list all variables synchronously as an array of segments with nested variables as arrays', () => {
+      expect(engine.variableSegmentsSync('{{ a[b.c].d }}')).toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+      expect(engine.variableSegmentsSync(engine.parse('{{ a[b.c].d }}'))).toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+    })
+
     it('should list global variables as an array of segments', () => {
       expect(engine.globalVariableSegments('{% assign c = 1 %}{{ a.b }}{{ c }}{{ c }}')).resolves.toStrictEqual([['a', 'b']])
       expect(engine.globalVariableSegments(engine.parse('{% assign c = 1 %}{{ a.b }}{{ c }}{{ c }}'))).resolves.toStrictEqual([['a', 'b']])
@@ -316,6 +326,16 @@ describe('Liquid', function () {
     it('should list global variables as an array of segments synchronously', () => {
       expect(engine.globalVariableSegmentsSync('{% assign c = 1 %}{{ a.b }}{{ c }}{{ c }}')).toStrictEqual([['a', 'b']])
       expect(engine.globalVariableSegmentsSync(engine.parse('{% assign c = 1 %}{{ a.b }}{{ c }}{{ c }}'))).toStrictEqual([['a', 'b']])
+    })
+
+    it('should list global variables as an array of segments with nested variables as arrays', () => {
+      expect(engine.globalVariableSegments('{{ a[b.c].d }}')).resolves.toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+      expect(engine.globalVariableSegments(engine.parse('{{ a[b.c].d }}'))).resolves.toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+    })
+
+    it('should list global variables synchronously as an array of segments with nested variables as arrays', () => {
+      expect(engine.globalVariableSegmentsSync('{{ a[b.c].d }}')).toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
+      expect(engine.globalVariableSegmentsSync(engine.parse('{{ a[b.c].d }}'))).toStrictEqual([['a', ['b', 'c'], 'd'], ['b', 'c']])
     })
   })
 })

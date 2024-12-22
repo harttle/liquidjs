@@ -23,6 +23,11 @@ export interface VariableLocation {
 }
 
 /**
+ * A variable's segments as an array, possibly with nested arrays of segments.
+ */
+export type SegmentArray = Array<string | number | SegmentArray>
+
+/**
  * A variable's segments and location, which can be coerced to a string.
  */
 export class Variable {
@@ -33,6 +38,20 @@ export class Variable {
 
   public toString (): string {
     return segmentsString(this.segments, true)
+  }
+
+  /** Return this variable's segments as an array, possibly with nested arrays for nested paths. */
+  public toArray (): SegmentArray {
+    function * _visit (...segments: Array<string | number | Variable>): Generator<string | number | SegmentArray> {
+      for (const segment of segments) {
+        if (segment instanceof Variable) {
+          yield Array.from(_visit(...segment.segments))
+        } else {
+          yield segment
+        }
+      }
+    }
+    return Array.from(_visit(...this.segments))
   }
 }
 
@@ -132,6 +151,7 @@ function * _analyze (templates: Template[], partials: boolean, sync: boolean): G
 
     if (aliased !== undefined) {
       const root = aliased.segments[0]
+      // TODO: What if a a template renders a rendered template? Do we need scope.parent?
       if (isString(root) && !rootScope.has(root)) {
         globals.push(aliased)
       }

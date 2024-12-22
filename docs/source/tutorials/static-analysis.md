@@ -29,6 +29,7 @@ const template = engine.parse(`\
        - {{ email }}
     {% endfor %}
   {% endif %}
+  {{ a[b.c].d }}
 <p>
 `)
 
@@ -38,10 +39,10 @@ console.log(engine.variablesSync(template))
 **Output**
 
 ```javascript
-[ 'user', 'title', 'email' ]
+[ 'user', 'title', 'email', 'a', 'b' ]
 ```
 
-Alternatively, use `Liquid.fullVariables(template)` to get a list of variables including their properties. Notice that variables from tag and filter arguments are included too.
+Notice that variables from tag and filter arguments are included, as well as nested variables like `b` in the example. Alternatively, use `Liquid.fullVariables(template)` to get a list of variables including their properties as strings.
 
 ```javascript
 // continued from above
@@ -61,7 +62,9 @@ engine.fullVariables(template).then(console.log)
   'user.email_addresses[0]',
   'user.email_addresses',
   'title',
-  'email'
+  'email',
+  'a[b.c].d',
+  'b.c'
 ]
 ```
 
@@ -85,7 +88,9 @@ engine.variableSegments(template).then(console.log)
   [ 'user', 'email_addresses', 0 ],
   [ 'user', 'email_addresses' ],
   [ 'title' ],
-  [ 'email' ]
+  [ 'email' ],
+  [ 'a', [ 'b', 'c' ], 'd' ],
+  [ 'b', 'c' ]
 ]
 ```
 
@@ -111,7 +116,9 @@ engine.globalVariableSegments(template).then(console.log)
   [ 'user', 'address' ],
   [ 'user', 'address', 'line1' ],
   [ 'user', 'email_addresses', 0 ],
-  [ 'user', 'email_addresses' ]
+  [ 'user', 'email_addresses' ],
+  [ 'a', [ 'b', 'c' ], 'd' ],
+  [ 'b', 'c' ]
 ]
 ```
 

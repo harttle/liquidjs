@@ -1,6 +1,6 @@
 import { Context } from './context'
 import { toPromise, toValueSync, isFunction, forOwn, isString, strictUniq } from './util'
-import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value, StaticAnalysisOptions, StaticAnalysis, analyze, analyzeSync, Variable } from './template'
+import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value, StaticAnalysisOptions, StaticAnalysis, analyze, analyzeSync, SegmentArray } from './template'
 import { LookupType } from './fs/loader'
 import { Render } from './render'
 import { Parser } from './parser'
@@ -139,8 +139,6 @@ export class Liquid {
     return analyzeSync(this.parse(html, filename), options)
   }
 
-  // TODO: deduplicate paths if they are used more than once
-
   /** Return an array of all variables without their properties. */
   public async variables (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<string[]> {
     const analysis = await analyze(isString(template) ? this.parse(template) : template, options)
@@ -166,15 +164,15 @@ export class Liquid {
   }
 
   /** Return an array of all variables, each as an array of properties/segments. */
-  public async variableSegments (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<Array<Array<string | number | Variable>>> {
+  public async variableSegments (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<Array<SegmentArray>> {
     const analysis = await analyze(isString(template) ? this.parse(template) : template, options)
-    return Array.from(strictUniq(Object.values(analysis.variables).flatMap((a) => a.map((v) => v.segments))))
+    return Array.from(strictUniq(Object.values(analysis.variables).flatMap((a) => a.map((v) => v.toArray()))))
   }
 
   /** Return an array of all variables, each as an array of properties/segments. */
-  public variableSegmentsSync (template: string | Template[], options: StaticAnalysisOptions = {}): Array<Array<string | number | Variable>> {
+  public variableSegmentsSync (template: string | Template[], options: StaticAnalysisOptions = {}): Array<SegmentArray> {
     const analysis = analyzeSync(isString(template) ? this.parse(template) : template, options)
-    return Array.from(strictUniq(Object.values(analysis.variables).flatMap((a) => a.map((v) => v.segments))))
+    return Array.from(strictUniq(Object.values(analysis.variables).flatMap((a) => a.map((v) => v.toArray()))))
   }
 
   /** Return an array of all expected context variables without their properties. */
@@ -202,14 +200,14 @@ export class Liquid {
   }
 
   /** Return an array of all expected context variables, each as an array of properties/segments. */
-  public async globalVariableSegments (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<Array<Array<string | number | Variable>>> {
+  public async globalVariableSegments (template: string | Template[], options: StaticAnalysisOptions = {}): Promise<Array<SegmentArray>> {
     const analysis = await analyze(isString(template) ? this.parse(template) : template, options)
-    return Array.from(strictUniq(Object.values(analysis.globals).flatMap((a) => a.map((v) => v.segments))))
+    return Array.from(strictUniq(Object.values(analysis.globals).flatMap((a) => a.map((v) => v.toArray()))))
   }
 
   /** Return an array of all expected context variables, each as an array of properties/segments. */
-  public globalVariableSegmentsSync (template: string | Template[], options: StaticAnalysisOptions = {}): Array<Array<string | number | Variable>> {
+  public globalVariableSegmentsSync (template: string | Template[], options: StaticAnalysisOptions = {}): Array<SegmentArray> {
     const analysis = analyzeSync(isString(template) ? this.parse(template) : template, options)
-    return Array.from(strictUniq(Object.values(analysis.globals).flatMap((a) => a.map((v) => v.segments))))
+    return Array.from(strictUniq(Object.values(analysis.globals).flatMap((a) => a.map((v) => v.toArray()))))
   }
 }
