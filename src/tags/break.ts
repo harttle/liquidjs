@@ -1,7 +1,7 @@
 import { Context, Emitter, Tag } from '..'
 
 export default class extends Tag {
-  render (ctx: Context, emitter: Emitter) {
-    emitter['break'] = true
+  render (ctx: Context, _emitter: Emitter) {
+    ctx.breakCalled = true
   }
 }
