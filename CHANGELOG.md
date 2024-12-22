@@ -1,3 +1,12 @@
+## [10.19.1](https://github.com/harttle/liquidjs/compare/v10.19.0...v10.19.1) (2024-12-22)
+
+
+### Bug Fixes
+
+* add sideEffects=false to package.json ([734eb52](https://github.com/harttle/liquidjs/commit/734eb52b987d46d33cf8f03281a3773a0f1f0e4a))
+* inconsistent continue behaviour, fixes [#779](https://github.com/harttle/liquidjs/issues/779) ([e3ef574](https://github.com/harttle/liquidjs/commit/e3ef574674c5a21a37b3ffc929f514c8a3d0b866))
+* memoryLimit doesn't work in for tag, [#776](https://github.com/harttle/liquidjs/issues/776) ([2af297f](https://github.com/harttle/liquidjs/commit/2af297f81ac465feb3277ba7b92f7236409370b0))
+
 # [10.19.0](https://github.com/harttle/liquidjs/compare/v10.18.0...v10.19.0) (2024-11-17)
 
 
