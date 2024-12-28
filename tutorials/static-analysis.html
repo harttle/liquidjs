@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head prefix="og: https://ogp.me/ns#">
+  <meta charset="utf-8">
+  <title>Static Template Analysis | LiquidJS</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LiquidJS is a simple, expressive and safe Shopify / GitHub Pages compatible template engine in pure JavaScript.">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
+  <link rel="manifest" href="/manifest.json">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://liquidjs.com/tutorials/static-analysis.html">
+  <!-- Alternative links -->
+  
+    
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/tutorials/static-analysis">
+    
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/tutorials/static-analysis">
+    
+  
+  <!-- Icon -->
+  <link rel="apple-touch-icon" sizes="57x57" href="../icon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../icon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../icon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../icon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../icon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../icon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../icon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../icon/apple-touch-icon-152x152.png">
+  <link rel="icon" type="image/png" href="../icon/favicon-196x196.png" sizes="196x196">
+  <link rel="icon" type="image/png" href="../icon/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="../icon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../icon/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="../icon/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#2f83cd">
+  <meta name="msapplication-TileImage" content="../icon/mstile-144x144.png">
+  
+<link rel="stylesheet" href="../css/navy.css">
+
+  <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <header id="header" class="wrapper">
+  <div id="header-inner" class="inner">
+    <h1 id="logo-wrap">
+      <a href="../index.html" id="logo">LiquidJS</a>
+    </h1>
+    <nav id="main-nav">
+      <a href="../tutorials/intro-to-liquid.html" class="main-nav-link">Tutorials</a><a href="../tags/overview.html" class="main-nav-link">Tags</a><a href="../filters/overview.html" class="main-nav-link">Filters</a><a href="../playground.html" class="main-nav-link">Playground</a><a href="../api/classes/Liquid.html" class="main-nav-link">API</a>
+      <div id="search-input-wrap">
+        <i id="search-input-icon" class="icon-search"></i>
+        <input type="search" id="search-input" placeholder="Search...">
+      </div>
+    </nav>
+    <div class="main-nav-link icon-nav-link">
+      <label><i class="icon-network"></i> <span class="icon-nav-title">English</span></label>
+      <select id="lang-select" data-canonical="tutorials/static-analysis.html">
+        
+          <option value="en" selected>English</option>
+        
+          <option value="zh-cn">简体中文</option>
+        
+      </select>
+    </div>
+    <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">GitHub</span></a>
+    <a id="mobile-nav-toggle">
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+      <span class="mobile-nav-toggle-bar"></span>
+    </a>
+  </div>
+</header>
+
+    <div id="content-wrap">
+  <div id="content" class="wrapper">
+    <div id="content-inner">
+      <aside id="sidebar" role="navigation">
+  <div class="inner">
+    <strong class="sidebar-title">Getting Started</strong><a href="intro-to-liquid.html" class="sidebar-link">Intro to Liquid</a><a href="setup.html" class="sidebar-link">Setup</a><a href="options.html" class="sidebar-link">Options</a><a href="render-file.html" class="sidebar-link">Render Files</a><a href="partials-and-layouts.html" class="sidebar-link">Includes and Layouts</a><a href="use-in-expressjs.html" class="sidebar-link">Use in Express.js</a><strong class="sidebar-title">Advanced</strong><a href="caching.html" class="sidebar-link">Caching</a><a href="escaping.html" class="sidebar-link">Escaping</a><a href="register-filters-tags.html" class="sidebar-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="sidebar-link">Access Scope in Filters</a><a href="parse-parameters.html" class="sidebar-link">Parse Parameters</a><a href="render-tag-content.html" class="sidebar-link">Render Tag Content</a><a href="drops.html" class="sidebar-link">Liquid Drops</a><a href="sync-and-async.html" class="sidebar-link">Sync and Async</a><a href="whitespace-control.html" class="sidebar-link">Whitespace Control</a><a href="plugins.html" class="sidebar-link">Plugins</a><a href="operators.html" class="sidebar-link">Operators</a><a href="truthy-and-falsy.html" class="sidebar-link">Truthy and Falsy</a><a href="dos.html" class="sidebar-link">DoS</a><a href="static-analysis.html" class="sidebar-link current">Static Analysis</a><strong class="sidebar-title">Miscellaneous</strong><a href="migrate-to-9.html" class="sidebar-link">Migrate to LiquidJS 9</a><a href="changelog.html" class="sidebar-link">Changelog</a><a href="differences.html" class="sidebar-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="sidebar-link">Contribution Guidelines</a>
+  </div>
+</aside>
+      <article class="article-container" itemscope itemtype="https://schema.org/Article">
+        <div class="article-inner">
+          <div class="article">
+            <div class="inner">
+              <header class="article-header">
+                <h1 class="article-title" itemprop="name">Static Template Analysis</h1>
+                
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/tutorials/static-analysis.md" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
+                
+              </header>
+              <div class="article-content" itemprop="articleBody">
+                <p class="since">v10.20.0</p>
+
+<blockquote class="note info"><strong class="note-title">Sync and Async</strong><p>There are synchronous and asynchronous versions of each of the methods demonstrated on this page. See the <a href="liquid-api">Liquid API</a> for a complete reference.</p>
+</blockquote>
+
+<h2 id="Variables" class="article-heading"><a href="#Variables" class="headerlink" title="Variables"></a>Variables<a class="article-anchor" href="#Variables" aria-hidden="true"></a></h2><p>Retrieve the names of variables used in a template with <code>Liquid.variables(template)</code>. It returns an array of strings, one string for each distinct variable, without its properties.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'liquidjs'</span>
+
+<span class="token keyword">const</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> template <span class="token operator">=</span> engine<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">\
+&lt;p>
+  &#123;% assign title = user.title | capitalize %&#125;
+  &#123;&#123; title &#125;&#125; &#123;&#123; user.first_name | default: user.name &#125;&#125; &#123;&#123; user.last_name &#125;&#125;
+  &#123;% if user.address %&#125;
+    &#123;&#123; user.address.line1 &#125;&#125;
+  &#123;% else %&#125;
+    &#123;&#123; user.email_addresses[0] &#125;&#125;
+    &#123;% for email in user.email_addresses %&#125;
+       - &#123;&#123; email &#125;&#125;
+    &#123;% endfor %&#125;
+  &#123;% endif %&#125;
+  &#123;&#123; a[b.c].d &#125;&#125;
+&lt;p>
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>engine<span class="token punctuation">.</span><span class="token function">variablesSync</span><span class="token punctuation">(</span>template<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>Output</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'title'</span><span class="token punctuation">,</span> <span class="token string">'email'</span><span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">,</span> <span class="token string">'b'</span> <span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>Notice that variables from tag and filter arguments are included, as well as nested variables like <code>b</code> in the example. Alternatively, use <code>Liquid.fullVariables(template)</code> to get a list of variables including their properties as strings.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// continued from above</span>
+engine<span class="token punctuation">.</span><span class="token function">fullVariables</span><span class="token punctuation">(</span>template<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>Output</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token string">'user.title'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.first_name'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.name'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.last_name'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.address'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.address.line1'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.email_addresses[0]'</span><span class="token punctuation">,</span>
+  <span class="token string">'user.email_addresses'</span><span class="token punctuation">,</span>
+  <span class="token string">'title'</span><span class="token punctuation">,</span>
+  <span class="token string">'email'</span><span class="token punctuation">,</span>
+  <span class="token string">'a[b.c].d'</span><span class="token punctuation">,</span>
+  <span class="token string">'b.c'</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>Or use <code>Liquid.variableSegments(template)</code> to get an array of strings and numbers that make up each variable’s path.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// continued from above</span>
+engine<span class="token punctuation">.</span><span class="token function">variableSegments</span><span class="token punctuation">(</span>template<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>Output</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'title'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'first_name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'last_name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'address'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'address'</span><span class="token punctuation">,</span> <span class="token string">'line1'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'email_addresses'</span><span class="token punctuation">,</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'email_addresses'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'title'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'email'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'a'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span> <span class="token string">'b'</span><span class="token punctuation">,</span> <span class="token string">'c'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'d'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'b'</span><span class="token punctuation">,</span> <span class="token string">'c'</span> <span class="token punctuation">]</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Global-Variables" class="article-heading"><a href="#Global-Variables" class="headerlink" title="Global Variables"></a>Global Variables<a class="article-anchor" href="#Global-Variables" aria-hidden="true"></a></h3><p>Notice, in the examples above, that <code>title</code> and <code>email</code> are included in the results. Often you’ll want to exclude names that are in scope from <code>&#123;% assign %&#125;</code> tags, and temporary variables like those introduced by a <code>&#123;% for %&#125;</code> tag.</p>
+<p>To get names that are expected to be <em>global</em>, that is, provided by application developers rather than template authors, use the <code>globalVariables</code>, <code>globalFullVariables</code> or <code>globalVariableSegments</code> methods (or their synchronous equivalents) of a <code>Liquid</code> class instance.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// continued from above</span>
+engine<span class="token punctuation">.</span><span class="token function">globalVariableSegments</span><span class="token punctuation">(</span>template<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>Output</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'title'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'first_name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'last_name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'address'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'address'</span><span class="token punctuation">,</span> <span class="token string">'line1'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'email_addresses'</span><span class="token punctuation">,</span> <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'user'</span><span class="token punctuation">,</span> <span class="token string">'email_addresses'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'a'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span> <span class="token string">'b'</span><span class="token punctuation">,</span> <span class="token string">'c'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token string">'d'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token punctuation">[</span> <span class="token string">'b'</span><span class="token punctuation">,</span> <span class="token string">'c'</span> <span class="token punctuation">]</span>
+<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Partial-Templates" class="article-heading"><a href="#Partial-Templates" class="headerlink" title="Partial Templates"></a>Partial Templates<a class="article-anchor" href="#Partial-Templates" aria-hidden="true"></a></h3><p>By default, LiquidJS will try to load and analyze any included and rendered templates too.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'liquidjs'</span>
+
+<span class="token keyword">const</span> footer <span class="token operator">=</span> <span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">\
+&lt;footer>
+  &lt;p>&amp;copy; &#123;&#123; "now" | date: "%Y" &#125;&#125; &#123;&#123; site_name &#125;&#125;&lt;/p>
+  &lt;p>&#123;&#123; site_description &#125;&#125;&lt;/p>
+&lt;/footer></span><span class="token template-punctuation string">`</span></span>
+
+<span class="token keyword">const</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span> <span class="token literal-property property">templates</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> footer <span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+<span class="token keyword">const</span> template <span class="token operator">=</span> engine<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">\
+&lt;body>
+  &lt;h1>Hi, &#123;&#123; you | default: 'World' &#125;&#125;!&lt;/h1>
+  &#123;% assign some = 'thing' %&#125;
+  &#123;% include 'footer' %&#125;
+&lt;/body>
+</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
+
+engine<span class="token punctuation">.</span><span class="token function">globalVariables</span><span class="token punctuation">(</span>template<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>Output</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span> <span class="token string">'you'</span><span class="token punctuation">,</span> <span class="token string">'site_name'</span><span class="token punctuation">,</span> <span class="token string">'site_description'</span> <span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>You can disable analysis of partial templates by setting the <code>partials</code> options to <code>false</code>.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// continue from above</span>
+engine<span class="token punctuation">.</span><span class="token function">globalVariables</span><span class="token punctuation">(</span>template<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">partials</span><span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>console<span class="token punctuation">.</span>log<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>Output</strong></p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">[</span> <span class="token string">'you'</span> <span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>If an <code>&#123;% include %&#125;</code> tag uses a dynamic template name (one that can’t be determined without rendering the template) it will be ignored, even if <code>partials</code> is set to <code>true</code>.</p>
+<h3 id="Advanced-Usage" class="article-heading"><a href="#Advanced-Usage" class="headerlink" title="Advanced Usage"></a>Advanced Usage<a class="article-anchor" href="#Advanced-Usage" aria-hidden="true"></a></h3><p>The examples so far all use convenience methods of the <code>Liquid</code> class, intended to cover the most common use cases. Instead, you can work with <a href="static-analysis-interface">analysis results</a> directly, which expose the row, column and file name for every occurrence of each variable.</p>
+<p>This is an example of an object returned from <code>Liquid.analyze()</code>, passing it the template from the <a href="#partial-templates">Partial Template</a> section above.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token punctuation">&#123;</span>
+  <span class="token literal-property property">variables</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">you</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'you'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'you'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">14</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token keyword">undefined</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">site_name</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'site_name'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'site_name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">41</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token string">'footer'</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">site_description</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'site_description'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'site_description'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token string">'footer'</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">globals</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">you</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'you'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'you'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">14</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token keyword">undefined</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">site_name</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'site_name'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'site_name'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">41</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token string">'footer'</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">site_description</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'site_description'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'site_description'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token string">'footer'</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">locals</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token literal-property property">some</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">[</span><span class="token function">String</span> <span class="token punctuation">(</span>Variable<span class="token punctuation">)</span><span class="token operator">:</span> <span class="token string">'some'</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span>
+        <span class="token literal-property property">segments</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">'some'</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">location</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span> <span class="token literal-property property">row</span><span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token literal-property property">col</span><span class="token operator">:</span> <span class="token number">13</span><span class="token punctuation">,</span> <span class="token literal-property property">file</span><span class="token operator">:</span> <span class="token keyword">undefined</span> <span class="token punctuation">&#125;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="Analyzing-Custom-Tags" class="article-heading"><a href="#Analyzing-Custom-Tags" class="headerlink" title="Analyzing Custom Tags"></a>Analyzing Custom Tags<a class="article-anchor" href="#Analyzing-Custom-Tags" aria-hidden="true"></a></h3><p>For static analysis to include results from custom tags, those tags must implement some additional methods defined on the <a href="/api/interfaces/Template.html">Template interface</a>. LiquidJS will use the information returned from these methods to traverse the template and report variable usage.</p>
+<p>Not all methods are required, depending in the kind of tag. If it’s a block with a start tag, end tag and any amount of Liquid markup in between, it will need to implement the <a href="/api/interfaces/Template.html#children"><code>children()</code></a> method. <code>children()</code> is defined as a generator, so that we can use it in synchronous and asynchronous contexts, just like <code>render()</code>. It should return HTML content, output statements and tags that are child nodes of the current tag.</p>
+<p>The <a href="/api/interfaces/Template.html#blockScope"><code>blockScope()</code></a> method is responsible for telling LiquidJS which names will be in scope for the duration of the tag’s block. Some of these names could depend on the tag’s arguments, and some will be fixed, like <code>forloop</code> from the <code>&#123;% for %&#125;</code> tag.</p>
+<p>Whether a tag is an inline tag or a block tag, if it accepts arguments it should implement <a href="/api/interfaces/Template.html#arguments"><code>arguments()</code></a>, which is responsible for returning the tag’s arguments as a sequence of <a href="/api/classes/Value.html"><code>Value</code></a> instances or tokens of type <a href="/api/types/ValueToken.html"><code>ValueToken</code></a>.</p>
+<p>This example demonstrates these methods for a block tag. See LiquidJS’s <a href="built-in">built-in tags</a> for more examples.</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Liquid<span class="token punctuation">,</span> Tag<span class="token punctuation">,</span> Hash <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'liquidjs'</span>
+
+<span class="token keyword">class</span> <span class="token class-name">ExampleTag</span> <span class="token keyword">extends</span> <span class="token class-name">Tag</span> <span class="token punctuation">&#123;</span>
+  args
+  templates
+
+  <span class="token function">constructor</span> <span class="token punctuation">(</span><span class="token parameter">token<span class="token punctuation">,</span> remainTokens<span class="token punctuation">,</span> liquid<span class="token punctuation">,</span> parser</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>token<span class="token punctuation">,</span> remainTokens<span class="token punctuation">,</span> liquid<span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>args <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Hash</span><span class="token punctuation">(</span>token<span class="token punctuation">.</span>tokenizer<span class="token punctuation">)</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>templates <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+    <span class="token keyword">const</span> stream <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parseStream</span><span class="token punctuation">(</span>remainTokens<span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'tag:endexample'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> stream<span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'template'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">tpl</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token keyword">this</span><span class="token punctuation">.</span>templates<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>tpl<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">'end'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">tag </span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$&#123;</span>token<span class="token punctuation">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">&#125;</span></span><span class="token string"> not closed</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+
+    stream<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token operator">*</span> <span class="token function">render</span> <span class="token punctuation">(</span><span class="token parameter">ctx<span class="token punctuation">,</span> emitter</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">const</span> scope <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">yield</span> <span class="token keyword">this</span><span class="token punctuation">.</span>args<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>ctx<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span>scope<span class="token punctuation">)</span>
+    <span class="token keyword">yield</span> <span class="token keyword">this</span><span class="token punctuation">.</span>liquid<span class="token punctuation">.</span>renderer<span class="token punctuation">.</span><span class="token function">renderTemplates</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>templates<span class="token punctuation">,</span> ctx<span class="token punctuation">,</span> emitter<span class="token punctuation">)</span>
+    ctx<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token operator">*</span> <span class="token function">children</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>templates
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token operator">*</span> <span class="token function">arguments</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">yield</span> <span class="token operator">*</span> Object<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>args<span class="token punctuation">.</span>hash<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">el</span><span class="token punctuation">)</span> <span class="token operator">=></span> el <span class="token operator">!==</span> <span class="token keyword">undefined</span><span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token function">blockScope</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>args<span class="token punctuation">.</span>hash<span class="token punctuation">)</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+              </div>
+              <footer class="article-footer">
+                <time class="article-footer-updated" datetime="2024-12-28T13:35:45.899Z" itemprop="dateModified">Last updated: 2024-12-28</time>
+                <a href="dos.html" class="article-footer-prev" title="DoS"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="migrate-to-9.html" class="article-footer-next" title="Migrate to LiquidJS 9"><span>Next</span><i class="icon-chevron-right"></i></a>
+              </footer>
+            </div>
+          </div>
+          <aside id="article-toc" role="navigation">
+            <div id="article-toc-inner">
+              <div id="article-toc-inner-list">
+                <strong class="sidebar-title">Contents</strong>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Variables"><span class="toc-text">Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Global-Variables"><span class="toc-text">Global Variables</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Partial-Templates"><span class="toc-text">Partial Templates</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Advanced-Usage"><span class="toc-text">Advanced Usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Analyzing-Custom-Tags"><span class="toc-text">Analyzing Custom Tags</span></a></li></ol></li></ol>
+              </div>
+              <a href="#" id="article-toc-top">Back to Top</a>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="wrapper">
+  <div class="inner">
+    <div id="footer-copyright">
+      &copy; 2024 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      Documentation licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>.
+    </div>
+    <div id="footer-links">
+      <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
+      <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
+      <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  <div id="mobile-nav-dimmer"></div>
+  <nav id="mobile-nav">
+  <div id="mobile-nav-inner">
+    <ul id="mobile-nav-list">
+      <a href="../tutorials/intro-to-liquid.html" class="mobile-nav-link">Tutorials</a><a href="../tags/overview.html" class="mobile-nav-link">Tags</a><a href="../filters/overview.html" class="mobile-nav-link">Filters</a><a href="../playground.html" class="mobile-nav-link">Playground</a><a href="../api/classes/Liquid.html" class="mobile-nav-link">API</a>
+    </ul>
+    
+    <div class="mobile-sidebar-list">
+      <strong class="mobile-nav-title">Getting Started</strong><a href="intro-to-liquid.html" class="mobile-nav-link">Intro to Liquid</a><a href="setup.html" class="mobile-nav-link">Setup</a><a href="options.html" class="mobile-nav-link">Options</a><a href="render-file.html" class="mobile-nav-link">Render Files</a><a href="partials-and-layouts.html" class="mobile-nav-link">Includes and Layouts</a><a href="use-in-expressjs.html" class="mobile-nav-link">Use in Express.js</a><strong class="mobile-nav-title">Advanced</strong><a href="caching.html" class="mobile-nav-link">Caching</a><a href="escaping.html" class="mobile-nav-link">Escaping</a><a href="register-filters-tags.html" class="mobile-nav-link">Register Filters/Tags</a><a href="access-scope-in-filters.html" class="mobile-nav-link">Access Scope in Filters</a><a href="parse-parameters.html" class="mobile-nav-link">Parse Parameters</a><a href="render-tag-content.html" class="mobile-nav-link">Render Tag Content</a><a href="drops.html" class="mobile-nav-link">Liquid Drops</a><a href="sync-and-async.html" class="mobile-nav-link">Sync and Async</a><a href="whitespace-control.html" class="mobile-nav-link">Whitespace Control</a><a href="plugins.html" class="mobile-nav-link">Plugins</a><a href="operators.html" class="mobile-nav-link">Operators</a><a href="truthy-and-falsy.html" class="mobile-nav-link">Truthy and Falsy</a><a href="dos.html" class="mobile-nav-link">DoS</a><a href="static-analysis.html" class="mobile-nav-link current">Static Analysis</a><strong class="mobile-nav-title">Miscellaneous</strong><a href="migrate-to-9.html" class="mobile-nav-link">Migrate to LiquidJS 9</a><a href="changelog.html" class="mobile-nav-link">Changelog</a><a href="differences.html" class="mobile-nav-link">Differences with Shopify/liquid</a><a href="contribution-guidelines.html" class="mobile-nav-link">Contribution Guidelines</a>
+    </div>
+    
+  </div>
+  <div id="mobile-button-list">
+    <a href="https://github.com/harttle/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-github"></i></a>
+    <a href="https://opencollective.com/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-opencollective"></i></a>
+    <div id="mobile-lang-select-wrap" class="mobile-nav-link">
+      <label for="mobile-lang-select"><i class="icon-network"></i></label>
+      <select id="mobile-lang-select" data-canonical="tutorials/static-analysis.html">
+        
+          <option value="en" selected>English</option>
+        
+          <option value="zh-cn">简体中文</option>
+        
+      </select>
+    </div>
+  </div>
+</nav>
+  
+
+
+<script src="../js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+document.getElementById('search-input-wrap').classList.add('on');
+docsearch({
+apiKey: '01f36cc168657a26a385308b9e721bc6',
+indexName: 'liquidjs',
+inputSelector: '#search-input',
+debug: false
+});
+</script>
+</body>
+</html>
