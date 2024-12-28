@@ -93,6 +93,10 @@ export function isArray (value: any): value is any[] {
   return toString.call(value) === '[object Array]'
 }
 
+export function isArrayLike (value: any): value is any[] {
+  return value && isNumber(value.length)
+}
+
 export function isIterable (value: any): value is Iterable<any> {
   return isObject(value) && Symbol.iterator in value
 }

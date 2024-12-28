@@ -27,13 +27,6 @@ describe('filters/array', function () {
       return expect(render(src)).rejects.toThrow('expected ":" after filter name, line:1, col:83')
     })
   })
-  describe('last', () => {
-    it('should support last', function () {
-      const src = '{{ arr | last }}'
-      const scope = { arr: ['zebra', 'octopus', 'giraffe', 'tiger'] }
-      return test(src, scope, 'tiger')
-    })
-  })
   describe('split', () => {
     it('should support split', function () {
       const src = '{% assign my_array = "zebra, octopus, giraffe, tiger" | split: ", " %}' +
@@ -263,6 +256,7 @@ describe('filters/array', function () {
     it('should return 0 for false', () => test('{{ false | size }}', '0'))
     it('should return 0 for nil', () => test('{{ nil | size }}', '0'))
     it('should return 0 for undefined', () => test('{{ foo | size }}', '0'))
+    it('should work for string', () => test('{{ "foo" | size }}', {}, '3'))
   })
   describe('first', function () {
     it('should support first', () => test(
@@ -273,7 +267,7 @@ describe('filters/array', function () {
     it('should return empty for nil', () => test('{{nil | first}}', ''))
     it('should return empty for undefined', () => test('{{foo | first}}', ''))
     it('should return empty for false', () => test('{{false | first}}', ''))
-    it('should return empty for string', () => test('{{"zebra" | first}}', ''))
+    it('should work for string', () => test('{{ "foo" | first }}', 'f'))
   })
   describe('last', function () {
     it('should support last', () => test(
@@ -284,7 +278,7 @@ describe('filters/array', function () {
     it('should return empty for nil', () => test('{{nil | last}}', ''))
     it('should return empty for undefined', () => test('{{foo | last}}', ''))
     it('should return empty for false', () => test('{{false | last}}', ''))
-    it('should return empty for string', () => test('{{"zebra" | last}}', ''))
+    it('should work for string', () => test('{{ "foo" | last }}', {}, 'o'))
   })
   describe('slice', function () {
     it('should slice first char by 0', () => test('{{ "Liquid" | slice: 0 }}', 'L'))
