@@ -52,6 +52,7 @@ sidebar:
     operators: Operators
     truth: Truthy and Falsy
     dos: DoS
+    static_analysis: Static Analysis
 
     miscellaneous: Miscellaneous
     migration9: 'Migrate to LiquidJS 9'
