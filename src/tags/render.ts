@@ -1,8 +1,9 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
-import { toEnumerable } from '../util'
+import { isString, isValueToken, toEnumerable } from '../util'
 import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
+import { Argument, Arguments, PartialScope } from '../template'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
@@ -45,7 +46,7 @@ export default class extends Tag {
       tokenizer.p = begin
       break
     }
-    this.hash = new Hash(tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.hash = new Hash(tokenizer, liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const { liquid, hash } = this
@@ -73,6 +74,61 @@ export default class extends Tag {
     } else {
       const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])) as Template[]
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
+    }
+  }
+
+  public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {
+    if (partials && isString(this['file'])) {
+      return (yield this.liquid._parsePartialFile(this['file'], sync, this['currentFile'])) as Template[]
+    }
+    return []
+  }
+
+  public partialScope (): PartialScope | undefined {
+    if (isString(this['file'])) {
+      const names: Array<string | [string, Argument]> = Object.keys(this.hash.hash)
+
+      if (this['with']) {
+        const { value, alias } = this['with']
+        if (isString(alias)) {
+          names.push([alias, value])
+        } else if (isString(this.file)) {
+          names.push([this.file, value])
+        }
+      }
+
+      if (this['for']) {
+        const { value, alias } = this['for']
+        if (isString(alias)) {
+          names.push([alias, value])
+        } else if (isString(this.file)) {
+          names.push([this.file, value])
+        }
+      }
+
+      return { name: this['file'], isolated: true, scope: names }
+    }
+  }
+
+  public * arguments (): Arguments {
+    for (const v of Object.values(this.hash.hash)) {
+      if (isValueToken(v)) {
+        yield v
+      }
+    }
+
+    if (this['with']) {
+      const { value } = this['with']
+      if (isValueToken(value)) {
+        yield value
+      }
+    }
+
+    if (this['for']) {
+      const { value } = this['for']
+      if (isValueToken(value)) {
+        yield value
+      }
     }
   }
 }

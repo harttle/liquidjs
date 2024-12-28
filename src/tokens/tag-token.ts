@@ -21,6 +21,7 @@ export class TagToken extends DelimitedToken {
     this.tokenizer.assert(this.name, `illegal tag syntax, tag name expected`)
     this.tokenizer.skipBlank()
   }
+
   get args (): string {
     return this.tokenizer.input.slice(this.tokenizer.p, this.contentRange[1])
   }

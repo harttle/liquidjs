@@ -1,6 +1,7 @@
 import { toPromise } from '../util'
 import { Hash } from './hash'
 import { Context } from '../context'
+import { Tokenizer } from '../parser'
 
 describe('Hash', function () {
   it('should parse "reverse"', async function () {
@@ -42,5 +43,11 @@ describe('Hash', function () {
   it('should support custom separator', async function () {
     const hash = await toPromise(new Hash('num=2.3', '=').render(new Context()))
     expect(hash.num).toBe(2.3)
+  })
+  it('should accept an existing tokenizer', async function () {
+    const tokenizer = new Tokenizer('a:1, b:2')
+    const hash = await toPromise(new Hash(tokenizer).render(new Context()))
+    expect(hash.a).toBe(1)
+    expect(hash.b).toBe(2)
   })
 })

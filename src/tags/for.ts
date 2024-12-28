@@ -1,7 +1,8 @@
 import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
-import { assertEmpty, toEnumerable } from '../util'
+import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
+import { Arguments } from '../template'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -25,7 +26,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collection
-    this.hash = new Hash(this.tokenizer.remaining(), liquid.options.keyValueSeparator)
+    this.hash = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
     this.elseTemplates = []
 
@@ -74,6 +75,28 @@ export default class extends Tag {
       scope.forloop.next()
     }
     ctx.pop()
+  }
+
+  public * children (): Generator<unknown, Template[]> {
+    const templates = this.templates.slice()
+    if (this.elseTemplates) {
+      templates.push(...this.elseTemplates)
+    }
+    return templates
+  }
+
+  public * arguments (): Arguments {
+    yield this.collection
+
+    for (const v of Object.values(this.hash.hash)) {
+      if (isValueToken(v)) {
+        yield v
+      }
+    }
+  }
+
+  public blockScope (): Iterable<string> {
+    return [this.variable, 'forloop']
   }
 }
 

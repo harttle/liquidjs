@@ -11,4 +11,8 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     yield this.liquid.renderer.renderTemplates(this.templates, ctx, emitter)
   }
+
+  public * children (): Generator<unknown, Template[]> {
+    return this.templates
+  }
 }

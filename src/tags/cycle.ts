@@ -1,4 +1,5 @@
 import { TopLevelToken, Liquid, ValueToken, evalToken, Emitter, TagToken, Context, Tag } from '..'
+import { Arguments } from '../template'
 
 export default class extends Tag {
   private candidates: ValueToken[] = []
@@ -37,5 +38,13 @@ export default class extends Tag {
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
     return yield evalToken(candidate, ctx)
+  }
+
+  public * arguments (): Arguments {
+    yield * this.candidates
+
+    if (this.group) {
+      yield this.group
+    }
   }
 }
