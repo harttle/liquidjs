@@ -23,7 +23,7 @@ export class Render {
         const html = yield tpl.render(ctx, emitter)
         // if not, it'll return an `html`, write to the emitter for it
         html && emitter.write(html)
-        if (emitter['break'] || emitter['continue']) break
+        if (ctx.breakCalled || ctx.continueCalled) break
       } catch (e) {
         const err = LiquidError.is(e) ? e : new RenderError(e as Error, tpl)
         if (ctx.opts.catchAllErrors) errors.push(err)
