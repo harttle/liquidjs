@@ -1,20 +1,20 @@
 ---
-title: Static Template Analysis
+title: 静态模板分析
 ---
 
 {% since %}v10.20.0{% endsince %}
 
-{% note warn Experimental %}  
-Note that this is an experimental feature and future APIs are subject to change. And internal structures returned can be changed w/o a major version bump.
+{% note warn 实验性功能 %}  
+这是一个实验性功能，未来的 API 可能会发生变化，返回的内部结构也可能在不进行主要版本更新的情况下更改。
 {% endnote %}
 
-{% note info Sync and Async %}
-There are synchronous and asynchronous versions of each of the methods demonstrated on this page. See the [Liquid API][liquid-api] for a complete reference.
+{% note info 同步与异步 %}  
+本文中的每种方法都提供了同步和异步版本。请参阅 [Liquid API][liquid-api] 了解完整的参考信息。  
 {% endnote %}
 
-## Variables
+## 变量
 
-Retrieve the names of variables used in a template with `Liquid.variables(template)`. It returns an array of strings, one string for each distinct variable, without its properties.
+可以使用 `Liquid.variables(template)` 方法获取模板中使用的变量名称。它会返回一个字符串数组，每个字符串代表一个不同的变量，不包括其属性。
 
 ```javascript
 import { Liquid } from 'liquidjs'
@@ -40,20 +40,21 @@ const template = engine.parse(`
 console.log(engine.variablesSync(template))
 ```
 
-**Output**
+**输出**
 
 ```javascript
 [ 'user', 'title', 'email', 'a', 'b' ]
 ```
 
-Notice that variables from tag and filter arguments are included, as well as nested variables like `b` in the example. Alternatively, use `Liquid.fullVariables(template)` to get a list of variables including their properties as strings.
+可以看到，标签和过滤器参数中的变量也会包含在内，例如示例中的嵌套变量 `b`。  
+另外，可以使用 `Liquid.fullVariables(template)` 方法获取包含其属性的完整变量列表。
 
 ```javascript
-// continued from above
+// 上例继续
 engine.fullVariables(template).then(console.log)
 ```
 
-**Output**
+**输出**
 
 ```javascript
 [
@@ -72,14 +73,14 @@ engine.fullVariables(template).then(console.log)
 ]
 ```
 
-Or use `Liquid.variableSegments(template)` to get an array of strings and numbers that make up each variable's path.
+或者，使用 `Liquid.variableSegments(template)` 获取每个变量路径的字符串和数字数组。
 
 ```javascript
-// continued from above
+// 上例继续
 engine.variableSegments(template).then(console.log)
 ```
 
-**Output**
+**输出**
 
 ```javascript
 [
@@ -98,18 +99,18 @@ engine.variableSegments(template).then(console.log)
 ]
 ```
 
-### Global Variables
+### 全局变量
 
-Notice, in the examples above, that `title` and `email` are included in the results. Often you'll want to exclude names that are in scope from `{% assign %}` tags, and temporary variables like those introduced by a `{% for %}` tag.
+注意在上述示例中，`title` 和 `email` 被包含在结果中。通常你可能希望排除 `{% assign %}` 标签中定义的变量名，以及由 `{% for %}` 标签引入的临时变量。
 
-To get names that are expected to be _global_, that is, provided by application developers rather than template authors, use the `globalVariables`, `globalFullVariables` or `globalVariableSegments` methods (or their synchronous equivalents) of a `Liquid` class instance.
+为了获取 _全局_ 变量（即由应用开发者提供，而不是模板作者定义的变量）的名称，可以使用 `globalVariables`、`globalFullVariables` 或 `globalVariableSegments` 方法（及其同步版本）。
 
 ```javascript
-// continued from above
+// 上例继续
 engine.globalVariableSegments(template).then(console.log)
 ```
 
-**Output**
+**输出**
 
 ```javascript
 [
@@ -126,9 +127,9 @@ engine.globalVariableSegments(template).then(console.log)
 ]
 ```
 
-### Partial Templates
+### 部分模板
 
-By default, LiquidJS will try to load and analyze any included and rendered templates too.
+默认情况下，LiquidJS 还会尝试加载和分析任何被包含和渲染的模板。
 
 ```javascript
 import { Liquid } from 'liquidjs'
@@ -152,32 +153,33 @@ const template = engine.parse(`
 engine.globalVariables(template).then(console.log)
 ```
 
-**Output**
+**输出**
 
 ```javascript
 [ 'you', 'site_name', 'site_description' ]
 ```
 
-You can disable analysis of partial templates by setting the `partials` options to `false`.
+可以通过将 `partials` 选项设置为 `false` 来禁用部分模板的分析。
 
 ```javascript
-// continue from above
+// 上例继续
 engine.globalVariables(template, { partials: false }).then(console.log)
 ```
 
-**Output**
+**输出**
 
 ```javascript
 [ 'you' ]
 ```
 
-If an `{% include %}` tag uses a dynamic template name (one that can't be determined without rendering the template) it will be ignored, even if `partials` is set to `true`.
+如果 `{% include %}` 标签使用了动态模板名称（无法在渲染模板之前确定的模板名称），即使 `partials` 设置为 `true`，也会被忽略。
 
-### Advanced Usage
+### 高级用法
 
-The examples so far all use convenience methods of the `Liquid` class, intended to cover the most common use cases. Instead, you can work with [analysis results][static-analysis-interface] directly, which expose the row, column and file name for every occurrence of each variable.
+上述示例使用的是 `Liquid` 类的便捷方法，适用于最常见的使用场景。  
+如果需要更详细的信息，可以直接处理 [分析结果][static-analysis-interface]，其中每个变量的每次出现都会记录行、列和文件名等信息。
 
-This is an example of an object returned from `Liquid.analyze()`, passing it the template from the [Partial Template](#partial-templates) section above.
+此处是对 [部分模板](#部分模板) 中模板进行 `Liquid.analyze()` 调用后返回的对象示例。
 
 ```javascript
 {
@@ -232,17 +234,17 @@ This is an example of an object returned from `Liquid.analyze()`, passing it the
 }
 ```
 
-### Analyzing Custom Tags
+### 自定义标签的分析
 
-For static analysis to include results from custom tags, those tags must implement some additional methods defined on the [Template interface]( /api/interfaces/Template.html). LiquidJS will use the information returned from these methods to traverse the template and report variable usage.
+为了在静态分析中包含自定义标签的结果，这些标签必须实现 [Template 接口]( /api/interfaces/Template.html) 中定义的一些附加方法。LiquidJS 会使用这些方法返回的信息来遍历模板并报告变量使用情况。
 
-Not all methods are required, depending in the kind of tag. If it's a block with a start tag, end tag and any amount of Liquid markup in between, it will need to implement the [`children()`](/api/interfaces/Template.html#children) method. `children()` is defined as a generator, so that we can use it in synchronous and asynchronous contexts, just like `render()`. It should return HTML content, output statements and tags that are child nodes of the current tag.
+并非所有方法都是必须的，这取决于标签的类型。如果标签是一个块标签，具有起始标签、结束标签以及内容，那么它需要实现 [`children()`](/api/interfaces/Template.html#children) 方法。`children()` 需要返回一个生成器，这是为了像 `render()` 一样既可以同步也可以异步调用。该方法应返回当前标签的子节点，例如 HTML 内容、输出语句和标签。
 
-The [`blockScope()`](/api/interfaces/Template.html#blockScope) method is responsible for telling LiquidJS which names will be in scope for the duration of the tag's block. Some of these names could depend on the tag's arguments, and some will be fixed, like `forloop` from the `{% for %}` tag.
+[`blockScope()`](/api/interfaces/Template.html#blockScope) 方法用于告知 LiquidJS 在标签块的持续时间内哪些名称会处于作用域中。这些名称可能依赖于标签的参数，也可能是固定的，例如 `{% for %}` 标签生成的 `forloop`。
 
-Whether a tag is an inline tag or a block tag, if it accepts arguments it should implement [`arguments()`](/api/interfaces/Template.html#arguments), which is responsible for returning the tag's arguments as a sequence of [`Value`](/api/classes/Value.html) instances or tokens of type [`ValueToken`](/api/types/ValueToken.html).
+无论标签是行内标签还是块标签，如果它接受参数，则应实现 [`arguments()`](/api/interfaces/Template.html#arguments) 方法，该方法负责将标签的参数作为 [`Value`](/api/classes/Value.html) 实例或类型为 [`ValueToken`](/api/types/ValueToken.html) 的标记序列返回。
 
-This example demonstrates these methods for a block tag. See LiquidJS's [built-in tags][built-in] for more examples.
+以下示例展示了块标签如何实现这些方法。有关更多示例，请参见 LiquidJS 的[内置标签][built-in]。
 
 ```javascript
 import { Liquid, Tag, Hash } from 'liquidjs'

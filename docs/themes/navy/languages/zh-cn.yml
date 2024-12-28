@@ -52,6 +52,7 @@ sidebar:
     operators: 运算符
     truth: 真和假
     dos: DoS
+    static_analysis: 静态分析
 
     miscellaneous: 其他
     migration9: '迁移到 LiquidJS 9'
