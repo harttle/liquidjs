@@ -1,3 +1,11 @@
+# [10.20.0](https://github.com/harttle/liquidjs/compare/v10.19.1...v10.20.0) (2024-12-28)
+
+
+### Features
+
+* `size`, `first`, `last` support arraylike objects, [#781](https://github.com/harttle/liquidjs/issues/781) ([35a8442](https://github.com/harttle/liquidjs/commit/35a84421a622b3a6657946b9395839da2b8e154a))
+* static variable analysis ([#770](https://github.com/harttle/liquidjs/issues/770)) ([3492ff6](https://github.com/harttle/liquidjs/commit/3492ff63f40abb8ff8adb8b6b0ce29408f99e19b))
+
 ## [10.19.1](https://github.com/harttle/liquidjs/compare/v10.19.0...v10.19.1) (2024-12-22)
 
 
