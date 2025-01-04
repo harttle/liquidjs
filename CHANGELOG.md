@@ -1,3 +1,12 @@
+## [10.20.1](https://github.com/harttle/liquidjs/compare/v10.20.0...v10.20.1) (2025-01-04)
+
+
+### Bug Fixes
+
+* break/continue stops whole template, [#783](https://github.com/harttle/liquidjs/issues/783) ([5f1a4cf](https://github.com/harttle/liquidjs/commit/5f1a4cfdc9d6bde31ce86ddc88b8f4bdf52f7893))
+* enumerate plain objects in where/where_exp, [#785](https://github.com/harttle/liquidjs/issues/785) ([#788](https://github.com/harttle/liquidjs/issues/788)) ([25ef104](https://github.com/harttle/liquidjs/commit/25ef104446731f4b6cb3a2e78f4d3b99efb635f4))
+* preserveTimezones support for RFC2822 date, [#784](https://github.com/harttle/liquidjs/issues/784) ([59cf3c0](https://github.com/harttle/liquidjs/commit/59cf3c08dbc5f2e5b109ffcb5375ae738b5ac386))
+
 # [10.20.0](https://github.com/harttle/liquidjs/compare/v10.19.1...v10.20.0) (2024-12-28)
 
 
