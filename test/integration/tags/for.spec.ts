@@ -178,6 +178,19 @@ describe('tags/for', function () {
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).toBe(' before before')
     })
+    it('should continue current forloop only', async () => {
+      const src = `
+      {%- for i in (1..2) -%}
+        i:{{ i }},
+        {%- for j in (1..2) -%}
+          j:{{ j }},
+          {%- continue -%}
+          after
+        {%- endfor -%}
+      {%- endfor -%}`
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('i:1,j:1,j:2,i:2,j:1,j:2,')
+    })
   })
   describe('break', function () {
     it('should support break', async function () {
@@ -195,6 +208,27 @@ describe('tags/for', function () {
         '{% endfor %}'
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).toBe('123breaking')
+    })
+    it('should not break template outside of forloop', async () => {
+      const src = '{% for i in (1..5) %}' +
+        '{{ i }}' +
+        '{% break %}' +
+        '{% endfor %}' +
+        ' after'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('1 after')
+    })
+    it('should not break parent forloop', async function () {
+      const src = `
+      {%- for i in (1..3) -%}
+        i:{{ i }},
+        {%- for j in (1..3) -%}
+          j:{{ j }},
+          {%- break -%}
+        {%- endfor -%}
+      {%- endfor -%}`
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('i:1,j:1,i:2,j:1,i:3,j:1,')
     })
   })
 

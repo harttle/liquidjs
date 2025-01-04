@@ -74,6 +74,7 @@ export default class extends Tag {
       if (ctx.breakCalled) break
       scope.forloop.next()
     }
+    ctx.continueCalled = ctx.breakCalled = false
     ctx.pop()
   }
 
