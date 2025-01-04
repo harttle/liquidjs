@@ -554,6 +554,12 @@ describe('filters/array', function () {
       { graduation_year: 2014, name: 'John' },
       { graduation_year: 2009, name: 'Jack' }
     ]
+    const postsByTags = {
+      CPP: [ 'page0' ],
+      PHP: [ 'page0', 'page2' ],
+      JavaScript: [ 'page1', 'page2', 'page3' ],
+      CSharp: [ 'page2', 'page4' ]
+    }
     it('should support group by expression', function () {
       const expected = [{
         name: '201',
@@ -570,6 +576,29 @@ describe('filters/array', function () {
       return test(
         `{{ members | group_by_exp: "item", "item.graduation_year | truncate: 3, ''" | json}}`,
         { members },
+        JSON.stringify(expected))
+    })
+    it('should group key/values in plain object', function () {
+      const expected = [{
+        name: 3,
+        items: [
+          ['JavaScript', ['page1', 'page2', 'page3']]
+        ]
+      }, {
+        name: 2,
+        items: [
+          ['PHP', ['page0', 'page2']],
+          ['CSharp', ['page2', 'page4']]
+        ]
+      }, {
+        name: 1,
+        items: [
+          ['CPP', ['page0']]
+        ]
+      }]
+      return test(
+        `{{ postsByTags | group_by_exp: "tag", "tag[1].size" | sort: 'name' | reverse | json}}`,
+        { postsByTags },
         JSON.stringify(expected))
     })
   })

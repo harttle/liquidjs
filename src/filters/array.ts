@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, isArrayLike } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, isArrayLike, toEnumerable } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -148,7 +148,7 @@ export function * where_exp<T extends object> (this: FilterImpl, arr: T[], itemN
 
 export function * group_by<T extends object> (this: FilterImpl, arr: T[], property: string): IterableIterator<unknown> {
   const map = new Map()
-  arr = toArray(arr)
+  arr = toEnumerable(arr)
   const token = new Tokenizer(stringify(property)).readScopeValue()
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
@@ -162,7 +162,7 @@ export function * group_by<T extends object> (this: FilterImpl, arr: T[], proper
 export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
   const map = new Map()
   const keyTemplate = new Value(stringify(exp), this.liquid)
-  arr = toArray(arr)
+  arr = toEnumerable(arr)
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
     const key = yield keyTemplate.value(this.context.spawn({ [itemName]: item }))

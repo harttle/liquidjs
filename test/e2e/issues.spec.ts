@@ -531,4 +531,31 @@ describe('Issues', function () {
     const tpl = `{% for i in (1..1000000000) %} {{'a'}} {% endfor %}`
     expect(() => engine.parseAndRenderSync(tpl)).toThrow('memory alloc limit exceeded, line:1, col:1')
   })
+  it('group_by_exp fails with object as input #785', () => {
+    const site = {
+      tags: {
+        CPP: [ 'page0' ],
+        PHP: [ 'page0', 'page2' ],
+        JavaScript: [ 'page1', 'page2', 'page3' ],
+        CSharp: [ 'page2', 'page4' ]
+      }
+    }
+    const tpl = `
+      {%- assign tags_by_size = site.tags | group_by_exp: 'tag', 'tag[1].size' | sort: 'name' | reverse -%}
+      {%- for tags_with_size in tags_by_size -%}
+        {%- for tag in tags_with_size.items -%}
+          {%- assign tag_name = tag[0] %}
+          {{ tag_name }} <sup>{{ tags_with_size.name }}</sup> Posts:
+          {%- for post in tag[1] -%}{{post}},{%- endfor -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    `
+    const engine = new Liquid()
+    const html = engine.parseAndRenderSync(tpl, { site })
+    expect(html).toEqual(`
+          JavaScript <sup>3</sup> Posts:page1,page2,page3,
+          PHP <sup>2</sup> Posts:page0,page2,
+          CSharp <sup>2</sup> Posts:page2,page4,
+          CPP <sup>1</sup> Posts:page0,`)
+  })
 })
