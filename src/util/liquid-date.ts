@@ -3,7 +3,11 @@ import { isString } from './underscore'
 
 // one minute in milliseconds
 const OneMinute = 60000
-const ISO8601_TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):(\d{2}))$/
+/**
+ * Need support both ISO8601 and RFC2822 as in major browsers & NodeJS
+ * RFC2822: https://datatracker.ietf.org/doc/html/rfc2822#section-3.3
+ */
+const TIMEZONE_PATTERN = /([zZ]|([+-])(\d{2}):?(\d{2}))$/
 const monthNames = [
   'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
   'September', 'October', 'November', 'December'
@@ -126,7 +130,7 @@ export class LiquidDate {
    * Given that a template is expected to be parsed fewer times than rendered.
    */
   static createDateFixedToTimezone (dateString: string, locale: string): LiquidDate {
-    const m = dateString.match(ISO8601_TIMEZONE_PATTERN)
+    const m = dateString.match(TIMEZONE_PATTERN)
     // representing a UTC timestamp
     if (m && m[1] === 'Z') {
       return new LiquidDate(+new Date(dateString), locale, 0)

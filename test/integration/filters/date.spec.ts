@@ -80,19 +80,23 @@ describe('filters/date', function () {
     return test('{{ "1991-02-22T00:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1991-02-22T00:00:00')
   })
   describe('when preserveTimezones is enabled', function () {
-    const opts: LiquidOptions = { preserveTimezones: true }
+    const opts: LiquidOptions = { preserveTimezones: true, locale: 'en-US' }
 
     it('should not change the timezone between input and output', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
     })
     it('should apply numeric timezone offset (0)', function () {
-      return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
+      return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S %z"}}', '1990-12-31T23:00:00 +0000', undefined, opts)
     })
     it('should apply numeric timezone offset (-1)', function () {
-      return test('{{ "1990-12-31T23:00:00-01:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
+      return test('{{ "1990-12-31T23:00:00-01:00" | date: "%Y-%m-%dT%H:%M:%S %z"}}', '1990-12-31T23:00:00 -0100', undefined, opts)
     })
     it('should apply numeric timezone offset (+2.30)', function () {
-      return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
+      return test('{{ "1990-12-31T23:00:00+02:30" | date: "%Y-%m-%dT%H:%M:%S %z"}}', '1990-12-31T23:00:00 +0230', undefined, opts)
+    })
+    it('should support timezone in more casual JavaScript Date', async () => {
+      await test('{{ "2025-01-02 03:04:05 -0100" | date: "%Y-%m-%dT%H:%M:%S %z" }}', '2025-01-02T03:04:05 -0100', undefined, opts)
+      await test('{{ "2025-01-02 03:04:05 -0100" | date }}', 'Thursday, January 2, 2025 at 3:04 am -0100', undefined, opts)
     })
     it('should automatically work when timezone not specified', function () {
       return test('{{ "1990-12-31T23:00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T23:00:00', undefined, opts)
