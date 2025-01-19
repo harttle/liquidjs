@@ -1,3 +1,11 @@
+## [10.20.2](https://github.com/harttle/liquidjs/compare/v10.20.1...v10.20.2) (2025-01-19)
+
+
+### Bug Fixes
+
+* consistent range syntax parsing, [#791](https://github.com/harttle/liquidjs/issues/791) ([a490a70](https://github.com/harttle/liquidjs/commit/a490a70da1ca2b479065c6618207bf4789db6b4f))
+* context for group_by_exp/where_exp/find_exp, [#790](https://github.com/harttle/liquidjs/issues/790) ([a5070af](https://github.com/harttle/liquidjs/commit/a5070af3e4b4d1ae3b6398c6638b130e50e1cf6e))
+
 ## [10.20.1](https://github.com/harttle/liquidjs/compare/v10.20.0...v10.20.1) (2025-01-04)
 
 
