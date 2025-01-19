@@ -391,9 +391,11 @@ export class Tokenizer {
     if (this.peek() !== '(') return
     ++this.p
     const lhs = this.readValueOrThrow()
-    this.p += 2
+    this.skipBlank()
+    this.assert(this.read() === '.' && this.read() === '.', 'invalid range syntax')
     const rhs = this.readValueOrThrow()
-    ++this.p
+    this.skipBlank()
+    this.assert(this.read() === ')', 'invalid range syntax')
     return new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
   }
 
