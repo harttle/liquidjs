@@ -24,11 +24,6 @@ describe('Expression', function () {
       expect(await toPromise(create('"foo"').evaluate(ctx, false))).toBe('foo')
       expect(await toPromise(create('false').evaluate(ctx, false))).toBe(false)
     })
-    it('should eval range expression', async function () {
-      const ctx = new Context({ two: 2 })
-      expect(await toPromise(create('(2..4)').evaluate(ctx, false))).toEqual([2, 3, 4])
-      expect(await toPromise(create('(two..4)').evaluate(ctx, false))).toEqual([2, 3, 4])
-    })
     it('should eval literal', async function () {
       expect(await toPromise(create('2.4').evaluate(ctx, false))).toBe(2.4)
       expect(await toPromise(create('"foo"').evaluate(ctx, false))).toBe('foo')
@@ -218,6 +213,30 @@ describe('Expression', function () {
     })
     it('should allow range as property read variable', async function () {
       expect(await toPromise(create('(3..5).size').evaluate(ctx))).toBe(3)
+    })
+  })
+
+  describe('range', function () {
+    const ctx = new Context({ two: 2, num: { one: 1, two: 2 } })
+    it('should eval range expression', async function () {
+      expect(await toPromise(create('(2..4)').evaluate(ctx, false))).toEqual([2, 3, 4])
+      expect(await toPromise(create('(two..4)').evaluate(ctx, false))).toEqual([2, 3, 4])
+    })
+    it('should allow property access expression as variables', async function () {
+      expect(await toPromise(create('(num.one..num.two)').evaluate(ctx))).toEqual([1, 2])
+      expect(await toPromise(create('(num.one .. two)').evaluate(ctx))).toEqual([1, 2])
+    })
+    it('should allow blanks in range', async function () {
+      expect(await toPromise(create('(3 ..5)').evaluate(ctx))).toEqual([3, 4, 5])
+      expect(await toPromise(create('(3 .. 5)').evaluate(ctx))).toEqual([3, 4, 5])
+      expect(await toPromise(create('( 3 .. 5 )').evaluate(ctx))).toEqual([3, 4, 5])
+    })
+    it('should throw if .. not matched', async function () {
+      expect(() => create('(3.5')).toThrow('invalid range syntax')
+      expect(() => create('(3 5')).toThrow('invalid range syntax')
+    })
+    it('should throw if ( not patched', async function () {
+      expect(() => create('(3..5')).toThrow('invalid range syntax')
     })
   })
 
