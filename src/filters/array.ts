@@ -140,7 +140,9 @@ export function * where_exp<T extends object> (this: FilterImpl, arr: T[], itemN
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
-    const value = yield keyTemplate.value(this.context.spawn({ [itemName]: item }))
+    this.context.push({ [itemName]: item })
+    const value = yield keyTemplate.value(this.context)
+    this.context.pop()
     if (value) filtered.push(item)
   }
   return filtered
@@ -165,7 +167,9 @@ export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], it
   arr = toEnumerable(arr)
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
-    const key = yield keyTemplate.value(this.context.spawn({ [itemName]: item }))
+    this.context.push({ [itemName]: item })
+    const key = yield keyTemplate.value(this.context)
+    this.context.pop()
     if (!map.has(key)) map.set(key, [])
     map.get(key).push(item)
   }
@@ -185,7 +189,9 @@ export function * find_exp<T extends object> (this: FilterImpl, arr: T[], itemNa
   const predicate = new Value(stringify(exp), this.liquid)
   const array = toArray(arr)
   for (const item of array) {
-    const value = yield predicate.value(this.context.spawn({ [itemName]: item }))
+    this.context.push({ [itemName]: item })
+    const value = yield predicate.value(this.context)
+    this.context.pop()
     if (value) return item
   }
 }

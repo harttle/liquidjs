@@ -522,6 +522,20 @@ describe('filters/array', function () {
         - Garlic press
         `)
     })
+    it('should be aware context', function () {
+      const tpl = `{% assign kitchen_products = products | where_exp: "item", "item.type == target" %}
+        Kitchen products:
+        {% for product in kitchen_products -%}
+        - {{ product.title }}
+        {% endfor %}`
+      const scope = { products, target: 'kitchen' }
+      const html = `
+        Kitchen products:
+        - Spatula
+        - Garlic press
+        `
+      return test(tpl, scope, html)
+    })
   })
   describe('group_by', function () {
     const members = [
