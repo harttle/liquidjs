@@ -65,20 +65,6 @@ Available products:
 - Boring sneakers
 ```
 
-The `where` filter can also be used to find a single object in an array when combined with the `first` filter. For example, say you want to show off the shirt in your new fall collection.
-
-Input
-```liquid
-{% assign new_shirt = products | where: "type", "shirt" | first %}
-
-Featured product: {{ new_shirt.title }}
-```
-
-Output
-```text
-Featured product: Hawaiian print sweater vest
-```
-
 Additionally, `property` can be any valid Liquid variable expression as used in output syntax, except that the scope of this expression is within each item. For the following `products` array:
 
 ```javascript
@@ -105,9 +91,9 @@ Output
 
 ## Jekyll style
 
-{% since %}v10.19.0{% endsince %}
+{% since %}v10.21.0{% endsince %}
 
-For Liquid users migrating from Jekyll, there's a `jekyllWhere` option to mimic the behavior of Jekyll's `where` filter. This option is set to `false` by default. When enabled, if `property` is an array, the target value is matched using `Array.includes` instead of `==`, which is particularly useful for filtering tags.
+For Liquid users migrating from Jekyll, there's a `jekyllWhere` option to mimic the behavior of Jekyll's `where` filter. This option is set to `false` by default. When enabled, if `property` is an array, the target value is matched using `Array.includes` instead of `==`, which is particularly useful for excluding tags.
 
 ```javascript
 const pages = [
@@ -118,7 +104,7 @@ const pages = [
 
 Input
 ```liquid
-{% assign selected = pages | where: 'tags', "cat" %}
+{% assign selected = pages | reject: 'tags', "cat" %}
 {% for item in selected -%}
 - {{ item.title }}
 {% endfor %}
@@ -126,7 +112,7 @@ Input
 
 Output
 ```text
-Cat Food
+Dog Food
 ```
 
 [truthy]: ../tutorials/truthy-and-falsy.html
