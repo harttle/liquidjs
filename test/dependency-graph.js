@@ -396,4 +396,39 @@ describe.only("dependency-graph tests", () => {
       ]);
     });
   });
-});
+
+  describe.only("checkValidJSON function", () => {
+    it("should pass if checkValidJSON does not throw an error", () => {
+      const expression = `
+        {% if a == "USD" %}
+          {% parseAssign x1 = "{\\"key\\": \\"value\\"}" %}
+        {% elsif a == "INR" %}
+          {% parseAssign x2 = "[1, 2, 3]" %}
+        {% else %}
+          {% parseAssign x3 = "true" %}
+        {% endif %}
+      `;
+
+      expect(() => depGraph.checkValidJSON(expression)).to.not.throw();
+    });
+
+    it("should pass if checkValidJSON throws an error", () => {
+      const expression = `
+        {% if a == "USD" %}
+          {% parseAssign x1 = {"key": value } %}  <!-- Invalid JSON -->
+        {% elsif a == "INR" %}
+          {% parseAssign x2 = [1, 2,] %}      <!-- Invalid JSON -->
+        {% else %}
+          {% parseAssign x3 = unquotedString %} <!-- Invalid JSON -->
+        {% endif %}
+      `;
+
+      expect(() => depGraph.checkValidJSON(expression)).to.throw();
+    });
+  });
+
+
+  const { expect } = require("chai");
+
+
+}); 

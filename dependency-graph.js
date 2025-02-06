@@ -331,6 +331,7 @@ function _internal_getAssignedVars(template, engine, assignedVarsArr) {
 function getAssignedVariables(expression) {
   const engine = createEngine();
   const templates = getTemplates(expression, engine);
+
   const assignedArr = [];
 
   templates.forEach(function (tpl) {
@@ -340,6 +341,43 @@ function getAssignedVariables(expression) {
   return Array.from(new Set(assignedArr));
 }
 
+function checkValidJSON(expression) {
+  const engine = createEngine();
+  const templates = getTemplates(expression, engine);
+
+  function validateJSON(value) {
+    try {
+      JSON.parse(value);
+    } catch (e) {
+      throw new Error(`Invalid JSON: ${e.message}`);
+    }
+  }
+
+  templates.forEach((tpl) => {
+    if (tpl.type !== 'tag') return;
+
+    Object.entries(tpl.tagImpl).forEach(([key, value]) => {
+      if (key === 'branches') {
+        value.forEach((branch) => {
+          branch.templates.forEach((tpl) => {
+            if (tpl.type === 'tag' && tpl.name === 'parseAssign') {
+              validateJSON(tpl.tagImpl.value);
+            }
+          });
+        });
+      } 
+      else if (key === 'templates' || key === 'elseTemplates') {
+        value.forEach((tpl) => {
+          if (tpl.type === 'tag' && tpl.name === 'parseAssign') {
+            validateJSON(tpl.tagImpl.value);
+          }
+        });
+      }
+    });
+  });
+}
+
+
 module.exports = {
   parseAssign,
   getTemplates,
@@ -348,4 +386,6 @@ module.exports = {
   getAffectedVariables,
   checkForCyclicDependency,
   getAssignedVariables,
+  checkValidJSON
 };
+
