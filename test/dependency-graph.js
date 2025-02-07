@@ -400,6 +400,7 @@ describe.only("dependency-graph tests", () => {
   describe.only("checkValidJSON function", () => {
     it("should pass if checkValidJSON does not throw an error", () => {
       const expression = `
+        {% parseAssign x0 = "100" %}
         {% if a == "USD" %}
           {% parseAssign x1 = "{\\"key\\": \\"value\\"}" %}
         {% elsif a == "INR" %}
@@ -414,6 +415,8 @@ describe.only("dependency-graph tests", () => {
 
     it("should pass if checkValidJSON throws an error", () => {
       const expression = `
+        {% parseAssign x0 = 10, 0 %}
+        {% parseAssign y = a | plus: b %}
         {% if a == "USD" %}
           {% parseAssign x1 = {"key": value } %}  <!-- Invalid JSON -->
         {% elsif a == "INR" %}

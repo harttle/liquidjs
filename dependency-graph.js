@@ -354,10 +354,12 @@ function checkValidJSON(expression) {
   }
 
   templates.forEach((tpl) => {
-    if (tpl.type !== 'tag') return;
-
+    if (tpl.type !== 'tag' || tpl.name !== 'parseAssign') return;
     Object.entries(tpl.tagImpl).forEach(([key, value]) => {
-      if (key === 'branches') {
+      if (key === 'key') {
+        validateJSON(tpl.tagImpl.value)
+      }
+      else if (key === 'branches') {
         value.forEach((branch) => {
           branch.templates.forEach((tpl) => {
             if (tpl.type === 'tag' && tpl.name === 'parseAssign') {
@@ -365,7 +367,7 @@ function checkValidJSON(expression) {
             }
           });
         });
-      } 
+      }
       else if (key === 'templates' || key === 'elseTemplates') {
         value.forEach((tpl) => {
           if (tpl.type === 'tag' && tpl.name === 'parseAssign') {
