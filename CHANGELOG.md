@@ -1,3 +1,10 @@
+## [10.20.3](https://github.com/harttle/liquidjs/compare/v10.20.2...v10.20.3) (2025-02-09)
+
+
+### Bug Fixes
+
+* empty tagToken.args since 10.20.0, fixes [#796](https://github.com/harttle/liquidjs/issues/796) ([38a0f51](https://github.com/harttle/liquidjs/commit/38a0f510b0a14baf35a368e9f07b536253394d06))
+
 ## [10.20.2](https://github.com/harttle/liquidjs/compare/v10.20.1...v10.20.2) (2025-01-19)
 
 
