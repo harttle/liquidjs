@@ -28,13 +28,13 @@ jobs:
       - name: Build
         run: npm run build
       - name: Archive artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist-${{ inputs.os }}
           path: dist
       - name: Archive npm failure logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: npm-logs
+          name: npm-logs-${{ inputs.os }}
           path: ~/.npm/_logs

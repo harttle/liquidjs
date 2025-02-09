@@ -18,7 +18,7 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Archive npm failure logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: npm-logs
