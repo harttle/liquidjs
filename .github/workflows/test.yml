@@ -34,17 +34,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist-${{ matrix.os }}
           path: dist
       - name: Run Test
         run: TZ=${{ matrix.timezone }} npm test
       - name: Archive npm failure logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: npm-logs
+          name: test-npm-logs-${{ matrix.os }}-${{ matrix.timezone }}-${{ matrix.node-version }}
           path: ~/.npm/_logs
   demo:
     name: Demo Check
@@ -59,15 +59,15 @@ jobs:
         with:
           node-version: 22
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist-ubuntu-latest
           path: dist
       - name: Run Demo Test
         run: npm run test:demo
       - name: Archive npm failure logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: npm-logs
+          name: demo-npm-logs
           path: ~/.npm/_logs
