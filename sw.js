@@ -10,6 +10,7 @@ const urlsToCache = [
 ]
 const blackList = [
   /chrome-extension:/,
+  /algolia.net/,
   /google-analytics.com.*collect/
 ]
 
