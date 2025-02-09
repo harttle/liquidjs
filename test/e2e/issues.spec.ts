@@ -1,4 +1,4 @@
-import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError } from '../..'
+import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, IfTag } from '../..'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
 
 describe('Issues', function () {
@@ -557,5 +557,12 @@ describe('Issues', function () {
           PHP <sup>2</sup> Posts:page0,page2,
           CSharp <sup>2</sup> Posts:page2,page4,
           CPP <sup>1</sup> Posts:page0,`)
+  })
+  it('if tag condition, the token args is empty #796', () => {
+    const tpl = 'Hello, {% if name  %} {{ name }} {% else %} user {% endif %}'
+    const engine = new Liquid()
+    const parsed = engine.parse(tpl)
+    const ifToken = parsed[1]
+    expect((ifToken as IfTag).token.args).toEqual('name')
   })
 })
