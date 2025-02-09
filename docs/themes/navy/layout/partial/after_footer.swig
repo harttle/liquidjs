@@ -9,7 +9,8 @@
 <script>
 document.getElementById('search-input-wrap').classList.add('on');
 docsearch({
-apiKey: '01f36cc168657a26a385308b9e721bc6',
+appId: '{{ config.algolia.applicationID }}',
+apiKey: '{{ config.algolia.apiKey }}',
 indexName: 'liquidjs',
 inputSelector: '#search-input',
 debug: false

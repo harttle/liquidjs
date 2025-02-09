@@ -30,8 +30,8 @@ prismjs:
   tab_replace: ""
 
 algolia:
-  applicationID: 0X19J927JZ
-  apiKey: 533161d821384919672e4ce8a39451b3
+  applicationID: QJ35YOZTU4
+  apiKey: 8c6cbb824b4c5023f0bb2ef29e228bef
   indexName: liquidjs
 twitter: harttleharttle
 github: harttle/liquidjs
