@@ -5,6 +5,7 @@ import type { NormalizedFullOptions } from '../liquid-options'
 export class TagToken extends DelimitedToken {
   public name: string
   public tokenizer: Tokenizer
+  public readonly args: string;
   public constructor (
     input: string,
     begin: number,
@@ -20,9 +21,6 @@ export class TagToken extends DelimitedToken {
     this.name = this.tokenizer.readTagName()
     this.tokenizer.assert(this.name, `illegal tag syntax, tag name expected`)
     this.tokenizer.skipBlank()
-  }
-
-  get args (): string {
-    return this.tokenizer.input.slice(this.tokenizer.p, this.contentRange[1])
+    this.args = this.tokenizer.input.slice(this.tokenizer.p, this.contentRange[1])
   }
 }
