@@ -36,7 +36,7 @@ Kitchen products:
 - Television
 ```
 
-Say instead you have a list of products and you want to exclude those which require taxable. You can `reject` with a property name but no target value to reject all products with a [truthy][truthy] `"taxable"` value.
+Say instead you have a list of products and you want to exclude taxable products. You can `reject` with a property name but no target value to reject all products with a [truthy][truthy] `"taxable"` value.
 
 Input
 ```liquid
@@ -62,7 +62,7 @@ All products:
 - Garlic press
 
 Available products:
-- Vacuum
+- Spatula
 - Television
 ```
 

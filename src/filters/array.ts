@@ -118,10 +118,10 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
 }
 
 function contextMatcher (this: FilterImpl, expected: any): (v: any) => boolean {
-  const matcher = this.context.opts.jekyllWhere
+  if (expected === undefined) return (v: any) => isTruthy(v, this.context)
+  return this.context.opts.jekyllWhere
     ? (v: any) => EmptyDrop.is(expected) ? equals(v, expected) : (isArray(v) ? arrayIncludes(v, expected) : equals(v, expected))
     : (v: any) => equals(v, expected)
-  return (v: any) => expected === undefined ? isTruthy(v, this.context) : matcher(v)
 }
 
 function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[], property: string, expected: any): IterableIterator<unknown> {

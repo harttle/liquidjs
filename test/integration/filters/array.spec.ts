@@ -813,6 +813,7 @@ describe('filters/array', function () {
         ``)
     })
   })
+  // (TO BE REMOVED)
   describe('RUBY COMPAT', function () {
     const filters = [['where', '| map: "name" | join: ","'], ['reject', '| map: "name" | join: ","'], ['has', '| json'], ['find', '| json'], ['find_index', '| json']]
     const conditions = ['', ', nil', ', blank', ', empty', ', null', ', 3', ', 50', ', 180', ', abc']
