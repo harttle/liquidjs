@@ -400,6 +400,7 @@ describe.only("dependency-graph tests", () => {
   describe.only("checkValidJSON function", () => {
     it("should pass if checkValidJSON does not throw an error", () => {
       const expression = `
+      {% parseAssign x1 = '{"key": "value"}' %}
         {% parseAssign x0 = "100" %}
         {% if a == "USD" %}
           {% parseAssign x1 = "{\\"key\\": \\"value\\"}" %}
@@ -410,7 +411,8 @@ describe.only("dependency-graph tests", () => {
         {% endif %}
       `;
 
-      expect(() => depGraph.checkValidJSON(expression)).to.not.throw();
+      const validationErrors = depGraph.checkValidJSON(expression);
+      expect(validationErrors).to.be.an('array').that.is.empty;
     });
 
     it("should pass if checkValidJSON throws an error", () => {
@@ -426,9 +428,17 @@ describe.only("dependency-graph tests", () => {
         {% endif %}
       `;
 
-      expect(() => depGraph.checkValidJSON(expression)).to.throw();
+      const validationErrors = depGraph.checkValidJSON(expression);
+      expect(validationErrors).to.be.an('array').that.is.not.empty;
+      expect(validationErrors).to.have.length.above(0);
     });
   });
+
+  describe("checkVariableDefined", () => {
+    it("should check if variable being used has been defined earlier", () => {
+      depGraph.checkVariableDefined()
+    })
+  })
 
 
   const { expect } = require("chai");
