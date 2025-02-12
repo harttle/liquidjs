@@ -417,6 +417,32 @@ describe('filters/array', function () {
         - Boring sneakers
         `)
     })
+    it('should support filter with undefined target', function () {
+      return test(`{% assign typed_products = products | where: "type", notdefined %}
+        Typed products:
+        {% for product in typed_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Typed products:
+        - Vacuum
+        - Spatula
+        - Television
+        - Garlic press
+        `)
+    })
+    it('should support no target', function () {
+      return test(`{% assign typed_products = products | where: "type" %}
+        Typed products:
+        {% for product in typed_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Typed products:
+        - Vacuum
+        - Spatula
+        - Television
+        - Garlic press
+        `)
+    })
     it('should support nested property', async function () {
       const authors = [
         { name: 'Alice', books: { year: 2019 } },
@@ -491,7 +517,7 @@ describe('filters/array', function () {
       await test('{{objs | where: "foo", "FOO" | json}}', scope, '[]')
     })
     describe('jekyll style', () => {
-      it('should not match string with array', async () => {
+      it('should filter arrays by inclusion', async () => {
         const scope = { objs: [{ foo: ['FOO', 'bar'] }] }
         await test('{{objs | where: "foo", "FOO" | json}}', scope, '[{"foo":["FOO","bar"]}]', { jekyllWhere: true })
       })
@@ -499,47 +525,13 @@ describe('filters/array', function () {
         const scope = { pages: [{ tags: ['FOO'] }, { tags: [] }, { title: 'foo' }] }
         await test('{{pages | where: "tags", empty | json}}', scope, '[{"tags":[]}]', { jekyllWhere: true })
       })
-    })
-    describe('reject', function () {
-      it('should support reject by property value', function () {
-        return test(`{% assign kitchen_products = products | reject: "type", "kitchen" %}
-          Kitchen products:
-          {% for product in kitchen_products -%}
-          - {{ product.title }}
-          {% endfor %}`, { products }, `
-          Kitchen products:
-          - Vacuum
-          - Television
-          - Coffee mug
-          - Limited edition sneakers
-          - Boring sneakers
-          `)
+      it('should filter by undefined when target is omitted', async () => {
+        await test('{{products | where: "type" | map: "title" | join: ","}}', { products },
+          'Coffee mug,Limited edition sneakers,Boring sneakers', { jekyllWhere: true })
       })
-      it('should support reject truthy property', function () {
-        return test(`{% assign unavailable_products = products | reject: "available" %}
-          Unavailable products:
-          {% for product in unavailable_products -%}
-          - {{ product.title }}
-          {% endfor %}`, { products }, `
-          Unavailable products:
-          - Vacuum
-          - Spatula
-          - Television
-          - Garlic press
-          - Limited edition sneakers
-          `)
-      })
-      it('should support reject by string property', function () {
-        return test(`{% assign untyped_products = products | reject: "type" %}
-          Untyped products:
-          {% for product in untyped_products -%}
-          - {{ product.title }}
-          {% endfor %}`, { products }, `
-          Untyped products:
-          - Coffee mug
-          - Limited edition sneakers
-          - Boring sneakers
-          `)
+      it('should filter plainly when target is undefined', async () => {
+        await test('{{products | where: "type", notdefined | map: "title" | join: ","}}', { products },
+          'Coffee mug,Limited edition sneakers,Boring sneakers', { jekyllWhere: true })
       })
     })
   })
@@ -578,18 +570,88 @@ describe('filters/array', function () {
         `
       return test(tpl, scope, html)
     })
-    describe('reject_exp', function () {
-      it('should support reject by exp', function () {
-        return test(`{% assign kitchen_products = products | reject_exp: "item", "item.type != 'kitchen'" %}
-          Kitchen products:
-          {% for product in kitchen_products -%}
-          - {{ product.title }}
-          {% endfor %}`, { products }, `
-          Kitchen products:
-          - Spatula
-          - Garlic press
-          `)
+  })
+  describe('reject', function () {
+    const products = [
+      { title: 'Vacuum', type: 'living room' },
+      { title: 'Spatula', type: 'kitchen' },
+      { title: 'Television', type: 'living room' },
+      { title: 'Garlic press', type: 'kitchen' },
+      { title: 'Coffee mug', available: true },
+      { title: 'Limited edition sneakers', available: false },
+      { title: 'Boring sneakers', available: true }
+    ]
+    it('should support reject by property value', function () {
+      return test(`{% assign kitchen_products = products | reject: "type", "kitchen" %}
+        Kitchen products:
+        {% for product in kitchen_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Kitchen products:
+        - Vacuum
+        - Television
+        - Coffee mug
+        - Limited edition sneakers
+        - Boring sneakers
+        `)
+    })
+    it('should support reject truthy property', function () {
+      return test(`{% assign unavailable_products = products | reject: "available" %}
+        Unavailable products:
+        {% for product in unavailable_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Unavailable products:
+        - Vacuum
+        - Spatula
+        - Television
+        - Garlic press
+        - Limited edition sneakers
+        `)
+    })
+    it('should support reject by string property', function () {
+      return test(`{% assign untyped_products = products | reject: "type" %}
+        Untyped products:
+        {% for product in untyped_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Untyped products:
+        - Coffee mug
+        - Limited edition sneakers
+        - Boring sneakers
+        `)
+    })
+    describe('jekyll style', () => {
+      it('should filter arrays by exclusion', async () => {
+        const scope = { objs: [{ foo: ['FOO', 'bar'] }, { foo: ['bar', 'baz'] }, { foo: ['FOO'] }] }
+        await test('{{objs | reject: "foo", "FOO" | json}}', scope, '[{"foo":["bar","baz"]}]', { jekyllWhere: true })
       })
+      it('should filter by undefined when target is omitted', async () => {
+        await test('{{products | reject: "type" | map: "title" | join: ","}}', { products },
+          'Vacuum,Spatula,Television,Garlic press', { jekyllWhere: true })
+      })
+    })
+  })
+  describe('reject_exp', function () {
+    const products = [
+      { title: 'Vacuum', type: 'living room' },
+      { title: 'Spatula', type: 'kitchen' },
+      { title: 'Television', type: 'living room' },
+      { title: 'Garlic press', type: 'kitchen' },
+      { title: 'Coffee mug', available: true },
+      { title: 'Limited edition sneakers', available: false },
+      { title: 'Boring sneakers', available: true }
+    ]
+    it('should support reject by exp', function () {
+      return test(`{% assign kitchen_products = products | reject_exp: "item", "item.type != 'kitchen'" %}
+        Kitchen products:
+        {% for product in kitchen_products -%}
+        - {{ product.title }}
+        {% endfor %}`, { products }, `
+        Kitchen products:
+        - Spatula
+        - Garlic press
+        `)
     })
   })
   describe('group_by', function () {
@@ -677,12 +739,12 @@ describe('filters/array', function () {
       { graduation_year: 2014, name: 'John' },
       { graduation_year: 2014, name: 'Jack', age: 13 }
     ]
-    // it('should support has with no value', function () {
-    //   return test(
-    //     `{{ members | has: "age" | json }}, {{ members | has: "height" | json }}`,
-    //     { members },
-    //     `true, false`)
-    // })
+    it('should support has with no value', function () {
+      return test(
+        `{{ members | has: "age" | json }}, {{ members | has: "height" | json }}`,
+        { members },
+        `true, false`)
+    })
     it('should support has by property', function () {
       return test(
         `{{ members | has: "graduation_year", 2014 | json }}`,
@@ -694,6 +756,20 @@ describe('filters/array', function () {
         `{{ members | has: "graduation_year", 2018 | json }}`,
         { members },
         `false`)
+    })
+    describe('jekyll style', () => {
+      it('should select array by inclusion', async () => {
+        const scope = { objs: [{ foo: ['FOO', 'bar'] }] }
+        await test('{{objs | has: "foo", "FOO" | json}}', scope, 'true', { jekyllWhere: true })
+      })
+      it('should support empty as target', async () => {
+        const scope = { pages: [{ tags: ['FOO'] }, { tags: [] }, { title: 'foo' }] }
+        await test('{{pages | has: "tags", empty | json}}', scope, 'true', { jekyllWhere: true })
+      })
+      it('should search plainly when target is undefined', async () => {
+        await test('{{members | has: "age", notdefined}}', { members }, 'true', { jekyllWhere: true })
+        await test('{{members | has: "name", notdefined}}', { members }, 'false', { jekyllWhere: true })
+      })
     })
   })
   describe('has_exp', function () {
@@ -740,13 +816,21 @@ describe('filters/array', function () {
         ``)
     })
     describe('jekyll style', () => {
-      it('should not match string with array', async () => {
+      it('should select array by inclusion', async () => {
         const scope = { objs: [{ foo: ['FOO', 'bar'] }] }
         await test('{{objs | find: "foo", "FOO" | json}}', scope, '{"foo":["FOO","bar"]}', { jekyllWhere: true })
       })
       it('should support empty as target', async () => {
         const scope = { pages: [{ tags: ['FOO'] }, { tags: [] }, { title: 'foo' }] }
         await test('{{pages | find: "tags", empty | json}}', scope, '{"tags":[]}', { jekyllWhere: true })
+      })
+      it('should search plainly when target is undefined', async () => {
+        await test(
+          '{{members | find: "age", notdefined | json}}',
+          { members },
+          '{"graduation_year":2013,"name":"Jay"}',
+          { jekyllWhere: true })
+        await test('{{members | find: "name", notdefined | json}}', { members }, '', { jekyllWhere: true })
       })
     })
   })
@@ -793,6 +877,20 @@ describe('filters/array', function () {
         { members },
         ``)
     })
+    describe('jekyll style', () => {
+      it('should select array by inclusion', async () => {
+        const scope = { objs: [{ foo: ['FOO', 'bar'] }] }
+        await test('{{objs | find_index: "foo", "FOO" | json}}', scope, '0', { jekyllWhere: true })
+      })
+      it('should support empty as target', async () => {
+        const scope = { pages: [{ tags: ['FOO'] }, { tags: [] }, { title: 'foo' }] }
+        await test('{{pages | find_index: "tags", empty | json}}', scope, '1', { jekyllWhere: true })
+      })
+      it('should search plainly when target is undefined', async () => {
+        await test('{{members | find_index: "age", notdefined | json}}', { members }, '0', { jekyllWhere: true })
+        await test('{{members | find_index: "name", notdefined | json}}', { members }, '', { jekyllWhere: true })
+      })
+    })
   })
   describe('find_index_exp', function () {
     const members = [
@@ -812,83 +910,5 @@ describe('filters/array', function () {
         { members },
         ``)
     })
-  })
-  // (TO BE REMOVED)
-  describe('RUBY COMPAT', function () {
-    const filters = [['where', '| map: "name" | join: ","'], ['reject', '| map: "name" | join: ","'], ['has', '| json'], ['find', '| json'], ['find_index', '| json']]
-    const conditions = ['', ', nil', ', blank', ', empty', ', null', ', 3', ', 50', ', 180', ', abc']
-    const data = [
-      { name: 'Adamy' },
-      { name: 'Blake', age: 50 },
-      { name: 'Codye', height: 180 }
-    ];
-    const rubyResults = {
-      where: {
-        ', nil': 'Blake',
-        ', blank': '',
-        ', empty': '',
-        ', null': 'Blake',
-        ', 3': '',
-        ', 50': 'Blake',
-        ', 180': '',
-        ', abc': 'Blake',
-        '': 'Blake'
-      },
-      reject: {
-        ', nil': 'Adamy,Codye',
-        ', blank': 'Adamy,Blake,Codye',
-        ', empty': 'Adamy,Blake,Codye',
-        ', null': 'Adamy,Codye',
-        ', 3': 'Adamy,Blake,Codye',
-        ', 50': 'Adamy,Codye',
-        ', 180': 'Adamy,Blake,Codye',
-        ', abc': 'Adamy,Codye',
-        '': 'Adamy,Codye'
-      },
-      has: {
-        ', nil': 'true',
-        ', blank': 'false',
-        ', empty': 'false',
-        ', null': 'true',
-        ', 3': 'false',
-        ', 50': 'true',
-        ', 180': 'false',
-        ', abc': 'true',
-        '': 'true'
-      },
-      find: {
-        ', nil': '{"name":"Blake","age":50}',
-        ', blank': 'null',
-        ', empty': 'null',
-        ', null': '{"name":"Blake","age":50}',
-        ', 3': 'null',
-        ', 50': '{"name":"Blake","age":50}',
-        ', 180': 'null',
-        ', abc': '{"name":"Blake","age":50}',
-        '': '{"name":"Blake","age":50}'
-      },
-      find_index: {
-        ', nil': '1',
-        ', blank': '',
-        ', empty': '',
-        ', null': '1',
-        ', 3': '',
-        ', 50': '1',
-        ', 180': '',
-        ', abc': '1',
-        '': '1'
-      }
-    };
-    for (const [filter, suffix] of filters) {
-      describe(filter, function () {
-        for (const condition of conditions) {
-          const query = `${filter}: "age"${condition} ${suffix}`
-          const expected = rubyResults[filter][condition]
-          it(`should match: ${query}`, function () {
-            return test(`{{ data | ${query} }}`, { data }, expected)
-          })
-        }
-      })
-    }
   })
 })

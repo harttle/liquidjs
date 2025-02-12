@@ -117,11 +117,14 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   return v.slice(begin, begin + length)
 }
 
-function contextMatcher (this: FilterImpl, expected: any): (v: any) => boolean {
-  if (expected === undefined) return (v: any) => isTruthy(v, this.context)
-  return this.context.opts.jekyllWhere
-    ? (v: any) => EmptyDrop.is(expected) ? equals(v, expected) : (isArray(v) ? arrayIncludes(v, expected) : equals(v, expected))
-    : (v: any) => equals(v, expected)
+function expectedMatcher (this: FilterImpl, expected: any): (v: any) => boolean {
+  if (this.context.opts.jekyllWhere) {
+    return (v: any) => EmptyDrop.is(expected) ? equals(v, expected) : (isArray(v) ? arrayIncludes(v, expected) : equals(v, expected))
+  } else if (expected === undefined) {
+    return (v: any) => isTruthy(v, this.context)
+  } else {
+    return (v: any) => equals(v, expected)
+  }
 }
 
 function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[], property: string, expected: any): IterableIterator<unknown> {
@@ -132,16 +135,8 @@ function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[
   for (const item of arr) {
     values.push(yield evalToken(token, this.context.spawn(item)))
   }
-  const matcher = contextMatcher.call(this, expected)
+  const matcher = expectedMatcher.call(this, expected)
   return arr.filter((_, i) => matcher(values[i]) === include)
-}
-
-export function * where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
-  return yield * filter.call(this, true, arr, property, expected)
-}
-
-export function * reject<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
-  return yield * filter.call(this, false, arr, property, expected)
 }
 
 function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
@@ -156,6 +151,14 @@ function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr
     if (value === include) filtered.push(item)
   }
   return filtered
+}
+
+export function * where<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
+  return yield * filter.call(this, true, arr, property, expected)
+}
+
+export function * reject<T extends object> (this: FilterImpl, arr: T[], property: string, expected?: any): IterableIterator<unknown> {
+  return yield * filter.call(this, false, arr, property, expected)
 }
 
 export function * where_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
@@ -197,7 +200,7 @@ export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], it
 function * search<T extends object> (this: FilterImpl, arr: T[], property: string, expected: string): IterableIterator<unknown> {
   const token = new Tokenizer(stringify(property)).readScopeValue()
   const array = toArray(arr)
-  const matcher = contextMatcher.call(this, expected)
+  const matcher = expectedMatcher.call(this, expected)
   for (let index = 0; index < array.length; index++) {
     const value = yield evalToken(token, this.context.spawn(array[index]))
     if (matcher(value)) return [index, array[index]]
