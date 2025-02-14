@@ -341,136 +341,9 @@ function getAssignedVariables(expression) {
   return Array.from(new Set(assignedArr));
 }
 
-function checkValidJSON(expression) {
-  const engine = createEngine();
-  const templates = getTemplates(expression, engine);
-  let validationErrors = []
-  function validateJSON(value) {
-    try {
-      const trimmedValue = value.trim()
-      const evalValue = engine.evalValue(trimmedValue, {});
-      const jsonStr = `{"val": ${evalValue}}`;
-
-      JSON.parse(jsonStr);
-    } catch (e) {
-      validationErrors.push(`Invalid JSON: ${e.message}`)
-    }
-
-  }
-
-  templates.forEach((tpl) => {
-    if (tpl.type !== 'tag' || tpl.name !== 'parseAssign') return;
-    Object.entries(tpl.tagImpl).forEach(([key, value]) => {
-      if (key === 'key') {
-        validateJSON(tpl.tagImpl.value)
-      }
-      else if (key === 'branches') {
-        value.forEach((branch) => {
-          branch.templates.forEach((tpl) => {
-            if (tpl.type === 'tag' && tpl.name === 'parseAssign') {
-              validateJSON(tpl.tagImpl.value);
-            }
-          });
-        });
-      }
-      else if (key === 'templates' || key === 'elseTemplates') {
-        value.forEach((tpl) => {
-          if (tpl.type === 'tag' && tpl.name === 'parseAssign') {
-            validateJSON(tpl.tagImpl.value);
-          }
-        });
-      }
-    });
-  });
-
-  return validationErrors;
-}
-
-
-// function checkVariableDefined() {
-//   const engine = createEngine();
-//   const expression = `
-//   {% if x %}
-//     {% if y %}
-//       {% assign c = a | times: b %}
-//     {% else %}
-//       {% assign d = x | times: y %}
-//     {% endif %}
-// {% elsif x == "editor" %}
-//     {% if y %}
-//       {% assign c = a | times: b %}
-//     {% else %}
-//       {% assign d = x | times: y %}
-//     {% endif %}
-// {% else %}
-//     {% if y %}
-//       {% assign c = a | times: b %}
-//     {% else %}
-//       {% assign d = x | times: y %}
-//     {% endif %}
-      
-// {% endif %}
-
-//   `
-//   const templates = getTemplates(expression, engine);
-
-//   let assignedVars = new Set()
-//   let errors = []
-
-//   function validateVariable(tpl) {
-
-//     const parsedObj = parseAssign(tpl, engine)
-
-//     let cur_errors = []
-//     parsedObj.dependsOn.forEach((varName) => {
-//       if (!assignedVars.has(varName)) {
-//         cur_errors.push(`Variable ${varName} used before assignment`)
-//       }
-//     })
-
-//     errors.push(...cur_errors)
-//     if (cur_errors.length == 0) {
-//       assignedVars.add(parsedObj.defined)
-//     }
-//   }
-
-
-//   templates.forEach((tpl) => {
-//     if (!(tpl.type == 'tag' && (tpl.name == "assign" || tpl.name=="parseAssign" || tpl.name=="if"))) return;
-//     if(tpl.name=="if"){
-//       Object.entries(tpl.tagImpl).forEach(([key, value]) => {
-//         if (key === 'branches') {
-//           value.forEach((branch) => {
-//             branch.templates.forEach((b) => {
-              
-
-//             });
-//           });
-//         }
-//         else if (key === 'templates' || key === 'elseTemplates') {
-//           value.forEach((tpl) => {
-//             if(tpl.type!=='tag' || !tplName.has(tpl.name)) return;
-//             const currentAssignedVar = tpl.tagImpl.key
-//             const currentExpression = tpl.tagImpl.value
-//             validateVariable(currentAssignedVar, currentExpression)
-
-//           });
-//         }
-//       });
-//     }
-    
-//     const currentAssignedVar = tpl.tagImpl.key
-//     validateVariable(tpl, currentAssignedVar)
 
 
 
-//   })
-
-//   console.log(assignedVars);
-//   console.log(errors);
-
-
-// }
 
 module.exports = {
   parseAssign,
@@ -480,7 +353,5 @@ module.exports = {
   getAffectedVariables,
   checkForCyclicDependency,
   getAssignedVariables,
-  checkValidJSON,
-  // checkVariableDefined
 };
 

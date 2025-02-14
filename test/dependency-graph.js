@@ -2,10 +2,12 @@ const chai = require("chai");
 const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
 const expect = chai.expect;
-
+const { astArray } = require('../astArray')
+const { format_options } = require('../format_options')
 chai.use(sinonChai);
 
 var depGraph = require("../dependency-graph");
+var validations = require("../validations")
 
 describe.only("dependency-graph tests", () => {
   describe("dependency-graph: assign expression parsing", function () {
@@ -397,7 +399,7 @@ describe.only("dependency-graph tests", () => {
     });
   });
 
-  describe.only("checkValidJSON function", () => {
+  describe("checkValidJSON function", () => {
     it("should pass if checkValidJSON does not throw an error", () => {
       const expression = `
       {% parseAssign x1 = '{"key": "value"}' %}
@@ -411,7 +413,7 @@ describe.only("dependency-graph tests", () => {
         {% endif %}
       `;
 
-      const validationErrors = depGraph.checkValidJSON(expression);
+      const validationErrors = validations.checkValidJSON(expression)
       expect(validationErrors).to.be.an('array').that.is.empty;
     });
 
@@ -428,7 +430,7 @@ describe.only("dependency-graph tests", () => {
         {% endif %}
       `;
 
-      const validationErrors = depGraph.checkValidJSON(expression);
+      const validationErrors = validations.checkValidJSON(expression)
       expect(validationErrors).to.be.an('array').that.is.not.empty;
       expect(validationErrors).to.have.length.above(0);
     });
@@ -437,6 +439,20 @@ describe.only("dependency-graph tests", () => {
   describe("checkVariableDefined", () => {
     it("should check if variable being used has been defined earlier", () => {
       depGraph.checkVariableDefined()
+    })
+  })
+
+  describe.only("docxTemplate Validations", () => {
+    it("should check if variables being used in docX exist in formatOptions", () => {
+      const errorSet = validations.docxValidator(format_options, astArray)
+      const expectedSet = new Set([
+        'sd_date_of_issue',
+        'subscriber$address$inline',
+        'ORIGINAL_contractor_entity$reference_id',
+        'sd_level'
+      ]);
+      expect([...errorSet]).to.have.members([...expectedSet]);
+
     })
   })
 
