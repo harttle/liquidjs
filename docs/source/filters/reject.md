@@ -93,7 +93,7 @@ Output
 
 {% since %}v10.21.0{% endsince %}
 
-For Liquid users migrating from Jekyll, there's a `jekyllWhere` option to mimic the behavior of Jekyll's `where` filter. This option is set to `false` by default. When enabled, if `property` is an array, the target value is matched using `Array.includes` instead of `==`, which is particularly useful for filtering tags.
+For Liquid users migrating from Jekyll, there's a `jekyllWhere` option to mimic the behavior of Jekyll's `where` filter. This option is set to `false` by default. When enabled, if `property` is an array, the target value is matched using `Array.includes` instead of `==`, which is particularly useful for excluding tags.
 
 ```javascript
 const pages = [
@@ -104,7 +104,7 @@ const pages = [
 
 Input
 ```liquid
-{% assign selected = pages | where: 'tags', "cat" %}
+{% assign selected = pages | reject: 'tags', "cat" %}
 {% for item in selected -%}
 - {{ item.title }}
 {% endfor %}
@@ -112,7 +112,7 @@ Input
 
 Output
 ```text
-Cat Food
+Dog Food
 ```
 
 [truthy]: ../tutorials/truthy-and-falsy.html
