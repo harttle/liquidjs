@@ -1,3 +1,10 @@
+# [10.21.0](https://github.com/harttle/liquidjs/compare/v10.20.3...v10.21.0) (2025-02-23)
+
+
+### Features
+
+* add find_index, has, and reject filters ([#799](https://github.com/harttle/liquidjs/issues/799)) ([0deb93e](https://github.com/harttle/liquidjs/commit/0deb93eeae4f530901e9a7d099bcc47207ad7385))
+
 ## [10.20.3](https://github.com/harttle/liquidjs/compare/v10.20.2...v10.20.3) (2025-02-09)
 
 
