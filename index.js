@@ -17,6 +17,7 @@ const filters = require('./filters')
 const Promise = require('any-promise')
 const anySeries = require('./src/util/promise.js').anySeries
 const Errors = require('./src/util/error.js')
+const checkValidJSON = require('./validations.js')
 
 var _engine = {
   init: function (tag, filter, options) {
@@ -149,7 +150,7 @@ var _engine = {
   }
 }
 
-function factory (options) {
+function factory(options) {
   options = _.assign({
     root: ['.'],
     cache: false,
@@ -170,7 +171,7 @@ function factory (options) {
   return engine
 }
 
-function normalizeStringArray (value) {
+function normalizeStringArray(value) {
   if (Array.isArray(value)) return value
   if (_.isString(value)) return [value]
   return []
@@ -187,5 +188,6 @@ factory.Types = {
   RenderBreakError: Errors.RenderBreakError,
   AssertionError: Errors.AssertionError
 }
+factory.checkValidJSON = checkValidJSON
 
 module.exports = factory
