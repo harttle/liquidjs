@@ -436,23 +436,32 @@ describe.only("dependency-graph tests", () => {
     });
   });
 
-  describe("checkVariableDefined", () => {
-    it("should check if variable being used has been defined earlier", () => {
-      depGraph.checkVariableDefined()
-    })
-  })
-
-  describe.only("docxTemplate Validations", () => {
-    it("should check if variables being used in docX exist in formatOptions", () => {
-      const errorSet = validations.docxValidator(format_options, astArray)
-      const expectedSet = new Set([
-        'sd_date_of_issue',
-        'subscriber$address$inline',
-        'ORIGINAL_contractor_entity$reference_id',
-        'sd_level'
-      ]);
-      expect([...errorSet]).to.have.members([...expectedSet]);
-
+  describe.only("checkVariableInCompute", () => {
+    it("should check if variable being used in computations has been defined earlier or not", () => {
+      const expression = `
+      {% if x %}
+        {% if y %}
+          {% assign c = a | times: b %}
+        {% else %}
+          {% assign d = x | times: y %}
+        {% endif %}
+      {% elsif x == "editor" %}
+        {% if y %}
+          {% assign c = a | times: b %}
+        {% else %}
+          {% assign d = x | times: y %}
+        {% endif %}
+      {% else %}
+        {% if y %}
+          {% assign c = a | times: b %}
+        {% else %}
+          {% assign d = x | times: y %}
+        {% endif %}
+      {% endif %}
+    `;
+      const expectedErrorArray = ['Variable "a" used before assignment in expression "c = a | times: b" on line 4', 'Variable "b" used before assignment in expression "c = a | times: b" on line 4', 'Variable "a" used before assignment in expression "c = a | times: b" on line 10', 'Variable "b" used before assignment in expression "c = a | times: b" on line 10', 'Variable "a" used before assignment in expression "c = a | times: b" on line 16', 'Variable "b" used before assignment in expression "c = a | times: b" on line 16']
+      const actualErrorArray = validations.checkVariableInComputation(expression)
+      expect(actualErrorArray).to.deep.equal(expectedErrorArray);
     })
   })
 
