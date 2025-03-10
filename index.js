@@ -17,7 +17,7 @@ const filters = require('./filters')
 const Promise = require('any-promise')
 const anySeries = require('./src/util/promise.js').anySeries
 const Errors = require('./src/util/error.js')
-const validations = require('./validations.js')
+const { checkValidJSON } = require("./validations");
 
 var _engine = {
   init: function (tag, filter, options) {
@@ -147,10 +147,10 @@ var _engine = {
         .then(html => callback(null, html))
         .catch(e => callback(e))
     }
-  },
+  }
 }
 
-function factory(options) {
+function factory (options) {
   options = _.assign({
     root: ['.'],
     cache: false,
@@ -167,19 +167,20 @@ function factory(options) {
   options.root = normalizeStringArray(options.root)
 
   var engine = Object.create(_engine)
+  engine.checkValidJSON = function (expression) {
+    return checkValidJSON(this, expression);
+  };
   engine.init(Tag(), Filter(options), options)
   return engine
 }
 
-function normalizeStringArray(value) {
+function normalizeStringArray (value) {
   if (Array.isArray(value)) return value
   if (_.isString(value)) return [value]
   return []
 }
 
 factory.lexical = lexical
-factory.validations = validations 
-
 factory.isTruthy = Syntax.isTruthy
 factory.isFalsy = Syntax.isFalsy
 factory.evalExp = Syntax.evalExp

@@ -331,7 +331,6 @@ function _internal_getAssignedVars(template, engine, assignedVarsArr) {
 function getAssignedVariables(expression) {
   const engine = createEngine();
   const templates = getTemplates(expression, engine);
-
   const assignedArr = [];
 
   templates.forEach(function (tpl) {
@@ -340,10 +339,6 @@ function getAssignedVariables(expression) {
 
   return Array.from(new Set(assignedArr));
 }
-
-
-
-
 
 module.exports = {
   parseAssign,
@@ -354,4 +349,3 @@ module.exports = {
   checkForCyclicDependency,
   getAssignedVariables,
 };
-

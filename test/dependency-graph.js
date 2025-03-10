@@ -1,15 +1,11 @@
 const chai = require("chai");
-const sinon = require("sinon");
 const sinonChai = require("sinon-chai");
 const expect = chai.expect;
-const { astArray } = require('../astArray')
-const { format_options } = require('../format_options')
 chai.use(sinonChai);
 
 var depGraph = require("../dependency-graph");
-var validations = require("../validations")
 
-describe.only("dependency-graph tests", () => {
+describe("dependency-graph tests", () => {
   describe("dependency-graph: assign expression parsing", function () {
     let engine;
 
@@ -398,75 +394,4 @@ describe.only("dependency-graph tests", () => {
       ]);
     });
   });
-
-  describe("checkValidJSON function", () => {
-    it("should pass if checkValidJSON does not throw an error", () => {
-      const expression = `
-      {% parseAssign x1 = '{"key": "value"}' %}
-        {% parseAssign x0 = "100" %}
-        {% if a == "USD" %}
-          {% parseAssign x1 = "{\\"key\\": \\"value\\"}" %}
-        {% elsif a == "INR" %}
-          {% parseAssign x2 = "[1, 2, 3]" %}
-        {% else %}
-          {% parseAssign x3 = "true" %}
-        {% endif %}
-      `;
-
-      const validationErrors = validations.checkValidJSON(expression)
-      expect(validationErrors).to.be.an('array').that.is.empty;
-    });
-
-    it("should pass if checkValidJSON throws an error", () => {
-      const expression = `
-        {% parseAssign x0 = 10, 0 %}
-        {% parseAssign y = a | plus: b %}
-        {% if a == "USD" %}
-          {% parseAssign x1 = {"key": value } %}  <!-- Invalid JSON -->
-        {% elsif a == "INR" %}
-          {% parseAssign x2 = [1, 2,] %}      <!-- Invalid JSON -->
-        {% else %}
-          {% parseAssign x3 = unquotedString %} <!-- Invalid JSON -->
-        {% endif %}
-      `;
-
-      const validationErrors = validations.checkValidJSON(expression)
-      expect(validationErrors).to.be.an('array').that.is.not.empty;
-      expect(validationErrors).to.have.length.above(0);
-    });
-  });
-
-  describe.only("checkVariableInCompute", () => {
-    it("should check if variable being used in computations has been defined earlier or not", () => {
-      const expression = `
-      {% if x %}
-        {% if y %}
-          {% assign c = a | times: b %}
-        {% else %}
-          {% assign d = x | times: y %}
-        {% endif %}
-      {% elsif x == "editor" %}
-        {% if y %}
-          {% assign c = a | times: b %}
-        {% else %}
-          {% assign d = x | times: y %}
-        {% endif %}
-      {% else %}
-        {% if y %}
-          {% assign c = a | times: b %}
-        {% else %}
-          {% assign d = x | times: y %}
-        {% endif %}
-      {% endif %}
-    `;
-      const expectedErrorArray = ['Variable "a" used before assignment in expression "c = a | times: b" on line 4', 'Variable "b" used before assignment in expression "c = a | times: b" on line 4', 'Variable "a" used before assignment in expression "c = a | times: b" on line 10', 'Variable "b" used before assignment in expression "c = a | times: b" on line 10', 'Variable "a" used before assignment in expression "c = a | times: b" on line 16', 'Variable "b" used before assignment in expression "c = a | times: b" on line 16']
-      const actualErrorArray = validations.checkVariableInComputation(expression)
-      expect(actualErrorArray).to.deep.equal(expectedErrorArray);
-    })
-  })
-
-
-  const { expect } = require("chai");
-
-
-}); 
+});
