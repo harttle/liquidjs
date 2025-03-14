@@ -17,6 +17,7 @@ const filters = require('./filters')
 const Promise = require('any-promise')
 const anySeries = require('./src/util/promise.js').anySeries
 const Errors = require('./src/util/error.js')
+const { checkValidJSON } = require("./validations");
 
 var _engine = {
   init: function (tag, filter, options) {
@@ -166,6 +167,9 @@ function factory (options) {
   options.root = normalizeStringArray(options.root)
 
   var engine = Object.create(_engine)
+  engine.checkValidJSON = function (expression) {
+    return checkValidJSON(this, expression);
+  };
   engine.init(Tag(), Filter(options), options)
   return engine
 }
