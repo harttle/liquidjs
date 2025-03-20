@@ -17,7 +17,6 @@ const filters = require('./filters')
 const Promise = require('any-promise')
 const anySeries = require('./src/util/promise.js').anySeries
 const Errors = require('./src/util/error.js')
-const { checkValidJSON } = require("./validations");
 
 var _engine = {
   init: function (tag, filter, options) {
