@@ -1,7 +1,7 @@
-const Liquid = require("./index");
 const Lexical = require("./src/lexical");
 
 function createEngine() {
+  const Liquid = require("./index"); //moved this here to prevent cyclic dependency
   return Liquid({});
 }
 
