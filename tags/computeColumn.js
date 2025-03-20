@@ -33,9 +33,6 @@ module.exports = function (liquid) {
         try {
           await liquid.renderer.renderTemplates(this.templates, context);
           const finalResult = context.get("$$answer");
-          if (finalResult === undefined) {
-            throw new Error("No value assigned to $$answer");
-          }
           table[i] = { ...row, [this.columnName]: finalResult };
         } catch (err) {
           throw err;
