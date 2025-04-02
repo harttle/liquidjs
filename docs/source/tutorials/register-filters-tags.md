@@ -10,7 +10,7 @@ import { Value, TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
 
 engine.registerTag('upper', {
     parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
-        this.value = new Value(token.args, liquid)
+        this.value = new Value(tagToken.args, engine)
     },
     render: function*(ctx: Context) {
         const str = yield this.value.value(ctx); // 'alice'
