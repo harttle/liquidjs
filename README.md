@@ -210,6 +210,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://tovd.dev"><img src="https://avatars.githubusercontent.com/u/35376389?v=4?s=100" width="100px;" alt="Tim van Dam"/><br /><sub><b>Tim van Dam</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=timvandam" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/edh649"><img src="https://avatars.githubusercontent.com/u/527604?v=4?s=100" width="100px;" alt="Ed Hanton"/><br /><sub><b>Ed Hanton</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=edh649" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
