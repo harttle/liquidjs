@@ -20,7 +20,11 @@ Getting started and building is described in [CONTRIBUTING.md](https://github.co
 
 ## Financial Support
 
-LiquidJS is Open Source and Free. To help it live and thrive, especially when LiquidJS is benefiting your business, please consider contribute on [GitHub Sponsors](https://github.com/sponsors/harttle) or [Open Collective][oc]. If I'm missing anything, find me via Twitter (harttleharttle) or email (harttleharttle at gmail), to add you into [the contributors table](https://github.com/harttle/liquidjs#contributors-).
+LiquidJS is Open Source and Free. To help it live and thrive, especially when LiquidJS is benefiting your business, please consider contribute on [GitHub Sponsors](https://github.com/sponsors/harttle) or [Open Collective][oc].
+
+I'll add all financial contributors into [README.md](https://github.com/harttle/liquidjs#financial-support) and it'll be also shown on https://liquidjs.com after next GitHub Actions build.
+
+If I'm missing anything or you observed it not working, please don't hesitate to file an issue or find me via email (harttleharttle at gmail).
 
 [oc]: https://opencollective.com/liquidjs/contribute/backer-10665/checkout
 [shopify/liquid]: https://shopify.github.io/liquid/
