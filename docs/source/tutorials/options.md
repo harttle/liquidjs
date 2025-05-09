@@ -116,7 +116,7 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 
 **preserveTimezones** is a boolean effects only literal timestamps. When set to `true`, all literal timestamps will remain the same when output. This is a parser option, so Date objects passed to LiquidJS as data will not be affected. Note that `preserveTimezones` has a higher priority than `timezoneOffset`.
 
-**dateFormat** is used to specify a default format to output dates. `%A, %B %-e, %Y at %-l:%M %P %z` will be used if not specified. For example, set `dateFormat: %Y-%m-%dT%H:%M:%S:%LZ` to output all dates in [JavaScript Date.toJson()][https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON] format.
+**dateFormat** is used to specify a default format to output dates. `%A, %B %-e, %Y at %-l:%M %P %z` will be used if not specified. For example, set `dateFormat: %Y-%m-%dT%H:%M:%S:%LZ` to output all dates in [JavaScript Date.toJson()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON) format.
 
 ## Trimming
 
