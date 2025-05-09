@@ -146,7 +146,7 @@ Nonexistent tags always throw errors during parsing and this behavior cannot be 
 
 ## Parameter Order
 
-Parameter orders are ignored by default, for ea `{% for i in (1..8) reversed limit:3 %}` will always perform `limit` before `reversed`, even if `reversed` occurs before `limit`. To make parameter order respected, set **orderedFilterParameters** to `true`. Its default value is `false`.
+Parameter orders are ignored by default, for example `{% for i in (1..8) reversed limit:3 %}` will always perform `limit` before `reversed`, even if `reversed` occurs before `limit`. To make parameter order respected, set **orderedFilterParameters** to `true`. Its default value is `false`.
 
 [liquid]: /api/classes/Liquid.html
 [caching]: ./caching.html
