@@ -4,7 +4,7 @@ title: Echo
 
 {% since %}v9.31.0{% endsince %}
 
-Outputs an expression in the rendered HTML. This is identical to wrapping an expression in `{{` and `}}`, but works inside liquid tags and supports filters.
+Outputs an expression in the rendered HTML. This is identical to wrapping an expression in <code>{{</code> and <code>}}</code>, but works inside liquid tags and supports filters.
 
 ## echo
 
