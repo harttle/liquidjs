@@ -39,7 +39,11 @@ export default class extends Tag {
       ctx.pop()
     }
     return renderChild
-      ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(new BlockDrop(() => renderCurrent(superBlock, emitter)), emitter)
+      ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(
+        new BlockDrop(
+          (emitter: Emitter) => renderCurrent(superBlock, emitter)
+        ),
+        emitter)
       : renderCurrent
   }
 

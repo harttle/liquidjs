@@ -101,6 +101,26 @@ describe('tags/layout', function () {
     const output = '<link href="base.css" rel="stylesheet"><link href="extra.css" rel="stylesheet">'
     return expect(html).toBe(output)
   })
+  it('should pass block.super as a string', async function () {
+    mock({
+      '/parent.html': '{% block css %}<link href="base.css" rel="stylesheet">{% endblock %}'
+    })
+    const src = '{% layout "parent.html" %}' +
+      '{%block css%}{{block.super}}<meta basesize={{block.super | size}}>{%endblock%}'
+    const html = await liquid.parseAndRender(src)
+    const output = '<link href="base.css" rel="stylesheet"><meta basesize=39>'
+    return expect(html).toBe(output)
+  })
+  it('should support block.super while strictVariables', async function () {
+    mock({
+      '/parent.html': '{% block css %}<link href="base.css" rel="stylesheet">{% endblock %}'
+    })
+    const src = '{% layout "parent.html" %}' +
+      '{%block css%}{{block.super}}<link href="extra.css" rel="stylesheet">{%endblock%}'
+    const html = await liquid.parseAndRender(src, undefined, { strictVariables: true })
+    const output = '<link href="base.css" rel="stylesheet"><link href="extra.css" rel="stylesheet">'
+    return expect(html).toBe(output)
+  })
   it('should render block.super to empty if no parent exists', async function () {
     mock({
       '/parent.html': '{% block css %}{{block.super}}<link href="base.css" rel="stylesheet">{% endblock %}'

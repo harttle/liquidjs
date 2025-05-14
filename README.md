@@ -53,6 +53,7 @@ For more details, refer to the [Setup Guide][setup].
 ## Who's Using LiquidJS?
 
 - [Eleventy](https://www.11ty.dev/): Eleventy, a simpler static site generator.
+- [Github Docs](https://github.com/github/docs): The open-source repo for docs.github.com.
 - [Opensense](https://www.opensense.com/): The smarter way to send email.
 - [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
 - [Semgrep](https://github.com/returntocorp/semgrep): Lightweight static analysis for many languages.
