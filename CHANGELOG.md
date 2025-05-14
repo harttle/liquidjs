@@ -1,3 +1,10 @@
+## [10.21.1](https://github.com/harttle/liquidjs/compare/v10.21.0...v10.21.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* block.super with strictVariables, [#806](https://github.com/harttle/liquidjs/issues/806) ([#807](https://github.com/harttle/liquidjs/issues/807)) ([025c40f](https://github.com/harttle/liquidjs/commit/025c40f0f2f13efa62193c61d2fa56943917ac3c))
+
 # [10.21.0](https://github.com/harttle/liquidjs/compare/v10.20.3...v10.21.0) (2025-02-23)
 
 
