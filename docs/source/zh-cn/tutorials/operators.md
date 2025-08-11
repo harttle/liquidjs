@@ -16,6 +16,6 @@ LiquidJS 运算符非常简单也很特别，只支持两类运算符：
 
 ## 结合性
 
-逻辑运算符是又结合的，所以连续的逻辑运算时计算顺序是从右向左，参考 [Shopify][operator-order] 的文档。
+逻辑运算符是右结合的，所以连续的逻辑运算时计算顺序是从右向左，参考 [Shopify][operator-order] 的文档。
 
 [operator-order]: https://help.shopify.com/en/themes/liquid/basics/operators#order-of-operations
