@@ -1,5 +1,5 @@
 {
-  "name": "liquidjs",
+  "name": "@spotdraft/liquidjs",
   "version": "3.1.0",
   "description": "Liquid template engine by pure JavaScript: compatible to shopify, easy to extend.",
   "main": "index.js",
