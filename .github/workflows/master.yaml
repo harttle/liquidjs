@@ -37,7 +37,7 @@ jobs:
         run: |
           TOKEN=$(gcloud auth print-access-token)
           rm -rf .npmrc
-          echo "//asia-south1-npm.pkg.dev/spotdraft-qa/npm/:_authToken=\"$TOKEN\"" >> .npmrc
+          echo -e "\n//asia-south1-npm.pkg.dev/spotdraft-qa/npm/:_authToken=\"$TOKEN\"" >> .npmrc
           echo "@spotdraft:registry=https://asia-south1-npm.pkg.dev/spotdraft-qa/npm/" >> .npmrc
           
       - name: Install dependencies
