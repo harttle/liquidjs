@@ -2,8 +2,7 @@ name: workflow for Master
 on:
   push:
     branches:
-      # - "master"
-      - "setup-workflows"
+      - "master"
 jobs:
   build:
     runs-on: ubicloud-standard-2
