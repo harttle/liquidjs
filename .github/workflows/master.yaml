@@ -1,0 +1,48 @@
+name: workflow for Master
+on:
+  push:
+    branches:
+      # - "master"
+      - "setup-workflows"
+jobs:
+  build:
+    runs-on: ubicloud-standard-2
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+
+      - id: 'auth-spotdraft-qa'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1.1.1'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects/400887723303/locations/global/workloadIdentityPools/github-actions-pool/providers/github-provider'
+          service_account: 'github-actions@spotdraft-qa.iam.gserviceaccount.com'
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: 'spotdraft-qa'
+
+      - name: Configure NPM to use Artifact Registry
+        run: |
+          TOKEN=$(gcloud auth print-access-token)
+          rm -rf .npmrc
+          echo "//asia-south1-npm.pkg.dev/spotdraft-qa/npm/:_authToken=\"$TOKEN\"" >> .npmrc
+          echo "@spotdraft:registry=https://asia-south1-npm.pkg.dev/spotdraft-qa/npm/" >> .npmrc
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish package
+        run: |
+          npm publish
