@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: test-npm-logs-${{ matrix.os }}-${{ matrix.timezone }}-${{ matrix.node-version }}
+          name: test-npm-logs-${{ matrix.os }}-${{ replace(matrix.timezone, '/', '_') }}-${{ matrix.node-version }}
           path: ~/.npm/_logs
   demo:
     name: Demo Check

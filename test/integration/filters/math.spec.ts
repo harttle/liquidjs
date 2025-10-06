@@ -56,8 +56,9 @@ describe('filters/math', function () {
     it('should return "20" for 16,4', () => test('{{ 16 | plus: 4 }}', '20'))
     it('should return "195.357" for 183.357,12',
       () => test('{{ 183.357 | plus: 12 }}', '195.357'))
-    it('should convert first arg as number', () => test('{{ "4" | plus: 2 }}', '6'))
-    it('should convert both args as number', () => test('{{ "4" | plus: "2" }}', '6'))
+    it('should convert first arg to number', () => test('{{ "4" | plus: 2 }}', '6'))
+    it('should convert both args to numbers', () => test('{{ "4" | plus: "2" }}', '6'))
+    it('should convert invalid string to 0', () => test('{{ "abc" | plus: "2" }}', '2'))
     it('should support variable', () => test('{{ 4 | plus: b }}', { b: 2 }, '6'))
   })
 
