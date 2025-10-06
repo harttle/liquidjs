@@ -86,7 +86,7 @@ export class Context {
   public * _getFromScope (scope: unknown, paths: (PropertyKey | Drop)[] | string, strictVariables = this.strictVariables): IterableIterator<unknown> {
     if (isString(paths)) paths = paths.split('.')
     for (let i = 0; i < paths.length; i++) {
-      scope = yield readProperty(scope as object, paths[i], this.ownPropertyOnly)
+      scope = yield this.readProperty(scope as object, paths[i])
       if (strictVariables && isUndefined(scope)) {
         throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
       }
@@ -120,21 +120,21 @@ export class Context {
     if (key in this.environments) return this.environments
     return this.globals
   }
+  readProperty (obj: Scope, key: (PropertyKey | Drop)) {
+    obj = toLiquid(obj)
+    key = toValue(key) as PropertyKey
+    if (isNil(obj)) return obj
+    if (isArray(obj) && (key as number) < 0) return obj[obj.length + +key]
+    const value = readJSProperty(obj, key, this.ownPropertyOnly)
+    if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key, this)
+    if (isFunction(value)) return value.call(obj)
+    if (key === 'size') return readSize(obj)
+    else if (key === 'first') return readFirst(obj)
+    else if (key === 'last') return readLast(obj)
+    return value
+  }
 }
 
-export function readProperty (obj: Scope, key: (PropertyKey | Drop), ownPropertyOnly: boolean) {
-  obj = toLiquid(obj)
-  key = toValue(key) as PropertyKey
-  if (isNil(obj)) return obj
-  if (isArray(obj) && (key as number) < 0) return obj[obj.length + +key]
-  const value = readJSProperty(obj, key, ownPropertyOnly)
-  if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key)
-  if (isFunction(value)) return value.call(obj)
-  if (key === 'size') return readSize(obj)
-  else if (key === 'first') return readFirst(obj)
-  else if (key === 'last') return readLast(obj)
-  return value
-}
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
   if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
