@@ -1,3 +1,15 @@
+# [10.22.0](https://github.com/harttle/liquidjs/compare/v10.21.1...v10.22.0) (2025-10-06)
+
+
+### Bug Fixes
+
+* math filters coerce invalid string to 0, [#813](https://github.com/harttle/liquidjs/issues/813) ([#819](https://github.com/harttle/liquidjs/issues/819)) ([e8e502c](https://github.com/harttle/liquidjs/commit/e8e502c5854c9649bf7611a671a068dc260011d1))
+
+
+### Features
+
+* allow context access in liquidMethodMissing, [#808](https://github.com/harttle/liquidjs/issues/808) ([#820](https://github.com/harttle/liquidjs/issues/820)) ([e551288](https://github.com/harttle/liquidjs/commit/e55128850e507687f9d85a012fc3a72ac2550f3b))
+
 ## [10.21.1](https://github.com/harttle/liquidjs/compare/v10.21.0...v10.21.1) (2025-05-14)
 
 
