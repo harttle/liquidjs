@@ -67,8 +67,7 @@ export function toValue (value: any): any {
 }
 
 export function toNumber (value: any): number {
-  value = Number(value)
-  return isNaN(value) ? 0 : value
+  return +toValue(value) || 0
 }
 
 export function isNumber (value: any): value is number {
@@ -189,6 +188,10 @@ export function caseInsensitiveCompare (a: any, b: any) {
 
 export function argumentsToValue<F extends (...args: any) => any, T> (fn: F) {
   return function (this: T, ...args: Parameters<F>) { return fn.call(this, ...args.map(toValue)) }
+}
+
+export function argumentsToNumber<F extends (...args: any) => any, T> (fn: F) {
+  return function (this: T, ...args: Parameters<F>) { return fn.call(this, ...args.map(toNumber)) }
 }
 
 export function escapeRegExp (text: string) {
