@@ -1,5 +1,4 @@
 import { assert } from './assert'
-import { toNumber } from './underscore'
 
 export class Limiter {
   private message: string
@@ -10,12 +9,12 @@ export class Limiter {
     this.limit = limit
   }
   use (count: number) {
-    count = toNumber(count)
+    count = +count || 0
     assert(this.base + count <= this.limit, this.message)
     this.base += count
   }
   check (count: number) {
-    count = toNumber(count)
+    count = +count || 0
     assert(count <= this.limit, this.message)
   }
 }
