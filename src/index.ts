@@ -8,6 +8,7 @@ export { defaultOperators, Operators, evalToken, evalQuotedToken, Expression, is
 export { Context, Scope } from './context'
 export { Value, Hash, Template, FilterImplOptions, Tag, Filter, Output, Variable, VariableLocation, VariableSegments, Variables, StaticAnalysis, StaticAnalysisOptions, analyze, analyzeSync, Arguments, PartialScope } from './template'
 export { Token, TopLevelToken, TagToken, ValueToken } from './tokens'
+export type { RangeToken, LiteralToken, QuotedToken, PropertyAccessToken, NumberToken } from "./tokens";
 export { TokenKind, Tokenizer, ParseStream, Parser } from './parser'
 export { filters } from './filters'
 export * from './tags'
