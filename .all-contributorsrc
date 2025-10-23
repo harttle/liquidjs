@@ -748,6 +748,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "skynetigor",
+      "name": "Ihor Panasiuk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20903171?v=4",
+      "profile": "https://github.com/skynetigor",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
