@@ -1,3 +1,10 @@
+# [10.23.0](https://github.com/harttle/liquidjs/compare/v10.22.0...v10.23.0) (2025-10-23)
+
+
+### Features
+
+* Export specific tokens as types ([#824](https://github.com/harttle/liquidjs/issues/824)) ([4f7d2fd](https://github.com/harttle/liquidjs/commit/4f7d2fd84a8884e1009b13346d331a99b9721149))
+
 # [10.22.0](https://github.com/harttle/liquidjs/compare/v10.21.1...v10.22.0) (2025-10-06)
 
 
