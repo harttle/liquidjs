@@ -216,6 +216,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/edh649"><img src="https://avatars.githubusercontent.com/u/527604?v=4?s=100" width="100px;" alt="Ed Hanton"/><br /><sub><b>Ed Hanton</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=edh649" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://gurdiga.com"><img src="https://avatars.githubusercontent.com/u/53922?v=4?s=100" width="100px;" alt="Vlad GURDIGA"/><br /><sub><b>Vlad GURDIGA</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=gurdiga" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.streakingman.com"><img src="https://avatars.githubusercontent.com/u/30397306?v=4?s=100" width="100px;" alt="裸奔狂甩丁丁"/><br /><sub><b>裸奔狂甩丁丁</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=StreakingMan" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/skynetigor"><img src="https://avatars.githubusercontent.com/u/20903171?v=4?s=100" width="100px;" alt="Ihor Panasiuk"/><br /><sub><b>Ihor Panasiuk</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=skynetigor" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
