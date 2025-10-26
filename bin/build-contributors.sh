@@ -20,7 +20,6 @@ awk '/ALL-CONTRIBUTORS-LIST:START/{flag=1;next}/ALL-CONTRIBUTORS-LIST:END/{flag=
 # create docs/themes/navy/layout/partial/financial-contributors.swig
 awk '/FINANCIAL-CONTRIBUTORS-BEGIN/{flag=1;next}/FINANCIAL-CONTRIBUTORS-END/{flag=0}flag' README.md | \
   sed 's/<br \/>.*<\/td>/<\/a><\/td>/g' | \
-  sed 's/width="[^"]*"//g' | \
   tr -d '\n' | \
   sed 's/<\/tr>\s*<tr>//g' \
   > docs/themes/navy/layout/partial/financial-contributors.swig

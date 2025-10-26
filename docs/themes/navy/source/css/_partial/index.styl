@@ -66,6 +66,10 @@
 .intro-news-wrap
   padding: 24px 30px
   text-decoration: none
+  &:first-child
+    padding-left: 0
+  &:last-child
+    padding-right: 0
   &:hover
     background-color: var(--color-link-hover)
   @media mq-normal
@@ -105,7 +109,7 @@
   text-align: center
   @media mq-normal
     text-align: left
-    padding-left: 70px
+    padding-left: 48px
 
 .intro-feature-icon
   color: var(--color-link)
@@ -116,7 +120,7 @@
     margin-bottom: 26px
     position: absolute
     top: 0
-    left: 20px
+    left: 0
     font-size: 24px
     width: @font-size
 
@@ -177,9 +181,11 @@
   border-bottom: 1px solid #161d24
   margin: -1px 0
   .inner
-    margin: 48px 16px
+    margin-top: 48px
+    margin-bottom: 48px
     @media mq-tablet
-      margin: 64px 32px
+      margin-top: 64px
+      margin-bottom: 64px
     h3
       color: #fff
       font-size: 32px
@@ -192,20 +198,7 @@
       text-decoration: none
 
 #contributors-wrap
-  .description a
-    color: #fff
-    &:hover
-      background: #fff
-      color: var(--color-navy-lighter)
-
-#sponsors-wrap
-  border: none
-  text-align: right
   background: var(--color-content-bg)
-  overflow: hidden;
-  .contributors
-    display: flex;
-    justify-content: right;
   .inner
     h3
       color: var(--color-default)
@@ -227,10 +220,20 @@
           background: #fff
           color: var(--color-navy-lighter)
 
+#sponsors-wrap
+  border: none
+  overflow: hidden;
+  .description a
+    color: #fff
+    &:hover
+      background: #fff
+      color: var(--color-navy-lighter)
+
 .contributors
   tr
     display: flex
     flex-wrap: wrap
+    justify-content: center;
   td
     margin: 10px 2px 0
     a img

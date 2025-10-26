@@ -54,7 +54,11 @@ a
 
 .inner
   @media screen
-    padding: 0 gutter-width
+    margin: 0 gutter-width
+.inner.inner-content
+  margin: 0 32px
+  @media mq-tablet
+    margin: 0 48px
 
 #content-wrap
   background: var(--color-content-bg)
