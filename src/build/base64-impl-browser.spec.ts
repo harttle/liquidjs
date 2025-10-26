@@ -12,9 +12,19 @@ describe('base64-impl/browser', function () {
       url: 'https://example.com/',
       contentType: 'text/html',
       includeNodeLocations: true
-    });
-    (global as any).btoa = dom.window.btoa
-    ;(global as any).atob = dom.window.atob
+    })
+
+    // Mock btoa and atob on global object
+    Object.defineProperty(global, 'btoa', {
+      value: dom.window.btoa,
+      writable: true,
+      configurable: true
+    })
+    Object.defineProperty(global, 'atob', {
+      value: dom.window.atob,
+      writable: true,
+      configurable: true
+    })
   })
 
   afterEach(function () {
