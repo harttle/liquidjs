@@ -45,6 +45,11 @@ const browserFS = {
   delimiters: ['', ''],
   './fs/fs-impl': './build/fs-impl-browser'
 }
+const browserBase64 = {
+  include: './src/filters/base64.ts',
+  delimiters: ['', ''],
+  './base64-impl': '../build/base64-impl-browser'
+}
 const browserStream = {
   include: './src/emitters/index.ts',
   delimiters: ['', ''],
@@ -94,6 +99,7 @@ const browserEsm = {
   plugins: [
     versionInjection,
     replace(browserFS),
+    replace(browserBase64),
     replace(browserStream),
     typescript(tsconfig('es6'))
   ],
@@ -112,6 +118,7 @@ const browserUmd = {
   plugins: [
     versionInjection,
     replace(browserFS),
+    replace(browserBase64),
     replace(browserStream),
     typescript(tsconfig('es5'))
   ],
@@ -130,6 +137,7 @@ const browserMin = {
   plugins: [
     versionInjection,
     replace(browserFS),
+    replace(browserBase64),
     replace(browserStream),
     typescript(tsconfig('es5')),
     uglify()
