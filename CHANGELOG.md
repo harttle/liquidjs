@@ -1,3 +1,10 @@
+# [10.24.0](https://github.com/harttle/liquidjs/compare/v10.23.0...v10.24.0) (2025-10-27)
+
+
+### Features
+
+* **filters:** Add base64_encode and base64_decode filters for Shopify compatibility ([#828](https://github.com/harttle/liquidjs/issues/828)) ([86fc135](https://github.com/harttle/liquidjs/commit/86fc135d9ec0137689faf150535b9315e75ecc30))
+
 # [10.23.0](https://github.com/harttle/liquidjs/compare/v10.22.0...v10.23.0) (2025-10-23)
 
 
