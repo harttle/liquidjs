@@ -2,7 +2,7 @@
 title: base64_encode
 ---
 
-{% since %}v10.23.0{% endsince %}
+{% since %}v10.24.0{% endsince %}
 
 Encodes a string into Base64 format.
 

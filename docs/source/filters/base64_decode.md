@@ -2,7 +2,7 @@
 title: base64_decode
 ---
 
-{% since %}v10.23.0{% endsince %}
+{% since %}v10.24.0{% endsince %}
 
 Decodes a Base64-formatted string back to its original text.
 
