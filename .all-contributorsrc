@@ -766,6 +766,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "immerrr",
+      "name": "immerrr again",
+      "avatar_url": "https://avatars.githubusercontent.com/u/579798?v=4",
+      "profile": "https://github.com/immerrr",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
