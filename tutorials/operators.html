@@ -95,18 +95,19 @@
                 <p>LiquidJS operators are very simple and different. There’re 2 types of operators supported:</p>
 <ul>
 <li>Comparison operators: <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code></li>
-<li>Logic operators: <code>or</code>, <code>and</code>, <code>contains</code></li>
+<li>Logic operators: <code>not</code>, <code>or</code>, <code>and</code>, <code>contains</code></li>
 </ul>
 <p>Thus numerical operators are not supported and you cannot even plus two numbers like this <code>{{a + b}}</code>, instead we need a filter <code>{{ a | plus: b}}</code>. Actually <code>+</code> is a valid variable name in LiquidJS.</p>
 <h2 id="Precedence" class="article-heading"><a href="#Precedence" class="headerlink" title="Precedence"></a>Precedence<a class="article-anchor" href="#Precedence" aria-hidden="true"></a></h2><ol>
-<li>Comparison operators. All comparison operations have the same precedence and higher than logic operators.</li>
-<li>Logic operators. All logic operators have the same precedence.</li>
+<li>Comparison operators, and <code>contains</code>. All comparison operators alongside <code>contains</code> have the same (highest) precedence.</li>
+<li><code>not</code> operator. It has slightly more precedence than <code>or</code> and <code>and</code>.</li>
+<li><code>or</code> and <code>and</code> operators. These logic operators have the same (lowest) precedence.</li>
 </ol>
-<h2 id="Associativity" class="article-heading"><a href="#Associativity" class="headerlink" title="Associativity"></a>Associativity<a class="article-anchor" href="#Associativity" aria-hidden="true"></a></h2><p>Logic operators are evaluated from right to left, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://help.shopify.com/en/themes/liquid/basics/operators#order-of-operations">shopify docs</a>.</p>
+<h2 id="Associativity" class="article-heading"><a href="#Associativity" class="headerlink" title="Associativity"></a>Associativity<a class="article-anchor" href="#Associativity" aria-hidden="true"></a></h2><p>Logic operators are evaluated from right to left, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://shopify.dev/docs/api/liquid/basics#order-of-operations">shopify docs</a>.</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2025-10-27T14:40:57.257Z" itemprop="dateModified">Last updated: 2025-10-27</time>
+                <time class="article-footer-updated" datetime="2025-10-31T01:34:18.616Z" itemprop="dateModified">Last updated: 2025-10-31</time>
                 <a href="plugins.html" class="article-footer-prev" title="Plugins"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="truthy-and-falsy.html" class="article-footer-next" title="Truthy and Falsy"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
