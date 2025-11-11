@@ -265,6 +265,14 @@ describe('tags/include', function () {
       const html = liquid.renderFileSync('/current.html')
       return expect(html).toBe('FOO-')
     })
+    it('should support Jekyll style include with other whitespace before filename', function () {
+      mock({
+        '/current.html': '{% include bar/foo.html\r\n\ntitle="TITLE"\tcontent="FOO" %}',
+        '/bar/foo.html': '{{include.title}}={{include.content}}-{{content}}'
+      })
+      const html = liquid.renderFileSync('/current.html')
+      return expect(html).toBe('TITLE=FOO-')
+    })
     it('should support multiple parameters', function () {
       mock({
         '/current.html': '{% include bar/foo.html header="HEADER" content="CONTENT" %}',

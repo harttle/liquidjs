@@ -422,7 +422,7 @@ export class Tokenizer {
 
   * readFileNameTemplate (options: NormalizedFullOptions): IterableIterator<TopLevelToken> {
     const { outputDelimiterLeft } = options
-    const htmlStopStrings = [',', ' ', outputDelimiterLeft]
+    const htmlStopStrings = [',', ' ', '\r', '\n', '\t', outputDelimiterLeft]
     const htmlStopStringSet = new Set(htmlStopStrings)
     // break on ',' and ' ', outputDelimiterLeft only stops HTML token
     while (this.p < this.N && !htmlStopStringSet.has(this.peek())) {
