@@ -122,7 +122,13 @@
     "commander": "^10.0.0"
   },
   "release": {
-    "branch": "master",
+    "branches": [
+      "master",
+      {
+        "name": "next",
+        "prerelease": "alpha"
+      }
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
