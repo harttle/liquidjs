@@ -19,12 +19,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ ${{ github.ref == 'refs/heads/master' }} ]; then
-            npx semantic-release
-          else
-            npx semantic-release --dry-run
-          fi
+        run: npx semantic-release
       - name: Archive npm failure logs
         uses: actions/upload-artifact@v4
         if: failure()
