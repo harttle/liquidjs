@@ -95,18 +95,43 @@
                 <p>LiquidJS 运算符非常简单也很特别，只支持两类运算符：</p>
 <ul>
 <li>比较运算符：<code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code></li>
-<li>逻辑运算符：<code>or</code>, <code>and</code>, <code>contains</code></li>
+<li>逻辑运算符：<code>not</code>, <code>or</code>, <code>and</code>, <code>contains</code></li>
 </ul>
 <p>因此普通的数学运算是不支持的，比如 <code>{{a + b}}</code>。它的替代方案是过滤器 <code>{{ a | plus: b}}</code>。事实上 <code>+</code> 在 LiquidJS 中是一个合法的变量名。</p>
+<h2 id="逻辑运算符" class="article-heading"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符<a class="article-anchor" href="#逻辑运算符" aria-hidden="true"></a></h2><h3 id="not" class="article-heading"><a href="#not" class="headerlink" title="not"></a>not<a class="article-anchor" href="#not" aria-hidden="true"></a></h3><p>对条件取反。如果条件为假则返回 <code>true</code>，如果条件为真则返回 <code>false</code>。</p>
+<p>输入</p>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">if</span> not user<span class="token punctuation">.</span>active <span class="token delimiter punctuation">%&#125;</span></span>
+  用户未激活
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endif</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="and" class="article-heading"><a href="#and" class="headerlink" title="and"></a>and<a class="article-anchor" href="#and" aria-hidden="true"></a></h3><p>当两个条件都为真时返回 <code>true</code>。</p>
+<p>输入</p>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">if</span> user<span class="token punctuation">.</span>age <span class="token operator">>=</span> <span class="token number">18</span> <span class="token operator">and</span> user<span class="token punctuation">.</span>verified <span class="token delimiter punctuation">%&#125;</span></span>
+  允许访问
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endif</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="or" class="article-heading"><a href="#or" class="headerlink" title="or"></a>or<a class="article-anchor" href="#or" aria-hidden="true"></a></h3><p>当至少一个条件为真时返回 <code>true</code>。</p>
+<p>输入</p>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">if</span> user<span class="token punctuation">.</span>isAdmin <span class="token operator">or</span> user<span class="token punctuation">.</span>isModerator <span class="token delimiter punctuation">%&#125;</span></span>
+  您拥有提升的权限
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endif</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="contains" class="article-heading"><a href="#contains" class="headerlink" title="contains"></a>contains<a class="article-anchor" href="#contains" aria-hidden="true"></a></h3><p>检查字符串是否包含子字符串，或数组是否包含元素。</p>
+<p>输入</p>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">if</span> <span class="token object">product</span><span class="token punctuation">.</span>title <span class="token operator">contains</span> <span class="token string">"Pack"</span> <span class="token delimiter punctuation">%&#125;</span></span>
+  这是一个套装
+<span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%</span> <span class="token keyword">endif</span> <span class="token delimiter punctuation">%&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
 <h2 id="优先级" class="article-heading"><a href="#优先级" class="headerlink" title="优先级"></a>优先级<a class="article-anchor" href="#优先级" aria-hidden="true"></a></h2><ol>
-<li>比较运算符。所有比较运算符具有同样的优先级，且高于逻辑运算符。</li>
-<li>逻辑运算符。所有逻辑运算符具有同样的有衔接。</li>
+<li>比较运算符和 <code>contains</code>。所有比较运算符和 <code>contains</code> 具有同样的（最高）优先级。</li>
+<li><code>not</code> 运算符。它的优先级略高于 <code>or</code> 和 <code>and</code>。</li>
+<li><code>or</code> 和 <code>and</code> 运算符。这些逻辑运算符具有同样的（最低）优先级。</li>
 </ol>
 <h2 id="结合性" class="article-heading"><a href="#结合性" class="headerlink" title="结合性"></a>结合性<a class="article-anchor" href="#结合性" aria-hidden="true"></a></h2><p>逻辑运算符是右结合的，所以连续的逻辑运算时计算顺序是从右向左，参考 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://help.shopify.com/en/themes/liquid/basics/operators#order-of-operations">Shopify</a> 的文档。</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2025-11-21T16:27:57.402Z" itemprop="dateModified">上次更新：2025-11-21</time>
+                <time class="article-footer-updated" datetime="2026-01-10T14:09:23.351Z" itemprop="dateModified">上次更新：2026-01-10</time>
                 <a href="plugins.html" class="article-footer-prev" title="插件"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="truthy-and-falsy.html" class="article-footer-next" title="真和假"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -115,7 +140,7 @@
             <div id="article-toc-inner">
               <div id="article-toc-inner-list">
                 <strong class="sidebar-title">目录</strong>
-                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E5%90%88%E6%80%A7"><span class="toc-text">结合性</span></a></li></ol>
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">逻辑运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#not"><span class="toc-text">not</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#and"><span class="toc-text">and</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#or"><span class="toc-text">or</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contains"><span class="toc-text">contains</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">优先级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E5%90%88%E6%80%A7"><span class="toc-text">结合性</span></a></li></ol>
               </div>
               <a href="#" id="article-toc-top">回到顶部</a>
             </div>
@@ -129,7 +154,7 @@
     <footer id="footer" class="wrapper">
   <div class="inner">
     <div id="footer-copyright">
-      &copy; 2025 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
+      &copy; 2026 <a href="https://github.com/harttle/liquidjs/graphs/contributors" rel="external nofollow noreferrer" target="_blank">Harttle</a><br>
       本文档通过 <a href="http://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a> 授权。
     </div>
     <div id="footer-links">
