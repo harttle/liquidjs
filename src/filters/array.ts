@@ -46,7 +46,7 @@ export function * sort_natural<T> (this: FilterImpl, arr: T[], property?: string
   return yield * sortBy.call(this, arr, property, caseInsensitiveCompare)
 }
 
-export const size = (v: string | any[]) => (v && v.length) || 0
+export const size = (v: string | any[]) => v?.length || 0
 
 export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
   const results = []
