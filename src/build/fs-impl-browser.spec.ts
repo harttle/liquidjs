@@ -3,10 +3,6 @@ import * as sinon from 'sinon'
 import { JSDOM } from 'jsdom'
 
 describe('fs/browser', function () {
-  if (+(process.version.match(/^v(\d+)/) as RegExpMatchArray)[1] < 8) {
-    console.info('jsdom not supported, skipping template-browser...')
-    return
-  }
   beforeEach(function () {
     const dom = new JSDOM(``, {
       url: 'https://example.com/foo/bar/',

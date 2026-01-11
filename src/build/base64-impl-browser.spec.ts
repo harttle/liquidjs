@@ -2,11 +2,6 @@ import * as base64 from './base64-impl-browser'
 import { JSDOM } from 'jsdom'
 
 describe('base64-impl/browser', function () {
-  if (+(process.version.match(/^v(\d+)/) as RegExpMatchArray)[1] < 8) {
-    console.info('jsdom not supported, skipping base64-impl-browser...')
-    return
-  }
-
   beforeEach(function () {
     const dom = new JSDOM(``, {
       url: 'https://example.com/',

@@ -89,7 +89,7 @@ const nodeEsm = {
   plugins: [
     versionInjection,
     replace(esmRequire),
-    typescript(tsconfig('es6'))
+    typescript(tsconfig('ES2020'))
   ],
   treeshake,
   input
@@ -108,7 +108,7 @@ const browserEsm = {
     replace(browserBase64),
     replace(browserCrypto),
     replace(browserStream),
-    typescript(tsconfig('es6'))
+    typescript(tsconfig('ES2020'))
   ],
   treeshake,
   input
@@ -128,7 +128,7 @@ const browserUmd = {
     replace(browserBase64),
     replace(browserCrypto),
     replace(browserStream),
-    typescript(tsconfig('es5'))
+    typescript(tsconfig('ES2020'))
   ],
   treeshake,
   input
@@ -148,7 +148,7 @@ const browserMin = {
     replace(browserBase64),
     replace(browserCrypto),
     replace(browserStream),
-    typescript(tsconfig('es5')),
+    typescript(tsconfig('ES2020')),
     uglify()
   ],
   treeshake,
