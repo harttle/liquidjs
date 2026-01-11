@@ -11,7 +11,7 @@ export class Render {
       .then(() => emitter.end(), err => emitter.error(err))
     return emitter.stream
   }
-  public * renderTemplates (templates: Template[], ctx: Context, emitter?: Emitter): IterableIterator<any> {
+  public * renderTemplates (templates: Template[], ctx: Context, emitter?: Emitter): IterableIterator<unknown> {
     if (!emitter) {
       emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter() : new SimpleEmitter()
     }

@@ -30,30 +30,30 @@ export class Liquid {
     return parser.parse(html, filepath)
   }
 
-  public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<any> {
+  public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<unknown> {
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplates(tpl, ctx)
   }
-  public async render (tpl: Template[], scope?: object, renderOptions?: RenderOptions): Promise<any> {
-    return toPromise(this._render(tpl, scope, { ...renderOptions, sync: false }))
+  public async render (tpl: Template[], scope?: object, renderOptions?: RenderOptions): Promise<string> {
+    return toPromise(this._render(tpl, scope, { ...renderOptions, sync: false })) as Promise<string>
   }
-  public renderSync (tpl: Template[], scope?: object, renderOptions?: RenderOptions): any {
-    return toValueSync(this._render(tpl, scope, { ...renderOptions, sync: true }))
+  public renderSync (tpl: Template[], scope?: object, renderOptions?: RenderOptions): string {
+    return toValueSync(this._render(tpl, scope, { ...renderOptions, sync: true })) as string
   }
   public renderToNodeStream (tpl: Template[], scope?: object, renderOptions: RenderOptions = {}): NodeJS.ReadableStream {
     const ctx = new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplatesToNodeStream(tpl, ctx)
   }
 
-  public _parseAndRender (html: string, scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<any> {
+  public _parseAndRender (html: string, scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<unknown> {
     const tpl = this.parse(html)
     return this._render(tpl, scope, renderOptions)
   }
-  public async parseAndRender (html: string, scope?: Context | object, renderOptions?: RenderOptions): Promise<any> {
-    return toPromise(this._parseAndRender(html, scope, { ...renderOptions, sync: false }))
+  public async parseAndRender (html: string, scope?: Context | object, renderOptions?: RenderOptions): Promise<string> {
+    return toPromise(this._parseAndRender(html, scope, { ...renderOptions, sync: false })) as Promise<string>
   }
-  public parseAndRenderSync (html: string, scope?: Context | object, renderOptions?: RenderOptions): any {
-    return toValueSync(this._parseAndRender(html, scope, { ...renderOptions, sync: true }))
+  public parseAndRenderSync (html: string, scope?: Context | object, renderOptions?: RenderOptions): string {
+    return toValueSync(this._parseAndRender(html, scope, { ...renderOptions, sync: true })) as string
   }
 
   public _parsePartialFile (file: string, sync?: boolean, currentFile?: string) {
@@ -71,30 +71,30 @@ export class Liquid {
   public parseFileSync (file: string, lookupType?: LookupType): Template[] {
     return toValueSync<Template[]>(new Parser(this).parseFile(file, true, lookupType))
   }
-  public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<any> {
+  public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, unknown, unknown> {
     const templates = (yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)) as Template[]
     return yield this._render(templates, ctx, renderFileOptions)
   }
-  public async renderFile (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions) {
-    return toPromise(this._renderFile(file, ctx, { ...renderFileOptions, sync: false }))
+  public async renderFile (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): Promise<string> {
+    return toPromise(this._renderFile(file, ctx, { ...renderFileOptions, sync: false })) as Promise<string>
   }
-  public renderFileSync (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions) {
-    return toValueSync(this._renderFile(file, ctx, { ...renderFileOptions, sync: true }))
+  public renderFileSync (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): string {
+    return toValueSync(this._renderFile(file, ctx, { ...renderFileOptions, sync: true })) as string
   }
   public async renderFileToNodeStream (file: string, scope?: object, renderOptions?: RenderOptions) {
     const templates = await this.parseFile(file)
     return this.renderToNodeStream(templates, scope, renderOptions)
   }
 
-  public _evalValue (str: string, scope?: object | Context): IterableIterator<any> {
+  public _evalValue (str: string, scope?: object | Context): IterableIterator<unknown> {
     const value = new Value(str, this)
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options)
     return value.value(ctx)
   }
-  public async evalValue (str: string, scope?: object | Context): Promise<any> {
+  public async evalValue (str: string, scope?: object | Context): Promise<unknown> {
     return toPromise(this._evalValue(str, scope))
   }
-  public evalValueSync (str: string, scope?: object | Context): any {
+  public evalValueSync (str: string, scope?: object | Context): unknown {
     return toValueSync(this._evalValue(str, scope))
   }
 
