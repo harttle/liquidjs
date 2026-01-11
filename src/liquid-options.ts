@@ -201,11 +201,11 @@ export const defaultOptions: NormalizedFullOptions = {
 }
 
 export function normalize (options: LiquidOptions): NormalizedFullOptions {
-  if (options.hasOwnProperty('root')) {
-    if (!options.hasOwnProperty('partials')) options.partials = options.root
-    if (!options.hasOwnProperty('layouts')) options.layouts = options.root
+  if ('root' in options) {
+    if (!('partials' in options)) options.partials = options.root
+    if (!('layouts' in options)) options.layouts = options.root
   }
-  if (options.hasOwnProperty('cache')) {
+  if ('cache' in options) {
     let cache: LiquidCache | undefined
     if (typeof options.cache === 'number') cache = options.cache > 0 ? new LRU(options.cache) : undefined
     else if (typeof options.cache === 'object') cache = options.cache

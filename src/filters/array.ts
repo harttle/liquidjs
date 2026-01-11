@@ -47,7 +47,7 @@ export function sort_natural<T> (this: FilterImpl, input: T[], property?: string
   return [...array].sort(compare)
 }
 
-export const size = (v: string | any[]) => (v && v.length) || 0
+export const size = (v: string | any[]) => v?.length || 0
 
 export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
   const results = []
@@ -79,7 +79,7 @@ export function concat<T1, T2> (this: FilterImpl, v: T1[], arg: T2[] = []): (T1 
   const lhs = toArray(v)
   const rhs = toArray(arg)
   this.context.memoryLimit.use(lhs.length + rhs.length)
-  return lhs.concat(rhs)
+  return [...lhs, ...rhs]
 }
 
 export function push<T> (this: FilterImpl, v: T[], arg: T): T[] {

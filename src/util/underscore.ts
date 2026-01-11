@@ -1,9 +1,8 @@
 import { Drop } from '../drop/drop'
 
 export const toString = Object.prototype.toString
+export const hasOwnProperty = Object.prototype.hasOwnProperty
 const toLowerCase = String.prototype.toLowerCase
-
-export const hasOwnProperty = Object.hasOwnProperty
 
 export function isString (value: any): value is string {
   return typeof value === 'string'
@@ -88,8 +87,7 @@ export function isUndefined (value: any): boolean {
 }
 
 export function isArray (value: any): value is any[] {
-  // be compatible with IE 8
-  return toString.call(value) === '[object Array]'
+  return Array.isArray(value)
 }
 
 export function isArrayLike (value: any): value is any[] {

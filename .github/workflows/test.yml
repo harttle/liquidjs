@@ -7,20 +7,10 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         timezone: [Etc/GMT, Asia/Shanghai, America/New_York]
-        node-version: [22]
+        node-version: [latest]
         include:
-          - os: macos-latest
-            timezone: America/New_York
-            node-versoin: 22
           - os: ubuntu-latest
-            timezone: Etc/GMT
-            node-version: 20
-          - os: ubuntu-latest
-            timezone: Asia/Shanghai
-            node-version: 18
-          - os: ubuntu-latest
-            timezone: Asia/Shanghai
-            node-version: 16
+            node-version: lts/*
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -39,7 +29,7 @@ jobs:
           name: dist-${{ matrix.os }}
           path: dist
       - name: Run Test
-        run: TZ=${{ matrix.timezone }} npm test
+        run: TZ=${{ matrix.timezone || 'Etc/GMT' }} npm test
       - name: Archive npm failure logs
         uses: actions/upload-artifact@v4
         if: failure()
@@ -57,7 +47,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
+          node-version: latest
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
