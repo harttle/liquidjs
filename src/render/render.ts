@@ -10,7 +10,7 @@ export class Render {
       .then(() => emitter.end(), err => emitter.error(err))
     return emitter.stream
   }
-  public * renderTemplates (templates: Template[], ctx: Context, emitter: Emitter = new SimpleEmitter(ctx.outputLengthLimit)): IterableIterator<any> {
+  public * renderTemplates (templates: Template[], ctx: Context, emitter: Emitter = new SimpleEmitter(ctx.outputLengthLimit)): IterableIterator<unknown> {
     const errors = []
     for (const tpl of templates) {
       ctx.templateLimit.use(1)
