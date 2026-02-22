@@ -59,15 +59,12 @@ export class Loader {
         yield referenced
       }
     }
-    if (fs.fallback !== undefined) {
-      const filepath = fs.fallback(file)
-      if (filepath !== undefined) {
-        if (!enforceRoot || dirs.some(dir => this.contains(dir, filepath))) {
-          yield filepath
-        }
-      }
-    }
-  }
+  
+  if (fs.fallback === undefined) return                                                                                                                                                                                                                                      
+  const filepath = fs.fallback(file)                                                                                                                                                                                                                                         
+  if (filepath === undefined) return                                                                                                                                                                                                                                         
+  if (enforceRoot && !dirs.some(dir => this.contains(dir, filepath))) return
+  yield filepath
 
   private dirname (path: string) {
     const fs = this.options.fs
