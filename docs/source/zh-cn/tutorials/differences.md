@@ -24,6 +24,7 @@ LiquidJS 一直很重视兼容于 Ruby 版本的 Liquid。Liquid 模板语言最
 
 * 真和假。在 LiquidJS 中 `undefined`, `null`, `false` 是假，之外的都是真；在 Ruby 中 `nil` 和 `false` 是假，其他都是真。见 [#26][#26]。
 * 数字。JavaScript 不区分浮点数和整数，因此缺失一部分整数算术，见 [#59][#59]。此外 `size` 过滤器作用于数字时总是返回零，而不是 Ruby 中的浮点数或整数的内存大小。
+* 输出字符串。基本类型的输出已经和 Shopify/liquid 对齐，但是仍然存在一些区别。比如在 Shopify/liquid 中 `strip` 会返回 inspect 字符串，但 LiquidJS `strip` 只是简单地把输入转换为字符串 [#852][#852]。
 * Drop 中的 [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) 替换为 `.toLiquid()`。
 * 数据的 [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) 替换为 `.toString()`。
 * 对象的迭代顺序。JavaScript 对象的迭代顺序是插入顺序和数字键递增顺序的组合，但 Ruby Hash 中只是插入顺序（JavaScript 字面量 Object 和 Ruby 字面量 Hash 的插入顺序解释也不同）。
@@ -46,6 +47,7 @@ LiquidJS 一直很重视兼容于 Ruby 版本的 Liquid。Liquid 模板语言最
 [#236]: https://github.com/harttle/liquidjs/issues/236
 [#414]: https://github.com/harttle/liquidjs/discussions/414
 [#485]: https://github.com/harttle/liquidjs/discussions/485
+[#852]: https://github.com/harttle/liquidjs/discussions/852
 [sort]: https://liquidjs.com/filters/sort.html
 [stable-sort]: https://v8.dev/features/stable-sort
 [plugins]: ./plugins.html#插件列表
