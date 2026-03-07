@@ -1,3 +1,15 @@
+# [10.25.0](https://github.com/harttle/liquidjs/compare/v10.24.0...v10.25.0) (2026-03-07)
+
+
+### Bug Fixes
+
+* path traversal vulnerability, [#851](https://github.com/harttle/liquidjs/issues/851) ([#855](https://github.com/harttle/liquidjs/issues/855)) ([3cd024d](https://github.com/harttle/liquidjs/commit/3cd024d652dc883c46307581e979fe32302adbac))
+
+
+### Features
+
+* export error types, resolving [#837](https://github.com/harttle/liquidjs/issues/837) ([#840](https://github.com/harttle/liquidjs/issues/840)) ([71aa1b1](https://github.com/harttle/liquidjs/commit/71aa1b1998a3a66e536af67c6ea8947a28616eaf))
+
 # [10.24.0](https://github.com/harttle/liquidjs/compare/v10.23.0...v10.24.0) (2025-10-27)
 
 
