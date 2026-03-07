@@ -1,3 +1,3 @@
-set -ex
+set -e
 
 npm start | grep 'LiquidJS Demo'

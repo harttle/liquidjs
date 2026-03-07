@@ -8,7 +8,7 @@ const engine = new Liquid({
   // layout files for `{% layout %}`
   layouts: process.cwd() + '/layouts',
   // partial files for `{% include %}` and `{% render %}`
-  partials: process.cwd() + '/partials'
+  partials: [process.cwd() + '/partials', 'node_modules']
 })
 
 const ctx = {
