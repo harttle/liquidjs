@@ -151,6 +151,9 @@
       ]
     ]
   },
+  "publishConfig": {
+    "provenance": true
+  },
   "nyc": {
     "extension": [
       ".ts"
