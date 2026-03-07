@@ -43,28 +43,28 @@ export class Loader {
 
   public * candidates (file: string, dirs: string[], currentFile?: string, enforceRoot?: boolean) {
     const { fs, extname } = this.options
+    const isAllowed = (filepath: string) => {
+      if (!enforceRoot) return true
+      for (const dir of dirs) {
+        if (this.contains(dir, filepath)) return true
+      }
+      return false
+    }
+
     if (this.shouldLoadRelative(file) && currentFile) {
       const referenced = fs.resolve(this.dirname(currentFile), file, extname)
-      for (const dir of dirs) {
-        if (!enforceRoot || this.contains(dir, referenced)) {
-          // the relatively referenced file is within one of root dirs
-          yield referenced
-          break
-        }
-      }
+      if (isAllowed(referenced)) yield referenced
     }
     for (const dir of dirs) {
       const referenced = fs.resolve(dir, file, extname)
-      if (!enforceRoot || this.contains(dir, referenced)) {
-        yield referenced
-      }
+      if (isAllowed(referenced)) yield referenced
     }
-  
-    if (fs.fallback === undefined) return                                                                                                                                                                                                                                      
-    const filepath = fs.fallback(file)                                                                                                                                                                                                                                         
-    if (filepath === undefined) return                                                                                                                                                                                                                                         
-    if (enforceRoot && !dirs.some(dir => this.contains(dir, filepath))) return
-    yield filepath
+
+    if (fs.fallback !== undefined) {
+      const filepath = fs.fallback(file)
+      if (filepath !== undefined && isAllowed(filepath)) yield filepath
+    }
+  }
 
   private dirname (path: string) {
     const fs = this.options.fs
