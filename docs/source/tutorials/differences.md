@@ -24,6 +24,7 @@ Though we're trying to be compatible with the Ruby version, there are still some
 
 * Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26][#26].
 * Number. In JavaScript we cannot distinguish or convert between `float` and `integer`, see [#59][#59]. And when applied `size` filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a `length` property.
+* Stringify: We've aligned string coercion for primitive types. While some differences remain; for example, in Shopify/liquid, `strip` returns the "inspected" string of an input array, whereas in LiquidJS, the `strip` filter simply stringifies the input array [#852][#852].
 * [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
 * [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 * Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.
@@ -47,6 +48,7 @@ Though we're trying to be compatible with the Ruby version, there are still some
 [#236]: https://github.com/harttle/liquidjs/issues/236
 [#414]: https://github.com/harttle/liquidjs/discussions/414
 [#485]: https://github.com/harttle/liquidjs/discussions/485
+[#852]: https://github.com/harttle/liquidjs/discussions/852
 [sort]: https://liquidjs.com/filters/sort.html
 [stable-sort]: https://v8.dev/features/stable-sort
 [plugins]: ./plugins.html#Plugin-List
