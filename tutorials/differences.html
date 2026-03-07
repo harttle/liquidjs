@@ -109,6 +109,7 @@
 <ul>
 <li>Truthy and Falsy. All values except <code>undefined</code>, <code>null</code>, <code>false</code> are truthy, whereas in Ruby Liquid all except <code>nil</code> and <code>false</code> are truthy. See <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/26">#26</a>.</li>
 <li>Number. In JavaScript we cannot distinguish or convert between <code>float</code> and <code>integer</code>, see <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/59">#59</a>. And when applied <code>size</code> filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a <code>length</code> property.</li>
+<li>Stringify: We’ve aligned string coercion for primitive types. While some differences remain; for example, in Shopify/liquid, <code>strip</code> returns the “inspected” string of an input array, whereas in LiquidJS, the <code>strip</code> filter simply stringifies the input array <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/852">#852</a>.</li>
 <li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid/wiki/Introduction-to-Drops">.to_liquid()</a> is replaced by <code>.toLiquid()</code></li>
 <li><a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.rubydoc.info/gems/liquid/Liquid/Drop">.to_s()</a> is replaced by JavaScript <code>.toString()</code></li>
 <li>Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.</li>
@@ -126,7 +127,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-03-07T18:36:21.753Z" itemprop="dateModified">Last updated: 2026-03-07</time>
+                <time class="article-footer-updated" datetime="2026-03-07T19:14:26.006Z" itemprop="dateModified">Last updated: 2026-03-07</time>
                 <a href="changelog.html" class="article-footer-prev" title="Changelog"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="Contribution Guidelines"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

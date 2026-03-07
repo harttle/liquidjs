@@ -109,6 +109,7 @@
 <ul>
 <li>真和假。在 LiquidJS 中 <code>undefined</code>, <code>null</code>, <code>false</code> 是假，之外的都是真；在 Ruby 中 <code>nil</code> 和 <code>false</code> 是假，其他都是真。见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/pull/26">#26</a>。</li>
 <li>数字。JavaScript 不区分浮点数和整数，因此缺失一部分整数算术，见 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/59">#59</a>。此外 <code>size</code> 过滤器作用于数字时总是返回零，而不是 Ruby 中的浮点数或整数的内存大小。</li>
+<li>输出字符串。基本类型的输出已经和 Shopify/liquid 对齐，但是仍然存在一些区别。比如在 Shopify/liquid 中 <code>strip</code> 会返回 inspect 字符串，但 LiquidJS <code>strip</code> 只是简单地把输入转换为字符串 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/852">#852</a>。</li>
 <li>Drop 中的 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid/wiki/Introduction-to-Drops">.to_liquid()</a> 替换为 <code>.toLiquid()</code>。</li>
 <li>数据的 <a target="_blank" rel="noopener external nofollow noreferrer" href="https://www.rubydoc.info/gems/liquid/Liquid/Drop">.to_s()</a> 替换为 <code>.toString()</code>。</li>
 <li>对象的迭代顺序。JavaScript 对象的迭代顺序是插入顺序和数字键递增顺序的组合，但 Ruby Hash 中只是插入顺序（JavaScript 字面量 Object 和 Ruby 字面量 Hash 的插入顺序解释也不同）。</li>
@@ -126,7 +127,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-03-07T18:36:21.759Z" itemprop="dateModified">上次更新：2026-03-07</time>
+                <time class="article-footer-updated" datetime="2026-03-07T19:14:26.011Z" itemprop="dateModified">上次更新：2026-03-07</time>
                 <a href="changelog.html" class="article-footer-prev" title="更新日志"><i class="icon-chevron-left"></i><span>上一页</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="贡献指南"><span>下一页</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
