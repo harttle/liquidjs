@@ -199,3 +199,18 @@ export function array_to_sentence_string (this: FilterImpl, array: unknown[], co
       return `${array.slice(0, -1).join(', ')}, ${connector} ${array[array.length - 1]}`
   }
 }
+
+export function newline (this: FilterImpl, v: unknown) {
+  let str = stringify(v)
+
+  // Normalize windows newline
+  if (str.endsWith('\r\n')) {
+    str = str.slice(0, -2) + '\n'
+  }
+
+  this.context.memoryLimit.use(str.length + 1)
+
+  // Handle the case where newline is already added
+  if (str.endsWith('\n')) return str
+  return str + '\n'
+}
