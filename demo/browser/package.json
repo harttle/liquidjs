@@ -8,7 +8,7 @@
     "test": "echo not implemented",
     "start": "http-server -c-1 "
   },
-  "author": "harttle <yangjvn@126.com>",
+  "author": "harttle <harttleharttle@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "http-server": "^0.11.1",

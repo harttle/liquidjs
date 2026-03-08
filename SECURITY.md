@@ -6,7 +6,7 @@ Only the latest major version is supported with security updates. It can be chan
 
 ## Reporting a Vulnerability
 
-Please contact yangjvn@126.com to report a vulnerability or change request.
+Please contact harttleharttle@gmail.com to report a vulnerability or change request.
 
 - If the vulnerability in question affects common use cases, it will be treated as a bug and fixed very soon (typically within 1 week).
 - Otherwise, it'll be scheduled in the same priority of feature request (which is lower than bugs).
