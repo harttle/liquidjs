@@ -12,7 +12,7 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
   value: Value
   public constructor (token: OutputToken, liquid: Liquid) {
     super(token)
-    const tokenizer = new Tokenizer(token.input, liquid.options.operators, token.file, token.contentRange)
+    const tokenizer = new Tokenizer(token.input, liquid.options.operators, token.file, token.contentRange, liquid.options.groupedExpressions)
     this.value = new Value(tokenizer.readFilteredValue(), liquid)
     const filters = this.value.filters
     const outputEscape = liquid.options.outputEscape

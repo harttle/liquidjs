@@ -1,4 +1,4 @@
-import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
+import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken, GroupedExpressionToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
 import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
 import { Operators, Expression } from '../render'
@@ -9,6 +9,7 @@ import { whiteSpaceCtrl } from './whitespace-ctrl'
 export class Tokenizer {
   p: number
   N: number
+  public groupedExpressions: boolean
   private rawBeginAt = -1
   private opTrie: Trie<OperatorHandler>
   private literalTrie: Trie<LiteralValue>
@@ -17,12 +18,14 @@ export class Tokenizer {
     public input: string,
     operators: Operators = defaultOptions.operators,
     public file?: string,
-    range?: [number, number]
+    range?: [number, number],
+    groupedExpressions = false
   ) {
     this.p = range ? range[0] : 0
     this.N = range ? range[1] : input.length
     this.opTrie = createTrie(operators)
     this.literalTrie = createTrie(literalValues)
+    this.groupedExpressions = groupedExpressions
   }
 
   readExpression () {
@@ -310,7 +313,16 @@ export class Tokenizer {
   readValue (): ValueToken | undefined {
     this.skipBlank()
     const begin = this.p
-    const variable = this.readLiteral() || this.readQuoted() || this.readRange() || this.readNumber()
+    let variable: ValueToken | undefined = this.readLiteral() || this.readQuoted()
+    if (!variable && this.peek() === '(') {
+      const rangeOrGroup = this.readGroupOrRange()
+      if (rangeOrGroup?.type === 'range') {
+        variable = rangeOrGroup.range
+      } else if (rangeOrGroup?.type === 'groupedExpression') {
+        variable = rangeOrGroup.groupedExpression
+      }
+    }
+    variable = variable || this.readNumber()
     const props = this.readProperties(!variable)
     if (!props.length) return variable
     return new PropertyAccessToken(variable, props, this.input, begin, this.p)
@@ -385,18 +397,41 @@ export class Tokenizer {
     return literal
   }
 
-  readRange (): RangeToken | undefined {
+  readGroupOrRange (): { type: 'range', range: RangeToken } | { type: 'groupedExpression', groupedExpression: GroupedExpressionToken } | undefined {
     this.skipBlank()
     const begin = this.p
     if (this.peek() !== '(') return
     ++this.p
     const lhs = this.readValueOrThrow()
     this.skipBlank()
-    this.assert(this.read() === '.' && this.read() === '.', 'invalid range syntax')
-    const rhs = this.readValueOrThrow()
-    this.skipBlank()
-    this.assert(this.read() === ')', 'invalid range syntax')
-    return new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
+
+    if (this.peek() === '.' && this.peek(1) === '.') {
+      this.p += 2
+      const rhs = this.readValueOrThrow()
+      this.skipBlank()
+      this.assert(this.read() === ')', 'invalid range syntax')
+      return {
+        type: 'range',
+        range: new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
+      }
+    }
+
+    if (this.groupedExpressions) {
+      const expression = new Expression((function * () { yield lhs })())
+      const closeParen = this.findMatchingParen()
+      this.assert(closeParen !== -1, 'unbalanced parentheses')
+      const savedN = this.N
+      this.N = closeParen
+      const filters = this.readFilters()
+      this.N = savedN
+      this.p = closeParen + 1
+      return {
+        type: 'groupedExpression',
+        groupedExpression: new GroupedExpressionToken(expression, filters, this.input, begin, this.p, this.file)
+      }
+    }
+
+    throw this.error('invalid range syntax')
   }
 
   readValueOrThrow (): ValueToken {
@@ -418,6 +453,29 @@ export class Tokenizer {
       else if (this.input[this.p - 1] === '\\') escaped = true
     }
     return new QuotedToken(this.input, begin, this.p, this.file)
+  }
+
+  private findMatchingParen (): number {
+    let depth = 1
+    let i = this.p
+    while (i < this.N && depth > 0) {
+      const ch = this.input[i]
+      if (ch === '(') {
+        depth++
+      } else if (ch === ')') {
+        depth--
+        if (depth === 0) return i
+      } else if (ch === '"' || ch === "'") {
+        const quote = ch
+        i++
+        while (i < this.N && this.input[i] !== quote) {
+          if (this.input[i] === '\\') i++
+          i++
+        }
+      }
+      i++
+    }
+    return -1
   }
 
   * readFileNameTemplate (options: NormalizedFullOptions): IterableIterator<TopLevelToken> {

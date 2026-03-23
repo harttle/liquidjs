@@ -169,4 +169,43 @@ describe('tags/if', function () {
     expect(() => liquid.parseAndRenderSync('{% if false %}{% else %}{% elsif true %}{% endif %}'))
       .toThrow(`unexpected elsif after else`)
   })
+  describe('parenthesized filter chains', function () {
+    const ge = new Liquid({ groupedExpressions: true })
+    it('should support (foo | upcase) == "BAR"', async function () {
+      const src = '{% if (foo | upcase) == "BAR" %}yes{% else %}no{% endif %}'
+      const html = await ge.parseAndRender(src, { foo: 'bar' })
+      return expect(html).toBe('yes')
+    })
+    it('should support both sides parenthesized', async function () {
+      const src = '{% if (a | upcase) == (b | upcase) %}yes{% else %}no{% endif %}'
+      const html = await ge.parseAndRender(src, { a: 'hi', b: 'hi' })
+      return expect(html).toBe('yes')
+    })
+    it('should support with logical operators', async function () {
+      const src = '{% if (a | upcase) == "FOO" and (b | downcase) == "bar" %}yes{% else %}no{% endif %}'
+      const html = await ge.parseAndRender(src, { a: 'foo', b: 'BAR' })
+      return expect(html).toBe('yes')
+    })
+    it('should support standalone parenthesized filter via evalValueSync', function () {
+      const result = ge.evalValueSync('(foo | upcase)', { foo: 'bar' })
+      return expect(result).toBe('BAR')
+    })
+    it('should support comparison via evalValueSync', function () {
+      const result = ge.evalValueSync('(foo | upcase) == "BAR"', { foo: 'bar' })
+      return expect(result).toBe(true)
+    })
+    it('should keep range syntax working', function () {
+      const result = ge.evalValueSync('(1..5)', {})
+      return expect(result).toEqual([1, 2, 3, 4, 5])
+    })
+    it('should support chained filters in condition', async function () {
+      const src = '{% if (name | downcase | size) > 3 %}long{% else %}short{% endif %}'
+      const html = await ge.parseAndRender(src, { name: 'Alice' })
+      return expect(html).toBe('long')
+    })
+    it('should support nested parenthesized expressions', function () {
+      const result = ge.evalValueSync('((foo | append: "!") | upcase)', { foo: 'bar' })
+      return expect(result).toBe('BAR!')
+    })
+  })
 })

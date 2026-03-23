@@ -1,10 +1,28 @@
 import { Filter } from './filter'
 import { Expression } from '../render'
 import { Tokenizer } from '../parser'
-import { assert } from '../util'
-import type { FilteredValueToken } from '../tokens'
+import { assert, isGroupedExpressionToken, isRangeToken, isPropertyAccessToken } from '../util'
+import { FilteredValueToken, Token } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
+
+export function resolveGroupedExpressions (token: Token, liquid: Liquid): void {
+  if (isGroupedExpressionToken(token)) {
+    const fvt = new FilteredValueToken(
+      token.initial, token.filters,
+      token.input, token.begin, token.end, token.file
+    )
+    token.resolvedValue = new Value(fvt, liquid)
+  }
+  if (isRangeToken(token)) {
+    resolveGroupedExpressions(token.lhs, liquid)
+    resolveGroupedExpressions(token.rhs, liquid)
+  }
+  if (isPropertyAccessToken(token)) {
+    if (token.variable) resolveGroupedExpressions(token.variable, liquid)
+    for (const prop of token.props) resolveGroupedExpressions(prop, liquid)
+  }
+}
 
 export class Value {
   public readonly filters: Filter[] = []
@@ -15,10 +33,13 @@ export class Value {
    */
   public constructor (input: string | FilteredValueToken, liquid: Liquid) {
     const token: FilteredValueToken = typeof input === 'string'
-      ? new Tokenizer(input, liquid.options.operators).readFilteredValue()
+      ? new Tokenizer(input, liquid.options.operators, undefined, undefined, liquid.options.groupedExpressions).readFilteredValue()
       : input
     this.initial = token.initial
     this.filters = token.filters.map(token => new Filter(token, this.getFilter(liquid, token.name), liquid))
+    for (const t of this.initial.postfix) {
+      resolveGroupedExpressions(t, liquid)
+    }
   }
 
   public * value (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {

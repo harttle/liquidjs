@@ -426,4 +426,12 @@ describe('tags/for', function () {
       return expect(html).toBe('i-someDrop i-someDrop i-someDrop ')
     })
   })
+  describe('parenthesized filter chains', function () {
+    const ge = new Liquid({ groupedExpressions: true })
+    it('should support range with filtered RHS', function () {
+      const src = '{% for i in (1..(items | size)) %}{{i}} {% endfor %}'
+      const html = ge.parseAndRenderSync(src, { items: ['a', 'b', 'c'] })
+      expect(html).toBe('1 2 3 ')
+    })
+  })
 })

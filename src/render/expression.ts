@@ -1,5 +1,5 @@
-import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes } from '../tokens'
-import { isRangeToken, isPropertyAccessToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
+import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes, GroupedExpressionToken } from '../tokens'
+import { isRangeToken, isPropertyAccessToken, isGroupedExpressionToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 import { Drop } from '../drop'
@@ -40,6 +40,12 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
   if ('content' in token) return token.content
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
+  if (isGroupedExpressionToken(token)) return yield evalGroupedExpressionToken(token, ctx, lenient)
+}
+
+function * evalGroupedExpressionToken (token: GroupedExpressionToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
+  assert(token.resolvedValue, 'grouped expression not resolved')
+  return yield token.resolvedValue!.value(ctx, lenient)
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
