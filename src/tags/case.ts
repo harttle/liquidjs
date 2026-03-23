@@ -1,7 +1,7 @@
 import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 import { Parser } from '../parser'
 import { equals } from '../render'
-import { Arguments } from '../template'
+import { Arguments, resolveGroupedExpressions } from '../template'
 
 export default class extends Tag {
   value: Value
@@ -24,7 +24,9 @@ export default class extends Tag {
 
         const values: ValueToken[] = []
         while (!token.tokenizer.end()) {
-          values.push(token.tokenizer.readValueOrThrow())
+          const val = token.tokenizer.readValueOrThrow()
+          resolveGroupedExpressions(val, liquid)
+          values.push(val)
           token.tokenizer.skipBlank()
           if (token.tokenizer.peek() === ',') {
             token.tokenizer.readTo(',')

@@ -2,7 +2,7 @@ import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelTo
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
-import { Arguments } from '../template'
+import { Arguments, resolveGroupedExpressions } from '../template'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -26,6 +26,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collection
+    resolveGroupedExpressions(this.collection, liquid)
     this.hash = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
     this.elseTemplates = []

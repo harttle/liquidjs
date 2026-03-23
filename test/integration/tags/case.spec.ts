@@ -132,4 +132,17 @@ describe('tags/case', function () {
       TRUE
     `)
   })
+  describe('parenthesized filter chains', function () {
+    const ge = new Liquid({ groupedExpressions: true })
+    it('should support grouped expression in case value', () => {
+      const src = '{% case (status | downcase) %}{% when "active" %}active{% when "pending" %}pending{% else %}other{% endcase %}'
+      const html = ge.parseAndRenderSync(src, { status: 'ACTIVE' })
+      expect(html).toBe('active')
+    })
+    it('should support grouped expression in when value', () => {
+      const src = '{% case status %}{% when (expected | downcase) %}match{% else %}no match{% endcase %}'
+      const html = ge.parseAndRenderSync(src, { status: 'active', expected: 'ACTIVE' })
+      expect(html).toBe('match')
+    })
+  })
 })

@@ -1,4 +1,4 @@
-import { LiquidTagToken, HTMLToken, QuotedToken, OutputToken, TagToken, OperatorToken, RangeToken, PropertyAccessToken, NumberToken, IdentifierToken } from '../tokens'
+import { LiquidTagToken, HTMLToken, QuotedToken, OutputToken, TagToken, OperatorToken, RangeToken, PropertyAccessToken, NumberToken, IdentifierToken, GroupedExpressionToken } from '../tokens'
 import { Tokenizer } from './tokenizer'
 import { defaultOperators } from '../render/operator'
 import { createTrie } from '../util/operator-trie'
@@ -245,6 +245,58 @@ describe('Tokenizer', function () {
       const range = new Tokenizer('(a.b..c["..d"])').readRange()
       expect(range).toBeInstanceOf(RangeToken)
       expect(range!.getText()).toEqual('(a.b..c["..d"])')
+    })
+  })
+  describe('#readGroupedExpression()', () => {
+    function createGrouped (input: string): Tokenizer {
+      const t = new Tokenizer(input, defaultOperators)
+      t.groupedExpressions = true
+      return t
+    }
+    it('should read `(foo | upcase)` as GroupedExpressionToken', () => {
+      const token = createGrouped('(foo | upcase)').readValue()
+      expect(token).toBeInstanceOf(GroupedExpressionToken)
+      const grouped = token as GroupedExpressionToken
+      expect(grouped.getText()).toBe('(foo | upcase)')
+      expect(grouped.initial.postfix).toHaveLength(1)
+      expect(grouped.filters).toHaveLength(1)
+      expect(grouped.filters[0].name).toBe('upcase')
+    })
+    it('should read `(foo | append: "!")` with filter argument', () => {
+      const token = createGrouped('(foo | append: "!")').readValue()
+      expect(token).toBeInstanceOf(GroupedExpressionToken)
+      const grouped = token as GroupedExpressionToken
+      expect(grouped.filters).toHaveLength(1)
+      expect(grouped.filters[0].name).toBe('append')
+      expect(grouped.filters[0].args).toHaveLength(1)
+    })
+    it('should read nested `((foo | append: "!") | upcase)`', () => {
+      const token = createGrouped('((foo | append: "!") | upcase)').readValue()
+      expect(token).toBeInstanceOf(GroupedExpressionToken)
+      const grouped = token as GroupedExpressionToken
+      expect(grouped.filters).toHaveLength(1)
+      expect(grouped.filters[0].name).toBe('upcase')
+      expect(grouped.initial.postfix).toHaveLength(1)
+      expect(grouped.initial.postfix[0]).toBeInstanceOf(GroupedExpressionToken)
+    })
+    it('should parse `(a | upcase) == "BAR"` as expression', () => {
+      const exp = [...createGrouped('(a | upcase) == "BAR"').readExpressionTokens()]
+      expect(exp).toHaveLength(3)
+      expect(exp[0]).toBeInstanceOf(GroupedExpressionToken)
+      expect(exp[1]).toBeInstanceOf(OperatorToken)
+      expect(exp[1].getText()).toBe('==')
+      expect(exp[2]).toBeInstanceOf(QuotedToken)
+    })
+    it('should still parse `(1..3)` as RangeToken', () => {
+      const token = createGrouped('(1..3)').readValue()
+      expect(token).toBeInstanceOf(RangeToken)
+    })
+    it('should return undefined for unclosed parens', () => {
+      const token = createGrouped('(foo | upcase').readValue()
+      expect(token).toBeUndefined()
+    })
+    it('should fall back to readRange when flag is off', () => {
+      expect(() => new Tokenizer('(foo | upcase)', defaultOperators).readValue()).toThrow('invalid range syntax')
     })
   })
   describe('#readFilter()', () => {

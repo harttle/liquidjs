@@ -17,7 +17,7 @@ export class TagToken extends DelimitedToken {
     const [valueBegin, valueEnd] = [begin + tagDelimiterLeft.length, end - tagDelimiterRight.length]
     super(TokenKind.Tag, [valueBegin, valueEnd], input, begin, end, trimTagLeft, trimTagRight, file)
 
-    this.tokenizer = new Tokenizer(input, options.operators, file, this.contentRange)
+    this.tokenizer = new Tokenizer(input, options.operators, file, this.contentRange, options.groupedExpressions)
     this.name = this.tokenizer.readTagName()
     this.tokenizer.assert(this.name, `illegal tag syntax, tag name expected`)
     this.tokenizer.skipBlank()

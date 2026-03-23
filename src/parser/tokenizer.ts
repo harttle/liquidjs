@@ -1,4 +1,4 @@
-import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
+import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken, GroupedExpressionToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
 import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
 import { Operators, Expression } from '../render'
@@ -9,6 +9,7 @@ import { whiteSpaceCtrl } from './whitespace-ctrl'
 export class Tokenizer {
   p: number
   N: number
+  public groupedExpressions: boolean
   private rawBeginAt = -1
   private opTrie: Trie<OperatorHandler>
   private literalTrie: Trie<LiteralValue>
@@ -17,12 +18,14 @@ export class Tokenizer {
     public input: string,
     operators: Operators = defaultOptions.operators,
     public file?: string,
-    range?: [number, number]
+    range?: [number, number],
+    groupedExpressions = false
   ) {
     this.p = range ? range[0] : 0
     this.N = range ? range[1] : input.length
     this.opTrie = createTrie(operators)
     this.literalTrie = createTrie(literalValues)
+    this.groupedExpressions = groupedExpressions
   }
 
   readExpression () {
@@ -310,7 +313,15 @@ export class Tokenizer {
   readValue (): ValueToken | undefined {
     this.skipBlank()
     const begin = this.p
-    const variable = this.readLiteral() || this.readQuoted() || this.readRange() || this.readNumber()
+    let variable: ValueToken | undefined = this.readLiteral() || this.readQuoted()
+    if (!variable && this.peek() === '(') {
+      if (this.groupedExpressions && !this.looksLikeRange()) {
+        variable = this.readGroupedExpression()
+      } else {
+        variable = this.readRange()
+      }
+    }
+    variable = variable || this.readNumber()
     const props = this.readProperties(!variable)
     if (!props.length) return variable
     return new PropertyAccessToken(variable, props, this.input, begin, this.p)
@@ -418,6 +429,70 @@ export class Tokenizer {
       else if (this.input[this.p - 1] === '\\') escaped = true
     }
     return new QuotedToken(this.input, begin, this.p, this.file)
+  }
+
+  readGroupedExpression (): GroupedExpressionToken | undefined {
+    this.skipBlank()
+    if (this.peek() !== '(') return
+    const begin = this.p
+    ++this.p
+    const closeParen = this.findMatchingParen()
+    if (closeParen === -1) {
+      this.p = begin
+      return
+    }
+    const savedN = this.N
+    this.N = closeParen
+    const fvt = this.readFilteredValue()
+    this.N = savedN
+    this.p = closeParen + 1
+    return new GroupedExpressionToken(fvt.initial, fvt.filters, this.input, begin, this.p, this.file)
+  }
+
+  private findMatchingParen (): number {
+    let depth = 1
+    let i = this.p
+    while (i < this.N && depth > 0) {
+      const ch = this.input[i]
+      if (ch === '(') {
+        depth++
+      } else if (ch === ')') {
+        depth--
+        if (depth === 0) return i
+      } else if (ch === '"' || ch === "'") {
+        const quote = ch
+        i++
+        while (i < this.N && this.input[i] !== quote) {
+          if (this.input[i] === '\\') i++
+          i++
+        }
+      }
+      i++
+    }
+    return -1
+  }
+
+  private looksLikeRange (): boolean {
+    let i = this.p + 1
+    let depth = 1
+    while (i < this.N && depth > 0) {
+      const ch = this.input[i]
+      if (ch === '(') {
+        depth++
+      } else if (ch === ')') {
+        depth--
+      } else if (ch === '"' || ch === "'") {
+        i++
+        while (i < this.N && this.input[i] !== ch) {
+          if (this.input[i] === '\\') i++
+          i++
+        }
+      } else if (depth === 1 && ch === '.' && this.input[i + 1] === '.') {
+        return true
+      }
+      i++
+    }
+    return false
   }
 
   * readFileNameTemplate (options: NormalizedFullOptions): IterableIterator<TopLevelToken> {
