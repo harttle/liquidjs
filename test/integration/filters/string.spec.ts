@@ -109,6 +109,14 @@ describe('filters/string', function () {
     return test('{{ "Take my protein pills and put my helmet on" | replace: "my", "your" }}',
       'Take your protein pills and put your helmet on')
   })
+  it('should support replace with undefined replacement', function () {
+    return test('{{ "Take my protein pills and put my helmet on" | replace: "my" }}',
+      'Take  protein pills and put  helmet on')
+  })
+  it('should support replace with undefined variable as replacement', function () {
+    return test('{{ "Take my protein pills and put my helmet on" | replace: "my", missing_variable }}',
+      'Take  protein pills and put  helmet on')
+  })
   it('should support replace_first', function () {
     return test('{% assign my_string = "Take my protein pills and put my helmet on" %}\n' +
             '{{ my_string | replace_first: "my", "your" }}',

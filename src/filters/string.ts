@@ -137,6 +137,7 @@ export function capitalize (this: FilterImpl, str: string) {
 export function replace (this: FilterImpl, v: string, pattern: string, replacement: string) {
   const str = stringify(v)
   pattern = stringify(pattern)
+  replacement = stringify(replacement)
   this.context.memoryLimit.use(str.length + pattern.length + replacement.length)
   return str.split(pattern).join(replacement)
 }
