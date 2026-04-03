@@ -83,8 +83,8 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
-    if (this.peek() !== '|') return null
-    ++this.p
+    if (this.peek() === ')') return null
+    this.assert(this.read() === '|', `expected "|" before filter`)
     const name = this.readIdentifier()
     if (!name.size()) {
       this.assert(this.end(), `expected filter name`)
