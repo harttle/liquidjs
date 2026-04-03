@@ -1,3 +1,10 @@
+## [10.25.2](https://github.com/harttle/liquidjs/compare/v10.25.1...v10.25.2) (2026-03-25)
+
+
+### Bug Fixes
+
+* handle undefined replacement argument in replace filter ([#864](https://github.com/harttle/liquidjs/issues/864)) ([0ad2b11](https://github.com/harttle/liquidjs/commit/0ad2b11ab15e7da608a9ef936b2a00a6a6517038))
+
 ## [10.25.1](https://github.com/harttle/liquidjs/compare/v10.25.0...v10.25.1) (2026-03-22)
 
 
