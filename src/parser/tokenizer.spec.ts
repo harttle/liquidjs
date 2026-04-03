@@ -349,9 +349,8 @@ describe('Tokenizer', function () {
       const token = createGrouped('(1..3)').readValue()
       expect(token).toBeInstanceOf(RangeToken)
     })
-    it('should return undefined for unclosed parens', () => {
-      const token = createGrouped('(foo | upcase').readValue()
-      expect(token).toBeUndefined()
+    it('should throw for unclosed parens', () => {
+      expect(() => createGrouped('(foo | upcase').readValue()).toThrow('unbalanced parentheses')
     })
     it('should fall back to readRange when flag is off', () => {
       expect(() => new Tokenizer('(foo | upcase)', defaultOperators).readValue()).toThrow('invalid range syntax')

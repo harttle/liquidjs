@@ -83,7 +83,8 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
-    this.assert(this.read() === '|', `expected "|" before filter`)
+    if (this.peek() !== '|') return null
+    ++this.p
     const name = this.readIdentifier()
     if (!name.size()) {
       this.assert(this.end(), `expected filter name`)
@@ -97,9 +98,9 @@ export class Tokenizer {
         const arg = this.readFilterArg()
         arg && args.push(arg)
         this.skipBlank()
-        this.assert(this.end() || this.peek() === ',' || this.peek() === '|', () => `unexpected character ${this.snapshot()}`)
+        this.assert(this.end() || this.peek() === ',' || this.peek() === '|' || this.peek() === ')', () => `unexpected character ${this.snapshot()}`)
       } while (this.peek() === ',')
-    } else if (this.peek() === '|' || this.end()) {
+    } else if (this.peek() === '|' || this.peek() === ')' || this.end()) {
       // do nothing
     } else {
       throw this.error('expected ":" after filter name')
@@ -418,13 +419,9 @@ export class Tokenizer {
 
     if (this.groupedExpressions) {
       const expression = new Expression((function * () { yield lhs })())
-      const closeParen = this.findMatchingParen()
-      this.assert(closeParen !== -1, 'unbalanced parentheses')
-      const savedN = this.N
-      this.N = closeParen
       const filters = this.readFilters()
-      this.N = savedN
-      this.p = closeParen + 1
+      this.skipBlank()
+      this.assert(this.read() === ')', 'unbalanced parentheses')
       return {
         type: 'groupedExpression',
         groupedExpression: new GroupedExpressionToken(expression, filters, this.input, begin, this.p, this.file)
@@ -455,28 +452,6 @@ export class Tokenizer {
     return new QuotedToken(this.input, begin, this.p, this.file)
   }
 
-  private findMatchingParen (): number {
-    let depth = 1
-    let i = this.p
-    while (i < this.N && depth > 0) {
-      const ch = this.input[i]
-      if (ch === '(') {
-        depth++
-      } else if (ch === ')') {
-        depth--
-        if (depth === 0) return i
-      } else if (ch === '"' || ch === "'") {
-        const quote = ch
-        i++
-        while (i < this.N && this.input[i] !== quote) {
-          if (this.input[i] === '\\') i++
-          i++
-        }
-      }
-      i++
-    }
-    return -1
-  }
 
   * readFileNameTemplate (options: NormalizedFullOptions): IterableIterator<TopLevelToken> {
     const { outputDelimiterLeft } = options
