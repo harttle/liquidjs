@@ -137,8 +137,11 @@ export function capitalize (this: FilterImpl, str: string) {
 export function replace (this: FilterImpl, v: string, pattern: string, replacement: string) {
   const str = stringify(v)
   pattern = stringify(pattern)
-  this.context.memoryLimit.use(str.length + pattern.length + replacement.length)
-  return str.split(pattern).join(replacement)
+  replacement = stringify(replacement)
+  const parts = str.split(pattern)
+  const outputSize = str.length + (parts.length - 1) * (replacement.length - pattern.length)
+  this.context.memoryLimit.use(outputSize)
+  return parts.join(replacement)
 }
 
 export function replace_first (this: FilterImpl, v: string, arg1: string, arg2: string) {
