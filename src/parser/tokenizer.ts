@@ -452,7 +452,6 @@ export class Tokenizer {
     return new QuotedToken(this.input, begin, this.p, this.file)
   }
 
-
   * readFileNameTemplate (options: NormalizedFullOptions): IterableIterator<TopLevelToken> {
     const { outputDelimiterLeft } = options
     const htmlStopStrings = [',', ' ', '\r', '\n', '\t', outputDelimiterLeft]
