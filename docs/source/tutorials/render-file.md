@@ -92,7 +92,7 @@ var engine = new Liquid({
 });
 ```
 
-{% note warn Path Traversal Vulnerability %}The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you'll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.{% endnote %}
+{% note warn Path Traversal Vulnerability %}The built-in Node <code>fs</code> implements <code>contains()</code> with realpath so templates cannot escape the root via symlinks. The browser bundle omits <code>contains</code> (loader treats paths as allowed). For a custom abstract <code>fs</code>, implement <code>contains</code> unless every resolved path is trusted.{% endnote %}
 
 ## In-memory Template
 

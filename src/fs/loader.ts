@@ -1,5 +1,5 @@
 import { FS } from './fs'
-import { assert } from '../util'
+import { assert, LiquidAsync, toLiquidAsync } from '../util'
 
 export interface LoaderOptions {
   fs: FS;
@@ -17,7 +17,8 @@ export enum LookupType {
 export class Loader {
   public shouldLoadRelative: (referencedFile: string) => boolean
   private options: LoaderOptions
-  private contains: (root: string, file: string) => boolean
+  private contains: LiquidAsync<NonNullable<FS['containsSync']>>
+  private exists: LiquidAsync<FS['existsSync']>
 
   constructor (options: LoaderOptions) {
     this.options = options
@@ -29,40 +30,48 @@ export class Loader {
     } else {
       this.shouldLoadRelative = (_referencedFile: string) => false
     }
-    this.contains = this.options.fs.contains || (() => true)
+    const fs = options.fs
+    this.contains = toLiquidAsync(
+      fs.containsSync?.bind(fs) || (() => true),
+      fs.contains?.bind(fs)
+    )
+    this.exists = toLiquidAsync(
+      fs.existsSync.bind(fs),
+      fs.exists.bind(fs)
+    )
   }
 
   public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string): Generator<unknown, string, string> {
-    const { fs } = this.options
     const dirs = this.options[type]
-    for (const filepath of this.candidates(file, dirs, currentFile, type !== LookupType.Root)) {
-      if (sync ? fs.existsSync(filepath) : yield fs.exists(filepath)) return filepath
+    const enforceRoot = type !== LookupType.Root
+    for (const filepath of this.candidates(file, dirs, currentFile)) {
+      if (enforceRoot) {
+        let allowed = false
+        for (const dir of dirs) {
+          if (yield this.contains(!!sync, dir, filepath)) { allowed = true; break }
+        }
+        if (!allowed) continue
+      }
+      if (yield this.exists(!!sync, filepath)) return filepath
     }
     throw this.lookupError(file, dirs)
   }
 
-  public * candidates (file: string, dirs: string[], currentFile?: string, enforceRoot?: boolean) {
+  public * candidates (file: string, dirs: string[], currentFile?: string) {
     const { fs, extname } = this.options
-    const isAllowed = (filepath: string) => {
-      if (!enforceRoot) return true
-      for (const dir of dirs) {
-        if (this.contains(dir, filepath)) return true
-      }
-      return false
-    }
 
     if (this.shouldLoadRelative(file) && currentFile) {
       const referenced = fs.resolve(this.dirname(currentFile), file, extname)
-      if (isAllowed(referenced)) yield referenced
+      yield referenced
     }
     for (const dir of dirs) {
       const referenced = fs.resolve(dir, file, extname)
-      if (isAllowed(referenced)) yield referenced
+      yield referenced
     }
 
     if (fs.fallback !== undefined) {
       const filepath = fs.fallback(file)
-      if (filepath !== undefined && isAllowed(filepath)) yield filepath
+      if (filepath !== undefined) yield filepath
     }
   }
 
