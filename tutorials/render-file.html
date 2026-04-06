@@ -157,7 +157,7 @@ name: alice<span aria-hidden="true" class="line-numbers-rows"><span></span><span
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<blockquote class="note warn"><strong class="note-title">Path Traversal Vulnerability</strong><p>The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you’ll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.</p>
+<blockquote class="note warn"><strong class="note-title">Path Traversal Vulnerability</strong><p>The built-in Node <code>fs</code> implements <code>contains()</code> with realpath so templates cannot escape the root via symlinks. The browser bundle omits <code>contains</code> (loader treats paths as allowed). For a custom abstract <code>fs</code>, implement <code>contains</code> unless every resolved path is trusted.</p>
 </blockquote>
 
 <h2 id="In-memory-Template" class="article-heading"><a href="#In-memory-Template" class="headerlink" title="In-memory Template"></a>In-memory Template<a class="article-anchor" href="#In-memory-Template" aria-hidden="true"></a></h2><p>To facilitate rendering w/o files, there’s a <code>templates</code> option to specify a mapping of filenames and their content. LiquidJS will read templates from the mapping.</p>
@@ -174,7 +174,7 @@ engine<span class="token punctuation">.</span><span class="token function">rende
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-03-26T11:37:54.718Z" itemprop="dateModified">Last updated: 2026-03-26</time>
+                <time class="article-footer-updated" datetime="2026-04-06T06:40:50.544Z" itemprop="dateModified">Last updated: 2026-04-06</time>
                 <a href="options.html" class="article-footer-prev" title="Options"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="partials-and-layouts.html" class="article-footer-next" title="Includes and Layouts"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
