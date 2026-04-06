@@ -1,4 +1,5 @@
 import * as fs from './fs-impl'
+import { resolve } from 'path'
 import { Loader, LookupType } from './loader'
 import { toValueSync } from '../util/async'
 
@@ -7,7 +8,7 @@ describe('fs/loader', function () {
     it('should resolve relatively', function () {
       const loader = new Loader({ relativeReference: true, fs, extname: '' } as any)
       const candidates = [...loader.candidates('./foo/bar', ['/root', '/root/foo'], '/root/current')]
-      expect(candidates).toContain('/root/foo/bar')
+      expect(candidates).toContain(resolve('/root/foo/bar'))
     })
   })
   describe('.lookup()', function () {
@@ -27,7 +28,7 @@ describe('fs/loader', function () {
       const mockFs = { ...fs, existsSync: () => true, exists: async () => true, contains: undefined, containsSync: undefined }
       const loader = new Loader({ relativeReference: true, fs: mockFs, extname: '', partials: ['/root'] } as any)
       const result = toValueSync(loader.lookup('./foo/bar', LookupType.Partials, true, '/root/current'))
-      expect(result).toBe('/root/foo/bar')
+      expect(result).toBe(resolve('/root/foo/bar'))
     })
   })
 })

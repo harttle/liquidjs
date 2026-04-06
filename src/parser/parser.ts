@@ -26,8 +26,8 @@ export class Parser {
     this.loader = new Loader(this.liquid.options)
     this.parseLimit = new Limiter('parse length', liquid.options.parseLimit)
     this.readFile = toLiquidAsync(
-      this.fs.readFileSync.bind(this.fs),
-      this.fs.readFile.bind(this.fs)
+      this.fs.readFile?.bind(this.fs) || (async () => { throw new Error('readFile not implemented') }),
+      this.fs.readFileSync?.bind(this.fs)
     )
   }
   public parse (html: string, filepath?: string): Template[] {

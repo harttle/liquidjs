@@ -1,6 +1,6 @@
 import { isString, forOwn } from '../../src/util/underscore'
 import * as fs from '../../src/fs/fs-impl'
-import { resolve } from 'path'
+import { resolve, sep } from 'path'
 
 interface FileDescriptor {
   mode: string;
@@ -33,12 +33,12 @@ export function mock (options: { [path: string]: (string | FileDescriptor) }) {
   };
   (fs as any).contains = async (root: string, file: string) => {
     root = resolve(root)
-    if (!root.endsWith('/')) root += '/'
+    if (!root.endsWith(sep)) root += sep
     return file.startsWith(root)
   };
   (fs as any).containsSync = (root: string, file: string) => {
     root = resolve(root)
-    if (!root.endsWith('/')) root += '/'
+    if (!root.endsWith(sep)) root += sep
     return file.startsWith(root)
   }
 }

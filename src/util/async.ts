@@ -4,12 +4,12 @@ export type LiquidAsync<F extends (...args: any[]) => any> =
   (sync: boolean, ...args: Parameters<F>) => ReturnType<F> | Promise<ReturnType<F>>
 
 export function toLiquidAsync<F extends (...args: any[]) => any> (
-  syncFn: F,
-  asyncFn?: (...args: Parameters<F>) => Promise<ReturnType<F>>
+  asyncFn: (...args: Parameters<F>) => Promise<ReturnType<F>>,
+  syncFn?: F
 ): LiquidAsync<F> {
-  const asyncImpl = asyncFn || syncFn as any
+  const syncImpl = syncFn || asyncFn as any
   return (sync: boolean, ...args: any[]) => {
-    return sync ? syncFn(...args as Parameters<F>) : asyncImpl(...args as Parameters<F>)
+    return sync ? syncImpl(...args as Parameters<F>) : asyncFn(...args as Parameters<F>)
   }
 }
 

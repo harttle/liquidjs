@@ -32,12 +32,12 @@ export class Loader {
     }
     const fs = options.fs
     this.contains = toLiquidAsync(
-      fs.containsSync?.bind(fs) || (() => true),
-      fs.contains?.bind(fs)
+      fs.contains?.bind(fs) || (async () => true),
+      fs.containsSync?.bind(fs) || (() => true)
     )
     this.exists = toLiquidAsync(
-      fs.existsSync.bind(fs),
-      fs.exists.bind(fs)
+      fs.exists?.bind(fs) || (async () => false),
+      fs.existsSync?.bind(fs)
     )
   }
 

@@ -1,8 +1,9 @@
 import * as fs from './fs-impl'
 import * as path from 'path'
 import { mkdtempSync, writeFileSync, symlinkSync, rmSync } from 'fs'
-const { join } = path
 import { tmpdir } from 'os'
+
+const { join } = path
 
 describe('fs-impl', function () {
   describe('.resolve()', function () {
@@ -54,7 +55,8 @@ describe('fs-impl', function () {
     })
   })
   describe('.contains()', () => {
-    it('should return false when path is a symlink to outside root', async () => {
+    const canSymlink = process.platform !== 'win32'
+    ;(canSymlink ? it : it.skip)('should return false when path is a symlink to outside root', async () => {
       const root = mkdtempSync(join(tmpdir(), 'liquid-contains-'))
       const outside = join(tmpdir(), `secret-${Date.now()}.liquid`)
       writeFileSync(outside, 'x')
@@ -69,7 +71,8 @@ describe('fs-impl', function () {
     })
   })
   describe('.containsSync()', () => {
-    it('should return false when path is a symlink to outside root', () => {
+    const canSymlink = process.platform !== 'win32'
+    ;(canSymlink ? it : it.skip)('should return false when path is a symlink to outside root', () => {
       const root = mkdtempSync(join(tmpdir(), 'liquid-contains-'))
       const outside = join(tmpdir(), `secret-${Date.now()}.liquid`)
       writeFileSync(outside, 'x')

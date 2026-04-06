@@ -60,7 +60,8 @@ describe('.parseAndRender()', function () {
     const html = await engine.parseAndRender(src)
     expect(html).toBe('true')
   })
-  describe('symlink outside root', function () {
+  const canSymlink = process.platform !== 'win32'
+  ;(canSymlink ? describe : describe.skip)('symlink outside root', function () {
     let root: string, secret: string
     beforeAll(function () {
       root = mkdtempSync(join(tmpdir(), 'liquid-e2e-root-'))
