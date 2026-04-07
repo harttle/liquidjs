@@ -15,5 +15,6 @@ export function round (v: number, arg = 0) {
   v = toNumber(v)
   arg = toNumber(arg)
   const amp = Math.pow(10, arg)
-  return Math.round(v * amp) / amp
+  const n = v * amp
+  return (Math.sign(n) * Math.round(Math.abs(n))) / amp
 }

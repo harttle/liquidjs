@@ -68,6 +68,8 @@ describe('filters/math', function () {
     it('should return "183.36" for 183.357,2',
       () => test('{{183.357|round: 2}}', '183.36'))
     it('should convert string to number', () => test('{{"2.7"|round}}', '3'))
+    it('should round -2.5 to -3 (away from zero)', () => test('{{ -2.5 | round }}', '-3'))
+    it('should round -1.5 to -2 (away from zero)', () => test('{{ -1.5 | round }}', '-2'))
   })
   describe('times', function () {
     it('should return "6" for 3,2', () => test('{{ 3 | times: 2 }}', '6'))
