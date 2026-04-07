@@ -220,6 +220,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MorielHarush"><img src="https://avatars.githubusercontent.com/u/93482738?v=4?s=100" width="100px;" alt="MorielHarush"/><br /><sub><b>MorielHarush</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=MorielHarush" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://doruk.ch"><img src="https://avatars.githubusercontent.com/u/77903714?v=4?s=100" width="100px;" alt="Peak Twilight"/><br /><sub><b>Peak Twilight</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=peaktwilight" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/joecottam"><img src="https://avatars.githubusercontent.com/u/44173086?v=4?s=100" width="100px;" alt="Joe Cottam"/><br /><sub><b>Joe Cottam</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=joecottam" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/timbze"><img src="https://avatars.githubusercontent.com/u/35117769?v=4?s=100" width="100px;" alt="Timmy Braun"/><br /><sub><b>Timmy Braun</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=timbze" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
