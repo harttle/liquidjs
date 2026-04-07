@@ -45,7 +45,9 @@ function parseDate (v: string | Date, opts: NormalizedFullOptions, timezoneOffse
   const defaultTimezoneOffset = timezoneOffset ?? opts.timezoneOffset
   const locale = opts.locale
   v = toValue(v)
-  if (v === 'now' || v === 'today') {
+  if (isNil(v)) {
+    return undefined
+  } else if (v === 'now' || v === 'today') {
     date = new LiquidDate(Date.now(), locale, defaultTimezoneOffset)
   } else if (isNumber(v)) {
     date = new LiquidDate(v * 1000, locale, defaultTimezoneOffset)
