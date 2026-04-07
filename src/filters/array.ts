@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, isArrayLike, toEnumerable } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, last as arrayLast, isArrayLike, toEnumerable } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -20,8 +20,8 @@ export const reverse = argumentsToValue(function (this: FilterImpl, v: any[]) {
   return [...array].reverse()
 })
 
-export function * sort<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
-  const values: [T, string | number][] = []
+function * sortBy<T> (this: FilterImpl, arr: T[], property: string | undefined, comparator: (a: unknown, b: unknown) => number): IterableIterator<unknown> {
+  const values: [T, unknown][] = []
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
@@ -30,21 +30,15 @@ export function * sort<T> (this: FilterImpl, arr: T[], property?: string): Itera
       property ? yield this.context._getFromScope(item, stringify(property).split('.'), false) : item
     ])
   }
-  return values.sort((lhs, rhs) => {
-    const lvalue = lhs[1]
-    const rvalue = rhs[1]
-    return lvalue < rvalue ? -1 : (lvalue > rvalue ? 1 : 0)
-  }).map(tuple => tuple[0])
+  return values.sort((lhs, rhs) => comparator(lhs[1], rhs[1])).map(tuple => tuple[0])
 }
 
-export function sort_natural<T> (this: FilterImpl, input: T[], property?: string) {
-  const propertyString = stringify(property)
-  const compare = property === undefined
-    ? caseInsensitiveCompare
-    : (lhs: T, rhs: T) => caseInsensitiveCompare(lhs[propertyString], rhs[propertyString])
-  const array = toArray(input)
-  this.context.memoryLimit.use(array.length)
-  return [...array].sort(compare)
+export function * sort<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
+  return yield * sortBy.call(this, arr, property, orderedCompare)
+}
+
+export function * sort_natural<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
+  return yield * sortBy.call(this, arr, property, caseInsensitiveCompare)
 }
 
 export const size = (v: string | any[]) => (v && v.length) || 0

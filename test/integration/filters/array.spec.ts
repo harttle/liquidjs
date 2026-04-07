@@ -315,6 +315,26 @@ describe('filters/array', function () {
     it('should return empty array for nil value', () => {
       return test('{{notDefined | sort | size}}', {}, '0')
     })
+    it('should respect ownPropertyOnly', async () => {
+      const engine = new Liquid({ ownPropertyOnly: true })
+      const a = Object.create({ secret: 'ccc' })
+      a.name = 'a'
+      const b = Object.create({ secret: 'aaa' })
+      b.name = 'b'
+      const html = await engine.parseAndRender(
+        '{{ arr | sort: "secret" | map: "name" | join: "," }}',
+        { arr: [a, b] }
+      )
+      expect(html).toBe('a,b')
+    })
+    it('should handle nil property values', async () => {
+      const arr = [{ age: 'cc' }, { name: 'x' }, { age: 'aa' }, { age: 'bb' }]
+      await test('{% assign sorted = arr | sort: "age" %}{% for item in sorted %}[{{ item.age }}]{% endfor %}', { arr }, '[aa][bb][cc][]')
+    })
+    it('should handle mixed-type items', async () => {
+      const arr = ['40', null, 30, undefined, true, false, 0, 'str', 50]
+      await test('{% assign sorted = arr | sort %}{% for item in sorted %}[{{ item }}]{% endfor %}', { arr }, '[false][0][true][30][40][str][50][][]')
+    })
   })
   describe('sort_natural', function () {
     it('should sort alphabetically', () => {
@@ -360,6 +380,23 @@ describe('filters/array', function () {
       { students: undefined },
       '0'
     ))
+    it('should respect ownPropertyOnly', async () => {
+      const engine = new Liquid({ ownPropertyOnly: true })
+      const target = Object.create({ secret: 'bbb' })
+      const html = await engine.parseAndRender(
+        '{{ arr | sort_natural: "secret" | map: "secret" | join: "," }}',
+        { arr: [{ secret: 'ccc' }, target, { secret: 'aaa' }] }
+      )
+      expect(html).toBe('aaa,ccc,')
+    })
+    it('should handle nil property values', async () => {
+      const arr = [{ age: '40' }, { name: 'x' }, { age: 30 }, { age: 50 }]
+      await test('{% assign sorted = arr | sort_natural: "age" %}{% for item in sorted %}[{{ item.age }}]{% endfor %}', { arr }, '[30][40][50][]')
+    })
+    it('should handle mixed-type items', async () => {
+      const arr = ['40', null, 30, undefined, true, false, 0, 'str', 50]
+      await test('{% assign sorted = arr | sort_natural %}{% for item in sorted %}[{{ item }}]{% endfor %}', { arr }, '[0][30][40][50][false][str][true][][]')
+    })
   })
   describe('uniq', function () {
     it('should uniq string list', function () {
