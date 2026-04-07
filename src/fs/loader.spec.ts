@@ -30,5 +30,11 @@ describe('fs/loader', function () {
       const result = toValueSync(loader.lookup('./foo/bar', LookupType.Partials, true, '/root/current'))
       expect(result).toBe(resolve('/root/foo/bar'))
     })
+    it('should enforce containment for LookupType.Root', function () {
+      const mockFs = { ...fs, existsSync: () => true, exists: async () => true }
+      const loader = new Loader({ relativeReference: false, fs: mockFs, extname: '', root: ['/safe'] } as any)
+      expect(() => toValueSync(loader.lookup('/etc/hosts', LookupType.Root, true)))
+        .toThrow(/ENOENT/)
+    })
   })
 })

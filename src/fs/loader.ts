@@ -43,15 +43,12 @@ export class Loader {
 
   public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string): Generator<unknown, string, string> {
     const dirs = this.options[type]
-    const enforceRoot = type !== LookupType.Root
     for (const filepath of this.candidates(file, dirs, currentFile)) {
-      if (enforceRoot) {
-        let allowed = false
-        for (const dir of dirs) {
-          if (yield this.contains(!!sync, dir, filepath)) { allowed = true; break }
-        }
-        if (!allowed) continue
+      let allowed = false
+      for (const dir of dirs) {
+        if (yield this.contains(!!sync, dir, filepath)) { allowed = true; break }
       }
+      if (!allowed) continue
       if (yield this.exists(!!sync, filepath)) return filepath
     }
     throw this.lookupError(file, dirs)
