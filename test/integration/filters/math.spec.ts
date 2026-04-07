@@ -65,6 +65,8 @@ describe('filters/math', function () {
   describe('round', function () {
     it('should return "1" for 1.2', () => test('{{1.2|round}}', '1'))
     it('should return "3" for 2.7', () => test('{{2.7|round}}', '3'))
+    it('should return "-3" for -2.5 (away from zero)', () => test('{{num|round}}', { num: -2.5 }, '-3'))
+    it('should return "-2" for -2.49 (closest integer)', () => test('{{num|round}}', { num: -2.49 }, '-2'))
     it('should return "183.36" for 183.357,2',
       () => test('{{183.357|round: 2}}', '183.36'))
     it('should convert string to number', () => test('{{"2.7"|round}}', '3'))
