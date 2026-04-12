@@ -373,17 +373,27 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
     yield * extractValueTokenVariables(token.lhs)
     yield * extractValueTokenVariables(token.rhs)
   } else if (isGroupedExpressionToken(token)) {
-    for (const t of token.initial.postfix) {
-      if (isValueToken(t)) yield * extractValueTokenVariables(t)
-    }
-    for (const filter of token.filters) {
-      for (const arg of filter.args) {
-        if (isKeyValuePair(arg) && arg[1]) yield * extractValueTokenVariables(arg[1])
-        else if (isValueToken(arg)) yield * extractValueTokenVariables(arg)
-      }
-    }
+    yield * extractGroupedExpressionTokenVariables(token)
   } else if (isPropertyAccessToken(token)) {
     yield extractPropertyAccessVariable(token)
+  }
+}
+
+function * extractGroupedExpressionTokenVariables (token: ValueToken): Generator<Variable> {
+  if (!isGroupedExpressionToken(token)) return
+
+  for (const t of token.initial.postfix) {
+    if (isValueToken(t)) yield * extractValueTokenVariables(t)
+  }
+
+  for (const filter of token.filters) {
+    for (const arg of filter.args) {
+      if (isKeyValuePair(arg) && arg[1]) {
+        yield * extractValueTokenVariables(arg[1])
+      } else if (isValueToken(arg)) {
+        yield * extractValueTokenVariables(arg)
+      }
+    }
   }
 }
 
