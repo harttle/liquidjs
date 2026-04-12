@@ -1,4 +1,5 @@
 import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { GroupedExpressionToken } from '../tokens'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
@@ -10,7 +11,7 @@ type valueOf<T> = T[keyof T]
 
 export default class extends Tag {
   variable: string
-  collection: ValueToken
+  collection: ValueToken | GroupedExpressionToken
   hash: Hash
   templates: Template[]
   elseTemplates: Template[]
