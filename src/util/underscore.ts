@@ -170,11 +170,20 @@ export function ellipsis (str: string, N: number): string {
   return str.length > N ? str.slice(0, N - 3) + '...' : str
 }
 
+export function orderedCompare (a: any, b: any) {
+  if (isNil(a) && isNil(b)) return 0
+  if (isNil(a)) return 1
+  if (isNil(b)) return -1
+  if (a < b) return -1
+  if (a > b) return 1
+  return 0
+}
+
 // compare string in case-insensitive way, undefined values to the tail
 export function caseInsensitiveCompare (a: any, b: any) {
-  if (a == null && b == null) return 0
-  if (a == null) return 1
-  if (b == null) return -1
+  if (isNil(a) && isNil(b)) return 0
+  if (isNil(a)) return 1
+  if (isNil(b)) return -1
   a = toLowerCase.call(a)
   b = toLowerCase.call(b)
   if (a < b) return -1

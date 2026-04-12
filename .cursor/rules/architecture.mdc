@@ -1,0 +1,17 @@
+---
+description: Architecture overview for liquidjs internals
+alwaysApply: true
+---
+
+## Async/sync duality via generators
+
+All core logic is written once as a `Generator` function (`function *`). Use `yield` where you'd normally `await` a potentially async value.
+
+- `toPromise(generator)` drives it **asynchronously** — awaits yielded promises.
+- `toValueSync(generator)` drives it **synchronously** — passes yielded values through as-is.
+
+Never duplicate logic into separate async and sync methods. A single generator serves both paths.
+
+When wrapping an async+sync function pair (e.g. `contains`/`containsSync`, `exists`/`existsSync`, `readFile`/`readFileSync`), use `toLiquidAsync(asyncFn, syncFn?)` which returns a `LiquidAsync<F>` — one function that picks the sync or async implementation based on a leading `sync: boolean` arg. Then `yield` the result inside a generator to let the driver handle it in both modes.
+
+See `src/util/async.ts`.

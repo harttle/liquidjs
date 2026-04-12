@@ -1,5 +1,18 @@
 import { isPromise, isIterator } from './underscore'
 
+export type LiquidAsync<F extends (...args: any[]) => any> =
+  (sync: boolean, ...args: Parameters<F>) => ReturnType<F> | Promise<ReturnType<F>>
+
+export function toLiquidAsync<F extends (...args: any[]) => any> (
+  asyncFn: (...args: Parameters<F>) => Promise<ReturnType<F>>,
+  syncFn?: F
+): LiquidAsync<F> {
+  const syncImpl = syncFn || asyncFn as any
+  return (sync: boolean, ...args: any[]) => {
+    return sync ? syncImpl(...args as Parameters<F>) : asyncFn(...args as Parameters<F>)
+  }
+}
+
 // convert an async iterator to a Promise
 export async function toPromise<T> (val: Generator<unknown, T, unknown> | Promise<T> | T): Promise<T> {
   if (!isIterator(val)) return val

@@ -1,4 +1,4 @@
-import { Limiter, toPromise, assert, isTagToken, isOutputToken, ParseError } from '../util'
+import { Limiter, toPromise, assert, isTagToken, isOutputToken, ParseError, toLiquidAsync, LiquidAsync } from '../util'
 import { Tokenizer } from './tokenizer'
 import { ParseStream } from './parse-stream'
 import { TopLevelToken, OutputToken } from '../tokens'
@@ -16,6 +16,7 @@ export class Parser {
   private cache?: LiquidCache
   private loader: Loader
   private parseLimit: Limiter
+  private readFile: LiquidAsync<FS['readFileSync']>
 
   public constructor (liquid: Liquid) {
     this.liquid = liquid
@@ -24,6 +25,10 @@ export class Parser {
     this.parseFile = this.cache ? this._parseFileCached : this._parseFile
     this.loader = new Loader(this.liquid.options)
     this.parseLimit = new Limiter('parse length', liquid.options.parseLimit)
+    this.readFile = toLiquidAsync(
+      this.fs.readFile?.bind(this.fs) || (async () => { throw new Error('readFile not implemented') }),
+      this.fs.readFileSync?.bind(this.fs)
+    )
   }
   public parse (html: string, filepath?: string): Template[] {
     html = String(html)
@@ -82,6 +87,6 @@ export class Parser {
   }
   private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], string> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)
-    return this.parse(sync ? this.fs.readFileSync(filepath) : yield this.fs.readFile(filepath), filepath)
+    return this.parse(yield this.readFile(!!sync, filepath), filepath)
   }
 }

@@ -1,4 +1,7 @@
 import { Liquid } from '../..'
+import { mkdtempSync, writeFileSync, symlinkSync, rmSync } from 'fs'
+import { join } from 'path'
+import { tmpdir } from 'os'
 
 describe('.parseAndRender()', function () {
   var engine: Liquid, strictEngine: Liquid
@@ -56,5 +59,27 @@ describe('.parseAndRender()', function () {
     const src = '{% if nonexistent == nil %}true{% endif %}'
     const html = await engine.parseAndRender(src)
     expect(html).toBe('true')
+  })
+  const canSymlink = process.platform !== 'win32'
+  ;(canSymlink ? describe : describe.skip)('symlink outside root', function () {
+    let root: string, secret: string
+    beforeAll(function () {
+      root = mkdtempSync(join(tmpdir(), 'liquid-e2e-root-'))
+      secret = join(tmpdir(), `liquid-e2e-secret-${Date.now()}.liquid`)
+      writeFileSync(secret, 'SECRET_OUTSIDE')
+      symlinkSync(secret, join(root, 'link.liquid'))
+    })
+    afterAll(function () {
+      rmSync(root, { recursive: true, force: true })
+      rmSync(secret, { force: true })
+    })
+    it('should not render a symlink partial whose target is outside root', async function () {
+      const e = new Liquid({ root: [root], extname: '.liquid', relativeReference: false })
+      await expect(e.parseAndRender('{% render "link" %}')).rejects.toThrow(/ENOENT|Failed to lookup/)
+    })
+    it('should not render a symlink partial via parseAndRenderSync', function () {
+      const e = new Liquid({ root: [root], extname: '.liquid', relativeReference: false })
+      expect(() => e.parseAndRenderSync('{% render "link" %}')).toThrow(/ENOENT|Failed to lookup/)
+    })
   })
 })

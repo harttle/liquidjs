@@ -1,5 +1,9 @@
 import * as fs from './fs-impl'
 import * as path from 'path'
+import { mkdtempSync, writeFileSync, symlinkSync, rmSync } from 'fs'
+import { tmpdir } from 'os'
+
+const { join } = path
 
 describe('fs-impl', function () {
   describe('.resolve()', function () {
@@ -48,6 +52,38 @@ describe('fs-impl', function () {
     it('should read content if exists', async function () {
       const content = await fs.readFile(__filename)
       expect(content).toContain('should read content if exists')
+    })
+  })
+  describe('.contains()', () => {
+    const canSymlink = process.platform !== 'win32'
+    ;(canSymlink ? it : it.skip)('should return false when path is a symlink to outside root', async () => {
+      const root = mkdtempSync(join(tmpdir(), 'liquid-contains-'))
+      const outside = join(tmpdir(), `secret-${Date.now()}.liquid`)
+      writeFileSync(outside, 'x')
+      const link = join(root, 'link.liquid')
+      symlinkSync(outside, link)
+      try {
+        expect(await fs.contains(root, link)).toBe(false)
+      } finally {
+        rmSync(root, { recursive: true, force: true })
+        rmSync(outside, { force: true })
+      }
+    })
+  })
+  describe('.containsSync()', () => {
+    const canSymlink = process.platform !== 'win32'
+    ;(canSymlink ? it : it.skip)('should return false when path is a symlink to outside root', () => {
+      const root = mkdtempSync(join(tmpdir(), 'liquid-contains-'))
+      const outside = join(tmpdir(), `secret-${Date.now()}.liquid`)
+      writeFileSync(outside, 'x')
+      const link = join(root, 'link.liquid')
+      symlinkSync(outside, link)
+      try {
+        expect(fs.containsSync(root, link)).toBe(false)
+      } finally {
+        rmSync(root, { recursive: true, force: true })
+        rmSync(outside, { force: true })
+      }
     })
   })
 })

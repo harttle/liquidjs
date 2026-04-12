@@ -21,8 +21,12 @@ describe('filters/date', function () {
       const time = String(new Date('2017-03-07T12:00:00').getTime() / 1000)
       return test('{{ time | date: "%Y-%m-%dT%H:%M:%S" }}', { time }, '2017-03-07T12:00:00')
     })
-    it('should treat nil as 0', () => {
-      expect(liquid.parseAndRenderSync('{{ nil | date: "%Y-%m-%dT%H:%M:%S", "Asia/Shanghai" }}')).toEqual('1970-01-01T08:00:00')
+    it('should treat null as invalid', () => {
+      const time = null
+      return test('{{ time | date: "%Y-%m-%dT%H:%M:%S" }}', { time }, '')
+    })
+    it('should treat nil as invalid', () => {
+      expect(liquid.parseAndRenderSync('{{ nil | date: "%Y-%m-%dT%H:%M:%S", "Asia/Shanghai" }}')).toEqual('')
     })
     it('should treat undefined as invalid', () => {
       expect(liquid.parseAndRenderSync('{{ num | date: "%Y-%m-%dT%H:%M:%S", "Asia/Shanghai" }}', { num: undefined })).toEqual('')

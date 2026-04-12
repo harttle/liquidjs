@@ -1,0 +1,6 @@
+---
+description: Project conventions for liquidjs
+alwaysApply: true
+---
+
+- Keep edits minimal: change only what the task requires, match existing style.

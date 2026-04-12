@@ -1,6 +1,6 @@
 import { promisify } from '../util'
 import { sep, resolve as nodeResolve, extname, dirname as nodeDirname } from 'path'
-import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync } from 'fs'
+import { stat, statSync, readFile as nodeReadFile, readFileSync as nodeReadFileSync, realpath, realpathSync } from 'fs'
 import { requireResolve } from './node-require'
 
 type NodeReadFile = (file: string, encoding: string, cb: ((err: Error | null, result: string) => void)) => void
@@ -41,10 +41,27 @@ export function fallback (file: string) {
 export function dirname (filepath: string) {
   return nodeDirname(filepath)
 }
-export function contains (root: string, file: string) {
-  root = nodeResolve(root)
-  root = root.endsWith(sep) ? root : root + sep
-  return file.startsWith(root)
+const realpathAsync = promisify(realpath)
+
+export async function contains (root: string, file: string) {
+  try {
+    const realRoot = await realpathAsync(root)
+    const realFile = await realpathAsync(file)
+    const prefix = realRoot.endsWith(sep) ? realRoot : realRoot + sep
+    return realFile.startsWith(prefix)
+  } catch {
+    return false
+  }
+}
+export function containsSync (root: string, file: string) {
+  try {
+    const realRoot = realpathSync(root)
+    const realFile = realpathSync(file)
+    const prefix = realRoot.endsWith(sep) ? realRoot : realRoot + sep
+    return realFile.startsWith(prefix)
+  } catch {
+    return false
+  }
 }
 
 export { sep } from 'path'

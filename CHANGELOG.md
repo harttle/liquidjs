@@ -1,3 +1,27 @@
+## [10.25.5](https://github.com/harttle/liquidjs/compare/v10.25.4...v10.25.5) (2026-04-07)
+
+
+### Bug Fixes
+
+* enforce root containment for renderFile/parseFile lookups ([#870](https://github.com/harttle/liquidjs/issues/870)) ([f41c1fc](https://github.com/harttle/liquidjs/commit/f41c1fc02fe901598f3328118b42b13bc6bc9b04))
+* null date should return empty ([#868](https://github.com/harttle/liquidjs/issues/868)) ([#872](https://github.com/harttle/liquidjs/issues/872)) ([4f9a499](https://github.com/harttle/liquidjs/commit/4f9a49988a93c156524981e189a4fec238e682b8))
+* rounding negative away from zero when half ([#873](https://github.com/harttle/liquidjs/issues/873)) ([1cdf10b](https://github.com/harttle/liquidjs/commit/1cdf10b57d82f0592414efbfca19e204b37aea9f))
+
+## [10.25.4](https://github.com/harttle/liquidjs/compare/v10.25.3...v10.25.4) (2026-04-07)
+
+
+### Bug Fixes
+
+* sort and sort_natural filters bypass ownPropertyOnly ([#869](https://github.com/harttle/liquidjs/issues/869)) ([e743da0](https://github.com/harttle/liquidjs/commit/e743da0020d34e2ee547e1cc1a86b58377ebe1ce))
+
+## [10.25.3](https://github.com/harttle/liquidjs/compare/v10.25.2...v10.25.3) (2026-04-06)
+
+
+### Bug Fixes
+
+* precise memoryLimit for string replace ([abc058b](https://github.com/harttle/liquidjs/commit/abc058be0f33d6372cd2216f4945183167abeb25))
+* use realpath for fs.contains ([#867](https://github.com/harttle/liquidjs/issues/867)) ([529dd67](https://github.com/harttle/liquidjs/commit/529dd67eeb6b125637623d6a723601f0938d3613))
+
 ## [10.25.2](https://github.com/harttle/liquidjs/compare/v10.25.1...v10.25.2) (2026-03-25)
 
 
