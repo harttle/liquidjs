@@ -1,14 +1,15 @@
 import { isValueToken, toEnumerable } from '../util'
 import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { GroupedExpressionToken } from '../tokens'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
-import { Arguments } from '../template'
+import { Arguments, resolveGroupedExpressionFilters } from '../template'
 
 export default class extends Tag {
   variable: string
   args: Hash
   templates: Template[]
-  collection: ValueToken
+  collection: ValueToken | GroupedExpressionToken
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
     const variable = this.tokenizer.readIdentifier()
@@ -22,6 +23,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collectionToken
+    resolveGroupedExpressionFilters(this.collection, liquid)
     this.args = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
 

@@ -44,8 +44,15 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
 }
 
 function * evalGroupedExpressionToken (token: GroupedExpressionToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
-  assert(token.resolvedValue, 'grouped expression not resolved')
-  return yield token.resolvedValue!.value(ctx, lenient)
+  assert(token.resolvedFilters, 'grouped expression filters not resolved')
+  lenient = lenient || (ctx.opts.lenientIf && token.filters.length > 0 && token.filters[0].name === 'default')
+  let val = yield token.initial.evaluate(ctx, lenient)
+
+  for (const filter of token.resolvedFilters!) {
+    val = yield filter.render(val, ctx)
+  }
+
+  return val
 }
 
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {

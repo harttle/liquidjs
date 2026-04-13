@@ -3,7 +3,7 @@ import { GroupedExpressionToken } from '../tokens'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
-import { Arguments, resolveGroupedExpressions } from '../template'
+import { Arguments, resolveGroupedExpressionFilters } from '../template'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -27,7 +27,7 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collection
-    resolveGroupedExpressions(this.collection, liquid)
+    resolveGroupedExpressionFilters(this.collection, liquid)
     this.hash = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
     this.elseTemplates = []

@@ -2,9 +2,10 @@ import { Token } from './token'
 import { FilterToken } from './filter-token'
 import { TokenKind } from '../parser'
 import { Expression } from '../render'
+import type { Filter } from '../template/filter'
 
 export class GroupedExpressionToken extends Token {
-  public resolvedValue?: { value (ctx: any, lenient?: boolean): Generator<unknown, unknown, unknown> }
+  public resolvedFilters?: Filter[]
   constructor (
     public initial: Expression,
     public filters: FilterToken[],

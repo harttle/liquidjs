@@ -6,21 +6,28 @@ import { FilteredValueToken, Token } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
 
-export function resolveGroupedExpressions (token: Token, liquid: Liquid): void {
+function getFilter (liquid: Liquid, name: string) {
+  const impl = liquid.filters[name]
+  assert(impl || !liquid.options.strictFilters, () => `undefined filter: ${name}`)
+  return impl
+}
+
+export function resolveGroupedExpressionFilters (token: Token, liquid: Liquid): void {
   if (isGroupedExpressionToken(token)) {
-    const fvt = new FilteredValueToken(
-      token.initial, token.filters,
-      token.input, token.begin, token.end, token.file
+    for (const t of token.initial.postfix) {
+      resolveGroupedExpressionFilters(t, liquid)
+    }
+    token.resolvedFilters = token.filters.map(filterToken =>
+      new Filter(filterToken, getFilter(liquid, filterToken.name), liquid)
     )
-    token.resolvedValue = new Value(fvt, liquid)
   }
   if (isRangeToken(token)) {
-    resolveGroupedExpressions(token.lhs, liquid)
-    resolveGroupedExpressions(token.rhs, liquid)
+    resolveGroupedExpressionFilters(token.lhs, liquid)
+    resolveGroupedExpressionFilters(token.rhs, liquid)
   }
   if (isPropertyAccessToken(token)) {
-    if (token.variable) resolveGroupedExpressions(token.variable, liquid)
-    for (const prop of token.props) resolveGroupedExpressions(prop, liquid)
+    if (token.variable) resolveGroupedExpressionFilters(token.variable, liquid)
+    for (const prop of token.props) resolveGroupedExpressionFilters(prop, liquid)
   }
 }
 
@@ -36,9 +43,9 @@ export class Value {
       ? new Tokenizer(input, liquid.options.operators, undefined, undefined, liquid.options.groupedExpressions).readFilteredValue()
       : input
     this.initial = token.initial
-    this.filters = token.filters.map(token => new Filter(token, this.getFilter(liquid, token.name), liquid))
+    this.filters = token.filters.map(token => new Filter(token, getFilter(liquid, token.name), liquid))
     for (const t of this.initial.postfix) {
-      resolveGroupedExpressions(t, liquid)
+      resolveGroupedExpressionFilters(t, liquid)
     }
   }
 
@@ -50,11 +57,5 @@ export class Value {
       val = yield filter.render(val, ctx)
     }
     return val
-  }
-
-  private getFilter (liquid: Liquid, name: string) {
-    const impl = liquid.filters[name]
-    assert(impl || !liquid.options.strictFilters, () => `undefined filter: ${name}`)
-    return impl
   }
 }
