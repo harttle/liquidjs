@@ -2,7 +2,7 @@ import { Argument, Template, Value } from '.'
 import { isKeyValuePair } from '../parser/filter-arg'
 import { PropertyAccessToken, ValueToken } from '../tokens'
 import {
-  isGroupedExpressionToken,
+  isFilteredValueToken,
   isNumberToken,
   isPropertyAccessToken,
   isQuotedToken,
@@ -372,7 +372,7 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
   if (isRangeToken(token)) {
     yield * extractValueTokenVariables(token.lhs)
     yield * extractValueTokenVariables(token.rhs)
-  } else if (isGroupedExpressionToken(token)) {
+  } else if (isFilteredValueToken(token)) {
     yield * extractGroupedExpressionTokenVariables(token)
   } else if (isPropertyAccessToken(token)) {
     yield extractPropertyAccessVariable(token)
@@ -380,7 +380,7 @@ function * extractValueTokenVariables (token: ValueToken): Generator<Variable> {
 }
 
 function * extractGroupedExpressionTokenVariables (token: ValueToken): Generator<Variable> {
-  if (!isGroupedExpressionToken(token)) return
+  if (!isFilteredValueToken(token)) return
 
   for (const t of token.initial.postfix) {
     if (isValueToken(t)) yield * extractValueTokenVariables(t)

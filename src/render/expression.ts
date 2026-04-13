@@ -1,8 +1,9 @@
-import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes, GroupedExpressionToken } from '../tokens'
-import { isRangeToken, isPropertyAccessToken, isGroupedExpressionToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
+import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes, FilteredValueToken } from '../tokens'
+import { isRangeToken, isPropertyAccessToken, isFilteredValueToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 import { Drop } from '../drop'
+import { Filter } from '../template/filter'
 
 export class Expression {
   readonly postfix: Token[]
@@ -40,15 +41,18 @@ export function * evalToken (token: Token | undefined, ctx: Context, lenient = f
   if ('content' in token) return token.content
   if (isPropertyAccessToken(token)) return yield evalPropertyAccessToken(token, ctx, lenient)
   if (isRangeToken(token)) return yield evalRangeToken(token, ctx)
-  if (isGroupedExpressionToken(token)) return yield evalGroupedExpressionToken(token, ctx, lenient)
+  if (isFilteredValueToken(token)) return yield evalFilteredValueToken(token, ctx, lenient)
 }
 
-function * evalGroupedExpressionToken (token: GroupedExpressionToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
-  assert(token.resolvedFilters, 'grouped expression filters not resolved')
+function * evalFilteredValueToken (token: FilteredValueToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
+  assert(ctx.liquid, 'FilteredValueToken evaluation requires liquid instance in context')
   lenient = lenient || (ctx.opts.lenientIf && token.filters.length > 0 && token.filters[0].name === 'default')
   let val = yield token.initial.evaluate(ctx, lenient)
 
-  for (const filter of token.resolvedFilters!) {
+  for (const filterToken of token.filters) {
+    const filterImpl = ctx.liquid.filters[filterToken.name]
+    assert(filterImpl || !ctx.liquid.options.strictFilters, () => `undefined filter: ${filterToken.name}`)
+    const filter = new Filter(filterToken, filterImpl, ctx.liquid)
     val = yield filter.render(val, ctx)
   }
 

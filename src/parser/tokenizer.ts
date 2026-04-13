@@ -1,4 +1,4 @@
-import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken, GroupedExpressionToken } from '../tokens'
+import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
 import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
 import { Operators, Expression } from '../render'
@@ -311,17 +311,12 @@ export class Tokenizer {
     return -1
   }
 
-  readValue (): ValueToken | undefined {
+  readValue (): ValueToken | FilteredValueToken | undefined {
     this.skipBlank()
     const begin = this.p
-    let variable: ValueToken | undefined = this.readLiteral() || this.readQuoted()
+    let variable: ValueToken | FilteredValueToken | undefined = this.readLiteral() || this.readQuoted()
     if (!variable && this.peek() === '(') {
-      const rangeOrGroup = this.readGroupOrRange()
-      if (rangeOrGroup?.type === 'range') {
-        variable = rangeOrGroup.range
-      } else if (rangeOrGroup?.type === 'groupedExpression') {
-        variable = rangeOrGroup.groupedExpression
-      }
+      variable = this.readGroupOrRange()
     }
     variable = variable || this.readNumber()
     const props = this.readProperties(!variable)
@@ -398,7 +393,7 @@ export class Tokenizer {
     return literal
   }
 
-  readGroupOrRange (): { type: 'range', range: RangeToken } | { type: 'groupedExpression', groupedExpression: GroupedExpressionToken } | undefined {
+  readGroupOrRange (): FilteredValueToken | RangeToken | undefined {
     this.skipBlank()
     const begin = this.p
     if (this.peek() !== '(') return
@@ -411,10 +406,7 @@ export class Tokenizer {
       const rhs = this.readValueOrThrow()
       this.skipBlank()
       this.assert(this.read() === ')', 'invalid range syntax')
-      return {
-        type: 'range',
-        range: new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
-      }
+      return new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
     }
 
     if (this.groupedExpressions) {
@@ -422,10 +414,7 @@ export class Tokenizer {
       const filters = this.readFilters()
       this.skipBlank()
       this.assert(this.read() === ')', 'unbalanced parentheses')
-      return {
-        type: 'groupedExpression',
-        groupedExpression: new GroupedExpressionToken(expression, filters, this.input, begin, this.p, this.file)
-      }
+      return new FilteredValueToken(expression, filters, this.input, begin, this.p, this.file)
     }
 
     throw this.error('invalid range syntax')

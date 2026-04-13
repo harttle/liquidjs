@@ -31,7 +31,7 @@ export class Liquid {
   }
 
   public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<any> {
-    const ctx = scope instanceof Context ? scope : new Context(scope, this.options, renderOptions)
+    const ctx = scope instanceof Context ? scope : new Context(scope, this.options, renderOptions, { liquid: this })
     return this.renderer.renderTemplates(tpl, ctx)
   }
   public async render (tpl: Template[], scope?: object, renderOptions?: RenderOptions): Promise<any> {
@@ -41,7 +41,7 @@ export class Liquid {
     return toValueSync(this._render(tpl, scope, { ...renderOptions, sync: true }))
   }
   public renderToNodeStream (tpl: Template[], scope?: object, renderOptions: RenderOptions = {}): NodeJS.ReadableStream {
-    const ctx = new Context(scope, this.options, renderOptions)
+    const ctx = new Context(scope, this.options, renderOptions, { liquid: this })
     return this.renderer.renderTemplatesToNodeStream(tpl, ctx)
   }
 
@@ -88,7 +88,7 @@ export class Liquid {
 
   public _evalValue (str: string, scope?: object | Context): IterableIterator<any> {
     const value = new Value(str, this)
-    const ctx = scope instanceof Context ? scope : new Context(scope, this.options)
+    const ctx = scope instanceof Context ? scope : new Context(scope, this.options, {}, { liquid: this })
     return value.value(ctx)
   }
   public async evalValue (str: string, scope?: object | Context): Promise<any> {

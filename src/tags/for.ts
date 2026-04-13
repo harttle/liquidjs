@@ -1,9 +1,8 @@
-import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
-import { GroupedExpressionToken } from '../tokens'
+import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream, FilteredValueToken } from '..'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
-import { Arguments, resolveGroupedExpressionFilters } from '../template'
+import { Arguments } from '../template'
 
 const MODIFIERS = ['offset', 'limit', 'reversed']
 
@@ -11,7 +10,7 @@ type valueOf<T> = T[keyof T]
 
 export default class extends Tag {
   variable: string
-  collection: ValueToken | GroupedExpressionToken
+  collection: ValueToken | FilteredValueToken
   hash: Hash
   templates: Template[]
   elseTemplates: Template[]
@@ -27,7 +26,6 @@ export default class extends Tag {
 
     this.variable = variable.content
     this.collection = collection
-    resolveGroupedExpressionFilters(this.collection, liquid)
     this.hash = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = []
     this.elseTemplates = []
