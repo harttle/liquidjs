@@ -1,17 +1,10 @@
 import { Filter } from './filter'
 import { Expression } from '../render'
 import { Tokenizer } from '../parser'
-import { FilteredValueToken } from '../tokens'
+import { assert } from '../util'
+import type { FilteredValueToken } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
-
-function getFilter (liquid: Liquid, name: string) {
-  const impl = liquid.filters[name]
-  if (!impl && liquid.options.strictFilters) {
-    throw new Error(`undefined filter: ${name}`)
-  }
-  return impl
-}
 
 export class Value {
   public readonly filters: Filter[] = []
@@ -25,7 +18,7 @@ export class Value {
       ? new Tokenizer(input, liquid.options.operators, undefined, undefined, liquid.options.groupedExpressions).readFilteredValue()
       : input
     this.initial = token.initial
-    this.filters = token.filters.map(token => new Filter(token, getFilter(liquid, token.name), liquid))
+    this.filters = token.filters.map(token => new Filter(token, this.getFilter(liquid, token.name), liquid))
   }
 
   public * value (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {
@@ -36,5 +29,11 @@ export class Value {
       val = yield filter.render(val, ctx)
     }
     return val
+  }
+
+  private getFilter (liquid: Liquid, name: string) {
+    const impl = liquid.filters[name]
+    assert(impl || !liquid.options.strictFilters, () => `undefined filter: ${name}`)
+    return impl
   }
 }
