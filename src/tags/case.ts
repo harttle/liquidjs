@@ -24,8 +24,7 @@ export default class extends Tag {
 
         const values: (ValueToken | FilteredValueToken)[] = []
         while (!token.tokenizer.end()) {
-          const val = token.tokenizer.readValueOrThrow()
-          values.push(val)
+          values.push(token.tokenizer.readValueOrThrow())
           token.tokenizer.skipBlank()
           if (token.tokenizer.peek() === ',') {
             token.tokenizer.readTo(',')
