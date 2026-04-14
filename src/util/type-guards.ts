@@ -49,11 +49,6 @@ export function isFilteredValueToken (val: any): val is FilteredValueToken {
   return getKind(val) === TokenKind.FilteredValue
 }
 
-// Deprecated: Use isFilteredValueToken instead
-export function isGroupedExpressionToken (val: any): val is FilteredValueToken {
-  return isFilteredValueToken(val)
-}
-
 export function isValueToken (val: any): val is ValueToken {
   // valueTokenBitMask = TokenKind.Number | TokenKind.Literal | TokenKind.Quoted | TokenKind.PropertyAccess | TokenKind.Range | TokenKind.FilteredValue
   return (getKind(val) & 5763) > 0
