@@ -204,9 +204,10 @@ describe('tags/if', function () {
         const html = await ge.parseAndRender(src, { name: 'Alice' })
         return expect(html).toBe('long')
       })
-      it('should support nested parenthesized expressions', function () {
-        const result = ge.evalValueSync('((foo | append: "!") | upcase)', { foo: 'bar' })
-        return expect(result).toBe('BAR!')
+      it('should support nested parenthesized expressions in if condition', async function () {
+        const src = '{% if ((foo | append: "!") | upcase) == "BAR!" %}match{% else %}no match{% endif %}'
+        const html = await ge.parseAndRender(src, { foo: 'bar' })
+        return expect(html).toBe('match')
       })
     })
     describe('when disabled', function () {
