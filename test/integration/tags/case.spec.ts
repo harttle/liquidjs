@@ -148,11 +148,11 @@ describe('tags/case', function () {
     })
     describe('when disabled', () => {
       const ge = new Liquid({ groupedExpressions: false })
-      it('should support grouped expression in case value', () => {
+      it('should throw error for grouped expression in case value', () => {
         const src = '{% case (status | downcase) %}{% when "active" %}active{% when "pending" %}pending{% else %}other{% endcase %}'
         expect(() => ge.parseAndRenderSync(src, { status: 'ACTIVE' })).toThrow('invalid range syntax')
       })
-      it('should support grouped expression in when value', () => {
+      it('should throw error for grouped expression in when value', () => {
         const src = '{% case status %}{% when (expected | downcase) %}match{% else %}no match{% endcase %}'
         expect(() => ge.parseAndRenderSync(src, { status: 'active', expected: 'ACTIVE' })).toThrow('invalid range syntax')
       })
