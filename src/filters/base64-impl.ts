@@ -1,5 +1,8 @@
-export function base64Encode (str: string): string {
-  return Buffer.from(str, 'utf8').toString('base64')
+export function base64Encode (value: string | Buffer): string {
+  if (Buffer.isBuffer(value)) {
+    return value.toString('base64')
+  }
+  return Buffer.from(value, 'utf8').toString('base64')
 }
 
 export function base64Decode (str: string): string {
