@@ -57,8 +57,6 @@ For more details, refer to the [Setup Guide][setup].
 - [Kibana](https://github.com/elastic/kibana): Elastic's analytics and visualization platform for Elasticsearch; workflow features use LiquidJS for Liquid templates.
 - [Opensense](https://www.opensense.com/): The smarter way to send email.
 - [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-- [Semgrep](https://github.com/returntocorp/semgrep): Lightweight static analysis for many languages.
-- [Sentry](https://github.com/getsentry/sentry): Developer-first error monitoring and performance platform; the JavaScript SDK loader is built with Liquid templates (LiquidJS).
 - [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
 - [Mitosis](https://github.com/BuilderIO/mitosis): Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more.
 - [Pattern Lab](https://patternlab.io/): a frontend workshop environment that helps you build, view, test, and showcase your design system's UI components.
@@ -78,7 +76,6 @@ If you personally love LiquidJS or it's benefiting your business, please conside
   <a href="https://www.11ty.dev/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/35147177?v=4&s=100" height="80" style="vertical-align: middle;" alt="Eleventy" title="Eleventy"/></a>
   <a href="https://www.opensense.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/opensense-inc/bf840ae/logo/256.png?height=100" height="80" style="vertical-align: middle;" alt="Opensense Inc." title="Opensense"/></a>
   <a href="https://github.com/microsoft" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/6154722?v=4&s=100" height="80" style="vertical-align: middle;" alt="Microsoft" title="Microsoft"/></a>
-  <a href="https://sentry.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/1396951?v=4&s=100" height="80" style="vertical-align: middle;" alt="Sentry" title="Sentry"/></a>
   <a href="https://www.checkoutblocks.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/114603307?v=4&s=100" height="80" style="vertical-align: middle;" alt="Checkout Blocks" title="Checkout Blocks"/></a>
   <a href="https://customer.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/1152079?v=4&s=100" height="80" style="vertical-align: middle;" alt="Customer IO" title="Customer IO"/></a>
   <a href="https://syntax.fm/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/130389858?v=4&s=100" height="80" style="vertical-align: middle;" alt="Syntax Podcast" title="Syntax Podcast"/></a>
@@ -222,7 +219,6 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MorielHarush"><img src="https://avatars.githubusercontent.com/u/93482738?v=4?s=100" width="100px;" alt="MorielHarush"/><br /><sub><b>MorielHarush</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=MorielHarush" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://doruk.ch"><img src="https://avatars.githubusercontent.com/u/77903714?v=4?s=100" width="100px;" alt="Peak Twilight"/><br /><sub><b>Peak Twilight</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=peaktwilight" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/joecottam"><img src="https://avatars.githubusercontent.com/u/44173086?v=4?s=100" width="100px;" alt="Joe Cottam"/><br /><sub><b>Joe Cottam</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=joecottam" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/timbze"><img src="https://avatars.githubusercontent.com/u/35117769?v=4?s=100" width="100px;" alt="Timmy Braun"/><br /><sub><b>Timmy Braun</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=timbze" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
