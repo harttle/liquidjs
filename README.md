@@ -54,9 +54,9 @@ For more details, refer to the [Setup Guide][setup].
 
 - [Eleventy](https://www.11ty.dev/): Eleventy, a simpler static site generator.
 - [Github Docs](https://github.com/github/docs): The open-source repo for docs.github.com.
+- [Kibana](https://github.com/elastic/kibana): Elastic's analytics and visualization platform for Elasticsearch; workflow features use LiquidJS for Liquid templates.
 - [Opensense](https://www.opensense.com/): The smarter way to send email.
 - [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-- [Semgrep](https://github.com/returntocorp/semgrep): Lightweight static analysis for many languages.
 - [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
 - [Mitosis](https://github.com/BuilderIO/mitosis): Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more.
 - [Pattern Lab](https://patternlab.io/): a frontend workshop environment that helps you build, view, test, and showcase your design system's UI components.
