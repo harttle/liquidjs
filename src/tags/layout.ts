@@ -32,7 +32,7 @@ export default class extends Tag {
     // render remaining contents and store rendered results
     ctx.setRegister('blockMode', BlockMode.STORE)
     const html = yield renderer.renderTemplates(this.templates, ctx)
-    const blocks = ctx.getRegister('blocks')
+    const blocks = ctx.getRegister('blocks', {} as Record<string, any>)
 
     // set whole content to anonymous block if anonymous doesn't specified
     if (blocks[''] === undefined) blocks[''] = (parent: BlankDrop, emitter: Emitter) => emitter.write(html)

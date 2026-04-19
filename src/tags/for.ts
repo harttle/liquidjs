@@ -50,7 +50,7 @@ export default class extends Tag {
     }
 
     const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
-    ctx.push({ continue: ctx.getRegister(continueKey) })
+    ctx.push({ continue: ctx.getRegister(continueKey, {}) })
     const hash = yield this.hash.render(ctx)
     ctx.pop()
 

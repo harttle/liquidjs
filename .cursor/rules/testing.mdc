@@ -1,0 +1,17 @@
+---
+description: Testing conventions — e2e uses built dist, integration uses src
+globs: test/**/*.ts
+alwaysApply: false
+---
+
+# Testing
+
+## End-to-end tests (`test/e2e`)
+
+- **Use the built package**, not TypeScript sources under `src/`.
+- Import the public API from the package root (for example `import { Liquid } from '../..'`), which resolves through `package.json` to **`dist/`** (`main`, `module`, etc.).
+- **Avoid** `import … from '../../src/liquid'` (or other `src/` paths) in `test/e2e/**` so e2e matches what consumers get from npm and you do not depend on an unbuilt tree.
+
+## Integration and unit tests
+
+- Tests under `test/integration/`, `src/**/*.spec.ts`, and similar may import from **`src/`** when the suite is meant to run against the current TypeScript sources (typical for this repo’s Jest setup).
