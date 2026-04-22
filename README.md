@@ -54,9 +54,9 @@ For more details, refer to the [Setup Guide][setup].
 
 - [Eleventy](https://www.11ty.dev/): Eleventy, a simpler static site generator.
 - [Github Docs](https://github.com/github/docs): The open-source repo for docs.github.com.
+- [Kibana](https://github.com/elastic/kibana): Elastic's analytics and visualization platform for Elasticsearch; workflow features use LiquidJS for Liquid templates.
 - [Opensense](https://www.opensense.com/): The smarter way to send email.
 - [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-- [Semgrep](https://github.com/returntocorp/semgrep): Lightweight static analysis for many languages.
 - [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
 - [Mitosis](https://github.com/BuilderIO/mitosis): Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more.
 - [Pattern Lab](https://patternlab.io/): a frontend workshop environment that helps you build, view, test, and showcase your design system's UI components.
@@ -108,7 +108,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://harttle.land"><img src="https://avatars3.githubusercontent.com/u/4427974?v=4?s=100" width="100px;" alt="Jun Yang"/><br /><sub><b>Jun Yang</b></sub></a><br /><a href="#maintenance-harttle" title="Maintenance">🚧</a> <a href="https://github.com/harttle/liquidjs/commits?author=harttle" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/harttle"><img src="https://avatars3.githubusercontent.com/u/4427974?v=4?s=100" width="100px;" alt="Jun Yang"/><br /><sub><b>Jun Yang</b></sub></a><br /><a href="#maintenance-harttle" title="Maintenance">🚧</a> <a href="https://github.com/harttle/liquidjs/commits?author=harttle" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/chenos"><img src="https://avatars0.githubusercontent.com/u/2993310?v=4?s=100" width="100px;" alt="chenos"/><br /><sub><b>chenos</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=chenos" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://zachleat.com/"><img src="https://avatars2.githubusercontent.com/u/39355?v=4?s=100" width="100px;" alt="Zach Leatherman"/><br /><sub><b>Zach Leatherman</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/issues?q=author%3Azachleat" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/thardy"><img src="https://avatars3.githubusercontent.com/u/120636?v=4?s=100" width="100px;" alt="Tim Hardy"/><br /><sub><b>Tim Hardy</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=thardy" title="Code">💻</a></td>

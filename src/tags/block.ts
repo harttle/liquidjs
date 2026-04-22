@@ -23,20 +23,25 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter) {
     const blockRender = this.getBlockRender(ctx)
     if (ctx.getRegister('blockMode') === BlockMode.STORE) {
-      ctx.getRegister('blocks')[this.block] = blockRender
+      ctx.getRegister('blocks', {} as Record<string, any>)[this.block] = blockRender
     } else {
       yield blockRender(new BlockDrop(), emitter)
     }
   }
 
   private getBlockRender (ctx: Context) {
+    const self = this as Tag
     const { liquid, templates } = this
-    const renderChild = ctx.getRegister('blocks')[this.block]
+    const renderChild = ctx.getRegister('blocks', {} as Record<string, any>)[this.block]
     const renderCurrent = function * (superBlock: BlockDrop, emitter: Emitter) {
-      // add {{ block.super }} support when rendering
+      const stack: Tag[] = ctx.getRegister('blockStack', [])
+      if (stack.includes(self)) throw new Error('block tag cannot be nested')
+
+      stack.push(self)
       ctx.push({ block: superBlock })
       yield liquid.renderer.renderTemplates(templates, ctx, emitter)
       ctx.pop()
+      stack.pop()
     }
     return renderChild
       ? (superBlock: BlockDrop, emitter: Emitter) => renderChild(

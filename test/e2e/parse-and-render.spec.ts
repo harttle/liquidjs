@@ -82,4 +82,39 @@ describe('.parseAndRender()', function () {
       expect(() => e.parseAndRenderSync('{% render "link" %}')).toThrow(/ENOENT|Failed to lookup/)
     })
   })
+  describe('layout: nested {% block %} regression', function () {
+    let root: string
+    beforeEach(function () {
+      root = mkdtempSync(join(tmpdir(), 'liquid-e2e-layout-nested-'))
+    })
+    afterEach(function () {
+      rmSync(root, { recursive: true, force: true })
+    })
+    it('should reject same-name {% block %} nested in child template (no hang / OOM)', async function () {
+      writeFileSync(
+        join(root, 'layout.html'),
+        '<header>{% block a %}default-a{% endblock %}</header>' +
+        '<main>{% block b %}default-b{% endblock %}</main>' +
+        '<footer>{% block c %}default-c{% endblock %}</footer>'
+      )
+      writeFileSync(
+        join(root, 'template.html'),
+        '{% layout "layout" %}' +
+        '{% block a %}outer-a {% block a %}inner-a{% endblock %}{% endblock %}' +
+        '{% block b %}content-b{% endblock %}' +
+        '{% block c %}content-c{% endblock %}'
+      )
+      const liquid = new Liquid({ root, extname: '.html' })
+      await expect(liquid.renderFile('template')).rejects.toThrow(/block tag cannot be nested/)
+    })
+    it('should reject nested anonymous {% block %} in child template (no hang / OOM)', async function () {
+      writeFileSync(join(root, 'parent.html'), 'X{%block%}{%endblock%}Y')
+      writeFileSync(
+        join(root, 'template.html'),
+        '{% layout "parent" %}{%block%}A{%block%}B{%endblock%}{%endblock%}'
+      )
+      const liquid = new Liquid({ root, extname: '.html' })
+      await expect(liquid.renderFile('template')).rejects.toThrow(/block tag cannot be nested/)
+    })
+  })
 })

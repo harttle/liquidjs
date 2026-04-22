@@ -50,7 +50,7 @@ describe('tags/include', function () {
     })
     return liquid.renderFile('/parent.html').catch(function (e) {
       expect(e.name).toBe('TokenizationError')
-      expect(e.message).toMatch('illegal file path, file:/parent.html, line:1, col:11')
+      expect(e.message).toMatch(/illegal file path, file:.*parent.html, line:1, col:11/)
     })
   })
 

@@ -166,6 +166,27 @@ describe('tags/layout', function () {
     const html = await liquid.renderFile('/main.html')
     return expect(html).toBe('XAY')
   })
+  it('should reject nested {% block %} with the same name (no OOM / hang)', function () {
+    mock({
+      '/layout.html':
+        '<header>{% block a %}default-a{% endblock %}</header>' +
+        '<main>{% block b %}default-b{% endblock %}</main>' +
+        '<footer>{% block c %}default-c{% endblock %}</footer>',
+      '/template.html':
+        '{% layout "layout" %}' +
+        '{% block a %}outer-a {% block a %}inner-a{% endblock %}{% endblock %}' +
+        '{% block b %}content-b{% endblock %}' +
+        '{% block c %}content-c{% endblock %}'
+    })
+    return expect(liquid.renderFile('/template.html')).rejects.toThrow(/block tag cannot be nested/)
+  })
+  it('should reject nested anonymous {% block %} (no OOM / hang)', function () {
+    mock({
+      '/parent.html': 'X{%block%}{%endblock%}Y'
+    })
+    const src = '{% layout "parent.html" %}{%block%}A{%block%}B{%endblock%}{%endblock%}'
+    return expect(liquid.parseAndRender(src)).rejects.toThrow(/block tag cannot be nested/)
+  })
   it('should not bleed scope into `include` layout', async function () {
     mock({
       '/parent.html': 'X{%block a%}{%endblock%}Y{%block b%}{%endblock%}Z',

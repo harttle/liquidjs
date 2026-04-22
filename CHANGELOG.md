@@ -1,3 +1,10 @@
+## [10.25.6](https://github.com/harttle/liquidjs/compare/v10.25.5...v10.25.6) (2026-04-19)
+
+
+### Bug Fixes
+
+* nested block for layout ([#883](https://github.com/harttle/liquidjs/issues/883)) ([e2311df](https://github.com/harttle/liquidjs/commit/e2311dfd6e82f73509308aa8a3a1fafc92e226f0))
+
 ## [10.25.5](https://github.com/harttle/liquidjs/compare/v10.25.4...v10.25.5) (2026-04-07)
 
 
