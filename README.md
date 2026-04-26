@@ -64,6 +64,7 @@ For more details, refer to the [Setup Guide][setup].
 - [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction): a secure, enterprise-grade, low-code software as a service (SaaS) platform for creating, hosting, and administering modern external-facing business websites.
 - [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal): an automatically generated, fully customizable website with the documentation of your APIs.
 - [WISMOlabs](https://wismolabs.com/): Post Purchase Experience platform for eCommerce retailers enhancing customer satisfaction by using LiquidJS to provide customizable post-purchase experiences through programmable email, SMS, order tracking pages, and webhooks.
+- [Freshet](https://chromewebstore.google.com/detail/freshet/mpclplhdencffbilobpcapccnihpelcg): *JSON in, page out* — a Chrome extension that uses LiquidJS templates per URL pattern, so the JSON becomes a rendered, useful page.
 
 Feel free to create a PR or contact me to add your use case into this list!
 
