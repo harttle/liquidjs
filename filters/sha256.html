@@ -2,20 +2,20 @@
 <html lang="en">
 <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
-  <title>base64_encode | LiquidJS</title>
+  <title>sha256 | LiquidJS</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="LiquidJS is a simple, expressive and safe Shopify / GitHub Pages compatible template engine in pure JavaScript.">
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net/">
   <link rel="manifest" href="/manifest.json">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://liquidjs.com/filters/base64_encode.html">
+  <link rel="canonical" href="https://liquidjs.com/filters/sha256.html">
   <!-- Alternative links -->
   
     
-      <link rel="alternative" hreflang="en" href="https://liquidjs.com/filters/base64_encode">
+      <link rel="alternative" hreflang="en" href="https://liquidjs.com/filters/sha256">
     
-      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/filters/base64_encode">
+      <link rel="alternative" hreflang="zh-cn" href="https://liquidjs.com/zh-cn/filters/sha256">
     
   
   <!-- Icon -->
@@ -56,7 +56,7 @@
     </nav>
     <div class="main-nav-link icon-nav-link">
       <label><i class="icon-network"></i> <span class="icon-nav-title">English</span></label>
-      <select id="lang-select" data-canonical="filters/base64_encode.html">
+      <select id="lang-select" data-canonical="filters/sha256.html">
         
           <option value="en" selected>English</option>
         
@@ -86,29 +86,25 @@
           <div class="article">
             <div class="inner">
               <header class="article-header">
-                <h1 class="article-title" itemprop="name">base64_encode</h1>
+                <h1 class="article-title" itemprop="name">sha256</h1>
                 
-                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/filters/base64_encode.md" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
+                <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/edit/master/docs/source/filters/sha256.md" class="article-edit-link" title="Improve this doc"><i class="icon-pencil"></i></a>
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p class="since">v10.24.0</p>
+                <p class="since">vNEXT</p>
 
-<p>Encodes a string into Base64 format.</p>
+<p>Converts a string into an SHA-256 hash. The output is a lowercase hexadecimal string.</p>
 <p>Input</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token string">"one two three"</span> <span class="token operator">|</span> <span class="token function filter">base64_encode</span> <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;%-</span> <span class="token keyword">assign</span> secret_potion <span class="token operator">=</span> <span class="token string">'Polyjuice'</span> <span class="token operator">|</span> <span class="token function filter">sha256</span> <span class="token delimiter punctuation">-%&#125;</span></span>
+My secret potion: <span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> secret_potion <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>Output</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">b25lIHR3byB0aHJlZQ==<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">My secret potion: 44ac1d7a2936e30a5de07082fd65d6fe9b1fb658a1a98bfe65bc5959beac5dd0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>Input</p>
-<pre class="line-numbers language-liquid" data-language="liquid"><code class="language-liquid"><span class="token liquid language-liquid"><span class="token delimiter punctuation">&#123;&#123;</span> <span class="token string">"Hello, World! @#$%"</span> <span class="token operator">|</span> <span class="token function filter">base64_encode</span> <span class="token delimiter punctuation">&#125;&#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>Output</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">SGVsbG8sIFdvcmxkISBAIyQl<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-05-03T04:03:41.386Z" itemprop="dateModified">Last updated: 2026-05-03</time>
+                <time class="article-footer-updated" datetime="2026-05-03T04:03:41.388Z" itemprop="dateModified">Last updated: 2026-05-03</time>
                 <a href="overview.html" class="article-footer-next" title="Overview"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -160,7 +156,7 @@
     <a href="https://opencollective.com/liquidjs" class="mobile-nav-link" rel="external" target="_blank"><i class="icon-opencollective"></i></a>
     <div id="mobile-lang-select-wrap" class="mobile-nav-link">
       <label for="mobile-lang-select"><i class="icon-network"></i></label>
-      <select id="mobile-lang-select" data-canonical="filters/base64_encode.html">
+      <select id="mobile-lang-select" data-canonical="filters/sha256.html">
         
           <option value="en" selected>English</option>
         
