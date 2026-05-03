@@ -106,7 +106,8 @@ export class Context {
     return new Context(scope, this.opts, {
       sync: this.sync,
       globals: this.globals,
-      strictVariables: this.strictVariables
+      strictVariables: this.strictVariables,
+      ownPropertyOnly: this.ownPropertyOnly
     }, {
       renderLimit: this.renderLimit,
       memoryLimit: this.memoryLimit
