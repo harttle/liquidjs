@@ -50,6 +50,11 @@ const browserBase64 = {
   delimiters: ['', ''],
   './base64-impl': '../build/base64-impl-browser'
 }
+const browserCrypto = {
+  include: './src/filters/crypto.ts',
+  delimiters: ['', ''],
+  './crypto-impl': '../build/crypto-impl-browser'
+}
 const browserStream = {
   include: './src/emitters/index.ts',
   delimiters: ['', ''],
@@ -67,7 +72,7 @@ const nodeCjs = {
     format: 'cjs',
     banner
   }],
-  external: ['path', 'fs', 'stream'],
+  external: ['path', 'fs', 'stream', 'crypto'],
   plugins: [versionInjection, typescript(tsconfig('ES2020'))],
   treeshake,
   input
@@ -79,7 +84,7 @@ const nodeEsm = {
     format: 'esm',
     banner
   }],
-  external: ['path', 'fs', 'stream'],
+  external: ['path', 'fs', 'stream', 'crypto'],
   plugins: [
     versionInjection,
     replace(esmRequire),
@@ -100,6 +105,7 @@ const browserEsm = {
     versionInjection,
     replace(browserFS),
     replace(browserBase64),
+    replace(browserCrypto),
     replace(browserStream),
     typescript(tsconfig('es6'))
   ],
@@ -119,6 +125,7 @@ const browserUmd = {
     versionInjection,
     replace(browserFS),
     replace(browserBase64),
+    replace(browserCrypto),
     replace(browserStream),
     typescript(tsconfig('es5'))
   ],
@@ -138,6 +145,7 @@ const browserMin = {
     versionInjection,
     replace(browserFS),
     replace(browserBase64),
+    replace(browserCrypto),
     replace(browserStream),
     typescript(tsconfig('es5')),
     uglify()

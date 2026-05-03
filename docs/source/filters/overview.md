@@ -16,5 +16,6 @@ Array | slice, map, sort, sort_natural, uniq, where, where_exp, group_by, group_
 Date | date, date_to_xmlschema, date_to_rfc822, date_to_string, date_to_long_string
 Misc | default, json, jsonify, inspect, raw, to_integer
 Base64 | base64_encode, base64_decode
+Crypto | sha256, hmac_sha256
 
 [shopify/liquid]: https://github.com/Shopify/liquid
