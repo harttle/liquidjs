@@ -77,5 +77,10 @@ describe('filters/html', function () {
     it('should strip until empty', function () {
       return test('{{"<br/><br />< p ></p></ p >" | strip_html }}', '')
     })
+    it('should strip generic tags spanning ASCII newlines inside the tag', function () {
+      expect(liquid.parseAndRenderSync('{{"<img\nsrc=x\nonerror=alert(1)>" | strip_html}}')).toBe('')
+      expect(liquid.parseAndRenderSync('{{"<img\rsrc=x\ronerror=alert(1)>" | strip_html}}')).toBe('')
+      expect(liquid.parseAndRenderSync('{{"<svg\nonload=alert(1)>" | strip_html}}')).toBe('')
+    })
   })
 })

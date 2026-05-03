@@ -45,5 +45,5 @@ export function newline_to_br (this: FilterImpl, v: string) {
 export function strip_html (this: FilterImpl, v: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
-  return str.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<.*?>|<!--[\s\S]*?-->/g, '')
+  return str.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[\s\S]*?>|<!--[\s\S]*?-->/g, '')
 }
