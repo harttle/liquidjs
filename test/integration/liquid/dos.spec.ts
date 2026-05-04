@@ -48,6 +48,11 @@ describe('DoS related', function () {
       await expect(liquid.parseAndRender('{% render "large" %}')).rejects.toThrow('template render limit exceeded')
       await expect(liquid.parseAndRender('{% render "small" %}')).resolves.toBe('12345')
     })
+    it('should enforce renderLimit when for body has no template nodes', () => {
+      const liquid = new Liquid({ memoryLimit: 1e9, renderLimit: 1 })
+      expect(() => liquid.parseAndRenderSync('{%- for i in (1..5000000) -%}{%- endfor -%}', {}))
+        .toThrow('template render limit exceeded')
+    })
   })
   describe('#memoryLimit', () => {
     it('should throw for too many array creation in filters', async () => {
