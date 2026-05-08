@@ -31,6 +31,10 @@ describe('util/strftime', function () {
         expect(t(date, '%j')).toBe('061')
       })
     })
+    it('should cap excessive numeric pad width for day-of-month', function () {
+      expect(t(now, '%5d')).toBe('00004')
+      expect(t(now, '%2000d').length).toBe(1024)
+    })
     it('should format %q as date suffix', function () {
       const first = new TestDate('2016-03-01 03:05:03')
       const second = new TestDate('2016-03-02 03:05:03')
@@ -86,6 +90,11 @@ describe('util/strftime', function () {
       expect(t(time, '%2N')).toBe('12')
       expect(t(time, '%10N')).toBe('1290000000')
       expect(t(time, '%0N')).toBe('129000000')
+    })
+    it('should cap excessive numeric pad width for %N', function () {
+      const time = new TestDate('2019-12-15 01:21:00.129')
+      expect(t(time, '%2000N').length).toBe(1024)
+      expect(t(time, '%50000N').length).toBe(1024)
     })
     it('should format %p as upper cased am/pm', function () {
       expect(t(now, '%p')).toBe('PM')

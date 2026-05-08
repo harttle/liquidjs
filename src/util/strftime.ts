@@ -1,6 +1,9 @@
 import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
 
+/** Upper bound for numeric strftime widths (%N, %15d, …) — avoids unbounded pad / CPU / memory. */
+export const MAX_STRFTIME_PAD = 1024
+
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
   flags: object;
@@ -93,7 +96,9 @@ const formatCodes = {
   m: (d: LiquidDate) => d.getMonth() + 1,
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
-    const width = Number(opts.width) || 9
+    let width = Number(opts.width) || 9
+    if (!Number.isFinite(width) || width < 0) width = 9
+    if (width > MAX_STRFTIME_PAD) width = MAX_STRFTIME_PAD
     const str = String(d.getMilliseconds()).slice(0, width)
     return padEnd(str, width, '0')
   },
@@ -130,6 +135,25 @@ export function strftime (d: LiquidDate, formatStr: string) {
   return output + remaining
 }
 
+/** Sum of clamped numeric widths in a strftime format string (for memoryLimit accounting). */
+export function estimateStrftimePaddingMemory (formatStr: string): number {
+  if (!formatStr) return 0
+  let sum = 0
+  const re = /%([-_0^#:]+)?(\d+)?([EO])?(.)/g
+  let m
+  while ((m = re.exec(formatStr)) !== null) {
+    const flagStr = m[1] || ''
+    const width = m[2]
+    const conversion = m[4]
+    const flags: Record<string, boolean> = {}
+    for (const flag of flagStr) flags[flag] = true
+    if (flags['-']) continue
+    if (width) sum += Math.min(Number(width), MAX_STRFTIME_PAD)
+    else if (conversion === 'N') sum += Math.min(9, MAX_STRFTIME_PAD)
+  }
+  return sum
+}
+
 function format (d: LiquidDate, match: RegExpExecArray) {
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
@@ -138,11 +162,13 @@ function format (d: LiquidDate, match: RegExpExecArray) {
   for (const flag of flagStr) flags[flag] = true
   let ret = String(convert(d, { flags, width, modifier }))
   let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
-  let padWidth = width || padWidths[conversion] || 0
+  let padWidth = width ? Number(width) : (padWidths[conversion as keyof typeof padWidths] || 0)
+  if (!Number.isFinite(padWidth) || padWidth < 0) padWidth = 0
   if (flags['^']) ret = ret.toUpperCase()
   else if (flags['#']) ret = changeCase(ret)
   if (flags['_']) padChar = ' '
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
+  else if (padWidth > MAX_STRFTIME_PAD) padWidth = MAX_STRFTIME_PAD
   return padStart(ret, padWidth, padChar)
 }

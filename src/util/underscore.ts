@@ -152,9 +152,11 @@ export function padEnd (str: any, length: number, ch = ' ') {
 
 export function pad (str: any, length: number, ch: string, add: (str: string, ch: string) => string) {
   str = String(str)
-  let n = length - str.length
-  while (n-- > 0) str = add(str, ch)
-  return str
+  const n = length - str.length
+  if (n <= 0) return str
+  const padChunk = ch.repeat(n)
+  const probe = add('probe', ch)
+  return probe[0] === ch ? padChunk + str : str + padChunk
 }
 
 export function identify<T> (val: T): T {

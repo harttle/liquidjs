@@ -204,6 +204,18 @@ describe('filters/date', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S" }}', '1991-01-01T04:30:00', undefined, optsWithDateFormat)
     })
   })
+  describe('strftime width / memoryLimit', () => {
+    it('should charge memoryLimit for huge numeric strftime widths', () => {
+      const liquid = new Liquid({ memoryLimit: 500 })
+      expect(() => liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000000d' }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should clamp numeric strftime pad width', () => {
+      const liquid = new Liquid({ memoryLimit: 1e7 })
+      const out = liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%50000d' })
+      expect(out.length).toBe(1024)
+    })
+  })
 })
 describe('filters/date_to_xmlschema', function () {
   const liquid = new Liquid()

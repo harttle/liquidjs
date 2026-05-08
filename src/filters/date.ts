@@ -1,4 +1,4 @@
-import { toValue, stringify, isString, isNumber, LiquidDate, strftime, isNil } from '../util'
+import { toValue, stringify, isString, isNumber, LiquidDate, strftime, estimateStrftimePaddingMemory, isNil } from '../util'
 import { FilterImpl } from '../template'
 import { NormalizedFullOptions } from '../liquid-options'
 
@@ -9,6 +9,7 @@ export function date (this: FilterImpl, v: string | Date, format?: string, timez
   if (!date) return v
   format = toValue(format)
   format = isNil(format) ? this.context.opts.dateFormat : stringify(format)
+  this.context.memoryLimit.use(estimateStrftimePaddingMemory(format))
   return strftime(date, format)
 }
 
