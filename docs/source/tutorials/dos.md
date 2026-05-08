@@ -8,6 +8,8 @@ When the template or data context cannot be trusted, enabling DoS prevention opt
 
 Setting these options can largely ensure that your LiquidJS instance won't hang for extended periods or consume excessive memory. These limits are based on the available JavaScript APIs, so they are not precise hard limits but thresholds to help prevent your process from failing or hanging.
 
+For the security boundary and production hardening guidance, see [Security Model][security-model].
+
 ```typescript
 const liquid = new Liquid({
     parseLimit: 1e8, // typical size of your templates in each render
@@ -55,3 +57,4 @@ Even with small number of templates and iterations, memory usage can grow expone
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
 [renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
 [memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit
+[security-model]: /tutorials/security-model.html

@@ -1,14 +1,16 @@
 import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
+import type { Limiter } from './limiter'
 
 /** Upper bound for numeric strftime widths (%N, %15d, …) — avoids unbounded pad / CPU / memory. */
 export const MAX_STRFTIME_PAD = 1024
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
-  flags: object;
+  flags: Record<string, boolean>;
   width?: string;
   modifier?: string;
+  memoryLimit?: Pick<Limiter, 'use'>;
 }
 
 // prototype extensions
@@ -78,7 +80,7 @@ function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
     (opts.flags[':'] ? ':' : '') +
     padStart(m, 2, '0')
 }
-const formatCodes = {
+const formatCodes: Record<string, (d: LiquidDate, opts: FormatOptions) => unknown> = {
   a: (d: LiquidDate) => d.getShortWeekdayName(),
   A: (d: LiquidDate) => d.getLongWeekdayName(),
   b: (d: LiquidDate) => d.getShortMonthName(),
@@ -100,6 +102,7 @@ const formatCodes = {
     if (!Number.isFinite(width) || width < 0) width = 9
     if (width > MAX_STRFTIME_PAD) width = MAX_STRFTIME_PAD
     const str = String(d.getMilliseconds()).slice(0, width)
+    opts.memoryLimit?.use(Math.max(0, width - str.length))
     return padEnd(str, width, '0')
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
@@ -120,47 +123,28 @@ const formatCodes = {
   't': () => '\t',
   'n': () => '\n',
   '%': () => '%'
-};
-(formatCodes as any).h = formatCodes.b
+}
+formatCodes.h = formatCodes.b
 
-export function strftime (d: LiquidDate, formatStr: string) {
+export function strftime (d: LiquidDate, formatStr: string, memoryLimit?: Pick<Limiter, 'use'>) {
   let output = ''
   let remaining = formatStr
-  let match
+  let match: RegExpExecArray | null
   while ((match = rFormat.exec(remaining))) {
     output += remaining.slice(0, match.index)
     remaining = remaining.slice(match.index + match[0].length)
-    output += format(d, match)
+    output += format(d, match, memoryLimit)
   }
   return output + remaining
 }
 
-/** Sum of clamped numeric widths in a strftime format string (for memoryLimit accounting). */
-export function estimateStrftimePaddingMemory (formatStr: string): number {
-  if (!formatStr) return 0
-  let sum = 0
-  const re = /%([-_0^#:]+)?(\d+)?([EO])?(.)/g
-  let m
-  while ((m = re.exec(formatStr)) !== null) {
-    const flagStr = m[1] || ''
-    const width = m[2]
-    const conversion = m[4]
-    const flags: Record<string, boolean> = {}
-    for (const flag of flagStr) flags[flag] = true
-    if (flags['-']) continue
-    if (width) sum += Math.min(Number(width), MAX_STRFTIME_PAD)
-    else if (conversion === 'N') sum += Math.min(9, MAX_STRFTIME_PAD)
-  }
-  return sum
-}
-
-function format (d: LiquidDate, match: RegExpExecArray) {
+function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limiter, 'use'>) {
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
   if (!convert) return input
-  const flags = {}
+  const flags: Record<string, boolean> = {}
   for (const flag of flagStr) flags[flag] = true
-  let ret = String(convert(d, { flags, width, modifier }))
+  let ret = String(convert(d, { flags, width, modifier, memoryLimit }))
   let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
   let padWidth = width ? Number(width) : (padWidths[conversion as keyof typeof padWidths] || 0)
   if (!Number.isFinite(padWidth) || padWidth < 0) padWidth = 0
@@ -170,5 +154,7 @@ function format (d: LiquidDate, match: RegExpExecArray) {
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
   else if (padWidth > MAX_STRFTIME_PAD) padWidth = MAX_STRFTIME_PAD
+
+  memoryLimit?.use(Math.max(0, padWidth - ret.length))
   return padStart(ret, padWidth, padChar)
 }
