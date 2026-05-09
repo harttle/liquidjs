@@ -2,44 +2,23 @@
 title: Security Model
 ---
 
-LiquidJS provides DoS-oriented limits (`parseLimit`, `renderLimit`, `memoryLimit`) to reduce risk, but these limits are cooperative safeguards, not strict runtime isolation.
+LiquidJS provides DoS-oriented limits (`parseLimit`, `renderLimit`, `memoryLimit`) to reduce risk. This page explains what each limit protects, and the security boundary you should assume in production.
 
-## `memoryLimit` is cooperative
+## Security boundary
 
-`memoryLimit` tracks memory-sensitive allocations inside LiquidJS code paths that explicitly account for them. It is best-effort mitigation for template-driven abuse, not a strict heap cap.
+The built-in limits are cooperative safeguards, not strict runtime isolation.
 
-- It does **not** equal process RSS/heap usage.
-- It does **not** sandbox JavaScript execution.
-- It should be combined with process/container limits and request timeouts for production defense-in-depth.
+- They do **not** equal process RSS/heap usage.
+- They do **not** sandbox JavaScript execution.
+- They should be combined with process/container limits and request timeouts for defense in depth.
 
-## What it limits (and what it does not)
-
-`memoryLimit` only limits operations that LiquidJS itself counts.
-
-- Counted: memory-sensitive LiquidJS operations that call internal memory accounting.
-- Not guaranteed counted: arbitrary user object behavior such as custom `toValue()`/`toString()` chains, or other host-side code that allocates outside LiquidJS accounting points.
-
-In other words, `memoryLimit` limits what LiquidJS counts, not every byte your process may allocate.
-
-## Guidance for online services
-
-If you run an online service, avoid rendering fully user-defined templates whenever possible.
-
-- Prefer curated templates or a restricted template subset.
-- If user-defined templates are required, isolate rendering (worker/process/container), enforce OS/container memory and CPU limits, and apply request rate limits.
-- Treat `parseLimit`/`renderLimit`/`memoryLimit` as one layer in a broader DoS defense strategy.
-
-## DoS limits quick reference
-
-LiquidJS provides 3 DoS-oriented options:
+## Limits at a glance
 
 - [parseLimit][parseLimit]: limit total template size per `parse()` call.
 - [renderLimit][renderLimit]: limit total render time per `render()` call.
 - [memoryLimit][memoryLimit]: cooperatively limit memory-sensitive allocations counted by LiquidJS.
 
-For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
-
-## DoS limits details
+## Limit details
 
 ### parseLimit
 
@@ -63,6 +42,13 @@ For time-consuming tags and filters within a single template, the process can st
 
 ### memoryLimit
 
+`memoryLimit` only limits operations that LiquidJS explicitly counts.
+
+- Counted: memory-sensitive LiquidJS operations that call internal memory accounting.
+- Not guaranteed counted: arbitrary user object behavior such as custom `toValue()`/`toString()` chains, or other host-side code that allocates outside LiquidJS accounting points.
+
+In other words, `memoryLimit` limits what LiquidJS counts, not every byte your process may allocate.
+
 Even with small number of templates and iterations, memory usage can grow exponentially. In the following example, memory doubles with each iteration:
 
 ```liquid
@@ -72,7 +58,17 @@ Even with small number of templates and iterations, memory usage can grow expone
 {% endfor %}
 ```
 
-[memoryLimit][memoryLimit] restricts memory-sensitive filters to prevent excessive memory allocation. As [JavaScript uses GC to manage memory](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management), `memoryLimit` limits only the total number of objects allocated by memory-sensitive operations in LiquidJS and may not reflect the actual memory footprint.
+As [JavaScript uses GC to manage memory](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management), `memoryLimit` may not reflect the actual memory footprint.
+
+## Online service guidance
+
+If you run an online service, avoid rendering fully user-defined templates whenever possible.
+
+- Prefer curated templates or a restricted template subset.
+- If user-defined templates are required, isolate rendering (worker/process/container), enforce OS/container memory and CPU limits, and apply request rate limits.
+- Treat `parseLimit`/`renderLimit`/`memoryLimit` as one layer in a broader DoS defense strategy.
+
+For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
 
 [paralleljs]: https://www.npmjs.com/package/paralleljs
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
