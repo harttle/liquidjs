@@ -39,6 +39,41 @@ LiquidJS provides 3 DoS-oriented options:
 
 For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
 
+## DoS limits details
+
+### parseLimit
+
+[parseLimit][parseLimit] restricts the size (character length) of templates parsed in each `.parse()` call, including referenced partials and layouts. Since LiquidJS parses template strings in near O(n) time, limiting total template length is usually sufficient.
+
+A typical PC handles `1e8` (100M) characters without issues.
+
+### renderLimit
+
+Restricting template size alone is insufficient because dynamic loops with large counts can occur in render time. [renderLimit][renderLimit] mitigates this by limiting the time consumed by each `render()` call.
+
+```liquid
+{%- for i in (1..10000000) -%}
+    order: {{i}}
+{%- endfor -%}
+```
+
+Render time is checked on a per-template basis (before rendering each template). In the above example, there are 2 templates in the loop: `order: ` and `{{i}}`, render time will be checked 10000000x2 times.
+
+For time-consuming tags and filters within a single template, the process can still hang.
+
+### memoryLimit
+
+Even with small number of templates and iterations, memory usage can grow exponentially. In the following example, memory doubles with each iteration:
+
+```liquid
+{% assign array = "1,2,3" | split: "," %}
+{% for i in (1..32) %}
+    {% assign array = array | concat: array %}
+{% endfor %}
+```
+
+[memoryLimit][memoryLimit] restricts memory-sensitive filters to prevent excessive memory allocation. As [JavaScript uses GC to manage memory](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management), `memoryLimit` limits only the total number of objects allocated by memory-sensitive operations in LiquidJS and may not reflect the actual memory footprint.
+
 [paralleljs]: https://www.npmjs.com/package/paralleljs
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
 [renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
