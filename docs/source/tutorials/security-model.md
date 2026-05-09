@@ -28,3 +28,18 @@ If you run an online service, avoid rendering fully user-defined templates whene
 - Prefer curated templates or a restricted template subset.
 - If user-defined templates are required, isolate rendering (worker/process/container), enforce OS/container memory and CPU limits, and apply request rate limits.
 - Treat `parseLimit`/`renderLimit`/`memoryLimit` as one layer in a broader DoS defense strategy.
+
+## DoS limits quick reference
+
+LiquidJS provides 3 DoS-oriented options:
+
+- [parseLimit][parseLimit]: limit total template size per `parse()` call.
+- [renderLimit][renderLimit]: limit total render time per `render()` call.
+- [memoryLimit][memoryLimit]: cooperatively limit memory-sensitive allocations counted by LiquidJS.
+
+For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
+
+[paralleljs]: https://www.npmjs.com/package/paralleljs
+[parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
+[renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
+[memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit

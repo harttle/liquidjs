@@ -28,3 +28,18 @@ LiquidJS 提供了面向 DoS 的限制选项（`parseLimit`、`renderLimit`、`m
 - 优先使用受控模板或受限模板子集。
 - 如果必须支持用户自定义模板，请隔离渲染（worker/进程/容器），并同时配置操作系统或容器级的内存/CPU 限额与请求限流。
 - 将 `parseLimit` / `renderLimit` / `memoryLimit` 视为 DoS 防护体系中的一层，而不是唯一防线。
+
+## DoS 限制速查
+
+LiquidJS 提供 3 个 DoS 相关选项：
+
+- [parseLimit][parseLimit]：限制每次 `parse()` 的模板总长度。
+- [renderLimit][renderLimit]：限制每次 `render()` 的总渲染时间。
+- [memoryLimit][memoryLimit]：协作式限制 LiquidJS 已记账的内存敏感分配。
+
+对于单个模板中的重型操作，仍建议使用进程级隔离（例如 [paralleljs][paralleljs]）。
+
+[paralleljs]: https://www.npmjs.com/package/paralleljs
+[parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
+[renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
+[memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit
