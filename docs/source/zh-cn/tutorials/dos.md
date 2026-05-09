@@ -8,6 +8,8 @@ title: 防止 DoS 攻击
 
 设置这些选项可以在很大程度上确保你的 LiquidJS 实例不会长时间挂起或消耗过多内存。这些限制基于可用的 JavaScript API，因此它们不是精确的硬性限制，而是确保你的进程不会失败或挂起的阈值。
 
+关于安全边界和生产环境加固建议，请参见 [安全模型][security-model]。
+
 ```typescript
 const liquid = new Liquid({
     parseLimit: 1e8, // 每次渲染的模板的典型大小
@@ -53,3 +55,4 @@ const liquid = new Liquid({
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
 [renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
 [memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit
+[security-model]: /zh-cn/tutorials/security-model.html
