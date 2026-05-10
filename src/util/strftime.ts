@@ -98,11 +98,9 @@ const formatCodes: Record<string, (d: LiquidDate, opts: FormatOptions) => unknow
   m: (d: LiquidDate) => d.getMonth() + 1,
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
-    let width = Number(opts.width) || 9
-    if (!Number.isFinite(width) || width < 0) width = 9
-    if (width > MAX_STRFTIME_PAD) width = MAX_STRFTIME_PAD
+    const width = Math.min(Number(opts.width) || 9, MAX_STRFTIME_PAD)
     const str = String(d.getMilliseconds()).slice(0, width)
-    opts.memoryLimit?.use(Math.max(0, width - str.length))
+    opts.memoryLimit?.use(width - str.length)
     return padEnd(str, width, '0')
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
