@@ -79,5 +79,38 @@ describe('DoS related', function () {
       await expect(liquid.parseAndRender(src, { array, count: 3 })).resolves.toBe('a a a a a a a a')
       await expect(liquid.parseAndRender(src, { array, count: 100 })).rejects.toThrow('memory alloc limit exceeded, line:1, col:26')
     })
+    it('should charge strip_html input length to memoryLimit', () => {
+      const liquid = new Liquid({ memoryLimit: 100 })
+      expect(() => liquid.parseAndRenderSync('{{ s | strip_html }}', { s: 'a'.repeat(200) }))
+        .toThrow('memory alloc limit exceeded')
+    })
+  })
+  describe('strip_html ReDoS', () => {
+    // Regression for O(n^2) backtracking on unclosed `<script` / `<style` openers.
+    // The previous regex stalled the event loop for ~10s on 350KB of `'<script'.repeat`.
+    it('should handle many unclosed <script openers in linear time', () => {
+      const liquid = new Liquid()
+      const payload = '<script'.repeat(50000)
+      const t0 = Date.now()
+      const out = liquid.parseAndRenderSync('{{ x | strip_html }}', { x: payload })
+      expect(Date.now() - t0).toBeLessThan(1000)
+      expect(out).toBe(payload)
+    })
+    it('should handle many unclosed <style openers in linear time', () => {
+      const liquid = new Liquid()
+      const payload = '<style'.repeat(50000)
+      const t0 = Date.now()
+      const out = liquid.parseAndRenderSync('{{ x | strip_html }}', { x: payload })
+      expect(Date.now() - t0).toBeLessThan(1000)
+      expect(out).toBe(payload)
+    })
+    it('should handle <script openers that have > but no </script> in linear time', () => {
+      const liquid = new Liquid()
+      const payload = '<script>foo'.repeat(50000)
+      const t0 = Date.now()
+      const out = liquid.parseAndRenderSync('{{ x | strip_html }}', { x: payload })
+      expect(Date.now() - t0).toBeLessThan(1000)
+      expect(out).toBe('foo'.repeat(50000))
+    })
   })
 })
