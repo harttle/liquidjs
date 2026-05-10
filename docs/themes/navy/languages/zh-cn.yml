@@ -51,7 +51,7 @@ sidebar:
     plugins: 插件
     operators: 运算符
     truth: 真和假
-    dos: DoS
+    security_model: 安全模型
     static_analysis: 静态分析
 
     miscellaneous: 其他

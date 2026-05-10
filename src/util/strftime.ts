@@ -4,7 +4,7 @@ import type { Limiter } from './limiter'
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
-  flags: Record<string, boolean>;
+  flags: object;
   width?: string;
   modifier?: string;
   memoryLimit?: Pick<Limiter, 'use'>;
@@ -77,7 +77,7 @@ function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
     (opts.flags[':'] ? ':' : '') +
     padStart(m, 2, '0')
 }
-const formatCodes: Record<string, (d: LiquidDate, opts: FormatOptions) => unknown> = {
+const formatCodes = {
   a: (d: LiquidDate) => d.getShortWeekdayName(),
   A: (d: LiquidDate) => d.getLongWeekdayName(),
   b: (d: LiquidDate) => d.getShortMonthName(),
@@ -118,13 +118,13 @@ const formatCodes: Record<string, (d: LiquidDate, opts: FormatOptions) => unknow
   't': () => '\t',
   'n': () => '\n',
   '%': () => '%'
-}
-formatCodes.h = formatCodes.b
+};
+(formatCodes as any).h = formatCodes.b
 
 export function strftime (d: LiquidDate, formatStr: string, memoryLimit?: Pick<Limiter, 'use'>) {
   let output = ''
   let remaining = formatStr
-  let match: RegExpExecArray | null
+  let match
   while ((match = rFormat.exec(remaining))) {
     output += remaining.slice(0, match.index)
     remaining = remaining.slice(match.index + match[0].length)
@@ -137,18 +137,16 @@ function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limit
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
   if (!convert) return input
-  const flags: Record<string, boolean> = {}
+  const flags = {}
   for (const flag of flagStr) flags[flag] = true
   let ret = String(convert(d, { flags, width, modifier, memoryLimit }))
   let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
-  let padWidth = width ? Number(width) : (padWidths[conversion as keyof typeof padWidths] || 0)
-  if (!Number.isFinite(padWidth) || padWidth < 0) padWidth = 0
+  let padWidth = width || padWidths[conversion] || 0
   if (flags['^']) ret = ret.toUpperCase()
   else if (flags['#']) ret = changeCase(ret)
   if (flags['_']) padChar = ' '
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
-
-  memoryLimit?.use(Math.max(0, padWidth - ret.length))
+  memoryLimit?.use(Number(padWidth) - ret.length)
   return padStart(ret, padWidth, padChar)
 }

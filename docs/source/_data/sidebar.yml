@@ -19,7 +19,7 @@ tutorials:
     plugins: plugins.html
     operators: operators.html
     truth: truthy-and-falsy.html
-    dos: dos.html
+    security_model: security-model.html
     static_analysis: static-analysis.html
   miscellaneous:
     migration9: migrate-to-9.html

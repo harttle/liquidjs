@@ -154,9 +154,7 @@ export function pad (str: any, length: number, ch: string, add: (str: string, ch
   str = String(str)
   const n = length - str.length
   if (n <= 0) return str
-  const padChunk = ch.repeat(n)
-  const probe = add('probe', ch)
-  return probe[0] === ch ? padChunk + str : str + padChunk
+  return add(str, ch.repeat(n))
 }
 
 export function identify<T> (val: T): T {

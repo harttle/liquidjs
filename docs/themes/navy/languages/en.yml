@@ -51,7 +51,7 @@ sidebar:
     plugins: Plugins
     operators: Operators
     truth: Truthy and Falsy
-    dos: DoS
+    security_model: Security Model
     static_analysis: Static Analysis
 
     miscellaneous: Miscellaneous
