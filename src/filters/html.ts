@@ -42,36 +42,35 @@ export function newline_to_br (this: FilterImpl, v: string) {
   return str.replace(/\r?\n/gm, '<br />\n')
 }
 
+// Linear-time replacement for the previous backtracking regex
+//   /<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[\s\S]*?>|<!--[\s\S]*?-->/g
+// which is O(n^2) in V8 on inputs with many unclosed openers. JS regex has no atomic
+// groups / possessive quantifiers, so unrolled-loop patterns don't help asymptotically.
+// We scan forward with indexOf and cache the next known closer per kind so unclosed
+// openers don't re-scan the tail. Each character is visited O(1) times.
+const STRIP_BLOCKS = [['<script', '</script>'], ['<style', '</style>']] as const
+
 export function strip_html (this: FilterImpl, v: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
-  // Single-pass linear strip. The previous regex
-  //   /<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[\s\S]*?>|<!--[\s\S]*?-->/g
-  // backtracks O(n^2) on inputs with many unclosed openers (e.g. `'<script'.repeat(N)`).
-  // We use indexOf-based scanning and cache "no closer after position k" results so that
-  // repeated unclosed openers do not re-scan the tail. Total work is O(n).
+  const closers = [0, 0]
   let out = ''
   let i = 0
-  const n = str.length
-  let scriptEnd = 0
-  let styleEnd = 0
-  while (i < n) {
+  while (i < str.length) {
     const lt = str.indexOf('<', i)
-    if (lt < 0) { out += str.slice(i); break }
-    if (lt > i) out += str.slice(i, lt)
+    if (lt < 0) return out + str.slice(i)
+    out += str.slice(i, lt)
     let end = -1
-    if (str.startsWith('<script', lt)) {
-      if (scriptEnd !== -1 && scriptEnd < lt + 7) scriptEnd = str.indexOf('</script>', lt + 7)
-      if (scriptEnd >= 0) end = scriptEnd + 9
-    } else if (str.startsWith('<style', lt)) {
-      if (styleEnd !== -1 && styleEnd < lt + 6) styleEnd = str.indexOf('</style>', lt + 6)
-      if (styleEnd >= 0) end = styleEnd + 8
+    for (let k = 0; k < STRIP_BLOCKS.length; k++) {
+      const [opener, closer] = STRIP_BLOCKS[k]
+      if (!str.startsWith(opener, lt)) continue
+      const from = lt + opener.length
+      if (closers[k] !== -1 && closers[k] < from) closers[k] = str.indexOf(closer, from)
+      if (closers[k] >= 0) end = closers[k] + closer.length
+      break
     }
-    if (end < 0) {
-      const gt = str.indexOf('>', lt + 1)
-      if (gt < 0) { out += str.slice(lt); break }
-      end = gt + 1
-    }
+    if (end < 0) end = str.indexOf('>', lt + 1) + 1
+    if (end <= 0) return out + str.slice(lt)
     i = end
   }
   return out
