@@ -2,9 +2,6 @@ import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
 import type { Limiter } from './limiter'
 
-/** Upper bound for numeric strftime widths (%N, %15d, …) — avoids unbounded pad / CPU / memory. */
-export const MAX_STRFTIME_PAD = 1024
-
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
   flags: Record<string, boolean>;
@@ -98,7 +95,7 @@ const formatCodes: Record<string, (d: LiquidDate, opts: FormatOptions) => unknow
   m: (d: LiquidDate) => d.getMonth() + 1,
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
-    const width = Math.min(Number(opts.width) || 9, MAX_STRFTIME_PAD)
+    const width = Number(opts.width) || 9
     const str = String(d.getMilliseconds()).slice(0, width)
     opts.memoryLimit?.use(width - str.length)
     return padEnd(str, width, '0')
@@ -151,7 +148,6 @@ function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limit
   if (flags['_']) padChar = ' '
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
-  else if (padWidth > MAX_STRFTIME_PAD) padWidth = MAX_STRFTIME_PAD
 
   memoryLimit?.use(Math.max(0, padWidth - ret.length))
   return padStart(ret, padWidth, padChar)

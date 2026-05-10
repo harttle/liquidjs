@@ -38,7 +38,7 @@ Restricting template size alone is insufficient because dynamic loops with large
 
 Render time is checked on a per-template basis (before rendering each template). In the above example, there are 2 templates in the loop: `order: ` and `{{i}}`, render time will be checked 10000000x2 times.
 
-For time-consuming tags and filters within a single template, the process can still hang.
+`renderLimit` is not a hard CPU limiter. It is checked between template renders, so compute-intensive filters/tags/user-defined functions or deeply nested template execution between checks can still cause DoS.
 
 ### memoryLimit
 

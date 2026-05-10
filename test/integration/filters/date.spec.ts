@@ -222,10 +222,13 @@ describe('filters/date', function () {
       expect(() => liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f }))
         .toThrow('memory alloc limit exceeded')
     })
-    it('should clamp numeric strftime pad width', () => {
+    it('should honor numeric strftime pad width when memoryLimit allows', () => {
       const liquid = new Liquid({ memoryLimit: 1e7 })
-      const out = liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%50000d' })
-      expect(out.length).toBe(1024)
+      const out = liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000d' })
+      expect(out.length).toBe(5000)
+      const tight = new Liquid({ memoryLimit: 100 })
+      expect(() => tight.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000d' }))
+        .toThrow('memory alloc limit exceeded')
     })
   })
 })
