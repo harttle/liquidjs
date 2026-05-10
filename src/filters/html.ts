@@ -42,28 +42,30 @@ export function newline_to_br (this: FilterImpl, v: string) {
   return str.replace(/\r?\n/gm, '<br />\n')
 }
 
-// Linear-time strip via indexOf scan. A regex equivalent to the old
-//   /<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>|<[\s\S]*?>|<!--[\s\S]*?-->/g
-// is O(n^2) on unclosed openers (JS regex has no atomic groups / memoization),
-// so we cache "next known </script>/</style> position" across openers.
+// <script>, <style>, and <!--...--> are raw-text blocks (HTML5): their content is
+// opaque until the matching closer, so a `>` inside CSS/JS/comment does not end them.
+// Same set as Shopify Liquid's STRIP_HTML_BLOCKS. Everything else is a generic <...>.
+// We scan with indexOf and cache the next known closer per kind, keeping total work
+// O(n); a regex equivalent is O(n^2) in V8 (no atomic groups / memoization).
 export function strip_html (this: FilterImpl, v: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
+  const blocks: [string, string][] = [['<script', '</script>'], ['<style', '</style>'], ['<!--', '-->']]
+  const closes = [0, 0, 0]
   let out = ''
   let i = 0
-  let scriptEnd = 0
-  let styleEnd = 0
   while (i < str.length) {
     const lt = str.indexOf('<', i)
     if (lt < 0) return out + str.slice(i)
     out += str.slice(i, lt)
     let end = -1
-    if (str.startsWith('<script', lt)) {
-      if (scriptEnd >= 0 && scriptEnd < lt + 7) scriptEnd = str.indexOf('</script>', lt + 7)
-      if (scriptEnd >= 0) end = scriptEnd + 9
-    } else if (str.startsWith('<style', lt)) {
-      if (styleEnd >= 0 && styleEnd < lt + 6) styleEnd = str.indexOf('</style>', lt + 6)
-      if (styleEnd >= 0) end = styleEnd + 8
+    for (let k = 0; k < blocks.length; k++) {
+      const [opener, closer] = blocks[k]
+      if (!str.startsWith(opener, lt)) continue
+      const from = lt + opener.length
+      if (closes[k] >= 0 && closes[k] < from) closes[k] = str.indexOf(closer, from)
+      if (closes[k] >= 0) end = closes[k] + closer.length
+      break
     }
     if (end < 0) end = str.indexOf('>', lt + 1) + 1
     if (end <= 0) return out + str.slice(lt)
