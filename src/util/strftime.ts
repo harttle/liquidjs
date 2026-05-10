@@ -1,11 +1,13 @@
 import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
+import type { Limiter } from './limiter'
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
   flags: object;
   width?: string;
   modifier?: string;
+  memoryLimit?: Pick<Limiter, 'use'>;
 }
 
 // prototype extensions
@@ -95,6 +97,7 @@ const formatCodes = {
   N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
     const str = String(d.getMilliseconds()).slice(0, width)
+    opts.memoryLimit?.use(width - str.length)
     return padEnd(str, width, '0')
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
@@ -118,25 +121,25 @@ const formatCodes = {
 };
 (formatCodes as any).h = formatCodes.b
 
-export function strftime (d: LiquidDate, formatStr: string) {
+export function strftime (d: LiquidDate, formatStr: string, memoryLimit?: Pick<Limiter, 'use'>) {
   let output = ''
   let remaining = formatStr
   let match
   while ((match = rFormat.exec(remaining))) {
     output += remaining.slice(0, match.index)
     remaining = remaining.slice(match.index + match[0].length)
-    output += format(d, match)
+    output += format(d, match, memoryLimit)
   }
   return output + remaining
 }
 
-function format (d: LiquidDate, match: RegExpExecArray) {
+function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limiter, 'use'>) {
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
   if (!convert) return input
   const flags = {}
   for (const flag of flagStr) flags[flag] = true
-  let ret = String(convert(d, { flags, width, modifier }))
+  let ret = String(convert(d, { flags, width, modifier, memoryLimit }))
   let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
   let padWidth = width || padWidths[conversion] || 0
   if (flags['^']) ret = ret.toUpperCase()
@@ -144,5 +147,6 @@ function format (d: LiquidDate, match: RegExpExecArray) {
   if (flags['_']) padChar = ' '
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
+  memoryLimit?.use(Number(padWidth) - ret.length)
   return padStart(ret, padWidth, padChar)
 }

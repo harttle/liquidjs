@@ -204,6 +204,33 @@ describe('filters/date', function () {
       return test('{{ "1990-12-31T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S" }}', '1991-01-01T04:30:00', undefined, optsWithDateFormat)
     })
   })
+  describe('strftime width / memoryLimit', () => {
+    it('should charge memoryLimit for huge numeric strftime widths', () => {
+      const liquid = new Liquid({ memoryLimit: 500 })
+      expect(() => liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000000d' }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should charge memoryLimit for array format PoC', () => {
+      const liquid = new Liquid({ memoryLimit: 50, renderLimit: 1e9 })
+      expect(() => liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: ['a'.repeat(2000000)] }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should charge memoryLimit for object toString format PoC', () => {
+      const liquid = new Liquid({ memoryLimit: 50, renderLimit: 1e9 })
+      const huge = 'a'.repeat(2000000)
+      const f = { toString: () => huge }
+      expect(() => liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should honor numeric strftime pad width when memoryLimit allows', () => {
+      const liquid = new Liquid({ memoryLimit: 1e7 })
+      const out = liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000d' })
+      expect(out.length).toBe(5000)
+      const tight = new Liquid({ memoryLimit: 100 })
+      expect(() => tight.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000d' }))
+        .toThrow('memory alloc limit exceeded')
+    })
+  })
 })
 describe('filters/date_to_xmlschema', function () {
   const liquid = new Liquid()
