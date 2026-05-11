@@ -57,6 +57,9 @@ describe('filters/html', function () {
     it('should strip multiline comments', function () {
       expect(liquid.parseAndRenderSync('{{"<!--foo\r\nbar \ncoo\t  \r\n  -->"|strip_html}}')).toBe('')
     })
+    it('should treat > inside comments as comment content (not a tag end)', function () {
+      expect(liquid.parseAndRenderSync('{{ "<!-- a > b -->after" | strip_html }}')).toBe('after')
+    })
     it('should strip all style tags and their contents', function () {
       return test('{{ "<style>cite { font-style: italic; }</style><cite>Ulysses<cite>?" | strip_html }}',
         'Ulysses?')
