@@ -42,29 +42,25 @@ export function newline_to_br (this: FilterImpl, v: string) {
   return str.replace(/\r?\n/gm, '<br />\n')
 }
 
-// Raw-text blocks (HTML5): a regex equivalent is O(n^2) in V8 on unclosed openers.
+// Raw-text blocks (HTML5) plus '<...>' as the catch-all kind; a regex
+// equivalent is O(n^2) in V8 on unclosed openers.
 export function strip_html (this: FilterImpl, v: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
-  const blocks = new Set<[string, string]>([['<script', '</script>'], ['<style', '</style>'], ['<!--', '-->']])
+  const blocks = new Map([['<script', '</script>'], ['<style', '</style>'], ['<!--', '-->'], ['<', '>']])
   let out = ''
   let i = 0
   while (i < str.length) {
     const lt = str.indexOf('<', i)
     if (lt < 0) return out + str.slice(i)
     out += str.slice(i, lt)
-    let end = -1
-    for (const block of blocks) {
-      const [opener, closer] = block
+    for (const [opener, closer] of blocks) {
       if (!str.startsWith(opener, lt)) continue
       const e = str.indexOf(closer, lt + opener.length)
-      if (e < 0) blocks.delete(block)
-      else end = e + closer.length
-      break
+      if (e >= 0) { i = e + closer.length; break }
+      blocks.delete(opener)
     }
-    if (end < 0) end = str.indexOf('>', lt + 1) + 1
-    if (end <= 0) return out + str.slice(lt)
-    i = end
+    if (i === lt) return out + str.slice(lt)
   }
   return out
 }
