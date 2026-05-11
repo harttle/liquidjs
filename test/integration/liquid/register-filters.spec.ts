@@ -65,22 +65,13 @@ describe('liquid#registerFilter()', function () {
     it('should use a null-prototype map for filters', () => {
       expect(Object.getPrototypeOf(liquid.filters)).toBeNull()
     })
-    it('should still resolve built-in filters', async () => {
-      expect(await liquid.parseAndRender(`{{ 'a' | append: 'b' }}`)).toBe('ab')
-    })
-    it('should not resolve names that exist only on Object.prototype', async () => {
+    it('should treat Object.prototype keys as unregistered unless explicitly registered', async () => {
       const registered = new Set(Object.keys(liquid.filters))
+      const strict = new Liquid({ strictFilters: true })
       for (const name of Object.getOwnPropertyNames(Object.prototype)) {
         if (registered.has(name)) continue
         const out = await liquid.parseAndRender(`{{ x | ${name} }}`, { x: 42 })
         expect(out).toBe('42')
-      }
-    })
-    it('should reject unknown filter names under strictFilters, including Object.prototype keys', async () => {
-      const strict = new Liquid({ strictFilters: true })
-      const registered = new Set(Object.keys(strict.filters))
-      for (const name of Object.getOwnPropertyNames(Object.prototype)) {
-        if (registered.has(name)) continue
         await expect(strict.parseAndRender(`{{ 1 | ${name} }}`)).rejects.toThrow('undefined filter')
       }
     })

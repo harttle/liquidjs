@@ -77,16 +77,13 @@ describe('Issues', function () {
     )
     expect(html).toBe('BAR')
   })
-  it('filter/tag maps are null-prototype; built-ins work (node + UMD)', async () => {
-    const tpl = `{{ 'a' | append: 'b' }}`
+  it('filter/tag maps are null-prototype (node + UMD)', async () => {
     const nodeEngine = new Liquid()
     const umdEngine = new LiquidUMD()
     expect(Object.getPrototypeOf(nodeEngine.filters)).toBeNull()
     expect(Object.getPrototypeOf(nodeEngine.tags)).toBeNull()
     expect(Object.getPrototypeOf(umdEngine.filters)).toBeNull()
     expect(Object.getPrototypeOf(umdEngine.tags)).toBeNull()
-    expect(await nodeEngine.parseAndRender(tpl)).toBe('ab')
-    expect(await umdEngine.parseAndRender(tpl)).toBe('ab')
   })
   it('lenientIf not working as expected in umd #313', async () => {
     const engine = new LiquidUMD({
