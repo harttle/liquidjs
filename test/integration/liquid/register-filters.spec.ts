@@ -61,29 +61,28 @@ describe('liquid#registerFilter()', function () {
     })
   })
 
-  describe('filter name must not inherit from Object.prototype', () => {
-    it('should treat valueOf as unregistered (no FilterImpl leak)', async () => {
-      const out = await liquid.parseAndRender(
-        '{% assign r = 1 | valueOf %}{{ r.liquid.options.fs.sep }}|{{ r }}'
-      )
-      expect(out).toBe('|1')
+  describe('filter registry storage', () => {
+    it('should use a null-prototype map for filters', () => {
+      expect(Object.getPrototypeOf(liquid.filters)).toBeNull()
     })
-    it('should not expose context, liquid, or token via valueOf', async () => {
-      const out = await liquid.parseAndRender(
-        '{% assign r = 1 | valueOf %}{{ r.context }}/{{ r.liquid }}/{{ r.token }}'
-      )
-      expect(out).toBe('//')
+    it('should still resolve built-in filters', async () => {
+      expect(await liquid.parseAndRender(`{{ 'a' | append: 'b' }}`)).toBe('ab')
     })
-    it.each(['toString', 'constructor', 'hasOwnProperty', 'isPrototypeOf', '__proto__', '__defineGetter__'])(
-      'should treat %s as unregistered filter',
-      async (name) => {
-        const out = await liquid.parseAndRender(`{{ "x" | ${name} }}`)
-        expect(out).toBe('x')
+    it('should not resolve names that exist only on Object.prototype', async () => {
+      const registered = new Set(Object.keys(liquid.filters))
+      for (const name of Object.getOwnPropertyNames(Object.prototype)) {
+        if (registered.has(name)) continue
+        const out = await liquid.parseAndRender(`{{ x | ${name} }}`, { x: 42 })
+        expect(out).toBe('42')
       }
-    )
-    it('should throw under strictFilters for valueOf', async () => {
+    })
+    it('should reject unknown filter names under strictFilters, including Object.prototype keys', async () => {
       const strict = new Liquid({ strictFilters: true })
-      await expect(strict.parseAndRender('{{ 1 | valueOf }}')).rejects.toThrow('undefined filter: valueOf')
+      const registered = new Set(Object.keys(strict.filters))
+      for (const name of Object.getOwnPropertyNames(Object.prototype)) {
+        if (registered.has(name)) continue
+        await expect(strict.parseAndRender(`{{ 1 | ${name} }}`)).rejects.toThrow('undefined filter')
+      }
     })
   })
 })

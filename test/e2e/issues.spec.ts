@@ -77,15 +77,16 @@ describe('Issues', function () {
     )
     expect(html).toBe('BAR')
   })
-  it('filter/tag lookup must not inherit Object.prototype (node + UMD)', async () => {
-    const tpl = '{% assign r = 1 | valueOf %}{{ r.context }}{{ r.liquid }}{{ r.token }}|{{ r }}'
+  it('filter/tag maps are null-prototype; built-ins work (node + UMD)', async () => {
+    const tpl = `{{ 'a' | append: 'b' }}`
     const nodeEngine = new Liquid()
-    expect(await nodeEngine.parseAndRender(tpl)).toBe('|1')
-    expect(() => nodeEngine.parse('{% constructor %}')).toThrow('tag "constructor" not found')
-
     const umdEngine = new LiquidUMD()
-    expect(await umdEngine.parseAndRender(tpl)).toBe('|1')
-    expect(() => umdEngine.parse('{% constructor %}')).toThrow('tag "constructor" not found')
+    expect(Object.getPrototypeOf(nodeEngine.filters)).toBeNull()
+    expect(Object.getPrototypeOf(nodeEngine.tags)).toBeNull()
+    expect(Object.getPrototypeOf(umdEngine.filters)).toBeNull()
+    expect(Object.getPrototypeOf(umdEngine.tags)).toBeNull()
+    expect(await nodeEngine.parseAndRender(tpl)).toBe('ab')
+    expect(await umdEngine.parseAndRender(tpl)).toBe('ab')
   })
   it('lenientIf not working as expected in umd #313', async () => {
     const engine = new LiquidUMD({
