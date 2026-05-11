@@ -60,4 +60,30 @@ describe('liquid#registerFilter()', function () {
       return expect(html).toBe(dst)
     })
   })
+
+  describe('filter name must not inherit from Object.prototype', () => {
+    it('should treat valueOf as unregistered (no FilterImpl leak)', async () => {
+      const out = await liquid.parseAndRender(
+        '{% assign r = 1 | valueOf %}{{ r.liquid.options.fs.sep }}|{{ r }}'
+      )
+      expect(out).toBe('|1')
+    })
+    it('should not expose context, liquid, or token via valueOf', async () => {
+      const out = await liquid.parseAndRender(
+        '{% assign r = 1 | valueOf %}{{ r.context }}/{{ r.liquid }}/{{ r.token }}'
+      )
+      expect(out).toBe('//')
+    })
+    it.each(['toString', 'constructor', 'hasOwnProperty', 'isPrototypeOf', '__proto__', '__defineGetter__'])(
+      'should treat %s as unregistered filter',
+      async (name) => {
+        const out = await liquid.parseAndRender(`{{ "x" | ${name} }}`)
+        expect(out).toBe('x')
+      }
+    )
+    it('should throw under strictFilters for valueOf', async () => {
+      const strict = new Liquid({ strictFilters: true })
+      await expect(strict.parseAndRender('{{ 1 | valueOf }}')).rejects.toThrow('undefined filter: valueOf')
+    })
+  })
 })

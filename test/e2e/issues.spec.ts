@@ -77,6 +77,16 @@ describe('Issues', function () {
     )
     expect(html).toBe('BAR')
   })
+  it('filter/tag lookup must not inherit Object.prototype (node + UMD)', async () => {
+    const tpl = '{% assign r = 1 | valueOf %}{{ r.context }}{{ r.liquid }}{{ r.token }}|{{ r }}'
+    const nodeEngine = new Liquid()
+    expect(await nodeEngine.parseAndRender(tpl)).toBe('|1')
+    expect(() => nodeEngine.parse('{% constructor %}')).toThrow('tag "constructor" not found')
+
+    const umdEngine = new LiquidUMD()
+    expect(await umdEngine.parseAndRender(tpl)).toBe('|1')
+    expect(() => umdEngine.parse('{% constructor %}')).toThrow('tag "constructor" not found')
+  })
   it('lenientIf not working as expected in umd #313', async () => {
     const engine = new LiquidUMD({
       strictVariables: true,

@@ -38,4 +38,14 @@ describe('liquid#registerTag()', function () {
     })
     return expect(html).toBe('ABC')
   })
+
+  describe('tag name must not inherit from Object.prototype', () => {
+    it.each(['constructor', 'toString', 'valueOf', 'hasOwnProperty', '__proto__'])(
+      'should report %s as unknown tag',
+      (name) => {
+        const l = new Liquid()
+        expect(() => l.parse(`{% ${name} %}`)).toThrow(`tag "${name}" not found`)
+      }
+    )
+  })
 })
