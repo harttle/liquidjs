@@ -217,11 +217,16 @@ describe('Context', function () {
     })
   })
   describe('scope storage', function () {
-    it('should use null prototype for bottom scope', function () {
-      expect(Object.getPrototypeOf(new Context().bottom())).toBeNull()
+    it('should not treat Object.prototype properties as implicit keys on bottom scope', function () {
+      const bottom = new Context().bottom() as Record<string, unknown>
+      expect('toString' in bottom).toBe(false)
+      expect('hasOwnProperty' in bottom).toBe(false)
     })
-    it('should use null prototype for getAll() merge result', function () {
-      expect(Object.getPrototypeOf(new Context({ a: 1 }).getAll())).toBeNull()
+    it('should merge into a scope result without implicit Object.prototype keys', function () {
+      const all = new Context({ a: 1 }).getAll() as Record<string, unknown>
+      expect(all.a).toBe(1)
+      expect('toString' in all).toBe(false)
+      expect('hasOwnProperty' in all).toBe(false)
     })
   })
 })
