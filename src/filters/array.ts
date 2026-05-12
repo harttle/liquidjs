@@ -2,7 +2,7 @@ import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, 
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
-import type { Scope } from '../context'
+import { createScope, type Scope } from '../context'
 import { EmptyDrop } from '../drop'
 
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
@@ -139,7 +139,7 @@ function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
-    this.context.push({ [itemName]: item })
+    this.context.push(createScope({ [itemName]: item }))
     const value = yield keyTemplate.value(this.context)
     this.context.pop()
     if (value === include) filtered.push(item)
@@ -182,7 +182,7 @@ export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], it
   arr = toEnumerable(arr)
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
-    this.context.push({ [itemName]: item })
+    this.context.push(createScope({ [itemName]: item }))
     const key = yield keyTemplate.value(this.context)
     this.context.pop()
     if (!map.has(key)) map.set(key, [])
@@ -205,7 +205,7 @@ function * search_exp<T extends object> (this: FilterImpl, arr: T[], itemName: s
   const predicate = new Value(stringify(exp), this.liquid)
   const array = toArray(arr)
   for (let index = 0; index < array.length; index++) {
-    this.context.push({ [itemName]: array[index] })
+    this.context.push(createScope({ [itemName]: array[index] }))
     const value = yield predicate.value(this.context)
     this.context.pop()
     if (value) return [index, array[index]]

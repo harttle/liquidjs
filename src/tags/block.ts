@@ -1,4 +1,4 @@
-import { BlockMode } from '../context'
+import { BlockMode, createScope } from '../context'
 import { isTagToken } from '../util'
 import { BlockDrop } from '../drop'
 import { Liquid, TagToken, TopLevelToken, Template, Context, Emitter, Tag } from '..'
@@ -23,7 +23,7 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter) {
     const blockRender = this.getBlockRender(ctx)
     if (ctx.getRegister('blockMode') === BlockMode.STORE) {
-      ctx.getRegister('blocks', {} as Record<string, any>)[this.block] = blockRender
+      ctx.getRegister('blocks', createScope() as Record<string, any>)[this.block] = blockRender
     } else {
       yield blockRender(new BlockDrop(), emitter)
     }
@@ -32,13 +32,13 @@ export default class extends Tag {
   private getBlockRender (ctx: Context) {
     const self = this as Tag
     const { liquid, templates } = this
-    const renderChild = ctx.getRegister('blocks', {} as Record<string, any>)[this.block]
+    const renderChild = ctx.getRegister('blocks', createScope() as Record<string, any>)[this.block]
     const renderCurrent = function * (superBlock: BlockDrop, emitter: Emitter) {
       const stack: Tag[] = ctx.getRegister('blockStack', [])
       if (stack.includes(self)) throw new Error('block tag cannot be nested')
 
       stack.push(self)
-      ctx.push({ block: superBlock })
+      ctx.push(createScope({ block: superBlock }))
       yield liquid.renderer.renderTemplates(templates, ctx, emitter)
       ctx.pop()
       stack.pop()

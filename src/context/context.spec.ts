@@ -216,4 +216,12 @@ describe('Context', function () {
       expect(ctx.getSync(['foo'])).toEqual('zoo')
     })
   })
+  describe('scope storage', function () {
+    it('should use null prototype for bottom scope', function () {
+      expect(Object.getPrototypeOf(new Context().bottom())).toBeNull()
+    })
+    it('should use null prototype for getAll() merge result', function () {
+      expect(Object.getPrototypeOf(new Context({ a: 1 }).getAll())).toBeNull()
+    })
+  })
 })

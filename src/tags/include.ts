@@ -1,4 +1,4 @@
-import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
+import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context, createScope } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
 import { Argument, Arguments, PartialScope } from '../template'
@@ -32,12 +32,12 @@ export default class extends Tag {
     assert(filepath, () => `illegal file path "${filepath}"`)
 
     const saved = ctx.saveRegister('blocks', 'blockMode')
-    ctx.setRegister('blocks', {})
+    ctx.setRegister('blocks', createScope())
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const scope = (yield hash.render(ctx)) as Scope
     if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
     const templates = (yield liquid._parsePartialFile(filepath, ctx.sync, this['currentFile'])) as Template[]
-    ctx.push(ctx.opts.jekyllInclude ? { include: scope } : scope)
+    ctx.push(ctx.opts.jekyllInclude ? createScope({ include: scope }) : Object.assign(createScope(), scope))
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.restoreRegister(saved)

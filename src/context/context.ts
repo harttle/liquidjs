@@ -2,7 +2,7 @@ import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { Scope } from './scope'
+import { Scope, createScope } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
 
 type PropertyKey = string | number;
@@ -12,8 +12,8 @@ export class Context {
    * insert a Context-level empty scope,
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
-  private scopes: Scope[] = [{}]
-  private registers = {}
+  private scopes: Scope[] = [createScope()]
+  private registers: Record<string, any> = Object.create(null)
   /**
    * user passed in scope
    * `{% increment %}`, `{% decrement %}` changes this scope,
@@ -49,7 +49,7 @@ export class Context {
     this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
   }
   public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
-    return (this.registers[key] = this.registers[key] || defaultValue)
+    return (this.registers[key] = this.registers[key] ?? defaultValue)
   }
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)
@@ -62,7 +62,7 @@ export class Context {
   }
   public getAll () {
     return [this.globals, this.environments, ...this.scopes]
-      .reduce((ctx, val) => __assign(ctx, val), {})
+      .reduce((ctx, val) => __assign(ctx, val), createScope())
   }
   /**
    * @deprecated use `_get()` or `getSync()` instead
@@ -102,7 +102,7 @@ export class Context {
   public bottom () {
     return this.scopes[0]
   }
-  public spawn (scope = {}) {
+  public spawn (scope: object = createScope()) {
     return new Context(scope, this.opts, {
       sync: this.sync,
       globals: this.globals,

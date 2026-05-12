@@ -1,5 +1,5 @@
 import { isValueToken, toEnumerable } from '../util'
-import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream, createScope } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
 import { Arguments } from '../template'
@@ -48,7 +48,7 @@ export default class extends Tag {
 
     const r = this.liquid.renderer
     const tablerowloop = new TablerowloopDrop(collection.length, cols, this.collection.getText(), this.variable)
-    const scope = { tablerowloop }
+    const scope = createScope({ tablerowloop })
     ctx.push(scope)
 
     for (let idx = 0; idx < collection.length; idx++, tablerowloop.next()) {

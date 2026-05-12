@@ -1,4 +1,4 @@
-import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream, createScope } from '..'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
@@ -50,7 +50,7 @@ export default class extends Tag {
     }
 
     const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
-    ctx.push({ continue: ctx.getRegister(continueKey, {}) })
+    ctx.push(createScope({ continue: ctx.getRegister(continueKey, 0) }))
     const hash = yield this.hash.render(ctx)
     ctx.pop()
 
@@ -65,7 +65,7 @@ export default class extends Tag {
     }, collection)
 
     ctx.setRegister(continueKey, (hash['offset'] || 0) + collection.length)
-    const scope = { forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) }
+    const scope = createScope({ forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) })
     ctx.push(scope)
     for (const item of collection) {
       scope[this.variable] = item
