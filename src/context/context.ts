@@ -13,7 +13,7 @@ export class Context {
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
   private scopes: Scope[] = [createScope()]
-  private registers: Record<string, any> = Object.create(null)
+  private registers = {}
   /**
    * user passed in scope
    * `{% increment %}`, `{% decrement %}` changes this scope,
@@ -49,7 +49,7 @@ export class Context {
     this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
   }
   public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
-    return (this.registers[key] = this.registers[key] ?? defaultValue)
+    return (this.registers[key] = this.registers[key] || defaultValue)
   }
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)

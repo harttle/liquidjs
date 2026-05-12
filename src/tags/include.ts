@@ -32,7 +32,7 @@ export default class extends Tag {
     assert(filepath, () => `illegal file path "${filepath}"`)
 
     const saved = ctx.saveRegister('blocks', 'blockMode')
-    ctx.setRegister('blocks', createScope())
+    ctx.setRegister('blocks', {})
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
     const scope = (yield hash.render(ctx)) as Scope
     if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
