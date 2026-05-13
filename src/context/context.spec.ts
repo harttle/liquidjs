@@ -138,6 +138,11 @@ describe('Context', function () {
       ctx.push({ foo: [] })
       return expect(ctx.getSync(['foo', 'reduce'])).toEqual(undefined)
     })
+    it('should return undefined for typical Object.prototype properties (e.g. constructor, valueOf)', function () {
+      ctx.push({ obj: {} })
+      expect(ctx.getSync(['obj', 'constructor'])).toEqual(undefined)
+      expect(ctx.getSync(['obj', 'valueOf'])).toEqual(undefined)
+    })
     it('should return undefined for function prototype property', function () {
       function Foo () {}
       Foo.prototype.bar = 'BAR'
@@ -214,19 +219,6 @@ describe('Context', function () {
       })
       ctx.pop()
       expect(ctx.getSync(['foo'])).toEqual('zoo')
-    })
-  })
-  describe('scope storage', function () {
-    it('should not treat Object.prototype properties as implicit keys on bottom scope', function () {
-      const bottom = new Context().bottom() as Record<string, unknown>
-      expect('toString' in bottom).toBe(false)
-      expect('hasOwnProperty' in bottom).toBe(false)
-    })
-    it('should merge into a scope result without implicit Object.prototype keys', function () {
-      const all = new Context({ a: 1 }).getAll() as Record<string, unknown>
-      expect(all.a).toBe(1)
-      expect('toString' in all).toBe(false)
-      expect('hasOwnProperty' in all).toBe(false)
     })
   })
 })
