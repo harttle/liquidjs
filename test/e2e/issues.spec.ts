@@ -85,6 +85,14 @@ describe('Issues', function () {
     expect(Object.getPrototypeOf(umdEngine.filters)).toBeNull()
     expect(Object.getPrototypeOf(umdEngine.tags)).toBeNull()
   })
+  it('filter/tag lookups ignore Object.prototype keys unless registered (node + UMD)', async () => {
+    for (const LiquidClass of [Liquid, LiquidUMD]) {
+      const engine = new LiquidClass()
+      await expect(engine.parseAndRender('{{ x | constructor }}', { x: 'OK' })).resolves.toBe('OK')
+      await expect(new LiquidClass({ strictFilters: true }).parseAndRender('{{ x | constructor }}', { x: 'OK' })).rejects.toThrow(/undefined filter/)
+      expect(() => engine.parse('{% constructor %}')).toThrow('tag "constructor" not found')
+    }
+  })
   it('lenientIf not working as expected in umd #313', async () => {
     const engine = new LiquidUMD({
       strictVariables: true,
