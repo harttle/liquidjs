@@ -2,7 +2,7 @@
 title: 安全模型
 ---
 
-LiquidJS 提供了面向 DoS 的限制选项（`parseLimit`、`renderLimit`、`memoryLimit`）来降低风险。本文按统一结构说明每个限制的作用范围，以及你在生产环境应采用的安全边界。
+LiquidJS 提供了面向 DoS 的限制选项（`parseLimit`、`renderLimit`、`memoryLimit`）来降低风险。本文概述这些限制、[`ownPropertyOnly`][ownPropertyOnly]、自定义 [`Drop`][drop] 的注意事项，以及生产环境应采用的安全边界。
 
 ## 安全边界
 
@@ -60,6 +60,14 @@ LiquidJS 提供了面向 DoS 的限制选项（`parseLimit`、`renderLimit`、`m
 
 由于 [JavaScript 使用 GC 来管理内存](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management)，`memoryLimit` 可能无法反映实际的内存占用。
 
+## `ownPropertyOnly` 与作用域数据
+
+将 [`ownPropertyOnly`][ownPropertyOnly] 设为 `true` 时，普通作用域对象只暴露**自有**属性（不包含继承链与 `Object.prototype` 上的键）。默认 `false` 与常规 JavaScript 属性访问一致。对不可信或可能被污染的对象应使用 `true`；若缺少路径需报错，可配合 [`strictVariables`][strictVariables]。单次渲染可通过 [`RenderOptions`][renderOwnPropertyOnly] 覆盖。该选项只约束作用域数据的读取，不是过滤器、标签或宿主代码的沙箱。
+
+## 自定义 `Drop` 类
+
+[`Drop`][drop] 与普通对象处理不同：即使开启 [`ownPropertyOnly`][ownPropertyOnly]，LiquidJS 仍可能沿原型链读取属性，并在未解析时调用 [`liquidMethodMissing`][liquidMethodMissing]。**你**对 Drop 暴露的能力负责：收窄 API，勿向 Drop 传入不安全数据，除非该类明确为模板访问而设计。仅靠 `ownPropertyOnly` 无法硬化自定义 Drop，应像审计其他特权代码一样审查其实现。
+
 ## 在线服务建议
 
 如果你运行在线服务，建议尽量避免渲染完全由用户定义的模板。
@@ -74,3 +82,8 @@ LiquidJS 提供了面向 DoS 的限制选项（`parseLimit`、`renderLimit`、`m
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
 [renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
 [memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit
+[ownPropertyOnly]: /api/interfaces/LiquidOptions.html#ownPropertyOnly
+[renderOwnPropertyOnly]: /api/interfaces/RenderOptions.html#ownPropertyOnly
+[strictVariables]: /api/interfaces/LiquidOptions.html#strictVariables
+[drop]: /api/classes/Drop.html
+[liquidMethodMissing]: /api/classes/Drop.html#liquidMethodMissing
