@@ -2,7 +2,7 @@
 title: Security Model
 ---
 
-LiquidJS provides DoS-oriented limits (`parseLimit`, `renderLimit`, `memoryLimit`) to reduce risk. This page explains what each limit protects, and the security boundary you should assume in production.
+LiquidJS provides DoS-oriented limits (`parseLimit`, `renderLimit`, `memoryLimit`) to reduce risk. This page summarizes those limits, [`ownPropertyOnly`][ownPropertyOnly], custom [`Drop`][drop] usage, and the security boundary to assume in production.
 
 ## Security boundary
 
@@ -60,6 +60,14 @@ Even with small number of templates and iterations, memory usage can grow expone
 
 As [JavaScript uses GC to manage memory](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management), `memoryLimit` may not reflect the actual memory footprint.
 
+## `ownPropertyOnly` and scope data
+
+With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). Default `false` follows normal JS property access. Use `true` for untrusted or polluted objects; add [`strictVariables`][strictVariables] if missing paths should error. Override per render via [`RenderOptions`][renderOwnPropertyOnly]. This is a read policy for scope data—not a sandbox for filters, tags, or your code.
+
+## Custom `Drop` classes
+
+[`Drop`][drop] values are not restricted the same way: LiquidJS still reads the prototype chain and may call [`liquidMethodMissing`][liquidMethodMissing]. **You** control what a drop exposes; narrow APIs and never feed unsafe data into drops unless the class is built for template access. `ownPropertyOnly` alone does not harden custom drops—audit them like any privileged code.
+
 ## Online service guidance
 
 If you run an online service, avoid rendering fully user-defined templates whenever possible.
@@ -74,3 +82,8 @@ For heavy single-template operations, process-level isolation is still recommend
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
 [renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
 [memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit
+[ownPropertyOnly]: /api/interfaces/LiquidOptions.html#ownPropertyOnly
+[renderOwnPropertyOnly]: /api/interfaces/RenderOptions.html#ownPropertyOnly
+[strictVariables]: /api/interfaces/LiquidOptions.html#strictVariables
+[drop]: /api/classes/Drop.html
+[liquidMethodMissing]: /api/classes/Drop.html#liquidMethodMissing
