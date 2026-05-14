@@ -1,3 +1,20 @@
+# [10.26.0](https://github.com/harttle/liquidjs/compare/v10.25.7...v10.26.0) (2026-05-14)
+
+
+### Bug Fixes
+
+* **date:** cap strftime widths and account padding in memoryLimit ([#895](https://github.com/harttle/liquidjs/issues/895)) ([3129d46](https://github.com/harttle/liquidjs/commit/3129d46dc95efa357b00e5a57ee1af80a13d72ed))
+* enforce renderLimit for empty renderTemplates calls ([#894](https://github.com/harttle/liquidjs/issues/894)) ([5b9c346](https://github.com/harttle/liquidjs/commit/5b9c3469085e01c79e2d0af28e2a13f730e1793d))
+* propagate ownPropertyOnly into Context.spawn() for {% render %} ([#893](https://github.com/harttle/liquidjs/issues/893)) ([dbbf628](https://github.com/harttle/liquidjs/commit/dbbf6288030591bf6da28d8c1cce5a17bca97bb6))
+* **security:** block Object.prototype filter/tag lookups (RCE) ([#897](https://github.com/harttle/liquidjs/issues/897)) ([457fae0](https://github.com/harttle/liquidjs/commit/457fae0736c3ec862539b9dbf7f477e6c08fb6c6))
+* strip html newline tags ([#892](https://github.com/harttle/liquidjs/issues/892)) ([26ea285](https://github.com/harttle/liquidjs/commit/26ea2856c7a90aec892b98d94a9b7a3e18539045))
+* **strip_html:** rewrite as linear single-pass scan to avoid ReDoS ([#896](https://github.com/harttle/liquidjs/issues/896)) ([3616a74](https://github.com/harttle/liquidjs/commit/3616a744b9abeb425c217b340a2397d46176afb8))
+
+
+### Features
+
+* add sha256 and hmac_sha256 filters for cryptographic operations ([#889](https://github.com/harttle/liquidjs/issues/889)) ([1c816d4](https://github.com/harttle/liquidjs/commit/1c816d4fc3bcd2cba011f7a84f56a4251fca0622))
+
 ## [10.25.7](https://github.com/harttle/liquidjs/compare/v10.25.6...v10.25.7) (2026-04-23)
 
 
