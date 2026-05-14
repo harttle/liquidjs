@@ -2,7 +2,7 @@ import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { Scope, createScope } from './scope'
+import { Scope } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
 
 type PropertyKey = string | number;
@@ -12,7 +12,7 @@ export class Context {
    * insert a Context-level empty scope,
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
-  private scopes: Scope[] = [createScope()]
+  private scopes: Scope[] = [{}]
   private registers = {}
   /**
    * user passed in scope
@@ -62,7 +62,7 @@ export class Context {
   }
   public getAll () {
     return [this.globals, this.environments, ...this.scopes]
-      .reduce((ctx, val) => __assign(ctx, val), createScope())
+      .reduce((ctx, val) => __assign(ctx, val), {})
   }
   /**
    * @deprecated use `_get()` or `getSync()` instead
@@ -102,7 +102,7 @@ export class Context {
   public bottom () {
     return this.scopes[0]
   }
-  public spawn (scope: object = createScope()) {
+  public spawn (scope = {}) {
     return new Context(scope, this.opts, {
       sync: this.sync,
       globals: this.globals,

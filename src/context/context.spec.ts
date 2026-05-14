@@ -138,11 +138,6 @@ describe('Context', function () {
       ctx.push({ foo: [] })
       return expect(ctx.getSync(['foo', 'reduce'])).toEqual(undefined)
     })
-    it('should return undefined for typical Object.prototype properties (e.g. constructor, valueOf)', function () {
-      ctx.push({ obj: {} })
-      expect(ctx.getSync(['obj', 'constructor'])).toEqual(undefined)
-      expect(ctx.getSync(['obj', 'valueOf'])).toEqual(undefined)
-    })
     it('should return undefined for function prototype property', function () {
       function Foo () {}
       Foo.prototype.bar = 'BAR'

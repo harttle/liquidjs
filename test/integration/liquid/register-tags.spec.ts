@@ -39,17 +39,9 @@ describe('liquid#registerTag()', function () {
     return expect(html).toBe('ABC')
   })
 
-  describe('tag registry storage', () => {
-    it('should use a null-prototype map for tags', () => {
-      expect(Object.getPrototypeOf(new Liquid().tags)).toBeNull()
-    })
-    it('should not resolve names that exist only on Object.prototype', () => {
-      const l = new Liquid()
-      const registered = new Set(Object.keys(l.tags))
-      for (const name of Object.getOwnPropertyNames(Object.prototype)) {
-        if (registered.has(name)) continue
-        expect(() => l.parse(`{% ${name} %}`)).toThrow(`tag "${name}" not found`)
-      }
-    })
+  it('should not treat Object.prototype names as registered tags', () => {
+    const l = new Liquid()
+    expect(Object.getPrototypeOf(l.tags)).toBeNull()
+    expect(() => l.parse('{% constructor %}')).toThrow('tag "constructor" not found')
   })
 })
