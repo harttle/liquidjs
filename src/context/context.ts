@@ -2,7 +2,7 @@ import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { Scope } from './scope'
+import { createScope, Scope } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
 
 type PropertyKey = string | number;
@@ -12,7 +12,7 @@ export class Context {
    * insert a Context-level empty scope,
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
-  private scopes: Scope[] = [{}]
+  private scopes: Scope[] = [createScope()]
   private registers = {}
   /**
    * user passed in scope
