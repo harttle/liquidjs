@@ -1,3 +1,10 @@
+# [10.27.0](https://github.com/harttle/liquidjs/compare/v10.26.0...v10.27.0) (2026-05-15)
+
+
+### Features
+
+* **context:** null-prototype scope frames via createScope ([#899](https://github.com/harttle/liquidjs/issues/899)) ([47d3f1b](https://github.com/harttle/liquidjs/commit/47d3f1b1cf33be91fe587821f288d1c9d8e1ace7))
+
 # [10.26.0](https://github.com/harttle/liquidjs/compare/v10.25.7...v10.26.0) (2026-05-14)
 
 
