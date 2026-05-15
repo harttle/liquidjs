@@ -1,5 +1,5 @@
 import { Scope, Template, Liquid, Tag, assert, Emitter, Hash, TagToken, TopLevelToken, Context } from '..'
-import { BlockMode } from '../context'
+import { BlockMode, createScope } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
@@ -39,7 +39,7 @@ export default class extends Tag {
     ctx.setRegister('blockMode', BlockMode.OUTPUT)
 
     // render the layout file use stored blocks
-    ctx.push((yield args.render(ctx)) as Scope)
+    ctx.push(createScope((yield args.render(ctx)) as Scope))
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
   }
