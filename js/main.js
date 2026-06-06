@@ -37,25 +37,6 @@
 }());
 
 (function() {
-  // lang select
-  function changeLang() {
-    var lang = this.value;
-    var canonical = this.dataset.canonical;
-    var path = '/';
-    if (lang !== 'en') path += lang + '/';
-
-    var expires = new Date();
-    expires.setFullYear(expires.getFullYear() + 1);
-    document.cookie = 'nf_lang=' + lang + ';path=/;expires=' + expires.toGMTString();
-
-    location.href = path + canonical;
-  }
-
-  document.getElementById('lang-select').addEventListener('change', changeLang);
-  document.getElementById('mobile-lang-select').addEventListener('change', changeLang);
-}());
-
-(function() {
   // playground
   /* global liquidjs, ace */
   if (!location.pathname.match(/playground.html$/)) return;
@@ -141,6 +122,28 @@
     document.querySelector('.version').innerHTML = `
       liquidjs@<a target="_blank" href="https://www.npmjs.com/package/liquidjs/v/${version}">${version}</a>
     `
+  }
+}());
+
+(function() {
+  // GitHub star count
+  var el = document.getElementById('gh-star-count');
+  if (!el) return;
+  el.textContent = '1.8K';
+  if (!window.fetch) return;
+
+  fetch('https://api.github.com/repos/harttle/liquidjs')
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (typeof data.stargazers_count === 'number') {
+        el.textContent = format(data.stargazers_count);
+      }
+    });
+
+  function format(n) {
+    if (n < 1000) return String(n);
+    var k = n / 1000;
+    return (k >= 10 ? Math.round(k) : Math.round(k * 10) / 10) + 'k';
   }
 }());
 
