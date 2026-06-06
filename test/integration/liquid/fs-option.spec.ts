@@ -68,16 +68,54 @@ describe('LiquidOptions#fs', function () {
     })
     expect(engine.renderFileSync('views/entry')).toEqual('header footer')
   })
-  it('should ignore root/layouts/partials', () => {
+  it('should respect relativeReference for in-memory templates', () => {
+    const engine = new Liquid({
+      relativeReference: false,
+      templates: {
+        'views/entry': 'header {% include "../partials/footer" %}',
+        'partials/footer': 'footer'
+      }
+    })
+    expect(() => engine.renderFileSync('views/entry')).toThrow('Failed to lookup')
+  })
+  it('should respect root/layouts/partials', () => {
     const engine = new Liquid({
       root: '/foo/bar/',
       layouts: '/foo/bar/',
       partials: '/foo/bar/',
       templates: {
-        entry: '{% layout "main" %}entry',
-        main: 'header {% block %}{% endblock %} footer'
+        '/foo/bar/entry': '{% layout "main" %}entry',
+        '/foo/bar/main': 'header {% block %}{% endblock %} footer'
       }
     })
     expect(engine.renderFileSync('entry')).toEqual('header entry footer')
+  })
+  it('should reject dynamic includes outside configured partials', async () => {
+    const engine = new Liquid({
+      root: 'tenant_a',
+      partials: 'tenant_a',
+      templates: {
+        'tenant_a/page.liquid': '{% include filename %}',
+        'tenant_b/secret.liquid': 'B_SECRETS'
+      }
+    })
+    await expect(engine.renderFile('page.liquid', { filename: '../tenant_b/secret.liquid' }))
+      .rejects.toThrow('Failed to lookup')
+    expect(() => engine.renderFileSync('page.liquid', { filename: '../tenant_b/secret.liquid' }))
+      .toThrow('Failed to lookup')
+  })
+  it('should reject dynamic renders outside configured partials', async () => {
+    const engine = new Liquid({
+      root: 'tenant_a',
+      partials: 'tenant_a',
+      templates: {
+        'tenant_a/page.liquid': '{% render filename %}',
+        'tenant_b/secret.liquid': 'B_SECRETS'
+      }
+    })
+    await expect(engine.renderFile('page.liquid', { filename: '../tenant_b/secret.liquid' }))
+      .rejects.toThrow('Failed to lookup')
+    expect(() => engine.renderFileSync('page.liquid', { filename: '../tenant_b/secret.liquid' }))
+      .toThrow('Failed to lookup')
   })
 })

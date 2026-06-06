@@ -109,7 +109,7 @@ engine.renderFileSync('views/entry'))
 // Result: 'header footer'
 ```
 
-Note that file system options like `root`, `layouts`, `partials`, `relativeReference` will be ignored when `templates` is specified.
+Note that the `fs` option will be ignored when `templates` is specified. `root`, `layouts`, `partials`, and `relativeReference` still control template lookup within the in-memory mapping.
 
 [fs]: /api/interfaces/LiquidOptions.html#fs
 [ifs]: /api/interfaces/FS.html

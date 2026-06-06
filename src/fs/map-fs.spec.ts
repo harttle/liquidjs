@@ -30,6 +30,26 @@ describe('MapFS', () => {
     it('should resolve invalid path', () => {
       expect(fs.resolve('foo/bar', '..//coo', '')).toEqual('foo/coo')
     })
+    it('should resolve from a trailing separator', () => {
+      expect(fs.resolve('/foo/bar/', 'coo', '')).toEqual('/foo/bar/coo')
+    })
+  })
+  describe('#containsSync()', () => {
+    it('should contain files under root', () => {
+      expect(fs.containsSync('foo/bar', 'foo/bar/coo')).toBe(true)
+    })
+    it('should contain root itself', () => {
+      expect(fs.containsSync('foo/bar', 'foo/bar')).toBe(true)
+    })
+    it('should contain root itself with a trailing separator', () => {
+      expect(fs.containsSync('foo/bar/', 'foo/bar')).toBe(true)
+    })
+    it('should treat root as a terminated path', () => {
+      expect(fs.containsSync('foo/bar', 'foo/bar-baz/coo')).toBe(false)
+    })
+    it('should allow all files from default root', () => {
+      expect(fs.containsSync('.', 'foo/bar')).toBe(true)
+    })
   })
   describe('#.readFileSync()', () => {
     it('should throw if not exist', () => {

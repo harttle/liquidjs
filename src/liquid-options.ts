@@ -72,7 +72,7 @@ export interface LiquidOptions {
   fs?: FS;
   /** keyValue separator */
   keyValueSeparator?: string;
-  /** Render from an in-memory `templates` mapping instead of the file system. When `templates` is set, Liquid uses the provided mapping for template lookup (including includes, layouts, and partials), and file-system options such as `fs`, `root`, `partials`, `layouts`, and `relativeReference` are effectively bypassed for those lookups. */
+  /** Render from an in-memory `templates` mapping instead of the file system. When `templates` is set, Liquid uses the provided mapping for template lookup (including includes, layouts, and partials). The `fs` option is ignored; `root`, `partials`, `layouts`, and `relativeReference` still control lookup within the mapping. */
   templates?: {[key: string]: string};
   /** the global scope passed down to all partial and layout templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
@@ -213,6 +213,7 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
     options.cache = cache
   }
   options = { ...defaultOptions, ...(options.jekyllInclude ? { dynamicPartials: false } : {}), ...options }
+  if (options.templates) options.fs = new MapFS(options.templates)
   if ((!options.fs!.dirname || !options.fs!.sep) && options.relativeReference) {
     console.warn('[LiquidJS] `fs.dirname` and `fs.sep` are required for relativeReference, set relativeReference to `false` to suppress this warning')
     options.relativeReference = false
@@ -223,11 +224,6 @@ export function normalize (options: LiquidOptions): NormalizedFullOptions {
   options.outputEscape = options.outputEscape && getOutputEscapeFunction(options.outputEscape)
   if (!options.locale) {
     options.locale = getDateTimeFormat()?.().resolvedOptions().locale ?? 'en-US'
-  }
-  if (options.templates) {
-    options.fs = new MapFS(options.templates)
-    options.relativeReference = true
-    options.root = options.partials = options.layouts = '.'
   }
   return options as NormalizedFullOptions
 }
