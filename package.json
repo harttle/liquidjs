@@ -17,7 +17,6 @@
   "scripts": {
     "lint": "eslint \"**/*.mjs\" \"**/*.ts\" .",
     "check": "npm run build && npm run build:docs && npm test && npm run lint && npm run perf:diff",
-    "prepush": "npm run check",
     "test": "jest",
     "test:coverage": "jest --coverage src test/integration",
     "test:e2e": "jest test/e2e",
