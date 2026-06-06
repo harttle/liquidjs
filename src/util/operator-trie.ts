@@ -4,22 +4,16 @@ interface TrieInput<T> {
   [key: string]: T
 }
 
-interface TrieLeafNode<T> {
-  data: T;
-  end: true;
-  needBoundary?: true;
-}
-
-export interface Trie<T> {
-  [key: string]: Trie<T> | TrieLeafNode<T>;
-}
-
-export type TrieNode<T> = Trie<T> | TrieLeafNode<T>
+export type Trie<T> = {
+  data?: T
+  end?: true
+  needBoundary?: true
+} & Record<string, any>
 
 export function createTrie<T = any> (input: TrieInput<T>): Trie<T> {
   const trie: Trie<T> = {}
   for (const [name, data] of Object.entries(input)) {
-    let node: Trie<T> | TrieLeafNode<T> = trie
+    let node = trie
 
     for (let i = 0; i < name.length; i++) {
       const c = name[i]

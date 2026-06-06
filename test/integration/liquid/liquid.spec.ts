@@ -1,6 +1,7 @@
 import { Liquid, Context, isFalsy } from '../../../src'
 import { mock, restore } from '../../stub/mockfs'
 import { drainStream } from '../../stub/stream'
+import { resolve } from 'path'
 
 describe('Liquid', function () {
   describe('#plugin()', function () {
@@ -144,7 +145,7 @@ describe('Liquid', function () {
     })
     it('should fallback to require.resolve in Node.js', async function () {
       const engine = new Liquid({
-        root: [process.cwd()],
+        root: [resolve(__dirname, '../../..')],
         extname: '.html'
       })
       const tpls = await engine.parseFileSync('jest')

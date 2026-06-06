@@ -1,6 +1,6 @@
 const rHex = /[\da-fA-F]/
 const rOct = /[0-7]/
-const escapeChar = {
+const escapeChar: Record<string, string> = {
   b: '\b',
   f: '\f',
   n: '\n',

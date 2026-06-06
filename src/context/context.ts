@@ -13,7 +13,7 @@ export class Context {
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
   private scopes: Scope[] = [createScope()]
-  private registers = {}
+  private registers: Record<string, any> = {}
   /**
    * user passed in scope
    * `{% increment %}`, `{% decrement %}` changes this scope,

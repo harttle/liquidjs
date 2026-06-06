@@ -52,7 +52,7 @@ export default class extends Tag {
 
     const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
     ctx.push(createScope({ continue: ctx.getRegister(continueKey, {}) }))
-    const hash = yield this.hash.render(ctx)
+    const hash = (yield this.hash.render(ctx)) as Record<string, any>
     ctx.pop()
 
     const modifiers = this.liquid.options.orderedFilterParameters
