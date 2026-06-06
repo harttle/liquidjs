@@ -18,7 +18,5 @@ content = content
   .replace(/\{\{/g, '{% raw %}{{{% endraw %}')
 
 const enFrontmatter = '---\ntitle: Changelog\nauto: true\n---\n\n'
-const zhFrontmatter = '---\ntitle: 更新日志\nauto: true\n---\n\n'
 
 fs.writeFileSync(path.join(root, 'docs/source/tutorials/changelog.md'), enFrontmatter + content)
-fs.writeFileSync(path.join(root, 'docs/source/zh-cn/tutorials/changelog.md'), zhFrontmatter + content)

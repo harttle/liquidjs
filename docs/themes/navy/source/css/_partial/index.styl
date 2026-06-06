@@ -23,10 +23,12 @@
 
 #banner-start
   text-align: center
-  padding: 40px 0
+  padding: 40px 0 48px
   line-height: 47px;
+  @media mq-tablet
+    padding-bottom: 64px
   @media mq-normal
-    padding: 60px 0
+    padding-top: 60px
     font-size: 18px
 
 #banner-start-command
@@ -51,52 +53,15 @@
 
 #banner-share
   display: block
-  padding-bottom: 60px
-
-#intro-news-list
-  background-color: var(--color-news-bg)
-  margin: -1px 0
-
-#intro-news-flex
-  display: flex
-  flex-flow: column
-  @media mq-normal
-    flex-flow: row wrap
-
-.intro-news-wrap
-  padding: 24px 30px
-  text-decoration: none
-  &:first-child
-    padding-left: 0
-  &:last-child
-    padding-right: 0
-  &:hover
-    background-color: var(--color-link-hover)
-  @media mq-normal
-    flex: 0 0 50%
-    padding: 36px 30px
-  @media screen and (min-width: 960px)
-    flex: 0 0 25%
-
-.intro-news-time
-  font-size: 14px
-  color: rgba(255,255,255,.6)
-
-.intro-news-wrap:hover .intro-news-time
-  color: rgba(255,255,255,.8)
-
-.intro-news-title
-  padding-top: 4px
-  font-size: 15px
-  line-height: 1.2;
-  color: #fff
+  padding-top: 24px
 
 #intro-feature-list
   display: flex
   flex-flow: column
-  margin: 30px 0
+  margin: 30px 0 50px
   @media mq-normal
     flex-flow: row wrap
+    margin: 30px 0 80px
 
 .intro-feature-wrap
   margin-top: 20px
@@ -112,7 +77,7 @@
     padding-left: 48px
 
 .intro-feature-icon
-  color: var(--color-link)
+  color: var(--color-default)
   font-size: 36px
   margin-bottom: 6px;
   text-align: center
@@ -125,36 +90,22 @@
     width: @font-size
 
 .intro-feature-title
-  color: var(--color-link)
+  color: var(--color-default)
   font-size: 24px
 
 .intro-feature-desc
+  color: var(--color-gray)
   margin-top: 1em
   @media mq-normal
     margin-top: line-height
   line-height: line-height
   a
     text-decoration: none
-    color: black
-    &:visited, &:hover
-      color: black
+    color: var(--color-link)
     &:hover
-      text-decoration: underline
-    @media (prefers-color-scheme: dark)
-      color: white
-      &:visited, &:hover
-        color: white
-
-#intro-cmd-wrap
-  max-width: 700px
-  padding: 15px 30px
-  font-size: 16px
-  pre
-    line-height: 32px
-  overflow: auto
-  margin: 50px auto 0;
-  @media mq-normal
-    margin: 70px auto 0;
+      color: var(--color-link-hover)
+  code
+    color: var(--color-gray)
 
 #intro-get-started-wrap
   text-align: center
@@ -186,18 +137,36 @@
     @media mq-tablet
       margin-top: 64px
       margin-bottom: 64px
+    .section-header
+      display: flex
+      align-items: baseline
+      justify-content: space-between
+      gap: 16px
+      margin: 0 0 24px
+      flex-wrap: wrap
+      h3
+        margin: 0
+        flex-shrink: 0
+      p.description
+        margin: 0
+        text-align: right
+        flex: 1
+        min-width: 0
+        color: var(--color-gray)
     h3
       color: #fff
       font-size: 32px
     p
       color: #ccc
-      margin: 36px 0 24px
       font-size: 20px
       line-height: 1.5
     .description a
       text-decoration: none
+      color: var(--color-link)
+      &:hover
+        color: var(--color-link-hover)
 
-#contributors-wrap
+#sponsors-wrap
   background: var(--color-content-bg)
   .inner
     h3
@@ -206,28 +175,13 @@
       color: var(--color-gray)
     .open-collective
       max-width: 100%
-    .description a
-      color: #333
-      &:hover
-        background: var(--color-navy)
-        color: #fff
     @media (prefers-color-scheme: dark)
       p
         color: var(--color-default)
-      .description a
-        color: #fff
-        &:hover
-          background: #fff
-          color: var(--color-navy-lighter)
 
-#sponsors-wrap
+#contributors-wrap
   border: none
   overflow: hidden;
-  .description a
-    color: #fff
-    &:hover
-      background: #fff
-      color: var(--color-navy-lighter)
 
 .contributors
   tr

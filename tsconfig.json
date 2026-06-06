@@ -9,9 +9,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "downlevelIteration": true,
-    "strict": true,
-    "suppressImplicitAnyIndexErrors": true
+    "strict": true
   },
   "all": true,
   "exclude": [ "node_modules", "dist", "demo", "test" ]

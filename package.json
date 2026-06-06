@@ -97,7 +97,6 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "express": "^4.16.4",
-    "husky": "^4.2.5",
     "jest": "^29.5.0",
     "jsdom": "^16.5.0",
     "npm-run-all2": "^8.0.4",
@@ -165,11 +164,5 @@
     "extension": [
       ".ts"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run check",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   }
 }

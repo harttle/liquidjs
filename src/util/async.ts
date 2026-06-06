@@ -18,10 +18,10 @@ export async function toPromise<T> (val: Generator<unknown, T, unknown> | Promis
   if (!isIterator(val)) return val
   let value: unknown
   let done = false
-  let next = 'next'
+  let next: 'next' | 'throw' = 'next'
   do {
     const state = val[next](value)
-    done = state.done
+    done = !!state.done
     value = state.value
     next = 'next'
     try {
@@ -40,10 +40,10 @@ export function toValueSync<T> (val: Generator<unknown, T, unknown> | T): T {
   if (!isIterator(val)) return val
   let value: any
   let done = false
-  let next = 'next'
+  let next: 'next' | 'throw' = 'next'
   do {
     const state = val[next](value)
-    done = state.done
+    done = !!state.done
     value = state.value
     next = 'next'
     if (isIterator(value)) {

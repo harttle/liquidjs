@@ -4,7 +4,7 @@ import type { Limiter } from './limiter'
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
-  flags: object;
+  flags: Record<string, boolean>;
   width?: string;
   modifier?: string;
   memoryLimit?: Pick<Limiter, 'use'>;
@@ -50,7 +50,7 @@ function century (d: LiquidDate) {
 }
 
 // default to 0
-const padWidths = {
+const padWidths: Record<string, number> = {
   d: 2,
   e: 2,
   H: 2,
@@ -77,7 +77,9 @@ function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
     (opts.flags[':'] ? ':' : '') +
     padStart(m, 2, '0')
 }
-const formatCodes = {
+type FormatCodeHandler = (d: LiquidDate, opts: FormatOptions) => unknown
+
+const formatCodes: Record<string, FormatCodeHandler> = {
   a: (d: LiquidDate) => d.getShortWeekdayName(),
   A: (d: LiquidDate) => d.getLongWeekdayName(),
   b: (d: LiquidDate) => d.getShortMonthName(),
@@ -118,8 +120,8 @@ const formatCodes = {
   't': () => '\t',
   'n': () => '\n',
   '%': () => '%'
-};
-(formatCodes as any).h = formatCodes.b
+}
+formatCodes.h = formatCodes.b
 
 export function strftime (d: LiquidDate, formatStr: string, memoryLimit?: Pick<Limiter, 'use'>) {
   let output = ''
@@ -137,11 +139,11 @@ function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limit
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
   if (!convert) return input
-  const flags = {}
+  const flags: Record<string, boolean> = {}
   for (const flag of flagStr) flags[flag] = true
   let ret = String(convert(d, { flags, width, modifier, memoryLimit }))
   let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
-  let padWidth = width || padWidths[conversion] || 0
+  let padWidth = Number(width) || padWidths[conversion] || 0
   if (flags['^']) ret = ret.toUpperCase()
   else if (flags['#']) ret = changeCase(ret)
   if (flags['_']) padChar = ' '

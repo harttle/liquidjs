@@ -1,5 +1,3 @@
-<!-- GitHub star -->
-<a href="https://github.com/harttle/liquidjs" target="_blank"><img src="https://img.shields.io/github/stars/harttle/liquidjs?style=flat-square" alt="Star"></a>
 <!-- NPM Download -->
 <a href="https://www.npmjs.com/package/liquidjs" target="_blank"><img src ="https://img.shields.io/npm/dm/liquidjs?logo=npm&style=flat-square" alt="NPM Downloads"></a>
 <!-- Contributors button -->

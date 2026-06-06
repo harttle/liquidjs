@@ -10,10 +10,11 @@ export default class extends Tag {
   args: Hash
   templates: Template[]
   file?: ParsedFileName
+  private currentFile?: string
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(token, remainTokens, liquid)
     this.file = parseFilePath(this.tokenizer, this.liquid, parser)
-    this['currentFile'] = token.file
+    this.currentFile = token.file
     this.args = new Hash(this.tokenizer, liquid.options.keyValueSeparator)
     this.templates = parser.parseTokens(remainTokens)
   }
@@ -27,7 +28,7 @@ export default class extends Tag {
     }
     const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
     assert(filepath, () => `illegal file path "${filepath}"`)
-    const templates = (yield liquid._parseLayoutFile(filepath, ctx.sync, this['currentFile'])) as Template[]
+    const templates = (yield liquid._parseLayoutFile(filepath, ctx.sync, this.currentFile)) as Template[]
 
     // render remaining contents and store rendered results
     ctx.setRegister('blockMode', BlockMode.STORE)
@@ -48,7 +49,7 @@ export default class extends Tag {
     const templates = this.templates.slice()
 
     if (partials && isString(this.file)) {
-      templates.push(...(yield this.liquid._parsePartialFile(this.file, true, this['currentFile'])) as Template[])
+      templates.push(...(yield this.liquid._parsePartialFile(this.file, true, this.currentFile)) as Template[])
     }
 
     return templates

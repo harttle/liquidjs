@@ -7,23 +7,23 @@ ul#intro-feature-list
     .intro-feature
       .intro-feature-icon
         i.icon-shield
-      h3.intro-feature-title Safe Rendering
-      p.intro-feature-desc Liquid templates are highly readable and fault-tolerant thus suitable for designers and customers. Operators and expressions are parsed to AST and no #[code eval] or #[code new Function] are used. 
+      h3.intro-feature-title Safe &amp; Typed
+      p.intro-feature-desc Templates are readable and fault-tolerant, parsed to an AST with no #[code eval] or #[code new Function]. The whole repo is written in TypeScript strict mode, so types stay precise and docs accurate.
   li.intro-feature-wrap
     .intro-feature
       .intro-feature-icon
         i.icon-rocket
       h3.intro-feature-title Pure JavaScript
-      p.intro-feature-desc Written with pure JavaScript with no native bindings, available in both Node.js and browsers. All of the CMD, ESM and CJS bundles are available on CDN.
+      p.intro-feature-desc Written in pure JavaScript with no native bindings, running in both Node.js and the browser. The CMD, ESM and CJS bundles are all available on CDN.
   li.intro-feature-wrap
     .intro-feature
       .intro-feature-icon
         i.icon-shopify
-      h3.intro-feature-title Shopify Compatible
-      p.intro-feature-desc All filters and tags from Ruby #[a(href="https://github.com/shopify/liquid") shopify/liquid] are supported by LiquidJS. #[a(href="https://jekyllrb.com/") Jekyll sites], #[a(href="https://pages.github.com/") GitHub Pages] and #[a(href="https://themes.shopify.com/") Shopify templates] can be ported to Node.js without pain.
+      h3.intro-feature-title Shopify &amp; Jekyll
+      p.intro-feature-desc All filters and tags from Ruby #[a(href="https://github.com/shopify/liquid") shopify/liquid] are supported, so #[a(href="https://themes.shopify.com/") Shopify templates] work out of the box — as do #[a(href="https://jekyllrb.com/") Jekyll] sites and #[a(href="https://pages.github.com/") GitHub Pages].
   li.intro-feature-wrap
     .intro-feature
       .intro-feature-icon
-        i.icon-typescript
-      h3.intro-feature-title TypeScript Strict
-      p.intro-feature-desc The whole repo is re-written in TypeScript strict mode to ensure a smooth experience using this lib and the document is precise and always up to date.
+        i.icon-network
+      h3.intro-feature-title Streaming
+      p.intro-feature-desc Render directly to a Node.js stream with #[code renderToNodeStream], emitting output as it's produced — for a faster time to first byte and low memory usage on large pages.

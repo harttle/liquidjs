@@ -1,14 +1,14 @@
 import { FilterImpl } from '../template'
 import { stringify } from '../util/underscore'
 
-const escapeMap = {
+const escapeMap: Record<string, string> = {
   '&': '&amp;',
   '<': '&lt;',
   '>': '&gt;',
   '"': '&#34;',
   "'": '&#39;'
 }
-const unescapeMap = {
+const unescapeMap: Record<string, string> = {
   '&amp;': '&',
   '&lt;': '<',
   '&gt;': '>',
