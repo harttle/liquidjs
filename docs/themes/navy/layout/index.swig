@@ -3,6 +3,7 @@
     <h2 id="banner-title">{{ page.subtitle }}</h2>
     <div id="banner-start">
       <code id="banner-start-command">npm install liquidjs</code><a id="banner-start-link" href="./tutorials/setup.html"><i class="icon-arrow-right"></i></a>
+      <a id="banner-github-link" href="https://github.com/{{ config.github }}" target="_blank" rel="noreferrer">GitHub</a>
     </div>
     <div id="banner-share">{{ partial('partial/share') }}</div>
   </div>

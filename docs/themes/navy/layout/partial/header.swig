@@ -18,7 +18,10 @@
         {% endfor %}
       </select>
     </div>
-    <a href="https://github.com/{{ config.github }}" class="main-nav-link icon-nav-link"><i class="icon-github"></i> <span class="icon-nav-title">GitHub</span></a>
+    <div class="main-nav-link icon-nav-link github-buttons-wrap">
+      <a class="github-button" href="https://github.com/harttle/liquidjs" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" data-show-count="true" aria-label="Star harttle/liquidjs on GitHub">Star</a>
+      <a class="github-button" href="https://github.com/sponsors/harttle" data-color-scheme="no-preference: light; light: light; dark: dark;" data-size="large" aria-label="Sponsor @harttle on GitHub">Sponsor</a>
+    </div>
     <a id="mobile-nav-toggle">
       <span class="mobile-nav-toggle-bar"></span>
       <span class="mobile-nav-toggle-bar"></span>
