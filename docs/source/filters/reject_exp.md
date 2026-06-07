@@ -1,5 +1,5 @@
 ---
-title: '`reject_exp`'
+title: Reject exp
 ---
 
 {% since %}v10.21.0{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: '`assign`'
+title: Assign
 ---
 
 {% since %}v1.9.1{% endsince %}

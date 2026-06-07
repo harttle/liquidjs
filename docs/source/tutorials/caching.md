@@ -2,13 +2,13 @@
 title: Caching
 ---
 
-In a typical website project, we'll have a directory of view templates and they'll be rendered multiple times. In production environment the template files are not likely to be changed over time (other than re-deployments). Thus it makes sense to cache the file contents and the parsed templates (in a kind of AST) to improve performance.
+In a typical website project, we'll have a directory of view templates and they'll be rendered multiple times. In a production environment the template files are not likely to change over time (other than re-deployments). Thus it makes sense to cache the file contents and the parsed templates (in a kind of AST) to improve performance.
 
 LiquidJS provides multiple ways to cache the parsed templates to improve performance.
 
 ## Programmatically
 
-The [.parse()][parse], [.parseFile()][parseFile], [.parseFileSync()][parseFileSync] APIs are used to parse templates from string or files. The result template can be then rendered multiple times with different context.
+The [.parse()][parse], [.parseFile()][parseFile], [.parseFileSync()][parseFileSync] APIs are used to parse templates from strings or files. The resulting template can then be rendered multiple times with different context.
 
 Parse from string:
 

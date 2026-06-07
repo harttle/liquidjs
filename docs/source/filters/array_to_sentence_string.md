@@ -1,5 +1,5 @@
 ---
-title: '`array_to_sentence_string`'
+title: Array to sentence string
 ---
 
 {% since %}v10.13.0{% endsince %}

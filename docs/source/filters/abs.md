@@ -1,5 +1,5 @@
 ---
-title: '`abs`'
+title: Abs
 ---
 
 {% since %}v1.9.1{% endsince %}

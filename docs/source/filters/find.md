@@ -1,5 +1,5 @@
 ---
-title: '`find`'
+title: Find
 ---
 
 {% since %}v10.11.0{% endsince %}

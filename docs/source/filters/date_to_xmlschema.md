@@ -1,5 +1,5 @@
 ---
-title: '`date_to_xmlschema`'
+title: Date to XML schema
 ---
 {% since %}v10.13.0{% endsince %}
 

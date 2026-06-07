@@ -1,5 +1,5 @@
 ---
-title: '`number_of_words`'
+title: Number of words
 ---
 
 {% since %}v10.13.0{% endsince %}

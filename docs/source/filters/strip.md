@@ -1,5 +1,5 @@
 ---
-title: '`strip`'
+title: Strip
 ---
 
 {% since %}v1.9.1{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: '`find_index_exp`'
+title: Find index exp
 ---
 
 {% since %}v10.21.0{% endsince %}

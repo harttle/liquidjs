@@ -1,5 +1,5 @@
 ---
-title: '`escape_once`'
+title: Escape once
 ---
 
 {% since %}v1.9.1{% endsince %}

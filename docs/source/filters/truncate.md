@@ -1,5 +1,5 @@
 ---
-title: '`truncate`'
+title: Truncate
 ---
 
 {% since %}v1.9.1{% endsince %}

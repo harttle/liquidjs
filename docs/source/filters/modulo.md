@@ -1,5 +1,5 @@
 ---
-title: '`modulo`'
+title: Modulo
 ---
 
 {% since %}v1.9.1{% endsince %}

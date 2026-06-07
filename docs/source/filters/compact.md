@@ -1,5 +1,5 @@
 ---
-title: '`compact`'
+title: Compact
 ---
 
 {% since %}v9.22.0{% endsince %}

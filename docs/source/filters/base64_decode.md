@@ -1,5 +1,5 @@
 ---
-title: '`base64_decode`'
+title: Base64 decode
 ---
 
 {% since %}v10.24.0{% endsince %}

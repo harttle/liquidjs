@@ -1,5 +1,5 @@
 ---
-title: '`group_by`'
+title: Group by
 ---
 
 {% since %}v10.11.0{% endsince %}

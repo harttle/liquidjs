@@ -1,5 +1,5 @@
 ---
-title: '`find_exp`'
+title: Find exp
 ---
 
 {% since %}v10.11.0{% endsince %}

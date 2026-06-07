@@ -1,10 +1,10 @@
 ---
-title: '`json`'
+title: JSON
 ---
 
 {% since %}v9.10.0{% endsince %}
 
-Convert values to string via `JSON.stringify()`, for debug purpose.
+Convert values to string via `JSON.stringify()`, for debugging purposes.
 
 Input
 ```liquid

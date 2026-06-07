@@ -1,5 +1,5 @@
 ---
-title: '`replace_last`'
+title: Replace last
 ---
 
 {% since %}v10.2.0{% endsince %}

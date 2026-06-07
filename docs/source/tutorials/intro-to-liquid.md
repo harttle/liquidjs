@@ -5,7 +5,7 @@ describe: A short introduction to the Liquid template language and some simple d
 
 LiquidJS is a simple, expressive and safe [Shopify][shopify/liquid] / GitHub Pages compatible template engine in pure JavaScript. The purpose of this repo is to provide a standard Liquid implementation for the JavaScript community. Liquid is originally implemented in Ruby and used by GitHub Pages, Jekyll and Shopify, see [Differences with Shopify/liquid][diff].
 
-LiquidJS syntax is relatively simple. There're 2 types of markups in LiquidJS:
+LiquidJS syntax is relatively simple. There are 2 types of markups in LiquidJS:
 
 - **Tags**. A tag consists of a tag name and optional arguments wrapped between `{%raw%}{%{%endraw%}` and `%}`.
 - **Outputs**. An output consists of a value and a list of filters, which is optional, wrapped between `{%raw%}{{{%endraw%}` and `}}`.
@@ -38,7 +38,7 @@ A complete list of filters supported by LiquidJS can be found [here](../filters/
 
 ## Tags
 
-**Tags** are used to control the template rendering process, manipulating template variables, inter-op with other templates, etc. For example `assign` can be used to define a variable which can be later used in the template:
+**Tags** are used to control the template rendering process, manipulating template variables, interacting with other templates, etc. For example `assign` can be used to define a variable that can be later used in the template:
 
 ```liquid
 {% assign foo = "FOO" %}
@@ -50,7 +50,7 @@ Typically tags appear in pairs with a start tag and a corresponding end tag. For
 {% if foo == "FOO" %}
     Variable `foo` equals "FOO"
 {% else %}
-    Variable `foo` not equals "FOO"
+    Variable `foo` does not equal "FOO"
 {% endif %}
 ```
 

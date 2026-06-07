@@ -1,5 +1,5 @@
 ---
-title: '`reverse`'
+title: Reverse
 ---
 
 {% since %}v1.9.1{% endsince %}

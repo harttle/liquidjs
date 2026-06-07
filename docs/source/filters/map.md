@@ -1,5 +1,5 @@
 ---
-title: '`map`'
+title: Map
 ---
 
 {% since %}v1.9.1{% endsince %}

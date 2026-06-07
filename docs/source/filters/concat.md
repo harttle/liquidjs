@@ -1,5 +1,5 @@
 ---
-title: '`concat`'
+title: Concat
 ---
 
 {% since %}v2.0.0{% endsince %}

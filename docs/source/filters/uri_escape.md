@@ -1,5 +1,5 @@
 ---
-title: '`uri_escape`'
+title: URI escape
 ---
 
 {% since %}v10.13.0{% endsince %}

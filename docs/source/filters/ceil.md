@@ -1,5 +1,5 @@
 ---
-title: '`ceil`'
+title: Ceil
 ---
 
 {% since %}v1.9.1{% endsince %}

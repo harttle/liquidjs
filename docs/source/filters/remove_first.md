@@ -1,5 +1,5 @@
 ---
-title: '`remove_first`'
+title: Remove first
 ---
 
 {% since %}v1.9.1{% endsince %}

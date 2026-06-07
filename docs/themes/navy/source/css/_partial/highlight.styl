@@ -20,6 +20,9 @@ pre
     border: none
     display: block
     padding: 0
+  &.line-numbers
+    white-space: pre
+    overflow-x: auto
 
 .highlight
   padding: 10px 15px
@@ -101,11 +104,20 @@ pre
   .keyword
   .javascript .function
     color: var(--highlight-purple)
-  // Prism bash uses "builtin" / "class-name", not pygments-style "built_in"
-  .language-bash, .language-shell
-    .builtin
-    .class-name
-    .function
-      color: var(--highlight-orange)
+  // Prism bash: builtins (echo), external commands (npm), and cli-command (npx)
+  code.language-bash
+    .builtin,
+    .class-name,
+    .function,
+    .cli-command
+      color: var(--highlight-bash-command)
+    .operator
+      color: var(--highlight-purple)
+  code.language-shell
+    .builtin,
+    .class-name,
+    .function,
+    .cli-command
+      color: var(--highlight-bash-command)
     .operator
       color: var(--highlight-purple)

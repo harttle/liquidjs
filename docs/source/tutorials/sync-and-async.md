@@ -2,11 +2,11 @@
 title: Sync and Async
 ---
 
-LiquidJS supports both sync and async evaluate, and can be used with Promises. To reuse the same set of tag/filter implementations in both sync and async, LiquidJS tags are implemented as generators.
+LiquidJS supports both synchronous and asynchronous evaluation, and can be used with Promises. To reuse the same set of tag/filter implementations in both sync and async modes, LiquidJS tags are implemented as generators.
 
 ## Sync and Async API
 
-All major methods on [Liquid][Liquid] supports both sync and async. These methods return Promises:
+All major methods on [Liquid][Liquid] support both sync and async. These methods return Promises:
 
 - `render()`
 - `renderFile()`
@@ -44,11 +44,11 @@ engine.registerTag('upper', class UpperTag extends Tag {
 })
 ```
 
-All builtin tags are implemented this way and safe to use in both sync and async (I'll call it *sync-compatible*). To make your custom tag *sync-compatible*, you'll need to:
+All built-in tags are implemented this way and are safe to use in both sync and async modes (I'll call it *sync-compatible*). To make your custom tag *sync-compatible*, you'll need to:
 
 - declare render function as `* render()`, in which
 - do not directly `return <Promise>`, and
-- do not call any APIs that returns a Promise.
+- do not call any APIs that return a Promise.
 
 ## Call APIs that return a Promise
 
@@ -92,7 +92,7 @@ engine.registerTag('upper', class UpperTag extends Tag {
 
 ## Async only Tags
 
-If your tag is intend to be used only asynchronously, it can be declared as `async render()` so you can use `await` in its implementation directly:
+If your tag is intended to be used only asynchronously, it can be declared as `async render()` so you can use `await` in its implementation directly:
 
 ```typescript
 import { toPromise, TagToken, Context, Emitter, TopLevelToken, Value, Tag, Liquid } from 'liquidjs'

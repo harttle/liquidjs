@@ -1,5 +1,5 @@
 ---
-title: '`layout`'
+title: Layout
 ---
 
 {% since %}v1.9.1{% endsince %}
@@ -31,7 +31,7 @@ If [extname][extname] option is set, the `.liquid` extension becomes optional:
 ```
 
 {% note info Scoping %}
-When a partial template is rendered by the `layout` tag, its template have access for its caller's variables but not vice versa. Variables defined in `layout` will be popped out before control returning to its caller.
+When a partial template is rendered by the `layout` tag, its template has access to its caller's variables but not vice versa. Variables defined in `layout` will be popped out before control returns to its caller.
 {% endnote %}
 
 ## Multiple Blocks
@@ -53,7 +53,7 @@ The `layout` file can contain multiple blocks, each with a specified name. The f
 
 ## Default Block Contents
 
-In the above `layout` files, blocks has empty contents. But it's not necessarily be empty, in which case, the block contents in `layout` files will be used as default templates. The following snippets are also equivalent to the above examples:
+In the above `layout` files, blocks have empty contents. They do not necessarily need to be empty; in that case, the block contents in `layout` files will be used as default templates. The following snippets are also equivalent to the above examples:
 
 ```liquid
 // default-layout.liquid
@@ -68,7 +68,7 @@ In the above `layout` files, blocks has empty contents. But it's not necessarily
 
 ## Passing Variables
 
-Variables defined in current template can be passed to a the `layout` template by listing them as parameters on the `layout` tag:
+Variables defined in the current template can be passed to the `layout` template by listing them as parameters on the `layout` tag:
 
 ```liquid
 {% assign my_variable = 'apples' %}

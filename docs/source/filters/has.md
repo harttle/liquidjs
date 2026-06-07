@@ -1,5 +1,5 @@
 ---
-title: '`has`'
+title: Has
 ---
 
 {% since %}v10.21.0{% endsince %}

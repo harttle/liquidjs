@@ -1,5 +1,5 @@
 ---
-title: '`url_decode`'
+title: URL decode
 ---
 
 {% since %}v6.1.0{% endsince %}

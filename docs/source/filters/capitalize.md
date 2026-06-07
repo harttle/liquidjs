@@ -1,5 +1,5 @@
 ---
-title: '`capitalize`'
+title: Capitalize
 ---
 
 {% since %}v1.9.1{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: '`jsonify`'
+title: Jsonify
 ---
 
 {% since %}v10.13.0{% endsince %}

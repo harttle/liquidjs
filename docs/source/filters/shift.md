@@ -1,5 +1,5 @@
 ---
-title: '`shift`'
+title: Shift
 ---
 
 {% since %}v10.11.0{% endsince %}

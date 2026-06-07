@@ -2,7 +2,7 @@
 title: Render Tag Content
 ---
 
-Custom tags can have content template and can be nested. This article describes how to implement custom tags that consists of a *begin tag*, an *end tag*, and template content between them.
+Custom tags can have content templates and can be nested. This article describes how to implement custom tags that consist of a *begin tag*, an *end tag*, and template content between them.
 
 ## Render Tag Content
 
@@ -22,12 +22,12 @@ Expected output:
 </div>
 ```
 
-Firstly, [register][register-tags] a tag with name `wrap` and parse the content into `this.tpls`. Here in `parse(tagToken, remainTokens)`,
+Firstly, [register][register-tags] a tag named `wrap` and parse the content into `this.tpls`. Here in `parse(tagToken, remainTokens)`:
 
 - `tagToken` is current token `{%raw%}{% wrap %}{%endraw%}`, and
 - `remainTokens` is an array of all tokens following `{%raw%}{% wrap %}{%endraw%}` until the end of this template file.
 
-Basically, what we need to do is take/`.shift()` enough tags from `remainTokens` until we got a `endwrap` token (the name can be arbitrary, but in convention, we need it to be `endwrap`). And if there's no `endwrap` until the end of template file, we need to throw an tag-not-closed `Error`.
+Basically, what we need to do is take/`.shift()` enough tags from `remainTokens` until we get an `endwrap` token (the name can be arbitrary, but by convention it should be `endwrap`). And if there's no `endwrap` until the end of the template file, we need to throw a tag-not-closed `Error`.
 
 ```javascript
 engine.registerTag('wrap', {
@@ -57,11 +57,11 @@ engine.registerTag('wrap', {
 })
 ```
 
-`.renderTemplates()` can be async, we need `yield` to wait it complete. More details on async in LiquidJS, please refer to [Sync and Async][async]. Other parts of `render()` method is quite straightforward. Here's a JSFiddle version: <https://jsfiddle.net/por0zcn1/3/>
+`.renderTemplates()` can be async; we need `yield` to wait for it to complete. For more details on async in LiquidJS, see [Sync and Async][async]. Other parts of the `render()` method are quite straightforward. Here's a JSFiddle version: <https://jsfiddle.net/por0zcn1/3/>
 
 ## Using ParseStream
 
-When it comes to complex tags like [for][for] and [if][if], the `parse()` can be very complicated. There's a [ParseStream][ParseStream] utility to organize the `parse()` in event-based style. Following is a re-written `parse()` using `ParseStream` and does exactly the same as above example.
+When it comes to complex tags like [for][for] and [if][if], the `parse()` can be very complicated. There's a [ParseStream][ParseStream] utility to organize the `parse()` in event-based style. Following is a re-written `parse()` using `ParseStream` that does exactly the same as the example above.
 
 ```javascript
 parse(tagToken, remainTokens) {
@@ -79,7 +79,7 @@ Here's a JSFiddle version: <https://jsfiddle.net/por0zcn1/4/>. For simplicity, t
 
 ## Manipulate the Context
 
-The `wrap` tag above doesn't seem to be very useful, without using that tag we can render the content anyway. Now we're going to implement a `repeat` tag to render the content 2 times (we can also add a [parameter][parameter] to render arbitrary times).
+The `wrap` tag above doesn't seem very useful; even without using that tag, we can render the content anyway. Now we're going to implement a `repeat` tag to render the content 2 times (we can also add a [parameter][parameter] to render an arbitrary number of times).
 
 ```liquid
 {% repeat %}

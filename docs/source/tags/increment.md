@@ -1,5 +1,5 @@
 ---
-title: '`increment`'
+title: Increment
 ---
 
 {% since %}v1.9.1{% endsince %}

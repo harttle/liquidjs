@@ -1,5 +1,5 @@
 ---
-title: '`pop`'
+title: Pop
 ---
 
 {% since %}v10.11.0{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: '`lstrip`'
+title: Lstrip
 ---
 
 {% since %}v1.9.1{% endsince %}

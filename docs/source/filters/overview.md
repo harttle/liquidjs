@@ -5,7 +5,7 @@ description: Description and demo for each Liquid filter
 
 LiquidJS implements business-logic independent filters that are typically implemented in [shopify/liquid][shopify/liquid]. This section contains the specification and demos for all the filters implemented by LiquidJS.
 
-There's 40+ filters supported by LiquidJS. These filters can be categorized into these groups:
+There are 40+ filters supported by LiquidJS. These filters can be categorized into these groups:
 
 Categories | Filters
 --- | ---

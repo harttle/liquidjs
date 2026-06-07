@@ -1,5 +1,5 @@
 ---
-title: '`round`'
+title: Round
 ---
 
 {% since %}v1.9.1{% endsince %}

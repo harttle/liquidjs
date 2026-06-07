@@ -1,5 +1,5 @@
 ---
-title: '`date_to_string`'
+title: Date to string
 ---
 {% since %}v10.13.0{% endsince %}
 

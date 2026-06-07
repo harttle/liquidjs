@@ -1,5 +1,5 @@
 ---
-title: '`default`'
+title: Default
 ---
 
 {% since %}v1.9.1{% endsince %}

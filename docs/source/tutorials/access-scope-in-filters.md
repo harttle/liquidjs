@@ -2,7 +2,7 @@
 title: Access Scope in Filters
 ---
 
-As covered in [Register Filters/Tags][register-filters], we can access filter arguments directly in filter function like:
+As covered in [Register Filters/Tags][register-filters], we can access filter arguments directly in a filter function like:
 
 ```javascript
 // Usage: {{ 1 | add: 2, 3 }}
@@ -10,7 +10,7 @@ As covered in [Register Filters/Tags][register-filters], we can access filter ar
 engine.registerFilter('add', (initial, arg1, arg2) => initial + arg1 + arg2)
 ```
 
-When it comes to stateful filters, for example transform a URL path to full URL, we'll need to access a `origin` in current scope:
+When it comes to stateful filters, for example transforming a URL path to a full URL, we'll need to access an `origin` in the current scope:
 
 ```javascript
 // Usage: {{ '/index.html' | fullURL }}
