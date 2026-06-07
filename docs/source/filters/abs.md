@@ -1,5 +1,5 @@
 ---
-title: Abs
+title: abs
 ---
 
 {% since %}v1.9.1{% endsince %}

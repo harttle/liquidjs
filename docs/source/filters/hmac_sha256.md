@@ -1,5 +1,5 @@
 ---
-title: HMAC SHA256
+title: hmac_sha256
 ---
 
 {% since %}vNEXT{% endsince %}

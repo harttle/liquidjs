@@ -1,5 +1,5 @@
 ---
-title: Newline to br
+title: newline_to_br
 ---
 
 {% since %}v1.9.1{% endsince %}

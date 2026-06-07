@@ -1,5 +1,5 @@
 ---
-title: Date to RFC822
+title: date_to_rfc822
 ---
 {% since %}v10.13.0{% endsince %}
 

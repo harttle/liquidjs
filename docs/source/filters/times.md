@@ -1,5 +1,5 @@
 ---
-title: Times
+title: times
 ---
 
 {% since %}v1.9.1{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: Layout
+title: layout
 ---
 
 {% since %}v1.9.1{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: Slugify
+title: slugify
 ---
 
 {% since %}v10.13.0{% endsince %}

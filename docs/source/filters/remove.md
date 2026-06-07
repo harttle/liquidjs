@@ -1,5 +1,5 @@
 ---
-title: Remove
+title: remove
 ---
 
 {% since %}v1.9.1{% endsince %}

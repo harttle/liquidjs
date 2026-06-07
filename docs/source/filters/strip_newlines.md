@@ -1,5 +1,5 @@
 ---
-title: Strip newlines
+title: strip_newlines
 ---
 
 {% since %}v1.9.1{% endsince %}

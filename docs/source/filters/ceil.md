@@ -1,5 +1,5 @@
 ---
-title: Ceil
+title: ceil
 ---
 
 {% since %}v1.9.1{% endsince %}

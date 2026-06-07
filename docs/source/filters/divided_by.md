@@ -1,5 +1,5 @@
 ---
-title: Divided by
+title: divided_by
 ---
 
 {% since %}v1.9.1{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: Base64 encode
+title: base64_encode
 ---
 
 {% since %}v10.24.0{% endsince %}

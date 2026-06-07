@@ -1,5 +1,5 @@
 ---
-title: JSON
+title: json
 ---
 
 {% since %}v9.10.0{% endsince %}

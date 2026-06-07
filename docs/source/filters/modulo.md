@@ -1,5 +1,5 @@
 ---
-title: Modulo
+title: modulo
 ---
 
 {% since %}v1.9.1{% endsince %}

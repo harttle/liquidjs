@@ -1,5 +1,5 @@
 ---
-title: Include
+title: include
 ---
 
 {% since %}v1.9.1{% endsince %}

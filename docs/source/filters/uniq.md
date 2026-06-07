@@ -1,5 +1,5 @@
 ---
-title: Uniq
+title: uniq
 ---
 
 {% since %}v1.9.1{% endsince %}

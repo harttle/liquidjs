@@ -1,5 +1,5 @@
 ---
-title: Strip
+title: strip
 ---
 
 {% since %}v1.9.1{% endsince %}

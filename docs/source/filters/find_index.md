@@ -1,5 +1,5 @@
 ---
-title: Find index
+title: find_index
 ---
 
 {% since %}v10.21.0{% endsince %}

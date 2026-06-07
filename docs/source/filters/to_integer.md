@@ -1,5 +1,5 @@
 ---
-title: To integer
+title: to_integer
 ---
 
 {% since %}v10.13.0{% endsince %}

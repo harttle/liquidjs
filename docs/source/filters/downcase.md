@@ -1,5 +1,5 @@
 ---
-title: Downcase
+title: downcase
 ---
 
 {% since %}v1.9.1{% endsince %}

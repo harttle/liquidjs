@@ -1,5 +1,5 @@
 ---
-title: Inline comment
+title: "# (inline comment)"
 ---
 
 {% since %}v9.38.0{% endsince %}

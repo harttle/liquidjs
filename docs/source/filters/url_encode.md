@@ -1,5 +1,5 @@
 ---
-title: URL encode
+title: url_encode
 ---
 
 {% since %}v1.9.1{% endsince %}

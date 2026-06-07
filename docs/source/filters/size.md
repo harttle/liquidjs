@@ -1,5 +1,5 @@
 ---
-title: Size
+title: size
 ---
 
 {% since %}v1.9.1{% endsince %}

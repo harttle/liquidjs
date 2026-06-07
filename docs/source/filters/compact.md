@@ -1,5 +1,5 @@
 ---
-title: Compact
+title: compact
 ---
 
 {% since %}v9.22.0{% endsince %}

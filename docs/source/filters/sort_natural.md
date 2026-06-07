@@ -1,5 +1,5 @@
 ---
-title: Sort natural
+title: sort_natural
 ---
 
 {% since %}v8.4.0{% endsince %}

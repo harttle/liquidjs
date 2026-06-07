@@ -1,5 +1,5 @@
 ---
-title: Number of words
+title: number_of_words
 ---
 
 {% since %}v10.13.0{% endsince %}

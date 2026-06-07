@@ -1,5 +1,5 @@
 ---
-title: Date
+title: date
 ---
 {% since %}v1.9.1{% endsince %}
 
