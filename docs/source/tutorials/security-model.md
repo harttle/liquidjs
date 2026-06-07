@@ -28,7 +28,7 @@ A typical PC handles `1e8` (100M) characters without issues.
 
 ### renderLimit
 
-Restricting template size alone is insufficient because dynamic loops with large counts can occur in render time. [renderLimit][renderLimit] mitigates this by limiting the time consumed by each `render()` call.
+Restricting template size alone is insufficient because dynamic loops with large counts can occur during rendering. [renderLimit][renderLimit] mitigates this by limiting the time consumed by each `render()` call.
 
 ```liquid
 {%- for i in (1..10000000) -%}
@@ -49,7 +49,7 @@ Render time is checked on a per-template basis (before rendering each template).
 
 In other words, `memoryLimit` limits what LiquidJS counts, not every byte your process may allocate.
 
-Even with small number of templates and iterations, memory usage can grow exponentially. In the following example, memory doubles with each iteration:
+Even with a small number of templates and iterations, memory usage can grow exponentially. In the following example, memory doubles with each iteration:
 
 ```liquid
 {% assign array = "1,2,3" | split: "," %}

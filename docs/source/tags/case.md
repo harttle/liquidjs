@@ -4,7 +4,7 @@ title: case
 
 {% since %}v1.9.1{% endsince %}
 
-Creates a switch statement to compare a variable with different values. `case` initializes the switch statement, and `when` compares its values.
+Creates a switch statement to compare a variable with different values. `case` initializes the switch statement, and `when` tags compare values.
 
 Input
 ```liquid

@@ -1,5 +1,5 @@
 ---
-title: Liquid
+title: liquid
 ---
 
 {% since %}v9.31.0{% endsince %}

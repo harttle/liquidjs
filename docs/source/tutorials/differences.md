@@ -4,7 +4,7 @@ title: Differences with Shopify/liquid
 
 ## Compatibility
 
-Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it's one of the most popular template engines in Ruby. There're lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
+Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it's one of the most popular template engines in Ruby. There are lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
 
 So "being compatible" means serving developers from Shopify and Jekyll well:
 
@@ -13,8 +13,8 @@ So "being compatible" means serving developers from Shopify and Jekyll well:
 
 In the meantime, it's now implemented in JavaScript, that means it has to be more powerful:
 
-* **Async as first-class citizen**. Filters and tags can be implemented asynchronously by return a `Promise`.
-* **Also can be sync**. For scenarios that are not I/O intensive, render synchronously can be much faster. You can call synchronous APIs like `.renderSync()` as long as all the filters and tags in template support to be rendered synchronously. All builtin filters/tags support both sync and async render.
+* **Async as a first-class citizen**. Filters and tags can be implemented asynchronously by returning a `Promise`.
+* **Can also be synchronous**. For scenarios that are not I/O intensive, rendering synchronously can be much faster. You can call synchronous APIs like `.renderSync()` as long as all the filters and tags in the template can be rendered synchronously. All built-in filters/tags support both sync and async render.
 * **[Abstract file system][afs]**. Along with async feature, LiquidJS can be used to serve templates stored in Databases [#414][#414], on remote HTTP server [#485][#485], and so on.
 * **Additional tags and filters** like `layout` and `json`, `inspect`, `where_exp`, `group_by`, etc., see below for details.
 

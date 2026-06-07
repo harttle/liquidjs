@@ -1,48 +1,107 @@
 #playground
   background: var(--color-content-bg)
   overflow: hidden
+  box-shadow: var(--panel-shadow)
+
   .wrapper
     margin-bottom: 40px
+
   h1
     font-size: 36px
     font-weight: 300
-    margin: 40px 0 24px
+    margin-top: 40px
+    margin-bottom: 24px
+    color: var(--color-default)
+
+  h2
+    font-size: 0.8125rem
+    font-weight: 600
+    text-transform: uppercase
+    letter-spacing: 0.04em
+    color: var(--color-gray)
+    margin: 0
 
   #editors
     display: grid
     overflow: hidden
-    margin-bottom: 16px
+    margin-bottom: 0
     height: 75vh
-    grid-template-columns: auto auto
-    grid-template-rows: 60% 40%
+    min-height: 480px
+    grid-template-columns: 1fr 1fr
+    grid-template-rows: 3fr 2fr
     grid-gap: 16px
+    align-items: stretch
+    @media mq-mobile
+      height: auto
+      min-height: 0
+      grid-template-columns: 1fr
+      grid-template-rows: auto
+      grid-gap: 20px
+
   .area-tpl
     grid-row: 1
     grid-column: 1
+    min-height: 0
   .area-data
     grid-row: 2
     grid-column: 1
+    min-height: 0
   .area-output
     grid-column: 2
     grid-row: 1 / -1
+    min-height: 0
+    @media mq-mobile
+      grid-row: auto
+      grid-column: 1
+
   .editor-wrapper
     display: flex
     gap: 8px
     flex-direction: column
+    min-height: 0
+    overflow: hidden
     .editor
-      flex-grow: 1
+      flex: 1 1 auto
+      min-height: 0
+      position: relative
+      code-block-chrome()
+      overflow: hidden
+      @media mq-mobile
+        min-height: 240px
+    .ace_editor
+      font-family: font-mono
+      font-size: 14px
+      line-height: 1.5
+      border-radius: 6px
+    .ace_scrollbar
+      z-index: 2
+
+  .version
+    font-size: 0.8125rem
+    line-height: 1.5
+    font-family: font-mono
+    color: var(--color-gray)
+    margin-top: 20px
+    margin-bottom: 32px
+    a
+      color: inherit
+      text-decoration: none
+      &:hover
+        color: var(--color-link)
+        text-decoration: underline
+
   .hide
     display: none
+
   .loader
-    width: 75px
-    height: 75px
+    width: 48px
+    height: 48px
     margin: 150px auto 200px
-    border-top: 5px solid #292929
-    border-right: 5px solid #efefef
-    border-bottom: 5px solid #efefef
-    border-left: 5px solid #efefef
-    border-radius: 100px
-    animation: spin 1s infinite linear
+    border: 3px solid var(--color-border)
+    border-top-color: var(--color-link)
+    border-radius: 50%
+    animation: spin 0.8s infinite linear
+
   @keyframes spin
     100%
       transform: rotate(360deg)

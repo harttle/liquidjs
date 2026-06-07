@@ -62,7 +62,7 @@ See existing filter implementations here: <https://github.com/harttle/liquidjs/t
 
 ## Unregister Tags/Filters
 
-In some cases it's desirable to disable some tags/filters (see [#324](https://github.com/harttle/liquidjs/issues/324)), you'll need to register a dummy tag/filter in which an corresponding Error throws.
+In some cases it's desirable to disable some tags/filters (see [#324](https://github.com/harttle/liquidjs/issues/324)). You'll need to register a dummy tag/filter that throws a corresponding Error.
 
 ```javascript
 // disable a tag

@@ -4,38 +4,86 @@ vendor-prefixes = webkit moz ms official
 
 // Colors
 :root {
-    --color-default: #444
-    --color-default-invert: #d1d2d4
-    --color-gray: #999
-    --color-border: #e3e3e3
-    --color-navy: hsl(210, 25%, 12%)
+    --color-default: #374151
+    --color-default-invert: #e8eaed
+    --color-gray: #6b7280
+    --color-border: #e5e7eb
+    --color-navy: hsl(218, 32%, 11%)
     --color-content-bg: #fff
-    --color-navy-lighter: lighten(hsl(210, 25%, 12%), 10%)
-    --color-link: #0e83cd
-    --color-link-hover: lighten(#0e83cd, 10%)
+    --color-navy-lighter: hsl(218, 28%, 16%)
+    --color-link: #2563eb
+    --color-link-hover: #1d4ed8
+    --panel-shadow: 0 0 48px rgba(0, 0, 0, 0.18)
+    --heading-border: var(--color-border)
+    --code-border: #d0d7de
+    --code-shadow: 0 1px 2px rgba(0, 0, 0, 0.04)
+    --inline-code-bg: rgba(175, 184, 193, 0.2)
+    --inline-code-color: var(--color-default)
+    --blockquote-bg: transparent
+    --note-tip-bg: rgba(63, 185, 80, 0.05)
+    --note-info-bg: rgba(88, 166, 255, 0.05)
+    --note-warn-bg: rgba(248, 81, 73, 0.05)
+    --table-stripe-bg: #f3f4f6
+    --highlight-background: #f6f8fa
+    --highlight-current-line: #f0f3f6
+    --highlight-selection: #b6d4fe
+    --highlight-foreground: #24292f
+    --highlight-comment: #6e7781
+    --highlight-red: #cf222e
+    --highlight-orange: #953800
+    --highlight-bash-command: #c95100
+    --highlight-yellow: #7d4e00
+    --highlight-green: #116329
+    --highlight-aqua: #0550ae
+    --highlight-blue: #0550ae
+    --highlight-purple: #8250df
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-default: #d1d2d4
-        --color-default-invert: #444
-        --color-gray: invert(#999)
-        --color-border: #6a6a6a
+        --color-default: #e6edf3
+        --color-default-invert: #374151
+        --color-gray: #9aa4b2
+        --color-border: #3d444d
         --color-background: #fff
-        --color-navy: hsl(210, 25%, 12%)
-        --color-navy-lighter: lighten(hsl(210, 25%, 12%), 7%)
-        --color-content-bg: #1c1c1c
-        --color-link: #0e83cd
-        --color-link-hover: lighten(#0e83cd, 10%)
+        --color-navy: hsl(218, 32%, 9%)
+        --color-navy-lighter: hsl(218, 28%, 15%)
+        --color-content-bg: hsl(218, 28%, 13%)
+        --color-link: #58a6ff
+        --color-link-hover: #79b8ff
+        --panel-shadow: 0 0 64px rgba(0, 0, 0, 0.35)
+        --heading-border: rgba(255, 255, 255, 0.08)
+        --code-border: rgba(255, 255, 255, 0.06)
+        --code-shadow: 0 1px 3px rgba(0, 0, 0, 0.12)
+        --inline-code-bg: var(--highlight-background)
+        --inline-code-color: var(--highlight-foreground)
+        --blockquote-bg: rgba(255, 255, 255, 0.03)
+        --note-tip-bg: rgba(63, 185, 80, 0.07)
+        --note-info-bg: rgba(88, 166, 255, 0.07)
+        --note-warn-bg: rgba(248, 81, 73, 0.07)
+        --table-stripe-bg: rgba(255, 255, 255, 0.04)
+        --highlight-background: hsl(218, 24%, 15%)
+        --highlight-current-line: hsl(218, 18%, 18%)
+        --highlight-selection: hsl(218, 15%, 24%)
+        --highlight-foreground: #e6edf3
+        --highlight-comment: #8b949e
+        --highlight-red: #ff7b72
+        --highlight-orange: #ffa657
+        --highlight-bash-command: var(--highlight-orange)
+        --highlight-yellow: #e3b341
+        --highlight-green: #7ee787
+        --highlight-aqua: #79c0ff
+        --highlight-blue: #79c0ff
+        --highlight-purple: #d2a8ff
     }
 }
 
 // Typography
-font-sans = "Helvetica Neue", Helvetica, Arial, sans-serif
+font-sans = -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif
 font-serif = Garamond, Georgia, "Times New Roman", serif
-font-mono = "Source Code Pro", Monaco, Menlo, Consolas, monospace
+font-mono = "Source Code Pro", ui-monospace, Monaco, Menlo, Consolas, monospace
 font-size = 16px
-line-height = 1.8em
+line-height = 1.75
 
 // Layout
 max-width = 1800px
@@ -48,3 +96,9 @@ mq-mobile = "screen and (max-width: 768px)"
 mq-normal = "screen and (min-width: 769px)"
 mq-small = "screen and (min-width: 992px)"
 mq-tablet = "screen and (min-width: 480px)"
+
+// Shared code-block chrome (pre, .highlight, playground editors)
+code-block-chrome()
+  border-radius: 6px
+  border: 1px solid var(--code-border)
+  box-shadow: var(--code-shadow)
