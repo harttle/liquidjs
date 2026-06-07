@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -99,7 +100,7 @@
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <h2 id="Compatibility" class="article-heading"><a href="#Compatibility" class="headerlink" title="Compatibility"></a>Compatibility<a class="article-anchor" href="#Compatibility" aria-hidden="true"></a></h2><p>Being compatible with the Ruby version is one of our priorities. Liquid language is originally <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">implemented in Ruby</a> and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it’s one of the most popular template engines in Ruby. There’re lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.</p>
+                <h2 id="Compatibility" class="article-heading"><a href="#Compatibility" class="headerlink" title="Compatibility"></a>Compatibility<a class="article-anchor" href="#Compatibility" aria-hidden="true"></a></h2><p>Being compatible with the Ruby version is one of our priorities. Liquid language is originally <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">implemented in Ruby</a> and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it’s one of the most popular template engines in Ruby. There are lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.</p>
 <p>So “being compatible” means serving developers from Shopify and Jekyll well:</p>
 <ul>
 <li><strong>Well-formed Liquid template should work just fine in LiquidJS</strong>. For example, <code>forloop.index</code> should be 1-indexed, <code>nil</code> should be rendered as empty string rather than <code>undefined</code>, etc. Although some features (e.g. <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/issues/236">#236</a>) are not feasible in JavaScript, at least we’re trying to implement all the semantics of Liquid language.</li>
@@ -107,8 +108,8 @@
 </ul>
 <p>In the meantime, it’s now implemented in JavaScript, that means it has to be more powerful:</p>
 <ul>
-<li><strong>Async as first-class citizen</strong>. Filters and tags can be implemented asynchronously by return a <code>Promise</code>.</li>
-<li><strong>Also can be sync</strong>. For scenarios that are not I/O intensive, render synchronously can be much faster. You can call synchronous APIs like <code>.renderSync()</code> as long as all the filters and tags in template support to be rendered synchronously. All builtin filters/tags support both sync and async render.</li>
+<li><strong>Async as a first-class citizen</strong>. Filters and tags can be implemented asynchronously by returning a <code>Promise</code>.</li>
+<li><strong>Can also be synchronous</strong>. For scenarios that are not I/O intensive, rendering synchronously can be much faster. You can call synchronous APIs like <code>.renderSync()</code> as long as all the filters and tags in the template can be rendered synchronously. All built-in filters/tags support both sync and async render.</li>
 <li><strong><a href="https://liquidjs.com/tutorials/render-file.html#Abstract-File-System">Abstract file system</a></strong>. Along with async feature, LiquidJS can be used to serve templates stored in Databases <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/414">#414</a>, on remote HTTP server <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/discussions/485">#485</a>, and so on.</li>
 <li><strong>Additional tags and filters</strong> like <code>layout</code> and <code>json</code>, <code>inspect</code>, <code>where_exp</code>, <code>group_by</code>, etc., see below for details.</li>
 </ul>
@@ -134,7 +135,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.031Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.442Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="changelog.html" class="article-footer-prev" title="Changelog"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="contribution-guidelines.html" class="article-footer-next" title="Contribution Guidelines"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

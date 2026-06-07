@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -100,8 +101,8 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <p>A number of tags and filters can be encapsulated into a <strong>plugin</strong>, which will be typically installed via npm. This article provides information about how to create and use a plugin.</p>
-<h2 id="Write-a-Plugin" class="article-heading"><a href="#Write-a-Plugin" class="headerlink" title="Write a Plugin"></a>Write a Plugin<a class="article-anchor" href="#Write-a-Plugin" aria-hidden="true"></a></h2><p>A liquidjs plugin is simple function which takes the <a href="/api/classes/Liquid.html">Liquid class</a> as the first parameter and the Liquid instance for <code>this</code>. We can call liquidjs APIs on <code>this</code> to make certain changes, especially <a href="/harttle/liquidjs/wiki/Register-Filters-Tags">register filters and tags</a>.</p>
-<p>Now we’ll make a plugin to upper case every letter of the input, save the following snippet to <code>upup.js</code>:</p>
+<h2 id="Write-a-Plugin" class="article-heading"><a href="#Write-a-Plugin" class="headerlink" title="Write a Plugin"></a>Write a Plugin<a class="article-anchor" href="#Write-a-Plugin" aria-hidden="true"></a></h2><p>A LiquidJS plugin is a simple function that takes the <a href="/api/classes/Liquid.html">Liquid class</a> as the first parameter and uses the Liquid instance for <code>this</code>. We can call LiquidJS APIs on <code>this</code> to make certain changes, especially <a href="/harttle/liquidjs/wiki/Register-Filters-Tags">register filters and tags</a>.</p>
+<p>Now we’ll make a plugin to uppercase every letter of the input. Save the following snippet to <code>upup.js</code>:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">/**
  * Inside the plugin function, `this` refers to the Liquid instance.
  *
@@ -128,7 +129,7 @@ engine
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.031Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.442Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="whitespace-control.html" class="article-footer-prev" title="Whitespace Control"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="operators.html" class="article-footer-next" title="Operators"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -168,7 +169,7 @@ engine<span class="token punctuation">.</span><span class="token function">parse
 <span class="token comment">// Outputs: "red"</span>
 engine<span class="token punctuation">.</span><span class="token function">parseAndRender</span><span class="token punctuation">(</span><span class="token string">"&#123;&#123;color&#125;&#125;"</span><span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">html</span> <span class="token operator">=></span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>html<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="toLiquid" class="article-heading"><a href="#toLiquid" class="headerlink" title="toLiquid"></a>toLiquid<a class="article-anchor" href="#toLiquid" aria-hidden="true"></a></h2><p><code>toLiquid()</code> is not a method of <code>Drop</code>, but it can be used to return a <code>Drop</code>. In cases where you have a fixed structure in the <code>context</code> that cannot change its values, you can implement <code>toLiquid()</code> to let LiquidJS use the returned value instead of itself to render the templates.</p>
+<h2 id="toLiquid" class="article-heading"><a href="#toLiquid" class="headerlink" title="toLiquid"></a>toLiquid<a class="article-anchor" href="#toLiquid" aria-hidden="true"></a></h2><p><code>toLiquid()</code> is not a method of <code>Drop</code>, but it can be used to return a <code>Drop</code>. In cases where you have a fixed structure in the <code>context</code> that cannot change its values, you can implement <code>toLiquid()</code> to let LiquidJS use the returned value instead of the object itself when rendering templates.</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">import</span> <span class="token punctuation">&#123;</span> Liquid<span class="token punctuation">,</span> Drop <span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">'liquidjs'</span>
 
 <span class="token keyword">const</span> context <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
@@ -244,7 +245,7 @@ engine<span class="token punctuation">.</span><span class="token function">parse
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.031Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.442Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="render-tag-content.html" class="article-footer-prev" title="Render Tag Content"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="sync-and-async.html" class="article-footer-next" title="Sync and Async"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

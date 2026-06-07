@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });

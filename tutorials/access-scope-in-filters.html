@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -99,12 +100,12 @@
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>As covered in <a href="/tutorials/register-filters-tags.html">Register Filters/Tags</a>, we can access filter arguments directly in filter function like:</p>
+                <p>As covered in <a href="/tutorials/register-filters-tags.html">Register Filters/Tags</a>, we can access filter arguments directly in a filter function like:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Usage: &#123;&#123; 1 | add: 2, 3 &#125;&#125;</span>
 <span class="token comment">// Output: 6</span>
 engine<span class="token punctuation">.</span><span class="token function">registerFilter</span><span class="token punctuation">(</span><span class="token string">'add'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">initial<span class="token punctuation">,</span> arg1<span class="token punctuation">,</span> arg2</span><span class="token punctuation">)</span> <span class="token operator">=></span> initial <span class="token operator">+</span> arg1 <span class="token operator">+</span> arg2<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<p>When it comes to stateful filters, for example transform a URL path to full URL, we’ll need to access a <code>origin</code> in current scope:</p>
+<p>When it comes to stateful filters, for example transforming a URL path to a full URL, we’ll need to access an <code>origin</code> in the current scope:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">// Usage: &#123;&#123; '/index.html' | fullURL &#125;&#125;</span>
 <span class="token comment">// Scope: &#123; origin: "https://liquidjs.com" &#125;</span>
 <span class="token comment">// Output: https://liquidjs.com/index.html</span>
@@ -121,7 +122,7 @@ engine<span class="token punctuation">.</span><span class="token function">regis
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.030Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.441Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="register-filters-tags.html" class="article-footer-prev" title="Register Filters/Tags"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="parse-parameters.html" class="article-footer-next" title="Parse Parameters"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

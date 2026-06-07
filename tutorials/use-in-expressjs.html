@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -99,7 +100,7 @@
                 
               </header>
               <div class="article-content" itemprop="articleBody">
-                <p>LiquidJS is compatible to the <a target="_blank" rel="noopener external nofollow noreferrer" href="https://expressjs.com/en/resources/template-engines.html">express template engines</a>. You can set liquidjs instance to the <a target="_blank" rel="noopener external nofollow noreferrer" href="https://expressjs.com/en/guide/using-template-engines.html">view engine</a> option:</p>
+                <p>LiquidJS is compatible with <a target="_blank" rel="noopener external nofollow noreferrer" href="https://expressjs.com/en/resources/template-engines.html">Express template engines</a>. You can set the LiquidJS instance as the <a target="_blank" rel="noopener external nofollow noreferrer" href="https://expressjs.com/en/guide/using-template-engines.html">view engine</a> option:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -132,7 +133,7 @@ app<span class="token punctuation">.</span><span class="token function">set</spa
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'hello'</span><span class="token punctuation">)</span>
 res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'world'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h2 id="Caching" class="article-heading"><a href="#Caching" class="headerlink" title="Caching"></a>Caching<a class="article-anchor" href="#Caching" aria-hidden="true"></a></h2><p>Simply setting the <a href="/api/interfaces/LiquidOptions.html#cache">cache option</a> to true will enable template caching, as explained in <a href="./caching.html">Caching</a>. It’s recommended to enable cache in production environment, which can be done by:</p>
+<h2 id="Caching" class="article-heading"><a href="#Caching" class="headerlink" title="Caching"></a>Caching<a class="article-anchor" href="#Caching" aria-hidden="true"></a></h2><p>Simply setting the <a href="/api/interfaces/LiquidOptions.html#cache">cache option</a> to true will enable template caching, as explained in <a href="./caching.html">Caching</a>. It’s recommended to enable cache in a production environment, which can be done by:</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> <span class="token punctuation">&#123;</span> Liquid <span class="token punctuation">&#125;</span> <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'liquidjs'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">var</span> engine <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Liquid</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
     <span class="token literal-property property">cache</span><span class="token operator">:</span> process<span class="token punctuation">.</span>env<span class="token punctuation">.</span><span class="token constant">NODE_ENV</span> <span class="token operator">===</span> <span class="token string">'production'</span>
@@ -141,7 +142,7 @@ res<span class="token punctuation">.</span><span class="token function">render</
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.031Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.442Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="partials-and-layouts.html" class="article-footer-prev" title="Includes and Layouts"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="caching.html" class="article-footer-next" title="Caching"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

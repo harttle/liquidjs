@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -104,14 +105,14 @@
 <p><strong>Code Style</strong>: LiquidJS applies <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/standard/eslint-config-standard">standard</a> and <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/src/configs/recommended.json">@typescript-eslint/recommended</a> rules.</p>
 <p><strong>Testing</strong>: Make sure test cases pass with your patch merged by running <code>npm test</code></p>
 <p><strong>Commit Message</strong>: Please align to <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits">the Angular Commit Message Guidelines</a>, especially note the <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type">type identifier</a>, on which semantic-release bot depends.</p>
-<p><strong>Backward-Compatibility</strong>: please be backward-compatible. LiquidJS is used by multiple layers of softwares, including underlying libraries, compilers, site generators and Web servers. It’s not easy to do a major upgrade for most of them.</p>
-<h2 id="Financial-Support" class="article-heading"><a href="#Financial-Support" class="headerlink" title="Financial Support"></a>Financial Support<a class="article-anchor" href="#Financial-Support" aria-hidden="true"></a></h2><p>LiquidJS is Open Source and Free. To help it live and thrive, especially when LiquidJS is benefiting your business, please consider contribute on <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/sponsors/harttle">GitHub Sponsors</a> or <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs/contribute/backer-10665/checkout">Open Collective</a>.</p>
+<p><strong>Backward-Compatibility</strong>: please be backward-compatible. LiquidJS is used by multiple layers of software, including underlying libraries, compilers, site generators and Web servers. It’s not easy to do a major upgrade for most of them.</p>
+<h2 id="Financial-Support" class="article-heading"><a href="#Financial-Support" class="headerlink" title="Financial Support"></a>Financial Support<a class="article-anchor" href="#Financial-Support" aria-hidden="true"></a></h2><p>LiquidJS is Open Source and Free. To help it live and thrive, especially when LiquidJS is benefiting your business, consider contributing on <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/sponsors/harttle">GitHub Sponsors</a> or <a target="_blank" rel="noopener external nofollow noreferrer" href="https://opencollective.com/liquidjs/contribute/backer-10665/checkout">Open Collective</a>.</p>
 <p>I’ll add all financial contributors into <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs#financial-support">README.md</a> and it’ll be also shown on <a href="https://liquidjs.com">https://liquidjs.com</a> after next GitHub Actions build.</p>
 <p>If I’m missing anything or you observed it not working, please don’t hesitate to file an issue or find me via email (harttleharttle at gmail).</p>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.031Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.442Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="differences.html" class="article-footer-prev" title="Differences with Shopify/liquid"><i class="icon-chevron-left"></i><span>Prev</span></a>
               </footer>
             </div>

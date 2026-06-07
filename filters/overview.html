@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -100,7 +101,7 @@
               </header>
               <div class="article-content" itemprop="articleBody">
                 <p>LiquidJS implements business-logic independent filters that are typically implemented in <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Shopify/liquid">shopify/liquid</a>. This section contains the specification and demos for all the filters implemented by LiquidJS.</p>
-<p>There’s 40+ filters supported by LiquidJS. These filters can be categorized into these groups:</p>
+<p>There are 40+ filters supported by LiquidJS. These filters can be categorized into these groups:</p>
 <table>
 <thead>
 <tr>
@@ -110,41 +111,41 @@
 </thead>
 <tbody><tr>
 <td>Math</td>
-<td>plus, minus, modulo, times, floor, ceil, round, divided_by, abs, at_least, at_most</td>
+<td><code>plus</code>, <code>minus</code>, <code>modulo</code>, <code>times</code>, <code>floor</code>, <code>ceil</code>, <code>round</code>, <code>divided_by</code>, <code>abs</code>, <code>at_least</code>, <code>at_most</code></td>
 </tr>
 <tr>
 <td>String</td>
-<td>append, prepend, capitalize, upcase, downcase, strip, lstrip, rstrip, strip_newlines, split, replace, replace_first, replace_last,remove, remove_first, remove_last, truncate, truncatewords, normalize_whitespace, number_of_words, array_to_sentence_string</td>
+<td><code>append</code>, <code>prepend</code>, <code>capitalize</code>, <code>upcase</code>, <code>downcase</code>, <code>strip</code>, <code>lstrip</code>, <code>rstrip</code>, <code>strip_newlines</code>, <code>split</code>, <code>replace</code>, <code>replace_first</code>, <code>replace_last</code>,<code>remove</code>, <code>remove_first</code>, <code>remove_last</code>, <code>truncate</code>, <code>truncatewords</code>, <code>normalize_whitespace</code>, <code>number_of_words</code>, <code>array_to_sentence_string</code></td>
 </tr>
 <tr>
 <td>HTML/URI</td>
-<td>escape, escape_once, url_encode, url_decode, strip_html, newline_to_br, xml_escape, cgi_escape, uri_escape, slugify</td>
+<td><code>escape</code>, <code>escape_once</code>, <code>url_encode</code>, <code>url_decode</code>, <code>strip_html</code>, <code>newline_to_br</code>, <code>xml_escape</code>, <code>cgi_escape</code>, <code>uri_escape</code>, <code>slugify</code></td>
 </tr>
 <tr>
 <td>Array</td>
-<td>slice, map, sort, sort_natural, uniq, where, where_exp, group_by, group_by_exp, find, find_exp, first, last, join, reverse, concat, compact, size, push, pop, shift, unshift</td>
+<td><code>slice</code>, <code>map</code>, <code>sort</code>, <code>sort_natural</code>, <code>uniq</code>, <code>where</code>, <code>where_exp</code>, <code>group_by</code>, <code>group_by_exp</code>, <code>find</code>, <code>find_exp</code>, <code>first</code>, <code>last</code>, <code>join</code>, <code>reverse</code>, <code>concat</code>, <code>compact</code>, <code>size</code>, <code>push</code>, <code>pop</code>, <code>shift</code>, <code>unshift</code></td>
 </tr>
 <tr>
 <td>Date</td>
-<td>date, date_to_xmlschema, date_to_rfc822, date_to_string, date_to_long_string</td>
+<td><code>date</code>, <code>date_to_xmlschema</code>, <code>date_to_rfc822</code>, <code>date_to_string</code>, <code>date_to_long_string</code></td>
 </tr>
 <tr>
 <td>Misc</td>
-<td>default, json, jsonify, inspect, raw, to_integer</td>
+<td><code>default</code>, <code>json</code>, <code>jsonify</code>, <code>inspect</code>, <code>raw</code>, <code>to_integer</code></td>
 </tr>
 <tr>
 <td>Base64</td>
-<td>base64_encode, base64_decode</td>
+<td><code>base64_encode</code>, <code>base64_decode</code></td>
 </tr>
 <tr>
 <td>Crypto</td>
-<td>sha256, hmac_sha256</td>
+<td><code>sha256</code>, <code>hmac_sha256</code></td>
 </tr>
 </tbody></table>
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.026Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.439Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="abs.html" class="article-footer-next" title="sidebar.filters.abs"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>

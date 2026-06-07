@@ -39,6 +39,7 @@
   <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
   <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
     var cpm = {};
     window.cookiehub.load(cpm);
   });
@@ -101,7 +102,7 @@
               <div class="article-content" itemprop="articleBody">
                 <p class="since">v10.20.0</p>
 
-<blockquote class="note warn"><strong class="note-title">Experimental</strong><p>Note that this is an experimental feature and future APIs are subject to change. And internal structures returned can be changed w/o a major version bump.</p>
+<blockquote class="note warn"><strong class="note-title">Experimental</strong><p>Note that this is an experimental feature and future APIs are subject to change. Internal structures returned can be changed without a major version bump.</p>
 </blockquote>
 
 <blockquote class="note info"><strong class="note-title">Sync and Async</strong><p>There are synchronous and asynchronous versions of each of the methods demonstrated on this page. See the [Liquid API][liquid-api] for a complete reference.</p>
@@ -278,7 +279,7 @@ engine<span class="token punctuation">.</span><span class="token function">globa
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="Analyzing-Custom-Tags" class="article-heading"><a href="#Analyzing-Custom-Tags" class="headerlink" title="Analyzing Custom Tags"></a>Analyzing Custom Tags<a class="article-anchor" href="#Analyzing-Custom-Tags" aria-hidden="true"></a></h3><p>For static analysis to include results from custom tags, those tags must implement some additional methods defined on the <a href="/api/interfaces/Template.html">Template interface</a>. LiquidJS will use the information returned from these methods to traverse the template and report variable usage.</p>
-<p>Not all methods are required, depending in the kind of tag. If it’s a block with a start tag, end tag and any amount of Liquid markup in between, it will need to implement the <a href="/api/interfaces/Template.html#children"><code>children()</code></a> method. <code>children()</code> is defined as a generator, so that we can use it in synchronous and asynchronous contexts, just like <code>render()</code>. It should return HTML content, output statements and tags that are child nodes of the current tag.</p>
+<p>Not all methods are required, depending on the kind of tag. If it’s a block with a start tag, end tag and any amount of Liquid markup in between, it will need to implement the <a href="/api/interfaces/Template.html#children"><code>children()</code></a> method. <code>children()</code> is defined as a generator, so that we can use it in synchronous and asynchronous contexts, just like <code>render()</code>. It should return HTML content, output statements and tags that are child nodes of the current tag.</p>
 <p>The <a href="/api/interfaces/Template.html#blockScope"><code>blockScope()</code></a> method is responsible for telling LiquidJS which names will be in scope for the duration of the tag’s block. Some of these names could depend on the tag’s arguments, and some will be fixed, like <code>forloop</code> from the <code>&#123;% for %&#125;</code> tag.</p>
 <p>Whether a tag is an inline tag or a block tag, if it accepts arguments it should implement <a href="/api/interfaces/Template.html#arguments"><code>arguments()</code></a>, which is responsible for returning the tag’s arguments as a sequence of <a href="/api/classes/Value.html"><code>Value</code></a> instances or tokens of type <a href="/api/types/ValueToken.html"><code>ValueToken</code></a>.</p>
 <p>This example demonstrates these methods for a block tag. See LiquidJS’s <a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/harttle/liquidjs/tree/master/src/tags">built-in tags</a> for more examples.</p>
@@ -324,7 +325,7 @@ engine<span class="token punctuation">.</span><span class="token function">globa
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-06T17:38:08.031Z" itemprop="dateModified">Last updated: 2026-06-06</time>
+                <time class="article-footer-updated" datetime="2026-06-07T16:27:07.442Z" itemprop="dateModified">Last updated: 2026-06-07</time>
                 <a href="security-model.html" class="article-footer-prev" title="Security Model"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="migrate-to-9.html" class="article-footer-next" title="Migrate to LiquidJS 9"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
