@@ -1,5 +1,5 @@
 ---
-title: xml_escape
+title: '`xml_escape`'
 ---
 
 {% since %}v10.13.0{% endsince %}

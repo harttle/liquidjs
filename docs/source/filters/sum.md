@@ -1,5 +1,5 @@
 ---
-title: sum
+title: '`sum`'
 ---
 
 {% since %}v10.10.0{% endsince %}

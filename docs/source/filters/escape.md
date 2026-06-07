@@ -1,5 +1,5 @@
 ---
-title: escape
+title: '`escape`'
 ---
 
 {% since %}v1.9.1{% endsince %}

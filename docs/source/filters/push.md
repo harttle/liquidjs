@@ -1,5 +1,5 @@
 ---
-title: push
+title: '`push`'
 ---
 
 {% since %}v10.8.0{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: Layout
+title: '`layout`'
 ---
 
 {% since %}v1.9.1{% endsince %}
@@ -31,12 +31,12 @@ If [extname][extname] option is set, the `.liquid` extension becomes optional:
 ```
 
 {% note info Scoping %}
-When a partial template is rendered by <code>layout</code>, its template have access for its caller's variables but not vice versa. Variables defined in layout will be popped out before control returning to its caller.
+When a partial template is rendered by the `layout` tag, its template have access for its caller's variables but not vice versa. Variables defined in `layout` will be popped out before control returning to its caller.
 {% endnote %}
 
 ## Multiple Blocks
 
-The layout file can contain multiple blocks, each with a specified name. The following snippets yield same result as in the above example.
+The `layout` file can contain multiple blocks, each with a specified name. The following snippets yield same result as in the above example.
 
 ```liquid
 // default-layout.liquid
@@ -53,7 +53,7 @@ The layout file can contain multiple blocks, each with a specified name. The fol
 
 ## Default Block Contents
 
-In the above layout files, blocks has empty contents. But it's not necessarily be empty, in which case, the block contents in layout files will be used as default templates. The following snippets are also equivalent to the above examples:
+In the above `layout` files, blocks has empty contents. But it's not necessarily be empty, in which case, the block contents in `layout` files will be used as default templates. The following snippets are also equivalent to the above examples:
 
 ```liquid
 // default-layout.liquid
@@ -68,7 +68,7 @@ In the above layout files, blocks has empty contents. But it's not necessarily b
 
 ## Passing Variables
 
-Variables defined in current template can be passed to a the layout template by listing them as parameters on the `layout` tag:
+Variables defined in current template can be passed to a the `layout` template by listing them as parameters on the `layout` tag:
 
 ```liquid
 {% assign my_variable = 'apples' %}

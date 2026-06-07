@@ -1,5 +1,5 @@
 ---
-title: rstrip
+title: '`rstrip`'
 ---
 
 {% since %}v1.9.1{% endsince %}

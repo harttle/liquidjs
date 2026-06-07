@@ -1,5 +1,5 @@
 ---
-title: slice
+title: '`slice`'
 ---
 
 {% since %}v1.9.1{% endsince %}

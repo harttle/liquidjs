@@ -1,5 +1,5 @@
 ---
-title: capture
+title: '`capture`'
 ---
 
 {% since %}v1.9.1{% endsince %}

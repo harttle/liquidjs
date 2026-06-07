@@ -1,5 +1,5 @@
 ---
-title: floor
+title: '`floor`'
 ---
 
 {% since %}v1.9.1{% endsince %}

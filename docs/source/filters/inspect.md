@@ -1,5 +1,5 @@
 ---
-title: inspect
+title: '`inspect`'
 ---
 
 {% since %}v10.13.0{% endsince %}

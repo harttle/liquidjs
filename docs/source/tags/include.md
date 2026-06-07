@@ -1,5 +1,5 @@
 ---
-title: Include
+title: '`include`'
 ---
 
 {% since %}v1.9.1{% endsince %}
@@ -70,11 +70,11 @@ This way, you don't need to escape `"` in the filename expression.
 {% include prefix/{{name | append: ".html"}} %}
 ```
 
-## Jekyll include
+## Jekyll `include`
 
 {% since %}v9.33.0{% endsince %}
 
-[jekyllInclude][jekyllInclude] is used to enable Jekyll-like include syntax. Defaults to `false`, when set to `true`:
+[jekyllInclude][jekyllInclude] is used to enable Jekyll-like `include` syntax. Defaults to `false`, when set to `true`:
 
 - Filename will be static: `dynamicPartials` now defaults to `false` (instead of `true`). And you can set `dynamicPartials` back to `true`.
 - Use `=` instead of `:` to separate parameter key-values.

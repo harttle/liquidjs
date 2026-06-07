@@ -1,5 +1,5 @@
 ---
-title: cycle
+title: '`cycle`'
 ---
 
 {% since %}v1.9.1{% endsince %}

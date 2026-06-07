@@ -30,7 +30,7 @@
     "build:umd": "BUNDLES=umd rollup -c rollup.config.mjs",
     "build:charmap": "./bin/character-gen.js > src/util/character.ts",
     "build:docs": "run-s build:docs-liquid build:contributors build:apidoc build:changelog build:docs-hexo",
-    "build:docs-liquid": "cross-env BUNDLES=min rollup -c rollup.config.mjs && shx mkdir -p docs/public/js && shx cp dist/liquid.browser.min.js docs/public/js/",
+    "build:docs-liquid": "cross-env BUNDLES=min rollup -c rollup.config.mjs && shx cp dist/liquid.browser.min.js docs/themes/navy/source/js/",
     "build:contributors": "node bin/build-contributors.js",
     "build:apidoc": "shx rm -rf docs/source/api && typedoc --plugin typedoc-plugin-missing-exports ./src --gitRevision master --out docs/source/api",
     "build:changelog": "node bin/build-changelog.js",

@@ -1,5 +1,5 @@
 ---
-title: normalize_whitespace
+title: '`normalize_whitespace`'
 ---
 
 {% since %}v10.13.0{% endsince %}

@@ -1,5 +1,5 @@
 ---
-title: upcase
+title: '`upcase`'
 ---
 
 {% since %}v1.9.1{% endsince %}

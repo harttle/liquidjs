@@ -1,5 +1,5 @@
 ---
-title: group_by_exp
+title: '`group_by_exp`'
 ---
 
 {% since %}v10.11.0{% endsince %}

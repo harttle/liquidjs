@@ -1,5 +1,5 @@
 ---
-title: case
+title: Case
 ---
 
 {% since %}v1.9.1{% endsince %}

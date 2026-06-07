@@ -1,5 +1,5 @@
 ---
-title: sort
+title: '`sort`'
 ---
 
 {% since %}v1.9.1{% endsince %}

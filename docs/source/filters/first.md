@@ -1,5 +1,5 @@
 ---
-title: first
+title: '`first`'
 ---
 
 {% since %}v1.9.1{% endsince %}

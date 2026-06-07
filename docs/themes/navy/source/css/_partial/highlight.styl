@@ -1,19 +1,6 @@
 // https://github.com/chriskempson/tomorrow-theme
-// Tomorrow Night Eighties
-:root {
-    --highlight-background: #2d2d2d
-    --highlight-current-line: #393939
-    --highlight-selection: #515151
-    --highlight-foreground: #cccccc
-    --highlight-comment: #999999
-    --highlight-red: #f2777a
-    --highlight-orange: #f99157
-    --highlight-yellow: #ffcc66
-    --highlight-green: #99cc99
-    --highlight-aqua: #66cccc
-    --highlight-blue: #6699cc
-    --highlight-purple: #cc99cc
-}
+// Light: GitHub-style; dark: Tomorrow Night Eighties (tuned for navy palette)
+// Palette tokens live in _variables.styl
 
 pre, code
   font-family: font-mono
@@ -23,10 +10,12 @@ pre, code
 
 code
   padding: 0 5px
+  border-radius: 4px
 
 pre
   padding: 10px 15px
   line-height: 22px
+  code-block-chrome()
   code
     border: none
     display: block
@@ -38,6 +27,7 @@ pre
   background: var(--highlight-background)
   overflow: auto
   margin: 0
+  code-block-chrome()
   table
     margin: 0 !important
     border: 0
@@ -56,6 +46,9 @@ pre
     padding: 0
     background: none
     white-space: pre
+    border: none
+    box-shadow: none
+    border-radius: 0
   .line
     height: 22px
 
@@ -108,3 +101,11 @@ pre
   .keyword
   .javascript .function
     color: var(--highlight-purple)
+  // Prism bash uses "builtin" / "class-name", not pygments-style "built_in"
+  .language-bash, .language-shell
+    .builtin
+    .class-name
+    .function
+      color: var(--highlight-orange)
+    .operator
+      color: var(--highlight-purple)

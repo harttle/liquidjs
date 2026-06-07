@@ -1,5 +1,5 @@
 ---
-title: replace_first
+title: '`replace_first`'
 ---
 
 {% since %}v1.9.1{% endsince %}

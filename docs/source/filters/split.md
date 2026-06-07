@@ -1,5 +1,5 @@
 ---
-title: split
+title: '`split`'
 ---
 
 {% since %}v1.9.1{% endsince %}

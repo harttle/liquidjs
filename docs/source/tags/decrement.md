@@ -1,5 +1,5 @@
 ---
-title: Decrement
+title: '`decrement`'
 ---
 
 {% since %}v1.9.1{% endsince %}

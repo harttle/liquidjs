@@ -45,12 +45,18 @@
     memoryLimit: 1e5,
     renderLimit: 1e5
   });
+  const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
   const preview = createEditor('previewEl', 'html');
   preview.setReadOnly(true);
   preview.renderer.setShowGutter(false);
-  preview.renderer.setPadding(20);
+  preview.renderer.setPadding(16);
+
+  const editors = [editor, dataEditor, preview];
+  colorScheme.addEventListener('change', function() {
+    editors.forEach(applyEditorTheme);
+  });
 
   const init = parseArgs(location.hash.slice(1));
   if (init) {
@@ -67,20 +73,35 @@
     loader.classList.add('hide');
     loader.setAttribute('aria-busy', false);
 
-    const editors = document.querySelector('#editors');
-    editors.classList.remove('hide');
-    editors.setAttribute('aria-hide', false);
+    const editorsEl = document.querySelector('#editors');
+    editorsEl.classList.remove('hide');
+    editorsEl.setAttribute('aria-hide', false);
+    editors.forEach(function(ed) { ed.resize(); });
+  }
+
+  function getEditorTheme() {
+    return colorScheme.matches
+      ? 'ace/theme/tomorrow_night_eighties'
+      : 'ace/theme/github';
+  }
+
+  function applyEditorTheme(editor) {
+    editor.setTheme(getEditorTheme());
   }
 
   function createEditor(id, lang) {
     const editor = ace.edit(id);
-    editor.setTheme('ace/theme/tomorrow_night');
-    editor.getSession().setMode('ace/mode/' + lang);
-    editor.getSession().setOptions({
+    applyEditorTheme(editor);
+    editor.setOptions({
+      fontFamily: '"Source Code Pro", ui-monospace, Monaco, Menlo, Consolas, monospace',
+      fontSize: '14px',
+      showPrintMargin: false,
       tabSize: 2,
-      useSoftTabs: true
+      useSoftTabs: true,
+      scrollPastEnd: 0.25
     });
-    editor.renderer.setScrollMargin(15);
+    editor.getSession().setMode('ace/mode/' + lang);
+    editor.renderer.setScrollMargin(8, 8, 0, 0);
     return editor;
   }
 
@@ -119,9 +140,8 @@
   }
   
   function updateVersion(version) {
-    document.querySelector('.version').innerHTML = `
-      liquidjs@<a target="_blank" href="https://www.npmjs.com/package/liquidjs/v/${version}">${version}</a>
-    `
+    document.querySelector('.version').innerHTML =
+      'liquidjs@<a target="_blank" rel="noopener noreferrer" href="https://www.npmjs.com/package/liquidjs/v/' + version + '">' + version + '</a>';
   }
 }());
 

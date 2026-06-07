@@ -1,5 +1,5 @@
 ---
-title: join
+title: '`join`'
 ---
 
 {% since %}v1.9.1{% endsince %}

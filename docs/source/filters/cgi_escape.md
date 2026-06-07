@@ -1,5 +1,5 @@
 ---
-title: cgi_escape
+title: '`cgi_escape`'
 ---
 
 {% since %}v10.13.0{% endsince %}
