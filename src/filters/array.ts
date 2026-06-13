@@ -88,8 +88,10 @@ export function unshift<T> (this: FilterImpl, v: T[], arg: T): T[] {
   return clone
 }
 
-export function pop<T> (v: T[]): T[] {
-  const clone = [...toArray(v)]
+export function pop<T> (this: FilterImpl, v: T[]): T[] {
+  const array = toArray(v)
+  this.context.memoryLimit.use(array.length)
+  const clone = [...array]
   clone.pop()
   return clone
 }
