@@ -9,15 +9,34 @@ function defaultFilter<T1 extends boolean, T2> (this: FilterImpl, value: T1, def
   return isFalsy(value, this.context) ? defaultValue : value
 }
 
+// A strict lower bound on the bytes a single node contributes to JSON output,
+// excluding its children (which are visited separately). Charging this per node
+// during traversal lets `memoryLimit` abort before the full string is built,
+// while never over-charging an in-budget input (total charged <= output.length).
+function jsonNodeSize (value: any): number {
+  if (value === null) return 4 // null
+  switch (typeof value) {
+    case 'string': return value.length + 2 // quotes; escapes only add more
+    case 'number': return ('' + value).length
+    case 'boolean': return value ? 4 : 5
+    case 'object': return 2 // {} or [] braces; entries charged on their own visits
+    default: return 0 // undefined/function/symbol are omitted from output
+  }
+}
+
 function json (this: FilterImpl, value: any, space = 0) {
-  const output = JSON.stringify(value, null, space)
-  this.context.memoryLimit.use(output.length)
-  return output
+  const memoryLimit = this.context.memoryLimit
+  return JSON.stringify(value, (_key: string, value: any) => {
+    memoryLimit.use(jsonNodeSize(value))
+    return value
+  }, space)
 }
 
 function inspect (this: FilterImpl, value: any, space = 0) {
+  const memoryLimit = this.context.memoryLimit
   const ancestors: object[] = []
-  const output = JSON.stringify(value, function (this: unknown, _key: unknown, value: any) {
+  return JSON.stringify(value, function (this: unknown, _key: unknown, value: any) {
+    memoryLimit.use(jsonNodeSize(value))
     if (typeof value !== 'object' || value === null) return value
     // `this` is the object that value is contained in, i.e., its direct parent.
     while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) ancestors.pop()
@@ -25,8 +44,6 @@ function inspect (this: FilterImpl, value: any, space = 0) {
     ancestors.push(value)
     return value
   }, space)
-  this.context.memoryLimit.use(output.length)
-  return output
 }
 
 function to_integer (value: any) {
