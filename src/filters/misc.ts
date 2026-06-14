@@ -29,25 +29,22 @@ function indentWidth (space: number | string): number {
 function json (this: FilterImpl, value: any, space: number | string = 0) {
   const memoryLimit = this.context.memoryLimit
   const width = indentWidth(space)
-  const ancestors: unknown[] = []
   return JSON.stringify(value, function (this: unknown, key: string, value: any) {
-    while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) ancestors.pop()
-    memoryLimit.use(jsonNodeSize(value) + (isArray(this) ? 0 : key.length) + ancestors.length * width)
-    if (value === null || typeof value !== 'object') return value
-    ancestors.push(value)
+    memoryLimit.use(jsonNodeSize(value) + (isArray(this) ? 0 : key.length) + width)
     return value
   }, space)
 }
 
 function inspect (this: FilterImpl, value: any, space: number | string = 0) {
   const memoryLimit = this.context.memoryLimit
-  const width = indentWidth(space)
-  const ancestors: unknown[] = []
+  const ancestors: object[] = []
   return JSON.stringify(value, function (this: unknown, key: string, value: any) {
-    // `this` is the parent holding `value`; ancestors.length is its nesting depth.
+    if (typeof value !== 'object' || value === null) {
+      memoryLimit.use(jsonNodeSize(value) + (isArray(this) ? 0 : key.length))
+      return value
+    }
     while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) ancestors.pop()
-    memoryLimit.use(jsonNodeSize(value) + (isArray(this) ? 0 : key.length) + ancestors.length * width)
-    if (value === null || typeof value !== 'object') return value
+    memoryLimit.use(jsonNodeSize(value) + (isArray(this) ? 0 : key.length))
     if (ancestors.includes(value)) return '[Circular]'
     ancestors.push(value)
     return value
