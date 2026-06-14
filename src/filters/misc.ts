@@ -9,13 +9,15 @@ function defaultFilter<T1 extends boolean, T2> (this: FilterImpl, value: T1, def
   return isFalsy(value, this.context) ? defaultValue : value
 }
 
-function json (value: any, space = 0) {
-  return JSON.stringify(value, null, space)
+function json (this: FilterImpl, value: any, space = 0) {
+  const output = JSON.stringify(value, null, space)
+  this.context.memoryLimit.use(output.length)
+  return output
 }
 
-function inspect (value: any, space = 0) {
+function inspect (this: FilterImpl, value: any, space = 0) {
   const ancestors: object[] = []
-  return JSON.stringify(value, function (this: unknown, _key: unknown, value: any) {
+  const output = JSON.stringify(value, function (this: unknown, _key: unknown, value: any) {
     if (typeof value !== 'object' || value === null) return value
     // `this` is the object that value is contained in, i.e., its direct parent.
     while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) ancestors.pop()
@@ -23,6 +25,8 @@ function inspect (value: any, space = 0) {
     ancestors.push(value)
     return value
   }, space)
+  this.context.memoryLimit.use(output.length)
+  return output
 }
 
 function to_integer (value: any) {

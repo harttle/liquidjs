@@ -89,6 +89,21 @@ describe('DoS related', function () {
       const liquid = new Liquid({ memoryLimit: 100 })
       await expect(liquid.parseAndRender('{{ array | sample: 1 | size }}', { array })).rejects.toThrow('memory alloc limit exceeded')
     })
+    it('should charge json allocation to memoryLimit', async () => {
+      const data = Array(1e3).fill({ k: 'value' })
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ data | json }}', { data })).rejects.toThrow('memory alloc limit exceeded')
+    })
+    it('should charge jsonify allocation to memoryLimit', async () => {
+      const data = Array(1e3).fill({ k: 'value' })
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ data | jsonify }}', { data })).rejects.toThrow('memory alloc limit exceeded')
+    })
+    it('should charge inspect allocation to memoryLimit', async () => {
+      const data = Array(1e3).fill({ k: 'value' })
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ data | inspect }}', { data })).rejects.toThrow('memory alloc limit exceeded')
+    })
     it('should charge strip_html input length to memoryLimit', () => {
       const liquid = new Liquid({ memoryLimit: 100 })
       expect(() => liquid.parseAndRenderSync('{{ s | strip_html }}', { s: 'a'.repeat(200) }))
