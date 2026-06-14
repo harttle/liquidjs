@@ -103,7 +103,7 @@ export class Context {
     return this.scopes[0]
   }
   public spawn (scope = {}) {
-    return new Context(scope, this.opts, {
+    const ctx = new Context(scope, this.opts, {
       sync: this.sync,
       globals: this.globals,
       strictVariables: this.strictVariables,
@@ -112,6 +112,8 @@ export class Context {
       renderLimit: this.renderLimit,
       memoryLimit: this.memoryLimit
     })
+    ctx.setRegister('partialStack', this.getRegister('partialStack', [] as string[]))
+    return ctx
   }
   private findScope (key: string | number) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {

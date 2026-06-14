@@ -296,4 +296,29 @@ describe('tags/include', function () {
       return expect(html).toBe('FOO-')
     })
   })
+
+  describe('recursion', function () {
+    it('should reject self-referential {% include %} (no OOM / hang)', function () {
+      mock({
+        '/self.html': 'A{% include "self.html" %}B'
+      })
+      return expect(liquid.renderFile('/self.html')).rejects.toThrow(/include tag cannot be nested/)
+    })
+    it('should reject indirect {% include %} cycle (no OOM / hang)', function () {
+      mock({
+        '/a.html': '{% include "b.html" %}',
+        '/b.html': '{% include "a.html" %}'
+      })
+      return expect(liquid.renderFile('/a.html')).rejects.toThrow(/include tag cannot be nested/)
+    })
+    it('should allow legitimate nested {% include %} chain', async function () {
+      mock({
+        '/a.html': 'A{% include "b.html" %}',
+        '/b.html': 'B{% include "c.html" %}',
+        '/c.html': 'C'
+      })
+      const html = await liquid.renderFile('/a.html')
+      expect(html).toBe('ABC')
+    })
+  })
 })

@@ -117,4 +117,21 @@ describe('.parseAndRender()', function () {
       await expect(liquid.renderFile('template')).rejects.toThrow(/block tag cannot be nested/)
     })
   })
+  describe('render/include: self-referential partial regression', function () {
+    it('should reject self-referential {% render %} via in-memory templates (no hang / OOM)', async function () {
+      const liquid = new Liquid({ templates: { self: '{% render "self" %}' } })
+      await expect(liquid.parseAndRender('{% render "self" %}')).rejects.toThrow(/render tag cannot be nested/)
+    })
+    it('should reject self-referential {% include %} (no hang / OOM)', async function () {
+      let root: string
+      root = mkdtempSync(join(tmpdir(), 'liquid-e2e-include-nested-'))
+      try {
+        writeFileSync(join(root, 'self.html'), 'A{% include "self.html" %}B')
+        const liquid = new Liquid({ root, extname: '.html' })
+        await expect(liquid.renderFile('self')).rejects.toThrow(/include tag cannot be nested/)
+      } finally {
+        rmSync(root, { recursive: true, force: true })
+      }
+    })
+  })
 })

@@ -59,27 +59,32 @@ export default class extends Tag {
     const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
     assert(filepath, () => `illegal file path "${filepath}"`)
 
-    const childCtx = ctx.spawn()
-    const scope = childCtx.bottom()
-    __assign(scope, yield hash.render(ctx))
-    if (this.with) {
-      const { value, alias } = this.with
-      scope[alias || filepath] = yield evalToken(value, ctx)
-    }
+    pushPartialStack(ctx, filepath, 'render')
+    try {
+      const childCtx = ctx.spawn()
+      const scope = childCtx.bottom()
+      __assign(scope, yield hash.render(ctx))
+      if (this.with) {
+        const { value, alias } = this.with
+        scope[alias || filepath] = yield evalToken(value, ctx)
+      }
 
-    if (this.forBinding) {
-      const { value, alias } = this.forBinding
-      const collection = toEnumerable(yield evalToken(value, ctx))
-      scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
-      for (const item of collection) {
-        scope[alias as string] = item
+      if (this.forBinding) {
+        const { value, alias } = this.forBinding
+        const collection = toEnumerable(yield evalToken(value, ctx))
+        scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
+        for (const item of collection) {
+          scope[alias as string] = item
+          const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
+          yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
+          scope['forloop'].next()
+        }
+      } else {
         const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
-        scope['forloop'].next()
       }
-    } else {
-      const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
-      yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
+    } finally {
+      popPartialStack(ctx)
     }
   }
 
@@ -172,4 +177,15 @@ export function * renderFilePath (file: ParsedFileName, ctx: Context, liquid: Li
   if (typeof file === 'string') return file
   if (Array.isArray(file)) return liquid.renderer.renderTemplates(file, ctx)
   return yield evalToken(file, ctx)
+}
+
+export function pushPartialStack (ctx: Context, filepath: string, tag: 'render' | 'include') {
+  const stack: string[] = ctx.getRegister('partialStack', [])
+  if (stack.includes(filepath)) throw new Error(`${tag} tag cannot be nested`)
+  stack.push(filepath)
+}
+
+export function popPartialStack (ctx: Context) {
+  const stack: string[] = ctx.getRegister('partialStack', [])
+  stack.pop()
 }

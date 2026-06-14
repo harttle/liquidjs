@@ -394,4 +394,27 @@ describe('tags/render', function () {
       expect(html).toBe('Xchild with redY')
     })
   })
+
+  describe('recursion', function () {
+    it('should reject self-referential {% render %} via in-memory templates (no OOM / hang)', async function () {
+      const liquid = new Liquid({ templates: { self: '{% render "self" %}' } })
+      await expect(liquid.parseAndRender('{% render "self" %}')).rejects.toThrow(/render tag cannot be nested/)
+    })
+    it('should reject indirect {% render %} cycle (no OOM / hang)', async function () {
+      mock({
+        '/a.html': '{% render "b.html" %}',
+        '/b.html': '{% render "a.html" %}'
+      })
+      await expect(liquid.renderFile('/a.html')).rejects.toThrow(/render tag cannot be nested/)
+    })
+    it('should allow legitimate nested {% render %} chain', async function () {
+      mock({
+        '/a.html': 'A{% render "b.html" %}',
+        '/b.html': 'B{% render "c.html" %}',
+        '/c.html': 'C'
+      })
+      const html = await liquid.renderFile('/a.html')
+      expect(html).toBe('ABC')
+    })
+  })
 })
