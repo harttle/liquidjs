@@ -84,6 +84,11 @@ describe('DoS related', function () {
       const liquid = new Liquid({ memoryLimit: 100 })
       await expect(liquid.parseAndRender('{{ array | pop | size }}', { array })).rejects.toThrow('memory alloc limit exceeded')
     })
+    it('should charge sample allocation to memoryLimit', async () => {
+      const array = Array(1e3).fill(0)
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ array | sample: 1 | size }}', { array })).rejects.toThrow('memory alloc limit exceeded')
+    })
     it('should charge strip_html input length to memoryLimit', () => {
       const liquid = new Liquid({ memoryLimit: 100 })
       expect(() => liquid.parseAndRenderSync('{{ s | strip_html }}', { s: 'a'.repeat(200) }))
