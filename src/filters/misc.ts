@@ -1,5 +1,6 @@
 import { isFalsy } from '../render/boolean'
 import { identify, isArray, isString, toValue } from '../util/underscore'
+import { Limiter } from '../util/limiter'
 import { FilterImpl } from '../template'
 
 function defaultFilter<T1 extends boolean, T2> (this: FilterImpl, value: T1, defaultValue: T2, ...args: Array<[string, any]>): T1 | T2 {
@@ -9,41 +10,45 @@ function defaultFilter<T1 extends boolean, T2> (this: FilterImpl, value: T1, def
   return isFalsy(value, this.context) ? defaultValue : value
 }
 
-// A strict lower bound on the bytes a single node contributes to JSON output,
-// excluding its children (which are visited separately). Charging this per node
-// during traversal lets `memoryLimit` abort before the full string is built,
-// while never over-charging an in-budget input (total charged <= output.length).
 function jsonNodeSize (value: any): number {
-  if (value === null) return 4 // null
+  if (value === null) return 4
   switch (typeof value) {
-    case 'string': return value.length + 2 // quotes; escapes only add more
+    case 'string': return value.length + 2
     case 'number': return ('' + value).length
     case 'boolean': return value ? 4 : 5
-    case 'object': return 2 // {} or [] braces; entries charged on their own visits
-    default: return 0 // undefined/function/symbol are omitted from output
+    case 'object': return 2
+    default: return 0
   }
 }
 
-function json (this: FilterImpl, value: any, space = 0) {
-  const memoryLimit = this.context.memoryLimit
-  return JSON.stringify(value, (_key: string, value: any) => {
-    memoryLimit.use(jsonNodeSize(value))
-    return value
-  }, space)
+function indentWidth (space: number | string): number {
+  if (typeof space === 'string') return Math.min(space.length, 10)
+  const n = Math.floor(space)
+  return n > 0 ? Math.min(n, 10) : 0
 }
 
-function inspect (this: FilterImpl, value: any, space = 0) {
-  const memoryLimit = this.context.memoryLimit
-  const ancestors: object[] = []
-  return JSON.stringify(value, function (this: unknown, _key: unknown, value: any) {
-    memoryLimit.use(jsonNodeSize(value))
-    if (typeof value !== 'object' || value === null) return value
-    // `this` is the object that value is contained in, i.e., its direct parent.
+function jsonReplacer (memoryLimit: Limiter, width: number, detectCircular: boolean) {
+  const ancestors: unknown[] = []
+  return function (this: unknown, key: string, value: any) {
+    // `this` is the parent holding `value`; popping ancestors back to it yields the
+    // nesting depth, so we can charge a lower bound of the bytes `value` adds to the
+    // output (its own content, its key, and the indentation of its line).
     while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) ancestors.pop()
-    if (ancestors.includes(value)) return '[Circular]'
+    const keySize = isArray(this) ? 0 : key.length
+    memoryLimit.use(jsonNodeSize(value) + keySize + ancestors.length * width)
+    if (value === null || typeof value !== 'object') return value
+    if (detectCircular && ancestors.includes(value)) return '[Circular]'
     ancestors.push(value)
     return value
-  }, space)
+  }
+}
+
+function json (this: FilterImpl, value: any, space: number | string = 0) {
+  return JSON.stringify(value, jsonReplacer(this.context.memoryLimit, indentWidth(space), false), space)
+}
+
+function inspect (this: FilterImpl, value: any, space: number | string = 0) {
+  return JSON.stringify(value, jsonReplacer(this.context.memoryLimit, indentWidth(space), true), space)
 }
 
 function to_integer (value: any) {

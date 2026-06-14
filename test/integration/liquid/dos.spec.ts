@@ -104,6 +104,18 @@ describe('DoS related', function () {
       const liquid = new Liquid({ memoryLimit: 100 })
       await expect(liquid.parseAndRender('{{ data | inspect }}', { data })).rejects.toThrow('memory alloc limit exceeded')
     })
+    it('should charge json indentation (space) to memoryLimit', async () => {
+      const data = Array(50).fill(0)
+      const liquid = new Liquid({ memoryLimit: 200 })
+      await expect(liquid.parseAndRender('{{ data | json }}', { data })).resolves.toBe('[' + Array(50).fill(0).join(',') + ']')
+      await expect(liquid.parseAndRender('{{ data | json: 10 }}', { data })).rejects.toThrow('memory alloc limit exceeded')
+    })
+    it('should charge json object keys to memoryLimit', async () => {
+      const data: Record<string, number> = {}
+      for (let i = 0; i < 20; i++) data['k' + i + 'x'.repeat(50)] = 0
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ data | json }}', { data })).rejects.toThrow('memory alloc limit exceeded')
+    })
     it('should charge strip_html input length to memoryLimit', () => {
       const liquid = new Liquid({ memoryLimit: 100 })
       expect(() => liquid.parseAndRenderSync('{{ s | strip_html }}', { s: 'a'.repeat(200) }))
