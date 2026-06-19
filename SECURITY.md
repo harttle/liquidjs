@@ -6,8 +6,10 @@ Only the latest major version is supported with security updates. It can be chan
 
 ## Reporting a Vulnerability
 
-Please contact harttleharttle@gmail.com to report a vulnerability or change request.
+**Please do not report security vulnerabilities through public GitHub issues.**
 
-- If the vulnerability in question affects common use cases, it will be treated as a bug and fixed very soon (typically within 1 week).
+Report them via [GitHub Security Advisories — Report a vulnerability](https://github.com/harttle/liquidjs/security/advisories/new).
+
+- If the vulnerability in question affects common use cases, it will be treated as a bug and fixed very soon (typically within a month).
 - Otherwise, it'll be scheduled in the same priority of feature request (which is lower than bugs).
-- If the request is declined, you'll receive a reply email anyway (most likely there will be a discussion).
+- If the request is declined, you'll receive a reply anyway (most likely there will be a discussion).
