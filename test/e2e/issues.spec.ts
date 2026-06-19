@@ -215,6 +215,21 @@ describe('Issues', function () {
     const html = engine.parseAndRenderSync('{{foo | size}}-{{bar.coo}}', { foo: 'foo', bar: Object.create({ coo: 'COO' }) })
     expect(html).toBe('3-')
   })
+  it('should block prototype pollution via size/first/last magic keys', () => {
+    Object.assign(Object.prototype, { size: 123, first: 'FIRST_PROTO', last: 'LAST_PROTO' })
+    try {
+      const engine = new Liquid({ ownPropertyOnly: true })
+      const tpl = '{{ foo.size }}-{{ foo.first }}-{{ foo.last }}-{{ foo["size"] }}'
+      expect(engine.parseAndRenderSync(tpl, { foo: {} })).toBe('0---0')
+      expect(engine.parseAndRenderSync('{{ arr.first }}-{{ arr.last }}-{{ arr.size }}', { arr: [1, 2, 3] })).toBe('1-3-3')
+      const engine2 = new Liquid({ ownPropertyOnly: false })
+      expect(engine2.parseAndRenderSync('{{ foo.size }}-{{ foo.first }}-{{ foo.last }}', { foo: {} })).toBe('123-FIRST_PROTO-LAST_PROTO')
+    } finally {
+      delete (Object.prototype as any).size
+      delete (Object.prototype as any).first
+      delete (Object.prototype as any).last
+    }
+  })
   it('Liquidjs divided_by not compatible with Ruby/Shopify Liquid #465', () => {
     const engine = new Liquid({ ownPropertyOnly: true })
     const html = engine.parseAndRenderSync('{{ 5 | divided_by: 3, true }}')

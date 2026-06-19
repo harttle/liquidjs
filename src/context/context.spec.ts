@@ -183,6 +183,48 @@ describe('Context', function () {
       ctx.push({ foo: Object.create({ bar: 'BAR' }) })
       return expect(() => ctx.getSync(['foo', 'bar'])).toThrow(/undefined variable: foo.bar/)
     })
+    it('should block prototype size/first/last magic keys', function () {
+      Object.assign(Object.prototype, { size: 123, first: 'FIRST_PROTO', last: 'LAST_PROTO' })
+      try {
+        ctx.push({ foo: {} })
+        expect(ctx.getSync(['foo', 'size'])).toEqual(0)
+        expect(ctx.getSync(['foo', 'first'])).toEqual(undefined)
+        expect(ctx.getSync(['foo', 'last'])).toEqual(undefined)
+      } finally {
+        delete (Object.prototype as any).size
+        delete (Object.prototype as any).first
+        delete (Object.prototype as any).last
+      }
+    })
+    it('should allow array first/last/size magic keys with ownPropertyOnly', function () {
+      ctx.push({ foo: [1, 2, 3] })
+      expect(ctx.getSync(['foo', 'first'])).toEqual(1)
+      expect(ctx.getSync(['foo', 'last'])).toEqual(3)
+      expect(ctx.getSync(['foo', 'size'])).toEqual(3)
+    })
+    it('should use prototype magic keys when ownPropertyOnly=false', function () {
+      Object.assign(Object.prototype, { size: 123, first: 'FIRST_PROTO', last: 'LAST_PROTO' })
+      try {
+        ctx = new Context({}, { ownPropertyOnly: false } as any)
+        ctx.push({ foo: {} })
+        expect(ctx.getSync(['foo', 'size'])).toEqual(123)
+        expect(ctx.getSync(['foo', 'first'])).toEqual('FIRST_PROTO')
+        expect(ctx.getSync(['foo', 'last'])).toEqual('LAST_PROTO')
+      } finally {
+        delete (Object.prototype as any).size
+        delete (Object.prototype as any).first
+        delete (Object.prototype as any).last
+      }
+    })
+    it('should treat bracket access like dot access for magic keys', function () {
+      Object.assign(Object.prototype, { size: 123 })
+      try {
+        ctx.push({ foo: {} })
+        expect(ctx.getSync(['foo', 'size'])).toEqual(0)
+      } finally {
+        delete (Object.prototype as any).size
+      }
+    })
   })
 
   describe('.getAll()', function () {
