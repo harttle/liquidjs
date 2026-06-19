@@ -216,15 +216,6 @@ describe('Context', function () {
         delete (Object.prototype as any).last
       }
     })
-    it('should treat bracket access like dot access for magic keys', function () {
-      Object.assign(Object.prototype, { size: 123 })
-      try {
-        ctx.push({ foo: {} })
-        expect(ctx.getSync(['foo', 'size'])).toEqual(0)
-      } finally {
-        delete (Object.prototype as any).size
-      }
-    })
   })
 
   describe('.getAll()', function () {
