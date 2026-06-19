@@ -1,61 +1,23 @@
-# LiquidJS
-
-> A simple, expressive and safe [Shopify Liquid][shopify/liquid] template engine for JavaScript — compatible with Jekyll, GitHub Pages, and Shopify themes.
-
+# liquidjs
 [![npm version](https://img.shields.io/npm/v/liquidjs.svg?logo=npm&style=flat-square)](https://www.npmjs.org/package/liquidjs)
 [![npm downloads](https://img.shields.io/npm/dm/liquidjs.svg?style=flat-square)](https://www.npmjs.org/package/liquidjs)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/harttle/liquidjs/ci-build.yml?branch=master&style=flat-square)](https://github.com/harttle/liquidjs/actions/workflows/ci-build.yml?query=branch%3Amaster)
 [![Coverage](https://img.shields.io/coveralls/harttle/liquidjs.svg?style=flat-square)](https://coveralls.io/github/harttle/liquidjs?branch=master)
-[![License: MIT](https://img.shields.io/github/license/harttle/liquidjs?style=flat-square)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/harttle/liquidjs/ci-build.yml?branch=master&style=flat-square)](https://github.com/harttle/liquidjs/actions/workflows/ci-build.yml?query=branch%3Amaster)
+[![DUB license](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/harttle/liquidjs)
 
-[Documentation][doc] · [Playground](https://liquidjs.com/playground.html) · [Setup guide][setup] · [Contributing][contribution]
+A simple, expressive and safe [Shopify][shopify/liquid] / GitHub Pages compatible template engine in pure JavaScript.
+**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community so that [Jekyll sites](https://jekyllrb.com), [GitHub Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
 
-## Quick start
+* [Documentation][doc]
+* Please star [LiquidJS on GitHub][github]!
+* Financial support via [GitHub Sponsors](https://github.com/sponsors/harttle).
 
-```js
-import { Liquid } from 'liquidjs'
+<p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
 
-const engine = new Liquid()
-const html = await engine.parseAndRender(
-  'Hello, {{ name | capitalize }}!',
-  { name: 'liquid' }
-)
-//=> 'Hello, Liquid!'
-```
+## What's it like?
 
-## Features
-
-- **Compatible** — Shopify Liquid, Jekyll, and GitHub Pages dialects
-- **Safe by default** — `ownPropertyOnly`, `memoryLimit`, and `renderLimit` help sandbox untrusted templates
-- **Runs everywhere** — Node.js, browser (UMD/ESM), and CLI via `npx liquidjs`
-- **Extensible** — custom tags, filters, and [plugins][plugins]
-- **Typed** — TypeScript definitions included
-
-## Installation
-
-**Node.js**
-
-```bash
-npm install liquidjs
-```
-
-**Browser** (jsDelivr UMD bundle)
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
-```
-
-**CLI**
-
-```bash
-npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Liquid"}'
-```
-
-See the [setup guide][setup] for partials, layouts, caching, and other options.
-
-## Example
-
-Liquid templates use tags (`{% %}`) and outputs (`{{ }}`):
+Basically there're two types of Liquid syntax: tags enclosed by `{% %}` and outputs enclosed by `{{ }}`. A Liquid template looks like:
 
 ```liquid
 {% if username %}
@@ -63,25 +25,48 @@ Liquid templates use tags (`{% %}`) and outputs (`{{ }}`):
 {% endif %}
 ```
 
-Try it in the [playground](https://liquidjs.com/playground.html) or read the [Liquid syntax tutorial](https://liquidjs.com/tutorials/intro-to-liquid.html).
+[A live demo](https://liquidjs.com/playground.html) is also available and here's a [quick tutorial](https://liquidjs.com/tutorials/intro-to-liquid.html) for Liquid syntax.
 
-## Used by
 
-- [Eleventy](https://www.11ty.dev/)
-- [GitHub Docs](https://github.com/github/docs)
-- [Kibana](https://github.com/elastic/kibana)
-- [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction)
-- [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal)
-- [Directus](https://docs.directus.io/)
-- [Builder.io](https://www.builder.io/m/developers)
-- [Mitosis](https://github.com/BuilderIO/mitosis)
-- [Pattern Lab](https://patternlab.io/)
-- [Opensense](https://www.opensense.com/)
-- [Rock RMS](https://www.rockrms.com/)
-- [WISMOlabs](https://wismolabs.com/)
-- [Freshet](https://chromewebstore.google.com/detail/freshet/mpclplhdencffbilobpcapccnihpelcg)
+## Installation
 
-Using LiquidJS in production? [Open a PR](https://github.com/harttle/liquidjs/edit/master/README.md) to add your project.
+Install from npm in Node.js:
+
+```bash
+npm install liquidjs
+```
+
+Or use the UMD bundle from jsDelivr:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
+```
+
+Or render directly from CLI using npx:
+
+```bash
+npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
+```
+
+For more details, refer to the [Setup Guide][setup].
+
+## Who's Using LiquidJS?
+
+- [Eleventy](https://www.11ty.dev/): Eleventy, a simpler static site generator.
+- [Github Docs](https://github.com/github/docs): The open-source repo for docs.github.com.
+- [Kibana](https://github.com/elastic/kibana): Elastic's analytics and visualization platform for Elasticsearch; workflow features use LiquidJS for Liquid templates.
+- [Opensense](https://www.opensense.com/): The smarter way to send email.
+- [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
+- [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
+- [Mitosis](https://github.com/BuilderIO/mitosis): Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more.
+- [Pattern Lab](https://patternlab.io/): a frontend workshop environment that helps you build, view, test, and showcase your design system's UI components.
+- [Builder.io](https://www.builder.io/m/developers): the first and only headless CMS with a visual editor that lets you drag and drop with your components, directly within your current site or app. Completely API-driven, for cleaner code and simpler workflows.
+- [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction): a secure, enterprise-grade, low-code software as a service (SaaS) platform for creating, hosting, and administering modern external-facing business websites.
+- [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal): an automatically generated, fully customizable website with the documentation of your APIs.
+- [WISMOlabs](https://wismolabs.com/): Post Purchase Experience platform for eCommerce retailers enhancing customer satisfaction by using LiquidJS to provide customizable post-purchase experiences through programmable email, SMS, order tracking pages, and webhooks.
+- [Freshet](https://chromewebstore.google.com/detail/freshet/mpclplhdencffbilobpcapccnihpelcg): *JSON in, page out* — a Chrome extension that uses LiquidJS templates per URL pattern, so the JSON becomes a rendered, useful page.
+
+Feel free to create a PR or contact me to add your use case into this list!
 
 ## Financial Support
 
@@ -248,10 +233,6 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-## License
-
-[MIT](LICENSE) © [Jun Yang](https://github.com/harttle)
 
 [shopify/liquid]: https://shopify.github.io/liquid/
 [plugins]: https://liquidjs.com/tutorials/plugins.html#Plugin-List
