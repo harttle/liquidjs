@@ -133,5 +133,9 @@ describe('.parseAndRender()', function () {
         rmSync(root, { recursive: true, force: true })
       }
     })
+    it('should allow self-referential {% render %} when renderLimit is finite', async function () {
+      const liquid = new Liquid({ templates: { self: '{% render "self" %}' }, renderLimit: 0.01 })
+      await expect(liquid.parseAndRender('{% render "self" %}')).rejects.toThrow(/template render limit exceeded/)
+    })
   })
 })

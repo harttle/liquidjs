@@ -407,6 +407,10 @@ describe('tags/render', function () {
       })
       await expect(liquid.renderFile('/a.html')).rejects.toThrow(/render tag cannot be nested/)
     })
+    it('should allow self-referential {% render %} when renderLimit is finite', async function () {
+      const liquid = new Liquid({ templates: { self: '{% render "self" %}' }, renderLimit: 0.01 })
+      await expect(liquid.parseAndRender('{% render "self" %}')).rejects.toThrow(/template render limit exceeded/)
+    })
     it('should allow legitimate nested {% render %} chain', async function () {
       mock({
         '/a.html': 'A{% render "b.html" %}',

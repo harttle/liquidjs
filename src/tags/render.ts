@@ -181,7 +181,9 @@ export function * renderFilePath (file: ParsedFileName, ctx: Context, liquid: Li
 
 export function pushPartialStack (ctx: Context, filepath: string, tag: 'render' | 'include') {
   const stack: string[] = ctx.getRegister('partialStack', [])
-  if (stack.includes(filepath)) throw new Error(`${tag} tag cannot be nested`)
+  if (ctx.renderLimit.isUnlimited() && stack.includes(filepath)) {
+    throw new Error(`${tag} tag cannot be nested`)
+  }
   stack.push(filepath)
 }
 

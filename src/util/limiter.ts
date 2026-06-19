@@ -19,4 +19,7 @@ export class Limiter {
       assert(+count <= this.limit, this.message)
     }
   }
+  isUnlimited () {
+    return !Number.isFinite(this.limit)
+  }
 }

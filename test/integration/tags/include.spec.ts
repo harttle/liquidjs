@@ -311,6 +311,13 @@ describe('tags/include', function () {
       })
       return expect(liquid.renderFile('/a.html')).rejects.toThrow(/include tag cannot be nested/)
     })
+    it('should allow self-referential {% include %} when renderLimit is finite', function () {
+      mock({
+        '/self.html': 'A{% include "self.html" %}B'
+      })
+      const limited = new Liquid({ root: '/', renderLimit: 0.01 })
+      return expect(limited.renderFile('/self.html')).rejects.toThrow(/template render limit exceeded/)
+    })
     it('should allow legitimate nested {% include %} chain', async function () {
       mock({
         '/a.html': 'A{% include "b.html" %}',
