@@ -85,5 +85,9 @@ describe('filters/html', function () {
       expect(liquid.parseAndRenderSync('{{"<img\rsrc=x\ronerror=alert(1)>" | strip_html}}')).toBe('')
       expect(liquid.parseAndRenderSync('{{"<svg\nonload=alert(1)>" | strip_html}}')).toBe('')
     })
+    it('should not loop on unclosed openers (GHSA-m7fp-h3p4-hr49)', function () {
+      expect(liquid.parseAndRenderSync('{{ "a<" | strip_html }}')).toBe('a<')
+      expect(liquid.parseAndRenderSync('{{ "hello<world<again" | strip_html }}')).toBe('hello<world<again')
+    })
   })
 })
