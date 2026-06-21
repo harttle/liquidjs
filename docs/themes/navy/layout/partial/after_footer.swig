@@ -17,12 +17,10 @@ debug: false
 });
 </script>
 
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GM713991QQ"></script>
-<script>
+<script type="text/plain" data-category="analytics">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-GM713991QQ');
 </script>
