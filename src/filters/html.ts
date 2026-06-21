@@ -60,7 +60,7 @@ export function strip_html (this: FilterImpl, v: string) {
       if (e >= 0) { i = e + closer.length; break }
       blocks.delete(opener)
     }
-    if (i === lt) return out + str.slice(lt)
+    if (i <= lt) return out + str.slice(lt)
   }
   return out
 }
