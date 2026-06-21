@@ -7,7 +7,7 @@ title: strip_html
 Removes any HTML tags from a string.
 
 {% note warn Not safe for HTML output %}
-This filter is **not** a sanitizer. Output may still contain `<` sequences (for example malformed tags without a closing `>`, same as [Shopify Liquid](https://shopify.dev/docs/api/liquid/filters/strip_html)). Do not write the result into HTML without also using [escape][escape], [escape_once][escape_once], or [`outputEscape: "escape"`][outputEscape].
+This filter removes tags by string scanning; it does not parse HTML5 the way a browser does, and it is not a sanitizer. The result may still be unsafe when inserted into HTML. Use [escape][escape], [escape_once][escape_once], or [`outputEscape: "escape"`][outputEscape] for untrusted output.
 {% endnote %}
 
 Input
