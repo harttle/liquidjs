@@ -32,12 +32,7 @@
   <meta name="msapplication-TileImage" content="{{ url_for('icon/mstile-144x144.png') }}">
   {{ css('css/navy') }}
   {{ feed_tag('atom.xml') }}
-  <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
-  <script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", function(event) {
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
-    var cpm = {};
-    window.cookiehub.load(cpm);
-  });
-  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.css">
+  <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.umd.js"></script>
+  {{ js('js/cookieconsent-config') }}
 </head>
