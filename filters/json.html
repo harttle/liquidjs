@@ -36,14 +36,11 @@
 <link rel="stylesheet" href="../css/navy.css">
 
   <link rel="alternate" href="../atom.xml" title="LiquidJS" type="application/atom+xml">
-  <script src="https://cdn.cookiehub.eu/c2/e8e44c93.js"></script>
-  <script type="text/javascript">
-  document.addEventListener("DOMContentLoaded", function(event) {
-    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') return;
-    var cpm = {};
-    window.cookiehub.load(cpm);
-  });
-  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.css">
+  <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.umd.js"></script>
+  
+<script src="../js/cookieconsent-config.js"></script>
+
 <meta name="generator" content="Hexo 7.3.0"></head>
 
 <body>
@@ -126,7 +123,7 @@
 
               </div>
               <footer class="article-footer">
-                <time class="article-footer-updated" datetime="2026-06-19T16:00:20.315Z" itemprop="dateModified">Last updated: 2026-06-19</time>
+                <time class="article-footer-updated" datetime="2026-06-21T17:35:06.748Z" itemprop="dateModified">Last updated: 2026-06-21</time>
                 <a href="join.html" class="article-footer-prev" title="sidebar.filters.join"><i class="icon-chevron-left"></i><span>Prev</span></a><a href="jsonify.html" class="article-footer-next" title="sidebar.filters.jsonify"><span>Next</span><i class="icon-chevron-right"></i></a>
               </footer>
             </div>
@@ -153,6 +150,7 @@
       Documentation licensed under <a href="https://creativecommons.org/licenses/by/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>.
     </div>
     <div id="footer-links">
+      <button type="button" class="footer-link cookie-preferences" data-cc="show-consentModal" title="Manage cookie preferences"><i class="icon-shield"></i></button>
       <a href="https://twitter.com/harttleharttle" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
       <a href="https://opencollective.com/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
       <a href="https://github.com/harttle/liquidjs" rel="external nofollow noreferrer" class="footer-link" target="_blank"><i class="icon-github"></i></a>
@@ -196,13 +194,11 @@ debug: false
 });
 </script>
 
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GM713991QQ"></script>
-<script>
+<script type="text/plain" data-category="analytics">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-GM713991QQ');
 </script>
 </body>
