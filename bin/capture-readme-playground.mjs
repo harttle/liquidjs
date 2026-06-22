@@ -1,3 +1,4 @@
+/* global liquidjs */
 import { spawn, execFile } from 'node:child_process'
 import { access, copyFile, mkdir, rm } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
@@ -40,7 +41,7 @@ async function waitForServer (maxMs = 120000) {
       const res = await fetch(url)
       if (res.ok) return
     } catch {}
-    await new Promise((r) => setTimeout(r, 500))
+    await new Promise((resolve) => setTimeout(resolve, 500))
   }
   throw new Error(`Timed out waiting for ${url}`)
 }
@@ -53,7 +54,7 @@ async function ensureDocsDeps () {
   }
 }
 
-async function prepareCapture (page, { fullTemplate, fullContext, fullHtml }) {
+async function prepareCapture (page, { fullTemplate, fullContext }) {
   await page.addStyleTag({
     content: `
       #editors .capture-pane {
@@ -78,7 +79,6 @@ async function prepareCapture (page, { fullTemplate, fullContext, fullHtml }) {
       captureWidth,
       fullTemplate,
       fullContext,
-      fullHtml,
       lineHeight,
       windowChrome,
       gridGap,
@@ -128,11 +128,9 @@ async function prepareCapture (page, { fullTemplate, fullContext, fullHtml }) {
 
     const templateLineCount = fullTemplate.split('\n').length
     const contextLineCount = fullContext.split('\n').length
-    const outputLineCount = Math.max(fullHtml.split('\n').length, 1)
 
     const templateEditorH = paneHeight(templateLineCount)
     const contextEditorH = paneHeight(contextLineCount)
-    const outputEditorH = paneHeight(outputLineCount)
 
     const leftRow1 = templateEditorH
     const leftRow2 = contextEditorH
@@ -203,7 +201,6 @@ async function prepareCapture (page, { fullTemplate, fullContext, fullHtml }) {
     captureWidth: CAPTURE_WIDTH,
     fullTemplate,
     fullContext,
-    fullHtml,
     lineHeight: LINE_HEIGHT,
     windowChrome: WINDOW_CHROME,
     gridGap: GRID_GAP,
@@ -297,9 +294,8 @@ async function main () {
 
     const fullTemplate = await page.evaluate(() => window.ace.edit('editorEl').getValue())
     const fullContext = await page.evaluate(() => window.ace.edit('dataEl').getValue())
-    const fullHtml = await page.evaluate(() => document.querySelector('#previewCode').textContent)
 
-    await prepareCapture(page, { fullTemplate, fullContext, fullHtml })
+    await prepareCapture(page, { fullTemplate, fullContext })
 
     const framePaths = []
     let frameIndex = 0
