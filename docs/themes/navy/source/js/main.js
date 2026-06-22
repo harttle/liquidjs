@@ -38,7 +38,7 @@
 
 (function() {
   // playground
-  /* global liquidjs, ace, Prism */
+  /* global liquidjs, ace */
   if (!/\/playground(?:\.html)?$/.test(location.pathname)) return;
   updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid({
@@ -86,6 +86,8 @@
 
   function applyEditorTheme(editor) {
     editor.setTheme(getEditorTheme());
+    editor.renderer.setPadding(0);
+    editor.container.style.background = 'transparent';
   }
 
   function createEditor(id, lang) {
@@ -103,7 +105,10 @@
     });
     editor.getSession().setMode('ace/mode/' + lang);
     editor.renderer.setShowGutter(false);
-    editor.renderer.setScrollMargin(8, 8, 0, 0);
+    if (editor.renderer.$gutter) {
+      editor.renderer.$gutter.style.display = 'none';
+    }
+    editor.renderer.setScrollMargin(0, 0, 0, 0);
     bindClipboard(editor);
     return editor;
   }
@@ -163,10 +168,6 @@
   function setPreview (value) {
     previewValue = value
     previewCode.textContent = value
-    if (window.Prism) {
-      delete previewCode.dataset.highlighted
-      window.Prism.highlightElement(previewCode)
-    }
   }
 
   async function update() {
@@ -177,7 +178,7 @@
       const html = await engine.parseAndRender(tpl, JSON.parse(data));
       setPreview(html);
     } catch (err) {
-      setPreview(err.stack);
+      // keep last successful output while template or context is invalid
     }
   }
 

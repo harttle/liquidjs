@@ -1,6 +1,7 @@
 #playground
   --playground-gap: 12px
   --playground-radius: 10px
+  --playground-inset: 16px
   background: var(--color-content-bg)
   overflow: hidden
   box-shadow: var(--panel-shadow)
@@ -124,7 +125,7 @@
     gap: 10px
     flex-shrink: 0
     height: 36px
-    padding: 0 12px
+    padding: 0 var(--playground-inset)
     border-bottom: 1px solid var(--code-border)
     @media mq-mobile
       height: 32px
@@ -151,8 +152,31 @@
     min-width: 0
     display: flex
     flex-direction: column
-    overflow: visible
+    overflow: hidden
     background: var(--highlight-background)
+
+  .area-tpl .pane-body,
+  .area-data .pane-body
+    padding: var(--playground-inset)
+    box-sizing: border-box
+    @media mq-mobile
+      padding: 12px
+
+  .area-tpl .ace_gutter,
+  .area-data .ace_gutter
+    display: none !important
+    width: 0 !important
+    min-width: 0 !important
+
+  .area-tpl .ace_editor,
+  .area-data .ace_editor,
+  .area-tpl .ace_scroller,
+  .area-data .ace_scroller,
+  .area-tpl .ace_content,
+  .area-data .ace_content,
+  .area-tpl .ace_text-layer,
+  .area-data .ace_text-layer
+    background: transparent !important
 
   .editor
     flex: 1 1 auto
@@ -175,7 +199,7 @@
       min-height: 100%
       width: 100%
       box-sizing: border-box
-      padding: 16px
+      padding: var(--playground-inset)
       border: none
       box-shadow: none
       border-radius: 0
@@ -194,6 +218,7 @@
         font-family: font-mono
         font-size: 14px
         line-height: 1.55
+        color: var(--highlight-foreground)
         background: transparent
         padding: 0
         white-space: inherit
