@@ -48,20 +48,17 @@
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
-  const preview = createEditor('previewEl', 'html');
-  preview.setReadOnly(true);
-  preview.renderer.setShowGutter(false);
-  preview.renderer.setPadding(16);
+  const previewCode = document.getElementById('previewCode');
 
-  const editors = [editor, dataEditor, preview];
+  const editors = [editor, dataEditor];
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
   });
 
   const init = parseArgs(location.hash.slice(1));
   if (init) {
-    editor.setValue(init.tpl, 1);
-    dataEditor.setValue(init.data, 1);
+    editor.setValue(init.tpl, -1);
+    dataEditor.setValue(init.data, -1);
   }
   editor.on('change', update);
   dataEditor.on('change', update);
@@ -76,7 +73,10 @@
     const editorsEl = document.querySelector('#editors');
     editorsEl.classList.remove('hide');
     editorsEl.setAttribute('aria-hide', false);
-    editors.forEach(function(ed) { ed.resize(); });
+    editors.forEach(function(ed) {
+      ed.clearSelection();
+      ed.resize();
+    });
   }
 
   function getEditorTheme() {
@@ -96,11 +96,15 @@
       fontFamily: '"Source Code Pro", ui-monospace, Monaco, Menlo, Consolas, monospace',
       fontSize: '14px',
       showPrintMargin: false,
+      showGutter: false,
+      highlightActiveLine: false,
+      highlightSelectedWord: false,
       tabSize: 2,
       useSoftTabs: true,
       scrollPastEnd: 0.25
     });
     editor.getSession().setMode('ace/mode/' + lang);
+    editor.renderer.setShowGutter(false);
     editor.renderer.setScrollMargin(8, 8, 0, 0);
     return editor;
   }
@@ -118,15 +122,23 @@
     return utoa(obj.tpl) + ',' + utoa(obj.data);
   }
 
+  function setPreview(value) {
+    previewCode.textContent = value;
+    if (window.Prism) {
+      delete previewCode.dataset.highlighted;
+      window.Prism.highlightElement(previewCode);
+    }
+  }
+
   async function update() {
     const tpl = editor.getValue();
     const data = dataEditor.getValue();
     history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
     try {
       const html = await engine.parseAndRender(tpl, JSON.parse(data));
-      preview.setValue(html, 1);
+      setPreview(html);
     } catch (err) {
-      preview.setValue(err.stack, 1);
+      setPreview(err.stack);
       throw err;
     }
   }

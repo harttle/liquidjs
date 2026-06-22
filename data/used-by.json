@@ -1,0 +1,27 @@
+[
+  { "name": "Eleventy", "url": "https://www.11ty.dev/" },
+  { "name": "GitHub Docs", "url": "https://docs.github.com/" },
+  { "name": "Kibana", "url": "https://www.elastic.co/kibana" },
+  {
+    "name": "Power Pages, Azure API Management developer portal",
+    "url": "https://learn.microsoft.com/en-us/power-pages/"
+  },
+  {
+    "name": "Shopify CLI, Checkout Blocks",
+    "url": "https://www.shopify.com/"
+  },
+  { "name": "Directus", "url": "https://directus.io/" },
+  {
+    "name": "Builder.io, Mitosis",
+    "url": "https://www.builder.io/"
+  },
+  { "name": "Pattern Lab", "url": "https://patternlab.io/" },
+  { "name": "Rock RMS", "url": "https://www.rockrms.com/" },
+  { "name": "WISMOlabs", "url": "https://wismolabs.com/" },
+  { "name": "Dropkiq", "url": "https://www.dropkiq.com/" },
+  {
+    "name": "Freshet",
+    "url": "https://chromewebstore.google.com/detail/freshet/mpclplhdencffbilobpcapccnihpelcg",
+    "logo": "https://raw.githubusercontent.com/MattAltermatt/freshet/main/public/icon-128.png"
+  }
+]

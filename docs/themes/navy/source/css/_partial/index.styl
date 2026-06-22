@@ -126,7 +126,8 @@
     background: var(--color-link-hover)
     color: #fff
 
-#sponsors-wrap, #contributors-wrap
+#used-by-wrap, #sponsors-wrap, #contributors-wrap,
+.home-section
   background: var(--color-navy-lighter)
   border-top: 1px solid #161d24
   border-bottom: 1px solid #161d24
@@ -166,24 +167,40 @@
       &:hover
         color: var(--color-link-hover)
 
-#sponsors-wrap
+.home-section--logos, #sponsors-wrap, #used-by-wrap
   background: var(--color-content-bg)
   .inner
     h3
       color: var(--color-default)
     p
       color: var(--color-gray)
-    .open-collective
-      max-width: 100%
     @media (prefers-color-scheme: dark)
       p
         color: var(--color-default)
 
-#contributors-wrap
+.home-section--people, #contributors-wrap
   border: none
-  overflow: hidden;
+  overflow: hidden
 
 .contributors
+  p
+    margin: 0
+    line-height: 2.5
+    text-align: center
+  a
+    display: inline-block
+    vertical-align: middle
+    margin: 8px
+  a img
+    display: inline-block
+    height: 72px
+    width: auto
+    max-width: 160px
+    vertical-align: middle
+    object-fit: contain
+    background: transparent
+    border-radius: 0
+    margin-bottom: 0
   tr
     display: flex
     flex-wrap: wrap

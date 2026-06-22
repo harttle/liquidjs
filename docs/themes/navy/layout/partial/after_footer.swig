@@ -1,6 +1,8 @@
 {% if page.layout === 'playground' %}
 {{ js('js/liquid.browser.min.js') }}
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/ace.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
 {% endif %}
 
 {{ js('js/main') }}

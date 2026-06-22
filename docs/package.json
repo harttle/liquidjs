@@ -6,6 +6,7 @@
     "version": "7.3.0"
   },
   "scripts": {
+    "prebuild": "npm --prefix .. run build:contributors && npm --prefix .. run build:used-by",
     "build": "hexo generate",
     "start": "hexo serve",
     "lint": "eslint .",

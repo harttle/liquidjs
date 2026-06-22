@@ -1,9 +1,1 @@
-<ul>
-{%- for person in people %}
-  <li>
-    <a href="{{person | prepend: "https://example.com/"}}">
-      {{ person | capitalize }}
-    </a>
-  </li>
-{%- endfor%}
-</ul>
+<p>Hello, {{ name | capitalize }}!</p>

@@ -13,14 +13,6 @@
     margin-bottom: 24px
     color: var(--color-default)
 
-  h2
-    font-size: 0.8125rem
-    font-weight: 600
-    text-transform: uppercase
-    letter-spacing: 0.04em
-    color: var(--color-gray)
-    margin: 0
-
   #editors
     display: grid
     overflow: hidden
@@ -56,25 +48,80 @@
 
   .editor-wrapper
     display: flex
-    gap: 8px
     flex-direction: column
     min-height: 0
     overflow: hidden
-    .editor
-      flex: 1 1 auto
-      min-height: 0
-      position: relative
-      code-block-chrome()
-      overflow: hidden
-      @media mq-mobile
-        min-height: 240px
+
+  .pane-window
+    flex: 1 1 auto
+    min-height: 0
+    position: relative
+    display: flex
+    flex-direction: column
+    playground-window-chrome()
+    overflow: hidden
+    @media mq-mobile
+      min-height: 240px
+
+  .pane-tab
+    position: absolute
+    z-index: 5
+    top: 0
+    left: 0
+    right: 0
+    height: 36px
+    line-height: 36px
+    text-align: center
+    font-size: 0.75rem
+    font-weight: 600
+    letter-spacing: 0.02em
+    color: var(--color-gray)
+    pointer-events: none
+    user-select: none
+
+  .editor
+    flex: 1 1 auto
+    min-height: 0
+    position: relative
+    overflow: hidden
     .ace_editor
-      font-family: font-mono
-      font-size: 14px
-      line-height: 1.5
-      border-radius: 6px
-    .ace_scrollbar
-      z-index: 2
+      top: 0
+      bottom: 0
+      height: auto !important
+
+  .output-preview
+    flex: 1 1 auto
+    min-height: 0
+    cursor: default
+    overflow: auto
+    pre.highlight
+      margin: 0
+      min-height: 100%
+      padding: 16px
+      border: none
+      box-shadow: none
+      border-radius: 0 0 6px 6px
+      background: var(--highlight-background)
+      code
+        display: block
+        font-size: 14px
+        line-height: 1.5
+        background: transparent
+        padding: 0
+        white-space: pre
+
+  .ace_editor
+    font-family: font-mono
+    font-size: 14px
+    line-height: 1.5
+    border-radius: 6px
+  .ace_gutter
+    display: none !important
+    width: 0 !important
+  .ace_scroller
+    left: 0 !important
+  .ace_scrollbar
+    z-index: 2
 
   .version
     font-size: 0.8125rem
