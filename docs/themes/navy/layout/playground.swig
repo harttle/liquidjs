@@ -13,9 +13,7 @@
       </div>
       <div class="area-output editor-wrapper">
         <h2>Output</h2>
-        <div class="output-preview" id="previewEl">
-          <pre class="highlight"><code class="language-markup" id="previewCode">{{__('playground.loading')}}</code></pre>
-        </div>
+        <div class="editor" id="previewEl">{{__('playground.loading')}}</div>
       </div>
     </div>
     <p class="inner version"></p>

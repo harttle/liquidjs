@@ -35,7 +35,7 @@
     "build:apidoc": "shx rm -rf docs/source/api && typedoc --plugin typedoc-plugin-missing-exports ./src --gitRevision master --out docs/source/api",
     "build:changelog": "node bin/build-changelog.js",
     "build:docs-hexo": "cd docs && npm ci && npm run build && shx cp CNAME public/",
-    "docs:dev": "run-s build:docs-liquid build:contributors docs:serve",
+    "docs:dev": "npm run docs:serve",
     "docs:serve": "cd docs && npm run start"
   },
   "bin": {

@@ -48,17 +48,20 @@
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
-  const previewCode = document.getElementById('previewCode');
+  const preview = createEditor('previewEl', 'html');
+  preview.setReadOnly(true);
+  preview.renderer.setShowGutter(false);
+  preview.renderer.setPadding(16);
 
-  const editors = [editor, dataEditor];
+  const editors = [editor, dataEditor, preview];
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
   });
 
   const init = parseArgs(location.hash.slice(1));
   if (init) {
-    editor.setValue(init.tpl, -1);
-    dataEditor.setValue(init.data, -1);
+    editor.setValue(init.tpl, 1);
+    dataEditor.setValue(init.data, 1);
   }
   editor.on('change', update);
   dataEditor.on('change', update);
@@ -115,23 +118,15 @@
     return utoa(obj.tpl) + ',' + utoa(obj.data);
   }
 
-  function setPreview(value) {
-    previewCode.textContent = value;
-    if (window.Prism) {
-      delete previewCode.dataset.highlighted;
-      window.Prism.highlightElement(previewCode);
-    }
-  }
-
   async function update() {
     const tpl = editor.getValue();
     const data = dataEditor.getValue();
     history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
     try {
       const html = await engine.parseAndRender(tpl, JSON.parse(data));
-      setPreview(html);
+      preview.setValue(html, 1);
     } catch (err) {
-      setPreview(err.stack);
+      preview.setValue(err.stack, 1);
       throw err;
     }
   }
