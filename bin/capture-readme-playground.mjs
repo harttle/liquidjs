@@ -8,7 +8,7 @@ import { chromium } from 'playwright'
 const execFileAsync = promisify(execFile)
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const docsDir = join(root, 'docs')
-const framesDir = join(root, '.tmp/playground-gif-frames')
+const framesDir = join(root, '.local/playground-gif-frames')
 const outPath = join(docsDir, 'source/playground-demo.gif')
 const url = 'http://127.0.0.1:4001/playground.html'
 
@@ -315,8 +315,8 @@ async function main () {
     }
 
     await encodeGif()
-    await mkdir(join(root, '.tmp'), { recursive: true })
-    await copyFile(framePaths[framePaths.length - 1], join(root, '.tmp/playground-gif-last-frame.png'))
+    await mkdir(join(root, '.local'), { recursive: true })
+    await copyFile(framePaths[framePaths.length - 1], join(root, '.local/playground-gif-last-frame.png'))
     await browser.close()
     console.log(`Wrote ${outPath} (${framePaths.length} frames @ ${FPS} fps, char typing + live output)`)
   } finally {
