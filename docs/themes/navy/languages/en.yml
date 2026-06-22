@@ -16,7 +16,7 @@ index:
     description: 'Organizations and individuals who <a href="https://github.com/sponsors/harttle">sponsor LiquidJS</a>. Thank you!'
   used_by:
     title: Used by
-    description: 'Products and projects running on LiquidJS. <a href="https://github.com/harttle/liquidjs/edit/master/data/used-by.json">Open a PR</a> to add yours.'
+    description: 'Products and projects running on LiquidJS. <a href="https://github.com/harttle/liquidjs/edit/master/README.md">Open a PR</a> to add yours.'
 
 playground:
   title: Playground

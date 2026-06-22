@@ -33,7 +33,9 @@ function transformFinancial (html) {
 
 const allContributors = transformContributors(extractSection(readme, 'ALL-CONTRIBUTORS-LIST:START', 'ALL-CONTRIBUTORS-LIST:END'))
 const financialContributors = transformFinancial(extractSection(readme, 'FINANCIAL-CONTRIBUTORS-BEGIN', 'FINANCIAL-CONTRIBUTORS-END'))
+const usedBy = transformFinancial(extractSection(readme, 'USED-BY-BEGIN', 'USED-BY-END'))
 
 const outDir = path.join(root, 'docs/themes/navy/layout/partial')
 fs.writeFileSync(path.join(outDir, 'all-contributors.swig'), allContributors)
 fs.writeFileSync(path.join(outDir, 'financial-contributors.swig'), financialContributors)
+fs.writeFileSync(path.join(outDir, 'used-by.swig'), usedBy)
