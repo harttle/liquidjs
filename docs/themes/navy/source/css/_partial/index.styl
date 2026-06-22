@@ -126,8 +126,7 @@
     background: var(--color-link-hover)
     color: #fff
 
-#used-by-wrap, #sponsors-wrap, #contributors-wrap,
-.home-section
+#used-by-wrap, #sponsors-wrap, #contributors-wrap
   background: var(--color-navy-lighter)
   border-top: 1px solid #161d24
   border-bottom: 1px solid #161d24
@@ -167,20 +166,22 @@
       &:hover
         color: var(--color-link-hover)
 
-.home-section--logos, #sponsors-wrap, #used-by-wrap
+#used-by-wrap, #sponsors-wrap
   background: var(--color-content-bg)
   .inner
     h3
       color: var(--color-default)
     p
       color: var(--color-gray)
+    .open-collective
+      max-width: 100%
     @media (prefers-color-scheme: dark)
       p
         color: var(--color-default)
 
-.home-section--people, #contributors-wrap
+#contributors-wrap
   border: none
-  overflow: hidden
+  overflow: hidden;
 
 .contributors
   p
