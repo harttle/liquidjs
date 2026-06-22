@@ -38,7 +38,7 @@
 
 (function() {
   // playground
-  /* global liquidjs, ace */
+  /* global liquidjs, ace, Prism */
   if (!location.pathname.match(/playground.html$/)) return;
   updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid({
@@ -48,12 +48,9 @@
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
-  const preview = createEditor('previewEl', 'html');
-  preview.setReadOnly(true);
-  preview.renderer.setShowGutter(false);
-  preview.renderer.setPadding(16);
+  const previewCode = document.getElementById('previewCode');
 
-  const editors = [editor, dataEditor, preview];
+  const editors = [editor, dataEditor];
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
   });
@@ -118,15 +115,23 @@
     return utoa(obj.tpl) + ',' + utoa(obj.data);
   }
 
+  function setPreview (value) {
+    previewCode.textContent = value
+    if (window.Prism) {
+      delete previewCode.dataset.highlighted
+      window.Prism.highlightElement(previewCode)
+    }
+  }
+
   async function update() {
     const tpl = editor.getValue();
     const data = dataEditor.getValue();
     history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
     try {
       const html = await engine.parseAndRender(tpl, JSON.parse(data));
-      preview.setValue(html, 1);
+      setPreview(html);
     } catch (err) {
-      preview.setValue(err.stack, 1);
+      setPreview(err.stack);
       throw err;
     }
   }
