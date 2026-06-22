@@ -73,10 +73,7 @@
     const editorsEl = document.querySelector('#editors');
     editorsEl.classList.remove('hide');
     editorsEl.setAttribute('aria-hide', false);
-    editors.forEach(function(ed) {
-      ed.clearSelection();
-      ed.resize();
-    });
+    editors.forEach(function(ed) { ed.resize(); });
   }
 
   function getEditorTheme() {
@@ -96,15 +93,11 @@
       fontFamily: '"Source Code Pro", ui-monospace, Monaco, Menlo, Consolas, monospace',
       fontSize: '14px',
       showPrintMargin: false,
-      showGutter: false,
-      highlightActiveLine: false,
-      highlightSelectedWord: false,
       tabSize: 2,
       useSoftTabs: true,
       scrollPastEnd: 0.25
     });
     editor.getSession().setMode('ace/mode/' + lang);
-    editor.renderer.setShowGutter(false);
     editor.renderer.setScrollMargin(8, 8, 0, 0);
     return editor;
   }
