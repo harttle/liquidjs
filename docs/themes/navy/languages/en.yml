@@ -20,6 +20,7 @@ index:
 
 playground:
   title: Playground
+  lead: Edit a template and context JSON — rendered HTML updates as you type.
   loading: Loading...
 
 page:

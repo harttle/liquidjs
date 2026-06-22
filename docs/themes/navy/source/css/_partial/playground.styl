@@ -1,129 +1,230 @@
 #playground
+  --playground-gap: 12px
+  --playground-radius: 10px
   background: var(--color-content-bg)
   overflow: hidden
   box-shadow: var(--panel-shadow)
 
   .wrapper
-    margin-bottom: 40px
+    margin-bottom: 32px
+    @media mq-mobile
+      margin-bottom: 20px
+
+  .playground-hero
+    display: flex
+    flex-wrap: wrap
+    align-items: flex-end
+    justify-content: space-between
+    gap: 16px 24px
+    padding-top: 32px
+    padding-bottom: 20px
+    @media mq-mobile
+      padding-top: 16px
+      padding-bottom: 12px
+      gap: 10px
+      align-items: flex-start
+
+  .playground-hero-text
+    flex: 1 1 280px
+    min-width: 0
 
   h1
-    font-size: 36px
-    font-weight: 300
-    margin-top: 40px
-    margin-bottom: 24px
-    color: var(--color-default)
-
-  h2
-    font-size: 0.8125rem
+    font-size: 28px
     font-weight: 600
-    text-transform: uppercase
-    letter-spacing: 0.04em
-    color: var(--color-gray)
+    letter-spacing: -0.02em
+    margin: 0 0 8px
+    color: var(--color-default)
+    @media mq-mobile
+      font-size: 22px
+      margin-bottom: 4px
+
+  .playground-lead
     margin: 0
+    font-size: 15px
+    line-height: 1.5
+    color: var(--color-gray)
+    @media mq-mobile
+      font-size: 14px
+      line-height: 1.45
+
+  .playground-version
+    flex: 0 0 auto
+    margin: 0
+    font-size: 12px
+    line-height: 1.4
+    font-family: font-mono
+    padding: 6px 12px
+    border-radius: 999px
+    background: var(--playground-surface)
+    border: 1px solid var(--color-border)
+    color: var(--color-gray)
+    a
+      color: var(--color-default)
+      text-decoration: none
+      font-weight: 500
+      &:hover
+        color: var(--color-link)
+        text-decoration: none
 
   #editors
-    display: grid
-    overflow: hidden
     margin-bottom: 0
-    height: 75vh
-    min-height: 480px
+
+  .playground-workspace
+    display: grid
+    gap: var(--playground-gap)
     grid-template-columns: 1fr 1fr
     grid-template-rows: 3fr 2fr
-    grid-gap: 16px
     align-items: stretch
+    @media mq-normal
+      overflow: hidden
+      height: 75vh
+      max-height: unquote('calc(100vh - 200px)')
+      min-height: 520px
     @media mq-mobile
-      height: auto
-      min-height: 0
       grid-template-columns: 1fr
       grid-template-rows: auto
-      grid-gap: 20px
+      gap: 12px
 
   .area-tpl
     grid-row: 1
     grid-column: 1
     min-height: 0
+    .pane-indicator
+      background: var(--color-link)
   .area-data
     grid-row: 2
     grid-column: 1
     min-height: 0
+    .pane-indicator
+      background: var(--highlight-orange)
   .area-output
     grid-column: 2
     grid-row: 1 / -1
     min-height: 0
+    min-width: 0
+    .pane-indicator
+      background: var(--highlight-green)
     @media mq-mobile
       grid-row: auto
       grid-column: 1
 
-  .editor-wrapper
+  .playground-pane
     display: flex
-    gap: 8px
     flex-direction: column
     min-height: 0
     overflow: hidden
-    .editor
-      flex: 1 1 auto
-      min-height: 0
-      position: relative
-      code-block-chrome()
-      overflow: hidden
-      @media mq-mobile
-        min-height: 240px
-    .output-preview
-      flex: 1 1 auto
-      min-height: 0
-      code-block-chrome()
-      overflow: auto
-      pre.highlight
-        margin: 0
-        min-height: 100%
-        padding: 16px
-        border: none
-        box-shadow: none
-        border-radius: 0
-        background: var(--highlight-background)
-        code
-          display: block
-          font-family: font-mono
-          font-size: 14px
-          line-height: 1.5
-          background: transparent
-          padding: 0
-          white-space: pre-wrap
-          word-break: break-word
-    .ace_editor
-      font-family: font-mono
-      font-size: 14px
-      line-height: 1.5
-      border-radius: 6px
-    .ace_scrollbar
-      z-index: 2
+    background: var(--playground-pane-head)
+    border: 1px solid var(--code-border)
+    border-radius: var(--playground-radius)
+    box-shadow: var(--code-shadow)
 
-  .version
-    font-size: 0.8125rem
-    line-height: 1.5
+  .pane-head
+    display: flex
+    align-items: center
+    gap: 10px
+    flex-shrink: 0
+    height: 36px
+    padding: 0 12px
+    border-bottom: 1px solid var(--code-border)
+    @media mq-mobile
+      height: 32px
+      padding: 0 10px
+    h2
+      font-size: 13px
+      font-weight: 600
+      letter-spacing: 0.01em
+      text-transform: none
+      color: var(--color-default)
+      margin: 0
+      @media mq-mobile
+        font-size: 12px
+
+  .pane-indicator
+    width: 8px
+    height: 8px
+    border-radius: 50%
+    flex-shrink: 0
+
+  .pane-body
+    flex: 1 1 auto
+    min-height: 0
+    min-width: 0
+    display: flex
+    flex-direction: column
+    overflow: visible
+    background: var(--highlight-background)
+
+  .editor
+    flex: 1 1 auto
+    min-height: 0
+    position: relative
+    overflow: hidden
+    @media mq-mobile
+      min-height: 180px
+
+  .output-preview
+    flex: 1 1 auto
+    min-height: 0
+    min-width: 0
+    width: 100%
+    overflow: auto
+    @media mq-mobile
+      min-height: 120px
+    pre.highlight
+      margin: 0
+      min-height: 100%
+      width: 100%
+      box-sizing: border-box
+      padding: 16px
+      border: none
+      box-shadow: none
+      border-radius: 0
+      background: transparent
+      color: var(--highlight-foreground)
+      overflow-x: hidden
+      overflow-y: auto
+      white-space: pre-wrap
+      overflow-wrap: break-word
+      @media mq-mobile
+        padding: 12px
+      code
+        display: block
+        width: 100%
+        box-sizing: border-box
+        font-family: font-mono
+        font-size: 14px
+        line-height: 1.55
+        background: transparent
+        padding: 0
+        white-space: inherit
+        overflow-wrap: inherit
+        @media mq-mobile
+          font-size: 13px
+
+  .ace_editor
     font-family: font-mono
-    color: var(--color-gray)
-    margin-top: 20px
-    margin-bottom: 32px
-    a
-      color: inherit
-      text-decoration: none
-      &:hover
-        color: var(--color-link)
-        text-decoration: underline
+    font-size: 14px
+    line-height: 1.55
+    border-radius: 0
+    @media mq-mobile
+      font-size: 13px
+  .ace_scrollbar
+    z-index: 2
 
   .hide
     display: none
 
   .loader
-    width: 48px
-    height: 48px
-    margin: 150px auto 200px
-    border: 3px solid var(--color-border)
+    width: 40px
+    height: 40px
+    margin: 120px auto 160px
+    border: 2px solid var(--color-border)
     border-top-color: var(--color-link)
     border-radius: 50%
-    animation: spin 0.8s infinite linear
+    animation: playground-spin 0.7s infinite linear
+    @media mq-mobile
+      margin: 60px auto 80px
 
-  @keyframes spin
+  @keyframes playground-spin
     100%
       transform: rotate(360deg)

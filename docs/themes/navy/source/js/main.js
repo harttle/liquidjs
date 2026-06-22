@@ -39,7 +39,7 @@
 (function() {
   // playground
   /* global liquidjs, ace, Prism */
-  if (!location.pathname.match(/playground.html$/)) return;
+  if (!/\/playground(?:\.html)?$/.test(location.pathname)) return;
   updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid({
     memoryLimit: 1e5,
@@ -51,8 +51,10 @@
   const previewCode = document.getElementById('previewCode');
 
   const editors = [editor, dataEditor];
+  let previewValue = '';
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
+    if (previewValue) setPreview(previewValue);
   });
 
   const init = parseArgs(location.hash.slice(1));
@@ -99,7 +101,47 @@
     });
     editor.getSession().setMode('ace/mode/' + lang);
     editor.renderer.setScrollMargin(8, 8, 0, 0);
+    bindClipboard(editor);
     return editor;
+  }
+
+  function bindClipboard(editor) {
+    editor.commands.addCommand({
+      name: 'copy',
+      bindKey: {win: 'Ctrl-C', mac: 'Command-C'},
+      exec: function (ed) {
+        const text = ed.getCopyText();
+        if (!text) return;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text);
+        }
+      },
+      readOnly: true
+    });
+    editor.commands.addCommand({
+      name: 'cut',
+      bindKey: {win: 'Ctrl-X', mac: 'Command-X'},
+      exec: function (ed) {
+        const text = ed.getCopyText();
+        if (!text) return;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(function () {
+            ed.insert('');
+          });
+        }
+      }
+    });
+    editor.commands.addCommand({
+      name: 'paste',
+      bindKey: {win: 'Ctrl-V', mac: 'Command-V'},
+      exec: function (ed) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.readText().then(function (text) {
+            ed.insert(text);
+          });
+        }
+      }
+    });
   }
 
   function parseArgs(hash) {
@@ -116,6 +158,7 @@
   }
 
   function setPreview (value) {
+    previewValue = value
     previewCode.textContent = value
     if (window.Prism) {
       delete previewCode.dataset.highlighted
@@ -132,7 +175,6 @@
       setPreview(html);
     } catch (err) {
       setPreview(err.stack);
-      throw err;
     }
   }
 
