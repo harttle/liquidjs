@@ -52,6 +52,7 @@
 
   const editors = [editor, dataEditor];
   let previewValue = '';
+  let hadPreview = false;
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
     if (previewValue) setPreview(previewValue);
@@ -176,7 +177,10 @@
     history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
     try {
       const html = await engine.parseAndRender(tpl, JSON.parse(data));
-      setPreview(html);
+      if (html !== '' || !hadPreview) {
+        setPreview(html);
+        if (html !== '') hadPreview = true;
+      }
     } catch (err) {
       // keep last successful output while template or context is invalid
     }
