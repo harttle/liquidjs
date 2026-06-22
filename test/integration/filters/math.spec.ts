@@ -70,6 +70,10 @@ describe('filters/math', function () {
     it('should return "183.36" for 183.357,2',
       () => test('{{183.357|round: 2}}', '183.36'))
     it('should convert string to number', () => test('{{"2.7"|round}}', '3'))
+    it('odd number 1.005 should round correctly', () => test('{{1.005|round:2}}', '1.01'))
+    it('odd number -1.005 should round correctly', () => test('{{num|round:2}}', { num: -1.005 }, '-1.01'))
+    it('odd number 9.075 should round correctly', () => test('{{9.075|round:2}}', '9.08'))
+    it('odd number -9.075 should round correctly', () => test('{{num|round:2}}', { num: -9.075 }, '-9.08'))
   })
   describe('times', function () {
     it('should return "6" for 3,2', () => test('{{ 3 | times: 2 }}', '6'))

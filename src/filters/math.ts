@@ -15,7 +15,6 @@ export function round (v: number, arg = 0) {
   v = toNumber(v)
   arg = toNumber(arg)
   const amp = Math.pow(10, arg)
-  const scaled = v * amp
-  // Round half away from zero
-  return Math.sign(v) * Math.round(Math.abs(scaled)) / amp
+  const scaled = (v * amp) * (1 + Number.EPSILON)
+  return Math.round(scaled) / amp
 }
