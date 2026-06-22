@@ -6,7 +6,8 @@
     "version": "7.3.0"
   },
   "scripts": {
-    "prebuild": "npm --prefix .. run build:contributors",
+    "prebuild": "npm --prefix .. run build:docs-liquid && npm --prefix .. run build:contributors",
+    "prestart": "npm --prefix .. run build:docs-liquid && npm --prefix .. run build:contributors",
     "build": "hexo generate",
     "start": "hexo serve",
     "lint": "eslint .",
