@@ -95,11 +95,14 @@
       fontFamily: '"Source Code Pro", ui-monospace, Monaco, Menlo, Consolas, monospace',
       fontSize: '14px',
       showPrintMargin: false,
+      showGutter: false,
+      highlightActiveLine: false,
       tabSize: 2,
       useSoftTabs: true,
-      scrollPastEnd: 0.25
+      scrollPastEnd: 0
     });
     editor.getSession().setMode('ace/mode/' + lang);
+    editor.renderer.setShowGutter(false);
     editor.renderer.setScrollMargin(8, 8, 0, 0);
     bindClipboard(editor);
     return editor;
