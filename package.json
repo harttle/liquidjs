@@ -37,7 +37,8 @@
     "build:changelog": "node bin/build-changelog.js",
     "build:docs-hexo": "cd docs && npm ci && npm run build && shx cp CNAME public/",
     "serve:docs": "cd docs && npm run start",
-    "dev:docs": "run-s prepare:docs serve:docs"
+    "dev:docs": "run-s prepare:docs serve:docs",
+    "capture:readme-playground": "node bin/capture-readme-playground.mjs"
   },
   "bin": {
     "liquidjs": "./bin/liquid.js",
