@@ -1,6 +1,6 @@
 {
   "name": "liquidjs",
-  "version": "10.27.0",
+  "version": "10.27.1",
   "sideEffects": false,
   "description": "A simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.",
   "main": "dist/liquid.node.js",

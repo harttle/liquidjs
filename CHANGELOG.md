@@ -1,3 +1,17 @@
+## [10.27.1](https://github.com/harttle/liquidjs/compare/v10.27.0...v10.27.1) (2026-06-23)
+
+
+### Bug Fixes
+
+* improve round function; improvement to [#873](https://github.com/harttle/liquidjs/issues/873) ([#901](https://github.com/harttle/liquidjs/issues/901)) ([956b51e](https://github.com/harttle/liquidjs/commit/956b51ea953eb52d9eba7409b7f51e379023fec4))
+* **security:** charge pop filter allocation to memoryLimit ([#907](https://github.com/harttle/liquidjs/issues/907)) ([8a0c74a](https://github.com/harttle/liquidjs/commit/8a0c74a7fcb1671aa1dcb71ec82ba0602dc90d04))
+* **strip_html:** infinite loop for strip_html ([5c3522f](https://github.com/harttle/liquidjs/commit/5c3522f33928aae66f0fe85c36e1d9015c768fe2))
+
+
+### Performance Improvements
+
+* **parser:** memoize createTrie to avoid rebuilding tries per Tokenizer ([#911](https://github.com/harttle/liquidjs/issues/911)) ([3a0d80d](https://github.com/harttle/liquidjs/commit/3a0d80d1f4526af0fbca2bb2e0a9c51669d2fd3e))
+
 # [10.27.0](https://github.com/harttle/liquidjs/compare/v10.26.0...v10.27.0) (2026-05-15)
 
 
