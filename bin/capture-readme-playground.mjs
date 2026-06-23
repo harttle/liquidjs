@@ -19,8 +19,6 @@ const VIEWPORT_HEIGHT = 1000
 const DEVICE_SCALE = 2
 const FPS = 12
 const LAST_FRAME_HOLD = 2.5
-const ANIM_PHASE_MS = 425
-const FRAMES_PER_KEY = 2
 
 const LINE_HEIGHT = 22
 const PANE_HEAD = 36
@@ -72,6 +70,12 @@ async function prepareCapture (page, { fullTemplate, fullContext }) {
       }
       #playground .capture-json .json-key { color: #953800; }
       #playground .capture-json .json-string { color: #cf222e; }
+      #playground .pane-indicator {
+        animation: none;
+        transform: none;
+        box-shadow: none;
+        opacity: 1;
+      }
     `
   })
 
@@ -215,7 +219,8 @@ async function screenshotWorkspace (page, file) {
   await page.locator('.playground-workspace').screenshot({
     path: file,
     type: 'png',
-    scale: 'device'
+    scale: 'device',
+    animations: 'disabled'
   })
 }
 
@@ -232,13 +237,10 @@ async function encodeGif () {
 
 async function captureFrame (page, framesDir, framePaths, frameIndexRef, templateText, opts) {
   await setCaptureFrame(page, templateText, opts)
-  for (let phase = 0; phase < FRAMES_PER_KEY; phase++) {
-    if (phase > 0) await page.waitForTimeout(ANIM_PHASE_MS)
-    const file = join(framesDir, `frame-${String(frameIndexRef.value).padStart(3, '0')}.png`)
-    framePaths.push(file)
-    await screenshotWorkspace(page, file)
-    frameIndexRef.value++
-  }
+  const file = join(framesDir, `frame-${String(frameIndexRef.value).padStart(3, '0')}.png`)
+  framePaths.push(file)
+  await screenshotWorkspace(page, file)
+  frameIndexRef.value++
 }
 
 async function main () {
@@ -262,7 +264,7 @@ async function main () {
       viewport: { width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT },
       deviceScaleFactor: DEVICE_SCALE
     })
-    await page.emulateMedia({ colorScheme: 'light' })
+    await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
     await page.goto(url, { waitUntil: 'networkidle' })
 
     const allowCookies = page.getByRole('button', { name: 'Allow all cookies' })
