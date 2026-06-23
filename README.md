@@ -1,6 +1,6 @@
 # LiquidJS
 
-A simple, expressive [Shopify Liquid][shopify/liquid] template engine for JavaScript — Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.
+A simple, expressive Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.
 
 [![npm version](https://img.shields.io/npm/v/liquidjs.svg?logo=npm&style=flat-square)](https://www.npmjs.org/package/liquidjs)
 [![npm downloads](https://img.shields.io/npm/dm/liquidjs.svg?style=flat-square)](https://www.npmjs.org/package/liquidjs)
@@ -252,7 +252,6 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
 
 [MIT](LICENSE) © [Jun Yang](https://github.com/harttle)
 
-[shopify/liquid]: https://shopify.github.io/liquid/
 [setup]: https://liquidjs.com/tutorials/setup.html
 [doc]: https://liquidjs.com
 [github]: https://github.com/harttle/liquidjs
