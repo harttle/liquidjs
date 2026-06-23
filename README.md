@@ -1,72 +1,86 @@
-# liquidjs
+# LiquidJS
+
+A simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.
+
 [![npm version](https://img.shields.io/npm/v/liquidjs.svg?logo=npm&style=flat-square)](https://www.npmjs.org/package/liquidjs)
 [![npm downloads](https://img.shields.io/npm/dm/liquidjs.svg?style=flat-square)](https://www.npmjs.org/package/liquidjs)
-[![Coverage](https://img.shields.io/coveralls/harttle/liquidjs.svg?style=flat-square)](https://coveralls.io/github/harttle/liquidjs?branch=master)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/harttle/liquidjs/ci-build.yml?branch=master&style=flat-square)](https://github.com/harttle/liquidjs/actions/workflows/ci-build.yml?query=branch%3Amaster)
-[![DUB license](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/harttle/liquidjs)
+[![Coverage](https://img.shields.io/coveralls/harttle/liquidjs.svg?style=flat-square)](https://coveralls.io/github/harttle/liquidjs?branch=master)
+[![License: MIT](https://img.shields.io/github/license/harttle/liquidjs?style=flat-square)](https://github.com/harttle/liquidjs/blob/master/LICENSE)
 
-A simple, expressive and safe [Shopify][shopify/liquid] / GitHub Pages compatible template engine in pure JavaScript.
-**The purpose of this repo** is to provide a standard Liquid implementation for the JavaScript community so that [Jekyll sites](https://jekyllrb.com), [GitHub Pages](https://pages.github.com/) and [Shopify templates](https://themes.shopify.com/) can be ported to Node.js without pain.
+[Documentation][doc] · [Playground](https://liquidjs.com/playground.html) · [Setup guide][setup] · [Contributing][contribution]
 
-* [Documentation][doc]
-* Please star [LiquidJS on GitHub][github]!
-* Financial support via [GitHub Sponsors](https://github.com/sponsors/harttle).
+<a href="https://liquidjs.com/playground.html">
+  <img src="docs/source/playground-demo.gif" alt="LiquidJS playground: edit a template and context, see live HTML output" width="980" style="display: block; margin: 0 auto;" />
+</a>
 
-<p align="center"><a href="https://liquidjs.com"><img height="155px" width="155px" src="https://liquidjs.com/icon/mstile-310x310.png" alt="logo"></a></p>
+<p align="center"><sub>Try the <a href="https://liquidjs.com/playground.html">online playground</a>.</sub></p>
 
-## What's it like?
+## Quick start
 
-Basically there're two types of Liquid syntax: tags enclosed by `{% %}` and outputs enclosed by `{{ }}`. A Liquid template looks like:
+```js
+import { Liquid } from 'liquidjs'
 
-```liquid
-{% if username %}
-  {{ username | append: ", welcome to LiquidJS!" | capitalize }}
-{% endif %}
+const engine = new Liquid()
+const html = await engine.parseAndRender(
+  'Hello, {{ name | capitalize }}!',
+  { name: 'liquid' }
+)
+//=> 'Hello, Liquid!'
 ```
-
-[A live demo](https://liquidjs.com/playground.html) is also available and here's a [quick tutorial](https://liquidjs.com/tutorials/intro-to-liquid.html) for Liquid syntax.
-
 
 ## Installation
 
-Install from npm in Node.js:
+**Node.js**
 
 ```bash
 npm install liquidjs
 ```
 
-Or use the UMD bundle from jsDelivr:
+**Browser** (jsDelivr UMD bundle)
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.browser.min.js"></script>
 ```
 
-Or render directly from CLI using npx:
+**CLI**
 
 ```bash
-npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
+npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Liquid"}'
 ```
 
-For more details, refer to the [Setup Guide][setup].
+See the [setup guide][setup] for partials, layouts, caching, and other options.
 
-## Who's Using LiquidJS?
+## Used by
 
-- [Eleventy](https://www.11ty.dev/): Eleventy, a simpler static site generator.
-- [Github Docs](https://github.com/github/docs): The open-source repo for docs.github.com.
-- [Kibana](https://github.com/elastic/kibana): Elastic's analytics and visualization platform for Elasticsearch; workflow features use LiquidJS for Liquid templates.
-- [Opensense](https://www.opensense.com/): The smarter way to send email.
-- [Directus](https://docs.directus.io/): an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-- [Rock](https://www.rockrms.com/): An open source CMS, Relationship Management System (RMS) and Church Management System (ChMS) all rolled into one.
-- [Mitosis](https://github.com/BuilderIO/mitosis): Write components once, run everywhere. Compiles to React, Vue, Qwik, Solid, Angular, Svelte, and more.
-- [Pattern Lab](https://patternlab.io/): a frontend workshop environment that helps you build, view, test, and showcase your design system's UI components.
-- [Builder.io](https://www.builder.io/m/developers): the first and only headless CMS with a visual editor that lets you drag and drop with your components, directly within your current site or app. Completely API-driven, for cleaner code and simpler workflows.
-- [Microsoft Power Pages](https://learn.microsoft.com/en-us/power-pages/introduction): a secure, enterprise-grade, low-code software as a service (SaaS) platform for creating, hosting, and administering modern external-facing business websites.
-- [Azure API Management developer portal](https://learn.microsoft.com/en-us/azure/api-management/api-management-howto-developer-portal): an automatically generated, fully customizable website with the documentation of your APIs.
-- [WISMOlabs](https://wismolabs.com/): Post Purchase Experience platform for eCommerce retailers enhancing customer satisfaction by using LiquidJS to provide customizable post-purchase experiences through programmable email, SMS, order tracking pages, and webhooks.
-- [Freshet](https://chromewebstore.google.com/detail/freshet/mpclplhdencffbilobpcapccnihpelcg): *JSON in, page out* — a Chrome extension that uses LiquidJS templates per URL pattern, so the JSON becomes a rendered, useful page.
+<!-- USED-BY-BEGIN -->
+<p align="center" style="line-height: 2.5;">
+  <a href="https://www.11ty.dev/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/35147177?v=4&s=100" height="80" style="vertical-align: middle;" alt="Eleventy" title="Eleventy"/></a>
+  <a href="https://www.opensense.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/opensense-inc/bf840ae/logo/256.png?height=100" height="80" style="vertical-align: middle;" alt="Opensense" title="Opensense"/></a>
+  <a href="https://www.microsoft.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/6154722?v=4&s=100" height="80" style="vertical-align: middle;" alt="Power Pages, Azure API Management developer portal" title="Power Pages, Azure API Management developer portal"/></a>
+  <a href="https://docs.github.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/9919?v=4&amp;s=100" height="80" style="vertical-align: middle;" alt="GitHub Docs" title="GitHub Docs"/></a>
+  <a href="https://github.com/elastic/kibana" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/6764390?v=4&s=100" height="80" style="vertical-align: middle;" alt="Kibana" title="Kibana"/></a>
+  <a href="https://www.shopify.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/8085?v=4&amp;s=100" height="80" style="vertical-align: middle;" alt="Shopify CLI, Checkout Blocks" title="Shopify CLI, Checkout Blocks"/></a>
+  <a href="https://customer.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/1152079?v=4&s=100" height="80" style="vertical-align: middle;" alt="Customer IO" title="Customer IO"/></a>
+  <br/>
+  <a href="https://syntax.fm/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/130389858?v=4&s=100" height="80" style="vertical-align: middle;" alt="Syntax Podcast" title="Syntax Podcast"/></a>
+  <a href="https://www.testmuai.com/?utm_medium=sponsor&utm_source=liquidjs" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/27130435?s=200&v=4" width="80" style="vertical-align: middle;" alt="TestMu AI" title="TestMu AI"/></a>
+  <a href="https://chudovo.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/Chudovo/avatar/256.png?height=100" width="160" style="vertical-align: middle;background: white;padding: 8px 16px;" alt="Chudovo" title="Chudovo"/></a>
+  <a href="https://www.pakstyle.pk/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/pakstyle/2b81605/logo/256.png?height=100" height="80" style="vertical-align: middle;" alt="PakStyle.pk" title="PakStyle.pk"/></a>
+  <a href="https://www.escorta.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/escortacom/avatar/256.png?height=100" height="45" style="vertical-align: middle;" alt="EscortA.com" title="EscortA.com"/></a>
+  <a href="https://opencollective.com/touchless" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/touchless/273bc74/logo/256.png?height=100" height="80" style="vertical-align: middle;" alt="Touchless" title="Touchless"/></a>
+  <br/>
+  <a href="https://www.dropkiq.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/1bertlol/43a8ea8/logo/256.png?height=100" height="80" style="vertical-align: middle;" alt="Dropkiq" title="Dropkiq"/></a>
+  <a href="https://directus.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/15967950?v=4&amp;s=100" height="80" style="vertical-align: middle;" alt="Directus" title="Directus"/></a>
+  <a href="https://www.builder.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F51a002f4a17f4fc4a829b8891a1c25ee" height="80" style="vertical-align: middle;" alt="Builder.io, Mitosis" title="Builder.io, Mitosis"/></a>
+  <a href="https://patternlab.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/4733935?v=4&amp;s=100" height="80" style="vertical-align: middle;" alt="Pattern Lab" title="Pattern Lab"/></a>
+  <a href="https://www.rockrms.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://www.rockrms.com/GetImage.ashx?id=72533" height="80" style="vertical-align: middle;" alt="Rock RMS" title="Rock RMS"/></a>
+  <a href="https://wismolabs.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://cdn-ldlap.nitrocdn.com/DsLJMZpUUekfsitqBnNmsRAnzbwPoIzE/assets/images/optimized/rev-5df8687/wismolabs.com/wp-content/uploads/2023/03/favicon-300x300.png" height="80" style="vertical-align: middle;" alt="WISMOlabs" title="WISMOlabs"/></a>
+  <a href="https://chromewebstore.google.com/detail/freshet/mpclplhdencffbilobpcapccnihpelcg" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://raw.githubusercontent.com/MattAltermatt/freshet/main/public/icon-128.png" height="80" style="vertical-align: middle;" alt="Freshet" title="Freshet"/></a>
+</p>
+<!-- USED-BY-END -->
 
-Feel free to create a PR or contact me to add your use case into this list!
+Products and projects running on LiquidJS. [Open a PR](https://github.com/harttle/liquidjs/edit/master/README.md) to add yours.
 
 ## Financial Support
 
@@ -78,7 +92,7 @@ If you personally love LiquidJS or it's benefiting your business, please conside
   <a href="https://www.opensense.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://images.opencollective.com/opensense-inc/bf840ae/logo/256.png?height=100" height="80" style="vertical-align: middle;" alt="Opensense Inc." title="Opensense"/></a>
   <a href="https://github.com/microsoft" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/6154722?v=4&s=100" height="80" style="vertical-align: middle;" alt="Microsoft" title="Microsoft"/></a>
   <a href="https://sentry.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/1396951?v=4&s=100" height="80" style="vertical-align: middle;" alt="Sentry" title="Sentry"/></a>
-  <a href="https://www.checkoutblocks.com/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/114603307?v=4&s=100" height="80" style="vertical-align: middle;" alt="Checkout Blocks" title="Checkout Blocks"/></a>
+  <a href="https://github.com/Checkout-Blocks" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/114603307?v=4&s=100" height="80" style="vertical-align: middle;" alt="Checkout Blocks" title="Checkout Blocks"/></a>
   <a href="https://customer.io/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/1152079?v=4&s=100" height="80" style="vertical-align: middle;" alt="Customer IO" title="Customer IO"/></a>
   <a href="https://syntax.fm/" style="display: inline-block; vertical-align: middle; margin: 8px;"><img src="https://avatars.githubusercontent.com/u/130389858?v=4&s=100" height="80" style="vertical-align: middle;" alt="Syntax Podcast" title="Syntax Podcast"/></a>
   <br/>
@@ -234,8 +248,10 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-[shopify/liquid]: https://shopify.github.io/liquid/
-[plugins]: https://liquidjs.com/tutorials/plugins.html#Plugin-List
+## License
+
+[MIT](LICENSE) © [Jun Yang](https://github.com/harttle)
+
 [setup]: https://liquidjs.com/tutorials/setup.html
 [doc]: https://liquidjs.com
 [github]: https://github.com/harttle/liquidjs

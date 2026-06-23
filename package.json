@@ -2,7 +2,7 @@
   "name": "liquidjs",
   "version": "10.27.0",
   "sideEffects": false,
-  "description": "A simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.",
+  "description": "A simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.",
   "main": "dist/liquid.node.js",
   "module": "dist/liquid.node.mjs",
   "es2015": "dist/liquid.browser.mjs",
@@ -29,12 +29,15 @@
     "build:min": "BUNDLES=min rollup -c rollup.config.mjs",
     "build:umd": "BUNDLES=umd rollup -c rollup.config.mjs",
     "build:charmap": "./bin/character-gen.js > src/util/character.ts",
-    "build:docs": "run-s build:docs-liquid build:contributors build:apidoc build:changelog build:docs-hexo",
+    "prepare:docs": "run-s build:docs-liquid build:contributors build:apidoc build:changelog",
+    "build:docs": "run-s prepare:docs build:docs-hexo",
     "build:docs-liquid": "cross-env BUNDLES=min rollup -c rollup.config.mjs && shx cp dist/liquid.browser.min.js docs/themes/navy/source/js/",
     "build:contributors": "node bin/build-contributors.js",
     "build:apidoc": "shx rm -rf docs/source/api && typedoc --plugin typedoc-plugin-missing-exports ./src --gitRevision master --out docs/source/api",
     "build:changelog": "node bin/build-changelog.js",
-    "build:docs-hexo": "cd docs && npm ci && npm run build && shx cp CNAME public/"
+    "build:docs-hexo": "cd docs && npm ci && npm run build && shx cp CNAME public/",
+    "serve:docs": "cd docs && npm run start",
+    "dev:docs": "run-s prepare:docs serve:docs"
   },
   "bin": {
     "liquidjs": "./bin/liquid.js",

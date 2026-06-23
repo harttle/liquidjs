@@ -13,10 +13,14 @@ index:
     description: 'Thanks to these wonderful people! See <a href="tutorials/contribution-guidelines.html">contribution guidelines</a> if you&#39;d like to help.'
   sponsors:
     title: Sponsors
-    description: 'If you personally love LiquidJS or it&#39;s benefiting your business, please <a href="https://github.com/sponsors/harttle">sponsor us</a>!'
+    description: 'Organizations and individuals who <a href="https://github.com/sponsors/harttle">sponsor LiquidJS</a>. Thank you!'
+  used_by:
+    title: Used by
+    description: 'Products and projects running on LiquidJS. <a href="https://github.com/harttle/liquidjs/edit/master/README.md">Open a PR</a> to add yours.'
 
 playground:
   title: Playground
+  lead: Edit a template and context JSON — rendered HTML updates as you type.
   loading: Loading...
 
 page:
