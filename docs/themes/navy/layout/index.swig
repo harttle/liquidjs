@@ -14,19 +14,6 @@
     </div>
   </div>
 </div>
-<div id="contributors-wrap">
-  <div class="wrapper">
-    <div class="inner inner-content">
-      <div class="section-header">
-        <h3>{{__('index.contributors.title')}}</h3>
-        <p class="description">{{__('index.contributors.description')}}</p>
-      </div>
-      <div class="contributors">
-        {{ partial('partial/all-contributors') }}
-      </div>
-    </div>
-  </div>
-</div>
 <div id="used-by-wrap">
   <div class="wrapper">
     <div class="inner inner-content">
@@ -49,6 +36,19 @@
       </div>
       <div class="contributors">
         {{ partial('partial/financial-contributors') }}
+      </div>
+    </div>
+  </div>
+</div>
+<div id="contributors-wrap">
+  <div class="wrapper">
+    <div class="inner inner-content">
+      <div class="section-header">
+        <h3>{{__('index.contributors.title')}}</h3>
+        <p class="description">{{__('index.contributors.description')}}</p>
+      </div>
+      <div class="contributors">
+        {{ partial('partial/all-contributors') }}
       </div>
     </div>
   </div>

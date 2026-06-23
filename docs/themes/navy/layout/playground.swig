@@ -12,7 +12,7 @@
       <div class="playground-workspace">
         <div class="playground-pane area-tpl">
           <div class="pane-head">
-            <span class="pane-indicator" aria-hidden="true"></span>
+            <span class="pane-indicator" data-state="idle" aria-hidden="true"></span>
             <h2>Template</h2>
           </div>
           <div class="pane-body">
@@ -21,7 +21,7 @@
         </div>
         <div class="playground-pane area-data">
           <div class="pane-head">
-            <span class="pane-indicator" aria-hidden="true"></span>
+            <span class="pane-indicator" data-state="idle" aria-hidden="true"></span>
             <h2>Context</h2>
           </div>
           <div class="pane-body">
@@ -30,13 +30,11 @@
         </div>
         <div class="playground-pane area-output">
           <div class="pane-head">
-            <span class="pane-indicator" aria-hidden="true"></span>
+            <span class="pane-indicator" data-state="idle" aria-hidden="true"></span>
             <h2>Output</h2>
           </div>
           <div class="pane-body">
-            <div class="output-preview" id="previewEl">
-              <pre class="highlight"><code class="language-markup" id="previewCode">{{__('playground.loading')}}</code></pre>
-            </div>
+            <div class="editor output-editor" id="previewEl"></div>
           </div>
         </div>
       </div>

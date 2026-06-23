@@ -90,21 +90,18 @@
     grid-row: 1
     grid-column: 1
     min-height: 0
-    .pane-indicator
-      background: var(--color-link)
+    --pane-dot: var(--color-link)
   .area-data
     grid-row: 2
     grid-column: 1
     min-height: 0
-    .pane-indicator
-      background: var(--highlight-orange)
+    --pane-dot: var(--highlight-orange)
   .area-output
     grid-column: 2
     grid-row: 1 / -1
     min-height: 0
     min-width: 0
-    .pane-indicator
-      background: var(--highlight-green)
+    --pane-dot: var(--highlight-green)
     @media mq-mobile
       grid-row: auto
       grid-column: 1
@@ -145,6 +142,66 @@
     height: 8px
     border-radius: 50%
     flex-shrink: 0
+    background: unquote('color-mix(in srgb, var(--pane-dot) 38%, var(--color-border))')
+    transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease
+
+    &[data-state="active"]
+      background: var(--pane-dot)
+      animation: playground-dot-typing 0.85s ease-in-out infinite
+
+    &[data-state="pending"]
+      background: var(--highlight-yellow)
+
+    &[data-state="ok"]
+      background: var(--highlight-green)
+      animation: playground-dot-ok 0.45s ease-out
+
+    &[data-state="error"]
+      background: var(--highlight-red)
+      animation: playground-dot-error 0.35s ease-out
+
+  .area-output .pane-indicator
+    &[data-state="pending"]
+      animation: playground-dot-pending 0.55s ease-in-out infinite
+
+  @keyframes playground-dot-typing
+    0%, 100%
+      transform: scale(1)
+      box-shadow: 0 0 0 0 unquote('color-mix(in srgb, var(--pane-dot) 0%, transparent)')
+    50%
+      transform: scale(1.2)
+      box-shadow: 0 0 0 4px unquote('color-mix(in srgb, var(--pane-dot) 28%, transparent)')
+
+  @keyframes playground-dot-pending
+    0%, 100%
+      transform: scale(1)
+      opacity: 0.75
+    50%
+      transform: scale(1.12)
+      opacity: 1
+
+  @keyframes playground-dot-ok
+    0%
+      transform: scale(0.85)
+      box-shadow: 0 0 0 0 unquote('color-mix(in srgb, var(--highlight-green) 50%, transparent)')
+    70%
+      transform: scale(1.15)
+      box-shadow: 0 0 0 5px unquote('color-mix(in srgb, var(--highlight-green) 0%, transparent)')
+    100%
+      transform: scale(1)
+      box-shadow: none
+
+  @keyframes playground-dot-error
+    0%, 100%
+      transform: translateX(0)
+    20%
+      transform: translateX(-2px)
+    40%
+      transform: translateX(2px)
+    60%
+      transform: translateX(-1px)
+    80%
+      transform: translateX(1px)
 
   .pane-body
     flex: 1 1 auto
@@ -156,27 +213,33 @@
     background: var(--highlight-background)
 
   .area-tpl .pane-body,
-  .area-data .pane-body
+  .area-data .pane-body,
+  .area-output .pane-body
     padding: var(--playground-inset)
     box-sizing: border-box
     @media mq-mobile
       padding: 12px
 
   .area-tpl .ace_gutter,
-  .area-data .ace_gutter
-    display: none !important
-    width: 0 !important
-    min-width: 0 !important
+  .area-data .ace_gutter,
+  .area-output .ace_gutter
+    display: none
+    width: 0
+    min-width: 0
 
   .area-tpl .ace_editor,
   .area-data .ace_editor,
+  .area-output .ace_editor,
   .area-tpl .ace_scroller,
   .area-data .ace_scroller,
+  .area-output .ace_scroller,
   .area-tpl .ace_content,
   .area-data .ace_content,
+  .area-output .ace_content,
   .area-tpl .ace_text-layer,
-  .area-data .ace_text-layer
-    background: transparent !important
+  .area-data .ace_text-layer,
+  .area-output .ace_text-layer
+    background: transparent
 
   .editor
     flex: 1 1 auto
@@ -186,45 +249,9 @@
     @media mq-mobile
       min-height: 180px
 
-  .output-preview
-    flex: 1 1 auto
-    min-height: 0
-    min-width: 0
-    width: 100%
-    overflow: auto
+  .output-editor
     @media mq-mobile
       min-height: 120px
-    pre.highlight
-      margin: 0
-      min-height: 100%
-      width: 100%
-      box-sizing: border-box
-      padding: var(--playground-inset)
-      border: none
-      box-shadow: none
-      border-radius: 0
-      background: transparent
-      color: var(--highlight-foreground)
-      overflow-x: hidden
-      overflow-y: auto
-      white-space: pre-wrap
-      overflow-wrap: break-word
-      @media mq-mobile
-        padding: 12px
-      code
-        display: block
-        width: 100%
-        box-sizing: border-box
-        font-family: font-mono
-        font-size: 14px
-        line-height: 1.55
-        color: var(--highlight-foreground)
-        background: transparent
-        padding: 0
-        white-space: inherit
-        overflow-wrap: inherit
-        @media mq-mobile
-          font-size: 13px
 
   .ace_editor
     font-family: font-mono

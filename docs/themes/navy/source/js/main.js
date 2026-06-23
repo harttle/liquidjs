@@ -48,11 +48,15 @@
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
-  const previewCode = document.getElementById('previewCode');
+  const previewEditor = createEditor('previewEl', 'html', { readOnly: true });
+  const indicatorTpl = document.querySelector('.area-tpl .pane-indicator');
+  const indicatorData = document.querySelector('.area-data .pane-indicator');
+  const indicatorOutput = document.querySelector('.area-output .pane-indicator');
 
-  const editors = [editor, dataEditor];
+  const editors = [editor, dataEditor, previewEditor];
   let previewValue = '';
-  let hadPreview = false;
+  let renderTimer = null;
+  const RENDER_DELAY = 180;
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
     if (previewValue) setPreview(previewValue);
@@ -63,9 +67,11 @@
     editor.setValue(init.tpl, 1);
     dataEditor.setValue(init.data, 1);
   }
-  editor.on('change', update);
-  dataEditor.on('change', update);
-  update();
+  editor.on('change', onTemplateChange);
+  dataEditor.on('change', onContextChange);
+  editor.on('focus', function () { setIndicator(indicatorTpl, 'active'); });
+  dataEditor.on('focus', function () { setIndicator(indicatorData, 'active'); });
+  scheduleUpdate();
   ready();
 
   function ready() {
@@ -91,7 +97,8 @@
     editor.container.style.background = 'transparent';
   }
 
-  function createEditor(id, lang) {
+  function createEditor(id, lang, options) {
+    options = options || {};
     const editor = ace.edit(id);
     applyEditorTheme(editor);
     editor.setOptions({
@@ -110,6 +117,10 @@
       editor.renderer.$gutter.style.display = 'none';
     }
     editor.renderer.setScrollMargin(0, 0, 0, 0);
+    if (options.readOnly) {
+      editor.setReadOnly(true);
+      editor.getSession().setUseWrapMode(true);
+    }
     bindClipboard(editor);
     return editor;
   }
@@ -166,23 +177,58 @@
     return utoa(obj.tpl) + ',' + utoa(obj.data);
   }
 
-  function setPreview (value) {
-    previewValue = value
-    previewCode.textContent = value
+  function setPreview(value) {
+    previewValue = value;
+    previewEditor.setValue(value, -1);
+    previewEditor.clearSelection();
+  }
+
+  function setIndicator(indicator, state) {
+    if (indicator) indicator.dataset.state = state;
+  }
+
+  function onTemplateChange() {
+    setIndicator(indicatorTpl, 'active');
+    if (indicatorData.dataset.state !== 'error') setIndicator(indicatorData, 'idle');
+    setIndicator(indicatorOutput, 'pending');
+    scheduleUpdate();
+  }
+
+  function onContextChange() {
+    setIndicator(indicatorData, 'active');
+    if (indicatorTpl.dataset.state !== 'error') setIndicator(indicatorTpl, 'idle');
+    setIndicator(indicatorOutput, 'pending');
+    scheduleUpdate();
+  }
+
+  function scheduleUpdate() {
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(update, RENDER_DELAY);
   }
 
   async function update() {
     const tpl = editor.getValue();
     const data = dataEditor.getValue();
     history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
+    let parsed;
     try {
-      const html = await engine.parseAndRender(tpl, JSON.parse(data));
-      if (html !== '' || !hadPreview) {
-        setPreview(html);
-        if (html !== '') hadPreview = true;
-      }
+      parsed = JSON.parse(data);
     } catch (err) {
-      // keep last successful output while template or context is invalid
+      setIndicator(indicatorData, 'error');
+      setIndicator(indicatorTpl, 'idle');
+      setIndicator(indicatorOutput, 'error');
+      return;
+    }
+    try {
+      const html = await engine.parseAndRender(tpl, parsed);
+      setPreview(html);
+      setIndicator(indicatorTpl, 'idle');
+      setIndicator(indicatorData, 'idle');
+      setIndicator(indicatorOutput, 'ok');
+    } catch (err) {
+      setIndicator(indicatorTpl, 'error');
+      setIndicator(indicatorData, 'idle');
+      setIndicator(indicatorOutput, 'error');
     }
   }
 
