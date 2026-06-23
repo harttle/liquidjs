@@ -3,7 +3,6 @@
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/ace.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/mode-liquid.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/mode-json.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/mode-html.js"></script>
 <script>ace.config.set('basePath', 'https://cdn.jsdelivr.net/npm/ace-builds@1.22.0/src-min/');</script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-markup.min.js"></script>
