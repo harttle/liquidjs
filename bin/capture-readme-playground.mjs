@@ -72,6 +72,7 @@ async function prepareCapture (page, { fullTemplate, fullContext }) {
       #playground .capture-json .json-string { color: #cf222e; }
       #playground .pane-indicator {
         animation: none;
+        transition: none;
         transform: none;
         box-shadow: none;
         opacity: 1;
@@ -122,7 +123,9 @@ async function prepareCapture (page, { fullTemplate, fullContext }) {
 
     function setIndicator (area, state) {
       const el = document.querySelector(area + ' .pane-indicator')
-      if (el) el.dataset.state = state
+      if (!el) return
+      el.getAnimations().forEach((a) => a.cancel())
+      el.dataset.state = state
     }
 
     document.querySelector('#playground .playground-hero')?.remove()
