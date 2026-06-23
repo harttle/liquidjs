@@ -1,7 +1,7 @@
 {
   "short_name": "LiquidJS",
   "name": "LiquidJS",
-  "description": "A simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.",
+  "description": "A simple, expressive, extensible Liquid template engine for JavaScript",
   "icons": [
     {
       "src": "/icon/apple-touch-icon-57x57.png",
