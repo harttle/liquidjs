@@ -14,7 +14,7 @@ A simple, expressive, extensible Liquid template engine for JavaScript — Shopi
   <img src="docs/source/playground-demo.gif" alt="LiquidJS playground: edit a template and context, see live HTML output" width="980" style="display: block; margin: 0 auto;" />
 </a>
 
-<p align="center"><sub>Template, context, and live output in the <a href="https://liquidjs.com/playground.html">playground</a>.</sub></p>
+<p align="center"><sub>Try the <a href="https://liquidjs.com/playground.html">online playground</a>.</sub></p>
 
 ## Quick start
 
