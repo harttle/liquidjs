@@ -1,6 +1,6 @@
 <header id="banner" class="wrapper">
   <div class="inner inner-content">
-    <h2 id="banner-title">{{ page.subtitle }}</h2>
+    <h2 id="banner-title">{{ page.subtitle | default(config.subtitle) }}</h2>
     <div id="banner-share">{{ partial('partial/share') }}</div>
     <div id="banner-start">
       <code id="banner-start-command">npm install liquidjs</code><a id="banner-start-link" href="./tutorials/setup.html"><i class="icon-arrow-right"></i></a>
