@@ -38,8 +38,8 @@
 
 (function() {
   // playground
-  /* global liquidjs, ace */
-  if (!location.pathname.match(/playground.html$/)) return;
+  /* global liquidjs, ace, Prism */
+  if (!/\/playground(?:\.html)?$/.test(location.pathname)) return;
   updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid({
     memoryLimit: 1e5,
@@ -48,14 +48,19 @@
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
-  const preview = createEditor('previewEl', 'html');
-  preview.setReadOnly(true);
-  preview.renderer.setShowGutter(false);
-  preview.renderer.setPadding(16);
+  const previewCode = document.getElementById('previewCode');
+  const indicatorTpl = document.querySelector('.area-tpl .pane-indicator');
+  const indicatorData = document.querySelector('.area-data .pane-indicator');
+  const indicatorOutput = document.querySelector('.area-output .pane-indicator');
 
-  const editors = [editor, dataEditor, preview];
+  const editors = [editor, dataEditor];
+  let previewValue = '';
+  let hadPreview = false;
+  let renderTimer = null;
+  const RENDER_DELAY = 180;
   colorScheme.addEventListener('change', function() {
     editors.forEach(applyEditorTheme);
+    if (previewValue) setPreview(previewValue);
   });
 
   const init = parseArgs(location.hash.slice(1));
@@ -63,9 +68,11 @@
     editor.setValue(init.tpl, 1);
     dataEditor.setValue(init.data, 1);
   }
-  editor.on('change', update);
-  dataEditor.on('change', update);
-  update();
+  editor.on('change', onTemplateChange);
+  dataEditor.on('change', onContextChange);
+  editor.on('focus', function () { setIndicator(indicatorTpl, 'active'); });
+  dataEditor.on('focus', function () { setIndicator(indicatorData, 'active'); });
+  scheduleUpdate();
   ready();
 
   function ready() {
@@ -87,6 +94,8 @@
 
   function applyEditorTheme(editor) {
     editor.setTheme(getEditorTheme());
+    editor.renderer.setPadding(0);
+    editor.container.style.background = 'transparent';
   }
 
   function createEditor(id, lang) {
@@ -96,13 +105,59 @@
       fontFamily: '"Source Code Pro", ui-monospace, Monaco, Menlo, Consolas, monospace',
       fontSize: '14px',
       showPrintMargin: false,
+      showGutter: false,
+      highlightActiveLine: false,
       tabSize: 2,
       useSoftTabs: true,
-      scrollPastEnd: 0.25
+      scrollPastEnd: 0
     });
     editor.getSession().setMode('ace/mode/' + lang);
-    editor.renderer.setScrollMargin(8, 8, 0, 0);
+    editor.renderer.setShowGutter(false);
+    if (editor.renderer.$gutter) {
+      editor.renderer.$gutter.style.display = 'none';
+    }
+    editor.renderer.setScrollMargin(0, 0, 0, 0);
+    bindClipboard(editor);
     return editor;
+  }
+
+  function bindClipboard(editor) {
+    editor.commands.addCommand({
+      name: 'copy',
+      bindKey: {win: 'Ctrl-C', mac: 'Command-C'},
+      exec: function (ed) {
+        const text = ed.getCopyText();
+        if (!text) return;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text);
+        }
+      },
+      readOnly: true
+    });
+    editor.commands.addCommand({
+      name: 'cut',
+      bindKey: {win: 'Ctrl-X', mac: 'Command-X'},
+      exec: function (ed) {
+        const text = ed.getCopyText();
+        if (!text) return;
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(function () {
+            ed.insert('');
+          });
+        }
+      }
+    });
+    editor.commands.addCommand({
+      name: 'paste',
+      bindKey: {win: 'Ctrl-V', mac: 'Command-V'},
+      exec: function (ed) {
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.readText().then(function (text) {
+            ed.insert(text);
+          });
+        }
+      }
+    });
   }
 
   function parseArgs(hash) {
@@ -118,16 +173,64 @@
     return utoa(obj.tpl) + ',' + utoa(obj.data);
   }
 
+  function setPreview(value) {
+    previewValue = value;
+    previewCode.textContent = value;
+    if (window.Prism) {
+      delete previewCode.dataset.highlighted;
+      window.Prism.highlightElement(previewCode);
+    }
+  }
+
+  function setIndicator(indicator, state) {
+    if (indicator) indicator.dataset.state = state;
+  }
+
+  function onTemplateChange() {
+    setIndicator(indicatorTpl, 'active');
+    if (indicatorData.dataset.state !== 'error') setIndicator(indicatorData, 'idle');
+    setIndicator(indicatorOutput, 'pending');
+    scheduleUpdate();
+  }
+
+  function onContextChange() {
+    setIndicator(indicatorData, 'active');
+    if (indicatorTpl.dataset.state !== 'error') setIndicator(indicatorTpl, 'idle');
+    setIndicator(indicatorOutput, 'pending');
+    scheduleUpdate();
+  }
+
+  function scheduleUpdate() {
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(update, RENDER_DELAY);
+  }
+
   async function update() {
     const tpl = editor.getValue();
     const data = dataEditor.getValue();
     history.replaceState({}, '', '#' + serializeArgs({tpl, data}));
+    let parsed;
     try {
-      const html = await engine.parseAndRender(tpl, JSON.parse(data));
-      preview.setValue(html, 1);
+      parsed = JSON.parse(data);
     } catch (err) {
-      preview.setValue(err.stack, 1);
-      throw err;
+      setIndicator(indicatorData, 'error');
+      setIndicator(indicatorTpl, 'idle');
+      setIndicator(indicatorOutput, 'error');
+      return;
+    }
+    try {
+      const html = await engine.parseAndRender(tpl, parsed);
+      if (html !== '' || !hadPreview) {
+        setPreview(html);
+        if (html !== '') hadPreview = true;
+      }
+      setIndicator(indicatorTpl, 'idle');
+      setIndicator(indicatorData, 'idle');
+      setIndicator(indicatorOutput, 'ok');
+    } catch (err) {
+      setIndicator(indicatorTpl, 'error');
+      setIndicator(indicatorData, 'idle');
+      setIndicator(indicatorOutput, 'error');
     }
   }
 

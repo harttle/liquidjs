@@ -1,6 +1,6 @@
 # LiquidJS
 
-> A simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.
+> A simple, expressive, extensible Liquid template engine for JavaScript
 
 ## Tutorials
 
