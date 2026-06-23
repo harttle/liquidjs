@@ -38,7 +38,7 @@
 
 (function() {
   // playground
-  /* global liquidjs, ace */
+  /* global liquidjs, ace, Prism */
   if (!/\/playground(?:\.html)?$/.test(location.pathname)) return;
   updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid({
@@ -48,13 +48,14 @@
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');
   const dataEditor = createEditor('dataEl', 'json');
-  const previewEditor = createEditor('previewEl', 'html', { readOnly: true });
+  const previewCode = document.getElementById('previewCode');
   const indicatorTpl = document.querySelector('.area-tpl .pane-indicator');
   const indicatorData = document.querySelector('.area-data .pane-indicator');
   const indicatorOutput = document.querySelector('.area-output .pane-indicator');
 
-  const editors = [editor, dataEditor, previewEditor];
+  const editors = [editor, dataEditor];
   let previewValue = '';
+  let hadPreview = false;
   let renderTimer = null;
   const RENDER_DELAY = 180;
   colorScheme.addEventListener('change', function() {
@@ -97,8 +98,7 @@
     editor.container.style.background = 'transparent';
   }
 
-  function createEditor(id, lang, options) {
-    options = options || {};
+  function createEditor(id, lang) {
     const editor = ace.edit(id);
     applyEditorTheme(editor);
     editor.setOptions({
@@ -117,10 +117,6 @@
       editor.renderer.$gutter.style.display = 'none';
     }
     editor.renderer.setScrollMargin(0, 0, 0, 0);
-    if (options.readOnly) {
-      editor.setReadOnly(true);
-      editor.getSession().setUseWrapMode(true);
-    }
     bindClipboard(editor);
     return editor;
   }
@@ -179,8 +175,11 @@
 
   function setPreview(value) {
     previewValue = value;
-    previewEditor.setValue(value, -1);
-    previewEditor.clearSelection();
+    previewCode.textContent = value;
+    if (window.Prism) {
+      delete previewCode.dataset.highlighted;
+      window.Prism.highlightElement(previewCode);
+    }
   }
 
   function setIndicator(indicator, state) {
@@ -221,7 +220,10 @@
     }
     try {
       const html = await engine.parseAndRender(tpl, parsed);
-      setPreview(html);
+      if (html !== '' || !hadPreview) {
+        setPreview(html);
+        if (html !== '') hadPreview = true;
+      }
       setIndicator(indicatorTpl, 'idle');
       setIndicator(indicatorData, 'idle');
       setIndicator(indicatorOutput, 'ok');

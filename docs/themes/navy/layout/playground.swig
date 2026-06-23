@@ -34,7 +34,9 @@
             <h2>Output</h2>
           </div>
           <div class="pane-body">
-            <div class="editor output-editor" id="previewEl"></div>
+            <div class="output-preview" id="previewEl">
+              <pre class="highlight"><code class="language-markup" id="previewCode">{{__('playground.loading')}}</code></pre>
+            </div>
           </div>
         </div>
       </div>
