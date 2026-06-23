@@ -3,7 +3,7 @@ title: The Liquid Template Language
 describe: A short introduction to the Liquid template language and some simple demos.
 ---
 
-LiquidJS is a simple, expressive and safe [Shopify][shopify/liquid] / GitHub Pages compatible template engine in pure JavaScript. The purpose of this repo is to provide a standard Liquid implementation for the JavaScript community. Liquid is originally implemented in Ruby and used by GitHub Pages, Jekyll and Shopify, see [Differences with Shopify/liquid][diff].
+LiquidJS is a simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support. The purpose of this repo is to provide a standard Liquid implementation for the JavaScript community. Liquid is originally implemented in Ruby and used by GitHub Pages, Jekyll and Shopify, see [Differences with Shopify/liquid][diff].
 
 LiquidJS syntax is relatively simple. There are 2 types of markups in LiquidJS:
 

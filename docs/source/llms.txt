@@ -1,6 +1,6 @@
 # LiquidJS
 
-> A simple, expressive and safe Shopify / Github Pages compatible template engine in pure JavaScript.
+> A simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support.
 
 ## Tutorials
 

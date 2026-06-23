@@ -1,6 +1,6 @@
 # LiquidJS
 
-Shopify / GitHub Pages compatible Liquid template engine. TypeScript in `src/`, bundles in `dist/`. Docs site in `docs/` (Hexo, `navy` theme).
+A simple, expressive, extensible Liquid template engine for JavaScript — Shopify, Jekyll and GitHub Pages compatible, for Node.js, browsers, and the CLI, with TypeScript support. TypeScript in `src/`, bundles in `dist/`. Docs site in `docs/` (Hexo, `navy` theme).
 
 ## Layout
 
