@@ -8,7 +8,7 @@ export const divided_by = argumentsToNumber((dividend: number, divisor: number, 
 export const floor = argumentsToNumber(Math.floor)
 export const minus = argumentsToNumber((v: number, arg: number) => v - arg)
 export const plus = argumentsToNumber((lhs: number, rhs: number) => lhs + rhs)
-export const modulo = argumentsToNumber((v: number, arg: number) => v % arg)
+export const modulo = argumentsToNumber((v: number, arg: number) => ((v % arg) + arg) % arg)
 export const times = argumentsToNumber((v: number, arg: number) => v * arg)
 
 export function round (v: number, arg = 0) {

@@ -50,6 +50,9 @@ describe('filters/math', function () {
       expect(Number(html)).toBeCloseTo(3.357, 3)
     })
     it('should convert string', () => test('{{ "24" | modulo: "7" }}', '3'))
+    it('should follow divisor sign for negative dividend', () => test('{{ -7 | modulo: 3 }}', '2'))
+    it('should follow divisor sign for negative divisor', () => test('{{ 7 | modulo: -3 }}', '-2'))
+    it('should follow divisor sign for negative float', () => test('{{ -4.5 | modulo: 3 }}', '1.5'))
   })
   describe('plus', function () {
     it('should return "6" for 4,2', () => test('{{ 4 | plus: 2 }}', '6'))
