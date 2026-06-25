@@ -240,6 +240,9 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/talboren"><img src="https://avatars.githubusercontent.com/u/68807791?v=4?s=100" width="100px;" alt="Tal"/><br /><sub><b>Tal</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=talboren" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://filonov.dev"><img src="https://avatars.githubusercontent.com/u/813224?v=4?s=100" width="100px;" alt="Vladimir Filonov"/><br /><sub><b>Vladimir Filonov</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=VladimirFilonov" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/spokodev"><img src="https://avatars.githubusercontent.com/u/239690017?v=4?s=100" width="100px;" alt="spokodev"/><br /><sub><b>spokodev</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=spokodev" title="Code">💻</a></td>
+    </tr>
   </tbody>
 </table>
 
