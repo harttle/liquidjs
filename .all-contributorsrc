@@ -838,6 +838,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "spokodev",
+      "name": "spokodev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/239690017?v=4",
+      "profile": "https://github.com/spokodev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
