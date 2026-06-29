@@ -33,6 +33,10 @@ export class Tokenizer {
   }
 
   * readExpressionTokens (): IterableIterator<Token> {
+    yield * this.readExpressionTokensFromHere()
+  }
+
+  * readExpressionTokensFromHere (): IterableIterator<Token> {
     while (this.p < this.N) {
       const operator = this.readOperator()
       if (operator) {
@@ -46,6 +50,11 @@ export class Tokenizer {
       }
       return
     }
+  }
+
+  * readGroupedExpressionTokens (lhs: Token): IterableIterator<Token> {
+    yield lhs
+    yield * this.readExpressionTokensFromHere()
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
@@ -398,7 +407,6 @@ export class Tokenizer {
     const begin = this.p
     if (this.peek() !== '(') return
     ++this.p
-    const innerStart = this.p
     const lhs = this.readValueOrThrow()
     this.skipBlank()
 
@@ -411,18 +419,12 @@ export class Tokenizer {
     }
 
     if (this.groupedExpressions) {
-      if (this.peek() === '|') {
-        const expression = new Expression((function * () { yield lhs })())
-        const filters = this.readFilters()
-        this.skipBlank()
-        this.assert(this.read() === ')', 'unbalanced parentheses')
-        return new FilteredValueToken(expression, filters, this.input, begin, this.p, this.file)
-      }
-      this.p = innerStart
-      const filtered = this.readFilteredValue()
+      const initial = new Expression(this.readGroupedExpressionTokens(lhs))
+      this.assert(initial.valid(), () => `invalid value expression: ${this.snapshot()}`)
+      const filters = this.readFilters()
       this.skipBlank()
       this.assert(this.read() === ')', 'unbalanced parentheses')
-      return new FilteredValueToken(filtered.initial, filtered.filters, this.input, begin, this.p, this.file)
+      return new FilteredValueToken(initial, filters, this.input, begin, this.p, this.file)
     }
 
     throw this.error('invalid range syntax')
