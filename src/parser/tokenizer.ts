@@ -398,6 +398,7 @@ export class Tokenizer {
     const begin = this.p
     if (this.peek() !== '(') return
     ++this.p
+    const innerStart = this.p
     const lhs = this.readValueOrThrow()
     this.skipBlank()
 
@@ -410,11 +411,18 @@ export class Tokenizer {
     }
 
     if (this.groupedExpressions) {
-      const expression = new Expression((function * () { yield lhs })())
-      const filters = this.readFilters()
+      if (this.peek() === '|') {
+        const expression = new Expression((function * () { yield lhs })())
+        const filters = this.readFilters()
+        this.skipBlank()
+        this.assert(this.read() === ')', 'unbalanced parentheses')
+        return new FilteredValueToken(expression, filters, this.input, begin, this.p, this.file)
+      }
+      this.p = innerStart
+      const filtered = this.readFilteredValue()
       this.skipBlank()
       this.assert(this.read() === ')', 'unbalanced parentheses')
-      return new FilteredValueToken(expression, filters, this.input, begin, this.p, this.file)
+      return new FilteredValueToken(filtered.initial, filtered.filters, this.input, begin, this.p, this.file)
     }
 
     throw this.error('invalid range syntax')

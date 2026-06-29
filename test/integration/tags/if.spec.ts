@@ -204,6 +204,11 @@ describe('tags/if', function () {
         const html = await ge.parseAndRender(src, { name: 'Alice' })
         return expect(html).toBe('long')
       })
+      it('should support real parenthesis grouping with comparisons and and', async function () {
+        const src = '{% if (((name | downcase | size) > 3) and (one < three)) %}long{% else %}short{% endif %}'
+        const html = await ge.parseAndRender(src, { name: 'Alice', one: 1, three: 3 })
+        return expect(html).toBe('long')
+      })
       it('should support nested parenthesized expressions in if condition', async function () {
         const src = '{% if ((foo | append: "!") | upcase) == "BAR!" %}match{% else %}no match{% endif %}'
         const html = await ge.parseAndRender(src, { foo: 'bar' })
