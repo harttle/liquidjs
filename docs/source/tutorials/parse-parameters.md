@@ -4,7 +4,7 @@ title: Parse Parameters
 
 ## Access Raw Parameters
 
-As covered in [Register Filters/Tags][register-tags], tag parameters is available on `tagToken.args` as a raw string. For example:
+As covered in [Register Filters/Tags][register-tags], tag parameters are available on `tagToken.args` as a raw string. For example:
 
 ```javascript
 // Usage: {% random foo bar coo %}
@@ -66,7 +66,7 @@ Async calls in LiquidJS are implemented by generators directly, for we can call 
 
 ## Parse Key-Value Pairs as Named Parameters
 
-Named parameters become very handy when there're optional parameters or lots of parameters, in which case the order of parameters is not important. This is exactly what [Hash][Hash] class is invented for.
+Named parameters become very handy when there are optional parameters or lots of parameters, in which case the order of parameters is not important. This is exactly what the [Hash][Hash] class was invented for.
 
 ```liquid
 {% random from:2, to:max %}

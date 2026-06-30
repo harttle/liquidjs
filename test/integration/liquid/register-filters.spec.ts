@@ -60,4 +60,10 @@ describe('liquid#registerFilter()', function () {
       return expect(html).toBe(dst)
     })
   })
+
+  it('should not treat Object.prototype names as registered filters', async () => {
+    expect(Object.getPrototypeOf(liquid.filters)).toBeNull()
+    await expect(liquid.parseAndRender('{{ x | constructor }}', { x: 42 })).resolves.toBe('42')
+    await expect(new Liquid({ strictFilters: true }).parseAndRender('{{ 1 | constructor }}')).rejects.toThrow('undefined filter')
+  })
 })

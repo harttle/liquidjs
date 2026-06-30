@@ -1,6 +1,6 @@
 import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
-import { TrieNode, LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
+import { LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
 import { Operators, Expression } from '../render'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { FilterArg } from './filter-arg'
@@ -63,11 +63,11 @@ export class Tokenizer {
     return new OperatorToken(this.input, this.p, (this.p = end), this.file)
   }
   matchTrie<T> (trie: Trie<T>) {
-    let node: TrieNode<T> = trie
+    let node: Trie<T> = trie
     let i = this.p
-    let info
-    while (node[this.input[i]] && i < this.N) {
-      node = node[this.input[i++]]
+    let info: Trie<T> | undefined
+    while ((node as Trie<T>)[this.input[i]] && i < this.N) {
+      node = (node as Trie<T>)[this.input[i++]] as Trie<T>
       if (node['end']) info = node
     }
     if (!info) return -1

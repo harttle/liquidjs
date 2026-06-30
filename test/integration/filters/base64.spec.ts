@@ -1,4 +1,4 @@
-import { test } from '../../stub/render'
+import { test, liquid } from '../../stub/render'
 
 describe('filters/base64', function () {
   describe('base64_encode', function () {
@@ -62,6 +62,33 @@ describe('filters/base64', function () {
 
     it('should handle boolean input', () => {
       return test('{{ "dHJ1ZQ==" | base64_decode }}', 'true')
+    })
+  })
+
+  describe('base64_encode with Buffer input', function () {
+    it('should encode a Buffer to base64 without data corruption', async () => {
+      const buf = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0xff, 0xfe])
+      const result = await liquid.parseAndRender('{{ data | base64_encode }}', { data: buf })
+      expect(result).toBe(buf.toString('base64'))
+    })
+
+    it('should preserve bytes that are invalid UTF-8', async () => {
+      const buf = Buffer.from([0x80, 0xff, 0xfe, 0x00, 0x01])
+      const result = await liquid.parseAndRender('{{ data | base64_encode }}', { data: buf })
+      const decoded = Buffer.from(result, 'base64')
+      expect(decoded).toEqual(buf)
+    })
+
+    it('should handle an empty Buffer', async () => {
+      const buf = Buffer.alloc(0)
+      const result = await liquid.parseAndRender('{{ data | base64_encode }}', { data: buf })
+      expect(result).toBe('')
+    })
+
+    it('should handle a Buffer containing valid UTF-8 text', async () => {
+      const buf = Buffer.from('Hello World', 'utf8')
+      const result = await liquid.parseAndRender('{{ data | base64_encode }}', { data: buf })
+      expect(result).toBe(Buffer.from('Hello World').toString('base64'))
     })
   })
 

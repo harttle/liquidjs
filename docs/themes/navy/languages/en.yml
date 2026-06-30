@@ -10,13 +10,17 @@ index:
   get_started: Get Started
   contributors:
     title: Contributors
-    description: 'LiquidJS follows the <a href="https://github.com/all-contributors/all-contributors">all-contributors</a> specification, see <a href="tutorials/contribution-guidelines.html">guidelines here</a>! Thanks goes to these wonderful people:'
+    description: 'Thanks to these wonderful people! See <a href="tutorials/contribution-guidelines.html">contribution guidelines</a> if you&#39;d like to help.'
   sponsors:
     title: Sponsors
-    description: 'If you personally love LiquidJS or it&#39;s benefiting your business, please <a href="https://github.com/sponsors/harttle">sponsor us</a>!'
+    description: 'Organizations and individuals who <a href="https://github.com/sponsors/harttle">sponsor LiquidJS</a>. Thank you!'
+  used_by:
+    title: Used by
+    description: 'Products and projects running on LiquidJS. <a href="https://github.com/harttle/liquidjs/edit/master/README.md">Open a PR</a> to add yours.'
 
 playground:
   title: Playground
+  lead: Edit a template and context JSON — rendered HTML updates as you type.
   loading: Loading...
 
 page:
@@ -51,7 +55,7 @@ sidebar:
     plugins: Plugins
     operators: Operators
     truth: Truthy and Falsy
-    dos: DoS
+    security_model: Security Model
     static_analysis: Static Analysis
 
     miscellaneous: Miscellaneous

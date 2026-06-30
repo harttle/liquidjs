@@ -8,14 +8,13 @@ export const divided_by = argumentsToNumber((dividend: number, divisor: number, 
 export const floor = argumentsToNumber(Math.floor)
 export const minus = argumentsToNumber((v: number, arg: number) => v - arg)
 export const plus = argumentsToNumber((lhs: number, rhs: number) => lhs + rhs)
-export const modulo = argumentsToNumber((v: number, arg: number) => v % arg)
+export const modulo = argumentsToNumber((v: number, arg: number) => ((v % arg) + arg) % arg)
 export const times = argumentsToNumber((v: number, arg: number) => v * arg)
 
 export function round (v: number, arg = 0) {
   v = toNumber(v)
   arg = toNumber(arg)
   const amp = Math.pow(10, arg)
-  const scaled = v * amp
-  // Round half away from zero
-  return Math.sign(v) * Math.round(Math.abs(scaled)) / amp
+  const scaled = (v * amp) * (1 + Number.EPSILON)
+  return Math.round(scaled) / amp
 }

@@ -50,6 +50,9 @@ describe('filters/math', function () {
       expect(Number(html)).toBeCloseTo(3.357, 3)
     })
     it('should convert string', () => test('{{ "24" | modulo: "7" }}', '3'))
+    it('should follow divisor sign for negative dividend', () => test('{{ -7 | modulo: 3 }}', '2'))
+    it('should follow divisor sign for negative divisor', () => test('{{ 7 | modulo: -3 }}', '-2'))
+    it('should follow divisor sign for negative float', () => test('{{ -4.5 | modulo: 3 }}', '1.5'))
   })
   describe('plus', function () {
     it('should return "6" for 4,2', () => test('{{ 4 | plus: 2 }}', '6'))
@@ -70,6 +73,10 @@ describe('filters/math', function () {
     it('should return "183.36" for 183.357,2',
       () => test('{{183.357|round: 2}}', '183.36'))
     it('should convert string to number', () => test('{{"2.7"|round}}', '3'))
+    it('odd number 1.005 should round correctly', () => test('{{1.005|round:2}}', '1.01'))
+    it('odd number -1.005 should round correctly', () => test('{{num|round:2}}', { num: -1.005 }, '-1.01'))
+    it('odd number 9.075 should round correctly', () => test('{{9.075|round:2}}', '9.08'))
+    it('odd number -9.075 should round correctly', () => test('{{num|round:2}}', { num: -9.075 }, '-9.08'))
   })
   describe('times', function () {
     it('should return "6" for 3,2', () => test('{{ 3 | times: 2 }}', '6'))

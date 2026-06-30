@@ -2,7 +2,7 @@ import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { Scope } from './scope'
+import { createScope, Scope } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
 
 type PropertyKey = string | number;
@@ -12,8 +12,8 @@ export class Context {
    * insert a Context-level empty scope,
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
-  private scopes: Scope[] = [{}]
-  private registers = {}
+  private scopes: Scope[] = [createScope()]
+  private registers: Record<string, any> = {}
   /**
    * user passed in scope
    * `{% increment %}`, `{% decrement %}` changes this scope,
@@ -53,8 +53,8 @@ export class Context {
     this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
     this.liquid = liquid
   }
-  public getRegister (key: string) {
-    return (this.registers[key] = this.registers[key] || {})
+  public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
+    return (this.registers[key] = this.registers[key] || defaultValue)
   }
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)
@@ -111,7 +111,8 @@ export class Context {
     return new Context(scope, this.opts, {
       sync: this.sync,
       globals: this.globals,
-      strictVariables: this.strictVariables
+      strictVariables: this.strictVariables,
+      ownPropertyOnly: this.ownPropertyOnly
     }, {
       renderLimit: this.renderLimit,
       memoryLimit: this.memoryLimit,

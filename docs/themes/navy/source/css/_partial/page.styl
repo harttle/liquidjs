@@ -1,6 +1,6 @@
-note-tip = #0fff00
-note-info = hsl(200, 100%, 50%)
-note-warn = hsl(0, 100%, 50%)
+note-tip = #3fb950
+note-info = #58a6ff
+note-warn = #f85149
 
 #content
   position: relative
@@ -26,7 +26,7 @@ note-warn = hsl(0, 100%, 50%)
   #article-toc
     display: none
     width: sidebar-width
-    opacity: 0.8
+    opacity: 0.9
     @media mq-normal
       display: block
 
@@ -86,7 +86,7 @@ note-warn = hsl(0, 100%, 50%)
 .article-edit-link
   float: right
   text-decoration: none;
-  color: #bbb
+  color: var(--color-gray)
   font-size: 24px
   line-height: 36px
   transition: 0.2s
@@ -111,21 +111,31 @@ note-warn = hsl(0, 100%, 50%)
   color: var(--color-default)
   @media print
     font-size: 12pt
-  p, ol, ul, dl, table, blockquote, iframe, .highlight
+  p, ol, ul, dl, table, blockquote, iframe, pre, .highlight
     margin: 1em 0
+  pre + pre,
+  .highlight + .highlight,
+  pre + .highlight,
+  .highlight + pre
+    margin-top: 1em
   h1
     font-size: 2em
   h2
     font-size: 1.5em
-    border-bottom: 1px solid var(--color-border)
+    border-bottom: 1px solid var(--heading-border)
     padding-bottom: 10px
-    margin-bottom: 15px
+    margin-bottom: 0.75em
   h3
     font-size: 1.3em
   h1, h2, h3, h4, h5, h6
     line-height: 1em
     font-weight: bold
-    margin: 1em 0
+    margin-top: 1.75em
+    margin-bottom: 0.625em
+  blockquote + h1, blockquote + h2, blockquote + h3, blockquote + h4,
+  .highlight + h1, .highlight + h2, .highlight + h3, .highlight + h4,
+  pre + h1, pre + h2, pre + h3, pre + h4
+    margin-top: 2.25em
   hr
     border-bottom: none;
     border-top: 1px dashed var(--color-border);
@@ -138,6 +148,9 @@ note-warn = hsl(0, 100%, 50%)
         padding-left: 3px;
         vertical-align: super;
         zoom: .7
+  :not(pre) > code
+    background: var(--inline-code-bg)
+    color: var(--inline-code-color)
   strong
     font-weight: bold
   em
@@ -156,7 +169,7 @@ note-warn = hsl(0, 100%, 50%)
   li
     p
       margin: 0
-    table, blockquote, iframe, .highlight
+    table, blockquote, iframe, pre, .highlight
       margin: 1em 0
   img, video
     max-width: 100%
@@ -165,8 +178,11 @@ note-warn = hsl(0, 100%, 50%)
   blockquote
     padding: 0 20px
     position: relative
+    background: var(--blockquote-bg)
     border: 1px solid var(--color-border)
-    border-left: 5px solid #ddd
+    border-left: 4px solid #ddd
+    border-radius: 6px
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06)
     footer
       margin: 1em 0
       font-style: italic
@@ -176,15 +192,16 @@ note-warn = hsl(0, 100%, 50%)
           padding: 0 0.3em
         a
           color: color-grey
-    @media (prefers-color-scheme: dark)
-      border-color: var(--color-gray)
   .note
     &.tip
       border-left-color: note-tip
+      background: var(--note-tip-bg)
     &.info
       border-left-color: note-info
+      background: var(--note-info-bg)
     &.warn
       border-left-color: note-warn
+      background: var(--note-warn-bg)
   .since
     margin-top: 0;
     font-style: italic;
@@ -206,9 +223,7 @@ note-warn = hsl(0, 100%, 50%)
       padding: 5px 15px
     tr
       &:nth-child(2n)
-        background: #eee
-        @media (prefers-color-scheme: dark)
-          background: var(--color-gray)
+        background: var(--table-stripe-bg)
 
 .article-footer
   margin: 60px 0 0
@@ -246,6 +261,3 @@ $article-footer-link
 
 .article-footer-updated
   font-size: 0.9em
-
-[lang="zh-cn"] .since::before
-  content: "支持版本："

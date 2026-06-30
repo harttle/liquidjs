@@ -613,6 +613,14 @@ describe('Tokenizer', function () {
       expect(new Tokenizer('contains b').matchTrie(opTrie)).toBe(8)
     })
   })
+  describe('#createTrie()', function () {
+    it('should return the same trie for the same input', () => {
+      expect(createTrie(defaultOperators)).toBe(createTrie(defaultOperators))
+    })
+    it('should return distinct tries for distinct inputs', () => {
+      expect(createTrie({ foo: 1 })).not.toBe(createTrie({ foo: 1 }))
+    })
+  })
   describe('#readLiquidTagTokens', () => {
     it('should read newline terminated tokens', () => {
       const tokenizer = new Tokenizer('echo \'hello\'')

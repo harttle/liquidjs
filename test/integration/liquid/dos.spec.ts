@@ -48,6 +48,16 @@ describe('DoS related', function () {
       await expect(liquid.parseAndRender('{% render "large" %}')).rejects.toThrow('template render limit exceeded')
       await expect(liquid.parseAndRender('{% render "small" %}')).resolves.toBe('12345')
     })
+    it('should enforce renderLimit when for body has no template nodes', () => {
+      const liquid = new Liquid({ memoryLimit: 1e9, renderLimit: 1 })
+      expect(() => liquid.parseAndRenderSync('{%- for i in (1..5000000) -%}{%- endfor -%}', {}))
+        .toThrow('template render limit exceeded')
+    })
+    it('should enforce renderLimit when tablerow body has no template nodes', () => {
+      const liquid = new Liquid({ memoryLimit: 1e9, renderLimit: 1 })
+      expect(() => liquid.parseAndRenderSync('{%- tablerow i in (1..1000000) cols:1 -%}{%- endtablerow -%}', {}))
+        .toThrow('template render limit exceeded')
+    })
   })
   describe('#memoryLimit', () => {
     it('should throw for too many array creation in filters', async () => {
@@ -69,5 +79,40 @@ describe('DoS related', function () {
       await expect(liquid.parseAndRender(src, { array, count: 3 })).resolves.toBe('a a a a a a a a')
       await expect(liquid.parseAndRender(src, { array, count: 100 })).rejects.toThrow('memory alloc limit exceeded, line:1, col:26')
     })
+    it('should charge pop allocation to memoryLimit', async () => {
+      const array = Array(1e3).fill(0)
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ array | pop | size }}', { array })).rejects.toThrow('memory alloc limit exceeded')
+    })
+    it('should charge sample allocation to memoryLimit', async () => {
+      const array = Array(1e3).fill(0)
+      const liquid = new Liquid({ memoryLimit: 100 })
+      await expect(liquid.parseAndRender('{{ array | sample: 1 | size }}', { array })).rejects.toThrow('memory alloc limit exceeded')
+    })
+    it('should charge strip_html input length to memoryLimit', () => {
+      const liquid = new Liquid({ memoryLimit: 100 })
+      expect(() => liquid.parseAndRenderSync('{{ s | strip_html }}', { s: 'a'.repeat(200) }))
+        .toThrow('memory alloc limit exceeded')
+    })
+  })
+  describe('strip_html ReDoS', () => {
+    // Regression for O(n^2) backtracking on unclosed `<script` / `<style` openers.
+    // The previous regex stalled the event loop for ~10s on 350KB of `'<script'.repeat`.
+    // The per-test timeout below caps total time; an O(n^2) regression would blow it.
+    it('should handle many unclosed <script openers in linear time', () => {
+      const liquid = new Liquid()
+      const payload = '<script'.repeat(50000)
+      expect(liquid.parseAndRenderSync('{{ x | strip_html }}', { x: payload })).toBe(payload)
+    }, 1000)
+    it('should handle many unclosed <style openers in linear time', () => {
+      const liquid = new Liquid()
+      const payload = '<style'.repeat(50000)
+      expect(liquid.parseAndRenderSync('{{ x | strip_html }}', { x: payload })).toBe(payload)
+    }, 1000)
+    it('should handle <script openers that have > but no </script> in linear time', () => {
+      const liquid = new Liquid()
+      const payload = '<script>foo'.repeat(50000)
+      expect(liquid.parseAndRenderSync('{{ x | strip_html }}', { x: payload })).toBe('foo'.repeat(50000))
+    }, 1000)
   })
 })

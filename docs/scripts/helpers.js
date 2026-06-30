@@ -2,6 +2,8 @@
 
 'use strict'
 
+require('./prism-bash-extend')
+
 const { resolve, basename } = require('path')
 const { readFileSync } = require('fs')
 const cheerio = require('cheerio')

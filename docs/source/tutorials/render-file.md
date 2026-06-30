@@ -38,7 +38,7 @@ name: alice
 
 ## Template Lookup
 
-Template files names passed to [renderFile][renderFile], [parseFile][parseFile], [renderFileSync][renderFileSync], [parseFileSync][parseFileSync] APIs,
+Template file names passed to [renderFile][renderFile], [parseFile][parseFile], [renderFileSync][renderFileSync], [parseFileSync][parseFileSync] APIs,
 and [include][include], [layout][layout] tags are resolved against [the root option][root].
 
 It can be a string-typed path (see above example), or a list of root directories, in which case templates will be looked up in that order. e.g.
@@ -96,7 +96,7 @@ var engine = new Liquid({
 
 ## In-memory Template
 
-To facilitate rendering w/o files, there's a `templates` option to specify a mapping of filenames and their content. LiquidJS will read templates from the mapping.
+To facilitate rendering without files, there's a `templates` option to specify a mapping of filenames and their content. LiquidJS will read templates from the mapping.
 
 ```typescript
 const engine = new Liquid({

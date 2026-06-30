@@ -88,8 +88,10 @@ export function unshift<T> (this: FilterImpl, v: T[], arg: T): T[] {
   return clone
 }
 
-export function pop<T> (v: T[]): T[] {
-  const clone = [...toArray(v)]
+export function pop<T> (this: FilterImpl, v: T[]): T[] {
+  const array = toArray(v)
+  this.context.memoryLimit.use(array.length)
+  const clone = [...array]
   clone.pop()
   return clone
 }
@@ -252,7 +254,7 @@ export function sample<T> (this: FilterImpl, v: T[] | string, count = 1): T | st
   v = toValue(v)
   if (isNil(v)) return []
   if (!isArray(v)) v = stringify(v)
-  this.context.memoryLimit.use(count)
+  this.context.memoryLimit.use(v.length)
   const shuffled = [...v].sort(() => Math.random() - 0.5)
   if (count === 1) return shuffled[0]
   return shuffled.slice(0, count)

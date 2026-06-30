@@ -15,8 +15,8 @@ export class Liquid {
    * @deprecated will be removed. In tags use `this.parser` instead
    */
   public readonly parser: Parser
-  public readonly filters: Record<string, FilterImplOptions> = {}
-  public readonly tags: Record<string, TagClass> = {}
+  public readonly filters: Record<string, FilterImplOptions> = Object.create(null)
+  public readonly tags: Record<string, TagClass> = Object.create(null)
 
   public constructor (opts: LiquidOptions = {}) {
     this.options = normalize(opts)

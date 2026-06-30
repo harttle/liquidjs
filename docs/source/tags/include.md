@@ -1,5 +1,5 @@
 ---
-title: Include
+title: include
 ---
 
 {% since %}v1.9.1{% endsince %}
@@ -22,11 +22,11 @@ If [extname][extname] option is set, the above `.liquid` extension becomes optio
 {% include 'footer' %}
 ```
 
-When a partial template is rendered by `include`, the code inside it can access its parent's variables but its parent cannot access variables defined inside a included template.
+When a partial template is rendered by `include`, the code inside it can access its parent's variables but its parent cannot access variables defined inside an included template.
 
 ## Passing Variables
 
-Variables defined in parent's scope can be passed to a the partial template by listing them as parameters on the `include` tag:
+Variables defined in the parent's scope can be passed to the partial template by listing them as parameters on the `include` tag:
 
 ```liquid
 {% assign my_variable = 'apples' %}
@@ -70,11 +70,11 @@ This way, you don't need to escape `"` in the filename expression.
 {% include prefix/{{name | append: ".html"}} %}
 ```
 
-## Jekyll include
+## Jekyll `include`
 
 {% since %}v9.33.0{% endsince %}
 
-[jekyllInclude][jekyllInclude] is used to enable Jekyll-like include syntax. Defaults to `false`, when set to `true`:
+[jekyllInclude][jekyllInclude] is used to enable Jekyll-like `include` syntax. Defaults to `false`, when set to `true`:
 
 - Filename will be static: `dynamicPartials` now defaults to `false` (instead of `true`). And you can set `dynamicPartials` back to `true`.
 - Use `=` instead of `:` to separate parameter key-values.
@@ -86,7 +86,7 @@ For example, the following template:
 {% include article.html header="HEADER" content="CONTENT" %}
 ```
 
-`article.html` with following content:
+`article.html` with the following content:
 
 ```liquid
 <article>
@@ -95,7 +95,7 @@ For example, the following template:
 </article>
 ```
 
-Note that we're referencing the first parameter by `include.header` instead of `header`. Will output following:
+Note that we're referencing the first parameter by `include.header` instead of `header`. It will output the following:
 
 ```html
 <article>

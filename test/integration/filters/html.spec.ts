@@ -57,6 +57,9 @@ describe('filters/html', function () {
     it('should strip multiline comments', function () {
       expect(liquid.parseAndRenderSync('{{"<!--foo\r\nbar \ncoo\t  \r\n  -->"|strip_html}}')).toBe('')
     })
+    it('should treat > inside comments as comment content (not a tag end)', function () {
+      expect(liquid.parseAndRenderSync('{{ "<!-- a > b -->after" | strip_html }}')).toBe('after')
+    })
     it('should strip all style tags and their contents', function () {
       return test('{{ "<style>cite { font-style: italic; }</style><cite>Ulysses<cite>?" | strip_html }}',
         'Ulysses?')
@@ -76,6 +79,15 @@ describe('filters/html', function () {
     })
     it('should strip until empty', function () {
       return test('{{"<br/><br />< p ></p></ p >" | strip_html }}', '')
+    })
+    it('should strip generic tags spanning ASCII newlines inside the tag', function () {
+      expect(liquid.parseAndRenderSync('{{"<img\nsrc=x\nonerror=alert(1)>" | strip_html}}')).toBe('')
+      expect(liquid.parseAndRenderSync('{{"<img\rsrc=x\ronerror=alert(1)>" | strip_html}}')).toBe('')
+      expect(liquid.parseAndRenderSync('{{"<svg\nonload=alert(1)>" | strip_html}}')).toBe('')
+    })
+    it('should not loop on unclosed openers (GHSA-m7fp-h3p4-hr49)', function () {
+      expect(liquid.parseAndRenderSync('{{ "a<" | strip_html }}')).toBe('a<')
+      expect(liquid.parseAndRenderSync('{{ "hello<world<again" | strip_html }}')).toBe('hello<world<again')
     })
   })
 })

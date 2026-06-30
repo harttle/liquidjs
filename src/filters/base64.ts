@@ -8,7 +8,11 @@ import { FilterImpl } from '../template'
 import { stringify } from '../util'
 import { base64Encode, base64Decode } from './base64-impl'
 
-export function base64_encode (this: FilterImpl, value: string): string {
+export function base64_encode (this: FilterImpl, value: string | Buffer): string {
+  if (typeof Buffer !== 'undefined' && Buffer.isBuffer(value)) {
+    this.context.memoryLimit.use(value.byteLength)
+    return value.toString('base64')
+  }
   const str = stringify(value)
   this.context.memoryLimit.use(str.length)
   return base64Encode(str)

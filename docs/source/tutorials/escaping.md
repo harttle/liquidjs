@@ -2,10 +2,10 @@
 title: Escaping
 ---
 
-Escaping is important in all languages, including LiquidJS. While escaping has 2 different meanings for a template engine:
+Escaping is important in all languages, including LiquidJS. Escaping has two different meanings for a template engine:
 
 1. Escaping for the output, i.e. HTML escape. Used to escape HTML special characters so the output will not break HTML structures, aka HTML safe.
-2. Escaping for the language itself, i.e. Liquid escape. Used to output strings that's considered special in Liquid language. This will be useful when you're writing an article in Liquid template to introduce Liquid language.
+2. Escaping for the language itself, i.e. Liquid escape. Used to output strings that are considered special in the Liquid language. This is useful when you're writing an article in a Liquid template to introduce the Liquid language.
 
 ## HTML Escape
 
@@ -55,7 +55,7 @@ In LiquidJS, {{ this | escape }} will be HTML-escaped, but
 {{{ that }}} will not.
 ```
 
-Within strings literals in LiquidJS template, `\` can be used to escape special characters in string syntax. For example:
+Within string literals in a LiquidJS template, `\` can be used to escape special characters in string syntax. For example:
 
 Input
 ```liquid

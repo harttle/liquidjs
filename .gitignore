@@ -11,9 +11,11 @@ coverage/
 node_modules/
 
 # tmp
-docs/public/js/liquid.browser.min.js
+.local/
+docs/themes/navy/source/js/liquid.browser.min.js
 docs/themes/navy/layout/partial/all-contributors.swig
 docs/themes/navy/layout/partial/financial-contributors.swig
+docs/themes/navy/layout/partial/used-by.swig
 dist/
 demo/*/yarn.json
 

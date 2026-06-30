@@ -4,22 +4,25 @@ interface TrieInput<T> {
   [key: string]: T
 }
 
-interface TrieLeafNode<T> {
-  data: T;
-  end: true;
-  needBoundary?: true;
-}
+export type Trie<T> = {
+  data?: T
+  end?: true
+  needBoundary?: true
+} & Record<string, any>
 
-export interface Trie<T> {
-  [key: string]: Trie<T> | TrieLeafNode<T>;
-}
-
-export type TrieNode<T> = Trie<T> | TrieLeafNode<T>
+// Tries are built once per input object and reused: the Tokenizer rebuilds them
+// on every instantiation, but `input` (operators/literalValues) is a stable
+// reference. WeakMap-keying by `input` lets short-lived operator objects (and
+// their tries) be garbage collected. The returned trie is treated as read-only
+// by callers (matchTrie only reads it); do not mutate it.
+const trieCache = new WeakMap<TrieInput<any>, Trie<any>>()
 
 export function createTrie<T = any> (input: TrieInput<T>): Trie<T> {
+  const cached = trieCache.get(input)
+  if (cached) return cached
   const trie: Trie<T> = {}
   for (const [name, data] of Object.entries(input)) {
-    let node: Trie<T> | TrieLeafNode<T> = trie
+    let node = trie
 
     for (let i = 0; i < name.length; i++) {
       const c = name[i]
@@ -35,5 +38,6 @@ export function createTrie<T = any> (input: TrieInput<T>): Trie<T> {
     node.data = data
     node.end = true
   }
+  trieCache.set(input, trie)
   return trie
 }
