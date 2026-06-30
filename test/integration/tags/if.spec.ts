@@ -214,6 +214,29 @@ describe('tags/if', function () {
         const html = await ge.parseAndRender(src, { foo: 'bar' })
         return expect(html).toBe('match')
       })
+      it('should support or with grouped operands', async function () {
+        const src = '{% if (a | upcase) == "X" or (b | upcase) == "B" %}yes{% else %}no{% endif %}'
+        expect(await ge.parseAndRender(src, { a: 'z', b: 'b' })).toBe('yes')
+      })
+      it('should support not with a grouped operand', async function () {
+        const src = '{% if not (a | upcase) == "B" %}no{% else %}yes{% endif %}'
+        expect(await ge.parseAndRender(src, { a: 'b' })).toBe('yes')
+      })
+      it('should support contains with a grouped operand', async function () {
+        const src = '{% if (csv | split: ",") contains "b" %}yes{% else %}no{% endif %}'
+        expect(await ge.parseAndRender(src, { csv: 'a,b,c' })).toBe('yes')
+      })
+      it('should support property access on a grouped result', function () {
+        expect(ge.evalValueSync('(items | first).name', { items: [{ name: 'Sally' }] })).toBe('Sally')
+      })
+      it('should support a grouped expression inside a bracket index', function () {
+        expect(ge.evalValueSync('arr[(i | plus: 1)]', { arr: [10, 20, 30], i: 1 })).toBe(30)
+      })
+      it('should support an async filter inside a grouped expression', async function () {
+        ge.registerFilter('asyncUpcase', (v: string) => Promise.resolve(String(v).toUpperCase()))
+        const src = '{% if (name | asyncUpcase) == "BAR" %}yes{% else %}no{% endif %}'
+        expect(await ge.parseAndRender(src, { name: 'bar' })).toBe('yes')
+      })
     })
     describe('when disabled', function () {
       const ge = new Liquid({ groupedExpressions: false })
