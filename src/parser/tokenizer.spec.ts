@@ -1,4 +1,4 @@
-import { LiquidTagToken, HTMLToken, QuotedToken, OutputToken, TagToken, OperatorToken, RangeToken, PropertyAccessToken, NumberToken, IdentifierToken } from '../tokens'
+import { LiquidTagToken, HTMLToken, QuotedToken, OutputToken, TagToken, OperatorToken, RangeToken, PropertyAccessToken, NumberToken, IdentifierToken, FilteredValueToken } from '../tokens'
 import { Tokenizer } from './tokenizer'
 import { defaultOperators } from '../render/operator'
 import { createTrie } from '../util/operator-trie'
@@ -229,22 +229,113 @@ describe('Tokenizer', function () {
   })
   describe('#readRange()', () => {
     it('should read `(1..3)`', () => {
-      const range = new Tokenizer('(1..3)').readRange()
+      const range = new Tokenizer('(1..3)').readGroupOrRange()
+      expect(range).toBeDefined()
       expect(range).toBeInstanceOf(RangeToken)
       expect(range!.getText()).toEqual('(1..3)')
-      const { lhs, rhs } = range!
-      expect(lhs).toBeInstanceOf(NumberToken)
-      expect(lhs.getText()).toBe('1')
-      expect(rhs).toBeInstanceOf(NumberToken)
-      expect(rhs.getText()).toBe('3')
+      expect((range as RangeToken).lhs).toBeInstanceOf(NumberToken)
+      expect((range as RangeToken).lhs.getText()).toBe('1')
+      expect((range as RangeToken).rhs).toBeInstanceOf(NumberToken)
+      expect((range as RangeToken).rhs.getText()).toBe('3')
     })
     it('should throw for `(..3)`', () => {
-      expect(() => new Tokenizer('(..3)').readRange()).toThrow('unexpected token "..3)", value expected')
+      expect(() => new Tokenizer('(..3)').readGroupOrRange()).toThrow('unexpected token "..3)", value expected')
     })
     it('should read `(a.b..c["..d"])`', () => {
-      const range = new Tokenizer('(a.b..c["..d"])').readRange()
+      const range = new Tokenizer('(a.b..c["..d"])').readGroupOrRange()
+      expect(range).toBeDefined()
       expect(range).toBeInstanceOf(RangeToken)
       expect(range!.getText()).toEqual('(a.b..c["..d"])')
+    })
+  })
+  describe('#readGroupedExpression()', () => {
+    function createGrouped (input: string): Tokenizer {
+      const t = new Tokenizer(input, defaultOperators)
+      t.groupedExpressions = true
+      return t
+    }
+    it('should read `(foo | upcase)` as FilteredValueToken', () => {
+      const token = createGrouped('(foo | upcase)').readValue()
+      expect(token).toBeInstanceOf(FilteredValueToken)
+      const grouped = token as FilteredValueToken
+      expect(grouped.getText()).toBe('(foo | upcase)')
+      expect(grouped.initial.postfix).toHaveLength(1)
+      expect(grouped.filters).toHaveLength(1)
+      expect(grouped.filters[0].name).toBe('upcase')
+    })
+    it('should read `(foo | append: "!")` with filter argument', () => {
+      const token = createGrouped('(foo | append: "!")').readValue()
+      expect(token).toBeInstanceOf(FilteredValueToken)
+      const grouped = token as FilteredValueToken
+      expect(grouped.filters).toHaveLength(1)
+      expect(grouped.filters[0].name).toBe('append')
+      expect(grouped.filters[0].args).toHaveLength(1)
+    })
+    it('should read nested `((foo | append: "!") | upcase)`', () => {
+      const token = createGrouped('((foo | append: "!") | upcase)').readValue()
+      expect(token).toBeInstanceOf(FilteredValueToken)
+      const grouped = token as FilteredValueToken
+      expect(grouped.filters).toHaveLength(1)
+      expect(grouped.filters[0].name).toBe('upcase')
+      expect(grouped.initial.postfix).toHaveLength(1)
+      expect(grouped.initial.postfix[0]).toBeInstanceOf(FilteredValueToken)
+    })
+    it('should parse `(a | upcase) == "BAR"` as expression', () => {
+      const exp = [...createGrouped('(a | upcase) == "BAR"').readExpressionTokens()]
+      expect(exp).toHaveLength(3)
+      expect(exp[0]).toBeInstanceOf(FilteredValueToken)
+      expect(exp[1]).toBeInstanceOf(OperatorToken)
+      expect(exp[1].getText()).toBe('==')
+      expect(exp[2]).toBeInstanceOf(QuotedToken)
+    })
+    it('should read `((a | upcase) > 3)` as outer FilteredValueToken with comparison inside parens', () => {
+      const token = createGrouped('((a | upcase) > 3)').readValue()
+      expect(token).toBeInstanceOf(FilteredValueToken)
+      const outer = token as FilteredValueToken
+      expect(outer.filters).toHaveLength(0)
+      expect(outer.getText()).toBe('((a | upcase) > 3)')
+      const [first, second, third] = outer.initial.postfix
+      expect(first).toBeInstanceOf(FilteredValueToken)
+      expect(second).toBeInstanceOf(NumberToken)
+      expect(third).toBeInstanceOf(OperatorToken)
+      expect((first as FilteredValueToken).filters[0].name).toBe('upcase')
+    })
+    it('should read `(1 < 3)` as grouped comparison with no filters', () => {
+      const token = createGrouped('(1 < 3)').readValue() as FilteredValueToken
+      expect(token.filters).toHaveLength(0)
+      expect(token.initial.postfix).toHaveLength(3)
+      expect(token.initial.postfix[0]).toBeInstanceOf(NumberToken)
+      expect(token.initial.postfix[1]).toBeInstanceOf(NumberToken)
+      expect((token.initial.postfix[2] as OperatorToken).operator).toBe('<')
+    })
+    it('should read redundant parens `(x)` as FilteredValueToken', () => {
+      const token = createGrouped('(x)').readValue() as FilteredValueToken
+      expect(token.filters).toHaveLength(0)
+      expect(token.initial.postfix).toHaveLength(1)
+    })
+    it('should read expression plus filters inside parens `(a == b | default: "x")`', () => {
+      const token = createGrouped('(a == b | default: "x")').readValue() as FilteredValueToken
+      expect(token.filters).toHaveLength(1)
+      expect(token.filters[0].name).toBe('default')
+      expect(token.initial.postfix.map((t) => t.getText()).join(' ')).toMatch(/a.*b.*==/)
+    })
+    it('should parse `((a | upcase) > 3) and (1 < 3)` as three expression tokens', () => {
+      const exp = [...createGrouped('((a | upcase) > 3) and (1 < 3)').readExpressionTokens()]
+      expect(exp).toHaveLength(3)
+      expect(exp[0]).toBeInstanceOf(FilteredValueToken)
+      expect(exp[1]).toBeInstanceOf(OperatorToken)
+      expect(exp[1].getText()).toBe('and')
+      expect(exp[2]).toBeInstanceOf(FilteredValueToken)
+    })
+    it('should still parse `(1..3)` as RangeToken', () => {
+      const token = createGrouped('(1..3)').readValue()
+      expect(token).toBeInstanceOf(RangeToken)
+    })
+    it('should throw for unclosed parens', () => {
+      expect(() => createGrouped('(foo | upcase').readValue()).toThrow('unbalanced parentheses')
+    })
+    it('should fall back to readRange when flag is off', () => {
+      expect(() => new Tokenizer('(foo | upcase)', defaultOperators).readValue()).toThrow('invalid range syntax')
     })
   })
   describe('#readFilter()', () => {

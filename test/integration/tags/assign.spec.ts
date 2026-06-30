@@ -99,4 +99,13 @@ describe('tags/assign', function () {
     const html = liquid.parseAndRenderSync(src)
     return expect(html).toBe('bar')
   })
+  describe('grouped expressions', function () {
+    const ge = new Liquid({ groupedExpressions: true })
+    it('should assign a grouped expression', async () => {
+      expect(await ge.parseAndRender('{% assign x = (name | upcase) %}{{ x }}', { name: 'bar' })).toBe('BAR')
+    })
+    it('should assign a grouped range', async () => {
+      expect(await ge.parseAndRender('{% assign x = (1..(items | size)) %}{{ x }}', { items: ['a', 'b', 'c'] })).toBe('123')
+    })
+  })
 })

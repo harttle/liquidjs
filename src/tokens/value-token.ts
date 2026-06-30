@@ -3,5 +3,6 @@ import { LiteralToken } from './literal-token'
 import { NumberToken } from './number-token'
 import { QuotedToken } from './quoted-token'
 import { PropertyAccessToken } from './property-access-token'
+import { FilteredValueToken } from './filtered-value-token'
 
-export type ValueToken = RangeToken | LiteralToken | QuotedToken | PropertyAccessToken | NumberToken
+export type ValueToken = RangeToken | LiteralToken | QuotedToken | PropertyAccessToken | NumberToken | FilteredValueToken

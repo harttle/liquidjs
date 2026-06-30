@@ -132,4 +132,30 @@ describe('tags/case', function () {
       TRUE
     `)
   })
+  describe('parenthesized filter chains', function () {
+    describe('when enabled', () => {
+      const ge = new Liquid({ groupedExpressions: true })
+      it('should support grouped expression in case value', () => {
+        const src = '{% case (status | downcase) %}{% when "active" %}active{% when "pending" %}pending{% else %}other{% endcase %}'
+        const html = ge.parseAndRenderSync(src, { status: 'ACTIVE' })
+        expect(html).toBe('active')
+      })
+      it('should support grouped expression in when value', () => {
+        const src = '{% case status %}{% when (expected | downcase) %}match{% else %}no match{% endcase %}'
+        const html = ge.parseAndRenderSync(src, { status: 'active', expected: 'ACTIVE' })
+        expect(html).toBe('match')
+      })
+    })
+    describe('when disabled', () => {
+      const ge = new Liquid({ groupedExpressions: false })
+      it('should throw error for grouped expression in case value', () => {
+        const src = '{% case (status | downcase) %}{% when "active" %}active{% when "pending" %}pending{% else %}other{% endcase %}'
+        expect(() => ge.parseAndRenderSync(src, { status: 'ACTIVE' })).toThrow('invalid range syntax')
+      })
+      it('should throw error for grouped expression in when value', () => {
+        const src = '{% case status %}{% when (expected | downcase) %}match{% else %}no match{% endcase %}'
+        expect(() => ge.parseAndRenderSync(src, { status: 'active', expected: 'ACTIVE' })).toThrow('invalid range syntax')
+      })
+    })
+  })
 })

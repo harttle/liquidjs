@@ -1,11 +1,11 @@
-import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
+import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream, FilteredValueToken } from '..'
 import { Parser } from '../parser'
 import { equals } from '../render'
 import { Arguments } from '../template'
 
 export default class extends Tag {
   value: Value
-  branches: { values: ValueToken[], templates: Template[] }[] = []
+  branches: { values: (ValueToken | FilteredValueToken)[], templates: Template[] }[] = []
   elseTemplates: Template[] = []
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
@@ -22,7 +22,7 @@ export default class extends Tag {
 
         p = []
 
-        const values: ValueToken[] = []
+        const values: (ValueToken | FilteredValueToken)[] = []
         while (!token.tokenizer.end()) {
           values.push(token.tokenizer.readValueOrThrow())
           token.tokenizer.skipBlank()

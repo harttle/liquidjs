@@ -9,6 +9,7 @@ import { whiteSpaceCtrl } from './whitespace-ctrl'
 export class Tokenizer {
   p: number
   N: number
+  public groupedExpressions: boolean
   private rawBeginAt = -1
   private opTrie: Trie<OperatorHandler>
   private literalTrie: Trie<LiteralValue>
@@ -17,12 +18,14 @@ export class Tokenizer {
     public input: string,
     operators: Operators = defaultOptions.operators,
     public file?: string,
-    range?: [number, number]
+    range?: [number, number],
+    groupedExpressions = false
   ) {
     this.p = range ? range[0] : 0
     this.N = range ? range[1] : input.length
     this.opTrie = createTrie(operators)
     this.literalTrie = createTrie(literalValues)
+    this.groupedExpressions = groupedExpressions
   }
 
   readExpression () {
@@ -30,6 +33,10 @@ export class Tokenizer {
   }
 
   * readExpressionTokens (): IterableIterator<Token> {
+    yield * this.readExpressionTokensFromHere()
+  }
+
+  * readExpressionTokensFromHere (): IterableIterator<Token> {
     while (this.p < this.N) {
       const operator = this.readOperator()
       if (operator) {
@@ -43,6 +50,11 @@ export class Tokenizer {
       }
       return
     }
+  }
+
+  * readGroupedExpressionTokens (lhs: Token): IterableIterator<Token> {
+    yield lhs
+    yield * this.readExpressionTokensFromHere()
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
@@ -80,6 +92,7 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
+    if (this.peek() === ')') return null
     this.assert(this.read() === '|', `expected "|" before filter`)
     const name = this.readIdentifier()
     if (!name.size()) {
@@ -94,9 +107,9 @@ export class Tokenizer {
         const arg = this.readFilterArg()
         arg && args.push(arg)
         this.skipBlank()
-        this.assert(this.end() || this.peek() === ',' || this.peek() === '|', () => `unexpected character ${this.snapshot()}`)
+        this.assert(this.end() || this.peek() === ',' || this.peek() === '|' || this.peek() === ')', () => `unexpected character ${this.snapshot()}`)
       } while (this.peek() === ',')
-    } else if (this.peek() === '|' || this.end()) {
+    } else if (this.peek() === '|' || this.peek() === ')' || this.end()) {
       // do nothing
     } else {
       throw this.error('expected ":" after filter name')
@@ -307,10 +320,14 @@ export class Tokenizer {
     return -1
   }
 
-  readValue (): ValueToken | undefined {
+  readValue (): ValueToken | FilteredValueToken | undefined {
     this.skipBlank()
     const begin = this.p
-    const variable = this.readLiteral() || this.readQuoted() || this.readRange() || this.readNumber()
+    let variable: ValueToken | FilteredValueToken | undefined = this.readLiteral() || this.readQuoted()
+    if (!variable && this.peek() === '(') {
+      variable = this.readGroupOrRange()
+    }
+    variable = variable || this.readNumber()
     const props = this.readProperties(!variable)
     if (!props.length) return variable
     return new PropertyAccessToken(variable, props, this.input, begin, this.p)
@@ -385,18 +402,32 @@ export class Tokenizer {
     return literal
   }
 
-  readRange (): RangeToken | undefined {
+  readGroupOrRange (): FilteredValueToken | RangeToken | undefined {
     this.skipBlank()
     const begin = this.p
     if (this.peek() !== '(') return
     ++this.p
     const lhs = this.readValueOrThrow()
     this.skipBlank()
-    this.assert(this.read() === '.' && this.read() === '.', 'invalid range syntax')
-    const rhs = this.readValueOrThrow()
-    this.skipBlank()
-    this.assert(this.read() === ')', 'invalid range syntax')
-    return new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
+
+    if (this.peek() === '.' && this.peek(1) === '.') {
+      this.p += 2
+      const rhs = this.readValueOrThrow()
+      this.skipBlank()
+      this.assert(this.read() === ')', 'invalid range syntax')
+      return new RangeToken(this.input, begin, this.p, lhs, rhs, this.file)
+    }
+
+    if (this.groupedExpressions) {
+      const initial = new Expression(this.readGroupedExpressionTokens(lhs))
+      this.assert(initial.valid(), () => `invalid value expression: ${this.snapshot()}`)
+      const filters = this.readFilters()
+      this.skipBlank()
+      this.assert(this.read() === ')', 'unbalanced parentheses')
+      return new FilteredValueToken(initial, filters, this.input, begin, this.p, this.file)
+    }
+
+    throw this.error('invalid range syntax')
   }
 
   readValueOrThrow (): ValueToken {

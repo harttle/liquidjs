@@ -32,13 +32,17 @@ export class Context {
    */
   public opts: NormalizedFullOptions
   /**
+   * Reference to the Liquid instance for filter resolution
+   */
+  public liquid?: any
+  /**
    * Throw when accessing undefined variable?
    */
   public strictVariables: boolean;
   public ownPropertyOnly: boolean;
   public memoryLimit: Limiter;
   public renderLimit: Limiter;
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { memoryLimit, renderLimit }: { [key: string]: Limiter } = {}) {
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { memoryLimit, renderLimit, liquid }: { memoryLimit?: Limiter, renderLimit?: Limiter, liquid?: any } = {}) {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
@@ -47,6 +51,7 @@ export class Context {
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
     this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
     this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
+    this.liquid = liquid
   }
   public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
     return (this.registers[key] = this.registers[key] || defaultValue)
@@ -110,7 +115,8 @@ export class Context {
       ownPropertyOnly: this.ownPropertyOnly
     }, {
       renderLimit: this.renderLimit,
-      memoryLimit: this.memoryLimit
+      memoryLimit: this.memoryLimit,
+      liquid: this.liquid
     })
   }
   private findScope (key: string | number) {

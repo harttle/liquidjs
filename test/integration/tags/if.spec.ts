@@ -169,4 +169,84 @@ describe('tags/if', function () {
     expect(() => liquid.parseAndRenderSync('{% if false %}{% else %}{% elsif true %}{% endif %}'))
       .toThrow(`unexpected elsif after else`)
   })
+  describe('parenthesized filter chains', function () {
+    describe('when enabled', function () {
+      const ge = new Liquid({ groupedExpressions: true })
+      it('should support (foo | upcase) == "BAR"', async function () {
+        const src = '{% if (foo | upcase) == "BAR" %}yes{% else %}no{% endif %}'
+        const html = await ge.parseAndRender(src, { foo: 'bar' })
+        return expect(html).toBe('yes')
+      })
+      it('should support both sides parenthesized', async function () {
+        const src = '{% if (a | upcase) == (b | upcase) %}yes{% else %}no{% endif %}'
+        const html = await ge.parseAndRender(src, { a: 'hi', b: 'hi' })
+        return expect(html).toBe('yes')
+      })
+      it('should support with logical operators', async function () {
+        const src = '{% if (a | upcase) == "FOO" and (b | downcase) == "bar" %}yes{% else %}no{% endif %}'
+        const html = await ge.parseAndRender(src, { a: 'foo', b: 'BAR' })
+        return expect(html).toBe('yes')
+      })
+      it('should support standalone parenthesized filter via evalValueSync', function () {
+        const result = ge.evalValueSync('(foo | upcase)', { foo: 'bar' })
+        return expect(result).toBe('BAR')
+      })
+      it('should support comparison via evalValueSync', function () {
+        const result = ge.evalValueSync('(foo | upcase) == "BAR"', { foo: 'bar' })
+        return expect(result).toBe(true)
+      })
+      it('should keep range syntax working', function () {
+        const result = ge.evalValueSync('(1..5)', {})
+        return expect(result).toEqual([1, 2, 3, 4, 5])
+      })
+      it('should support chained filters in condition', async function () {
+        const src = '{% if (name | downcase | size) > 3 %}long{% else %}short{% endif %}'
+        const html = await ge.parseAndRender(src, { name: 'Alice' })
+        return expect(html).toBe('long')
+      })
+      it('should support real parenthesis grouping with comparisons and and', async function () {
+        const src = '{% if (((name | downcase | size) > 3) and (one < three)) %}long{% else %}short{% endif %}'
+        const html = await ge.parseAndRender(src, { name: 'Alice', one: 1, three: 3 })
+        return expect(html).toBe('long')
+      })
+      it('should support nested parenthesized expressions in if condition', async function () {
+        const src = '{% if ((foo | append: "!") | upcase) == "BAR!" %}match{% else %}no match{% endif %}'
+        const html = await ge.parseAndRender(src, { foo: 'bar' })
+        return expect(html).toBe('match')
+      })
+      it('should support or with grouped operands', async function () {
+        const src = '{% if (a | upcase) == "X" or (b | upcase) == "B" %}yes{% else %}no{% endif %}'
+        expect(await ge.parseAndRender(src, { a: 'z', b: 'b' })).toBe('yes')
+      })
+      it('should support not with a grouped operand', async function () {
+        const src = '{% if not (a | upcase) == "B" %}no{% else %}yes{% endif %}'
+        expect(await ge.parseAndRender(src, { a: 'b' })).toBe('yes')
+      })
+      it('should support contains with a grouped operand', async function () {
+        const src = '{% if (csv | split: ",") contains "b" %}yes{% else %}no{% endif %}'
+        expect(await ge.parseAndRender(src, { csv: 'a,b,c' })).toBe('yes')
+      })
+      it('should support property access on a grouped result', function () {
+        expect(ge.evalValueSync('(items | first).name', { items: [{ name: 'Sally' }] })).toBe('Sally')
+      })
+      it('should support a grouped expression inside a bracket index', function () {
+        expect(ge.evalValueSync('arr[(i | plus: 1)]', { arr: [10, 20, 30], i: 1 })).toBe(30)
+      })
+      it('should support an async filter inside a grouped expression', async function () {
+        ge.registerFilter('asyncUpcase', (v: string) => Promise.resolve(String(v).toUpperCase()))
+        const src = '{% if (name | asyncUpcase) == "BAR" %}yes{% else %}no{% endif %}'
+        expect(await ge.parseAndRender(src, { name: 'bar' })).toBe('yes')
+      })
+    })
+    describe('when disabled', function () {
+      const ge = new Liquid({ groupedExpressions: false })
+      it('should throw for parenthesized filter in condition', () => {
+        const src = '{% if (foo | upcase) == "BAR" %}yes{% else %}no{% endif %}'
+        expect(() => ge.parseAndRenderSync(src, { foo: 'bar' })).toThrow('invalid range syntax')
+      })
+      it('should throw for parenthesized filter via evalValueSync', () => {
+        expect(() => ge.evalValueSync('(foo | upcase)', { foo: 'bar' })).toThrow('invalid range syntax')
+      })
+    })
+  })
 })
