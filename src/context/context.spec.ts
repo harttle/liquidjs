@@ -32,7 +32,7 @@ describe('Context', function () {
     it('should read nested property', async function () {
       expect(ctx.get(['obj', 'first'])).toEqual('f')
       expect(ctx.get(['obj', 'last'])).toEqual('l')
-      expect(ctx.get(['obj', 'size'])).toEqual(2)
+      expect(ctx.get(['obj', 'size'])).toBeUndefined()
     })
     it('undefined property should yield undefined', async function () {
       expect(ctx.get(['notdefined'])).toEqual(undefined)
@@ -55,7 +55,9 @@ describe('Context', function () {
     it('should return array length as size', async function () {
       expect(ctx.get(['bar', 'arr', 'size'])).toEqual(2)
     })
-    it('should return map size as size', async function () {
+    it('should return map size only via own property access', async function () {
+      expect(ctx.get(['map', 'size'])).toBeUndefined()
+      ctx = new Context(scope, { ownPropertyOnly: false } as any)
       expect(ctx.get(['map', 'size'])).toEqual(1)
     })
     it('should return undefined if not have a size', async function () {
@@ -67,6 +69,14 @@ describe('Context', function () {
     })
     it('should read .last of array', async function () {
       expect(ctx.get(['bar', 'arr', 'last'])).toEqual('b')
+    })
+    it('should read own size property on objects', async function () {
+      expect(ctx.get(['zoo', 'size'])).toEqual(4)
+    })
+    it('should read string first/last as magic keys', async function () {
+      ctx.push({ str: 'abc' })
+      expect(ctx.getSync(['str', 'first'])).toEqual('a')
+      expect(ctx.getSync(['str', 'last'])).toEqual('c')
     })
     it('should read element of array', async function () {
       expect(ctx.get(['arr', 1])).toEqual('b')
@@ -167,13 +177,16 @@ describe('Context', function () {
       ctx.push({ foo: [1, 2] })
       return expect(ctx.getSync(['foo', 'size'])).toEqual(2)
     })
-    it('should allow size to access Set.prototype.size', function () {
+    it('should allow size to access Set.prototype.size via property access', function () {
+      ctx.push({ foo: new Set([1, 2]) })
+      expect(ctx.getSync(['foo', 'size'])).toEqual(undefined)
+      ctx = new Context({}, { ownPropertyOnly: false } as any)
       ctx.push({ foo: new Set([1, 2]) })
       return expect(ctx.getSync(['foo', 'size'])).toEqual(2)
     })
-    it('should allow size to access Object key count', function () {
+    it('should not apply size magic to plain objects', function () {
       ctx.push({ foo: { bar: 'BAR', coo: 'COO' } })
-      return expect(ctx.getSync(['foo', 'size'])).toEqual(2)
+      return expect(ctx.getSync(['foo', 'size'])).toEqual(undefined)
     })
     it('should throw when property is hidden and strictVariables is true', function () {
       ctx = new Context(ctx, {
@@ -182,6 +195,39 @@ describe('Context', function () {
       } as any)
       ctx.push({ foo: Object.create({ bar: 'BAR' }) })
       return expect(() => ctx.getSync(['foo', 'bar'])).toThrow(/undefined variable: foo.bar/)
+    })
+    it('should not apply size/first/last magic keys to plain objects', function () {
+      Object.assign(Object.prototype, { size: 123, first: 'FIRST_PROTO', last: 'LAST_PROTO' })
+      try {
+        ctx.push({ foo: {} })
+        expect(ctx.getSync(['foo', 'size'])).toEqual(undefined)
+        expect(ctx.getSync(['foo', 'first'])).toEqual(undefined)
+        expect(ctx.getSync(['foo', 'last'])).toEqual(undefined)
+      } finally {
+        delete (Object.prototype as any).size
+        delete (Object.prototype as any).first
+        delete (Object.prototype as any).last
+      }
+    })
+    it('should allow array first/last/size magic keys', function () {
+      ctx.push({ foo: [1, 2, 3] })
+      expect(ctx.getSync(['foo', 'first'])).toEqual(1)
+      expect(ctx.getSync(['foo', 'last'])).toEqual(3)
+      expect(ctx.getSync(['foo', 'size'])).toEqual(3)
+    })
+    it('should read prototype size/first/last via property access when ownPropertyOnly=false', function () {
+      Object.assign(Object.prototype, { size: 123, first: 'FIRST_PROTO', last: 'LAST_PROTO' })
+      try {
+        ctx = new Context({}, { ownPropertyOnly: false } as any)
+        ctx.push({ foo: {} })
+        expect(ctx.getSync(['foo', 'size'])).toEqual(123)
+        expect(ctx.getSync(['foo', 'first'])).toEqual('FIRST_PROTO')
+        expect(ctx.getSync(['foo', 'last'])).toEqual('LAST_PROTO')
+      } finally {
+        delete (Object.prototype as any).size
+        delete (Object.prototype as any).first
+        delete (Object.prototype as any).last
+      }
     })
   })
 
