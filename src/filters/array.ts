@@ -116,7 +116,7 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   this.context.memoryLimit.use(length)
   return isArray(v)
     ? Array.prototype.slice.call(v, begin, begin + length)
-    : v.slice(begin, begin + length)
+    : String.prototype.slice.call(v, begin, begin + length)
 }
 
 function expectedMatcher (this: FilterImpl, expected: any): (v: any) => boolean {
