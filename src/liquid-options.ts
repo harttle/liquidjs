@@ -91,7 +91,11 @@ export interface LiquidOptions {
   parseLimit?: number;
   /** For DoS handling, limit total time (in ms) for each `render()` call. */
   renderLimit?: number;
-  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue. */
+  /**
+   * For DoS handling, caps the memory allocated while rendering. Operations allocating asymptotically more
+   * than their input (template and context) charge upfront to abort before allocating; everything else is
+   * charged as the output is written out. A typical PC can handle 1e9 (1G) memory without issue.
+   */
   memoryLimit?: number;
 }
 
@@ -116,7 +120,11 @@ export interface RenderOptions {
   templateLimit?: number;
   /** For DoS handling, limit total time (in ms) for each `render()` call. */
   renderLimit?: number;
-  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue.. */
+  /**
+   * For DoS handling, caps the memory allocated while rendering. Operations allocating asymptotically more
+   * than their input (template and context) charge upfront to abort before allocating; everything else is
+   * charged as the output is written out. A typical PC can handle 1e9 (1G) memory without issue.
+   */
   memoryLimit?: number;
 }
 
