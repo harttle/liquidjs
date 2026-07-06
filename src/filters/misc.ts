@@ -9,13 +9,19 @@ function defaultFilter<T1 extends boolean, T2> (this: FilterImpl, value: T1, def
   return isFalsy(value, this.context) ? defaultValue : value
 }
 
-function json (value: any, space = 0) {
-  return JSON.stringify(value, null, space)
+function json (this: FilterImpl, value: any, space = 0) {
+  const memoryLimit = this.context.memoryLimit
+  return JSON.stringify(value, (_key, val) => {
+    memoryLimit.use(typeof val === 'string' ? val.length : 1)
+    return val
+  }, space)
 }
 
-function inspect (value: any, space = 0) {
+function inspect (this: FilterImpl, value: any, space = 0) {
+  const memoryLimit = this.context.memoryLimit
   const ancestors: object[] = []
   return JSON.stringify(value, function (this: unknown, _key: unknown, value: any) {
+    memoryLimit.use(typeof value === 'string' ? value.length : 1)
     if (typeof value !== 'object' || value === null) return value
     // `this` is the object that value is contained in, i.e., its direct parent.
     while (ancestors.length > 0 && ancestors[ancestors.length - 1] !== this) ancestors.pop()
