@@ -95,7 +95,7 @@ engine.parseAndRender("{{color}}", context).then(html => console.log(html))
 
 ## toLiquid
 
-`toLiquid()` is not a method of `Drop`, but it can be used to return a `Drop`. In cases where you have a fixed structure in the `context` that cannot change its values, you can implement `toLiquid()` to let LiquidJS use the returned value instead of itself to render the templates.
+`toLiquid()` is not a method of `Drop`, but it can be used to return a `Drop`. In cases where you have a fixed structure in the `context` that cannot change its values, you can implement `toLiquid()` to let LiquidJS use the returned value instead of the object itself when rendering templates.
 
 ```javascript
 import { Liquid, Drop } from 'liquidjs'

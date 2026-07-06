@@ -5,6 +5,7 @@
       {{__('footer.license')}}
     </div>
     <div id="footer-links">
+      <button type="button" class="footer-link cookie-preferences" data-cc="show-consentModal" title="Manage cookie preferences"><i class="icon-shield"></i></button>
       <a href="https://twitter.com/{{ config.twitter }}" class="footer-link" target="_blank"><i class="icon-twitter"></i></a>
       <a href="https://opencollective.com/{{ config.oc }}" class="footer-link" target="_blank"><i class="icon-opencollective"></i></a>
       <a href="https://github.com/{{ config.github }}" class="footer-link" target="_blank"><i class="icon-github"></i></a>

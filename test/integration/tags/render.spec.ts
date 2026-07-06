@@ -271,6 +271,27 @@ describe('tags/render', function () {
     return expect(staticLiquid.renderFile('parent.html')).rejects.toThrow(/Failed to lookup "..\/bar\/child.html"/)
   })
 
+  describe('per-render ownPropertyOnly', function () {
+    it('should propagate to {% render %} partial (spawned context)', async function () {
+      mock({
+        '/_user.liquid': '{{ user.passwordHash }}'
+      })
+      const engine = new Liquid({ ownPropertyOnly: false, root: '/' })
+      class User {
+        name: string
+        constructor (n: string) {
+          this.name = n
+        }
+      }
+      Object.assign(User.prototype, { passwordHash: 'secret-from-prototype' })
+      const u = new User('alice')
+      const tpl = 'Direct:[{{ user.passwordHash }}] Render:[{% render "_user.liquid", user: user %}]'
+      const html = await engine.parseAndRender(tpl, { user: u }, { ownPropertyOnly: true })
+      expect(html).toBe('Direct:[] Render:[]')
+      expect(engine.parseAndRenderSync(tpl, { user: u }, { ownPropertyOnly: true })).toBe('Direct:[] Render:[]')
+    })
+  })
+
   describe('static partial', function () {
     let staticLiquid: Liquid
     beforeEach(() => {

@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, isArray, isNil, last as arrayLast, isArrayLike, toEnumerable } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -8,20 +8,25 @@ import { EmptyDrop } from '../drop'
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
   const array = toArray(v)
   const sep = isNil(arg) ? ' ' : stringify(arg)
-  const complexity = array.length * (1 + sep.length)
-  this.context.memoryLimit.use(complexity)
-  return array.join(sep)
+  let outputSize = sep.length * Math.max(array.length - 1, 0)
+  for (let i = 0; i < array.length; i++) outputSize += String(array[i]).length
+  this.context.memoryLimit.use(outputSize)
+  return Array.prototype.join.call(array, sep)
 })
-export const last = argumentsToValue((v: any) => isArrayLike(v) ? arrayLast(v) : '')
-export const first = argumentsToValue((v: any) => isArrayLike(v) ? v[0] : '')
+export const last = argumentsToValue(function (this: FilterImpl, v: any) {
+  return isArrayLike(v) ? readArrayElement(v, -1, this.context.ownPropertyOnly) : ''
+})
+export const first = argumentsToValue(function (this: FilterImpl, v: any) {
+  return isArrayLike(v) ? readArrayElement(v, 0, this.context.ownPropertyOnly) : ''
+})
 export const reverse = argumentsToValue(function (this: FilterImpl, v: any[]) {
   const array = toArray(v)
   this.context.memoryLimit.use(array.length)
   return [...array].reverse()
 })
 
-export function * sort<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
-  const values: [T, string | number][] = []
+function * sortBy<T> (this: FilterImpl, arr: T[], property: string | undefined, comparator: (a: unknown, b: unknown) => number): IterableIterator<unknown> {
+  const values: [T, unknown][] = []
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
@@ -30,21 +35,15 @@ export function * sort<T> (this: FilterImpl, arr: T[], property?: string): Itera
       property ? yield this.context._getFromScope(item, stringify(property).split('.'), false) : item
     ])
   }
-  return values.sort((lhs, rhs) => {
-    const lvalue = lhs[1]
-    const rvalue = rhs[1]
-    return lvalue < rvalue ? -1 : (lvalue > rvalue ? 1 : 0)
-  }).map(tuple => tuple[0])
+  return values.sort((lhs, rhs) => comparator(lhs[1], rhs[1])).map(tuple => tuple[0])
 }
 
-export function sort_natural<T> (this: FilterImpl, input: T[], property?: string) {
-  const propertyString = stringify(property)
-  const compare = property === undefined
-    ? caseInsensitiveCompare
-    : (lhs: T, rhs: T) => caseInsensitiveCompare(lhs[propertyString], rhs[propertyString])
-  const array = toArray(input)
-  this.context.memoryLimit.use(array.length)
-  return [...array].sort(compare)
+export function * sort<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
+  return yield * sortBy.call(this, arr, property, orderedCompare)
+}
+
+export function * sort_natural<T> (this: FilterImpl, arr: T[], property?: string): IterableIterator<unknown> {
+  return yield * sortBy.call(this, arr, property, caseInsensitiveCompare)
 }
 
 export const size = (v: string | any[]) => v?.length || 0
@@ -72,14 +71,14 @@ export function * sum (this: FilterImpl, arr: Scope[], property?: string): Itera
 export function compact<T> (this: FilterImpl, arr: T[]) {
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
-  return array.filter(x => !isNil(toValue(x)))
+  return Array.prototype.filter.call(array, x => !isNil(toValue(x)))
 }
 
 export function concat<T1, T2> (this: FilterImpl, v: T1[], arg: T2[] = []): (T1 | T2)[] {
   const lhs = toArray(v)
   const rhs = toArray(arg)
   this.context.memoryLimit.use(lhs.length + rhs.length)
-  return [...lhs, ...rhs]
+  return Array.prototype.concat.call(lhs, rhs)
 }
 
 export function push<T> (this: FilterImpl, v: T[], arg: T): T[] {
@@ -94,8 +93,10 @@ export function unshift<T> (this: FilterImpl, v: T[], arg: T): T[] {
   return clone
 }
 
-export function pop<T> (v: T[]): T[] {
-  const clone = [...toArray(v)]
+export function pop<T> (this: FilterImpl, v: T[]): T[] {
+  const array = toArray(v)
+  this.context.memoryLimit.use(array.length)
+  const clone = [...array]
   clone.pop()
   return clone
 }
@@ -114,7 +115,9 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   if (!isArray(v)) v = stringify(v)
   begin = begin < 0 ? v.length + begin : begin
   this.context.memoryLimit.use(length)
-  return v.slice(begin, begin + length)
+  return isArray(v)
+    ? Array.prototype.slice.call(v, begin, begin + length)
+    : String.prototype.slice.call(v, begin, begin + length)
 }
 
 function expectedMatcher (this: FilterImpl, expected: any): (v: any) => boolean {
@@ -136,7 +139,7 @@ function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[
     values.push(yield evalToken(token, this.context.spawn(item)))
   }
   const matcher = expectedMatcher.call(this, expected)
-  return arr.filter((_, i) => matcher(values[i]) === include)
+  return Array.prototype.filter.call(arr, (_, i) => matcher(values[i]) === include)
 }
 
 function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
@@ -258,7 +261,7 @@ export function sample<T> (this: FilterImpl, v: T[] | string, count = 1): T | st
   v = toValue(v)
   if (isNil(v)) return []
   if (!isArray(v)) v = stringify(v)
-  this.context.memoryLimit.use(count)
+  this.context.memoryLimit.use(v.length)
   const shuffled = [...v].sort(() => Math.random() - 0.5)
   if (count === 1) return shuffled[0]
   return shuffled.slice(0, count)

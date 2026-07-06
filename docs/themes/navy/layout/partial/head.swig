@@ -32,4 +32,7 @@
   <meta name="msapplication-TileImage" content="{{ url_for('icon/mstile-144x144.png') }}">
   {{ css('css/navy') }}
   {{ feed_tag('atom.xml') }}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.css">
+  <script src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.1.0/dist/cookieconsent.umd.js"></script>
+  {{ js('js/cookieconsent-config') }}
 </head>

@@ -6,9 +6,9 @@ A number of tags and filters can be encapsulated into a **plugin**, which will b
 
 ## Write a Plugin
 
-A liquidjs plugin is simple function which takes the [Liquid class][liquid] as the first parameter and the Liquid instance for `this`. We can call liquidjs APIs on `this` to make certain changes, especially [register filters and tags][register].
+A LiquidJS plugin is a simple function that takes the [Liquid class][liquid] as the first parameter and uses the Liquid instance for `this`. We can call LiquidJS APIs on `this` to make certain changes, especially [register filters and tags][register].
 
-Now we'll make a plugin to upper case every letter of the input, save the following snippet to `upup.js`:
+Now we'll make a plugin to uppercase every letter of the input. Save the following snippet to `upup.js`:
 
 ```javascript
 /**

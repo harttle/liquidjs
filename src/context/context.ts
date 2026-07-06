@@ -2,8 +2,8 @@ import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { Scope } from './scope'
-import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
+import { createScope, Scope } from './scope'
+import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement } from '../util'
 
 type PropertyKey = string | number;
 
@@ -12,8 +12,8 @@ export class Context {
    * insert a Context-level empty scope,
    * for tags like `{% capture %}` `{% assign %}` to operate
    */
-  private scopes: Scope[] = [{}]
-  private registers = {}
+  private scopes: Scope[] = [createScope()]
+  private registers: Record<string, any> = {}
   /**
    * user passed in scope
    * `{% increment %}`, `{% decrement %}` changes this scope,
@@ -48,8 +48,8 @@ export class Context {
     this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
     this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
   }
-  public getRegister (key: string) {
-    return (this.registers[key] = this.registers[key] || {})
+  public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
+    return (this.registers[key] = this.registers[key] || defaultValue)
   }
   public setRegister (key: string, value: any) {
     return (this.registers[key] = value)
@@ -106,7 +106,8 @@ export class Context {
     return new Context(scope, this.opts, {
       sync: this.sync,
       globals: this.globals,
-      strictVariables: this.strictVariables
+      strictVariables: this.strictVariables,
+      ownPropertyOnly: this.ownPropertyOnly
     }, {
       renderLimit: this.renderLimit,
       memoryLimit: this.memoryLimit
@@ -124,13 +125,13 @@ export class Context {
     obj = toLiquid(obj)
     key = toValue(key) as PropertyKey
     if (isNil(obj)) return obj
-    if (isArray(obj) && (key as number) < 0) return obj[obj.length + +key]
+    if (isArray(obj) && isNumber(key)) return readArrayElement(obj, key, this.ownPropertyOnly)
     const value = readJSProperty(obj, key, this.ownPropertyOnly)
     if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key, this)
     if (isFunction(value)) return value.call(obj)
     if (key === 'size') return readSize(obj)
-    else if (key === 'first') return readFirst(obj)
-    else if (key === 'last') return readLast(obj)
+    else if (key === 'first') return readFirst(obj, this.ownPropertyOnly)
+    else if (key === 'last') return readLast(obj, this.ownPropertyOnly)
     return value
   }
 }
@@ -140,14 +141,14 @@ export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: b
   return obj[key]
 }
 
-function readFirst (obj: Scope) {
-  if (isArray(obj)) return obj[0]
-  return obj['first']
+function readFirst (obj: Scope, ownPropertyOnly: boolean) {
+  if (isArray(obj)) return readArrayElement(obj, 0, ownPropertyOnly)
+  return readJSProperty(obj, 'first', ownPropertyOnly)
 }
 
-function readLast (obj: Scope) {
-  if (isArray(obj)) return obj[obj.length - 1]
-  return obj['last']
+function readLast (obj: Scope, ownPropertyOnly: boolean) {
+  if (isArray(obj)) return readArrayElement(obj, -1, ownPropertyOnly)
+  return readJSProperty(obj, 'last', ownPropertyOnly)
 }
 
 function readSize (obj: Scope) {

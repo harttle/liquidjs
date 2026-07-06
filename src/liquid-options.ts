@@ -38,7 +38,10 @@ export interface LiquidOptions {
   strictVariables?: boolean;
   /** Catch all errors instead of exit upon one. Please note that render errors won't be reached when parse fails. */
   catchAllErrors?: boolean;
-  /** Hide scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates. */
+  /**
+   * Hide scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates.
+   * This only applies to property/index access on scope objects. Filter transforms and iteration operate on the resolved value with standard JavaScript semantics, so prototype-inherited array indices may still be surfaced by them.
+   */
   ownPropertyOnly?: boolean;
   /** Modifies the behavior of `strictVariables`. If set, a single undefined variable will *not* cause an exception in the context of the `if`/`elsif`/`unless` tag and the `default` filter. Instead, it will evaluate to `false` and `null`, respectively. Irrelevant if `strictVariables` is not set. Defaults to `false`. **/
   lenientIf?: boolean;
@@ -72,7 +75,7 @@ export interface LiquidOptions {
   fs?: FS;
   /** keyValue separator */
   keyValueSeparator?: string;
-  /** Render from in-memory `templates` mapping instead of file system. File system related options like `fs`, 'root', and `relativeReference` will be ignored when `templates` is specified. */
+  /** Render from an in-memory `templates` mapping instead of the file system. When `templates` is set, Liquid uses the provided mapping for template lookup (including includes, layouts, and partials), and file-system options such as `fs`, `root`, `partials`, `layouts`, and `relativeReference` are effectively bypassed for those lookups. */
   templates?: {[key: string]: string};
   /** the global scope passed down to all partial and layout templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;

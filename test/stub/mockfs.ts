@@ -1,6 +1,6 @@
 import { isString, forOwn } from '../../src/util/underscore'
 import * as fs from '../../src/fs/fs-impl'
-import { resolve } from 'path'
+import { resolve, sep } from 'path'
 
 interface FileDescriptor {
   mode: string;
@@ -8,7 +8,7 @@ interface FileDescriptor {
 }
 
 let files: { [path: string]: FileDescriptor } = {}
-const { readFile, exists, readFileSync, existsSync } = fs
+const { readFile, exists, readFileSync, existsSync, contains, containsSync } = fs
 
 export function mock (options: { [path: string]: (string | FileDescriptor) }) {
   forOwn(options, (val, key) => {
@@ -30,6 +30,16 @@ export function mock (options: { [path: string]: (string | FileDescriptor) }) {
   };
   (fs as any).existsSync = function (path: string) {
     return !!files[path]
+  };
+  (fs as any).contains = async (root: string, file: string) => {
+    root = resolve(root)
+    if (!root.endsWith(sep)) root += sep
+    return file.startsWith(root)
+  };
+  (fs as any).containsSync = (root: string, file: string) => {
+    root = resolve(root)
+    if (!root.endsWith(sep)) root += sep
+    return file.startsWith(root)
   }
 }
 
@@ -38,5 +48,7 @@ export function restore () {
   (fs as any).readFileSync = readFileSync;
   (fs as any).existsSync = existsSync;
   (fs as any).readFile = readFile;
-  (fs as any).exists = exists
+  (fs as any).exists = exists;
+  (fs as any).contains = contains;
+  (fs as any).containsSync = containsSync
 }

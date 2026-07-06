@@ -1,10 +1,10 @@
 import { Token } from './token'
 import { TokenKind } from '../parser'
-import { literalValues, LiteralValue } from '../util'
+import { literalValues, LiteralValue, LiteralKey } from '../util'
 
 export class LiteralToken extends Token {
   public content: LiteralValue
-  public literal: string
+  public literal: LiteralKey
   public constructor (
     public input: string,
     public begin: number,
@@ -12,7 +12,7 @@ export class LiteralToken extends Token {
     public file?: string
   ) {
     super(TokenKind.Literal, input, begin, end, file)
-    this.literal = this.getText()
+    this.literal = this.getText() as LiteralKey
     this.content = literalValues[this.literal]
   }
 }

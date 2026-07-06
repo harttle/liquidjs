@@ -1,5 +1,5 @@
 import { FS } from './fs'
-import { assert, escapeRegex } from '../util'
+import { assert, LiquidAsync, toLiquidAsync } from '../util'
 
 export interface LoaderOptions {
   fs: FS;
@@ -17,48 +17,55 @@ export enum LookupType {
 export class Loader {
   public shouldLoadRelative: (referencedFile: string) => boolean
   private options: LoaderOptions
-  private contains: (root: string, file: string) => boolean
+  private contains: LiquidAsync<NonNullable<FS['containsSync']>>
+  private exists: LiquidAsync<FS['existsSync']>
 
   constructor (options: LoaderOptions) {
     this.options = options
     if (options.relativeReference) {
       const sep = options.fs.sep
       assert(sep, '`fs.sep` is required for relative reference')
-      const rRelativePath = new RegExp(['.' + sep, '..' + sep, './', '../'].map(prefix => escapeRegex(prefix)).join('|'))
-      this.shouldLoadRelative = (referencedFile: string) => rRelativePath.test(referencedFile)
+      const prefixes = ['.' + sep, '..' + sep, './', '../']
+      this.shouldLoadRelative = (referencedFile: string) => prefixes.some(prefix => referencedFile.startsWith(prefix))
     } else {
       this.shouldLoadRelative = (_referencedFile: string) => false
     }
-    this.contains = this.options.fs.contains || (() => true)
+    const fs = options.fs
+    this.contains = toLiquidAsync(
+      fs.contains?.bind(fs) || (async () => true),
+      fs.containsSync?.bind(fs) || (() => true)
+    )
+    this.exists = toLiquidAsync(
+      fs.exists?.bind(fs) || (async () => false),
+      fs.existsSync?.bind(fs)
+    )
   }
 
   public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string): Generator<unknown, string, string> {
-    const { fs } = this.options
     const dirs = this.options[type]
-    for (const filepath of this.candidates(file, dirs, currentFile, type !== LookupType.Root)) {
-      if (sync ? fs.existsSync(filepath) : yield fs.exists(filepath)) return filepath
+    for (const filepath of this.candidates(file, dirs, currentFile)) {
+      let allowed = false
+      for (const dir of dirs) {
+        if (yield this.contains(!!sync, dir, filepath)) { allowed = true; break }
+      }
+      if (!allowed) continue
+      if (yield this.exists(!!sync, filepath)) return filepath
     }
     throw this.lookupError(file, dirs)
   }
 
-  public * candidates (file: string, dirs: string[], currentFile?: string, enforceRoot?: boolean) {
+  public * candidates (file: string, dirs: string[], currentFile?: string) {
     const { fs, extname } = this.options
+
     if (this.shouldLoadRelative(file) && currentFile) {
       const referenced = fs.resolve(this.dirname(currentFile), file, extname)
-      for (const dir of dirs) {
-        if (!enforceRoot || this.contains(dir, referenced)) {
-          // the relatively referenced file is within one of root dirs
-          yield referenced
-          break
-        }
-      }
+      yield referenced
     }
     for (const dir of dirs) {
       const referenced = fs.resolve(dir, file, extname)
-      if (!enforceRoot || this.contains(dir, referenced)) {
-        yield referenced
-      }
+      yield referenced
     }
+
     if (fs.fallback !== undefined) {
       const filepath = fs.fallback(file)
       if (filepath !== undefined) yield filepath

@@ -5,6 +5,7 @@ import * as arrayFilters from './array'
 import * as dateFilters from './date'
 import * as stringFilters from './string'
 import * as base64Filters from './base64'
+import * as cryptoFilters from './crypto'
 import misc from './misc'
 import { FilterImplOptions } from '../template'
 
@@ -16,5 +17,6 @@ export const filters: Record<string, FilterImplOptions> = {
   ...dateFilters,
   ...stringFilters,
   ...base64Filters,
+  ...cryptoFilters,
   ...misc
 }

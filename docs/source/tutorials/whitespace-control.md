@@ -13,14 +13,14 @@ By default, all tags and output markups lines will generate a NL (`\n`), and whi
 {{ author }}
 ```
 
-Outputs (note the blank link):
+Outputs (note the blank line):
 
 ```
 
 harttle
 ```
 
-We can include hyphens in your tag syntax (`{% raw %}{{-{% endraw %}`, `-}}`, `{% raw %}{%-{% endraw %}`, `-%}`) to strip whitespace from left or right. For example:
+You can include hyphens in tag syntax (`{% raw %}{{-{% endraw %}`, `-}}`, `{% raw %}{%-{% endraw %}`, `-%}`) to strip whitespace from the left or right. For example:
 
 ```liquid
 {% assign author = "harttle" -%}

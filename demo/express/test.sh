@@ -1,4 +1,4 @@
-set -x
+set -e
 
 LOG_FILE=$(mktemp)
 npm start > $LOG_FILE 2>&1 &

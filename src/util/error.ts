@@ -29,7 +29,7 @@ export abstract class LiquidError extends Error {
     if (this.originalError) this.stack += '\nFrom ' + this.originalError.stack
   }
   static is (obj: unknown): obj is LiquidError {
-    return obj?.[TRAIT] === 'LiquidError'
+    return (obj as Record<string, unknown> | null | undefined)?.[TRAIT] === 'LiquidError'
   }
 }
 

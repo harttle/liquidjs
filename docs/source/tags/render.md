@@ -1,5 +1,5 @@
 ---
-title: Render
+title: render
 ---
 
 {% since %}v9.2.0{% endsince %}
@@ -32,7 +32,7 @@ When a partial template is rendered, the code inside it can't access its parent'
 
 ## Passing Variables
 
-Variables defined in parent's scope can be passed to a the partial template by listing them as parameters on the render tag:
+Variables defined in the parent's scope can be passed to the partial template by listing them as parameters on the `render` tag:
 
 ```liquid
 {% assign my_variable = 'apples' %}

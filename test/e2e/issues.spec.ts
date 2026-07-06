@@ -1,4 +1,6 @@
 import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, IfTag } from '../..'
+import { spawnSync } from 'child_process'
+import { resolve as resolvePath } from 'path'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
 
 describe('Issues', function () {
@@ -172,6 +174,24 @@ describe('Issues', function () {
     const tpl = engine.parse('{% include prefix/{{ my_variable | append: "-bar" }}/suffix %}')
     const html = await engine.render(tpl, { my_variable: 'foo' })
     expect(html).toBe('CONTENT for /tmp/prefix/foo-bar/suffix')
+  })
+  it('should prevent path traversal in dynamic include with restricted root, #851', () => {
+    const projectRoot = resolvePath(__dirname, '../..')
+    const poc = `
+      const { Liquid } = require('./dist/liquid.node.js');
+      const e = new Liquid({ root: ['/tmp'], partials: ['/tmp'], dynamicPartials: true });
+      e.parseAndRender('{% include page %}', { page: '../../../etc/passwd' })
+        .then(() => { console.log('OK'); })
+        .catch(err => { console.error('ERR:' + err.message); process.exit(1); });
+    `
+    const result = spawnSync(
+      process.execPath,
+      ['-e', poc],
+      { cwd: projectRoot, encoding: 'utf8' }
+    )
+
+    expect(result.status).not.toBe(0)
+    expect(result.stderr).toContain('Failed to lookup')
   })
   it('Implement liquid/echo tags #428', () => {
     const template = `{%- liquid

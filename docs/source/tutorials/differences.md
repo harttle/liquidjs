@@ -4,7 +4,7 @@ title: Differences with Shopify/liquid
 
 ## Compatibility
 
-Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it's one of the most popular template engines in Ruby. There're lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
+Being compatible with the Ruby version is one of our priorities. Liquid language is originally [implemented in Ruby][ruby-liquid] and used by Shopify and Jekyll (and thus GitHub Pages). As you can see it's one of the most popular template engines in Ruby. There are lots of people using LiquidJS to serve their templates originally written for Shopify themes and Jekyll sites.
 
 So "being compatible" means serving developers from Shopify and Jekyll well:
 
@@ -13,8 +13,8 @@ So "being compatible" means serving developers from Shopify and Jekyll well:
 
 In the meantime, it's now implemented in JavaScript, that means it has to be more powerful:
 
-* **Async as first-class citizen**. Filters and tags can be implemented asynchronously by return a `Promise`.
-* **Also can be sync**. For scenarios that are not I/O intensive, render synchronously can be much faster. You can call synchronous APIs like `.renderSync()` as long as all the filters and tags in template support to be rendered synchronously. All builtin filters/tags support both sync and async render.
+* **Async as a first-class citizen**. Filters and tags can be implemented asynchronously by returning a `Promise`.
+* **Can also be synchronous**. For scenarios that are not I/O intensive, rendering synchronously can be much faster. You can call synchronous APIs like `.renderSync()` as long as all the filters and tags in the template can be rendered synchronously. All built-in filters/tags support both sync and async render.
 * **[Abstract file system][afs]**. Along with async feature, LiquidJS can be used to serve templates stored in Databases [#414][#414], on remote HTTP server [#485][#485], and so on.
 * **Additional tags and filters** like `layout` and `json`, `inspect`, `where_exp`, `group_by`, etc., see below for details.
 
@@ -24,6 +24,7 @@ Though we're trying to be compatible with the Ruby version, there are still some
 
 * Truthy and Falsy. All values except `undefined`, `null`, `false` are truthy, whereas in Ruby Liquid all except `nil` and `false` are truthy. See [#26][#26].
 * Number. In JavaScript we cannot distinguish or convert between `float` and `integer`, see [#59][#59]. And when applied `size` filter, numbers always return 0, which is 8 for integer in ruby, cause they do not have a `length` property.
+* Stringify: We've aligned string coercion for primitive types. While some differences remain; for example, in Shopify/liquid, `strip` returns the "inspected" string of an input array, whereas in LiquidJS, the `strip` filter simply stringifies the input array [#852][#852].
 * [.to_liquid()](https://github.com/Shopify/liquid/wiki/Introduction-to-Drops) is replaced by `.toLiquid()`
 * [.to_s()](https://www.rubydoc.info/gems/liquid/Liquid/Drop) is replaced by JavaScript `.toString()`
 * Iteration order for objects. The iteration order of JavaScript objects, and thus LiquidJS objects, is a combination of the insertion order for string keys, and ascending order for number-like keys, while the iteration order of Ruby Hash is simply the insertion order.
@@ -47,6 +48,7 @@ Though we're trying to be compatible with the Ruby version, there are still some
 [#236]: https://github.com/harttle/liquidjs/issues/236
 [#414]: https://github.com/harttle/liquidjs/discussions/414
 [#485]: https://github.com/harttle/liquidjs/discussions/485
+[#852]: https://github.com/harttle/liquidjs/discussions/852
 [sort]: https://liquidjs.com/filters/sort.html
 [stable-sort]: https://v8.dev/features/stable-sort
 [plugins]: ./plugins.html#Plugin-List

@@ -15,6 +15,7 @@ export class Render {
     if (!emitter) {
       emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter() : new SimpleEmitter()
     }
+    ctx.renderLimit.check(getPerformance().now())
     const errors = []
     for (const tpl of templates) {
       ctx.renderLimit.check(getPerformance().now())

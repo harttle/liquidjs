@@ -32,8 +32,10 @@ export const operatorTypes = {
   'or': OperatorType.Binary
 }
 
+export type OperatorKey = keyof typeof operatorPrecedences
+
 export class OperatorToken extends Token {
-  public operator: string
+  public operator: OperatorKey
   public constructor (
     public input: string,
     public begin: number,
@@ -41,10 +43,9 @@ export class OperatorToken extends Token {
     public file?: string
   ) {
     super(TokenKind.Operator, input, begin, end, file)
-    this.operator = this.getText()
+    this.operator = this.getText() as OperatorKey
   }
   getPrecedence () {
-    const key = this.getText()
-    return key in operatorPrecedences ? operatorPrecedences[key] : 1
+    return this.operator in operatorPrecedences ? operatorPrecedences[this.operator] : 1
   }
 }

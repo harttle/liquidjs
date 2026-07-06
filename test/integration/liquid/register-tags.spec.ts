@@ -38,4 +38,10 @@ describe('liquid#registerTag()', function () {
     })
     return expect(html).toBe('ABC')
   })
+
+  it('should not treat Object.prototype names as registered tags', () => {
+    const l = new Liquid()
+    expect(Object.getPrototypeOf(l.tags)).toBeNull()
+    expect(() => l.parse('{% constructor %}')).toThrow('tag "constructor" not found')
+  })
 })

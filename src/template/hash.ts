@@ -24,7 +24,7 @@ export class Hash {
   }
 
   * render (ctx: Context): Generator<unknown, Record<string, any>, unknown> {
-    const hash = {}
+    const hash: Record<string, any> = {}
     for (const key of Object.keys(this.hash)) {
       hash[key] = this.hash[key] === undefined ? true : yield evalToken(this.hash[key], ctx)
     }

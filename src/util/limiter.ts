@@ -9,12 +9,14 @@ export class Limiter {
     this.limit = limit
   }
   use (count: number) {
-    count = +count || 0
-    assert(this.base + count <= this.limit, this.message)
-    this.base += count
+    if (+count > 0) {
+      assert(this.base + +count <= this.limit, this.message)
+      this.base += +count
+    }
   }
   check (count: number) {
-    count = +count || 0
-    assert(count <= this.limit, this.message)
+    if (+count > 0) {
+      assert(+count <= this.limit, this.message)
+    }
   }
 }

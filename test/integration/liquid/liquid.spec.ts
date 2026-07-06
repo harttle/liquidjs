@@ -1,6 +1,7 @@
 import { Liquid, Context, isFalsy } from '../../../src'
 import { mock, restore } from '../../stub/mockfs'
 import { drainStream } from '../../stub/stream'
+import { resolve } from 'path'
 
 describe('Liquid', function () {
   describe('#plugin()', function () {
@@ -109,12 +110,29 @@ describe('Liquid', function () {
     })
   })
   describe('#renderFile', function () {
+    afterEach(restore)
     it('should throw with lookup list when file not exist', function () {
       const engine = new Liquid({
         root: ['/boo', '/root/'],
         extname: '.html'
       })
       return expect(engine.renderFile('/not/exist.html')).rejects.toThrow(/Failed to lookup "\/not\/exist.html" in "\/boo,\/root\/"/)
+    })
+    it('should reject absolute paths outside root', async function () {
+      mock({
+        '/safe/foo.html': 'safe',
+        '/etc/secret': 'SECRET'
+      })
+      const engine = new Liquid({ root: ['/safe'] })
+      await expect(engine.renderFile('/etc/secret')).rejects.toThrow(/Failed to lookup/)
+    })
+    it('should reject absolute paths outside root (sync)', function () {
+      mock({
+        '/safe/foo.html': 'safe',
+        '/etc/secret': 'SECRET'
+      })
+      const engine = new Liquid({ root: ['/safe'] })
+      expect(() => engine.renderFileSync('/etc/secret')).toThrow(/Failed to lookup/)
     })
   })
   describe('#parseFile', function () {
@@ -127,7 +145,7 @@ describe('Liquid', function () {
     })
     it('should fallback to require.resolve in Node.js', async function () {
       const engine = new Liquid({
-        root: ['/root/'],
+        root: [resolve(__dirname, '../../..')],
         extname: '.html'
       })
       const tpls = await engine.parseFileSync('jest')

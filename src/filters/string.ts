@@ -11,7 +11,7 @@
 // Hiragana (Japanese): \u3040-\u309F
 // Hangul (Korean): \uAC00-\uD7AF
 import { FilterImpl } from '../template'
-import { assert, escapeRegExp, stringify } from '../util'
+import { assert, stringify } from '../util'
 
 const rCJKWord = /[\u4E00-\u9FFF\uF900-\uFAFF\u3400-\u4DBF\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF]/gu
 
@@ -38,10 +38,14 @@ export function lstrip (this: FilterImpl, v: string, chars?: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
   if (chars) {
-    chars = escapeRegExp(stringify(chars))
-    return str.replace(new RegExp(`^[${chars}]+`, 'g'), '')
+    chars = stringify(chars)
+    this.context.memoryLimit.use(chars.length)
+    for (let i = 0, set = new Set(chars); i < str.length; i++) {
+      if (!set.has(str[i])) return str.slice(i)
+    }
+    return ''
   }
-  return str.replace(/^\s+/, '')
+  return str.trimStart()
 }
 
 export function downcase (this: FilterImpl, v: string) {
@@ -58,20 +62,22 @@ export function upcase (this: FilterImpl, v: string) {
 
 export function remove (this: FilterImpl, v: string, arg: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
-  return str.split(stringify(arg)).join('')
+  arg = stringify(arg)
+  this.context.memoryLimit.use(str.length + arg.length)
+  return str.split(arg).join('')
 }
 
 export function remove_first (this: FilterImpl, v: string, l: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
-  return str.replace(stringify(l), '')
+  l = stringify(l)
+  this.context.memoryLimit.use(str.length + l.length)
+  return str.replace(l, '')
 }
 
 export function remove_last (this: FilterImpl, v: string, l: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
   const pattern = stringify(l)
+  this.context.memoryLimit.use(str.length + pattern.length)
   const index = str.lastIndexOf(pattern)
   if (index === -1) return str
   return str.substring(0, index) + str.substring(index + pattern.length)
@@ -81,10 +87,14 @@ export function rstrip (this: FilterImpl, str: string, chars?: string) {
   str = stringify(str)
   this.context.memoryLimit.use(str.length)
   if (chars) {
-    chars = escapeRegExp(stringify(chars))
-    return str.replace(new RegExp(`[${chars}]+$`, 'g'), '')
+    chars = stringify(chars)
+    this.context.memoryLimit.use(chars.length)
+    for (let i = str.length - 1, set = new Set(chars); i >= 0; i--) {
+      if (!set.has(str[i])) return str.slice(0, i + 1)
+    }
+    return ''
   }
-  return str.replace(/\s+$/, '')
+  return str.trimEnd()
 }
 
 export function split (this: FilterImpl, v: string, arg: string) {
@@ -101,10 +111,13 @@ export function strip (this: FilterImpl, v: string, chars?: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
   if (chars) {
-    chars = escapeRegExp(stringify(chars))
-    return str
-      .replace(new RegExp(`^[${chars}]+`, 'g'), '')
-      .replace(new RegExp(`[${chars}]+$`, 'g'), '')
+    const set = new Set(stringify(chars))
+    this.context.memoryLimit.use(set.size)
+    let i = 0
+    let j = str.length - 1
+    while (set.has(str[i])) i++
+    while (j >= i && set.has(str[j])) j--
+    return str.slice(i, j + 1)
   }
   return str.trim()
 }
@@ -123,36 +136,44 @@ export function capitalize (this: FilterImpl, str: string) {
 
 export function replace (this: FilterImpl, v: string, pattern: string, replacement: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
-  return str.split(stringify(pattern)).join(replacement)
+  pattern = stringify(pattern)
+  replacement = stringify(replacement)
+  const parts = str.split(pattern)
+  const outputSize = str.length + (parts.length - 1) * (replacement.length - pattern.length)
+  this.context.memoryLimit.use(outputSize)
+  return parts.join(replacement)
 }
 
 export function replace_first (this: FilterImpl, v: string, arg1: string, arg2: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
-  return str.replace(stringify(arg1), arg2)
+  arg1 = stringify(arg1)
+  arg2 = stringify(arg2)
+  this.context.memoryLimit.use(str.length + arg1.length + arg2.length)
+  return str.replace(arg1, () => arg2)
 }
 
 export function replace_last (this: FilterImpl, v: string, arg1: string, arg2: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
   const pattern = stringify(arg1)
+  const replacement = stringify(arg2)
+  this.context.memoryLimit.use(str.length + pattern.length + replacement.length)
   const index = str.lastIndexOf(pattern)
   if (index === -1) return str
-  const replacement = stringify(arg2)
   return str.substring(0, index) + replacement + str.substring(index + pattern.length)
 }
 
 export function truncate (this: FilterImpl, v: string, l = 50, o = '...') {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
+  o = stringify(o)
+  this.context.memoryLimit.use(str.length + o.length)
   if (str.length <= l) return v
   return str.substring(0, l - o.length) + o
 }
 
 export function truncatewords (this: FilterImpl, v: string, words = 15, o = '...') {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
+  o = stringify(o)
+  this.context.memoryLimit.use(str.length + o.length)
   const arr = str.split(/\s+/)
   if (words <= 0) words = 1
   let ret = arr.slice(0, words).join(' ')
@@ -187,7 +208,10 @@ export function number_of_words (this: FilterImpl, input: string, mode?: 'cjk' |
 }
 
 export function array_to_sentence_string (this: FilterImpl, array: unknown[], connector = 'and') {
-  this.context.memoryLimit.use(array.length)
+  connector = stringify(connector)
+  let outputSize = connector.length + array.length * 2
+  for (let i = 0; i < array.length; i++) outputSize += stringify(array[i]).length
+  this.context.memoryLimit.use(outputSize)
   switch (array.length) {
     case 0:
       return ''

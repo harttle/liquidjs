@@ -58,7 +58,7 @@ logo-size = 36px
   text-decoration: none
   line-height: logo-size
   white-space: nowrap
-  opacity: 0.7
+  opacity: 0.85
   transition: opacity 0.2s, color 0.2s
   display: inline-block
   padding: 0 12px
@@ -80,12 +80,70 @@ logo-size = 36px
   @media mq-normal
     display: block
 
-#lang-select
-  opacity: 0
-  position: absolute
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  -webkit-appearance: menulist-button
-  font-size: inherit
+@media mq-normal
+  .github-buttons-wrap
+    display: flex
+    align-items: center
+    line-height: normal
+    opacity: 1
+    span
+      display: inline-flex
+      align-items: center
+
+.gh-star
+  display: inline-flex
+  margin-right: 12px
+  .gh-btn
+    border-radius: 0.25em 0 0 0.25em
+
+.gh-btn, .gh-count
+  font: 600 12px/16px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif
+  box-sizing: content-box
+  display: inline-flex
+  align-items: center
+  height: 16px
+  padding: 5px 10px
+  border: 1px solid #d1d9e0
+  color: #25292e
+  white-space: nowrap
+
+.gh-btn
+  border-radius: 0.25em
+  background-color: #ebf0f4
+  background-image: linear-gradient(180deg, #f6f8fa, #ebf0f4 90%)
+  span
+    margin-left: 4px
+  &:hover, &:focus
+    color: #25292e
+    text-decoration: none
+    background-color: #e5eaee
+    background-image: linear-gradient(180deg, #eff2f5, #e5eaee 90%)
+
+.gh-btn-icon
+  fill: currentColor
+
+.gh-count
+  border-left: 0
+  border-radius: 0 0.25em 0.25em 0
+  background-color: #fff
+  &:hover, &:focus
+    color: #0969da
+    text-decoration: none
+  &:empty
+    display: none
+
+@media (prefers-color-scheme: dark)
+  .gh-btn, .gh-count
+    border-color: #3d444d
+    color: #f0f6fc
+  .gh-btn
+    background-color: #1a2026
+    background-image: linear-gradient(180deg, #212830, #1a2026 90%)
+    &:hover, &:focus
+      color: #f0f6fc
+      background-color: #1f242c
+      background-image: linear-gradient(180deg, #262c36, #1f242c 90%)
+  .gh-count
+    background-color: #0d1117
+    &:hover, &:focus
+      color: #388bfd

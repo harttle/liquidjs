@@ -38,6 +38,7 @@ describe('#renderFile()', function () {
     return expect(html).toContain('"name": "liquidjs"')
   })
   it('should render file with context', async function () {
+    engine = new Liquid({ root: views, extname: '.html' })
     const html = await engine.renderFile(resolve(views, 'name.html'), { name: 'harttle' })
     return expect(html).toBe('My name is harttle.')
   })

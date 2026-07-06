@@ -2,7 +2,7 @@
 title: Use in Express.js
 ---
 
-LiquidJS is compatible to the [express template engines](https://expressjs.com/en/resources/template-engines.html). You can set liquidjs instance to the [view engine][express-views] option:
+LiquidJS is compatible with [Express template engines](https://expressjs.com/en/resources/template-engines.html). You can set the LiquidJS instance as the [view engine][express-views] option:
 
 ```javascript
 var { Liquid } = require('liquidjs');
@@ -50,7 +50,7 @@ res.render('world')
 
 ## Caching
 
-Simply setting the [cache option][cache] to true will enable template caching, as explained in [Caching][Caching]. It's recommended to enable cache in production environment, which can be done by:
+Simply setting the [cache option][cache] to true will enable template caching, as explained in [Caching][Caching]. It's recommended to enable cache in a production environment, which can be done by:
 
 ```javascript
 var { Liquid } = require('liquidjs');

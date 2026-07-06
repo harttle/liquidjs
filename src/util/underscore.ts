@@ -21,10 +21,6 @@ export function isIterator (val: any): val is IterableIterator<any> {
   return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
 }
 
-export function escapeRegex (str: string) {
-  return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
-}
-
 export function promisify<T1, T2> (fn: (arg1: T1, cb: (err: Error | null, result: T2) => void) => void): (arg1: T1) => Promise<T2>;
 export function promisify<T1, T2, T3> (fn: (arg1: T1, arg2: T2, cb: (err: Error | null, result: T3) => void) => void): (arg1: T1, arg2: T2) => Promise<T3>;
 export function promisify (fn: any) {
@@ -43,6 +39,12 @@ export function stringify (value: any): string {
   if (isNil(value)) return ''
   if (isArray(value)) return value.map(x => stringify(x)).join('')
   return String(value)
+}
+
+export function readArrayElement (arr: any[], index: number, ownPropertyOnly: boolean) {
+  if (index < 0) index = arr.length + index
+  if (ownPropertyOnly && !hasOwnProperty.call(arr, index)) return undefined
+  return arr[index]
 }
 
 export function toEnumerable<T = unknown> (val: any): T[] {
@@ -154,9 +156,9 @@ export function padEnd (str: any, length: number, ch = ' ') {
 
 export function pad (str: any, length: number, ch: string, add: (str: string, ch: string) => string) {
   str = String(str)
-  let n = length - str.length
-  while (n-- > 0) str = add(str, ch)
-  return str
+  const n = length - str.length
+  if (n <= 0) return str
+  return add(str, ch.repeat(n))
 }
 
 export function identify<T> (val: T): T {
@@ -172,11 +174,20 @@ export function ellipsis (str: string, N: number): string {
   return str.length > N ? str.slice(0, N - 3) + '...' : str
 }
 
+export function orderedCompare (a: any, b: any) {
+  if (isNil(a) && isNil(b)) return 0
+  if (isNil(a)) return 1
+  if (isNil(b)) return -1
+  if (a < b) return -1
+  if (a > b) return 1
+  return 0
+}
+
 // compare string in case-insensitive way, undefined values to the tail
 export function caseInsensitiveCompare (a: any, b: any) {
-  if (a == null && b == null) return 0
-  if (a == null) return 1
-  if (b == null) return -1
+  if (isNil(a) && isNil(b)) return 0
+  if (isNil(a)) return 1
+  if (isNil(b)) return -1
   a = toLowerCase.call(a)
   b = toLowerCase.call(b)
   if (a < b) return -1

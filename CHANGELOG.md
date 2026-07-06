@@ -1,3 +1,106 @@
+## [10.27.1](https://github.com/harttle/liquidjs/compare/v10.27.0...v10.27.1) (2026-06-23)
+
+
+### Bug Fixes
+
+* improve round function; improvement to [#873](https://github.com/harttle/liquidjs/issues/873) ([#901](https://github.com/harttle/liquidjs/issues/901)) ([956b51e](https://github.com/harttle/liquidjs/commit/956b51ea953eb52d9eba7409b7f51e379023fec4))
+* **security:** charge pop filter allocation to memoryLimit ([#907](https://github.com/harttle/liquidjs/issues/907)) ([8a0c74a](https://github.com/harttle/liquidjs/commit/8a0c74a7fcb1671aa1dcb71ec82ba0602dc90d04))
+* **strip_html:** infinite loop for strip_html ([5c3522f](https://github.com/harttle/liquidjs/commit/5c3522f33928aae66f0fe85c36e1d9015c768fe2))
+
+
+### Performance Improvements
+
+* **parser:** memoize createTrie to avoid rebuilding tries per Tokenizer ([#911](https://github.com/harttle/liquidjs/issues/911)) ([3a0d80d](https://github.com/harttle/liquidjs/commit/3a0d80d1f4526af0fbca2bb2e0a9c51669d2fd3e))
+
+# [10.27.0](https://github.com/harttle/liquidjs/compare/v10.26.0...v10.27.0) (2026-05-15)
+
+
+### Features
+
+* **context:** null-prototype scope frames via createScope ([#899](https://github.com/harttle/liquidjs/issues/899)) ([47d3f1b](https://github.com/harttle/liquidjs/commit/47d3f1b1cf33be91fe587821f288d1c9d8e1ace7))
+
+# [10.26.0](https://github.com/harttle/liquidjs/compare/v10.25.7...v10.26.0) (2026-05-14)
+
+
+### Bug Fixes
+
+* **date:** cap strftime widths and account padding in memoryLimit ([#895](https://github.com/harttle/liquidjs/issues/895)) ([3129d46](https://github.com/harttle/liquidjs/commit/3129d46dc95efa357b00e5a57ee1af80a13d72ed))
+* enforce renderLimit for empty renderTemplates calls ([#894](https://github.com/harttle/liquidjs/issues/894)) ([5b9c346](https://github.com/harttle/liquidjs/commit/5b9c3469085e01c79e2d0af28e2a13f730e1793d))
+* propagate ownPropertyOnly into Context.spawn() for {% render %} ([#893](https://github.com/harttle/liquidjs/issues/893)) ([dbbf628](https://github.com/harttle/liquidjs/commit/dbbf6288030591bf6da28d8c1cce5a17bca97bb6))
+* **security:** block Object.prototype filter/tag lookups (RCE) ([#897](https://github.com/harttle/liquidjs/issues/897)) ([457fae0](https://github.com/harttle/liquidjs/commit/457fae0736c3ec862539b9dbf7f477e6c08fb6c6))
+* strip html newline tags ([#892](https://github.com/harttle/liquidjs/issues/892)) ([26ea285](https://github.com/harttle/liquidjs/commit/26ea2856c7a90aec892b98d94a9b7a3e18539045))
+* **strip_html:** rewrite as linear single-pass scan to avoid ReDoS ([#896](https://github.com/harttle/liquidjs/issues/896)) ([3616a74](https://github.com/harttle/liquidjs/commit/3616a744b9abeb425c217b340a2397d46176afb8))
+
+
+### Features
+
+* add sha256 and hmac_sha256 filters for cryptographic operations ([#889](https://github.com/harttle/liquidjs/issues/889)) ([1c816d4](https://github.com/harttle/liquidjs/commit/1c816d4fc3bcd2cba011f7a84f56a4251fca0622))
+
+## [10.25.7](https://github.com/harttle/liquidjs/compare/v10.25.6...v10.25.7) (2026-04-23)
+
+
+### Bug Fixes
+
+* **filters:** support Buffer input in base64_encode to prevent binary data corruption ([#881](https://github.com/harttle/liquidjs/issues/881)) ([0ee6dbb](https://github.com/harttle/liquidjs/commit/0ee6dbb511aa926f6d490293282060abf3bab37f))
+
+## [10.25.6](https://github.com/harttle/liquidjs/compare/v10.25.5...v10.25.6) (2026-04-19)
+
+
+### Bug Fixes
+
+* nested block for layout ([#883](https://github.com/harttle/liquidjs/issues/883)) ([e2311df](https://github.com/harttle/liquidjs/commit/e2311dfd6e82f73509308aa8a3a1fafc92e226f0))
+
+## [10.25.5](https://github.com/harttle/liquidjs/compare/v10.25.4...v10.25.5) (2026-04-07)
+
+
+### Bug Fixes
+
+* enforce root containment for renderFile/parseFile lookups ([#870](https://github.com/harttle/liquidjs/issues/870)) ([f41c1fc](https://github.com/harttle/liquidjs/commit/f41c1fc02fe901598f3328118b42b13bc6bc9b04))
+* null date should return empty ([#868](https://github.com/harttle/liquidjs/issues/868)) ([#872](https://github.com/harttle/liquidjs/issues/872)) ([4f9a499](https://github.com/harttle/liquidjs/commit/4f9a49988a93c156524981e189a4fec238e682b8))
+* rounding negative away from zero when half ([#873](https://github.com/harttle/liquidjs/issues/873)) ([1cdf10b](https://github.com/harttle/liquidjs/commit/1cdf10b57d82f0592414efbfca19e204b37aea9f))
+
+## [10.25.4](https://github.com/harttle/liquidjs/compare/v10.25.3...v10.25.4) (2026-04-07)
+
+
+### Bug Fixes
+
+* sort and sort_natural filters bypass ownPropertyOnly ([#869](https://github.com/harttle/liquidjs/issues/869)) ([e743da0](https://github.com/harttle/liquidjs/commit/e743da0020d34e2ee547e1cc1a86b58377ebe1ce))
+
+## [10.25.3](https://github.com/harttle/liquidjs/compare/v10.25.2...v10.25.3) (2026-04-06)
+
+
+### Bug Fixes
+
+* precise memoryLimit for string replace ([abc058b](https://github.com/harttle/liquidjs/commit/abc058be0f33d6372cd2216f4945183167abeb25))
+* use realpath for fs.contains ([#867](https://github.com/harttle/liquidjs/issues/867)) ([529dd67](https://github.com/harttle/liquidjs/commit/529dd67eeb6b125637623d6a723601f0938d3613))
+
+## [10.25.2](https://github.com/harttle/liquidjs/compare/v10.25.1...v10.25.2) (2026-03-25)
+
+
+### Bug Fixes
+
+* handle undefined replacement argument in replace filter ([#864](https://github.com/harttle/liquidjs/issues/864)) ([0ad2b11](https://github.com/harttle/liquidjs/commit/0ad2b11ab15e7da608a9ef936b2a00a6a6517038))
+
+## [10.25.1](https://github.com/harttle/liquidjs/compare/v10.25.0...v10.25.1) (2026-03-22)
+
+
+### Bug Fixes
+
+* mem limiter for invalid ranges ([95ddefc](https://github.com/harttle/liquidjs/commit/95ddefc056a11a44d9e753fd47a39db2c241e578))
+* treat args for replace_first as literal ([35d5230](https://github.com/harttle/liquidjs/commit/35d523026345d80458df24c72e653db78b5d061d))
+
+# [10.25.0](https://github.com/harttle/liquidjs/compare/v10.24.0...v10.25.0) (2026-03-07)
+
+
+### Bug Fixes
+
+* path traversal vulnerability, [#851](https://github.com/harttle/liquidjs/issues/851) ([#855](https://github.com/harttle/liquidjs/issues/855)) ([3cd024d](https://github.com/harttle/liquidjs/commit/3cd024d652dc883c46307581e979fe32302adbac))
+
+
+### Features
+
+* export error types, resolving [#837](https://github.com/harttle/liquidjs/issues/837) ([#840](https://github.com/harttle/liquidjs/issues/840)) ([71aa1b1](https://github.com/harttle/liquidjs/commit/71aa1b1998a3a66e536af67c6ea8947a28616eaf))
+
 # [10.24.0](https://github.com/harttle/liquidjs/compare/v10.23.0...v10.24.0) (2025-10-27)
 
 

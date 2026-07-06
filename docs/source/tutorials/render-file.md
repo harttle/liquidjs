@@ -38,33 +38,27 @@ name: alice
 
 ## Template Lookup
 
-Template files names passed to [renderFile][renderFile], [parseFile][parseFile], [renderFileSync][renderFileSync], [parseFileSync][parseFileSync] APIs,
+Template file names passed to [renderFile][renderFile], [parseFile][parseFile], [renderFileSync][renderFileSync], [parseFileSync][parseFileSync] APIs,
 and [include][include], [layout][layout] tags are resolved against [the root option][root].
 
 It can be a string-typed path (see above example), or a list of root directories, in which case templates will be looked up in that order. e.g.
 
 ```javascript
 var engine = new Liquid({
-    root: ['views/', 'views/partials/'],
+    root: ['views/'],
+    partials: ['views/partials/'],
+    layouts: ['views/layouts/'],
     extname: '.liquid'
 });
 ```
 
 {% note tip Relative Paths %}Relative paths in <code>root</code> will be resolved against <code>cwd()</code>.{% endnote %}
 
-When `{% raw %}{% render "foo" %}{% endraw %}` is rendered or `liquid.renderFile('foo')` is called, the following files will be looked up and the first existing file will be used:
+- When `parse()`, `render()` functions are called, for example `liquid.renderFile('foo')`, templates under `root` will be looked up.
+- When a partial is requested, for example `{% raw %}{% render "foo" %}{% endraw %}`, templates under `partials` will be looked up.
+- When a layout is requested, for example `{% raw %}{% layout "foo" %}{% endraw %}`, templates under `layouts` will be looked up.
 
-- `cwd()`/views/foo.liquid
-- `cwd()`/views/partials/foo.liquid
-
-If none of the above files exists, an `ENOENT` error will be thrown. Here's a demo for Node.js: [demo/nodejs](https://github.com/harttle/liquidjs/tree/master/demo/nodejs).
-
-When LiquidJS is used in browser, say current location is <https://example.com/bar/index.html>, only the first `root` will be used and the file to be fetched is:
-
-- <https://example.com/bar/foo.liquid>
-
-If fetch fails, a 404/500 error or network failures for example, an `ENOENT` error will be thrown.
-Here's a demo for browsers: [demo/browser](https://github.com/harttle/liquidjs/tree/master/demo/browser).
+When LiquidJS is used in browser, the paths will be resolved based on current location. Here's a demo for browsers: [demo/browser](https://github.com/harttle/liquidjs/tree/master/demo/browser).
 
 ## Abstract File System
 
@@ -98,11 +92,11 @@ var engine = new Liquid({
 });
 ```
 
-{% note warn Path Traversal Vulnerability %}The default value of <code>contains()</code> always returns true. That means when specifying an abstract file system, you'll need to provide a proper <code>contains()</code> to avoid expose such vulnerabilities.{% endnote %}
+{% note warn Path Traversal Vulnerability %}The built-in Node <code>fs</code> implements <code>contains()</code> with realpath so templates cannot escape the root via symlinks. The browser bundle omits <code>contains</code> (loader treats paths as allowed). For a custom abstract <code>fs</code>, implement <code>contains</code> unless every resolved path is trusted.{% endnote %}
 
 ## In-memory Template
 
-To facilitate rendering w/o files, there's a `templates` option to specify a mapping of filenames and their content. LiquidJS will read templates from the mapping.
+To facilitate rendering without files, there's a `templates` option to specify a mapping of filenames and their content. LiquidJS will read templates from the mapping.
 
 ```typescript
 const engine = new Liquid({

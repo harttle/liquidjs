@@ -27,7 +27,7 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
     const group = (yield evalToken(this.group, ctx)) as ValueToken
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
-    const groups = ctx.getRegister('cycle')
+    const groups = ctx.getRegister('cycle', {} as Record<string, number>)
     let idx = groups[fingerprint]
 
     if (idx === undefined) {

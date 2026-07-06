@@ -5,7 +5,7 @@ title: Static Template Analysis
 {% since %}v10.20.0{% endsince %}
 
 {% note warn Experimental %}  
-Note that this is an experimental feature and future APIs are subject to change. And internal structures returned can be changed w/o a major version bump.
+Note that this is an experimental feature and future APIs are subject to change. Internal structures returned can be changed without a major version bump.
 {% endnote %}
 
 {% note info Sync and Async %}
@@ -234,9 +234,9 @@ This is an example of an object returned from `Liquid.analyze()`, passing it the
 
 ### Analyzing Custom Tags
 
-For static analysis to include results from custom tags, those tags must implement some additional methods defined on the [Template interface]( /api/interfaces/Template.html). LiquidJS will use the information returned from these methods to traverse the template and report variable usage.
+For static analysis to include results from custom tags, those tags must implement some additional methods defined on the [Template interface](/api/interfaces/Template.html). LiquidJS will use the information returned from these methods to traverse the template and report variable usage.
 
-Not all methods are required, depending in the kind of tag. If it's a block with a start tag, end tag and any amount of Liquid markup in between, it will need to implement the [`children()`](/api/interfaces/Template.html#children) method. `children()` is defined as a generator, so that we can use it in synchronous and asynchronous contexts, just like `render()`. It should return HTML content, output statements and tags that are child nodes of the current tag.
+Not all methods are required, depending on the kind of tag. If it's a block with a start tag, end tag and any amount of Liquid markup in between, it will need to implement the [`children()`](/api/interfaces/Template.html#children) method. `children()` is defined as a generator, so that we can use it in synchronous and asynchronous contexts, just like `render()`. It should return HTML content, output statements and tags that are child nodes of the current tag.
 
 The [`blockScope()`](/api/interfaces/Template.html#blockScope) method is responsible for telling LiquidJS which names will be in scope for the duration of the tag's block. Some of these names could depend on the tag's arguments, and some will be fixed, like `forloop` from the `{% for %}` tag.
 

@@ -25,7 +25,7 @@ color: 'red' shape: 'circle'
 color: 'yellow' shape: 'square'
 ```
 
-More details please refer to the [render](../tags/render.html) tag.
+For more details, see the [render](../tags/render.html) tag.
 
 {% note tip The &quot;.liquid&quot; Extension %}
 The ".liquid" extension in <code>layout</code>, <code>render</code> and <code>include</code> can be omitted if Liquid instance is created using `extname: ".liquid"` option. See <a href="./options.html#extname">the extname option</a> for details.
@@ -54,4 +54,4 @@ My page content
 Footer
 ```
 
-More details please refer to the [layout](../tags/layout.html) tag.
+For more details, see the [layout](../tags/layout.html) tag.

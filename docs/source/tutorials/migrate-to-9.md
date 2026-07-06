@@ -2,7 +2,7 @@
 title: Migrate to LiquidJS 9
 ---
 
-LiquidJS 9 has some fundamental improvements, including bugfixes, new features and performance improvement due to higher target(see #137). There're also some breaking changes.
+LiquidJS 9 has some fundamental improvements, including bugfixes, new features and performance improvements due to a higher target (see #137). There are also some breaking changes.
 
 ## Features
 
@@ -14,11 +14,11 @@ LiquidJS 9 has some fundamental improvements, including bugfixes, new features a
 * Rewrite boolean expression evaluation order, [#130](https://github.com/harttle/liquidjs/issues/130);
 * `break` and `continue` tags omitting output before them, [#123](https://github.com/harttle/liquidjs/issues/123);
 * Fixes errors in React.js demo during yarn install, [#145](https://github.com/harttle/liquidjs/issues/145);
-* Promise typed Drops are not await-ed some times.
+* Promise typed Drops are not always awaited.
 
 ## Performance
 
-* Performance Improvements due to targeting to Node.js 8, see [#137](https://github.com/harttle/liquidjs/issues/137);
+* Performance Improvements due to targeting Node.js 8, see [#137](https://github.com/harttle/liquidjs/issues/137);
 * Memory footprint is reduced by 57.5%, see [#202](https://github.com/harttle/liquidjs/pull/202);
 * Render performance is improved by 100.3%, see [#205](https://github.com/harttle/liquidjs/pull/205).
 

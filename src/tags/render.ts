@@ -1,16 +1,20 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
 import { isString, isValueToken, toEnumerable } from '../util'
-import { TopLevelToken, assert, Liquid, Token, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
+import { TopLevelToken, assert, Liquid, Token, ValueToken, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
 import { Argument, Arguments, PartialScope } from '../template'
 
 export type ParsedFileName = Template[] | Token | string | undefined
 
+type RenderBinding = { value: ValueToken; alias?: string }
+
 export default class extends Tag {
   private file: ParsedFileName
   private currentFile?: string
   private hash: Hash
+  private with?: RenderBinding
+  private forBinding?: RenderBinding
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(token, remainTokens, liquid)
     const tokenizer = this.tokenizer
@@ -33,7 +37,9 @@ export default class extends Tag {
             if (asStr.content === 'as') alias = tokenizer.readIdentifier()
             else tokenizer.p = beforeAs
 
-            this[keyword.content] = { value, alias: alias && alias.content }
+            const binding: RenderBinding = { value, alias: alias && alias.content }
+            if (keyword.content === 'with') this.with = binding
+            else this.forBinding = binding
             tokenizer.skipBlank()
             if (tokenizer.peek() === ',') tokenizer.advance()
             continue // matched!
@@ -50,46 +56,46 @@ export default class extends Tag {
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     const { liquid, hash } = this
-    const filepath = (yield renderFilePath(this['file'], ctx, liquid)) as string
+    const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
     assert(filepath, () => `illegal file path "${filepath}"`)
 
     const childCtx = ctx.spawn()
     const scope = childCtx.bottom()
     __assign(scope, yield hash.render(ctx))
-    if (this['with']) {
-      const { value, alias } = this['with']
+    if (this.with) {
+      const { value, alias } = this.with
       scope[alias || filepath] = yield evalToken(value, ctx)
     }
 
-    if (this['for']) {
-      const { value, alias } = this['for']
+    if (this.forBinding) {
+      const { value, alias } = this.forBinding
       const collection = toEnumerable(yield evalToken(value, ctx))
-      scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias)
+      scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
       for (const item of collection) {
-        scope[alias] = item
-        const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])) as Template[]
+        scope[alias as string] = item
+        const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
         scope['forloop'].next()
       }
     } else {
-      const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this['currentFile'])) as Template[]
+      const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
     }
   }
 
   public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {
-    if (partials && isString(this['file'])) {
-      return (yield this.liquid._parsePartialFile(this['file'], sync, this['currentFile'])) as Template[]
+    if (partials && isString(this.file)) {
+      return (yield this.liquid._parsePartialFile(this.file, sync, this.currentFile)) as Template[]
     }
     return []
   }
 
   public partialScope (): PartialScope | undefined {
-    if (isString(this['file'])) {
+    if (isString(this.file)) {
       const names: Array<string | [string, Argument]> = Object.keys(this.hash.hash)
 
-      if (this['with']) {
-        const { value, alias } = this['with']
+      if (this.with) {
+        const { value, alias } = this.with
         if (isString(alias)) {
           names.push([alias, value])
         } else if (isString(this.file)) {
@@ -97,8 +103,8 @@ export default class extends Tag {
         }
       }
 
-      if (this['for']) {
-        const { value, alias } = this['for']
+      if (this.forBinding) {
+        const { value, alias } = this.forBinding
         if (isString(alias)) {
           names.push([alias, value])
         } else if (isString(this.file)) {
@@ -106,7 +112,7 @@ export default class extends Tag {
         }
       }
 
-      return { name: this['file'], isolated: true, scope: names }
+      return { name: this.file, isolated: true, scope: names }
     }
   }
 
@@ -117,15 +123,15 @@ export default class extends Tag {
       }
     }
 
-    if (this['with']) {
-      const { value } = this['with']
+    if (this.with) {
+      const { value } = this.with
       if (isValueToken(value)) {
         yield value
       }
     }
 
-    if (this['for']) {
-      const { value } = this['for']
+    if (this.forBinding) {
+      const { value } = this.forBinding
       if (isValueToken(value)) {
         yield value
       }

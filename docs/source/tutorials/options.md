@@ -11,27 +11,27 @@ const engine = new Liquid({
 })
 ```
 
-{% note info API Document %}
-Following is an overview for all the options, for exact types and signatures please refer to <a href="https://liquidjs.com/api/interfaces/LiquidOptions.html" target="_self">LiquidOptions | API</a>.
+{% note info API documentation %}
+Following is an overview for all the options. For exact types and signatures, see <a href="https://liquidjs.com/api/interfaces/LiquidOptions.html" target="_self">LiquidOptions | API</a>.
 {% endnote %}
 
 ## cache
 
-**cache** is used to improve performance by caching previously parsed template structures, specially in cases when we're repeatedly parse or render files.
+**cache** is used to improve performance by caching previously parsed template structures, especially in cases when we repeatedly parse or render files.
 
-It's default to `false`. When setting to `true` a default LRU cache of size 1024 will be enabled. And certainly it can be a number which indicates the size of cache you want.
+It defaults to `false`. When set to `true`, a default LRU cache of size 1024 will be enabled. It can also be a number indicating the cache size you want.
 
 Additionally, it can also be a custom cache implementation. See [Caching][caching] for details.
 
 ## Partials/Layouts
 
-**root** is used to specify template directories for LiquidJS to lookup and read template files. Can be a single string and an array of strings. See [Render Files][render-file] for details.
+**root** is used to specify template directories for LiquidJS to look up and read template files. Can be a single string or an array of strings. See [Render Files][render-file] for details.
 
-**layouts** is used to specify template directories for LiquidJS to lookup files for `{% layout %}`. Same format as `root` and will default to `root` if not specified.
+**layouts** is used to specify template directories for LiquidJS to look up files for `{% layout %}`. Same format as `root` and will default to `root` if not specified.
 
-**partials** is used to specify template directories for LiquidJS to lookup files for `{% render %}` and `{% include %}`. Same format as `root` and will default to `root` if not specified.
+**partials** is used to specify template directories for LiquidJS to look up files for `{% render %}` and `{% include %}`. Same format as `root` and will default to `root` if not specified.
 
-**relativeReference** is set to `true` by default to allow relative filenames. Note that relatively referenced files are also need to be within corresponding root. For example you can reference another file like `{% render ../foo/bar %}` as long as `../foo/bar` is also within `partials` directory.
+**relativeReference** is set to `true` by default to allow relative filenames. Note that relatively referenced files also need to be within the corresponding root. For example you can reference another file like `{% render ../foo/bar %}` as long as `../foo/bar` is also within `partials` directory.
 
 ## dynamicPartials
 
@@ -62,7 +62,7 @@ LiquidJS defaults this option to <code>true</code> to be compatible with shopify
 - Use `=` instead of `:` to separate parameter key-values.
 - Parameters are under `include` variable instead of current scope.
 
-For example in the following template, `name.html` is not quoted, `header` and `"HEADER"` are separated by `=`, and the `header` parameter is referenced by `include.header`. More details please check out [include][include].
+For example in the following template, `name.html` is not quoted, `header` and `"HEADER"` are separated by `=`, and the `header` parameter is referenced by `include.header`. For more details, see [include][include].
 
 ```liquid
 // entry template
@@ -90,7 +90,7 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 ## fs
 
-**fs** is used to define a custom file system implementation which will be used by LiquidJS to lookup and read template files. See [Abstract File System][abstract-fs] for details.
+**fs** is used to define a custom file system implementation which will be used by LiquidJS to look up and read template files. See [Abstract File System][abstract-fs] for details.
 
 ## globals
 
@@ -98,9 +98,9 @@ Before 2.0.1, <code>extname</code> is set to `.liquid` by default. To change tha
 
 ## jsTruthy
 
-**jsTruthy** is used to use standard JavaScript truthiness rather than the Shopify.
+**jsTruthy** is used to use standard JavaScript truthiness rather than Shopify's.
 
-it defaults to false.  For example, when set to true, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
+It defaults to `false`. For example, when set to `true`, a blank string would evaluate to false with jsTruthy. With Shopify's truthiness, a blank string is true.
 
 ## outputEscape
 
@@ -108,13 +108,13 @@ it defaults to false.  For example, when set to true, a blank string would evalu
 
 - For untrusted output variables, set `outputEscape: "escape"` makes them be HTML escaped by default. You'll need [raw][raw] filter for direct output.
 - `"json"` is useful when you're using LiquidJS to create valid JSON files.
-- It can even be a function which allows you to control what variables are output throughout LiquidJS. Please note the input can be any type other than string, e.g. an filter returned an non-string value.
+- It can even be a function that allows you to control what variables are output throughout LiquidJS. Please note the input can be any type other than string, e.g. a filter may return a non-string value.
 
 ## Date
 
 **timezoneOffset** is used to specify a different timezone to output dates, your local timezone will be used if not specified. For example, set `timezoneOffset: 0` to output all dates in UTC/GMT 00:00.
 
-**preserveTimezones** is a boolean effects only literal timestamps. When set to `true`, all literal timestamps will remain the same when output. This is a parser option, so Date objects passed to LiquidJS as data will not be affected. Note that `preserveTimezones` has a higher priority than `timezoneOffset`.
+**preserveTimezones** is a boolean that affects only literal timestamps. When set to `true`, all literal timestamps will remain the same when output. This is a parser option, so Date objects passed to LiquidJS as data will not be affected. Note that `preserveTimezones` has a higher priority than `timezoneOffset`.
 
 **dateFormat** is used to specify a default format to output dates. `%A, %B %-e, %Y at %-l:%M %P %z` will be used if not specified. For example, set `dateFormat: %Y-%m-%dT%H:%M:%S:%LZ` to output all dates in [JavaScript Date.toJson()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toJSON) format.
 
