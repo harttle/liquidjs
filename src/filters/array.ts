@@ -8,9 +8,16 @@ import { EmptyDrop } from '../drop'
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
   const array = toArray(v)
   const sep = isNil(arg) ? ' ' : stringify(arg)
-  const complexity = array.length * (1 + sep.length)
-  this.context.memoryLimit.use(complexity)
-  return Array.prototype.join.call(array, sep)
+  const parts: string[] = []
+  let outputSize = array.length > 0 ? sep.length * (array.length - 1) : 0
+  for (let i = 0; i < array.length; i++) {
+    const item = array[i]
+    const part = isNil(item) ? '' : String(item)
+    outputSize += part.length
+    parts.push(part)
+  }
+  this.context.memoryLimit.use(outputSize)
+  return parts.join(sep)
 })
 export const last = argumentsToValue(function (this: FilterImpl, v: any) {
   return isArrayLike(v) ? readArrayElement(v, -1, this.context.ownPropertyOnly) : ''
