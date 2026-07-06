@@ -3,7 +3,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { createScope, Scope } from './scope'
-import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue } from '../util'
+import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement } from '../util'
 
 type PropertyKey = string | number;
 
@@ -125,13 +125,13 @@ export class Context {
     obj = toLiquid(obj)
     key = toValue(key) as PropertyKey
     if (isNil(obj)) return obj
-    if (isArray(obj) && (key as number) < 0) return obj[obj.length + +key]
+    if (isArray(obj) && isNumber(key)) return readArrayElement(obj, key, this.ownPropertyOnly)
     const value = readJSProperty(obj, key, this.ownPropertyOnly)
     if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key, this)
     if (isFunction(value)) return value.call(obj)
     if (key === 'size') return readSize(obj)
-    else if (key === 'first') return readFirst(obj)
-    else if (key === 'last') return readLast(obj)
+    else if (key === 'first') return readFirst(obj, this.ownPropertyOnly)
+    else if (key === 'last') return readLast(obj, this.ownPropertyOnly)
     return value
   }
 }
@@ -141,14 +141,14 @@ export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: b
   return obj[key]
 }
 
-function readFirst (obj: Scope) {
-  if (isArray(obj)) return obj[0]
-  return obj['first']
+function readFirst (obj: Scope, ownPropertyOnly: boolean) {
+  if (isArray(obj)) return readArrayElement(obj, 0, ownPropertyOnly)
+  return readJSProperty(obj, 'first', ownPropertyOnly)
 }
 
-function readLast (obj: Scope) {
-  if (isArray(obj)) return obj[obj.length - 1]
-  return obj['last']
+function readLast (obj: Scope, ownPropertyOnly: boolean) {
+  if (isArray(obj)) return readArrayElement(obj, -1, ownPropertyOnly)
+  return readJSProperty(obj, 'last', ownPropertyOnly)
 }
 
 function readSize (obj: Scope) {

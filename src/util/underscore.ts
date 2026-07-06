@@ -42,6 +42,12 @@ export function stringify (value: any): string {
   return String(value)
 }
 
+export function readArrayElement (arr: any[], index: number, ownPropertyOnly: boolean) {
+  if (index < 0) index = arr.length + index
+  if (ownPropertyOnly && !hasOwnProperty.call(arr, index)) return undefined
+  return arr[index]
+}
+
 export function toEnumerable<T = unknown> (val: any): T[] {
   val = toValue(val)
   if (isArray(val)) return val

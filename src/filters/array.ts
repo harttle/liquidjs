@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, last as arrayLast, isArrayLike, toEnumerable } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -12,8 +12,12 @@ export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: 
   this.context.memoryLimit.use(complexity)
   return array.join(sep)
 })
-export const last = argumentsToValue((v: any) => isArrayLike(v) ? arrayLast(v) : '')
-export const first = argumentsToValue((v: any) => isArrayLike(v) ? v[0] : '')
+export const last = argumentsToValue(function (this: FilterImpl, v: any) {
+  return isArrayLike(v) ? readArrayElement(v, -1, this.context.ownPropertyOnly) : ''
+})
+export const first = argumentsToValue(function (this: FilterImpl, v: any) {
+  return isArrayLike(v) ? readArrayElement(v, 0, this.context.ownPropertyOnly) : ''
+})
 export const reverse = argumentsToValue(function (this: FilterImpl, v: any[]) {
   const array = toArray(v)
   this.context.memoryLimit.use(array.length)

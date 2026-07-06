@@ -183,6 +183,21 @@ describe('Context', function () {
       ctx.push({ foo: Object.create({ bar: 'BAR' }) })
       return expect(() => ctx.getSync(['foo', 'bar'])).toThrow(/undefined variable: foo.bar/)
     })
+    it('should return undefined for inherited array indices', function () {
+      // eslint-disable-next-line no-extend-native
+      Array.prototype[0] = 'POLLUTED'
+      try {
+        const a: number[] = []
+        a.length = 1
+        ctx.push({ foo: a })
+        expect(ctx.getSync(['foo', 0])).toEqual(undefined)
+        expect(ctx.getSync(['foo', -1])).toEqual(undefined)
+        expect(ctx.getSync(['foo', 'first'])).toEqual(undefined)
+        expect(ctx.getSync(['foo', 'last'])).toEqual(undefined)
+      } finally {
+        delete (Array.prototype as any)[0]
+      }
+    })
   })
 
   describe('.getAll()', function () {
