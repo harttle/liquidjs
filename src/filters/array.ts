@@ -7,8 +7,10 @@ import { EmptyDrop } from '../drop'
 
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
   const array = toArray(v)
-  this.context.memoryLimit.use(array.length)
   const sep = isNil(arg) ? ' ' : stringify(arg)
+  let outputSize = sep.length * Math.max(array.length - 1, 0)
+  for (let i = 0; i < array.length; i++) outputSize += String(array[i]).length
+  this.context.memoryLimit.use(outputSize)
   return Array.prototype.join.call(array, sep)
 })
 export const last = argumentsToValue(function (this: FilterImpl, v: any) {

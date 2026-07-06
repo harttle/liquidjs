@@ -6,14 +6,14 @@ import { Emitter, KeepingTypeEmitter, StreamedEmitter, SimpleEmitter } from '../
 
 export class Render {
   public renderTemplatesToNodeStream (templates: Template[], ctx: Context): NodeJS.ReadableStream {
-    const emitter = new StreamedEmitter(ctx.memoryLimit)
+    const emitter = new StreamedEmitter()
     Promise.resolve().then(() => toPromise(this.renderTemplates(templates, ctx, emitter)))
       .then(() => emitter.end(), err => emitter.error(err))
     return emitter.stream
   }
   public * renderTemplates (templates: Template[], ctx: Context, emitter?: Emitter): IterableIterator<any> {
     if (!emitter) {
-      emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter(ctx.memoryLimit) : new SimpleEmitter(ctx.memoryLimit)
+      emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter() : new SimpleEmitter()
     }
     ctx.renderLimit.check(getPerformance().now())
     const errors = []

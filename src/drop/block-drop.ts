@@ -13,7 +13,6 @@ export class BlockDrop extends Drop {
    * {{ block.super }}
    */
   public * super (): IterableIterator<unknown> {
-    // memory limit already enforced by final emitter, not passing memory here
     const emitter = new SimpleEmitter()
     yield this.superBlockRender(emitter)
     return emitter.buffer
