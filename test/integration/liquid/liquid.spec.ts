@@ -1,6 +1,7 @@
 import { Liquid, Context, isFalsy } from '../../../src'
 import { mock, restore } from '../../stub/mockfs'
 import { drainStream } from '../../stub/stream'
+import { IntendedRenderErrorTag } from '../../stub/tags'
 import { resolve } from 'path'
 
 describe('Liquid', function () {
@@ -231,11 +232,7 @@ describe('Liquid', function () {
         '/root/error.html': 'A{%throwingTag%}B'
       })
       engine = new Liquid({ root: ['/root/'] })
-      engine.registerTag('throwingTag', {
-        render: function () {
-          throw new Error('intended render error')
-        }
-      })
+      engine.registerTag('throwingTag', IntendedRenderErrorTag)
     })
     afterEach(restore)
     it('should render a simple value', async () => {

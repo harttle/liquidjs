@@ -2,7 +2,8 @@ import { RenderError } from '../../../src/util/error'
 import { Liquid } from '../../../src/liquid'
 import { resolve } from 'path'
 import { mock, restore } from '../../stub/mockfs'
-import { throwIntendedError, rejectIntendedError } from '../../stub/util'
+import { throwIntendedError } from '../../stub/util'
+import { ThrowingTag, RejectingTag, ThrowsOnParseTag } from '../../stub/tags'
 
 const strictEngine = new Liquid({
   strictVariables: true,
@@ -13,9 +14,9 @@ const strictCatchingEngine = new Liquid({
   strictVariables: true,
   strictFilters: true
 })
-strictEngine.registerTag('throwingTag', { render: throwIntendedError })
+strictEngine.registerTag('throwingTag', ThrowingTag)
 strictEngine.registerFilter('throwingFilter', throwIntendedError)
-strictCatchingEngine.registerTag('throwingTag', { render: throwIntendedError })
+strictCatchingEngine.registerTag('throwingTag', ThrowingTag)
 strictCatchingEngine.registerFilter('throwingFilter', throwIntendedError)
 
 describe('error', function () {
@@ -83,8 +84,8 @@ describe('error', function () {
       engine = new Liquid({
         root: '/'
       })
-      engine.registerTag('throwingTag', { render: throwIntendedError })
-      engine.registerTag('rejectingTag', { render: rejectIntendedError })
+      engine.registerTag('throwingTag', ThrowingTag)
+      engine.registerTag('rejectingTag', RejectingTag)
       engine.registerFilter('throwingFilter', throwIntendedError)
     })
     it('should throw RenderError when tag throws', async function () {
@@ -244,10 +245,7 @@ describe('error', function () {
     let engine: Liquid
     beforeEach(function () {
       engine = new Liquid()
-      engine.registerTag('throwsOnParse', {
-        parse: throwIntendedError,
-        render: () => ''
-      })
+      engine.registerTag('throwsOnParse', ThrowsOnParseTag)
     })
     it('should throw ParseError when filter not defined', async function () {
       await expect(strictEngine.parseAndRender('{{1 | a}}')).rejects.toMatchObject({
@@ -337,11 +335,7 @@ describe('error', function () {
       engine = new Liquid({
         root: '/'
       })
-      engine.registerTag('throwingTag', {
-        render: function () {
-          throw new Error('intended error')
-        }
-      })
+      engine.registerTag('throwingTag', ThrowingTag)
     })
     it('should throw RenderError when tag throws', function () {
       const src = '{%throwingTag%}'

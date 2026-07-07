@@ -1,6 +1,6 @@
 import { Context } from './context'
-import { toPromise, toValueSync, isFunction, forOwn, isString, strictUniq } from './util'
-import { TagClass, createTagClass, TagImplOptions, FilterImplOptions, Template, Value, StaticAnalysisOptions, StaticAnalysis, analyze, analyzeSync, SegmentArray } from './template'
+import { toPromise, toValueSync, forOwn, isString, strictUniq } from './util'
+import { TagClass, FilterImplOptions, Template, Value, StaticAnalysisOptions, StaticAnalysis, analyze, analyzeSync, SegmentArray } from './template'
 import { LookupType } from './fs/loader'
 import { Render } from './render'
 import { Parser } from './parser'
@@ -101,8 +101,8 @@ export class Liquid {
   public registerFilter (name: string, filter: FilterImplOptions) {
     this.filters[name] = filter
   }
-  public registerTag (name: string, tag: TagClass | TagImplOptions) {
-    this.tags[name] = isFunction(tag) ? tag : createTagClass(tag)
+  public registerTag (name: string, tag: TagClass) {
+    this.tags[name] = tag
   }
   public plugin (plugin: (this: Liquid, L: typeof Liquid) => void) {
     return plugin.call(this, Liquid)

@@ -2,14 +2,13 @@ import { Liquid } from '../../../src/liquid'
 import { Drop } from '../../../src/drop/drop'
 import { Scope } from '../../../src/context/scope'
 import { mock, restore } from '../../stub/mockfs'
+import { IntendedRenderErrorTag } from '../../stub/tags'
 
 describe('tags/for', function () {
   let liquid: Liquid, scope: Scope
   beforeEach(function () {
     liquid = new Liquid()
-    liquid.registerTag('throwingTag', {
-      render: function () { throw new Error('intended render error') }
-    })
+    liquid.registerTag('throwingTag', IntendedRenderErrorTag)
     scope = {
       one: 1,
       // eslint-disable-next-line
