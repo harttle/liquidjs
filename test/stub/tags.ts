@@ -24,9 +24,3 @@ export class ThrowsOnParseTag extends Tag {
     return ''
   }
 }
-
-export class IntendedRenderErrorTag extends Tag {
-  render () {
-    throw new Error('intended render error')
-  }
-}
