@@ -7,7 +7,7 @@ while ! grep -q "Express running" "$LOG_FILE"; do
   if ! kill -0 $SERVER_PID; then
     echo "Server exited unexpectedly."
     cat $LOG_FILE
-    return 1
+    exit 1
   fi
   sleep 1
 done
