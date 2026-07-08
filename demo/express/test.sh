@@ -13,8 +13,7 @@ while ! grep -q "Express running" "$LOG_FILE"; do
 done
 curl http://127.0.0.1:3000 | grep -q 'Welcome to LiquidJS'
 RESULT=$?
-kill $SERVER_PID 2>/dev/null || true
-wait $SERVER_PID 2>/dev/null || true
+killall node || true
 rm $LOG_FILE
 if [ $RESULT != 0 ]; then
   exit 1
