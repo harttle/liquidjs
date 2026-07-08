@@ -2,7 +2,7 @@ import { getPerformance } from '../util/performance'
 import { toPromise, RenderError, LiquidErrors, LiquidError } from '../util'
 import { Context } from '../context'
 import { Template } from '../template'
-import { Emitter, KeepingTypeEmitter, StreamedEmitter, SimpleEmitter } from '../emitters'
+import { Emitter, StreamedEmitter, SimpleEmitter } from '../emitters'
 
 export class Render {
   public renderTemplatesToNodeStream (templates: Template[], ctx: Context): NodeJS.ReadableStream {
@@ -13,7 +13,7 @@ export class Render {
   }
   public * renderTemplates (templates: Template[], ctx: Context, emitter?: Emitter): IterableIterator<any> {
     if (!emitter) {
-      emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter() : new SimpleEmitter()
+      emitter = new SimpleEmitter()
     }
     ctx.renderLimit.check(getPerformance().now())
     const errors = []
