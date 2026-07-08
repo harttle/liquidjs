@@ -114,6 +114,7 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   if (isNil(v)) return []
   if (!isArray(v)) v = stringify(v)
   begin = begin < 0 ? v.length + begin : begin
+  if (begin < 0 || length < 0) return isArray(v) ? [] : ''
   this.context.memoryLimit.use(length)
   return isArray(v)
     ? Array.prototype.slice.call(v, begin, begin + length)

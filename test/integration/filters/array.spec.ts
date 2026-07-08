@@ -288,6 +288,9 @@ describe('filters/array', function () {
     it('should slice substr by -2,2', () => test('{{ "abc" | slice: -2, 2 }}', 'bc'))
     it('should support array', () => test('{{ "1,2,3,4" | split: "," | slice: 1,2 | join }}', '2 3'))
     it('should return empty array for nil value', () => test('{{ nil | slice: 0 }}', ''))
+    it('should return empty when begin is out of negative range', () => test('{{ "hello" | slice: -10, 2 }}', ''))
+    it('should return empty when length is negative', () => test('{{ "Liquid" | slice: 1, -2 }}', ''))
+    it('should return empty array when begin is out of negative range', () => test('{{ "1,2,3,4,5" | split: "," | slice: -10, 2 | join: "," }}', ''))
   })
   describe('sort', function () {
     it('should support sort', function () {
