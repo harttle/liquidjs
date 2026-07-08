@@ -87,6 +87,15 @@ describe('util/strftime', function () {
       expect(t(time, '%10N')).toBe('1290000000')
       expect(t(time, '%0N')).toBe('129000000')
     })
+    it('should zero pad %N for sub-100ms fractional seconds', function () {
+      const time = new TestDate('2019-12-15 01:21:00.005')
+      expect(t(time, '%N')).toBe('005000000')
+      expect(t(time, '%3N')).toBe('005')
+      expect(t(time, '%6N')).toBe('005000')
+      const tens = new TestDate('2019-12-15 01:21:00.050')
+      expect(t(tens, '%N')).toBe('050000000')
+      expect(t(tens, '%2N')).toBe('05')
+    })
     it('should format %p as upper cased am/pm', function () {
       expect(t(now, '%p')).toBe('PM')
       expect(t(then, '%p')).toBe('AM')

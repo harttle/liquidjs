@@ -98,7 +98,7 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
-    const str = String(d.getMilliseconds()).slice(0, width)
+    const str = padStart(String(d.getMilliseconds()), 3, '0').slice(0, width)
     opts.memoryLimit?.use(width - str.length)
     return padEnd(str, width, '0')
   },
