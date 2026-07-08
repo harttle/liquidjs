@@ -7,9 +7,6 @@ describe('tags/for', function () {
   let liquid: Liquid, scope: Scope
   beforeEach(function () {
     liquid = new Liquid()
-    liquid.registerTag('throwingTag', {
-      render: function () { throw new Error('intended render error') }
-    })
     scope = {
       one: 1,
       // eslint-disable-next-line

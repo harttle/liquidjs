@@ -1,6 +1,7 @@
 import { Liquid, Context, isFalsy } from '../../../src'
 import { mock, restore } from '../../stub/mockfs'
 import { drainStream } from '../../stub/stream'
+import { ThrowingTag } from '../../stub/tags'
 import { resolve } from 'path'
 
 describe('Liquid', function () {
@@ -231,11 +232,7 @@ describe('Liquid', function () {
         '/root/error.html': 'A{%throwingTag%}B'
       })
       engine = new Liquid({ root: ['/root/'] })
-      engine.registerTag('throwingTag', {
-        render: function () {
-          throw new Error('intended render error')
-        }
-      })
+      engine.registerTag('throwingTag', ThrowingTag)
     })
     afterEach(restore)
     it('should render a simple value', async () => {
@@ -244,7 +241,7 @@ describe('Liquid', function () {
     })
     it('should throw RenderError when tag throws', async () => {
       const stream = await engine.renderFileToNodeStream('error.html')
-      expect(drainStream(stream)).rejects.toThrow(/intended render error/)
+      expect(drainStream(stream)).rejects.toThrow(/intended error/)
     })
   })
   describe('#analyze', () => {

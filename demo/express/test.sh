@@ -7,13 +7,13 @@ while ! grep -q "Express running" "$LOG_FILE"; do
   if ! kill -0 $SERVER_PID; then
     echo "Server exited unexpectedly."
     cat $LOG_FILE
-    return 1
+    exit 1
   fi
   sleep 1
 done
 curl http://127.0.0.1:3000 | grep -q 'Welcome to LiquidJS'
 RESULT=$?
-killall node
+killall node || true
 rm $LOG_FILE
 if [ $RESULT != 0 ]; then
   exit 1

@@ -1,4 +1,4 @@
-import { TopLevelToken, TagToken, Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, IfTag } from '../..'
+import { Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, IfTag } from '../..'
 import { spawnSync } from 'child_process'
 import { resolve as resolvePath } from 'path'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
@@ -362,33 +362,8 @@ describe('Issues', function () {
     const html = await liquid.parseAndRender(tpl)
     expect(html).toMatch(/^\s*This is a love or luck potion.\s+This is a strength or health or love potion.\s*$/)
   })
-  it('tag registration compatible to v9 #570', async () => {
-    const liquid = new Liquid()
-    liquid.registerTag('metadata_file', {
-      parse (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-        this.str = tagToken.args
-      },
-      async render (ctx: Context) {
-        const content = await Promise.resolve(`{{${this.str}}}`)
-        return this.liquid.parseAndRender(content.toString(), ctx)
-      }
-    })
-    const tpl = '{% metadata_file foo %}'
-    const ctx = { foo: 'FOO' }
-    const html = await liquid.parseAndRender(tpl, ctx)
-    expect(html).toBe('FOO')
-  })
   it('date filter should return parsed input when no format is provided #573', async () => {
     const liquid = new Liquid()
-    liquid.registerTag('metadata_file', {
-      parse (tagToken: TagToken, remainTokens: TopLevelToken[]) {
-        this.str = tagToken.args
-      },
-      async render (ctx: Context) {
-        const content = await Promise.resolve(`{{${this.str}}}`)
-        return this.liquid.parseAndRender(content.toString(), ctx)
-      }
-    })
     const tpl = `{{ 'now' | date }}`
     const html = await liquid.parseAndRender(tpl)
     // sample: Thursday, February 2, 2023 at 6:25 pm +0000

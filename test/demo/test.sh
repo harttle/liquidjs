@@ -14,9 +14,9 @@ for demo in $(ls demo); do
   npm link liquidjs
 
   if npm test; then
-    echo [success] demo/webpack
+    echo "[success] demo/$demo"
   else
-    echo [fail] demo/webpack
+    echo "[fail] demo/$demo"
     exit 1
   fi
   cd -
