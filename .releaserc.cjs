@@ -17,15 +17,25 @@ const githubPlugin = [
   }
 ]
 
+// next is branch-protected (PR-only); skip @semantic-release/git there and publish to npm only.
+const onMaster = process.env.GITHUB_REF === 'refs/heads/master'
+const onNext = process.env.GITHUB_REF === 'refs/heads/next'
+
+// On next, breaking changes are v11 WIP — bump alpha prerelease only, not major.
+const commitAnalyzer = onNext
+  ? ['@semantic-release/commit-analyzer', {
+      releaseRules: [
+        { breaking: true, release: 'patch' }
+      ]
+    }]
+  : '@semantic-release/commit-analyzer'
+
 const basePlugins = [
-  '@semantic-release/commit-analyzer',
+  commitAnalyzer,
   '@semantic-release/release-notes-generator',
   '@semantic-release/changelog',
   '@semantic-release/npm'
 ]
-
-// next is branch-protected (PR-only); skip @semantic-release/git there and publish to npm only.
-const onMaster = process.env.GITHUB_REF === 'refs/heads/master'
 
 module.exports = {
   branches: [

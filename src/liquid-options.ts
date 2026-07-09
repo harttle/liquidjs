@@ -79,8 +79,6 @@ export interface LiquidOptions {
   templates?: {[key: string]: string};
   /** the global scope passed down to all partial and layout templates, i.e. templates included by `include`, `layout` and `render` tags. */
   globals?: object;
-  /** Whether or not to keep value type when writing the Output, not working for streamed rendering. Defaults to `false`. */
-  keepOutputType?: boolean;
   /** Default escape filter applied to output values, when set, you'll have to add `| raw` for values don't need to be escaped. Defaults to `undefined`. */
   outputEscape?: OutputEscapeOption;
   /** An object of operators for conditional statements. Defaults to the regular Liquid operators. */
@@ -160,7 +158,6 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   preserveTimezones: boolean;
   greedy: boolean;
   globals: object;
-  keepOutputType: boolean;
   operators: Operators;
   parseLimit: number;
   renderLimit: number;
@@ -196,7 +193,6 @@ export const defaultOptions: NormalizedFullOptions = {
   ownPropertyOnly: true,
   lenientIf: false,
   globals: {},
-  keepOutputType: false,
   operators: defaultOperators,
   memoryLimit: Infinity,
   parseLimit: Infinity,
