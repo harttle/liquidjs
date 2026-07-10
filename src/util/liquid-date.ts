@@ -53,6 +53,15 @@ export class LiquidDate {
   getTime () {
     return this.displayDate.getTime()
   }
+  /**
+   * The underlying UTC timestamp in milliseconds, unaffected by the display
+   * timezone. Use this (not `getTime()`) for timezone-invariant values like
+   * `%s`: `getTime()` reads `displayDate`, which is deliberately shifted by
+   * the display timezone offset so wall-clock getters can delegate to Date.
+   */
+  dateValue () {
+    return this.date.getTime()
+  }
   getMilliseconds () {
     return this.displayDate.getMilliseconds()
   }
