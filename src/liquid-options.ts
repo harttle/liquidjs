@@ -89,8 +89,6 @@ export interface LiquidOptions {
   parseLimit?: number;
   /** For DoS handling, limit total time (in ms) for each `render()` call. */
   renderLimit?: number;
-  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue. */
-  memoryLimit?: number;
 }
 
 export interface RenderOptions {
@@ -114,8 +112,6 @@ export interface RenderOptions {
   templateLimit?: number;
   /** For DoS handling, limit total time (in ms) for each `render()` call. */
   renderLimit?: number;
-  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue.. */
-  memoryLimit?: number;
 }
 
 export interface RenderFileOptions extends RenderOptions {
@@ -161,7 +157,6 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   operators: Operators;
   parseLimit: number;
   renderLimit: number;
-  memoryLimit: number;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -194,7 +189,6 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   operators: defaultOperators,
-  memoryLimit: Infinity,
   parseLimit: Infinity,
   renderLimit: Infinity
 }

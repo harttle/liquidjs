@@ -36,16 +36,14 @@ export class Context {
    */
   public strictVariables: boolean;
   public ownPropertyOnly: boolean;
-  public memoryLimit: Limiter;
   public renderLimit: Limiter;
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { memoryLimit, renderLimit }: { [key: string]: Limiter } = {}) {
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { renderLimit }: { renderLimit?: Limiter } = {}) {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
     this.environments = isObject(env) ? env : Object(env)
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
-    this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
     this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
   }
   public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
@@ -109,8 +107,7 @@ export class Context {
       strictVariables: this.strictVariables,
       ownPropertyOnly: this.ownPropertyOnly
     }, {
-      renderLimit: this.renderLimit,
-      memoryLimit: this.memoryLimit
+      renderLimit: this.renderLimit
     })
   }
   private findScope (key: string | number) {

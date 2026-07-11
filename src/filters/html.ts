@@ -18,7 +18,6 @@ const unescapeMap: Record<string, string> = {
 
 export function escape (this: FilterImpl, str: string) {
   str = stringify(str)
-  this.context.memoryLimit.use(str.length)
   return str.replace(/&|<|>|"|'/g, m => escapeMap[m])
 }
 
@@ -28,7 +27,6 @@ export function xml_escape (this: FilterImpl, str: string) {
 
 function unescape (this: FilterImpl, str: string) {
   str = stringify(str)
-  this.context.memoryLimit.use(str.length)
   return str.replace(/&(amp|lt|gt|#34|#39);/g, m => unescapeMap[m])
 }
 
@@ -38,7 +36,6 @@ export function escape_once (this: FilterImpl, str: string) {
 
 export function newline_to_br (this: FilterImpl, v: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
   return str.replace(/\r?\n/gm, '<br />\n')
 }
 
@@ -46,7 +43,6 @@ export function newline_to_br (this: FilterImpl, v: string) {
 // equivalent is O(n^2) in V8 on unclosed openers.
 export function strip_html (this: FilterImpl, v: string) {
   const str = stringify(v)
-  this.context.memoryLimit.use(str.length)
   const blocks = new Map([['<script', '</script>'], ['<style', '</style>'], ['<!--', '-->'], ['<', '>']])
   let out = ''
   let i = 0

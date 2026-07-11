@@ -8,9 +8,6 @@ import { EmptyDrop } from '../drop'
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
   const array = toArray(v)
   const sep = isNil(arg) ? ' ' : stringify(arg)
-  let outputSize = sep.length * Math.max(array.length - 1, 0)
-  for (let i = 0; i < array.length; i++) outputSize += String(array[i]).length
-  this.context.memoryLimit.use(outputSize)
   return Array.prototype.join.call(array, sep)
 })
 export const last = argumentsToValue(function (this: FilterImpl, v: any) {
@@ -21,14 +18,12 @@ export const first = argumentsToValue(function (this: FilterImpl, v: any) {
 })
 export const reverse = argumentsToValue(function (this: FilterImpl, v: any[]) {
   const array = toArray(v)
-  this.context.memoryLimit.use(array.length)
   return [...array].reverse()
 })
 
 function * sortBy<T> (this: FilterImpl, arr: T[], property: string | undefined, comparator: (a: unknown, b: unknown) => number): IterableIterator<unknown> {
   const values: [T, unknown][] = []
   const array = toArray(arr)
-  this.context.memoryLimit.use(array.length)
   for (const item of array) {
     values.push([
       item,
@@ -51,7 +46,6 @@ export const size = (v: string | any[]) => v?.length || 0
 export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
   const results = []
   const array = toArray(arr)
-  this.context.memoryLimit.use(array.length)
   for (const item of array) {
     results.push(yield this.context._getFromScope(item, stringify(property), false))
   }
@@ -70,14 +64,12 @@ export function * sum (this: FilterImpl, arr: Scope[], property?: string): Itera
 
 export function compact<T> (this: FilterImpl, arr: T[]) {
   const array = toArray(arr)
-  this.context.memoryLimit.use(array.length)
   return Array.prototype.filter.call(array, x => !isNil(toValue(x)))
 }
 
 export function concat<T1, T2> (this: FilterImpl, v: T1[], arg: T2[] = []): (T1 | T2)[] {
   const lhs = toArray(v)
   const rhs = toArray(arg)
-  this.context.memoryLimit.use(lhs.length + rhs.length)
   return Array.prototype.concat.call(lhs, rhs)
 }
 
@@ -87,7 +79,6 @@ export function push<T> (this: FilterImpl, v: T[], arg: T): T[] {
 
 export function unshift<T> (this: FilterImpl, v: T[], arg: T): T[] {
   const array = toArray(v)
-  this.context.memoryLimit.use(array.length)
   const clone = [...array]
   clone.unshift(arg)
   return clone
@@ -95,7 +86,6 @@ export function unshift<T> (this: FilterImpl, v: T[], arg: T): T[] {
 
 export function pop<T> (this: FilterImpl, v: T[]): T[] {
   const array = toArray(v)
-  this.context.memoryLimit.use(array.length)
   const clone = [...array]
   clone.pop()
   return clone
@@ -103,7 +93,6 @@ export function pop<T> (this: FilterImpl, v: T[]): T[] {
 
 export function shift<T> (this: FilterImpl, v: T[]): T[] {
   const array = toArray(v)
-  this.context.memoryLimit.use(array.length)
   const clone = [...array]
   clone.shift()
   return clone
@@ -114,7 +103,6 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   if (isNil(v)) return []
   if (!isArray(v)) v = stringify(v)
   begin = begin < 0 ? v.length + begin : begin
-  this.context.memoryLimit.use(length)
   return isArray(v)
     ? Array.prototype.slice.call(v, begin, begin + length)
     : String.prototype.slice.call(v, begin, begin + length)
@@ -133,7 +121,6 @@ function expectedMatcher (this: FilterImpl, expected: any): (v: any) => boolean 
 function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[], property: string, expected: any): IterableIterator<unknown> {
   const values: unknown[] = []
   arr = toArray(arr)
-  this.context.memoryLimit.use(arr.length)
   const token = new Tokenizer(stringify(property)).readScopeValue()
   for (const item of arr) {
     values.push(yield evalToken(token, this.context.spawn(item)))
@@ -146,7 +133,6 @@ function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr
   const filtered: unknown[] = []
   const keyTemplate = new Value(stringify(exp), this.liquid)
   const array = toArray(arr)
-  this.context.memoryLimit.use(array.length)
   for (const item of array) {
     this.context.push({ [itemName]: item })
     const value = yield keyTemplate.value(this.context)
@@ -176,7 +162,6 @@ export function * group_by<T extends object> (this: FilterImpl, arr: T[], proper
   const map = new Map()
   arr = toEnumerable(arr)
   const token = new Tokenizer(stringify(property)).readScopeValue()
-  this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
     const key = yield evalToken(token, this.context.spawn(item))
     if (!map.has(key)) map.set(key, [])
@@ -189,7 +174,6 @@ export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], it
   const map = new Map()
   const keyTemplate = new Value(stringify(exp), this.liquid)
   arr = toEnumerable(arr)
-  this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
     this.context.push({ [itemName]: item })
     const key = yield keyTemplate.value(this.context)
@@ -253,7 +237,6 @@ export function * find_exp<T extends object> (this: FilterImpl, arr: T[], itemNa
 
 export function uniq<T> (this: FilterImpl, arr: T[]): T[] {
   arr = toArray(arr)
-  this.context.memoryLimit.use(arr.length)
   return [...new Set(arr)]
 }
 
@@ -261,7 +244,6 @@ export function sample<T> (this: FilterImpl, v: T[] | string, count = 1): T | st
   v = toValue(v)
   if (isNil(v)) return []
   if (!isArray(v)) v = stringify(v)
-  this.context.memoryLimit.use(v.length)
   const shuffled = [...v].sort(() => Math.random() - 0.5)
   if (count === 1) return shuffled[0]
   return shuffled.slice(0, count)
