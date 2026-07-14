@@ -27,27 +27,24 @@ export default class extends Tag {
       return
     }
     ctx.depthLimit.use(1)
-    try {
-      const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
-      assert(filepath, () => `illegal file path "${filepath}"`)
-      const templates = (yield liquid._parseLayoutFile(filepath, ctx.sync, this.currentFile)) as Template[]
+    const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
+    assert(filepath, () => `illegal file path "${filepath}"`)
+    const templates = (yield liquid._parseLayoutFile(filepath, ctx.sync, this.currentFile)) as Template[]
 
-      // render remaining contents and store rendered results
-      ctx.setRegister('blockMode', BlockMode.STORE)
-      const html = yield renderer.renderTemplates(this.templates, ctx)
-      const blocks = ctx.getRegister('blocks', {} as Record<string, any>)
+    // render remaining contents and store rendered results
+    ctx.setRegister('blockMode', BlockMode.STORE)
+    const html = yield renderer.renderTemplates(this.templates, ctx)
+    const blocks = ctx.getRegister('blocks', {} as Record<string, any>)
 
-      // set whole content to anonymous block if anonymous doesn't specified
-      if (blocks[''] === undefined) blocks[''] = (parent: BlankDrop, emitter: Emitter) => emitter.write(html)
-      ctx.setRegister('blockMode', BlockMode.OUTPUT)
+    // set whole content to anonymous block if anonymous doesn't specified
+    if (blocks[''] === undefined) blocks[''] = (parent: BlankDrop, emitter: Emitter) => emitter.write(html)
+    ctx.setRegister('blockMode', BlockMode.OUTPUT)
 
-      // render the layout file use stored blocks
-      ctx.push(createScope((yield args.render(ctx)) as Scope))
-      yield renderer.renderTemplates(templates, ctx, emitter)
-      ctx.pop()
-    } finally {
-      ctx.depthLimit.release(1)
-    }
+    // render the layout file use stored blocks
+    ctx.push(createScope((yield args.render(ctx)) as Scope))
+    yield renderer.renderTemplates(templates, ctx, emitter)
+    ctx.pop()
+    ctx.depthLimit.release(1)
   }
 
   public * children (partials: boolean): Generator<unknown, Template[]> {

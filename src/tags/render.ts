@@ -56,36 +56,33 @@ export default class extends Tag {
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     ctx.depthLimit.use(1)
-    try {
-      const { liquid, hash } = this
-      const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
-      assert(filepath, () => `illegal file path "${filepath}"`)
+    const { liquid, hash } = this
+    const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
+    assert(filepath, () => `illegal file path "${filepath}"`)
 
-      const childCtx = ctx.spawn()
-      const scope = childCtx.bottom()
-      __assign(scope, yield hash.render(ctx))
-      if (this.with) {
-        const { value, alias } = this.with
-        scope[alias || filepath] = yield evalToken(value, ctx)
-      }
+    const childCtx = ctx.spawn()
+    const scope = childCtx.bottom()
+    __assign(scope, yield hash.render(ctx))
+    if (this.with) {
+      const { value, alias } = this.with
+      scope[alias || filepath] = yield evalToken(value, ctx)
+    }
 
-      if (this.forBinding) {
-        const { value, alias } = this.forBinding
-        const collection = toEnumerable(yield evalToken(value, ctx))
-        scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
-        for (const item of collection) {
-          scope[alias as string] = item
-          const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
-          yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
-          scope['forloop'].next()
-        }
-      } else {
+    if (this.forBinding) {
+      const { value, alias } = this.forBinding
+      const collection = toEnumerable(yield evalToken(value, ctx))
+      scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
+      for (const item of collection) {
+        scope[alias as string] = item
         const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
+        scope['forloop'].next()
       }
-    } finally {
-      ctx.depthLimit.release(1)
+    } else {
+      const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
+      yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
     }
+    ctx.depthLimit.release(1)
   }
 
   public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {

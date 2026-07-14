@@ -54,7 +54,6 @@ describe('DoS related', function () {
       await expect(liquid.parseAndRender('{% render "large" %}')).rejects.toThrow('template limit exceeded')
       await expect(liquid.parseAndRender('{% render "small" %}')).resolves.toBe('12345')
     })
-
   })
 
   describe('#outputLengthLimit', () => {

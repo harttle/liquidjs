@@ -29,25 +29,22 @@ export default class extends Tag {
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     ctx.depthLimit.use(1)
-    try {
-      const { liquid, hash, withVar } = this
-      const { renderer } = liquid
-      const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
-      assert(filepath, () => `illegal file path "${filepath}"`)
+    const { liquid, hash, withVar } = this
+    const { renderer } = liquid
+    const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
+    assert(filepath, () => `illegal file path "${filepath}"`)
 
-      const saved = ctx.saveRegister('blocks', 'blockMode')
-      ctx.setRegister('blocks', {})
-      ctx.setRegister('blockMode', BlockMode.OUTPUT)
-      const scope = createScope((yield hash.render(ctx)) as Scope)
-      if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
-      const templates = (yield liquid._parsePartialFile(filepath, ctx.sync, this.currentFile)) as Template[]
-      ctx.push(ctx.opts.jekyllInclude ? createScope({ include: scope }) : scope)
-      yield renderer.renderTemplates(templates, ctx, emitter)
-      ctx.pop()
-      ctx.restoreRegister(saved)
-    } finally {
-      ctx.depthLimit.release(1)
-    }
+    const saved = ctx.saveRegister('blocks', 'blockMode')
+    ctx.setRegister('blocks', {})
+    ctx.setRegister('blockMode', BlockMode.OUTPUT)
+    const scope = createScope((yield hash.render(ctx)) as Scope)
+    if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
+    const templates = (yield liquid._parsePartialFile(filepath, ctx.sync, this.currentFile)) as Template[]
+    ctx.push(ctx.opts.jekyllInclude ? createScope({ include: scope }) : scope)
+    yield renderer.renderTemplates(templates, ctx, emitter)
+    ctx.pop()
+    ctx.restoreRegister(saved)
+    ctx.depthLimit.release(1)
   }
 
   public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {

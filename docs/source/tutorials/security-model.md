@@ -58,20 +58,13 @@ With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expos
 
 ## Production guidance
 
-LiquidJS does not sandbox template code—custom filters, tags, and scope helpers run as ordinary JavaScript with your process privileges. For production with untrusted templates, treat built-in DoS limits as one layer in a broader strategy.
+LiquidJS does not sandbox template code—custom filters, tags, and scope helpers run as ordinary JavaScript with your process privileges. Built-in DoS limits are one layer; production deployments, especially online services that accept template input, need additional hardening:
 
-Host-level defenses:
-
-- Run each render in a **worker thread or child process** with a wall-clock timeout; **kill** the worker on expiry.
+- **Prefer curated templates** over fully user-defined Liquid when possible; if users need customization, offer a restricted subset rather than open template editing.
+- Run each render in a **worker thread or child process** with a wall-clock timeout; **kill** the worker on expiry. Libraries such as [paralleljs][paralleljs] can help for heavy single-template work.
 - Enforce **container/Kubernetes cgroup limits**, `ulimit`, or equivalent on the renderer process for memory and CPU.
 - Apply **request rate limits** at the API or gateway layer.
-- **`node:vm` and `isolated-vm` are not a security boundary** for LiquidJS: custom filters and tags run ordinary host JavaScript with your privileges.
-- Unlike Jinja/Twig sandbox modes, LiquidJS has **no restricted interpreter**—template logic executes in the same JS runtime as your app.
-
-For online services that accept template input:
-
-- Avoid rendering fully user-defined templates whenever possible; prefer curated templates or a restricted template subset.
-- For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
+- **`node:vm`, `isolated-vm`, and Jinja/Twig-style sandbox modes are not a security boundary**—template logic runs in the same JS runtime as your app, with your privileges.
 
 [paralleljs]: https://www.npmjs.com/package/paralleljs
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
