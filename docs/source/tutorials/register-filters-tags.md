@@ -6,23 +6,40 @@ title: Register Filters/Tags
 
 ```typescript
 // Usage: {% upper name %}
-import { Value, Tag, TagToken, Context, TopLevelToken, Liquid } from 'liquidjs'
+import { Value, TagToken, Context, Emitter, TopLevelToken } from 'liquidjs'
 
-engine.registerTag('upper', class UpperTag extends Tag {
-    private value: Value
-    constructor(tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
-        super(tagToken, remainTokens, liquid)
-        this.value = new Value(tagToken.args, liquid)
-    }
-    * render(ctx: Context) {
-        const str = yield this.value.value(ctx) // 'alice'
+engine.registerTag('upper', {
+    parse: function(tagToken: TagToken, remainTokens: TopLevelToken[]) {
+        this.value = new Value(tagToken.args, engine)
+    },
+    render: function*(ctx: Context) {
+        const str = yield this.value.value(ctx); // 'alice'
         return str.toUpperCase() // 'ALICE'
     }
 });
 ```
 
-* `constructor`: Parse tag arguments and read tokens from `remainTokens` until your end token. `liquid` is passed as the third argument.
-* `render`: Return an HTML string (or `return yield` a value) for simple tags that produce one value; use `emitter.write()` when writing incrementally or delegating via `yield this.liquid.renderer.renderTemplates()`, since nested templates write through the shared emitter.
+* `parse`: Read tokens from `remainTokens` until your end token.
+* `render`: Combine scope data with your parsed tokens into HTML string.
+
+For complex tag implementation, you can also provide a tag class:
+
+```typescript
+// Usage: {% upper name:"alice" %}
+import { Hash, Tag, TagToken, Context, Emitter, TopLevelToken, Liquid } from 'liquidjs'
+
+engine.registerTag('upper', class UpperTag extends Tag {
+    private hash: Hash
+    constructor(tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
+        super(tagToken, remainTokens, liquid)
+        this.hash = new Hash(tagToken.args)
+    }
+    * render(ctx: Context) {
+        const hash = yield this.hash.render();
+        return hash.name.toUpperCase() // 'ALICE'
+    }
+});
+```
 
 See existing tag implementations here: <https://github.com/harttle/liquidjs/tree/master/src/tags>
 See demo example here: https://github.com/harttle/liquidjs/blob/master/demo/typescript/index.ts
@@ -47,17 +64,14 @@ See existing filter implementations here: <https://github.com/harttle/liquidjs/t
 
 In some cases it's desirable to disable some tags/filters (see [#324](https://github.com/harttle/liquidjs/issues/324)). You'll need to register a dummy tag/filter that throws a corresponding Error.
 
-```typescript
-import { Tag } from 'liquidjs'
-
+```javascript
 // disable a tag
-engine.registerTag('include', class extends Tag {
-    constructor(token, remainTokens, liquid) {
-        super(token, remainTokens, liquid)
-        throw new Error(`tag "${token.name}" disabled`)
+const disabledTag = {
+    parse: function(token) {
+        throw new Error(`tag "${token.name}" disabled`);
     }
-    render() {}
-})
+}
+engine.registerTag('include', disabledTag);
 
 // disable a filter
 function disabledFilter(name) {
