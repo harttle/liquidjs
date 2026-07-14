@@ -26,7 +26,7 @@ export default class extends Tag {
       yield renderer.renderTemplates(this.templates, ctx, emitter)
       return
     }
-    ctx.increaseDepth()
+    ctx.depthLimit.use(1)
     try {
       const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
       assert(filepath, () => `illegal file path "${filepath}"`)
@@ -46,7 +46,7 @@ export default class extends Tag {
       yield renderer.renderTemplates(templates, ctx, emitter)
       ctx.pop()
     } finally {
-      ctx.decreaseDepth()
+      ctx.depthLimit.release(1)
     }
   }
 

@@ -55,7 +55,7 @@ export default class extends Tag {
     this.hash = new Hash(tokenizer, liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
-    ctx.increaseDepth()
+    ctx.depthLimit.use(1)
     try {
       const { liquid, hash } = this
       const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
@@ -84,7 +84,7 @@ export default class extends Tag {
         yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
       }
     } finally {
-      ctx.decreaseDepth()
+      ctx.depthLimit.release(1)
     }
   }
 

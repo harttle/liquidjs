@@ -14,6 +14,11 @@ export class Limiter {
       this.base += +count
     }
   }
+  release (count: number) {
+    if (+count > 0) {
+      this.base -= +count
+    }
+  }
   check (count: number) {
     if (+count > 0) {
       assert(+count <= this.limit, this.message)

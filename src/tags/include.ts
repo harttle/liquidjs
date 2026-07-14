@@ -28,7 +28,7 @@ export default class extends Tag {
     this.hash = new Hash(tokenizer, liquid.options.jekyllInclude || liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
-    ctx.increaseDepth()
+    ctx.depthLimit.use(1)
     try {
       const { liquid, hash, withVar } = this
       const { renderer } = liquid
@@ -46,7 +46,7 @@ export default class extends Tag {
       ctx.pop()
       ctx.restoreRegister(saved)
     } finally {
-      ctx.decreaseDepth()
+      ctx.depthLimit.release(1)
     }
   }
 

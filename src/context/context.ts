@@ -2,7 +2,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { createScope, Scope } from './scope'
-import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement, assert } from '../util'
+import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement } from '../util'
 
 type PropertyKey = string | number;
 
@@ -37,8 +37,8 @@ export class Context {
   public ownPropertyOnly: boolean;
   public templateLimit: Limiter;
   public outputLengthLimit: Limiter;
-  public depth: number;
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { templateLimit, outputLengthLimit, depth }: { templateLimit?: Limiter, outputLengthLimit?: Limiter, depth?: number } = {}) {
+  public depthLimit: Limiter;
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { templateLimit, outputLengthLimit, depthLimit }: { templateLimit?: Limiter, outputLengthLimit?: Limiter, depthLimit?: Limiter } = {}) {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
@@ -47,14 +47,7 @@ export class Context {
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
     this.templateLimit = templateLimit ?? new Limiter('template', renderOptions.templateLimit ?? opts.templateLimit)
     this.outputLengthLimit = outputLengthLimit ?? new Limiter('output length', renderOptions.outputLengthLimit ?? opts.outputLengthLimit)
-    this.depth = depth ?? 0
-  }
-  public increaseDepth () {
-    assert(this.depth < this.opts.maxDepth, 'template depth limit exceeded')
-    this.depth++
-  }
-  public decreaseDepth () {
-    this.depth--
+    this.depthLimit = depthLimit ?? new Limiter('template depth', opts.maxDepth)
   }
   public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
     return (this.registers[key] = this.registers[key] || defaultValue)
@@ -119,7 +112,7 @@ export class Context {
     }, {
       templateLimit: this.templateLimit,
       outputLengthLimit: this.outputLengthLimit,
-      depth: this.depth
+      depthLimit: this.depthLimit
     })
   }
   private findScope (key: string | number) {
