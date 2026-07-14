@@ -42,8 +42,7 @@
   if (!/\/playground(?:\.html)?$/.test(location.pathname)) return;
   updateVersion(liquidjs.version);
   const engine = new liquidjs.Liquid({
-    memoryLimit: 1e5,
-    renderLimit: 1e5
+    templateLimit: 1e5
   });
   const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
   const editor = createEditor('editorEl', 'liquid');

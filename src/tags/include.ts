@@ -28,21 +28,26 @@ export default class extends Tag {
     this.hash = new Hash(tokenizer, liquid.options.jekyllInclude || liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
-    const { liquid, hash, withVar } = this
-    const { renderer } = liquid
-    const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
-    assert(filepath, () => `illegal file path "${filepath}"`)
+    ctx.increaseDepth()
+    try {
+      const { liquid, hash, withVar } = this
+      const { renderer } = liquid
+      const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
+      assert(filepath, () => `illegal file path "${filepath}"`)
 
-    const saved = ctx.saveRegister('blocks', 'blockMode')
-    ctx.setRegister('blocks', {})
-    ctx.setRegister('blockMode', BlockMode.OUTPUT)
-    const scope = createScope((yield hash.render(ctx)) as Scope)
-    if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
-    const templates = (yield liquid._parsePartialFile(filepath, ctx.sync, this.currentFile)) as Template[]
-    ctx.push(ctx.opts.jekyllInclude ? createScope({ include: scope }) : scope)
-    yield renderer.renderTemplates(templates, ctx, emitter)
-    ctx.pop()
-    ctx.restoreRegister(saved)
+      const saved = ctx.saveRegister('blocks', 'blockMode')
+      ctx.setRegister('blocks', {})
+      ctx.setRegister('blockMode', BlockMode.OUTPUT)
+      const scope = createScope((yield hash.render(ctx)) as Scope)
+      if (withVar) scope[filepath] = yield evalToken(withVar, ctx)
+      const templates = (yield liquid._parsePartialFile(filepath, ctx.sync, this.currentFile)) as Template[]
+      ctx.push(ctx.opts.jekyllInclude ? createScope({ include: scope }) : scope)
+      yield renderer.renderTemplates(templates, ctx, emitter)
+      ctx.pop()
+      ctx.restoreRegister(saved)
+    } finally {
+      ctx.decreaseDepth()
+    }
   }
 
   public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {

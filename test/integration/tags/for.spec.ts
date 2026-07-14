@@ -120,6 +120,18 @@ describe('tags/for', function () {
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).toBe('b')
     })
+
+    it('should goto else when limit empties collection', async function () {
+      const src = '{%for c in alpha limit:0%}a{%else%}b{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('b')
+    })
+
+    it('should goto else when offset past end', async function () {
+      const src = '{%for c in alpha offset:10%}a{%else%}b{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('b')
+    })
   })
 
   it('should support for with forloop', async function () {

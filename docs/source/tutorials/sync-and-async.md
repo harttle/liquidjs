@@ -50,6 +50,8 @@ All built-in tags are implemented this way and are safe to use in both sync and 
 - do not directly `return <Promise>`, and
 - do not call any APIs that return a Promise.
 
+You can write output with `emitter.write()` or `return` / `return yield` an HTML string — both are emitted to output. Returning is handy for simple tags that produce one value (for example `{% cycle %}`); use `emitter.write()` when writing output incrementally or when delegating via `yield renderTemplates()`, since nested templates write through the shared emitter.
+
 ## Call APIs that return a Promise
 
 But LiquidJS is Promise-friendly, right? You can still call Promise-based functions and wait for that Promise within tag implementations. Just replace `await` with `yield`. e.g. we're calling `fs.readFile()` which returns a `Promise`:

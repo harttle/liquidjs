@@ -1,10 +1,17 @@
-import { stringify } from '../util'
+import { stringify, Limiter } from '../util'
 import { Emitter } from './emitter'
 
 export class SimpleEmitter implements Emitter {
   public buffer = '';
+  private outputLengthLimit?: Limiter
+
+  constructor (outputLengthLimit?: Limiter) {
+    this.outputLengthLimit = outputLengthLimit
+  }
 
   public write (html: any) {
-    this.buffer += stringify(html)
+    const str = stringify(html)
+    this.outputLengthLimit?.use(str.length)
+    this.buffer += str
   }
 }

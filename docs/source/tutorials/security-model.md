@@ -2,7 +2,7 @@
 title: Security Model
 ---
 
-LiquidJS provides DoS-oriented limits (`parseLimit`, `renderLimit`) to reduce risk. This page summarizes those limits, [`ownPropertyOnly`][ownPropertyOnly], custom [`Drop`][drop] usage, and the security boundary to assume in production.
+LiquidJS provides DoS-oriented limits (`parseLimit`, `templateLimit`, `outputLengthLimit`, `maxDepth`) to reduce risk. This page summarizes those limits, [`ownPropertyOnly`][ownPropertyOnly], custom [`Drop`][drop] usage, and the security boundary to assume in production.
 
 ## Security boundary
 
@@ -19,7 +19,9 @@ For LiquidJS in production, prefer **external** controls: Node.js `vm` or worker
 ## Limits at a glance
 
 - [parseLimit][parseLimit]: limit total template size per `parse()` call.
-- [renderLimit][renderLimit]: limit total render time per `render()` call.
+- [templateLimit][templateLimit]: limit total tag/HTML/output nodes rendered per `render()` call.
+- [outputLengthLimit][outputLengthLimit]: limit total output length per `render()` call.
+- [maxDepth][maxDepth]: limit nesting depth of `{% render %}`, `{% include %}`, and `{% layout %}`.
 
 ## Limit details
 
@@ -29,9 +31,9 @@ For LiquidJS in production, prefer **external** controls: Node.js `vm` or worker
 
 A typical PC handles `1e8` (100M) characters without issues.
 
-### renderLimit
+### templateLimit
 
-Restricting template size alone is insufficient because dynamic loops with large counts can occur during rendering. [renderLimit][renderLimit] mitigates this by limiting the time consumed by each `render()` call.
+Restricting template size alone is insufficient because dynamic loops with large counts can occur during rendering. [templateLimit][templateLimit] mitigates this by limiting the number of tag, HTML literal, and output nodes rendered in each `render()` call.
 
 ```liquid
 {%- for i in (1..10000000) -%}
@@ -39,9 +41,17 @@ Restricting template size alone is insufficient because dynamic loops with large
 {%- endfor -%}
 ```
 
-Render time is checked on a per-template basis (before rendering each template). In the above example, there are 2 templates in the loop: `order: ` and `{{i}}`, render time will be checked 10000000x2 times.
+Each template node (the `for` tag, literal `order: `, output `{{i}}`, and so on) counts toward the limit. In the above example, a limit of `30000000` would be exceeded before the loop finishes.
 
-`renderLimit` is not a hard CPU limiter. It is checked between template renders, so compute-intensive filters/tags/user-defined functions or deeply nested template execution between checks can still cause DoS.
+`templateLimit` is checked before each node render, so compute-intensive filters/tags/user-defined functions between checks can still cause DoS.
+
+### outputLengthLimit
+
+[outputLengthLimit][outputLengthLimit] caps the cumulative length of output written during a `render()` call, including output from partials rendered via `{% render %}`.
+
+### maxDepth
+
+[maxDepth][maxDepth] limits how deeply `{% render %}`, `{% include %}`, and `{% layout %}` can nest. Defaults to `128`.
 
 Memory-heavy templates (for example exponential `concat` in a loop) are not capped by LiquidJS. Mitigate them with process/container memory limits, output size checks after render, or template restrictions — the same pattern Jinja2 and Twig recommend for heap and CPU.
 
@@ -59,13 +69,15 @@ If you run an online service, avoid rendering fully user-defined templates whene
 
 - Prefer curated templates or a restricted template subset.
 - If user-defined templates are required, isolate rendering (worker/process/container), enforce OS/container memory and CPU limits, and apply request rate limits.
-- Treat `parseLimit` and `renderLimit` as one layer in a broader DoS defense strategy.
+- Treat `parseLimit`, `templateLimit`, `outputLengthLimit`, and `maxDepth` as one layer in a broader DoS defense strategy.
 
 For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
 
 [paralleljs]: https://www.npmjs.com/package/paralleljs
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
-[renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
+[templateLimit]: /api/interfaces/LiquidOptions.html#templateLimit
+[outputLengthLimit]: /api/interfaces/LiquidOptions.html#outputLengthLimit
+[maxDepth]: /api/interfaces/LiquidOptions.html#maxDepth
 [ownPropertyOnly]: /api/interfaces/LiquidOptions.html#ownPropertyOnly
 [renderOwnPropertyOnly]: /api/interfaces/RenderOptions.html#ownPropertyOnly
 [strictVariables]: /api/interfaces/LiquidOptions.html#strictVariables
