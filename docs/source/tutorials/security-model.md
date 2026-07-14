@@ -12,10 +12,6 @@ The built-in limits are cooperative safeguards, not strict runtime isolation.
 - They do **not** sandbox JavaScript execution.
 - They should be combined with process/container limits and request timeouts for defense in depth.
 
-LiquidJS does **not** enforce memory or CPU budgets inside the engine. Major template engines take the same approach: byte-level heap tracking is unreliable in garbage-collected runtimes (non-deterministic GC, accounting overhead) and does not map cleanly to real process memory. [Jinja2](https://jinja.palletsprojects.com/en/stable/sandbox/) relies on `sys.setrecursionlimit`, `SandboxedEnvironment` for access control, and advises OS/process limits (`ulimit`, cgroups). [Twig](https://twig.symfony.com/doc/3.x/api.html#security-policy) documents a `SecurityPolicy` for tags/filters/methods and explicitly leaves resource limits to PHP (`memory_limit`, execution timeouts). Handlebars and EJS provide no render budgets; Node.js users typically combine [`vm.Script` timeouts](https://nodejs.org/api/vm.html) or [`worker_threads`](https://nodejs.org/api/worker_threads.html) with process isolation for untrusted templates.
-
-For LiquidJS in production, prefer **external** controls: Node.js `vm` or worker threads (or packages such as [`isolated-vm`](https://www.npmjs.com/package/isolated-vm) when stronger isolation is required), separate processes or containers, OS/container memory and CPU quotas, and request timeouts — not in-engine heap tracking.
-
 ## Limits at a glance
 
 - [parseLimit][parseLimit]: limit total template size per `parse()` call.
@@ -53,7 +49,7 @@ Each template node (the `for` tag, literal `order: `, output `{{i}}`, and so on)
 
 [maxDepth][maxDepth] limits how deeply `{% render %}`, `{% include %}`, and `{% layout %}` can nest. Defaults to `128`.
 
-Memory-heavy templates (for example exponential `concat` in a loop) are not capped by LiquidJS. Mitigate them with process/container memory limits, output size checks after render, or template restrictions — the same pattern Jinja2 and Twig recommend for heap and CPU.
+The `memoryLimit` option was removed; memory usage is not capped in-engine.
 
 ## `ownPropertyOnly` and scope data
 
