@@ -1,5 +1,9 @@
 import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
+import { assert } from './assert'
+
+/** Per-conversion numeric width cap for strftime (%N, %15d, …). */
+export const MAX_STRFTIME_PAD = 1024 * 1024
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
@@ -96,6 +100,7 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
+    assertPadWidth(width)
     const str = String(d.getMilliseconds()).slice(0, width)
     return padEnd(str, width, '0')
   },
@@ -132,6 +137,10 @@ export function strftime (d: LiquidDate, formatStr: string) {
   return output + remaining
 }
 
+function assertPadWidth (width: number) {
+  assert(width <= MAX_STRFTIME_PAD, 'strftime pad width limit exceeded')
+}
+
 function format (d: LiquidDate, match: RegExpExecArray) {
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
@@ -146,5 +155,6 @@ function format (d: LiquidDate, match: RegExpExecArray) {
   if (flags['_']) padChar = ' '
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
+  else assertPadWidth(padWidth)
   return padStart(ret, padWidth, padChar)
 }

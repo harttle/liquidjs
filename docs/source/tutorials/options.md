@@ -140,6 +140,8 @@ It defaults to `false`. For example, when set to `true`, a blank string would ev
 
 **ownPropertyOnly** hides scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates. Defaults to `true`.
 
+Built-in DoS limits and host isolation guidance are documented in [Security Model](./security-model.html).
+
 {% note info Nonexistent Tags %}
 Nonexistent tags always throw errors during parsing and this behavior cannot be customized.
 {% endnote %}

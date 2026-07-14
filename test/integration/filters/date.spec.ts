@@ -210,6 +210,16 @@ describe('filters/date', function () {
       const out = liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000d' })
       expect(out.length).toBe(5000)
     })
+    it('should honor large numeric strftime pad width up to the cap', () => {
+      const liquid = new Liquid()
+      const out = liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%100000d' })
+      expect(out.length).toBe(100000)
+    })
+    it('should throw when numeric strftime pad width is too large', () => {
+      const liquid = new Liquid()
+      expect(() => liquid.parseAndRenderSync('{{ d | date: f }}', { d: 'now', f: '%5000000d' }))
+        .toThrow('strftime pad width limit exceeded')
+    })
   })
 })
 describe('filters/date_to_xmlschema', function () {

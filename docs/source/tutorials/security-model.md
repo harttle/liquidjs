@@ -4,20 +4,17 @@ title: Security Model
 
 LiquidJS provides DoS-oriented limits (`parseLimit`, `templateLimit`, `outputLengthLimit`, `maxDepth`) to reduce risk. This page summarizes those limits, [`ownPropertyOnly`][ownPropertyOnly], custom [`Drop`][drop] usage, and the security boundary to assume in production.
 
-## Security boundary
+## At a glance
 
-The built-in limits are cooperative safeguards, not strict runtime isolation.
-
-- They do **not** equal process RSS/heap usage.
-- They do **not** sandbox JavaScript execution.
-- They should be combined with process/container limits and request timeouts for defense in depth.
-
-## Limits at a glance
+LiquidJS ships a thin cooperative DoS layer:
 
 - [parseLimit][parseLimit]: limit total template size per `parse()` call.
 - [templateLimit][templateLimit]: limit total tag/HTML/output nodes rendered per `render()` call.
 - [outputLengthLimit][outputLengthLimit]: limit total output length per `render()` call.
 - [maxDepth][maxDepth]: limit nesting depth of `{% render %}`, `{% include %}`, and `{% layout %}`.
+- Strftime numeric pad widths in the `date` filter are capped at `1_000_000` (1M) per conversion.
+
+These are cooperative safeguards, not runtime isolation—see [Production guidance](#production-guidance) below for host-level limits and online-service hardening.
 
 ## Limit details
 
@@ -49,7 +46,7 @@ Each template node (the `for` tag, literal `order: `, output `{{i}}`, and so on)
 
 [maxDepth][maxDepth] limits how deeply `{% render %}`, `{% include %}`, and `{% layout %}` can nest. Defaults to `128`. In sync rendering (`renderSync`), nested tags are driven by `toValueSync`, which recursively resumes each yielded generator on the call stack—deep nesting can overflow it, and `maxDepth` caps that depth. Async `render()` resumes the same tag generators via `toPromise`/`yield` without a deep synchronous call chain, so stack overflow is not a concern there (the limit still applies as a DoS guard).
 
-The `memoryLimit` option was removed; memory usage is not capped in-engine.
+The `memoryLimit` option was removed in v11; enforce memory limits at the host or process level instead.
 
 ## `ownPropertyOnly` and scope data
 
@@ -59,15 +56,22 @@ With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expos
 
 [`Drop`][drop] values are not restricted the same way: LiquidJS still reads the prototype chain and may call [`liquidMethodMissing`][liquidMethodMissing]. **You** control what a drop exposes; narrow APIs and never feed unsafe data into drops unless the class is built for template access. `ownPropertyOnly` alone does not harden custom drops—audit them like any privileged code.
 
-## Online service guidance
+## Production guidance
 
-If you run an online service, avoid rendering fully user-defined templates whenever possible.
+LiquidJS does not sandbox template code—custom filters, tags, and scope helpers run as ordinary JavaScript with your process privileges. For production with untrusted templates, treat built-in DoS limits as one layer in a broader strategy.
 
-- Prefer curated templates or a restricted template subset.
-- If user-defined templates are required, isolate rendering (worker/process/container), enforce OS/container memory and CPU limits, and apply request rate limits.
-- Treat `parseLimit`, `templateLimit`, `outputLengthLimit`, and `maxDepth` as one layer in a broader DoS defense strategy.
+Host-level defenses:
 
-For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
+- Run each render in a **worker thread or child process** with a wall-clock timeout; **kill** the worker on expiry.
+- Enforce **container/Kubernetes cgroup limits**, `ulimit`, or equivalent on the renderer process for memory and CPU.
+- Apply **request rate limits** at the API or gateway layer.
+- **`node:vm` and `isolated-vm` are not a security boundary** for LiquidJS: custom filters and tags run ordinary host JavaScript with your privileges.
+- Unlike Jinja/Twig sandbox modes, LiquidJS has **no restricted interpreter**—template logic executes in the same JS runtime as your app.
+
+For online services that accept template input:
+
+- Avoid rendering fully user-defined templates whenever possible; prefer curated templates or a restricted template subset.
+- For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
 
 [paralleljs]: https://www.npmjs.com/package/paralleljs
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit

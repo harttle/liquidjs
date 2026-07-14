@@ -188,6 +188,14 @@ describe('util/strftime', function () {
     it('should have higher priority than H', () => {
       expect(t(then, '%0H')).toBe('03')
     })
+    it('should allow pad width up to MAX_STRFTIME_PAD', () => {
+      expect(t(now, '%100000d').length).toBe(100000)
+      expect(t(now, `%${1_000_000}d`).length).toBe(1_000_000)
+    })
+    it('should throw when pad width exceeds MAX_STRFTIME_PAD', () => {
+      expect(() => t(now, `%${1024 * 1024 + 1}d`)).toThrow('strftime pad width limit exceeded')
+      expect(() => t(now, '%5000000d')).toThrow('strftime pad width limit exceeded')
+    })
   })
   describe('modifier field', () => {
     it('should ignore E modifier', () => {
