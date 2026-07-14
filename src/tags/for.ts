@@ -41,7 +41,7 @@ export default class extends Tag {
 
     stream.start()
   }
-  * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
+  * render (ctx: Context, emitter: Emitter): Generator<unknown, void | string, Template[]> {
     const r = this.liquid.renderer
     const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
     ctx.push(createScope({ continue: ctx.getRegister(continueKey, {}) }))

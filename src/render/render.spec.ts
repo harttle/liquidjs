@@ -2,6 +2,7 @@ import { Context } from '../context'
 import { HTMLToken, TagToken } from '../tokens'
 import { Render } from './render'
 import { Tag, HTML } from '../template'
+import { SimpleEmitter } from '../emitters'
 import { toPromise } from '../util'
 
 describe('render', function () {
@@ -14,7 +15,7 @@ describe('render', function () {
     it('should render html', async function () {
       const scope = new Context()
       const token = { getContent: () => '<p>' } as HTMLToken
-      const html = await toPromise(render.renderTemplates([new HTML(token)], scope))
+      const html = await toPromise(render.renderTemplates([new HTML(token)], scope, new SimpleEmitter()))
       return expect(html).toBe('<p>')
     })
   })
