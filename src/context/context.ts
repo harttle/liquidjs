@@ -1,4 +1,3 @@
-import { getPerformance } from '../util/performance'
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
@@ -36,17 +35,19 @@ export class Context {
    */
   public strictVariables: boolean;
   public ownPropertyOnly: boolean;
-  public memoryLimit: Limiter;
-  public renderLimit: Limiter;
-  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { memoryLimit, renderLimit }: { [key: string]: Limiter } = {}) {
+  public templateLimit: Limiter;
+  public outputLengthLimit: Limiter;
+  public depthLimit: Limiter;
+  public constructor (env: object = {}, opts: NormalizedFullOptions = defaultOptions, renderOptions: RenderOptions = {}, { templateLimit, outputLengthLimit, depthLimit }: { templateLimit?: Limiter, outputLengthLimit?: Limiter, depthLimit?: Limiter } = {}) {
     this.sync = !!renderOptions.sync
     this.opts = opts
     this.globals = renderOptions.globals ?? opts.globals
     this.environments = isObject(env) ? env : Object(env)
     this.strictVariables = renderOptions.strictVariables ?? this.opts.strictVariables
     this.ownPropertyOnly = renderOptions.ownPropertyOnly ?? opts.ownPropertyOnly
-    this.memoryLimit = memoryLimit ?? new Limiter('memory alloc', renderOptions.memoryLimit ?? opts.memoryLimit)
-    this.renderLimit = renderLimit ?? new Limiter('template render', getPerformance().now() + (renderOptions.renderLimit ?? opts.renderLimit))
+    this.templateLimit = templateLimit ?? new Limiter('template', renderOptions.templateLimit ?? opts.templateLimit)
+    this.outputLengthLimit = outputLengthLimit ?? new Limiter('output length', renderOptions.outputLengthLimit ?? opts.outputLengthLimit)
+    this.depthLimit = depthLimit ?? new Limiter('template depth', opts.maxDepth)
   }
   public getRegister<T> (key: string, defaultValue: T = undefined as T): T {
     return (this.registers[key] = this.registers[key] || defaultValue)
@@ -109,8 +110,9 @@ export class Context {
       strictVariables: this.strictVariables,
       ownPropertyOnly: this.ownPropertyOnly
     }, {
-      renderLimit: this.renderLimit,
-      memoryLimit: this.memoryLimit
+      templateLimit: this.templateLimit,
+      outputLengthLimit: this.outputLengthLimit,
+      depthLimit: this.depthLimit
     })
   }
   private findScope (key: string | number) {

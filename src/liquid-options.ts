@@ -87,10 +87,12 @@ export interface LiquidOptions {
   orderedFilterParameters?: boolean;
   /** For DoS handling, limit total length of templates parsed in one `parse()` call. A typical PC can handle 1e8 (100M) characters without issues. */
   parseLimit?: number;
-  /** For DoS handling, limit total time (in ms) for each `render()` call. */
-  renderLimit?: number;
-  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue. */
-  memoryLimit?: number;
+  /** For DoS handling, limit total renders of tag/HTML/output in one `render()` call. */
+  templateLimit?: number;
+  /** For DoS handling, limit total output length in one `render()` call. */
+  outputLengthLimit?: number;
+  /** For DoS handling, limit nesting depth of `{% render %}`, `{% include %}`, and `{% layout %}` tags. Defaults to `128`. */
+  maxDepth?: number;
 }
 
 export interface RenderOptions {
@@ -110,12 +112,10 @@ export interface RenderOptions {
    * Same as `ownPropertyOnly` on LiquidOptions, but only for current render() call
    */
   ownPropertyOnly?: boolean;
-  /** For DoS handling, limit total renders of tag/HTML/output in one `render()` call. A typical PC can handle 1e5 renders of typical templates per second. */
+  /** For DoS handling, limit total renders of tag/HTML/output in one `render()` call. */
   templateLimit?: number;
-  /** For DoS handling, limit total time (in ms) for each `render()` call. */
-  renderLimit?: number;
-  /** For DoS handling, limit new objects creation, including array concat/join/strftime, etc. A typical PC can handle 1e9 (1G) memory without issue.. */
-  memoryLimit?: number;
+  /** For DoS handling, limit total output length in one `render()` call. */
+  outputLengthLimit?: number;
 }
 
 export interface RenderFileOptions extends RenderOptions {
@@ -160,8 +160,9 @@ export interface NormalizedFullOptions extends NormalizedOptions {
   globals: object;
   operators: Operators;
   parseLimit: number;
-  renderLimit: number;
-  memoryLimit: number;
+  templateLimit: number;
+  outputLengthLimit: number;
+  maxDepth: number;
 }
 
 export const defaultOptions: NormalizedFullOptions = {
@@ -194,9 +195,10 @@ export const defaultOptions: NormalizedFullOptions = {
   lenientIf: false,
   globals: {},
   operators: defaultOperators,
-  memoryLimit: Infinity,
   parseLimit: Infinity,
-  renderLimit: Infinity
+  templateLimit: Infinity,
+  outputLengthLimit: Infinity,
+  maxDepth: 128
 }
 
 export function normalize (options: LiquidOptions): NormalizedFullOptions {

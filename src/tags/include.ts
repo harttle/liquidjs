@@ -28,6 +28,7 @@ export default class extends Tag {
     this.hash = new Hash(tokenizer, liquid.options.jekyllInclude || liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
+    ctx.depthLimit.use(1)
     const { liquid, hash, withVar } = this
     const { renderer } = liquid
     const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
@@ -43,6 +44,7 @@ export default class extends Tag {
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
     ctx.restoreRegister(saved)
+    ctx.depthLimit.release(1)
   }
 
   public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {

@@ -26,6 +26,7 @@ export default class extends Tag {
       yield renderer.renderTemplates(this.templates, ctx, emitter)
       return
     }
+    ctx.depthLimit.use(1)
     const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
     assert(filepath, () => `illegal file path "${filepath}"`)
     const templates = (yield liquid._parseLayoutFile(filepath, ctx.sync, this.currentFile)) as Template[]
@@ -43,6 +44,7 @@ export default class extends Tag {
     ctx.push(createScope((yield args.render(ctx)) as Scope))
     yield renderer.renderTemplates(templates, ctx, emitter)
     ctx.pop()
+    ctx.depthLimit.release(1)
   }
 
   public * children (partials: boolean): Generator<unknown, Template[]> {

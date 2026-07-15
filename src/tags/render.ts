@@ -55,6 +55,7 @@ export default class extends Tag {
     this.hash = new Hash(tokenizer, liquid.options.keyValueSeparator)
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
+    ctx.depthLimit.use(1)
     const { liquid, hash } = this
     const filepath = (yield renderFilePath(this.file, ctx, liquid)) as string
     assert(filepath, () => `illegal file path "${filepath}"`)
@@ -81,6 +82,7 @@ export default class extends Tag {
       const templates = (yield liquid._parsePartialFile(filepath, childCtx.sync, this.currentFile)) as Template[]
       yield liquid.renderer.renderTemplates(templates, childCtx, emitter)
     }
+    ctx.depthLimit.release(1)
   }
 
   public * children (partials: boolean, sync: boolean): Generator<unknown, Template[]> {

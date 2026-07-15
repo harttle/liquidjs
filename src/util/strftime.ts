@@ -1,13 +1,15 @@
 import { changeCase, padStart, padEnd } from './underscore'
 import { LiquidDate } from './liquid-date'
-import type { Limiter } from './limiter'
+import { assert } from './assert'
+
+/** Per-conversion numeric width cap for strftime (%N, %15d, …). */
+export const MAX_STRFTIME_PAD = 1024 * 1024
 
 const rFormat = /%([-_0^#:]+)?(\d+)?([EO])?(.)/
 interface FormatOptions {
   flags: Record<string, boolean>;
   width?: string;
   modifier?: string;
-  memoryLimit?: Pick<Limiter, 'use'>;
 }
 
 // prototype extensions
@@ -98,8 +100,8 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
+    assertPadWidth(width)
     const str = String(d.getMilliseconds()).slice(0, width)
-    opts.memoryLimit?.use(width - str.length)
     return padEnd(str, width, '0')
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
@@ -123,25 +125,29 @@ const formatCodes: Record<string, FormatCodeHandler> = {
 }
 formatCodes.h = formatCodes.b
 
-export function strftime (d: LiquidDate, formatStr: string, memoryLimit?: Pick<Limiter, 'use'>) {
+export function strftime (d: LiquidDate, formatStr: string) {
   let output = ''
   let remaining = formatStr
   let match
   while ((match = rFormat.exec(remaining))) {
     output += remaining.slice(0, match.index)
     remaining = remaining.slice(match.index + match[0].length)
-    output += format(d, match, memoryLimit)
+    output += format(d, match)
   }
   return output + remaining
 }
 
-function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limiter, 'use'>) {
+function assertPadWidth (width: number) {
+  assert(width <= MAX_STRFTIME_PAD, 'strftime pad width limit exceeded')
+}
+
+function format (d: LiquidDate, match: RegExpExecArray) {
   const [input, flagStr = '', width, modifier, conversion] = match
   const convert = formatCodes[conversion]
   if (!convert) return input
   const flags: Record<string, boolean> = {}
   for (const flag of flagStr) flags[flag] = true
-  let ret = String(convert(d, { flags, width, modifier, memoryLimit }))
+  let ret = String(convert(d, { flags, width, modifier }))
   let padChar = padSpaceChars.has(conversion) ? ' ' : '0'
   let padWidth = Number(width) || padWidths[conversion] || 0
   if (flags['^']) ret = ret.toUpperCase()
@@ -149,6 +155,6 @@ function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limit
   if (flags['_']) padChar = ' '
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
-  memoryLimit?.use(Number(padWidth) - ret.length)
+  else assertPadWidth(padWidth)
   return padStart(ret, padWidth, padChar)
 }

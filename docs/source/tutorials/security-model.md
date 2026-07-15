@@ -2,21 +2,19 @@
 title: Security Model
 ---
 
-LiquidJS provides DoS-oriented limits (`parseLimit`, `renderLimit`, `memoryLimit`) to reduce risk. This page summarizes those limits, [`ownPropertyOnly`][ownPropertyOnly], custom [`Drop`][drop] usage, and the security boundary to assume in production.
+LiquidJS provides DoS-oriented limits (`parseLimit`, `templateLimit`, `outputLengthLimit`, `maxDepth`) to reduce risk. This page summarizes those limits, [`ownPropertyOnly`][ownPropertyOnly], custom [`Drop`][drop] usage, and the security boundary to assume in production.
 
-## Security boundary
+## At a glance
 
-The built-in limits are cooperative safeguards, not strict runtime isolation.
-
-- They do **not** equal process RSS/heap usage.
-- They do **not** sandbox JavaScript execution.
-- They should be combined with process/container limits and request timeouts for defense in depth.
-
-## Limits at a glance
+LiquidJS ships a thin cooperative DoS layer:
 
 - [parseLimit][parseLimit]: limit total template size per `parse()` call.
-- [renderLimit][renderLimit]: limit total render time per `render()` call.
-- [memoryLimit][memoryLimit]: cooperatively limit memory-sensitive allocations counted by LiquidJS.
+- [templateLimit][templateLimit]: limit total tag/HTML/output nodes rendered per `render()` call.
+- [outputLengthLimit][outputLengthLimit]: limit total output length per `render()` call.
+- [maxDepth][maxDepth]: limit nesting depth of `{% render %}`, `{% include %}`, and `{% layout %}`.
+- Strftime numeric pad widths in the `date` filter are capped at `1_000_000` (1M) per conversion.
+
+These are cooperative safeguards, not runtime isolation—see [Production guidance](#production-guidance) below for host-level limits and online-service hardening.
 
 ## Limit details
 
@@ -26,9 +24,9 @@ The built-in limits are cooperative safeguards, not strict runtime isolation.
 
 A typical PC handles `1e8` (100M) characters without issues.
 
-### renderLimit
+### templateLimit
 
-Restricting template size alone is insufficient because dynamic loops with large counts can occur during rendering. [renderLimit][renderLimit] mitigates this by limiting the time consumed by each `render()` call.
+Restricting template size alone is insufficient because dynamic loops with large counts can occur during rendering. [templateLimit][templateLimit] mitigates this by limiting the number of tag, HTML literal, and output nodes rendered in each `render()` call.
 
 ```liquid
 {%- for i in (1..10000000) -%}
@@ -36,29 +34,19 @@ Restricting template size alone is insufficient because dynamic loops with large
 {%- endfor -%}
 ```
 
-Render time is checked on a per-template basis (before rendering each template). In the above example, there are 2 templates in the loop: `order: ` and `{{i}}`, render time will be checked 10000000x2 times.
+Each template node (the `for` tag, literal `order: `, output `{{i}}`, and so on) counts toward the limit. In the above example, a limit of `30000000` would be exceeded before the loop finishes.
 
-`renderLimit` is not a hard CPU limiter. It is checked between template renders, so compute-intensive filters/tags/user-defined functions or deeply nested template execution between checks can still cause DoS.
+`templateLimit` is checked before each node render, so compute-intensive filters/tags/user-defined functions between checks can still cause DoS.
 
-### memoryLimit
+### outputLengthLimit
 
-`memoryLimit` only limits operations that LiquidJS explicitly counts.
+[outputLengthLimit][outputLengthLimit] caps the cumulative length of output written during a `render()` call, including output from partials rendered via `{% render %}`.
 
-- Counted: memory-sensitive LiquidJS operations that call internal memory accounting.
-- Not guaranteed counted: arbitrary user object behavior such as custom `toValue()`/`toString()` chains, or other host-side code that allocates outside LiquidJS accounting points.
+### maxDepth
 
-In other words, `memoryLimit` limits what LiquidJS counts, not every byte your process may allocate.
+[maxDepth][maxDepth] limits how deeply `{% render %}`, `{% include %}`, and `{% layout %}` can nest. Defaults to `128`. In sync rendering (`renderSync`), nested tags are driven by `toValueSync`, which recursively resumes each yielded generator on the call stack—deep nesting can overflow it, and `maxDepth` caps that depth. Async `render()` resumes the same tag generators via `toPromise`/`yield` without a deep synchronous call chain, so stack overflow is not a concern there (the limit still applies as a DoS guard).
 
-Even with a small number of templates and iterations, memory usage can grow exponentially. In the following example, memory doubles with each iteration:
-
-```liquid
-{% assign array = "1,2,3" | split: "," %}
-{% for i in (1..32) %}
-    {% assign array = array | concat: array %}
-{% endfor %}
-```
-
-As [JavaScript uses GC to manage memory](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_management), `memoryLimit` may not reflect the actual memory footprint.
+The `memoryLimit` option was removed in v11; enforce memory limits at the host or process level instead.
 
 ## `ownPropertyOnly` and scope data
 
@@ -68,20 +56,21 @@ With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expos
 
 [`Drop`][drop] values are not restricted the same way: LiquidJS still reads the prototype chain and may call [`liquidMethodMissing`][liquidMethodMissing]. **You** control what a drop exposes; narrow APIs and never feed unsafe data into drops unless the class is built for template access. `ownPropertyOnly` alone does not harden custom drops—audit them like any privileged code.
 
-## Online service guidance
+## Production guidance
 
-If you run an online service, avoid rendering fully user-defined templates whenever possible.
+LiquidJS does not sandbox template code—custom filters, tags, and scope helpers run as ordinary JavaScript with your process privileges. Built-in DoS limits are one layer; production deployments, especially online services that accept template input, need additional hardening:
 
-- Prefer curated templates or a restricted template subset.
-- If user-defined templates are required, isolate rendering (worker/process/container), enforce OS/container memory and CPU limits, and apply request rate limits.
-- Treat `parseLimit`/`renderLimit`/`memoryLimit` as one layer in a broader DoS defense strategy.
-
-For heavy single-template operations, process-level isolation is still recommended (for example with [paralleljs][paralleljs]).
+- **Prefer curated templates** over fully user-defined Liquid when possible; if users need customization, offer a restricted subset rather than open template editing.
+- Run each render in a **worker thread or child process** with a wall-clock timeout; **kill** the worker on expiry. Libraries such as [paralleljs][paralleljs] can help for heavy single-template work.
+- Enforce **container/Kubernetes cgroup limits**, `ulimit`, or equivalent on the renderer process for memory and CPU.
+- Apply **request rate limits** at the API or gateway layer.
+- **`node:vm`, `isolated-vm`, and Jinja/Twig-style sandbox modes are not a security boundary**—template logic runs in the same JS runtime as your app, with your privileges.
 
 [paralleljs]: https://www.npmjs.com/package/paralleljs
 [parseLimit]: /api/interfaces/LiquidOptions.html#parseLimit
-[renderLimit]: /api/interfaces/LiquidOptions.html#renderLimit
-[memoryLimit]: /api/interfaces/LiquidOptions.html#memoryLimit
+[templateLimit]: /api/interfaces/LiquidOptions.html#templateLimit
+[outputLengthLimit]: /api/interfaces/LiquidOptions.html#outputLengthLimit
+[maxDepth]: /api/interfaces/LiquidOptions.html#maxDepth
 [ownPropertyOnly]: /api/interfaces/LiquidOptions.html#ownPropertyOnly
 [renderOwnPropertyOnly]: /api/interfaces/RenderOptions.html#ownPropertyOnly
 [strictVariables]: /api/interfaces/LiquidOptions.html#strictVariables

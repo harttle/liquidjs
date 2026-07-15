@@ -45,6 +45,10 @@ export default class extends Tag {
     const limit = (args.limit === undefined) ? collection.length : args.limit
 
     collection = collection.slice(offset, offset + limit)
+    if (!collection.length) return
+
+    if (!this.templates.length) return
+
     const cols = args.cols || collection.length
 
     const r = this.liquid.renderer

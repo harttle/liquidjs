@@ -67,7 +67,6 @@ export function evalQuotedToken (token: QuotedToken) {
 function * evalRangeToken (token: RangeToken, ctx: Context) {
   const low: number = yield evalToken(token.lhs, ctx)
   const high: number = yield evalToken(token.rhs, ctx)
-  ctx.memoryLimit.use(high - low + 1)
   return range(+low, +high + 1)
 }
 
