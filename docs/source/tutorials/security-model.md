@@ -50,7 +50,7 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 ## `ownPropertyOnly` and scope data
 
-With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). Default `false` follows normal JS property access. Use `true` for untrusted or polluted objects; add [`strictVariables`][strictVariables] if missing paths should error. Override per render via [`RenderOptions`][renderOwnPropertyOnly]. This is a read policy for scope data—not a sandbox for filters, tags, or your code.
+With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). Default `true`. Use `true` for untrusted or polluted objects; add [`strictVariables`][strictVariables] if missing paths should error. Override per render via [`RenderOptions`][renderOwnPropertyOnly]. This is a read policy for scope data—not a sandbox for filters, tags, or your code.
 
 LiquidJS also blocks template access to the property names `__proto__`, `constructor`, and `prototype` at any depth, and omits those keys when building null-prototype managed scopes (for example loop and `{% render %}` locals). For deeply untrusted input, pre-sanitize scope objects before passing them to `render()` (for example with [@hapi/bourne](https://www.npmjs.com/package/@hapi/bourne)).
 
