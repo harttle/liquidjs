@@ -1,4 +1,5 @@
 import { Drop } from '../drop/drop'
+import { hasOwnProperty } from '../util'
 
 export interface ScopeObject extends Record<string | number | symbol, any> {
   toLiquid?: () => any;
@@ -6,8 +7,22 @@ export interface ScopeObject extends Record<string | number | symbol, any> {
 
 export type Scope = ScopeObject | Drop
 
+const BLOCKED_SCOPE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
+
+export function isBlockedScopeKey (key: PropertyKey): boolean {
+  return typeof key === 'string' && BLOCKED_SCOPE_KEYS.has(key)
+}
+
 export function createScope (from?: ScopeObject): ScopeObject {
+  return from ? sanitizeScope(from) : Object.create(null)
+}
+
+export function sanitizeScope (obj: ScopeObject): ScopeObject {
   const scope = Object.create(null)
-  if (from) Object.assign(scope, from)
+  for (const key of Object.keys(obj)) {
+    if (!isBlockedScopeKey(key) && hasOwnProperty.call(obj, key)) {
+      scope[key] = obj[key]
+    }
+  }
   return scope
 }

@@ -198,6 +198,23 @@ describe('Context', function () {
         delete (Array.prototype as any)[0]
       }
     })
+    it('should block __proto__ access', function () {
+      ctx.push({ foo: { __proto__: { bar: 'BAR' } } })
+      expect(ctx.getSync(['foo', '__proto__'])).toEqual(undefined)
+    })
+    it('should block constructor access', function () {
+      ctx.push({ foo: { constructor: { name: 'Evil' } } })
+      expect(ctx.getSync(['foo', 'constructor'])).toEqual(undefined)
+    })
+    it('should block prototype access', function () {
+      ctx.push({ foo: { prototype: { bar: 'BAR' } } })
+      expect(ctx.getSync(['foo', 'prototype'])).toEqual(undefined)
+    })
+    it('should block top-level __proto__ variable', function () {
+      ctx = new Context({ __proto__: { bar: 'BAR' }, bar: 'BAR' } as any)
+      expect(ctx.getSync(['__proto__'])).toEqual(undefined)
+      expect(ctx.getSync(['bar'])).toEqual('BAR')
+    })
   })
 
   describe('.getAll()', function () {

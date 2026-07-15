@@ -1,7 +1,7 @@
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { createScope, Scope } from './scope'
+import { createScope, isBlockedScopeKey, Scope } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement } from '../util'
 
 type PropertyKey = string | number;
@@ -116,11 +116,19 @@ export class Context {
     })
   }
   private findScope (key: string | number) {
+    if (isBlockedScopeKey(key)) return createScope()
+    const hasKey = (obj: Scope) => {
+      if (obj == null) return false
+      return this.ownPropertyOnly
+        ? hasOwnProperty.call(obj, key)
+        : key in obj
+    }
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
-      if (key in candidate) return candidate
+      if (hasKey(candidate)) return candidate
     }
-    if (key in this.environments) return this.environments
+    if (hasKey(this.environments)) return this.environments
+    if (hasKey(this.globals)) return this.globals
     return this.globals
   }
   readProperty (obj: Scope, key: (PropertyKey | Drop)) {
@@ -139,6 +147,7 @@ export class Context {
 }
 
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
+  if (isBlockedScopeKey(key)) return undefined
   if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
 }

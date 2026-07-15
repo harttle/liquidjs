@@ -52,6 +52,8 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 With [`ownPropertyOnly`][ownPropertyOnly] `true`, plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). Default `false` follows normal JS property access. Use `true` for untrusted or polluted objects; add [`strictVariables`][strictVariables] if missing paths should error. Override per render via [`RenderOptions`][renderOwnPropertyOnly]. This is a read policy for scope data—not a sandbox for filters, tags, or your code.
 
+LiquidJS also blocks template access to the property names `__proto__`, `constructor`, and `prototype` at any depth, and omits those keys when building null-prototype managed scopes (for example loop and `{% render %}` locals). For deeply untrusted input, pre-sanitize scope objects before passing them to `render()` (for example with [@hapi/bourne](https://www.npmjs.com/package/@hapi/bourne)).
+
 ## Custom `Drop` classes
 
 [`Drop`][drop] values are not restricted the same way: LiquidJS still reads the prototype chain and may call [`liquidMethodMissing`][liquidMethodMissing]. **You** control what a drop exposes; narrow APIs and never feed unsafe data into drops unless the class is built for template access. `ownPropertyOnly` alone does not harden custom drops—audit them like any privileged code.
