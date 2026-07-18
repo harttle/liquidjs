@@ -3,6 +3,7 @@ import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
 import type { Scope } from '../context'
+import { createScope } from '../context/scope'
 import { EmptyDrop } from '../drop'
 
 export const join = argumentsToValue(function (this: FilterImpl, v: any[], arg: string) {
@@ -134,7 +135,7 @@ function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr
   const keyTemplate = new Value(stringify(exp), this.liquid)
   const array = toArray(arr)
   for (const item of array) {
-    this.context.push({ [itemName]: item })
+    this.context.push(createScope({ [itemName]: item }))
     const value = yield keyTemplate.value(this.context)
     this.context.pop()
     if (value === include) filtered.push(item)
@@ -160,7 +161,7 @@ export function * reject_exp<T extends object> (this: FilterImpl, arr: T[], item
 
 export function * group_by<T extends object> (this: FilterImpl, arr: T[], property: string): IterableIterator<unknown> {
   const map = new Map()
-  arr = toEnumerable(arr)
+  arr = toEnumerable(arr, this.context.ownPropertyOnly)
   const token = new Tokenizer(stringify(property)).readScopeValue()
   for (const item of arr) {
     const key = yield evalToken(token, this.context.spawn(item))
@@ -173,9 +174,9 @@ export function * group_by<T extends object> (this: FilterImpl, arr: T[], proper
 export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
   const map = new Map()
   const keyTemplate = new Value(stringify(exp), this.liquid)
-  arr = toEnumerable(arr)
+  arr = toEnumerable(arr, this.context.ownPropertyOnly)
   for (const item of arr) {
-    this.context.push({ [itemName]: item })
+    this.context.push(createScope({ [itemName]: item }))
     const key = yield keyTemplate.value(this.context)
     this.context.pop()
     if (!map.has(key)) map.set(key, [])

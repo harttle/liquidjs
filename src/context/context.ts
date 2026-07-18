@@ -139,7 +139,7 @@ export class Context {
     const value = readJSProperty(obj, key, this.ownPropertyOnly)
     if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key, this)
     if (isFunction(value)) return value.call(obj)
-    if (key === 'size') return readSize(obj)
+    if (key === 'size') return readSize(obj, this.ownPropertyOnly)
     else if (key === 'first') return readFirst(obj, this.ownPropertyOnly)
     else if (key === 'last') return readLast(obj, this.ownPropertyOnly)
     return value
@@ -162,8 +162,10 @@ function readLast (obj: Scope, ownPropertyOnly: boolean) {
   return readJSProperty(obj, 'last', ownPropertyOnly)
 }
 
-function readSize (obj: Scope) {
-  if (hasOwnProperty.call(obj, 'size') || obj['size'] !== undefined) return obj['size']
+function readSize (obj: Scope, ownPropertyOnly: boolean) {
+  if (hasOwnProperty.call(obj, 'size')) return obj['size']
+  if (!ownPropertyOnly && obj['size'] !== undefined) return obj['size']
   if (isArray(obj) || isString(obj)) return obj.length
+  if (obj instanceof Map || obj instanceof Set) return obj.size
   if (typeof obj === 'object') return Object.keys(obj).length
 }

@@ -1,4 +1,5 @@
 import { Liquid } from '../../../src/liquid'
+import { Drop } from '../../../src/drop/drop'
 
 describe('scope security', function () {
   let liquid: Liquid
@@ -54,5 +55,53 @@ describe('scope security', function () {
   it('should still block __proto__ when ownPropertyOnly=false', async function () {
     const scope = { foo: { __proto__: { bar: 'BAR' } } }
     await expect(liquid.parseAndRender('{{ foo.__proto__.bar }}', scope, { ownPropertyOnly: false })).resolves.toBe('')
+  })
+
+  it('should not write increment to __proto__ on user scope', async function () {
+    const scope = Object.create(null) as Record<string, unknown>
+    await expect(liquid.parseAndRender('{% increment __proto__ %}', scope)).resolves.toBe('')
+    expect(Object.prototype).toEqual(Object.prototype)
+    expect(scope).toEqual({})
+  })
+
+  it('should not write assign to __proto__ on user scope', async function () {
+    const scope = { safe: 'ok' }
+    await expect(liquid.parseAndRender(
+      '{% assign __proto__ = obj %}',
+      { ...scope, obj: { polluted: true } }
+    )).resolves.toBe('')
+    expect((Object.prototype as any).polluted).toBeUndefined()
+  })
+
+  it('should not iterate plain objects via inherited Symbol.iterator', async function () {
+    // eslint-disable-next-line no-extend-native
+    (Object.prototype as any)[Symbol.iterator] = function * () { yield 'inherited' }
+    try {
+      await expect(liquid.parseAndRender(
+        '{% for x in obj %}{{ x }}{% endfor %}',
+        { obj: {} }
+      )).resolves.toBe('')
+    } finally {
+      delete (Object.prototype as any)[Symbol.iterator]
+    }
+  })
+
+  it('should not read inherited size on plain objects', async function () {
+    const obj = Object.create({ size: 99 })
+    obj.own = 'yes'
+    await expect(liquid.parseAndRender('{{ obj.size }}', { obj })).resolves.toBe('1')
+  })
+
+  it('should still iterate Drop with Symbol.iterator', async function () {
+    class IterableDrop extends Drop {
+      * [Symbol.iterator] () {
+        yield 'a'
+        yield 'b'
+      }
+    }
+    await expect(liquid.parseAndRender(
+      '{% for x in drop %}{{ x }}{% endfor %}',
+      { drop: new IterableDrop() }
+    )).resolves.toBe('ab')
   })
 })

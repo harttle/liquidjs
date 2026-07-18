@@ -1,4 +1,5 @@
 import { isNumber, stringify } from '../util'
+import { isBlockedScopeKey } from '../context/scope'
 import { Tag, Liquid, TopLevelToken, Emitter, TagToken, Context } from '..'
 import { IdentifierToken } from '../tokens'
 
@@ -11,6 +12,7 @@ export default class extends Tag {
     this.variable = this.identifier.content
   }
   render (context: Context, emitter: Emitter) {
+    if (isBlockedScopeKey(this.variable)) return
     const scope = context.environments
     if (!isNumber(scope[this.variable])) {
       scope[this.variable] = 0
