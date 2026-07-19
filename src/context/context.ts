@@ -94,8 +94,14 @@ export class Context {
     }
     return scope
   }
-  public push (ctx: object) {
-    return this.scopes.push(ctx)
+  public push (ctx: Scope): Scope {
+    const scope = ctx instanceof Drop
+      ? ctx
+      : Object.getPrototypeOf(ctx) === null
+        ? ctx
+        : createScope(ctx)
+    this.scopes.push(scope)
+    return scope
   }
   public pop () {
     return this.scopes.pop()

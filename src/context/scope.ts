@@ -24,15 +24,5 @@ export function shouldBlockScopeKeyWrite (key: PropertyKey, ownPropertyOnly: boo
 }
 
 export function createScope (from?: ScopeObject): ScopeObject {
-  return from ? sanitizeScope(from) : Object.create(null)
-}
-
-export function sanitizeScope (obj: ScopeObject): ScopeObject {
-  const scope = Object.create(null)
-  for (const key of Object.keys(obj)) {
-    if (hasOwnProperty.call(obj, key)) {
-      scope[key] = obj[key]
-    }
-  }
-  return scope
+  return Object.assign(Object.create(null), from)
 }

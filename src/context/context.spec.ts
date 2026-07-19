@@ -1,4 +1,5 @@
 import { Context } from './context'
+import { Drop } from '../drop/drop'
 import { Scope } from './scope'
 
 describe('Context', function () {
@@ -249,6 +250,21 @@ describe('Context', function () {
       ctx.push({ bar: { foo: 'foo' } })
       expect(ctx.getSync(['bar', 'foo'])).toEqual('foo')
       expect(ctx.getSync(['bar', 'bar'])).toEqual(undefined)
+    })
+    it('should wrap plain objects with null prototype', function () {
+      const scope = ctx.push({ foo: 'FOO' })
+      expect(Object.getPrototypeOf(scope)).toBeNull()
+    })
+    it('should return pushed scope for in-place mutation', function () {
+      const scope = ctx.push({})
+      scope.item = 'ITEM'
+      expect(ctx.getSync(['item'])).toEqual('ITEM')
+    })
+    it('should push Drop instances as-is', function () {
+      class TestDrop extends Drop {}
+      const drop = new TestDrop()
+      const pushed = ctx.push(drop)
+      expect(pushed).toBe(drop)
     })
   })
   describe('.pop()', function () {

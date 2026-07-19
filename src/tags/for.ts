@@ -1,6 +1,5 @@
 import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
-import { createScope } from '../context/scope'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
 import { Arguments } from '../template'
@@ -44,7 +43,7 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void | string, Template[]> {
     const r = this.liquid.renderer
     const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
-    ctx.push(createScope({ continue: ctx.getRegister(continueKey, {}) }))
+    ctx.push({ continue: ctx.getRegister(continueKey, {}) })
     const hash = (yield this.hash.render(ctx)) as Record<string, any>
     ctx.pop()
 
@@ -68,8 +67,7 @@ export default class extends Tag {
 
     if (!this.templates.length) return
 
-    const scope = createScope({ forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) })
-    ctx.push(scope)
+    const scope = ctx.push({ forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) })
     for (const item of collection) {
       scope[this.variable] = item
       ctx.continueCalled = ctx.breakCalled = false

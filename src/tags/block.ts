@@ -1,4 +1,4 @@
-import { BlockMode, createScope } from '../context'
+import { BlockMode } from '../context'
 import { isTagToken } from '../util'
 import { BlockDrop } from '../drop'
 import { Liquid, TagToken, TopLevelToken, Template, Context, Emitter, Tag } from '..'
@@ -38,7 +38,7 @@ export default class extends Tag {
       if (stack.includes(self)) throw new Error('block tag cannot be nested')
 
       stack.push(self)
-      ctx.push(createScope({ block: superBlock }))
+      ctx.push({ block: superBlock })
       yield liquid.renderer.renderTemplates(templates, ctx, emitter)
       ctx.pop()
       stack.pop()
