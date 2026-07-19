@@ -39,7 +39,7 @@ export default class extends Tag {
   }
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
-    let collection = toEnumerable(yield evalToken(this.collection, ctx), ctx.ownPropertyOnly)
+    let collection = toEnumerable(yield evalToken(this.collection, ctx))
     const args = (yield this.args.render(ctx)) as Record<string, any>
     const offset = args.offset || 0
     const limit = (args.limit === undefined) ? collection.length : args.limit

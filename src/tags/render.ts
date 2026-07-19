@@ -70,7 +70,7 @@ export default class extends Tag {
 
     if (this.forBinding) {
       const { value, alias } = this.forBinding
-      const collection = toEnumerable(yield evalToken(value, ctx), ctx.ownPropertyOnly)
+      const collection = toEnumerable(yield evalToken(value, ctx))
       scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
       for (const item of collection) {
         scope[alias as string] = item

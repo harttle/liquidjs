@@ -52,7 +52,7 @@ export default class extends Tag {
       ? Object.keys(hash).filter(x => MODIFIERS.includes(x))
       : MODIFIERS.filter(x => hash[x] !== undefined)
 
-    let collection = toEnumerable(yield evalToken(this.collection, ctx), ctx.ownPropertyOnly)
+    let collection = toEnumerable(yield evalToken(this.collection, ctx))
     collection = modifiers.reduce((collection, modifier: valueOf<typeof MODIFIERS>) => {
       if (modifier === 'offset') return offset(collection, hash['offset'])
       if (modifier === 'limit') return limit(collection, hash['limit'])

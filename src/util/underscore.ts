@@ -47,11 +47,11 @@ export function readArrayElement (arr: any[], index: number, ownPropertyOnly: bo
   return arr[index]
 }
 
-export function toEnumerable<T = unknown> (val: any, ownPropertyOnly = false): T[] {
+export function toEnumerable<T = unknown> (val: any): T[] {
   val = toValue(val)
   if (isArray(val)) return val
   if (isString(val) && val.length > 0) return [val] as unknown as T[]
-  if (isIterable(val, ownPropertyOnly)) return Array.from(val)
+  if (isIterable(val)) return Array.from(val)
   if (isObject(val)) return Object.keys(val).map((key) => [key, val[key]]) as unknown as T[]
   return []
 }
@@ -96,17 +96,8 @@ export function isArrayLike (value: any): value is any[] {
   return value && isNumber(value.length)
 }
 
-export function isIterable (value: any, ownPropertyOnly = false): value is Iterable<any> {
-  value = toValue(value)
-  if (!isObject(value)) return false
-  if (isArray(value)) return true
-  if (value instanceof Drop) return Symbol.iterator in value
-  if (ownPropertyOnly) {
-    const proto = Object.getPrototypeOf(value)
-    const isPlain = proto === null || proto === Object.prototype
-    if (isPlain) return hasOwnProperty.call(value, Symbol.iterator)
-  }
-  return Symbol.iterator in value
+export function isIterable (value: any): value is Iterable<any> {
+  return isObject(value) && Symbol.iterator in value
 }
 
 /*

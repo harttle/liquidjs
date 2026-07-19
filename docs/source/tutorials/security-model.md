@@ -57,7 +57,7 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 **Exceptions** — `ownPropertyOnly` does not restrict:
 
 - [`Drop`][drop] values: prototype chain and [`liquidMethodMissing`][liquidMethodMissing] still apply; audit custom drops like privileged code.
-- Iteration (`{% for %}`, `{% tablerow %}`, `{% render for %}`): class instances and drops keep their iterators; plain objects only iterate via an own `Symbol.iterator`.
+- Iteration (`{% for %}`, `{% tablerow %}`, `{% render for %}`): uses `Symbol.iterator` when present, including inherited iterators on plain objects; class instances and drops keep their iterators too.
 - Liquid pseudo-properties `.size`, `.first`, and `.last`: arrays and strings use length/index rules; `Map`/`Set` use their native size; plain objects with an own `size` property use that value (inherited `size` on plain objects is ignored when `ownPropertyOnly` is `true`).
 - Filters and custom tags: operate on resolved values with their own semantics.
 

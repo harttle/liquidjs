@@ -161,7 +161,7 @@ export function * reject_exp<T extends object> (this: FilterImpl, arr: T[], item
 
 export function * group_by<T extends object> (this: FilterImpl, arr: T[], property: string): IterableIterator<unknown> {
   const map = new Map()
-  arr = toEnumerable(arr, this.context.ownPropertyOnly)
+  arr = toEnumerable(arr)
   const token = new Tokenizer(stringify(property)).readScopeValue()
   for (const item of arr) {
     const key = yield evalToken(token, this.context.spawn(item))
@@ -174,7 +174,7 @@ export function * group_by<T extends object> (this: FilterImpl, arr: T[], proper
 export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
   const map = new Map()
   const keyTemplate = new Value(stringify(exp), this.liquid)
-  arr = toEnumerable(arr, this.context.ownPropertyOnly)
+  arr = toEnumerable(arr)
   for (const item of arr) {
     this.context.push(createScope({ [itemName]: item }))
     const key = yield keyTemplate.value(this.context)

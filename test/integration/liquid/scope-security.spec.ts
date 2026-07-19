@@ -88,14 +88,14 @@ describe('scope security', function () {
     expect((Object.prototype as any).polluted).toBeUndefined()
   })
 
-  it('should not iterate plain objects via inherited Symbol.iterator', async function () {
+  it('should iterate plain objects via inherited Symbol.iterator (ownPropertyOnly exception)', async function () {
     // eslint-disable-next-line no-extend-native
     (Object.prototype as any)[Symbol.iterator] = function * () { yield 'inherited' }
     try {
       await expect(liquid.parseAndRender(
         '{% for x in obj %}{{ x }}{% endfor %}',
         { obj: {} }
-      )).resolves.toBe('')
+      )).resolves.toBe('inherited')
     } finally {
       delete (Object.prototype as any)[Symbol.iterator]
     }
