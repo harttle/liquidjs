@@ -72,6 +72,10 @@ describe('scope security', function () {
     await expect(liquid.parseAndRender('{{ foo.constructor.name }}', scope, { ownPropertyOnly: false })).resolves.toBe('')
   })
 
+  it('should not resolve top-level inherited constructor when ownPropertyOnly=false', async function () {
+    await expect(liquid.parseAndRender('{{ constructor.name }}', { name: 'Alice' }, { ownPropertyOnly: false })).resolves.toBe('')
+  })
+
   it('should not write increment to __proto__ on user scope', async function () {
     const scope = Object.create(null) as Record<string, unknown>
     await expect(liquid.parseAndRender('{% increment __proto__ %}', scope)).resolves.toBe('')

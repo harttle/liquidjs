@@ -1,7 +1,7 @@
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { createScope, isBlockedScopeKey, Scope, shouldBlockScopeKeyRead } from './scope'
+import { createScope, Scope, shouldBlockScopeKeyRead } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement } from '../util'
 
 type PropertyKey = string | number;
@@ -116,9 +116,9 @@ export class Context {
     })
   }
   private findScope (key: string | number) {
-    if (isBlockedScopeKey(key) && this.ownPropertyOnly) return createScope()
     const hasKey = (obj: Scope) => {
       if (obj == null) return false
+      if (shouldBlockScopeKeyRead(obj, key, this.ownPropertyOnly)) return false
       return this.ownPropertyOnly
         ? hasOwnProperty.call(obj, key)
         : key in obj
@@ -128,7 +128,6 @@ export class Context {
       if (hasKey(candidate)) return candidate
     }
     if (hasKey(this.environments)) return this.environments
-    if (hasKey(this.globals)) return this.globals
     return this.globals
   }
   readProperty (obj: Scope, key: (PropertyKey | Drop)) {
