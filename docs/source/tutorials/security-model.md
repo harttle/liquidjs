@@ -52,7 +52,7 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 [`ownPropertyOnly`][ownPropertyOnly] controls **template property reads on plain scope objects** (objects whose prototype is `null` or `Object.prototype`). Default `true`. When enabled, only own enumerable properties are visible to variable lookup; inherited keys from `Object.prototype` or other prototypes are hidden.
 
-**Always blocked** (regardless of `ownPropertyOnly`): template access to the property names `__proto__`, `constructor`, and `prototype`, and writes to those names via `{% assign %}`, `{% capture %}`, `{% increment %}`, and `{% decrement %}`. Managed scopes built with null prototypes (loop locals, `{% render %}` bindings, filter iteration scopes) omit those keys when created from user data.
+**Proto-related keys** (`__proto__`, `constructor`, `prototype`): when [`ownPropertyOnly`][ownPropertyOnly] is `true` (default), template reads and writes to those names are blocked even if they are own properties—this defends against prototype pollution from sources such as `JSON.parse('{"__proto__":…}')`. When `ownPropertyOnly` is `false`, own properties with those names are allowed; inherited prototype-chain access to those names is still blocked. Managed scopes use null prototypes (loop locals, `{% render %}` bindings, filter iteration scopes).
 
 **Exceptions** — `ownPropertyOnly` does not restrict:
 

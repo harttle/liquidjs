@@ -52,9 +52,24 @@ describe('scope security', function () {
     await expect(liquid.parseAndRender('{{ foo.bar }}', scope, { ownPropertyOnly: false })).resolves.toBe('BAR')
   })
 
-  it('should still block __proto__ when ownPropertyOnly=false', async function () {
-    const scope = { foo: { __proto__: { bar: 'BAR' } } }
+  it('should still block inherited __proto__ when ownPropertyOnly=false', async function () {
+    const scope = { foo: Object.create({ __proto__: { bar: 'BAR' } }) }
     await expect(liquid.parseAndRender('{{ foo.__proto__.bar }}', scope, { ownPropertyOnly: false })).resolves.toBe('')
+  })
+
+  it('should allow own __proto__ when ownPropertyOnly=false', async function () {
+    const scope = { foo: JSON.parse('{"__proto__": {"bar": "BAR"}}') }
+    await expect(liquid.parseAndRender('{{ foo.__proto__.bar }}', scope, { ownPropertyOnly: false })).resolves.toBe('BAR')
+  })
+
+  it('should allow own constructor when ownPropertyOnly=false', async function () {
+    const scope = { name: 'Alice', constructor: { name: 'Custom' } }
+    await expect(liquid.parseAndRender('{{ constructor.name }}', scope, { ownPropertyOnly: false })).resolves.toBe('Custom')
+  })
+
+  it('should still block inherited constructor when ownPropertyOnly=false', async function () {
+    const scope = { foo: {} }
+    await expect(liquid.parseAndRender('{{ foo.constructor.name }}', scope, { ownPropertyOnly: false })).resolves.toBe('')
   })
 
   it('should not write increment to __proto__ on user scope', async function () {

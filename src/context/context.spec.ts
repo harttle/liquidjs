@@ -198,8 +198,20 @@ describe('Context', function () {
         delete (Array.prototype as any)[0]
       }
     })
-    it('should block __proto__ access', function () {
-      ctx.push({ foo: { __proto__: { bar: 'BAR' } } })
+    it('should allow own blocked keys when ownPropertyOnly=false', function () {
+      ctx = new Context({
+        foo: {
+          ...JSON.parse('{"__proto__": {"bar": "BAR"}}'),
+          constructor: { name: 'Custom' },
+          prototype: { x: 1 }
+        }
+      }, { ownPropertyOnly: false } as any)
+      expect(ctx.getSync(['foo', '__proto__', 'bar'])).toEqual('BAR')
+      expect(ctx.getSync(['foo', 'constructor', 'name'])).toEqual('Custom')
+      expect(ctx.getSync(['foo', 'prototype', 'x'])).toEqual(1)
+    })
+    it('should still block inherited blocked keys when ownPropertyOnly=false', function () {
+      ctx = new Context({ foo: Object.create({ __proto__: { bar: 'BAR' } }) }, { ownPropertyOnly: false } as any)
       expect(ctx.getSync(['foo', '__proto__'])).toEqual(undefined)
     })
     it('should block constructor access', function () {
