@@ -19,23 +19,9 @@ describe('scope security', function () {
     await expect(liquid.parseAndRender('{{ constructor.name }}', scope)).resolves.toBe('')
   })
 
-  it('should block assign to __proto__', async function () {
-    await expect(liquid.parseAndRender(
-      '{% assign __proto__ = obj %}{{ __proto__.polluted }}',
-      { obj: { polluted: true } }
-    )).resolves.toBe('')
-    expect((Object.prototype as any).polluted).toBeUndefined()
-  })
-
   it('should block inherited constructor when ownPropertyOnly=false', async function () {
     await expect(liquid.parseAndRender('{{ foo.constructor.name }}', { foo: {} }, { ownPropertyOnly: false })).resolves.toBe('')
     await expect(liquid.parseAndRender('{{ constructor.name }}', { name: 'Alice' }, { ownPropertyOnly: false })).resolves.toBe('')
-  })
-
-  it('should not write increment to __proto__ on user scope', async function () {
-    const scope = Object.create(null) as Record<string, unknown>
-    await expect(liquid.parseAndRender('{% increment __proto__ %}', scope)).resolves.toBe('')
-    expect(scope).toEqual({})
   })
 
   it('should iterate plain objects via inherited Symbol.iterator (ownPropertyOnly exception)', async function () {

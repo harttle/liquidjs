@@ -1,5 +1,4 @@
 import { Liquid, Tag, Template, Context, TagToken, TopLevelToken } from '..'
-import { shouldBlockScopeKeyWrite } from '../context/scope'
 import { Parser } from '../parser'
 import { IdentifierToken, QuotedToken } from '../tokens'
 import { isTagToken } from '../util'
@@ -32,7 +31,6 @@ export default class extends Tag {
   * render (ctx: Context): Generator<unknown, void, string> {
     const r = this.liquid.renderer
     const html = yield r.renderTemplates(this.templates, ctx)
-    if (shouldBlockScopeKeyWrite(this.variable, ctx.ownPropertyOnly)) return
     ctx.bottom()[this.variable] = html
   }
 

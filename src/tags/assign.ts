@@ -1,5 +1,4 @@
 import { Value, Liquid, TopLevelToken, TagToken, Context, Tag } from '..'
-import { shouldBlockScopeKeyWrite } from '../context/scope'
 import { Arguments } from '../template'
 import { IdentifierToken } from '../tokens'
 
@@ -21,7 +20,6 @@ export default class extends Tag {
     this.value = new Value(this.tokenizer.readFilteredValue(), this.liquid)
   }
   * render (ctx: Context): Generator<unknown, void, unknown> {
-    if (shouldBlockScopeKeyWrite(this.key, ctx.ownPropertyOnly)) return
     ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
   }
 

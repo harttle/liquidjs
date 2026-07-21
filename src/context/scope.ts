@@ -9,7 +9,7 @@ export type Scope = ScopeObject | Drop
 
 const BLOCKED_SCOPE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
-export function isBlockedScopeKey (key: PropertyKey): boolean {
+function isBlockedScopeKey (key: PropertyKey): boolean {
   return typeof key === 'string' && BLOCKED_SCOPE_KEYS.has(key)
 }
 
@@ -17,10 +17,6 @@ export function shouldBlockScopeKeyRead (obj: Scope, key: PropertyKey, ownProper
   if (!isBlockedScopeKey(key)) return false
   if (ownPropertyOnly) return true
   return !hasOwnProperty.call(obj, key)
-}
-
-export function shouldBlockScopeKeyWrite (key: PropertyKey, ownPropertyOnly: boolean): boolean {
-  return ownPropertyOnly && isBlockedScopeKey(key)
 }
 
 export function createScope (from?: ScopeObject): ScopeObject {
