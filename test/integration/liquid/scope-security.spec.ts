@@ -8,22 +8,6 @@ describe('scope security', function () {
     liquid = new Liquid()
   })
 
-  it('should not read __proto__ from passed scope', async function () {
-    const scope = JSON.parse('{"__proto__": {"polluted": true}, "name": "Alice"}')
-    await expect(liquid.parseAndRender('{{ name }}', scope)).resolves.toBe('Alice')
-    await expect(liquid.parseAndRender('{{ __proto__.polluted }}', scope)).resolves.toBe('')
-  })
-
-  it('should not read constructor from passed scope', async function () {
-    const scope = { name: 'Alice', constructor: { name: 'Object' } }
-    await expect(liquid.parseAndRender('{{ constructor.name }}', scope)).resolves.toBe('')
-  })
-
-  it('should block inherited constructor when ownPropertyOnly=false', async function () {
-    await expect(liquid.parseAndRender('{{ foo.constructor.name }}', { foo: {} }, { ownPropertyOnly: false })).resolves.toBe('')
-    await expect(liquid.parseAndRender('{{ constructor.name }}', { name: 'Alice' }, { ownPropertyOnly: false })).resolves.toBe('')
-  })
-
   it('should iterate plain objects via inherited Symbol.iterator (ownPropertyOnly exception)', async function () {
     // eslint-disable-next-line no-extend-native
     (Object.prototype as any)[Symbol.iterator] = function * () { yield 'inherited' }

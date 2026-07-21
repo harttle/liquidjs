@@ -1,7 +1,7 @@
 import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
-import { createScope, Scope, shouldBlockScopeKeyRead } from './scope'
+import { createScope, Scope } from './scope'
 import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, toValue, readArrayElement } from '../util'
 
 type PropertyKey = string | number;
@@ -163,6 +163,14 @@ export class Context {
     if (obj instanceof Map || obj instanceof Set) return obj.size
     if (typeof obj === 'object') return Object.keys(obj).length
   }
+}
+
+const BLOCKED_SCOPE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
+
+function shouldBlockScopeKeyRead (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean): boolean {
+  if (typeof key !== 'string' || !BLOCKED_SCOPE_KEYS.has(key)) return false
+  if (ownPropertyOnly) return true
+  return !hasOwnProperty.call(obj, key)
 }
 
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {

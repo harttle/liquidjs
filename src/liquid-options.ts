@@ -39,8 +39,9 @@ export interface LiquidOptions {
   /** Catch all errors instead of exit upon one. Please note that render errors won't be reached when parse fails. */
   catchAllErrors?: boolean;
   /**
-   * Hide scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates.
-   * This only applies to property/index access on scope objects. Filter transforms and iteration operate on the resolved value with standard JavaScript semantics, so prototype-inherited array indices may still be surfaced by them.
+   * Limit template property reads on plain scope objects to own properties (no inherited prototype keys). Defaults to `true`.
+   * Proto-related keys (`__proto__`, `constructor`, `prototype`) are blocked when `true` (even as own properties); when `false`, own properties with those names are allowed and inherited prototype-chain access to those names is still blocked.
+   * Drops, iteration, `.size`/`.first`/`.last`, filters, and custom tags follow separate rules.
    */
   ownPropertyOnly?: boolean;
   /** Modifies the behavior of `strictVariables`. If set, a single undefined variable will *not* cause an exception in the context of the `if`/`elsif`/`unless` tag and the `default` filter. Instead, it will evaluate to `false` and `null`, respectively. Irrelevant if `strictVariables` is not set. Defaults to `false`. **/
