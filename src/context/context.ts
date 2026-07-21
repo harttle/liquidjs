@@ -118,17 +118,11 @@ export class Context {
     })
   }
   private findScope (key: string | number) {
-    const hasKey = (obj: Scope) => {
-      if (obj == null) return false
-      return this.ownPropertyOnly
-        ? hasOwnProperty.call(obj, key)
-        : key in obj
-    }
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
-      if (hasKey(candidate)) return candidate
+      if (this.ownPropertyOnly ? hasOwnProperty.call(candidate, key) : key in candidate) return candidate
     }
-    if (hasKey(this.environments)) return this.environments
+    if (this.ownPropertyOnly ? hasOwnProperty.call(this.environments, key) : key in this.environments) return this.environments
     return this.globals
   }
   readProperty (obj: Scope, key: (PropertyKey | Drop)) {
@@ -163,14 +157,10 @@ export class Context {
 
 const BLOCKED_SCOPE_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
-function shouldBlockScopeKeyRead (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean): boolean {
-  if (typeof key !== 'string' || !BLOCKED_SCOPE_KEYS.has(key)) return false
-  if (ownPropertyOnly) return true
-  return !hasOwnProperty.call(obj, key)
-}
-
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
-  if (shouldBlockScopeKeyRead(obj, key, ownPropertyOnly)) return undefined
+  if (typeof key === 'string' && BLOCKED_SCOPE_KEYS.has(key)) {
+    if (ownPropertyOnly || !hasOwnProperty.call(obj, key)) return undefined
+  }
   if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
 }

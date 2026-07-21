@@ -50,18 +50,11 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 ## `ownPropertyOnly` and scope data
 
-[`ownPropertyOnly`][ownPropertyOnly] controls **template property reads on plain scope objects** (objects whose prototype is `null` or `Object.prototype`). Default `true`. When enabled, only own enumerable properties are visible to variable lookup; inherited keys from `Object.prototype` or other prototypes are hidden.
+With [`ownPropertyOnly`][ownPropertyOnly] `true` (default), plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). Proto keys (`__proto__`, `constructor`, `prototype`) are blocked when `true`, even as own properties; when `false`, own properties with those names are allowed but inherited access to those names is still blocked.
 
-**Proto-related keys** (`__proto__`, `constructor`, `prototype`): when [`ownPropertyOnly`][ownPropertyOnly] is `true` (default), template reads of those names are blocked even if they are own properties—this defends against prototype pollution from sources such as `JSON.parse('{"__proto__":…}')`. When `ownPropertyOnly` is `false`, own properties with those names are allowed; inherited prototype-chain access to those names is still blocked. Managed scopes use null prototypes (loop locals, `{% render %}` bindings, filter iteration scopes).
+Not restricted: [`Drop`][drop] values, iteration via `Symbol.iterator`, `.size`/`.first`/`.last`, filters, and custom tags.
 
-**Exceptions** — `ownPropertyOnly` does not restrict:
-
-- [`Drop`][drop] values: prototype chain and [`liquidMethodMissing`][liquidMethodMissing] still apply; audit custom drops like privileged code.
-- Iteration (`{% for %}`, `{% tablerow %}`, `{% render for %}`): uses `Symbol.iterator` when present, including inherited iterators on plain objects; class instances and drops keep their iterators too.
-- Liquid pseudo-properties `.size`, `.first`, and `.last`: arrays and strings use length/index rules; `Map`/`Set` use their native size; plain objects with an own `size` property use that value (inherited `size` on plain objects is ignored when `ownPropertyOnly` is `true`).
-- Filters and custom tags: operate on resolved values with their own semantics.
-
-Use `true` for untrusted or polluted objects; add [`strictVariables`][strictVariables] if missing paths should error. Override per render via [`RenderOptions`][renderOwnPropertyOnly]. For deeply untrusted input, pre-sanitize scope objects before `render()` (for example with [@hapi/bourne](https://www.npmjs.com/package/@hapi/bourne)). This is a read policy for scope data—not a sandbox for filters, tags, or your code.
+Use `true` for untrusted objects; add [`strictVariables`][strictVariables] if missing paths should error. Override per render via [`RenderOptions`][renderOwnPropertyOnly]. This is a read policy for scope data—not a sandbox for filters, tags, or your code.
 
 ## Custom `Drop` classes
 
