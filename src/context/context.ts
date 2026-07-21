@@ -95,11 +95,7 @@ export class Context {
     return scope
   }
   public push (ctx: Scope): Scope {
-    const scope = ctx instanceof Drop
-      ? ctx
-      : Object.getPrototypeOf(ctx) === null
-        ? ctx
-        : createScope(ctx)
+    const scope = ctx instanceof Drop ? ctx : createScope(ctx)
     this.scopes.push(scope)
     return scope
   }
