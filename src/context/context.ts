@@ -6,6 +6,8 @@ import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNu
 
 type PropertyKey = string | number;
 
+const BLOCKED_SCOPE_KEYS: ReadonlySet<PropertyKey> = new Set(['__proto__', 'constructor', 'prototype'])
+
 export class Context {
   /**
    * insert a Context-level empty scope,
@@ -94,8 +96,10 @@ export class Context {
     }
     return scope
   }
-  public push (ctx: object) {
-    return this.scopes.push(ctx)
+  public push (ctx: Scope): Scope {
+    const scope = createScope(ctx)
+    this.scopes.push(scope)
+    return scope
   }
   public pop () {
     return this.scopes.pop()
@@ -118,9 +122,9 @@ export class Context {
   private findScope (key: string | number) {
     for (let i = this.scopes.length - 1; i >= 0; i--) {
       const candidate = this.scopes[i]
-      if (key in candidate) return candidate
+      if (this.ownPropertyOnly ? hasOwnProperty.call(candidate, key) : key in candidate) return candidate
     }
-    if (key in this.environments) return this.environments
+    if (this.ownPropertyOnly ? hasOwnProperty.call(this.environments, key) : key in this.environments) return this.environments
     return this.globals
   }
   readProperty (obj: Scope, key: (PropertyKey | Drop)) {
@@ -131,30 +135,30 @@ export class Context {
     const value = readJSProperty(obj, key, this.ownPropertyOnly)
     if (value === undefined && obj instanceof Drop) return obj.liquidMethodMissing(key, this)
     if (isFunction(value)) return value.call(obj)
-    if (key === 'size') return readSize(obj)
-    else if (key === 'first') return readFirst(obj, this.ownPropertyOnly)
-    else if (key === 'last') return readLast(obj, this.ownPropertyOnly)
+    if (key === 'size') return this.readSize(obj)
+    else if (key === 'first') return this.readFirst(obj)
+    else if (key === 'last') return this.readLast(obj)
     return value
+  }
+  private readFirst (obj: Scope) {
+    if (isArray(obj)) return readArrayElement(obj, 0, this.ownPropertyOnly)
+    return readJSProperty(obj, 'first', this.ownPropertyOnly)
+  }
+  private readLast (obj: Scope) {
+    if (isArray(obj)) return readArrayElement(obj, -1, this.ownPropertyOnly)
+    return readJSProperty(obj, 'last', this.ownPropertyOnly)
+  }
+  private readSize (obj: Scope) {
+    if (hasOwnProperty.call(obj, 'size')) return obj['size']
+    if (!this.ownPropertyOnly && obj['size'] !== undefined) return obj['size']
+    if (isArray(obj) || isString(obj)) return obj.length
+    if (obj instanceof Map || obj instanceof Set) return obj.size
+    if (typeof obj === 'object') return Object.keys(obj).length
   }
 }
 
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
+  if (BLOCKED_SCOPE_KEYS.has(key) && ownPropertyOnly) return undefined
   if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
-}
-
-function readFirst (obj: Scope, ownPropertyOnly: boolean) {
-  if (isArray(obj)) return readArrayElement(obj, 0, ownPropertyOnly)
-  return readJSProperty(obj, 'first', ownPropertyOnly)
-}
-
-function readLast (obj: Scope, ownPropertyOnly: boolean) {
-  if (isArray(obj)) return readArrayElement(obj, -1, ownPropertyOnly)
-  return readJSProperty(obj, 'last', ownPropertyOnly)
-}
-
-function readSize (obj: Scope) {
-  if (hasOwnProperty.call(obj, 'size') || obj['size'] !== undefined) return obj['size']
-  if (isArray(obj) || isString(obj)) return obj.length
-  if (typeof obj === 'object') return Object.keys(obj).length
 }

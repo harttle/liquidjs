@@ -58,6 +58,9 @@ describe('Context', function () {
     it('should return map size as size', async function () {
       expect(ctx.get(['map', 'size'])).toEqual(1)
     })
+    it('should return own size property', async function () {
+      expect(ctx.get(['zoo', 'size'])).toEqual(4)
+    })
     it('should return undefined if not have a size', async function () {
       expect(ctx.get(['one', 'size'])).toBeUndefined()
       expect(ctx.get(['non-exist', 'size'])).toBeUndefined()
@@ -130,6 +133,10 @@ describe('Context', function () {
       ctx = new Context({ foo: Object.create({ bar: 'BAR' }) }, { ownPropertyOnly: false } as any)
       return expect(ctx.getSync(['foo', 'bar'])).toEqual('BAR')
     })
+    it('should read inherited size when ownPropertyOnly=false', function () {
+      ctx = new Context({ foo: Object.create({ size: 99 }) }, { ownPropertyOnly: false } as any)
+      return expect(ctx.getSync(['foo', 'size'])).toEqual(99)
+    })
     it('renderOptions.ownPropertyOnly should override options.ownPropertyOnly', function () {
       ctx = new Context({ foo: Object.create({ bar: 'BAR' }) }, { ownPropertyOnly: false } as any, { ownPropertyOnly: true })
       return expect(ctx.getSync(['foo', 'bar'])).toEqual(undefined)
@@ -198,6 +205,36 @@ describe('Context', function () {
         delete (Array.prototype as any)[0]
       }
     })
+    it('should allow own blocked keys when ownPropertyOnly=false', function () {
+      ctx = new Context({
+        foo: {
+          ...JSON.parse('{"__proto__": {"bar": "BAR"}}'),
+          constructor: { name: 'Custom' },
+          prototype: { x: 1 }
+        }
+      }, { ownPropertyOnly: false } as any)
+      expect(ctx.getSync(['foo', '__proto__', 'bar'])).toEqual('BAR')
+      expect(ctx.getSync(['foo', 'constructor', 'name'])).toEqual('Custom')
+      expect(ctx.getSync(['foo', 'prototype', 'x'])).toEqual(1)
+    })
+    it('should allow inherited properties when ownPropertyOnly=false', function () {
+      ctx = new Context({ foo: Object.create({ __proto__: { bar: 'BAR' }, constructor: { name: 'Evil' } }) }, { ownPropertyOnly: false } as any)
+      expect(ctx.getSync(['foo', '__proto__', '__proto__', 'bar'])).toEqual('BAR')
+      expect(ctx.getSync(['foo', 'constructor', 'name'])).toEqual('Evil')
+    })
+    it('should block own constructor when ownPropertyOnly=true', function () {
+      ctx.push({ foo: { constructor: { name: 'Evil' } } })
+      expect(ctx.getSync(['foo', 'constructor'])).toEqual(undefined)
+    })
+    it('should block own prototype when ownPropertyOnly=true', function () {
+      ctx.push({ foo: { prototype: { bar: 'BAR' } } })
+      expect(ctx.getSync(['foo', 'prototype'])).toEqual(undefined)
+    })
+    it('should block own top-level __proto__ variable when ownPropertyOnly=true', function () {
+      ctx = new Context(JSON.parse('{"__proto__": {"bar": "BAR"}, "bar": "BAR"}'))
+      expect(ctx.getSync(['__proto__'])).toEqual(undefined)
+      expect(ctx.getSync(['bar'])).toEqual('BAR')
+    })
   })
 
   describe('.getAll()', function () {
@@ -220,6 +257,11 @@ describe('Context', function () {
       ctx.push({ bar: { foo: 'foo' } })
       expect(ctx.getSync(['bar', 'foo'])).toEqual('foo')
       expect(ctx.getSync(['bar', 'bar'])).toEqual(undefined)
+    })
+    it('should return pushed scope for in-place mutation', function () {
+      const scope = ctx.push({})
+      scope.item = 'ITEM'
+      expect(ctx.getSync(['item'])).toEqual('ITEM')
     })
   })
   describe('.pop()', function () {

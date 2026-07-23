@@ -138,9 +138,7 @@ It defaults to `false`. For example, when set to `true`, a blank string would ev
 
 **lenientIf** modifies the behavior of `strictVariables` to allow handling optional variables. If set to `true`, an undefined variable will *not* cause an exception in the following two situations: a) it is the condition to an `if`, `elsif`, or `unless` tag; b) it occurs right before a `default` filter. Irrelevant if `strictVariables` is not set. Defaults to `false`.
 
-**ownPropertyOnly** hides scope variables from prototypes, useful when you're passing a not sanitized object into LiquidJS or need to hide prototypes from templates. Defaults to `true`.
-
-Built-in DoS limits and host isolation guidance are documented in [Security Model](./security-model.html).
+**ownPropertyOnly** limits template property reads on plain scope objects to own properties. Defaults to `true`. See [Security Model](./security-model.html).
 
 {% note info Nonexistent Tags %}
 Nonexistent tags always throw errors during parsing and this behavior cannot be customized.
