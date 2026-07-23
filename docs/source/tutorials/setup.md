@@ -56,33 +56,33 @@ Pre-built UMD bundles are also available:
 LiquidJS can also be used to render a template directly from CLI using `npx`:
 
 ```bash
-npx liquidjs --template '{{"hello" | capitalize}}'
+npx liquidjs '{{"hello" | capitalize}}'
 ```
 
 You can either pass the template inline (as shown above) or you can read it from a file by using the `@` character followed by a path, like so:
 
 ```bash
-npx liquidjs --template @./some-template.liquid
+npx liquidjs @./some-template.liquid
 ```
 
 A context can be passed inline, from a path, or piped through `stdin`. The following three are equivalent:
 
 ```bash
-npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
-npx liquidjs --template 'Hello, {{ name }}!' --context @./some-context.json
-echo '{"name": "Snake"}' | npx liquidjs --template 'Hello, {{ name }}!' --context @-
+npx liquidjs 'Hello, {{ name }}!' --context '{"name": "Snake"}'
+npx liquidjs 'Hello, {{ name }}!' --context @./some-context.json
+echo '{"name": "Snake"}' | npx liquidjs 'Hello, {{ name }}!' --context @-
 ```
 
 The rendered output is written to `stdout` by default, but you can also specify an output file (if the file exists, it will be overwritten):
 
 ```bash
-npx liquidjs --template '{{"hello" | capitalize}}' --output ./hello.txt
+npx liquidjs '{{"hello" | capitalize}}' --output ./hello.txt
 ```
 
 You can also pass a number of options to customize template rendering behavior. For example, the `--js-truthy` option can be used to enable JavaScript truthiness:
 
 ```bash
-npx liquidjs --template @./some-template.liquid --js-truthy
+npx liquidjs @./some-template.liquid --js-truthy
 ```
 
 Most of the [options available through the JavaScript API][options] are also available from the CLI. For help on available options, use `npx liquidjs --help`.

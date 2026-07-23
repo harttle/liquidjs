@@ -14,7 +14,7 @@ async function render () {
   program
     .name('liquidjs')
     .description('Render a Liquid template')
-    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (inline or @path to a file)') // TODO: Change to argument in 11.0
+    .argument('<template>', 'liquid template to render (inline or @path to a file)')
     .option('-c, --context <json | @path>', 'input context in JSON format (@- to read from stdin)')
     .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
     .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
@@ -45,12 +45,7 @@ async function render () {
     .parse()
 
   const options = program.opts()
-
-  if (options.template === '@-') {
-    throw new Error(`Reading template from stdin is not supported. Pass an inline template or @path.`)
-  }
-
-  const template = await resolveInputOption(options.template)
+  const template = await resolveTemplate(program.args[0])
   const context = await resolveContext(options.context)
   const liquid = new Liquid(options)
   const output = liquid.parseAndRenderSync(template, context)
@@ -68,6 +63,13 @@ async function resolveContext (contextOption) {
   }
   const context = JSON.parse(contextJson)
   return context
+}
+
+async function resolveTemplate (templateOption) {
+  if (templateOption && templateOption.startsWith('@') && templateOption !== '@-') {
+    return resolveInputOption(templateOption)
+  }
+  return templateOption
 }
 
 async function resolveInputOption (option) {
