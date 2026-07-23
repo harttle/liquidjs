@@ -39,4 +39,16 @@ describe('scope security', function () {
       { drop: new IterableDrop() }
     )).resolves.toBe('ab')
   })
+
+  it('should allow own blocked keys when ownPropertyOnly=true', async function () {
+    const scope = JSON.parse('{"__proto__": {"polluted": true}, "constructor": {"name": "Custom"}, "name": "Alice"}')
+    await expect(liquid.parseAndRender('{{ __proto__.polluted }}', scope)).resolves.toBe('true')
+    await expect(liquid.parseAndRender('{{ constructor.name }}', scope)).resolves.toBe('Custom')
+  })
+
+  it('should still block inherited blocked keys when ownPropertyOnly=true', async function () {
+    const scope = { foo: Object.create({ __proto__: { bar: 'BAR' }, constructor: { name: 'Evil' } }) }
+    await expect(liquid.parseAndRender('{{ foo.__proto__.bar }}', scope)).resolves.toBe('')
+    await expect(liquid.parseAndRender('{{ foo.constructor.name }}', scope)).resolves.toBe('')
+  })
 })

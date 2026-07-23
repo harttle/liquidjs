@@ -158,10 +158,7 @@ export class Context {
 const BLOCKED_SCOPE_KEYS: ReadonlySet<PropertyKey> = new Set(['__proto__', 'constructor', 'prototype'])
 
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
-  if (BLOCKED_SCOPE_KEYS.has(key)) {
-    if (!hasOwnProperty.call(obj, key)) return undefined
-    if (ownPropertyOnly) return undefined
-  }
+  if (BLOCKED_SCOPE_KEYS.has(key) && !hasOwnProperty.call(obj, key)) return undefined
   if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
 }

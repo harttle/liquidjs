@@ -52,8 +52,9 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 With [`ownPropertyOnly`][ownPropertyOnly] `true` (default), plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys).
 
-- **`true`:** proto keys (`__proto__`, `constructor`, `prototype`) blocked entirely.
-- **`false`:** own properties with those names allowed; inherited proto-key access still blocked.
+- **Proto keys** (`__proto__`, `constructor`, `prototype`): inherited access is always blocked.
+- **`true`:** other inherited properties are also hidden.
+- **`false`:** other inherited properties are allowed; own properties named `__proto__`, `constructor`, or `prototype` remain readable. Sanitize untrusted scope data (e.g. with [bourne](https://www.npmjs.com/package/bourne)) if those key names may appear.
 
 Not restricted: [`Drop`][drop] values, iteration via `Symbol.iterator`, `.size`/`.first`/`.last`, filters, and custom tags.
 
