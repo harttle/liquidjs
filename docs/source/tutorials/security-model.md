@@ -50,7 +50,10 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 ## `ownPropertyOnly` and scope data
 
-With [`ownPropertyOnly`][ownPropertyOnly] `true` (default), plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). Proto keys (`__proto__`, `constructor`, `prototype`) are blocked when `true`, even as own properties; when `false`, own properties with those names are allowed but inherited access to those names is still blocked.
+With [`ownPropertyOnly`][ownPropertyOnly] `true` (default), plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys).
+
+- **`true`:** proto keys (`__proto__`, `constructor`, `prototype`) blocked entirely.
+- **`false`:** own properties with those names allowed; inherited proto-key access still blocked.
 
 Not restricted: [`Drop`][drop] values, iteration via `Symbol.iterator`, `.size`/`.first`/`.last`, filters, and custom tags.
 

@@ -138,7 +138,7 @@ It defaults to `false`. For example, when set to `true`, a blank string would ev
 
 **lenientIf** modifies the behavior of `strictVariables` to allow handling optional variables. If set to `true`, an undefined variable will *not* cause an exception in the following two situations: a) it is the condition to an `if`, `elsif`, or `unless` tag; b) it occurs right before a `default` filter. Irrelevant if `strictVariables` is not set. Defaults to `false`.
 
-**ownPropertyOnly** limits template property reads on plain scope objects to own properties (no inherited prototype keys). Defaults to `true`. Proto keys (`__proto__`, `constructor`, `prototype`) are blocked when `true`. See [Security Model](./security-model.html).
+**ownPropertyOnly** limits template property reads on plain scope objects to own properties (no inherited prototype keys). Defaults to `true`, which blocks proto keys (`__proto__`, `constructor`, `prototype`) entirely; with `false`, only inherited proto-key access is blocked. See [Security Model](./security-model.html).
 
 {% note info Nonexistent Tags %}
 Nonexistent tags always throw errors during parsing and this behavior cannot be customized.
