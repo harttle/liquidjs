@@ -40,10 +40,11 @@ describe('scope security', function () {
     )).resolves.toBe('ab')
   })
 
-  it('should allow own blocked keys when ownPropertyOnly=true', async function () {
+  it('should block own blocked keys when ownPropertyOnly=true', async function () {
     const scope = JSON.parse('{"__proto__": {"polluted": true}, "constructor": {"name": "Custom"}, "name": "Alice"}')
-    await expect(liquid.parseAndRender('{{ __proto__.polluted }}', scope)).resolves.toBe('true')
-    await expect(liquid.parseAndRender('{{ constructor.name }}', scope)).resolves.toBe('Custom')
+    await expect(liquid.parseAndRender('{{ __proto__.polluted }}', scope)).resolves.toBe('')
+    await expect(liquid.parseAndRender('{{ constructor.name }}', scope)).resolves.toBe('')
+    await expect(liquid.parseAndRender('{{ name }}', scope)).resolves.toBe('Alice')
   })
 
   it('should block inherited properties when ownPropertyOnly=true', async function () {

@@ -215,17 +215,17 @@ describe('Context', function () {
       expect(ctx.getSync(['foo', '__proto__', '__proto__', 'bar'])).toEqual('BAR')
       expect(ctx.getSync(['foo', 'constructor', 'name'])).toEqual('Evil')
     })
-    it('should allow own constructor when ownPropertyOnly=true', function () {
+    it('should block own constructor when ownPropertyOnly=true', function () {
       ctx.push({ foo: { constructor: { name: 'Evil' } } })
-      expect(ctx.getSync(['foo', 'constructor'])).toEqual({ name: 'Evil' })
+      expect(ctx.getSync(['foo', 'constructor'])).toEqual(undefined)
     })
-    it('should allow own prototype when ownPropertyOnly=true', function () {
+    it('should block own prototype when ownPropertyOnly=true', function () {
       ctx.push({ foo: { prototype: { bar: 'BAR' } } })
-      expect(ctx.getSync(['foo', 'prototype'])).toEqual({ bar: 'BAR' })
+      expect(ctx.getSync(['foo', 'prototype'])).toEqual(undefined)
     })
-    it('should allow own top-level __proto__ variable', function () {
+    it('should block own top-level __proto__ variable when ownPropertyOnly=true', function () {
       ctx = new Context(JSON.parse('{"__proto__": {"bar": "BAR"}, "bar": "BAR"}'))
-      expect(ctx.getSync(['__proto__'])).toEqual({ bar: 'BAR' })
+      expect(ctx.getSync(['__proto__'])).toEqual(undefined)
       expect(ctx.getSync(['bar'])).toEqual('BAR')
     })
   })

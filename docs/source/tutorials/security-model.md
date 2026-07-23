@@ -50,7 +50,7 @@ The `memoryLimit` option was removed in v11; enforce memory limits at the host o
 
 ## `ownPropertyOnly` and scope data
 
-With [`ownPropertyOnly`][ownPropertyOnly] `true` (default), plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys). With `false`, inherited properties are allowed. Sanitize untrusted scope data (e.g. with [bourne](https://www.npmjs.com/package/bourne)) before passing it as scope. LiquidJS also uses null-prototype objects for managed scope frames (e.g. `{% capture %}`, `{% assign %}`) so internal frames do not inherit from `Object.prototype`.
+With [`ownPropertyOnly`][ownPropertyOnly] `true` (default), plain scope objects only expose **own** properties (no inherited / `Object.prototype` keys), and reads of `__proto__`, `constructor`, and `prototype` are blocked (own and inherited) as a prototype-pollution defense. With `false`, inherited properties and those keys are allowed—sanitize untrusted scope data (e.g. with [bourne](https://www.npmjs.com/package/bourne)) before passing it as scope. LiquidJS also uses null-prototype objects for managed scope frames (e.g. `{% capture %}`, `{% assign %}`) so internal frames do not inherit from `Object.prototype`.
 
 Not restricted: [`Drop`][drop] values, iteration via `Symbol.iterator`, `.size`/`.first`/`.last`, filters, and custom tags.
 

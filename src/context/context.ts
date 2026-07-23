@@ -6,6 +6,8 @@ import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNu
 
 type PropertyKey = string | number;
 
+const BLOCKED_SCOPE_KEYS: ReadonlySet<PropertyKey> = new Set(['__proto__', 'constructor', 'prototype'])
+
 export class Context {
   /**
    * insert a Context-level empty scope,
@@ -156,6 +158,7 @@ export class Context {
 }
 
 export function readJSProperty (obj: Scope, key: PropertyKey, ownPropertyOnly: boolean) {
+  if (BLOCKED_SCOPE_KEYS.has(key) && ownPropertyOnly) return undefined
   if (ownPropertyOnly && !hasOwnProperty.call(obj, key) && !(obj instanceof Drop)) return undefined
   return obj[key]
 }
