@@ -38,7 +38,7 @@ export interface LiquidOptions {
   strictVariables?: boolean;
   /** Catch all errors instead of exit upon one. Please note that render errors won't be reached when parse fails. */
   catchAllErrors?: boolean;
-  /** Limit template property reads on plain scope objects to own properties. Defaults to `true`. Proto keys (`__proto__`, `constructor`, `prototype`) are blocked when `true`. */
+  /** Limit template property reads on plain scope objects to own properties (no inherited prototype keys). Defaults to `true`. Sanitize untrusted scope data (e.g. with [bourne](https://www.npmjs.com/package/bourne)) before passing it as scope. */
   ownPropertyOnly?: boolean;
   /** Modifies the behavior of `strictVariables`. If set, a single undefined variable will *not* cause an exception in the context of the `if`/`elsif`/`unless` tag and the `default` filter. Instead, it will evaluate to `false` and `null`, respectively. Irrelevant if `strictVariables` is not set. Defaults to `false`. **/
   lenientIf?: boolean;

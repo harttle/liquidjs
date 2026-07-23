@@ -46,9 +46,9 @@ describe('scope security', function () {
     await expect(liquid.parseAndRender('{{ constructor.name }}', scope)).resolves.toBe('Custom')
   })
 
-  it('should still block inherited blocked keys when ownPropertyOnly=true', async function () {
+  it('should block inherited properties when ownPropertyOnly=true', async function () {
     const scope = { foo: Object.create({ __proto__: { bar: 'BAR' }, constructor: { name: 'Evil' } }) }
-    await expect(liquid.parseAndRender('{{ foo.__proto__.bar }}', scope)).resolves.toBe('')
-    await expect(liquid.parseAndRender('{{ foo.constructor.name }}', scope)).resolves.toBe('')
+    await expect(liquid.parseAndRender('{{ foo.__proto__ }}', scope)).resolves.toBe('')
+    await expect(liquid.parseAndRender('{{ foo.constructor }}', scope)).resolves.toBe('')
   })
 })

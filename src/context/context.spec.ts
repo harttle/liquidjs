@@ -210,9 +210,10 @@ describe('Context', function () {
       expect(ctx.getSync(['foo', 'constructor', 'name'])).toEqual('Custom')
       expect(ctx.getSync(['foo', 'prototype', 'x'])).toEqual(1)
     })
-    it('should still block inherited blocked keys when ownPropertyOnly=false', function () {
-      ctx = new Context({ foo: Object.create({ __proto__: { bar: 'BAR' } }) }, { ownPropertyOnly: false } as any)
-      expect(ctx.getSync(['foo', '__proto__'])).toEqual(undefined)
+    it('should allow inherited properties when ownPropertyOnly=false', function () {
+      ctx = new Context({ foo: Object.create({ __proto__: { bar: 'BAR' }, constructor: { name: 'Evil' } }) }, { ownPropertyOnly: false } as any)
+      expect(ctx.getSync(['foo', '__proto__', '__proto__', 'bar'])).toEqual('BAR')
+      expect(ctx.getSync(['foo', 'constructor', 'name'])).toEqual('Evil')
     })
     it('should allow own constructor when ownPropertyOnly=true', function () {
       ctx.push({ foo: { constructor: { name: 'Evil' } } })
