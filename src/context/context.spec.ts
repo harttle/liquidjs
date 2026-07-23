@@ -58,6 +58,9 @@ describe('Context', function () {
     it('should return map size as size', async function () {
       expect(ctx.get(['map', 'size'])).toEqual(1)
     })
+    it('should return own size property', async function () {
+      expect(ctx.get(['zoo', 'size'])).toEqual(4)
+    })
     it('should return undefined if not have a size', async function () {
       expect(ctx.get(['one', 'size'])).toBeUndefined()
       expect(ctx.get(['non-exist', 'size'])).toBeUndefined()
@@ -129,6 +132,10 @@ describe('Context', function () {
     it('should use prototype when ownPropertyOnly=false', function () {
       ctx = new Context({ foo: Object.create({ bar: 'BAR' }) }, { ownPropertyOnly: false } as any)
       return expect(ctx.getSync(['foo', 'bar'])).toEqual('BAR')
+    })
+    it('should read inherited size when ownPropertyOnly=false', function () {
+      ctx = new Context({ foo: Object.create({ size: 99 }) }, { ownPropertyOnly: false } as any)
+      return expect(ctx.getSync(['foo', 'size'])).toEqual(99)
     })
     it('renderOptions.ownPropertyOnly should override options.ownPropertyOnly', function () {
       ctx = new Context({ foo: Object.create({ bar: 'BAR' }) }, { ownPropertyOnly: false } as any, { ownPropertyOnly: true })

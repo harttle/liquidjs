@@ -27,6 +27,12 @@ describe('scope security', function () {
     await expect(liquid.parseAndRender('{{ obj.size }}', { obj })).resolves.toBe('1')
   })
 
+  it('should read inherited size when ownPropertyOnly=false', async function () {
+    liquid = new Liquid({ ownPropertyOnly: false })
+    const obj = Object.create({ size: 99 })
+    await expect(liquid.parseAndRender('{{ obj.size }}', { obj })).resolves.toBe('99')
+  })
+
   it('should still iterate Drop with Symbol.iterator', async function () {
     class IterableDrop extends Drop {
       * [Symbol.iterator] () {
