@@ -65,21 +65,13 @@ You can either pass the template inline (as shown above) or you can read it from
 npx liquidjs --template @./some-template.liquid
 ```
 
-You can also use the `@-` syntax to read the template from `stdin`:
-
-```bash
-echo '{{"hello" | capitalize}}' | npx liquidjs --template @-
-```
-
-A context can be passed in the same ways (i.e. inline, from a path or piped through `stdin`). The following three are equivalent:
+A context can be passed inline, from a path, or piped through `stdin`. The following three are equivalent:
 
 ```bash
 npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Snake"}'
 npx liquidjs --template 'Hello, {{ name }}!' --context @./some-context.json
 echo '{"name": "Snake"}' | npx liquidjs --template 'Hello, {{ name }}!' --context @-
 ```
-
-Note that you can only use the `stdin` specifier `@-` for a single argument. If you try to use it for both `--template` and `--context` you will get an error.
 
 The rendered output is written to `stdout` by default, but you can also specify an output file (if the file exists, it will be overwritten):
 

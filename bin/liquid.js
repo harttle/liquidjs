@@ -3,19 +3,7 @@
 const fs = require('fs/promises')
 const Liquid = require('..').Liquid
 
-// Preserve compatibility by falling back to legacy CLI behavior if:
-// - stdin is redirected (i.e. not connected to a terminal) AND
-// - there are either no arguments, or only a single argument which does not start with a dash
-// TODO: Remove this fallback for 11.0
-
-let renderPromise = null
-if (!process.stdin.isTTY && (process.argv.length === 2 || (process.argv.length === 3 && !process.argv[2].startsWith('-')))) {
-  renderPromise = renderLegacy()
-} else {
-  renderPromise = render()
-}
-
-renderPromise.catch(err => {
+render().catch(err => {
   process.stderr.write(`${err.message}\n`)
   process.exitCode = 1
 })
@@ -26,7 +14,7 @@ async function render () {
   program
     .name('liquidjs')
     .description('Render a Liquid template')
-    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (@- to read from stdin)') // TODO: Change to argument in 11.0
+    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (inline or @path to a file)') // TODO: Change to argument in 11.0
     .option('-c, --context <json | @path>', 'input context in JSON format (@- to read from stdin)')
     .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
     .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
@@ -58,8 +46,8 @@ async function render () {
 
   const options = program.opts()
 
-  if (Object.values(options).filter((value) => value === '@-').length > 1) {
-    throw new Error(`The stdin input specifier '@-' must only be used once.`)
+  if (options.template === '@-') {
+    throw new Error(`Reading template from stdin is not supported. Pass an inline template or @path.`)
   }
 
   const template = await resolveInputOption(options.template)
@@ -107,33 +95,4 @@ async function readStream (stream) {
     chunks.push(chunk)
   }
   return Buffer.concat(chunks).toString('utf8')
-}
-
-// TODO: Remove for 11.0
-async function renderLegacy () {
-  process.stderr.write('Reading template from stdin. This mode will be removed in next major version, use --template option instead.\n')
-  const contextArg = process.argv.slice(2)[0]
-  let context = {}
-  if (contextArg) {
-    const contextJson = await resolveInputOptionLegacy(contextArg)
-    context = JSON.parse(contextJson)
-  }
-  const template = await readStream(process.stdin)
-  const liquid = new Liquid()
-  const output = liquid.parseAndRenderSync(template, context)
-  process.stdout.write(output)
-}
-
-// TODO: Remove for 11.0
-async function resolveInputOptionLegacy (option) {
-  let content = null
-  if (option) {
-    const stat = await fs.stat(option).catch(e => null)
-    if (stat && stat.isFile) {
-      content = await fs.readFile(option, 'utf8')
-    } else {
-      content = option
-    }
-  }
-  return content
 }
