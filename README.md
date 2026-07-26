@@ -46,7 +46,7 @@ npm install liquidjs
 **CLI**
 
 ```bash
-npx liquidjs 'Hello, {{ name }}!' --context '{"name": "Liquid"}'
+npx liquidjs --template 'Hello, {{ name }}!' --context '{"name": "Liquid"}'
 ```
 
 See the [setup guide][setup] for partials, layouts, caching, and other options.

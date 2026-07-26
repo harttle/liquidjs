@@ -14,7 +14,7 @@ async function render () {
   program
     .name('liquidjs')
     .description('Render a Liquid template')
-    .argument('<template>', 'liquid template to render (inline or @path to a file)')
+    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (inline or @path to a file)')
     .option('-c, --context <json | @path>', 'input context in JSON format (@- to read from stdin)')
     .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
     .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
@@ -45,7 +45,7 @@ async function render () {
     .parse()
 
   const options = program.opts()
-  const template = await resolveTemplate(program.args[0])
+  const template = await resolveTemplate(options.template)
   const context = await resolveContext(options.context)
   const liquid = new Liquid(options)
   const output = liquid.parseAndRenderSync(template, context)
