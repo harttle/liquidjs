@@ -14,8 +14,8 @@ async function render () {
   program
     .name('liquidjs')
     .description('Render a Liquid template')
-    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (inline or @path to a file)')
-    .option('-c, --context <json | @path>', 'input context in JSON format (@- to read from stdin)')
+    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (inline, @path, or @- for stdin)')
+    .option('-c, --context <json | @path>', 'input context in JSON format (inline, @path, or @- for stdin)')
     .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
     .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
     .option('--extname <string>', 'use a default filename extension when resolving partials and layouts')
@@ -45,7 +45,12 @@ async function render () {
     .parse()
 
   const options = program.opts()
-  const template = await resolveTemplate(options.template)
+
+  if (Object.values(options).filter((value) => value === '@-').length > 1) {
+    throw new Error(`The stdin input specifier '@-' must only be used once.`)
+  }
+
+  const template = await resolveInputOption(options.template)
   const context = await resolveContext(options.context)
   const liquid = new Liquid(options)
   const output = liquid.parseAndRenderSync(template, context)
@@ -63,13 +68,6 @@ async function resolveContext (contextOption) {
   }
   const context = JSON.parse(contextJson)
   return context
-}
-
-async function resolveTemplate (templateOption) {
-  if (templateOption && templateOption.startsWith('@') && templateOption !== '@-') {
-    return resolveInputOption(templateOption)
-  }
-  return templateOption
 }
 
 async function resolveInputOption (option) {
