@@ -53,11 +53,10 @@ Pre-built UMD bundles are also available:
 
 ## LiquidJS in CLI
 
-LiquidJS can also be used to render a template directly from CLI using `npx`. Pass the template as a positional argument, or with `--template` / `-t`:
+LiquidJS can also be used to render a template directly from CLI using `npx`. Pass the template as a positional argument:
 
 ```bash
 npx liquidjs '{{"hello" | capitalize}}'
-npx liquidjs --template '{{"hello" | capitalize}}'
 ```
 
 You can either pass the template inline (as shown above), read it from a file with `@` followed by a path, or from `stdin` with `@-`:
