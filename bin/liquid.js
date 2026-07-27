@@ -14,7 +14,8 @@ async function render () {
   program
     .name('liquidjs')
     .description('Render a Liquid template')
-    .requiredOption('-t, --template <liquid | @path>', 'liquid template to render (inline, @path, or @- for stdin)')
+    .argument('[template]', 'liquid template to render (inline, @path, or @- for stdin)')
+    .option('-t, --template <liquid | @path>', 'liquid template to render (inline, @path, or @- for stdin)')
     .option('-c, --context <json | @path>', 'input context in JSON format (inline, @path, or @- for stdin)')
     .option('-o, --output <path>', 'write rendered output to file (omit to write to stdout)')
     .option('--cache [size]', 'cache previously parsed template structures (default cache size: 1024)')
@@ -45,12 +46,23 @@ async function render () {
     .parse()
 
   const options = program.opts()
+  const positionalTemplate = program.args[0]
+  const optionTemplate = options.template
 
-  if (Object.values(options).filter((value) => value === '@-').length > 1) {
+  if (positionalTemplate && optionTemplate && positionalTemplate !== optionTemplate) {
+    throw new Error(`Conflicting templates: positional argument and --template differ.`)
+  }
+
+  const templateOption = positionalTemplate || optionTemplate
+  if (!templateOption) {
+    throw new Error(`A template is required. Pass a positional <template> or --template.`)
+  }
+
+  if (Object.values({ template: templateOption, context: options.context }).filter((value) => value === '@-').length > 1) {
     throw new Error(`The stdin input specifier '@-' must only be used once.`)
   }
 
-  const template = await resolveInputOption(options.template)
+  const template = await resolveInputOption(templateOption)
   const context = await resolveContext(options.context)
   const liquid = new Liquid(options)
   const output = liquid.parseAndRenderSync(template, context)
