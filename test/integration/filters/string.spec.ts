@@ -153,6 +153,26 @@ describe('filters/string', function () {
             '{{ string_with_newlines | strip_newlines }}',
     'Hellothere')
   })
+  describe('squish', function () {
+    it('should collapse whitespace between words', function () {
+      return test('{{ "Hello   World!" | squish }}', 'Hello World!')
+    })
+    it('should strip leading and trailing whitespace', function () {
+      return test('{{ "  HelloWorld!  " | squish }}', 'HelloWorld!')
+    })
+    it('should treat newlines and tabs as whitespace', function () {
+      return test('{{ " \n\t\r\nHello  \n\t World!  \n" | squish }}', 'Hello World!')
+    })
+    it('should return empty string for whitespace only', function () {
+      return test('{{ " \n\t " | squish }}', '')
+    })
+    it('should stringify a number', function () {
+      return test('{{ 5 | squish }}', '5')
+    })
+    it('should return empty string for undefined', function () {
+      return test('{{ nosuchthing | squish }}', '')
+    })
+  })
   describe('truncate', function () {
     it('should truncate when string too long', function () {
       return test('{{ "Ground control to Major Tom." | truncate: 20 }}',

@@ -94,6 +94,7 @@ filters:
   sort: sort.html
   sort_natural: sort_natural.html
   split: split.html
+  squish: squish.html
   strip: strip.html
   strip_html: strip_html.html
   strip_newlines: strip_newlines.html

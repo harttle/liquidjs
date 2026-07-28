@@ -128,6 +128,12 @@ export function strip_newlines (this: FilterImpl, v: string) {
   return str.replace(/\r?\n/gm, '')
 }
 
+export function squish (this: FilterImpl, v: string) {
+  const str = stringify(v)
+  this.context.memoryLimit.use(str.length)
+  return str.replace(/\s+/g, ' ').trim()
+}
+
 export function capitalize (this: FilterImpl, str: string) {
   str = stringify(str)
   this.context.memoryLimit.use(str.length)
