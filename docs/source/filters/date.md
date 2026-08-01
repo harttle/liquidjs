@@ -34,6 +34,7 @@ The `date` filter is used to convert a timestamp into the specified format.
             * minutes: `-360` means `'+06:00'` and `360` means `'-06:00'`
             * timeZone ID: `Asia/Colombo` or `America/New_York`
     * See [here](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) for TZ database values
+* `%s` (seconds since the Unix epoch) identifies an instant rather than a wall-clock time, so it's not affected by the display timezone.
 
 ### Examples
 ```liquid

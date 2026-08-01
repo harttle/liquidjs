@@ -209,7 +209,9 @@ export function number_of_words (this: FilterImpl, input: string, mode?: 'cjk' |
 
 export function array_to_sentence_string (this: FilterImpl, array: unknown[], connector = 'and') {
   connector = stringify(connector)
-  this.context.memoryLimit.use(array.length + connector.length)
+  let outputSize = connector.length + array.length * 2
+  for (let i = 0; i < array.length; i++) outputSize += stringify(array[i]).length
+  this.context.memoryLimit.use(outputSize)
   switch (array.length) {
     case 0:
       return ''

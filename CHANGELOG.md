@@ -1,3 +1,14 @@
+## [10.27.2](https://github.com/harttle/liquidjs/compare/v10.27.1...v10.27.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* charge join/json/inspect filters by produced output size ([#925](https://github.com/harttle/liquidjs/issues/925)) ([7ab49f9](https://github.com/harttle/liquidjs/commit/7ab49f999ac045ec1e87f3a7a9fd68dd9e8602b3))
+* **date:** zero-pad milliseconds when formatting %N fractional seconds ([#929](https://github.com/harttle/liquidjs/issues/929)) ([2634f9d](https://github.com/harttle/liquidjs/commit/2634f9de7b1228cd887b7cab880af8a795c77053))
+* enforce ownPropertyOnly for inherited array indices ([#924](https://github.com/harttle/liquidjs/issues/924)) ([552819a](https://github.com/harttle/liquidjs/commit/552819a84b80c62306fe61072628a756272dc749))
+* **filters:** modulo should follow divisor sign for negative operands ([#922](https://github.com/harttle/liquidjs/issues/922)) ([568bd5f](https://github.com/harttle/liquidjs/commit/568bd5f9cb99f596292c09fd70b00284b8216f0c))
+* **filters:** return empty for out-of-range slice begin or negative length ([#928](https://github.com/harttle/liquidjs/issues/928)) ([f9a1316](https://github.com/harttle/liquidjs/commit/f9a1316d161f4f20018c833160f42dfcf0cde507))
+
 ## [10.27.1](https://github.com/harttle/liquidjs/compare/v10.27.0...v10.27.1) (2026-06-23)
 
 

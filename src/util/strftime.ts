@@ -98,14 +98,14 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   M: (d: LiquidDate) => d.getMinutes(),
   N: (d: LiquidDate, opts: FormatOptions) => {
     const width = Number(opts.width) || 9
-    const str = String(d.getMilliseconds()).slice(0, width)
+    const str = padStart(String(d.getMilliseconds()), 3, '0').slice(0, width)
     opts.memoryLimit?.use(width - str.length)
     return padEnd(str, width, '0')
   },
   p: (d: LiquidDate) => (d.getHours() < 12 ? 'AM' : 'PM'),
   P: (d: LiquidDate) => (d.getHours() < 12 ? 'am' : 'pm'),
   q: (d: LiquidDate) => ordinal(d),
-  s: (d: LiquidDate) => Math.round(d.getTime() / 1000),
+  s: (d: LiquidDate) => Math.floor(d.dateValue() / 1000),
   S: (d: LiquidDate) => d.getSeconds(),
   u: (d: LiquidDate) => d.getDay() || 7,
   U: (d: LiquidDate) => getWeekOfYear(d, 0),

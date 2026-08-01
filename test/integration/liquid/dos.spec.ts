@@ -89,6 +89,47 @@ describe('DoS related', function () {
       const liquid = new Liquid({ memoryLimit: 100 })
       await expect(liquid.parseAndRender('{{ array | sample: 1 | size }}', { array })).rejects.toThrow('memory alloc limit exceeded')
     })
+    it('should charge join by produced output size, not element count', () => {
+      const array = ['a'.repeat(100), 'b'.repeat(100)]
+      const liquid = new Liquid({ memoryLimit: 100 })
+      expect(() => liquid.parseAndRenderSync('{{ array | join: "" }}', { array }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should allow join within memoryLimit', () => {
+      const array = ['a'.repeat(20), 'b'.repeat(20)]
+      const liquid = new Liquid({ memoryLimit: 100 })
+      expect(liquid.parseAndRenderSync('{{ array | join: "" }}', { array })).toBe('a'.repeat(20) + 'b'.repeat(20))
+    })
+    it('should prevent concat doubling from bypassing join memoryLimit', () => {
+      const liquid = new Liquid({ memoryLimit: 1e4 })
+      const src = '{%- assign a = s | split: "NOSEP" -%}' +
+        '{%- assign a = a | concat: a -%}{%- assign a = a | concat: a -%}{%- assign a = a | concat: a -%}' +
+        '{{ a | join: "" | size }}'
+      expect(() => liquid.parseAndRenderSync(src, { s: 'a'.repeat(5000) }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should charge array_to_sentence_string by produced output size', () => {
+      const array = ['a'.repeat(100), 'b'.repeat(100), 'c'.repeat(100)]
+      const liquid = new Liquid({ memoryLimit: 100 })
+      expect(() => liquid.parseAndRenderSync('{{ array | array_to_sentence_string }}', { array }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should charge json serialization of concat-doubled arrays', () => {
+      const liquid = new Liquid({ memoryLimit: 1e4 })
+      const src = '{%- assign a = s | split: "NOSEP" -%}' +
+        '{%- assign a = a | concat: a -%}{%- assign a = a | concat: a -%}{%- assign a = a | concat: a -%}' +
+        '{{ a | json | size }}'
+      expect(() => liquid.parseAndRenderSync(src, { s: 'a'.repeat(5000) }))
+        .toThrow('memory alloc limit exceeded')
+    })
+    it('should charge inspect serialization of concat-doubled arrays', () => {
+      const liquid = new Liquid({ memoryLimit: 1e4 })
+      const src = '{%- assign a = s | split: "NOSEP" -%}' +
+        '{%- assign a = a | concat: a -%}{%- assign a = a | concat: a -%}{%- assign a = a | concat: a -%}' +
+        '{{ a | inspect | size }}'
+      expect(() => liquid.parseAndRenderSync(src, { s: 'a'.repeat(5000) }))
+        .toThrow('memory alloc limit exceeded')
+    })
     it('should charge strip_html input length to memoryLimit', () => {
       const liquid = new Liquid({ memoryLimit: 100 })
       expect(() => liquid.parseAndRenderSync('{{ s | strip_html }}', { s: 'a'.repeat(200) }))

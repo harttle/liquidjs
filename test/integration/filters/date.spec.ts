@@ -140,6 +140,18 @@ describe('filters/date', function () {
     it('should support timezone name argument when DST is active', function () {
       return test('{{ "2021-06-01T23:00:00Z" | date: "%Y-%m-%dT%H:%M:%S", "America/New_York" }}', '2021-06-01T19:00:00')
     })
+    it('should not shift %s by the timezone name argument', function () {
+      return test('{{ "2026-06-30T21:00:00Z" | date: "%s", "America/Toronto" }}', '1782853200')
+    })
+    it('should not shift %s by the timezone offset argument', function () {
+      return test('{{ "2026-06-30T21:00:00Z" | date: "%s", 360 }}', '1782853200')
+    })
+    it('should not shift %s by the timezoneOffset option', function () {
+      return test('{{ "2026-06-30T21:00:00Z" | date: "%s" }}', '1782853200', undefined, opts)
+    })
+    it('should truncate %s toward the epoch like Ruby strftime', function () {
+      return test('{{ "2026-06-30T17:00:00.500Z" | date: "%s" }}', '1782838800')
+    })
     it('should offset date literal with timezone 00:00 specified', function () {
       return test('{{ "1990-12-31T23:00:00+00:00" | date: "%Y-%m-%dT%H:%M:%S"}}', '1990-12-31T17:00:00', undefined, opts)
     })
