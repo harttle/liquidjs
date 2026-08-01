@@ -33,10 +33,6 @@ export class Tokenizer {
   }
 
   * readExpressionTokens (): IterableIterator<Token> {
-    yield * this.readExpressionTokensFromHere()
-  }
-
-  * readExpressionTokensFromHere (): IterableIterator<Token> {
     while (this.p < this.N) {
       const operator = this.readOperator()
       if (operator) {
@@ -50,11 +46,6 @@ export class Tokenizer {
       }
       return
     }
-  }
-
-  * readGroupedExpressionTokens (lhs: Token): IterableIterator<Token> {
-    yield lhs
-    yield * this.readExpressionTokensFromHere()
   }
   readOperator (): OperatorToken | undefined {
     this.skipBlank()
@@ -323,11 +314,10 @@ export class Tokenizer {
   readValue (): ValueToken | FilteredValueToken | undefined {
     this.skipBlank()
     const begin = this.p
-    let variable: ValueToken | FilteredValueToken | undefined = this.readLiteral() || this.readQuoted()
+    let variable: ValueToken | FilteredValueToken | undefined = this.readLiteral() || this.readQuoted() || this.readNumber()
     if (!variable && this.peek() === '(') {
       variable = this.readGroupOrRange()
     }
-    variable = variable || this.readNumber()
     const props = this.readProperties(!variable)
     if (!props.length) return variable
     return new PropertyAccessToken(variable, props, this.input, begin, this.p)
@@ -419,7 +409,7 @@ export class Tokenizer {
     }
 
     if (this.groupedExpressions) {
-      const initial = new Expression(this.readGroupedExpressionTokens(lhs))
+      const initial = new Expression([lhs, ...this.readExpressionTokens()])
       this.assert(initial.valid(), () => `invalid value expression: ${this.snapshot()}`)
       const filters = this.readFilters()
       this.skipBlank()

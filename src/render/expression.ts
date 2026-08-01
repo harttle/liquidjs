@@ -8,7 +8,7 @@ import { Filter } from '../template/filter'
 export class Expression {
   readonly postfix: Token[]
 
-  public constructor (tokens: IterableIterator<Token>) {
+  public constructor (tokens: Iterable<Token>) {
     this.postfix = [...toPostfix(tokens)]
   }
   public * evaluate (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {
@@ -88,7 +88,7 @@ function * evalRangeToken (token: RangeToken, ctx: Context) {
   return range(+low, +high + 1)
 }
 
-function * toPostfix (tokens: IterableIterator<Token>): IterableIterator<Token> {
+function * toPostfix (tokens: Iterable<Token>): IterableIterator<Token> {
   const ops: OperatorToken[] = []
   for (const token of tokens) {
     if (isOperatorToken(token)) {
