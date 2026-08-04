@@ -65,6 +65,41 @@ describe('filters/base64', function () {
     })
   })
 
+  describe('base64_decode_bytes', function () {
+    it('should decode Base64 to raw bytes without UTF-8 corruption', () => {
+      const bytes = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0xff, 0xfe])
+      const result = liquid.evalValueSync('data | base64_decode_bytes', {
+        data: bytes.toString('base64')
+      })
+
+      expect(Buffer.isBuffer(result)).toBe(true)
+      expect(result).toEqual(bytes)
+    })
+
+    it('should preserve bytes that are invalid UTF-8', () => {
+      const bytes = Buffer.from([0x80, 0xff, 0xfe, 0x00, 0x01])
+      const result = liquid.evalValueSync('data | base64_decode_bytes', {
+        data: bytes.toString('base64')
+      })
+
+      expect(result).toEqual(bytes)
+    })
+
+    it('should decode an empty string to an empty Buffer', () => {
+      const result = liquid.evalValueSync('data | base64_decode_bytes', { data: '' })
+
+      expect(result).toEqual(Buffer.alloc(0))
+    })
+
+    it('should round-trip arbitrary bytes through decode and encode filters', () => {
+      const bytes = Buffer.from([0x00, 0x01, 0x80, 0xff, 0xfe, 0xfd])
+      return test(
+        `{{ "${bytes.toString('base64')}" | base64_decode_bytes | base64_encode }}`,
+        bytes.toString('base64')
+      )
+    })
+  })
+
   describe('base64_encode with Buffer input', function () {
     it('should encode a Buffer to base64 without data corruption', async () => {
       const buf = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0xff, 0xfe])
