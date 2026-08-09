@@ -101,6 +101,9 @@ export class Liquid {
   public registerFilter (name: string, filter: FilterImplOptions) {
     this.filters[name] = filter
   }
+  public unregisterFilter (name: string) {
+    delete this.filters[name]
+  }
   public registerTag (name: string, tag: TagClass | TagImplOptions) {
     this.tags[name] = isFunction(tag) ? tag : createTagClass(tag)
   }

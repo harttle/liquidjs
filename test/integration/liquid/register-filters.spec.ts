@@ -67,3 +67,33 @@ describe('liquid#registerFilter()', function () {
     await expect(new Liquid({ strictFilters: true }).parseAndRender('{{ 1 | constructor }}')).rejects.toThrow('undefined filter')
   })
 })
+
+describe('liquid#unregisterFilter()', function () {
+  let liquid: Liquid
+  beforeEach(() => { liquid = new Liquid() })
+
+  it('should unregister a custom filter', async () => {
+    liquid.registerFilter('greet', value => `hello ${value}`)
+    liquid.unregisterFilter('greet')
+    const html = await liquid.parseAndRender('{{ "world" | greet }}')
+    return expect(html).toBe('world')
+  })
+
+  it('should unregister a built-in filter', () => {
+    liquid = new Liquid({ strictFilters: true })
+    liquid.unregisterFilter('upcase')
+    return expect(liquid.parseAndRender('{{ "foo" | upcase }}')).rejects.toThrow('undefined filter: upcase')
+  })
+
+  it('should support re-registering a filter', async () => {
+    liquid.registerFilter('greet', value => `hello ${value}`)
+    liquid.unregisterFilter('greet')
+    liquid.registerFilter('greet', value => `hi ${value}`)
+    const html = await liquid.parseAndRender('{{ "world" | greet }}')
+    return expect(html).toBe('hi world')
+  })
+
+  it('should not throw for an unknown filter', () => {
+    expect(() => liquid.unregisterFilter('unknown')).not.toThrow()
+  })
+})
