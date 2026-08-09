@@ -1,4 +1,4 @@
-import { Liquid } from '../../../src/liquid'
+import { Liquid, filters } from '../../../src'
 
 describe('liquid#registerFilter()', function () {
   let liquid: Liquid
@@ -85,12 +85,11 @@ describe('liquid#unregisterFilter()', function () {
     return expect(liquid.parseAndRender('{{ "foo" | upcase }}')).rejects.toThrow('undefined filter: upcase')
   })
 
-  it('should support re-registering a filter', async () => {
-    liquid.registerFilter('greet', value => `hello ${value}`)
-    liquid.unregisterFilter('greet')
-    liquid.registerFilter('greet', value => `hi ${value}`)
-    const html = await liquid.parseAndRender('{{ "world" | greet }}')
-    return expect(html).toBe('hi world')
+  it('should support re-registering a built-in filter', async () => {
+    liquid.unregisterFilter('upcase')
+    liquid.registerFilter('upcase', filters.upcase)
+    const html = await liquid.parseAndRender('{{ "foo" | upcase }}')
+    return expect(html).toBe('FOO')
   })
 
   it('should not throw for an unknown filter', () => {

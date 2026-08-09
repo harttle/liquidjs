@@ -70,6 +70,14 @@ engine.unregisterFilter('plus')
 
 With [`strictFilters`][strict-filters] enabled, using an unregistered filter will throw an error. Otherwise, the filter will be skipped.
 
+Built-in filters can be registered again using the exported `filters` object:
+
+```javascript
+import { filters } from 'liquidjs'
+
+engine.registerFilter('plus', filters.plus)
+```
+
 To disable a tag, or to make a disabled filter throw regardless of `strictFilters`, register a dummy implementation that throws a corresponding error (see [#324](https://github.com/harttle/liquidjs/issues/324)):
 
 ```javascript
