@@ -36,4 +36,14 @@ describe('tags/echo', function () {
     const html = await liquid.parseAndRender(src, { user: { name: 'Sally' } })
     return expect(html).toBe('Hello, SALLY!')
   })
+
+  describe('grouped expressions', function () {
+    const ge = new Liquid({ groupedExpressions: true })
+    it('should echo a grouped expression', async () => {
+      expect(await ge.parseAndRender('{% echo (name | upcase) %}', { name: 'bar' })).toBe('BAR')
+    })
+    it('should render a grouped expression in an output statement', async () => {
+      expect(await ge.parseAndRender('{{ (name | upcase | append: "!") }}', { name: 'bar' })).toBe('BAR!')
+    })
+  })
 })

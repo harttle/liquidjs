@@ -16,7 +16,7 @@ export class LiquidTagToken extends DelimitedToken {
     file?: string
   ) {
     super(TokenKind.Tag, [begin, end], input, begin, end, false, false, file)
-    this.tokenizer = new Tokenizer(input, options.operators, file, this.contentRange)
+    this.tokenizer = new Tokenizer(input, options.operators, file, this.contentRange, options.groupedExpressions)
     this.name = this.tokenizer.readTagName()
     this.tokenizer.assert(this.name, 'illegal liquid tag syntax')
     this.tokenizer.skipBlank()

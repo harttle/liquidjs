@@ -1,6 +1,6 @@
 import { isValueToken, toEnumerable } from '../util'
 import { createScope } from '../context/scope'
-import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream, FilteredValueToken } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
 import { Arguments } from '../template'
@@ -9,7 +9,7 @@ export default class extends Tag {
   variable: string
   args: Hash
   templates: Template[]
-  collection: ValueToken
+  collection: ValueToken | FilteredValueToken
   constructor (tagToken: TagToken, remainTokens: TopLevelToken[], liquid: Liquid, parser: Parser) {
     super(tagToken, remainTokens, liquid)
     const variable = this.tokenizer.readIdentifier()

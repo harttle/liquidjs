@@ -62,7 +62,23 @@ See existing filter implementations here: <https://github.com/harttle/liquidjs/t
 
 ## Unregister Tags/Filters
 
-In some cases it's desirable to disable some tags/filters (see [#324](https://github.com/harttle/liquidjs/issues/324)). You'll need to register a dummy tag/filter that throws a corresponding Error.
+Filters can be unregistered by name:
+
+```javascript
+engine.unregisterFilter('plus')
+```
+
+With [`strictFilters`][strict-filters] enabled, using an unregistered filter will throw an error. Otherwise, the filter will be skipped.
+
+Built-in filters can be registered again using the exported `filters` object:
+
+```javascript
+import { filters } from 'liquidjs'
+
+engine.registerFilter('plus', filters.plus)
+```
+
+To disable a tag, or to make a disabled filter throw regardless of `strictFilters`, register a dummy implementation that throws a corresponding error (see [#324](https://github.com/harttle/liquidjs/issues/324)):
 
 ```javascript
 // disable a tag
@@ -81,3 +97,5 @@ function disabledFilter(name) {
 }
 engine.registerFilter('plus', disabledFilter('plus'));
 ```
+
+[strict-filters]: /tutorials/options.html#strict

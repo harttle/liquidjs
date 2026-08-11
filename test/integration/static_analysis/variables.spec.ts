@@ -1085,4 +1085,24 @@ describe('Variable analysis', () => {
       locals: { y: [new Variable(['y'], { row: 1, col: 11, file: 'a' })] }
     })
   })
+
+  describe('grouped expressions', () => {
+    const ge = new Liquid({ groupedExpressions: true })
+
+    it('should report variables inside a grouped output expression', () => {
+      const analysis = analyzeSync(ge.parse('{{ (a | append: b) }}'))
+      expect(Object.keys(analysis.variables).sort()).toStrictEqual(['a', 'b'])
+    })
+
+    it('should report variables inside a grouped condition', () => {
+      const analysis = analyzeSync(ge.parse('{% if (a | append: b) == c %}{% endif %}'))
+      expect(Object.keys(analysis.globals).sort()).toStrictEqual(['a', 'b', 'c'])
+    })
+
+    it('should separate locals from globals for grouped assign', () => {
+      const analysis = analyzeSync(ge.parse('{% assign x = (a | upcase) %}{{ x }}'))
+      expect(Object.keys(analysis.globals)).toStrictEqual(['a'])
+      expect(Object.keys(analysis.locals)).toStrictEqual(['x'])
+    })
+  })
 })

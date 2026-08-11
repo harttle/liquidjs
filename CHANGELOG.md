@@ -1,3 +1,15 @@
+# [10.28.0](https://github.com/harttle/liquidjs/compare/v10.27.2...v10.28.0) (2026-08-01)
+
+
+### Bug Fixes
+
+* **date:** %s returns Unix epoch unaffected by display timezone ([#932](https://github.com/harttle/liquidjs/issues/932)) ([39c8743](https://github.com/harttle/liquidjs/commit/39c87437c5ef38ede9a208c9d55cd13231c6c023)), closes [#931](https://github.com/harttle/liquidjs/issues/931)
+
+
+### Features
+
+* Add support of inner expressions enclosed by parentheses ([#863](https://github.com/harttle/liquidjs/issues/863)) ([afa5f54](https://github.com/harttle/liquidjs/commit/afa5f5400428fc1ec935aca0282e579224660c95))
+
 ## [10.27.2](https://github.com/harttle/liquidjs/compare/v10.27.1...v10.27.2) (2026-07-09)
 
 
