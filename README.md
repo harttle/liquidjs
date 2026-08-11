@@ -242,6 +242,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/spokodev"><img src="https://avatars.githubusercontent.com/u/239690017?v=4?s=100" width="100px;" alt="spokodev"/><br /><sub><b>spokodev</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=spokodev" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/YacovGold"><img src="https://avatars.githubusercontent.com/u/8984042?v=4?s=100" width="100px;" alt="YacovGold"/><br /><sub><b>YacovGold</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=YacovGold" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
