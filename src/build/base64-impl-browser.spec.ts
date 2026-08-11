@@ -76,6 +76,20 @@ describe('base64-impl/browser', function () {
     })
   })
 
+  describe('#base64DecodeBytes()', function () {
+    it('should decode Base64 to raw bytes without UTF-8 corruption', function () {
+      const result = base64.base64DecodeBytes('iVBORw0KGgr//g==')
+
+      expect(result).toEqual(
+        new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0xff, 0xfe])
+      )
+    })
+
+    it('should decode an empty string to an empty Uint8Array', function () {
+      expect(base64.base64DecodeBytes('')).toEqual(new Uint8Array())
+    })
+  })
+
   describe('round-trip encoding/decoding', function () {
     it('should encode and decode back to original', function () {
       const original = 'Hello, World!'
