@@ -7,6 +7,14 @@ describe('filters/url', () => {
       const html = liquid.parseAndRenderSync('{{ "%27Stop%21%27+said+Fred" | url_decode }}')
       expect(html).toEqual("'Stop!' said Fred")
     })
+    it('should decode %2B to a literal plus', () => {
+      const html = liquid.parseAndRenderSync('{{ "1%2B1" | url_decode }}')
+      expect(html).toEqual('1+1')
+    })
+    it('should keep a literal plus when round-tripped through url_encode', () => {
+      const html = liquid.parseAndRenderSync('{{ "a+b c" | url_encode | url_decode }}')
+      expect(html).toEqual('a+b c')
+    })
   })
 
   describe('url_encode', () => {
