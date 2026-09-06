@@ -35,7 +35,7 @@
     "build:contributors": "node bin/build-contributors.js",
     "build:apidoc": "shx rm -rf docs/source/api && typedoc --plugin typedoc-plugin-missing-exports ./src --gitRevision master --out docs/source/api",
     "build:changelog": "node bin/build-changelog.js",
-    "build:docs-hexo": "cd docs && npm ci && npm run build && shx cp CNAME public/",
+    "build:docs-hexo": "cd docs && npm ci && npm run build && shx cp CNAME .nojekyll public/",
     "serve:docs": "cd docs && npm run start",
     "dev:docs": "run-s prepare:docs serve:docs"
   },
