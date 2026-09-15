@@ -180,7 +180,7 @@ export function truncatewords (this: FilterImpl, v: string, words = 15, o = '...
   const str = stringify(v)
   o = stringify(o)
   this.context.memoryLimit.use(str.length + o.length)
-  const arr = str.split(/\s+/)
+  const arr = str.trimStart().split(/\s+/)
   if (words <= 0) words = 1
   let ret = arr.slice(0, words).join(' ')
   if (arr.length >= words) ret += o
