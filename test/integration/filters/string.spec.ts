@@ -141,6 +141,23 @@ describe('filters/string', function () {
       'much room for activities!')
     await test('{{ "&[]{}" | strip: "&[]{}" }}', '')
   })
+  describe.each(['lstrip', 'rstrip', 'strip'])('%s with Unicode characters', filter => {
+    it.each([
+      ['𠮷𠮷text𠮷', '𠮷', ['text𠮷', '𠮷𠮷text', 'text']],
+      ['𠮷𠮶𠮷', '𠮷', ['𠮶𠮷', '𠮷𠮶', '𠮶']],
+      ['a𠮷text𠮷a', 'a𠮷', ['text𠮷a', 'a𠮷text', 'text']],
+      ['𠮷𠮷', '𠮷', ['', '', '']],
+      ['𠮶text𠮶', '𠮷', ['𠮶text𠮶', '𠮶text𠮶', '𠮶text𠮶']],
+      ['', '𠮷', ['', '', '']],
+      ['\uD842text\uD842', '\uD842', ['text\uD842', '\uD842text', 'text']],
+      ['\uD842𠮷x𠮷\uDFB7', '\uD842,\uDFB7', ['𠮷x𠮷\uDFB7', '\uD842𠮷x𠮷', '𠮷x𠮷']]
+    ])('should trim %s using %s', async (input, chars, outputs) => {
+      const expected = outputs[['lstrip', 'rstrip', 'strip'].indexOf(filter)]
+      const source = `{{ input | ${filter}: chars }}`
+      await test(source, { input, chars }, expected)
+      expect(liquid.parseAndRenderSync(source, { input, chars })).toBe(expected)
+    })
+  })
   it('should support strip_newlines', function () {
     return test('{% capture string_with_newlines %}\n' +
             'Hello\nthere\n{% endcapture %}' +
