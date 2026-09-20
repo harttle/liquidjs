@@ -233,6 +233,12 @@ describe('filters/string', function () {
     it('should default len to 15', function () {
       return test('{{ "1 2 3 4 5 6 7 8 9 a b c d e f" | truncatewords }}', '1 2 3 4 5 6 7 8 9 a b c d e f...')
     })
+    it('should ignore leading whitespace when counting words', function () {
+      return test('{{ "  Ground control to Major Tom." | truncatewords: 3 }}', 'Ground control to...')
+    })
+    it('should keep trailing whitespace when not truncating', function () {
+      return test('{{ "1 2 3 " | truncatewords: 5 }}', '1 2 3 ')
+    })
   })
   describe('remove_last', function () {
     it('should remove the last occurrence of substring', function () {
