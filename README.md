@@ -245,6 +245,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/YacovGold"><img src="https://avatars.githubusercontent.com/u/8984042?v=4?s=100" width="100px;" alt="YacovGold"/><br /><sub><b>YacovGold</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=YacovGold" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sarathfrancis90"><img src="https://avatars.githubusercontent.com/u/9289498?v=4?s=100" width="100px;" alt="Sarath Francis"/><br /><sub><b>Sarath Francis</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=sarathfrancis90" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/youdie006"><img src="https://avatars.githubusercontent.com/u/169331997?v=4?s=100" width="100px;" alt="KBS"/><br /><sub><b>KBS</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=youdie006" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/jakezwang"><img src="https://avatars.githubusercontent.com/u/2645794?v=4?s=100" width="100px;" alt="Jake Wang"/><br /><sub><b>Jake Wang</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jakezwang" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
