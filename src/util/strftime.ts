@@ -23,12 +23,9 @@ function getDayOfYear (d: LiquidDate) {
   return num + d.getDate()
 }
 function getWeekOfYear (d: LiquidDate, startDay: number) {
-  // Skip to startDay of this week
-  const now = getDayOfYear(d) + (startDay - d.getDay())
-  // Find the first startDay of the year
-  const jan1 = new Date(d.getFullYear(), 0, 1)
-  const then = (7 - jan1.getDay() + startDay)
-  return String(Math.floor((now - then) / 7) + 1)
+  // Days before the first startDay of the year belong to week 0
+  const daysSinceStartDay = (d.getDay() - startDay + 7) % 7
+  return String(Math.floor((getDayOfYear(d) - 1 - daysSinceStartDay + 7) / 7))
 }
 function isLeapYear (d: LiquidDate) {
   const year = d.getFullYear()

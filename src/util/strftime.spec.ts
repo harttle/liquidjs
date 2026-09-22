@@ -140,6 +140,22 @@ describe('util/strftime', function () {
     it('should format %W as week of year, starts with 1', function () {
       expect(t(now, '%W')).toBe('01')
     })
+    it('should format %U and %W as 00 before the first Sunday/Monday', function () {
+      // 2021-01-01 is a Friday
+      expect(t(new TestDate('2021-01-01 12:00:00'), '%U %W')).toBe('00 00')
+      expect(t(new TestDate('2021-01-03 12:00:00'), '%U %W')).toBe('01 00')
+      expect(t(new TestDate('2021-01-04 12:00:00'), '%U %W')).toBe('01 01')
+    })
+    it('should keep Sunday in the previous %W week', function () {
+      // 2000-01-02 is a Sunday
+      expect(t(new TestDate('2000-01-02 12:00:00'), '%W')).toBe('00')
+      expect(t(new TestDate('2000-01-09 12:00:00'), '%W')).toBe('01')
+    })
+    it('should format %U and %W when January 1st is the start day', function () {
+      // 2006-01-01 is a Sunday, 2007-01-01 is a Monday
+      expect(t(new TestDate('2006-07-05 12:00:00'), '%U %W')).toBe('27 27')
+      expect(t(new TestDate('2007-01-01 12:00:00'), '%U %W')).toBe('00 01')
+    })
   })
 
   describe('Time zone', () => {
