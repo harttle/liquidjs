@@ -8,3 +8,7 @@ export function base64Decode (str: string): string {
     Uint8Array.from(atob(str), c => c.charCodeAt(0))
   )
 }
+
+export function base64DecodeBytes (str: string): Uint8Array {
+  return Uint8Array.from(atob(str), c => c.charCodeAt(0))
+}
