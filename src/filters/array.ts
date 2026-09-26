@@ -137,7 +137,7 @@ function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[
   this.context.memoryLimit.use(arr.length)
   const token = new Tokenizer(stringify(property)).readScopeValue()
   for (const item of arr) {
-    values.push(yield evalToken(token, this.context.spawn(item)))
+    values.push(yield toValue(yield evalToken(token, this.context.spawn(item))))
   }
   const matcher = expectedMatcher.call(this, expected)
   return Array.prototype.filter.call(arr, (_, i) => matcher(values[i]) === include)
@@ -179,7 +179,7 @@ export function * group_by<T extends object> (this: FilterImpl, arr: T[], proper
   const token = new Tokenizer(stringify(property)).readScopeValue()
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
-    const key = yield evalToken(token, this.context.spawn(item))
+    const key = yield toValue(yield evalToken(token, this.context.spawn(item)))
     if (!map.has(key)) map.set(key, [])
     map.get(key).push(item)
   }
@@ -206,7 +206,7 @@ function * search<T extends object> (this: FilterImpl, arr: T[], property: strin
   const array = toArray(arr)
   const matcher = expectedMatcher.call(this, expected)
   for (let index = 0; index < array.length; index++) {
-    const value = yield evalToken(token, this.context.spawn(array[index]))
+    const value = yield toValue(yield evalToken(token, this.context.spawn(array[index])))
     if (matcher(value)) return [index, array[index]]
   }
 }
