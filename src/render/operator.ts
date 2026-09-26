@@ -4,43 +4,56 @@ import { toValue } from '../util'
 import { isFalsy, isTruthy } from '../render/boolean'
 import { isArray, isFunction } from '../util/underscore'
 
-export type UnaryOperatorHandler = (operand: any, ctx: Context) => boolean;
-export type BinaryOperatorHandler = (lhs: any, rhs: any, ctx: Context) => boolean;
+/**
+ * A handler may return a `boolean` (legacy interface), a `Promise`, or a generator
+ * that `yield`s to await async values. The render driver resolves all three, so
+ * operators written against the legacy `=> boolean` signature keep working.
+ */
+export type OperatorGenerator = Generator<unknown, boolean, any>
+export type OperatorResult = boolean | Promise<boolean> | OperatorGenerator
+export type UnaryOperatorHandler = (operand: any, ctx: Context) => OperatorResult;
+export type BinaryOperatorHandler = (lhs: any, rhs: any, ctx: Context) => OperatorResult;
 export type OperatorHandler = UnaryOperatorHandler | BinaryOperatorHandler;
 export type Operators = Record<string, OperatorHandler>
 
 export const defaultOperators: Operators = {
-  '==': equals,
-  '!=': (l: any, r: any) => !equals(l, r),
-  '>': (l: any, r: any) => {
+  '==': function * (l: any, r: any): OperatorGenerator {
+    if (isComparable(l) || isComparable(r)) return equals(l, r)
+    return equals(yield toValue(l), yield toValue(r))
+  },
+  '!=': function * (l: any, r: any): OperatorGenerator {
+    if (isComparable(l) || isComparable(r)) return !equals(l, r)
+    return !equals(yield toValue(l), yield toValue(r))
+  },
+  '>': function * (l: any, r: any): OperatorGenerator {
     if (isComparable(l)) return l.gt(r)
     if (isComparable(r)) return r.lt(l)
-    return toValue(l) > toValue(r)
+    return (yield toValue(l)) > (yield toValue(r))
   },
-  '<': (l: any, r: any) => {
+  '<': function * (l: any, r: any): OperatorGenerator {
     if (isComparable(l)) return l.lt(r)
     if (isComparable(r)) return r.gt(l)
-    return toValue(l) < toValue(r)
+    return (yield toValue(l)) < (yield toValue(r))
   },
-  '>=': (l: any, r: any) => {
+  '>=': function * (l: any, r: any): OperatorGenerator {
     if (isComparable(l)) return l.geq(r)
     if (isComparable(r)) return r.leq(l)
-    return toValue(l) >= toValue(r)
+    return (yield toValue(l)) >= (yield toValue(r))
   },
-  '<=': (l: any, r: any) => {
+  '<=': function * (l: any, r: any): OperatorGenerator {
     if (isComparable(l)) return l.leq(r)
     if (isComparable(r)) return r.geq(l)
-    return toValue(l) <= toValue(r)
+    return (yield toValue(l)) <= (yield toValue(r))
   },
-  'contains': (l: any, r: any) => {
-    l = toValue(l)
+  'contains': function * (l: any, r: any): OperatorGenerator {
+    l = yield toValue(l)
     if (isArray(l)) return l.some((i) => equals(i, r))
-    if (isFunction(l?.indexOf)) return l.indexOf(toValue(r)) > -1
+    if (isFunction(l?.indexOf)) return l.indexOf(yield toValue(r)) > -1
     return false
   },
-  'not': (v: any, ctx: Context) => isFalsy(toValue(v), ctx),
-  'and': (l: any, r: any, ctx: Context) => isTruthy(toValue(l), ctx) && isTruthy(toValue(r), ctx),
-  'or': (l: any, r: any, ctx: Context) => isTruthy(toValue(l), ctx) || isTruthy(toValue(r), ctx)
+  'not': function * (v: any, ctx: Context): OperatorGenerator { return isFalsy(yield toValue(v), ctx) },
+  'and': function * (l: any, r: any, ctx: Context): OperatorGenerator { return isTruthy(yield toValue(l), ctx) && isTruthy(yield toValue(r), ctx) },
+  'or': function * (l: any, r: any, ctx: Context): OperatorGenerator { return isTruthy(yield toValue(l), ctx) || isTruthy(yield toValue(r), ctx) }
 }
 
 export function equals (lhs: any, rhs: any): boolean {

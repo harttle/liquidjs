@@ -65,6 +65,16 @@ describe('tags/if', function () {
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).toBe('yes')
     })
+    it('should keep comparable operands uncoerced', async function () {
+      const src = '{% if empty == empty %}yes{%else%}no{%endif%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('no')
+    })
+    it('should keep comparable operands uncoerced in elsif', async function () {
+      const src = '{% if false %}a{% elsif empty == empty %}b{% else %}c{% endif %}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('c')
+    })
     it('should support value and expression', async function () {
       const src = `X{%if version and version != '' %}x{{version}}y{%endif%}Y`
       const scope = { 'version': '' }

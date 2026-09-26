@@ -1,7 +1,7 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
 import { isString, isValueToken, toEnumerable } from '../util'
-import { TopLevelToken, assert, Liquid, Token, ValueToken, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
+import { TopLevelToken, assert, Liquid, Token, ValueToken, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, toValue, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
 import { Argument, Arguments, PartialScope } from '../template'
 
@@ -69,7 +69,7 @@ export default class extends Tag {
 
     if (this.forBinding) {
       const { value, alias } = this.forBinding
-      const collection = toEnumerable(yield evalToken(value, ctx))
+      const collection = toEnumerable(yield toValue(yield evalToken(value, ctx)))
       scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
       for (const item of collection) {
         scope[alias as string] = item
@@ -171,5 +171,5 @@ function optimize (templates: Template[]): string | Template[] {
 export function * renderFilePath (file: ParsedFileName, ctx: Context, liquid: Liquid): IterableIterator<unknown> {
   if (typeof file === 'string') return file
   if (Array.isArray(file)) return liquid.renderer.renderTemplates(file, ctx)
-  return yield evalToken(file, ctx)
+  return yield toValue(yield evalToken(file, ctx))
 }

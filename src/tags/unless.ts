@@ -1,6 +1,7 @@
 import { Liquid, Tag, Value, TopLevelToken, Template, Emitter, isTruthy, isFalsy, Context, TagToken } from '..'
 import { Parser } from '../parser'
 import { Arguments } from '../template'
+import { toValue } from '../util'
 
 export default class extends Tag {
   branches: { value: Value, test: (val: any, ctx: Context) => boolean, templates: Template[] }[] = []
@@ -44,7 +45,7 @@ export default class extends Tag {
     const r = this.liquid.renderer
 
     for (const { value, test, templates } of this.branches) {
-      const v = yield value.value(ctx, ctx.opts.lenientIf)
+      const v = yield toValue(yield value.value(ctx, ctx.opts.lenientIf))
       if (test(v, ctx)) {
         yield r.renderTemplates(templates, ctx, emitter)
         return
