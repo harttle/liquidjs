@@ -1,4 +1,4 @@
-import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream, FilteredValueToken } from '..'
+import { Hash, ValueToken, Liquid, Tag, evalToken, toValue, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream, FilteredValueToken } from '..'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { createScope } from '../context/scope'
 import { ForloopDrop } from '../drop/forloop-drop'
@@ -43,7 +43,7 @@ export default class extends Tag {
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void | string, Template[]> {
     const r = this.liquid.renderer
-    let collection = toEnumerable(yield evalToken(this.collection, ctx))
+    let collection = toEnumerable(yield toValue(yield evalToken(this.collection, ctx)))
 
     if (!collection.length) {
       yield r.renderTemplates(this.elseTemplates, ctx, emitter)

@@ -1,5 +1,6 @@
 import { Liquid, TopLevelToken, Emitter, Value, TagToken, Context, Tag } from '..'
 import { Arguments } from '../template'
+import { toValue } from '../util'
 
 export default class extends Tag {
   private value?: Value
@@ -13,7 +14,7 @@ export default class extends Tag {
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     if (!this.value) return
-    const val = yield this.value.value(ctx, false)
+    const val = yield toValue(yield this.value.value(ctx, false))
     emitter.write(val)
   }
 

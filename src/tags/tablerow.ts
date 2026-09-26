@@ -1,6 +1,6 @@
 import { isValueToken, toEnumerable } from '../util'
 import { createScope } from '../context/scope'
-import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream, FilteredValueToken } from '..'
+import { ValueToken, Liquid, Tag, evalToken, toValue, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream, FilteredValueToken } from '..'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
 import { Arguments } from '../template'
@@ -39,7 +39,7 @@ export default class extends Tag {
   }
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
-    let collection = toEnumerable(yield evalToken(this.collection, ctx))
+    let collection = toEnumerable(yield toValue(yield evalToken(this.collection, ctx)))
     const args = (yield this.args.render(ctx)) as Record<string, any>
     const offset = args.offset || 0
     const limit = (args.limit === undefined) ? collection.length : args.limit
