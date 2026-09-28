@@ -18,6 +18,14 @@ describe('util/strftime', function () {
     it('should format %y as 2-digit year', function () {
       expect(t(now, '%y')).toBe('16')
     })
+    it('should format %C and %y from the numeric year', function () {
+      const year999 = new TestDate('0999-06-15 00:00:00')
+      expect(t(year999, '%C')).toBe('09')
+      expect(t(year999, '%y')).toBe('99')
+      const year2005 = new TestDate('2005-06-15 00:00:00')
+      expect(t(year2005, '%y')).toBe('05')
+      expect(t(year2005, '%-y')).toBe('5')
+    })
     describe('%j', function () {
       it('should format %j as day of year', function () {
         expect(t(then, '%j')).toBe('066')
