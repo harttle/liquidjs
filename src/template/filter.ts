@@ -1,10 +1,11 @@
 import { evalToken } from '../render'
+import { isComparable } from '../drop/comparable'
 import { Context } from '../context'
-import { identify, isFunction } from '../util/underscore'
+import { identify, isFunction, toValue } from '../util/underscore'
 import { FilterHandler, FilterImplOptions } from './filter-impl-options'
 import { FilterArg, isKeyValuePair } from '../parser/filter-arg'
 import { Liquid } from '../liquid'
-import { FilterToken } from '../tokens'
+import { FilterToken, ValueToken } from '../tokens'
 
 export class Filter {
   public name: string
@@ -27,9 +28,19 @@ export class Filter {
   public * render (value: any, context: Context): IterableIterator<unknown> {
     const argv: any[] = []
     for (const arg of this.args as FilterArg[]) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], yield evalToken(arg[1], context)])
-      else argv.push(yield evalToken(arg, context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], yield evalFilterArg(arg[1], context)])
+      else argv.push(yield evalFilterArg(arg, context))
     }
     return yield this.handler.apply({ context, token: this.token, liquid: this.liquid }, [value, ...argv])
   }
+}
+
+/**
+ * Filter arguments are values, except `empty` / `nil` / `blank`.
+ * Those stay drops so equality filters can use `Comparable`.
+ */
+function * evalFilterArg (arg: ValueToken | undefined, context: Context): IterableIterator<unknown> {
+  const value = yield evalToken(arg, context)
+  if (isComparable(value)) return value
+  return yield toValue(value)
 }

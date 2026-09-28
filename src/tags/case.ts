@@ -61,7 +61,7 @@ export default class extends Tag {
     for (const branch of this.branches) {
       for (const valueToken of branch.values) {
         const value = yield evalToken(valueToken, ctx, ctx.opts.lenientIf)
-        if (equals(target, value)) {
+        if (yield equals(target, value)) {
           yield r.renderTemplates(branch.templates, ctx, emitter)
           branchHit = true
           break

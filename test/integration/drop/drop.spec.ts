@@ -172,10 +172,34 @@ describe('drop/drop', function () {
         const html = await liquid.parseAndRender(`{{a}}`, { a: new AsyncStringDrop('x') })
         expect(html).toBe('x')
       })
-      it('passes the raw Drop to filters (not its async valueOf)', async function () {
-        liquid.registerFilter('typeName', x => x.constructor.name)
-        const html = await liquid.parseAndRender(`{{a | typeName}}`, { a: new AsyncStringDrop('ab') })
-        expect(html).toBe('AsyncStringDrop')
+      it('resolves async valueOf before the filter', async function () {
+        const html = await liquid.parseAndRender(`{{a | upcase}}`, { a: new AsyncStringDrop('ab') })
+        expect(html).toBe('AB')
+      })
+      it('map resolves async properties', async function () {
+        const items = [{ v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('y') }]
+        const html = await liquid.parseAndRender(`{{ items | map: 'v' | join: ',' }}`, { items })
+        expect(html).toBe('x,y')
+      })
+      it('sum resolves async properties', async function () {
+        const items = [{ n: new AsyncNumberDrop(1) }, { n: new AsyncNumberDrop(2) }]
+        const html = await liquid.parseAndRender(`{{ items | sum: 'n' }}`, { items })
+        expect(html).toBe('3')
+      })
+      it('sort resolves async properties', async function () {
+        const items = [{ id: 'a', n: new AsyncNumberDrop(2) }, { id: 'b', n: new AsyncNumberDrop(1) }]
+        const html = await liquid.parseAndRender(`{% assign s = items | sort: 'n' %}{% for i in s %}{{ i.id }}{% endfor %}`, { items })
+        expect(html).toBe('ba')
+      })
+      it('where_exp resolves async properties', async function () {
+        const items = [{ v: new AsyncStringDrop('x'), id: '1' }, { v: new AsyncStringDrop('y'), id: '2' }]
+        const html = await liquid.parseAndRender(`{% assign r = items | where_exp: 'item', 'item.v == "y"' %}{{ r[0].id }}`, { items })
+        expect(html).toBe('2')
+      })
+      it('group_by_exp resolves async properties', async function () {
+        const items = [{ v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('y') }]
+        const html = await liquid.parseAndRender(`{{ items | group_by_exp: 'item', 'item.v' | size }}`, { items })
+        expect(html).toBe('2')
       })
       it('where by async property', async function () {
         const items = [{ v: new AsyncStringDrop('x'), id: '1' }, { v: new AsyncStringDrop('y'), id: '2' }]
@@ -220,6 +244,13 @@ describe('drop/drop', function () {
           { a: new AsyncStringDrop('y') }
         )
         expect(html).toBe('Y')
+      })
+      it('case when empty uses Comparable on the resolved value', async function () {
+        const html = await liquid.parseAndRender(
+          `{% case a %}{% when empty %}E{% else %}X{% endcase %}`,
+          { a: new AsyncArrayDrop([]) }
+        )
+        expect(html).toBe('E')
       })
     })
 
@@ -307,6 +338,33 @@ describe('drop/drop', function () {
       it('assign then output', async function () {
         const html = await liquid.parseAndRender(`{% assign b = a %}{{ b }}`, { a: new AsyncStringDrop('z') })
         expect(html).toBe('z')
+      })
+      it('assign keeps the drop so properties stay readable', async function () {
+        class NamedDrop extends Drop {
+          id = '42'
+          async valueOf () { return 'serialized' }
+        }
+        const html = await liquid.parseAndRender(`{% assign b = a %}{{ b.id }}:{{ b }}`, { a: new NamedDrop() })
+        expect(html).toBe('42:serialized')
+      })
+      it('supports async Comparable.equals', async function () {
+        class EqDrop extends Drop {
+          constructor (private n: string) { super() }
+          async equals (rhs: unknown) {
+            const other = rhs instanceof Drop ? await rhs.valueOf() : rhs
+            return (await this.valueOf()) === other
+          }
+          async valueOf () { return this.n }
+          gt () { return false }
+          geq () { return false }
+          lt () { return false }
+          leq () { return false }
+        }
+        const html = await liquid.parseAndRender(
+          `{% if a == b %}eq{% endif %}/{% if a == c %}bad{% else %}ne{% endif %}`,
+          { a: new EqDrop('t'), b: new EqDrop('t'), c: new EqDrop('u') }
+        )
+        expect(html).toBe('eq/ne')
       })
       it('echo', async function () {
         const html = await liquid.parseAndRender(`{% echo a %}`, { a: new AsyncStringDrop('z') })

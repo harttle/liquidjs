@@ -1,4 +1,4 @@
-import { TopLevelToken, Liquid, ValueToken, evalToken, toValue, Emitter, TagToken, Context, Tag } from '..'
+import { TopLevelToken, Liquid, ValueToken, evalTokenValue, Emitter, TagToken, Context, Tag } from '..'
 import { Arguments } from '../template'
 
 export default class extends Tag {
@@ -25,7 +25,7 @@ export default class extends Tag {
   }
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
-    const group = (yield toValue(yield evalToken(this.group, ctx))) as string
+    const group = (yield evalTokenValue(this.group, ctx)) as string
     const fingerprint = `cycle:${group}:` + this.candidates.join(',')
     const groups = ctx.getRegister('cycle', {} as Record<string, number>)
     let idx = groups[fingerprint]
@@ -37,7 +37,7 @@ export default class extends Tag {
     const candidate = this.candidates[idx]
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
-    return yield toValue(yield evalToken(candidate, ctx))
+    return yield evalTokenValue(candidate, ctx)
   }
 
   public * arguments (): Arguments {

@@ -117,30 +117,31 @@ describe('tags/include', function () {
   })
   it('should support include: with as Drop', async function () {
     class ColorDrop extends Drop {
+      label = 'blue'
       public valueOf (): string {
         return 'red!'
       }
     }
     mock({
       '/with.html': '{% include "color" with color %}',
-      '/color.html': 'color:{{color}}'
+      '/color.html': '{{color.label}}:{{color}}'
     })
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
-    expect(html).toBe('color:red!')
+    expect(html).toBe('blue:red!')
   })
-  it('should support include: with passed as Drop', async function () {
+  it('should resolve async valueOf before filters while keeping the Drop on include with', async function () {
     class ColorDrop extends Drop {
-      public valueOf (): string {
+      label = 'blue'
+      public async valueOf () {
         return 'red!'
       }
     }
-    liquid.registerFilter('name', x => x.constructor.name)
     mock({
       '/with.html': '{% include "color" with color %}',
-      '/color.html': '{{color | name}}'
+      '/color.html': '{{color.label}}:{{color | upcase}}'
     })
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
-    expect(html).toBe('ColorDrop')
+    expect(html).toBe('blue:RED!')
   })
 
   it('should support nested includes', async function () {
