@@ -1,6 +1,11 @@
 
 export function base64Encode (str: string): string {
-  return btoa(String.fromCharCode(...new TextEncoder().encode(str)))
+  const bytes = new TextEncoder().encode(str)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  }
+  return btoa(binary)
 }
 
 export function base64Decode (str: string): string {
