@@ -43,11 +43,12 @@ function ordinal (d: LiquidDate) {
   }
 }
 function century (d: LiquidDate) {
-  return parseInt(d.getFullYear().toString().substring(0, 2), 10)
+  return Math.floor(d.getFullYear() / 100)
 }
 
 // default to 0
 const padWidths: Record<string, number> = {
+  C: 2,
   d: 2,
   e: 2,
   H: 2,
@@ -60,7 +61,8 @@ const padWidths: Record<string, number> = {
   M: 2,
   S: 2,
   U: 2,
-  W: 2
+  W: 2,
+  y: 2
 }
 
 const padSpaceChars = new Set('aAbBceklpP')
@@ -110,7 +112,7 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   W: (d: LiquidDate) => getWeekOfYear(d, 1),
   x: (d: LiquidDate) => d.toLocaleDateString(),
   X: (d: LiquidDate) => d.toLocaleTimeString(),
-  y: (d: LiquidDate) => d.getFullYear().toString().slice(2, 4),
+  y: (d: LiquidDate) => (d.getFullYear() % 100 + 100) % 100,
   Y: (d: LiquidDate) => d.getFullYear(),
   z: getTimezoneOffset,
   Z: (d: LiquidDate, opts: FormatOptions) => d.getTimeZoneName() || getTimezoneOffset(d, opts),
