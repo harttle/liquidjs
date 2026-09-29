@@ -21,5 +21,11 @@ export function base64_encode (this: FilterImpl, value: string | Buffer): string
 export function base64_decode (this: FilterImpl, value: string): string {
   const str = stringify(value)
   this.context.memoryLimit.use(str.length)
-  return base64Decode(str)
+  return isBase64(str) ? base64Decode(str) : ''
+}
+
+function isBase64 (str: string): boolean {
+  str = str.replace(/[\t\n\f\r ]/g, '')
+  if (str.length % 4 === 0) str = str.replace(/==?$/, '')
+  return str.length % 4 !== 1 && /^[A-Za-z0-9+/]*$/.test(str)
 }
