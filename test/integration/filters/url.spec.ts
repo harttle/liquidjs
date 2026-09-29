@@ -15,6 +15,14 @@ describe('filters/url', () => {
       const html = liquid.parseAndRenderSync('{{ "a+b c" | url_encode | url_decode }}')
       expect(html).toEqual('a+b c')
     })
+    it('should leave a malformed escape as written', () => {
+      const html = liquid.parseAndRenderSync('{{ "%E2%9C%93+100%" | url_decode }}')
+      expect(html).toEqual('✓ 100%')
+    })
+    it('should leave an incomplete UTF-8 sequence as written', () => {
+      const html = liquid.parseAndRenderSync('{{ "%E2%9C" | url_decode }}')
+      expect(html).toEqual('%E2%9C')
+    })
   })
 
   describe('url_encode', () => {
