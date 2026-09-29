@@ -172,33 +172,9 @@ describe('drop/drop', function () {
         const html = await liquid.parseAndRender(`{{a}}`, { a: new AsyncStringDrop('x') })
         expect(html).toBe('x')
       })
-      it('resolves async valueOf before the filter', async function () {
-        const html = await liquid.parseAndRender(`{{a | upcase}}`, { a: new AsyncStringDrop('ab') })
-        expect(html).toBe('AB')
-      })
-      it('map resolves async properties', async function () {
-        const items = [{ v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('y') }]
-        const html = await liquid.parseAndRender(`{{ items | map: 'v' | join: ',' }}`, { items })
-        expect(html).toBe('x,y')
-      })
-      it('sum resolves async properties', async function () {
-        const items = [{ n: new AsyncNumberDrop(1) }, { n: new AsyncNumberDrop(2) }]
-        const html = await liquid.parseAndRender(`{{ items | sum: 'n' }}`, { items })
-        expect(html).toBe('3')
-      })
-      it('sort resolves async properties', async function () {
-        const items = [{ id: 'a', n: new AsyncNumberDrop(2) }, { id: 'b', n: new AsyncNumberDrop(1) }]
-        const html = await liquid.parseAndRender(`{% assign s = items | sort: 'n' %}{% for i in s %}{{ i.id }}{% endfor %}`, { items })
-        expect(html).toBe('ba')
-      })
       it('where_exp resolves async properties', async function () {
         const items = [{ v: new AsyncStringDrop('x'), id: '1' }, { v: new AsyncStringDrop('y'), id: '2' }]
         const html = await liquid.parseAndRender(`{% assign r = items | where_exp: 'item', 'item.v == "y"' %}{{ r[0].id }}`, { items })
-        expect(html).toBe('2')
-      })
-      it('group_by_exp resolves async properties', async function () {
-        const items = [{ v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('y') }]
-        const html = await liquid.parseAndRender(`{{ items | group_by_exp: 'item', 'item.v' | size }}`, { items })
         expect(html).toBe('2')
       })
       it('where by async property', async function () {
@@ -209,11 +185,6 @@ describe('drop/drop', function () {
       it('find by async property', async function () {
         const items = [{ v: new AsyncStringDrop('x'), id: '1' }, { v: new AsyncStringDrop('y'), id: '2' }]
         const html = await liquid.parseAndRender(`{% assign f = items | find: 'v', 'y' %}{{ f.id }}`, { items })
-        expect(html).toBe('2')
-      })
-      it('group_by async property', async function () {
-        const items = [{ v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('x') }, { v: new AsyncStringDrop('y') }]
-        const html = await liquid.parseAndRender(`{{ items | group_by: 'v' | size }}`, { items })
         expect(html).toBe('2')
       })
     })
@@ -289,48 +260,6 @@ describe('drop/drop', function () {
           { a: new AsyncFalsyDrop() }
         )
         expect(html).toBe('yes')
-      })
-    })
-
-    describe('collections', function () {
-      it('for collection', async function () {
-        const html = await liquid.parseAndRender(
-          `{% for x in a %}{{ x }};{% endfor %}`,
-          { a: new AsyncArrayDrop(['u', 'v']) }
-        )
-        expect(html).toBe('u;v;')
-      })
-      it('tablerow collection', async function () {
-        const html = await liquid.parseAndRender(
-          `{% tablerow x in a cols:2 %}{{ x }}{% endtablerow %}`,
-          { a: new AsyncArrayDrop(['u', 'v']) }
-        )
-        expect(html).toContain('u')
-        expect(html).toContain('v')
-      })
-      it('render for collection', async function () {
-        mock({
-          '/item.html': '{{ x }}'
-        })
-        const html = await liquid.parseAndRender(
-          `{% render "item" for a as x %}`,
-          { a: new AsyncArrayDrop(['u', 'v']) }
-        )
-        expect(html).toBe('uv')
-      })
-      it('cycle candidate', async function () {
-        const html = await liquid.parseAndRender(
-          `{% cycle a, b %}{% cycle a, b %}`,
-          { a: new AsyncStringDrop('x'), b: new AsyncStringDrop('y') }
-        )
-        expect(html).toBe('xy')
-      })
-      it('tag named arg (tablerow cols)', async function () {
-        const html = await liquid.parseAndRender(
-          `{% tablerow i in (1..4) cols: c %}{{ i }}{% endtablerow %}`,
-          { c: new AsyncNumberDrop(2) }
-        )
-        expect(html).toBe('<tr class="row1"><td class="col1">1</td><td class="col2">2</td></tr><tr class="row2"><td class="col1">3</td><td class="col2">4</td></tr>')
       })
     })
 

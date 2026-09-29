@@ -201,31 +201,45 @@ describe('tags/render', function () {
   })
   it('should support render: with as Drop', async function () {
     class ColorDrop extends Drop {
-      label = 'blue'
       public valueOf (): string {
         return 'red!'
       }
     }
     mock({
       '/with.html': '{% render "color" with color %}',
-      '/color.html': '{{color.label}}:{{color}}'
+      '/color.html': 'color:{{color}}'
     })
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
-    expect(html).toBe('blue:red!')
+    expect(html).toBe('color:red!')
   })
-  it('should resolve async valueOf before filters while keeping the Drop on render with', async function () {
+  it('should support render: with passed as Drop', async function () {
+    class ColorDrop extends Drop {
+      public valueOf (): string {
+        return 'red!'
+      }
+    }
+    liquid.registerFilter('name', x => x.constructor.name)
+    mock({
+      '/with.html': '{% render "color" with color %}',
+      '/color.html': '{{color | name}}'
+    })
+    const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
+    expect(html).toBe('ColorDrop')
+  })
+  it('should await async valueOf when the rendered Drop is output', async function () {
     class ColorDrop extends Drop {
       label = 'blue'
       public async valueOf () {
         return 'red!'
       }
     }
+    liquid.registerFilter('name', x => x.constructor.name)
     mock({
       '/with.html': '{% render "color" with color %}',
-      '/color.html': '{{color.label}}:{{color | upcase}}'
+      '/color.html': '{{color.label}}:{{color}}:{{color | name}}'
     })
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
-    expect(html).toBe('blue:RED!')
+    expect(html).toBe('blue:red!:ColorDrop')
   })
 
   it('should support nested renders', async function () {

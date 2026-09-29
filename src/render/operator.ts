@@ -17,12 +17,8 @@ export type OperatorHandler = UnaryOperatorHandler | BinaryOperatorHandler;
 export type Operators = Record<string, OperatorHandler>
 
 export const defaultOperators: Operators = {
-  '==': function * (l: any, r: any): OperatorGenerator {
-    return yield equals(l, r)
-  },
-  '!=': function * (l: any, r: any): OperatorGenerator {
-    return !(yield equals(l, r))
-  },
+  '==': function * (l: any, r: any): OperatorGenerator { return yield equals(l, r) },
+  '!=': function * (l: any, r: any): OperatorGenerator { return !(yield equals(l, r)) },
   '>': function * (l: any, r: any): OperatorGenerator {
     if (isComparable(l)) return yield l.gt(r)
     if (isComparable(r)) return yield r.lt(l)

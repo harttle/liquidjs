@@ -58,7 +58,7 @@ function * evalFilteredValueToken (token: FilteredValueToken, ctx: Context, leni
     const filterImpl = ctx.liquid.filters[filterToken.name]
     assert(filterImpl || !ctx.liquid.options.strictFilters, () => `undefined filter: ${filterToken.name}`)
     const filter = new Filter(filterToken, filterImpl, ctx.liquid)
-    val = yield filter.render(yield toValue(val), ctx)
+    val = yield filter.render(val, ctx)
   }
 
   return val

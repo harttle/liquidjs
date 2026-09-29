@@ -1,5 +1,5 @@
 import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable } from '../util'
-import { arrayIncludes, equals, evalTokenValue, isTruthy } from '../render'
+import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
 import type { Scope } from '../context'
@@ -30,8 +30,10 @@ function * sortBy<T> (this: FilterImpl, arr: T[], property: string | undefined, 
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
-    const raw = property ? yield this.context._getFromScope(item, stringify(property).split('.'), false) : item
-    values.push([item, yield toValue(raw)])
+    values.push([
+      item,
+      property ? yield this.context._getFromScope(item, stringify(property).split('.'), false) : item
+    ])
   }
   return values.sort((lhs, rhs) => comparator(lhs[1], rhs[1])).map(tuple => tuple[0])
 }
@@ -51,7 +53,7 @@ export function * map (this: FilterImpl, arr: Scope[], property: string): Iterab
   const array = toArray(arr)
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
-    results.push(yield toValue(yield this.context._getFromScope(item, stringify(property), false)))
+    results.push(yield this.context._getFromScope(item, stringify(property), false))
   }
   return results
 }
@@ -60,8 +62,7 @@ export function * sum (this: FilterImpl, arr: Scope[], property?: string): Itera
   let sum = 0
   const array = toArray(arr)
   for (const item of array) {
-    const raw = property ? yield this.context._getFromScope(item, stringify(property), false) : item
-    const data = Number(yield toValue(raw))
+    const data = Number(property ? yield this.context._getFromScope(item, stringify(property), false) : item)
     sum += Number.isNaN(data) ? 0 : data
   }
   return sum
@@ -136,7 +137,7 @@ function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[
   const token = new Tokenizer(stringify(property)).readScopeValue()
   const result: T[] = []
   for (const item of arr) {
-    const value = yield evalTokenValue(token, this.context.spawn(item))
+    const value = yield evalToken(token, this.context.spawn(item))
     if ((yield matches.call(this, value, expected)) === include) result.push(item)
   }
   return result
@@ -149,7 +150,7 @@ function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr
   this.context.memoryLimit.use(array.length)
   for (const item of array) {
     this.context.push({ [itemName]: item })
-    const value = yield toValue(yield keyTemplate.value(this.context))
+    const value = yield keyTemplate.value(this.context)
     this.context.pop()
     if (value === include) filtered.push(item)
   }
@@ -178,7 +179,7 @@ export function * group_by<T extends object> (this: FilterImpl, arr: T[], proper
   const token = new Tokenizer(stringify(property)).readScopeValue()
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
-    const key = yield evalTokenValue(token, this.context.spawn(item))
+    const key = yield evalToken(token, this.context.spawn(item))
     if (!map.has(key)) map.set(key, [])
     map.get(key).push(item)
   }
@@ -192,7 +193,7 @@ export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], it
   this.context.memoryLimit.use(arr.length)
   for (const item of arr) {
     this.context.push({ [itemName]: item })
-    const key = yield toValue(yield keyTemplate.value(this.context))
+    const key = yield keyTemplate.value(this.context)
     this.context.pop()
     if (!map.has(key)) map.set(key, [])
     map.get(key).push(item)
@@ -204,7 +205,7 @@ function * search<T extends object> (this: FilterImpl, arr: T[], property: strin
   const token = new Tokenizer(stringify(property)).readScopeValue()
   const array = toArray(arr)
   for (let index = 0; index < array.length; index++) {
-    const value = yield evalTokenValue(token, this.context.spawn(array[index]))
+    const value = yield evalToken(token, this.context.spawn(array[index]))
     if (yield matches.call(this, value, expected)) return [index, array[index]]
   }
 }
@@ -214,7 +215,7 @@ function * search_exp<T extends object> (this: FilterImpl, arr: T[], itemName: s
   const array = toArray(arr)
   for (let index = 0; index < array.length; index++) {
     this.context.push({ [itemName]: array[index] })
-    const value = yield toValue(yield predicate.value(this.context))
+    const value = yield predicate.value(this.context)
     this.context.pop()
     if (value) return [index, array[index]]
   }

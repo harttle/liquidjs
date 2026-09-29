@@ -1,7 +1,7 @@
 import { Filter } from './filter'
 import { Expression } from '../render'
 import { Tokenizer } from '../parser'
-import { assert, toValue } from '../util'
+import { assert } from '../util'
 import type { FilteredValueToken } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
@@ -26,7 +26,7 @@ export class Value {
     let val = yield this.initial.evaluate(ctx, lenient)
 
     for (const filter of this.filters) {
-      val = yield filter.render(yield toValue(val), ctx)
+      val = yield filter.render(val, ctx)
     }
     return val
   }
