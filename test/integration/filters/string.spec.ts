@@ -397,5 +397,15 @@ describe('filters/string', function () {
       const html = await liquid.parseAndRender('{{ "foo,bar,baz" | split: "," | array_to_sentence_string }}')
       expect(html).toEqual('foo, bar, and baz')
     })
+
+    it('should render nil as an empty string', async () => {
+      const html = await liquid.parseAndRender('{{ missing | array_to_sentence_string }}')
+      expect(html).toEqual('')
+    })
+
+    it('should treat a non-array as a single item', async () => {
+      const html = await liquid.parseAndRender('{{ str | array_to_sentence_string }}', { str: 'apple' })
+      expect(html).toEqual('apple')
+    })
   })
 })

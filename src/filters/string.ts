@@ -11,7 +11,7 @@
 // Hiragana (Japanese): \u3040-\u309F
 // Hangul (Korean): \uAC00-\uD7AF
 import { FilterImpl } from '../template'
-import { assert, stringify } from '../util'
+import { assert, stringify, toArray } from '../util'
 
 const rCJKWord = /[\u4E00-\u9FFF\uF900-\uFAFF\u3400-\u4DBF\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF]/gu
 
@@ -223,7 +223,8 @@ export function number_of_words (this: FilterImpl, input: string, mode?: 'cjk' |
   }
 }
 
-export function array_to_sentence_string (this: FilterImpl, array: unknown[], connector = 'and') {
+export function array_to_sentence_string (this: FilterImpl, input: unknown, connector = 'and') {
+  const array = toArray(input)
   connector = stringify(connector)
   let outputSize = connector.length + array.length * 2
   for (let i = 0; i < array.length; i++) outputSize += stringify(array[i]).length
