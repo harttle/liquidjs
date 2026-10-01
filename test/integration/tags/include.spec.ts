@@ -142,6 +142,21 @@ describe('tags/include', function () {
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
     expect(html).toBe('ColorDrop')
   })
+  it('should await async valueOf when the included Drop is output', async function () {
+    class ColorDrop extends Drop {
+      label = 'blue'
+      public async valueOf () {
+        return 'red!'
+      }
+    }
+    liquid.registerFilter('name', x => x.constructor.name)
+    mock({
+      '/with.html': '{% include "color" with color %}',
+      '/color.html': '{{color.label}}:{{color}}:{{color | name}}'
+    })
+    const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
+    expect(html).toBe('blue:red!:ColorDrop')
+  })
 
   it('should support nested includes', async function () {
     mock({

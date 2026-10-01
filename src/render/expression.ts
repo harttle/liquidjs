@@ -1,5 +1,5 @@
 import { QuotedToken, RangeToken, OperatorToken, Token, PropertyAccessToken, OperatorType, operatorTypes, FilteredValueToken } from '../tokens'
-import { isRangeToken, isPropertyAccessToken, isFilteredValueToken, UndefinedVariableError, range, isOperatorToken, assert } from '../util'
+import { isRangeToken, isPropertyAccessToken, isFilteredValueToken, UndefinedVariableError, range, isOperatorToken, assert, toValue } from '../util'
 import type { Context } from '../context'
 import type { UnaryOperatorHandler } from '../render'
 import { Drop } from '../drop'
@@ -36,6 +36,11 @@ export class Expression {
   }
 }
 
+/**
+ * Evaluate `token`, preserving Drops.
+ * Operators use this so `Comparable` drops (`empty`, `nil`, `blank`) and custom drops
+ * are compared as drops rather than as their `valueOf()` result.
+ */
 export function * evalToken (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
   if (!token) return
   if ('content' in token) return token.content
@@ -59,10 +64,18 @@ function * evalFilteredValueToken (token: FilteredValueToken, ctx: Context, leni
   return val
 }
 
+/**
+ * Evaluate `token` to the value filters and tags consume.
+ * Awaits a promise returned by `Drop.valueOf()`.
+ */
+export function * evalTokenValue (token: Token | undefined, ctx: Context, lenient = false): IterableIterator<unknown> {
+  return yield toValue(yield evalToken(token, ctx, lenient))
+}
+
 function * evalPropertyAccessToken (token: PropertyAccessToken, ctx: Context, lenient: boolean): IterableIterator<unknown> {
   const props: (string | number | Drop)[] = []
   for (const prop of token.props) {
-    props.push((yield evalToken(prop, ctx, false)) as unknown as string | number | Drop)
+    props.push((yield evalTokenValue(prop, ctx, false)) as unknown as string | number | Drop)
   }
   try {
     if (token.variable) {
@@ -81,9 +94,9 @@ export function evalQuotedToken (token: QuotedToken) {
   return token.content
 }
 
-function * evalRangeToken (token: RangeToken, ctx: Context) {
-  const low: number = yield evalToken(token.lhs, ctx)
-  const high: number = yield evalToken(token.rhs, ctx)
+function * evalRangeToken (token: RangeToken, ctx: Context): IterableIterator<unknown> {
+  const low = (yield evalTokenValue(token.lhs, ctx)) as unknown as number
+  const high = (yield evalTokenValue(token.rhs, ctx)) as unknown as number
   ctx.memoryLimit.use(high - low + 1)
   return range(+low, +high + 1)
 }

@@ -121,26 +121,26 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
     : String.prototype.slice.call(v, begin, begin + length)
 }
 
-function expectedMatcher (this: FilterImpl, expected: any): (v: any) => boolean {
+function * matches (this: FilterImpl, value: unknown, expected: unknown): Generator<unknown, boolean, any> {
   if (this.context.opts.jekyllWhere) {
-    return (v: any) => EmptyDrop.is(expected) ? equals(v, expected) : (isArray(v) ? arrayIncludes(v, expected) : equals(v, expected))
-  } else if (expected === undefined) {
-    return (v: any) => isTruthy(v, this.context)
-  } else {
-    return (v: any) => equals(v, expected)
+    if (EmptyDrop.is(expected)) return yield equals(value, expected)
+    if (isArray(value)) return yield arrayIncludes(value, expected)
+    return yield equals(value, expected)
   }
+  if (expected === undefined) return isTruthy(value, this.context)
+  return yield equals(value, expected)
 }
 
 function * filter<T extends object> (this: FilterImpl, include: boolean, arr: T[], property: string, expected: any): IterableIterator<unknown> {
-  const values: unknown[] = []
   arr = toArray(arr)
   this.context.memoryLimit.use(arr.length)
   const token = new Tokenizer(stringify(property)).readScopeValue()
+  const result: T[] = []
   for (const item of arr) {
-    values.push(yield evalToken(token, this.context.spawn(item)))
+    const value = yield evalToken(token, this.context.spawn(item))
+    if ((yield matches.call(this, value, expected)) === include) result.push(item)
   }
-  const matcher = expectedMatcher.call(this, expected)
-  return Array.prototype.filter.call(arr, (_, i) => matcher(values[i]) === include)
+  return result
 }
 
 function * filter_exp<T extends object> (this: FilterImpl, include: boolean, arr: T[], itemName: string, exp: string): IterableIterator<unknown> {
@@ -204,10 +204,9 @@ export function * group_by_exp<T extends object> (this: FilterImpl, arr: T[], it
 function * search<T extends object> (this: FilterImpl, arr: T[], property: string, expected: string): IterableIterator<unknown> {
   const token = new Tokenizer(stringify(property)).readScopeValue()
   const array = toArray(arr)
-  const matcher = expectedMatcher.call(this, expected)
   for (let index = 0; index < array.length; index++) {
     const value = yield evalToken(token, this.context.spawn(array[index]))
-    if (matcher(value)) return [index, array[index]]
+    if (yield matches.call(this, value, expected)) return [index, array[index]]
   }
 }
 
