@@ -4,13 +4,8 @@ const rPercentEscapes = /(?:%[0-9A-Fa-f]{2})+/g
 
 export const url_decode = (x: string) => stringify(x)
   .replace(/\+/g, ' ')
-  .replace(rPercentEscapes, escapes => {
-    try {
-      return decodeURIComponent(escapes)
-    } catch (e) {
-      return escapes
-    }
-  })
+  .replace(rPercentEscapes, escapes => new TextDecoder('utf-8', { ignoreBOM: true })
+    .decode(Uint8Array.from(escapes.slice(1).split('%'), hex => parseInt(hex, 16))))
 export const url_encode = (x: string) => encodeURIComponent(stringify(x)).replace(/%20/g, '+')
 export const cgi_escape = (x: string) => encodeURIComponent(stringify(x))
   .replace(/%20/g, '+')
