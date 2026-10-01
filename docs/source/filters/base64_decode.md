@@ -6,6 +6,8 @@ title: base64_decode
 
 Decodes a Base64-formatted string back to its original text.
 
+Padding is optional and whitespace is ignored. Input that isn't valid Base64 renders an empty string, where Shopify/Liquid renders an error message in its place.
+
 Input
 ```liquid
 {{ "b25lIHR3byB0aHJlZQ==" | base64_decode }}
