@@ -30,30 +30,30 @@ export class Liquid {
     return parser.parse(html, filepath)
   }
 
-  public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<unknown> {
+  public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<string> {
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplates(tpl, ctx)
   }
   public async render (tpl: Template[], scope?: object, renderOptions?: RenderOptions): Promise<string> {
-    return toPromise(this._render(tpl, scope, { ...renderOptions, sync: false })) as Promise<string>
+    return toPromise(this._render(tpl, scope, { ...renderOptions, sync: false }))
   }
   public renderSync (tpl: Template[], scope?: object, renderOptions?: RenderOptions): string {
-    return toValueSync(this._render(tpl, scope, { ...renderOptions, sync: true })) as string
+    return toValueSync(this._render(tpl, scope, { ...renderOptions, sync: true }))
   }
   public renderToNodeStream (tpl: Template[], scope?: object, renderOptions: RenderOptions = {}): NodeJS.ReadableStream {
     const ctx = new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplatesToNodeStream(tpl, ctx)
   }
 
-  public _parseAndRender (html: string, scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<unknown> {
+  public _parseAndRender (html: string, scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<string> {
     const tpl = this.parse(html)
     return this._render(tpl, scope, renderOptions)
   }
   public async parseAndRender (html: string, scope?: Context | object, renderOptions?: RenderOptions): Promise<string> {
-    return toPromise(this._parseAndRender(html, scope, { ...renderOptions, sync: false })) as Promise<string>
+    return toPromise(this._parseAndRender(html, scope, { ...renderOptions, sync: false }))
   }
   public parseAndRenderSync (html: string, scope?: Context | object, renderOptions?: RenderOptions): string {
-    return toValueSync(this._parseAndRender(html, scope, { ...renderOptions, sync: true })) as string
+    return toValueSync(this._parseAndRender(html, scope, { ...renderOptions, sync: true }))
   }
 
   public _parsePartialFile (file: string, sync?: boolean, currentFile?: string) {
@@ -71,30 +71,30 @@ export class Liquid {
   public parseFileSync (file: string, lookupType?: LookupType): Template[] {
     return toValueSync<Template[]>(new Parser(this).parseFile(file, true, lookupType))
   }
-  public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, unknown, unknown> {
+  public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, string, unknown> {
     const templates = (yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)) as Template[]
-    return yield this._render(templates, ctx, renderFileOptions)
+    return (yield this._render(templates, ctx, renderFileOptions)) as string
   }
   public async renderFile (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): Promise<string> {
-    return toPromise(this._renderFile(file, ctx, { ...renderFileOptions, sync: false })) as Promise<string>
+    return toPromise(this._renderFile(file, ctx, { ...renderFileOptions, sync: false }))
   }
   public renderFileSync (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): string {
-    return toValueSync(this._renderFile(file, ctx, { ...renderFileOptions, sync: true })) as string
+    return toValueSync(this._renderFile(file, ctx, { ...renderFileOptions, sync: true }))
   }
   public async renderFileToNodeStream (file: string, scope?: object, renderOptions?: RenderOptions) {
     const templates = await this.parseFile(file)
     return this.renderToNodeStream(templates, scope, renderOptions)
   }
 
-  public _evalValue (str: string, scope?: object | Context): IterableIterator<unknown> {
+  public _evalValue (str: string, scope?: object | Context): IterableIterator<any> {
     const value = new Value(str, this)
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options)
     return value.value(ctx)
   }
-  public async evalValue (str: string, scope?: object | Context): Promise<unknown> {
+  public async evalValue (str: string, scope?: object | Context): Promise<any> {
     return toPromise(this._evalValue(str, scope))
   }
-  public evalValueSync (str: string, scope?: object | Context): unknown {
+  public evalValueSync (str: string, scope?: object | Context): any {
     return toValueSync(this._evalValue(str, scope))
   }
 
