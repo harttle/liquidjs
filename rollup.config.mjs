@@ -23,8 +23,7 @@ const tsconfig = (target) => ({
     compilerOptions: {
       target,
       module: 'ES2015',
-      rootDir: 'src',
-      suppressImplicitAnyIndexErrors: true
+      rootDir: 'src'
     }
   }
 })
