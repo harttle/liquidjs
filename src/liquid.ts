@@ -71,8 +71,8 @@ export class Liquid {
   public parseFileSync (file: string, lookupType?: LookupType): Template[] {
     return toValueSync<Template[]>(new Parser(this).parseFile(file, true, lookupType))
   }
-  public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, string, unknown> {
-    const templates = (yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)) as Template[]
+  public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, string, Template[]> {
+    const templates = yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)
     return yield * this._render(templates, ctx, renderFileOptions)
   }
   public async renderFile (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): Promise<string> {
