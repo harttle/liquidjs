@@ -1,5 +1,6 @@
-import { TopLevelToken, Liquid, ValueToken, evalToken, Emitter, TagToken, Context, Tag } from '..'
+import { TopLevelToken, Liquid, ValueToken, Emitter, TagToken, Context, Tag } from '..'
 import { Arguments } from '../template'
+import { evalToken } from '../render'
 
 export default class extends Tag {
   private candidates: ValueToken[] = []

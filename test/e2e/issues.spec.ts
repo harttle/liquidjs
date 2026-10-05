@@ -1,4 +1,5 @@
-import { Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, LiquidErrors, IfTag } from '../..'
+import { Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, LiquidErrors } from '../..'
+import type { IfTag } from '../..'
 import { spawnSync } from 'child_process'
 import { resolve as resolvePath } from 'path'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
