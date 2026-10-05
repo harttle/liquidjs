@@ -73,7 +73,7 @@ export class Liquid {
   }
   public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, string, unknown> {
     const templates = (yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)) as Template[]
-    return yield* this._render(templates, ctx, renderFileOptions)
+    return yield * this._render(templates, ctx, renderFileOptions)
   }
   public async renderFile (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): Promise<string> {
     return toPromise(this._renderFile(file, ctx, { ...renderFileOptions, sync: false }))
