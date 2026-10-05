@@ -1,10 +1,10 @@
-import { Scope, Template, Liquid, Tag, assert, Emitter, Hash, TagToken, TopLevelToken, Context } from '..'
+import { Scope, Template, Liquid, Tag, Emitter, Hash, TagToken, TopLevelToken, Context } from '..'
 import { BlockMode } from '../context'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 import { BlankDrop } from '../drop'
 import { Parser } from '../parser'
 import { Arguments, PartialScope } from '../template'
-import { isString, isValueToken } from '../util'
+import { assert, isString, isValueToken } from '../util'
 
 export default class extends Tag {
   args: Hash

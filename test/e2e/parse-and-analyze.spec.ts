@@ -1,4 +1,5 @@
-import { Context, Emitter, Hash, Liquid, Scope, Tag, TagToken, Template, TopLevelToken, ParseStream, Parser, Arguments, analyzeSync, Variable, StaticAnalysisOptions, StaticAnalysis } from '../..'
+import { Context, Hash, Liquid, Tag, TagToken, analyzeSync, Variable } from '../..'
+import type { Emitter, Scope, Template, TopLevelToken, ParseStream, Parser, Arguments, StaticAnalysisOptions, StaticAnalysis } from '../..'
 
 class MockTag extends Tag {
   private args: Hash

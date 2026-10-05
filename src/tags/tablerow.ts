@@ -1,5 +1,6 @@
 import { isValueToken, toEnumerable } from '../util'
-import { ValueToken, Liquid, Tag, evalToken, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { ValueToken, Liquid, Tag, Emitter, Hash, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
+import { evalToken } from '../render'
 import { TablerowloopDrop } from '../drop/tablerowloop-drop'
 import { Parser } from '../parser'
 import { Arguments } from '../template'

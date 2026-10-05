@@ -1,4 +1,5 @@
-import { Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, IfTag } from '../..'
+import { Tokenizer, Context, Liquid, Drop, toValueSync, LiquidError, LiquidErrors } from '../..'
+import type { IfTag } from '../..'
 import { spawnSync } from 'child_process'
 import { resolve as resolvePath } from 'path'
 const LiquidUMD = require('../../dist/liquid.browser.umd.js').Liquid
@@ -545,6 +546,9 @@ describe('Issues', function () {
           PHP <sup>2</sup> Posts:page0,page2,
           CSharp <sup>2</sup> Posts:page2,page4,
           CPP <sup>1</sup> Posts:page0,`)
+  })
+  it('exports LiquidErrors #837', () => {
+    expect(LiquidErrors.is(new Error('no'))).toBe(false)
   })
   it('if tag condition, the token args is empty #796', () => {
     const tpl = 'Hello, {% if name  %} {{ name }} {% else %} user {% endif %}'

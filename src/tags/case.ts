@@ -1,6 +1,6 @@
-import { ValueToken, Liquid, toValue, evalToken, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
+import { ValueToken, Liquid, toValue, Value, Emitter, TagToken, TopLevelToken, Context, Template, Tag, ParseStream } from '..'
 import { Parser } from '../parser'
-import { equals } from '../render'
+import { equals, evalToken } from '../render'
 import { Arguments } from '../template'
 
 export default class extends Tag {
