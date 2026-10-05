@@ -30,7 +30,7 @@ export class Liquid {
     return parser.parse(html, filepath)
   }
 
-  public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<string> {
+  public _render (tpl: Template[], scope: Context | object | undefined, renderOptions: RenderOptions): Generator<unknown, string, unknown> {
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options, renderOptions)
     return this.renderer.renderTemplates(tpl, ctx)
   }
@@ -45,7 +45,7 @@ export class Liquid {
     return this.renderer.renderTemplatesToNodeStream(tpl, ctx)
   }
 
-  public _parseAndRender (html: string, scope: Context | object | undefined, renderOptions: RenderOptions): IterableIterator<string> {
+  public _parseAndRender (html: string, scope: Context | object | undefined, renderOptions: RenderOptions): Generator<unknown, string, unknown> {
     const tpl = this.parse(html)
     return this._render(tpl, scope, renderOptions)
   }
@@ -73,7 +73,7 @@ export class Liquid {
   }
   public * _renderFile (file: string, ctx: Context | object | undefined, renderFileOptions: RenderFileOptions): Generator<unknown, string, unknown> {
     const templates = (yield this._parseFile(file, renderFileOptions.sync, renderFileOptions.lookupType)) as Template[]
-    return (yield this._render(templates, ctx, renderFileOptions)) as string
+    return yield* this._render(templates, ctx, renderFileOptions)
   }
   public async renderFile (file: string, ctx?: Context | object, renderFileOptions?: RenderFileOptions): Promise<string> {
     return toPromise(this._renderFile(file, ctx, { ...renderFileOptions, sync: false }))
