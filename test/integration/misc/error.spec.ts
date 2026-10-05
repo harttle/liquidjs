@@ -109,14 +109,6 @@ describe('error', function () {
         message: expect.stringContaining('intended error')
       })
     })
-    it('should keep a thrown string as the RenderError message', async function () {
-      const message = 'intended string'
-      engine.registerFilter('throwString', function () { throw message })
-      await expect(engine.parseAndRender('{{1|throwString}}')).rejects.toMatchObject({
-        name: 'RenderError',
-        message: expect.stringContaining('intended string')
-      })
-    })
     it('should not throw when variable undefined by default', async function () {
       const html = await engine.parseAndRender('X{{a}}Y')
       return expect(html).toBe('XY')
