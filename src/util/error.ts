@@ -51,10 +51,11 @@ export class ParseError extends LiquidError {
 }
 
 export class RenderError extends LiquidError {
-  public constructor (err: Error | string, tpl: Template) {
-    super(err, tpl.token)
+  public constructor (err: unknown, tpl: Template) {
+    const cause = typeof err === 'string' || err instanceof Error ? err : new Error(String(err))
+    super(cause, tpl.token)
     this.name = 'RenderError'
-    this.message = typeof err === 'string' ? err : err.message
+    this.message = typeof cause === 'string' ? cause : cause.message
     super.update()
   }
   public static is (obj: any): obj is RenderError {

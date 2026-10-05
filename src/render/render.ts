@@ -19,7 +19,7 @@ export class Render {
         html && emitter.write(html)
         if (ctx.breakCalled || ctx.continueCalled) break
       } catch (e) {
-        const err = LiquidError.is(e) ? e : new RenderError(typeof e === 'string' ? e : e as Error, tpl)
+        const err = LiquidError.is(e) ? e : new RenderError(e, tpl)
         if (ctx.opts.catchAllErrors) errors.push(err)
         else throw err
       }
