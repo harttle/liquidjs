@@ -1,4 +1,4 @@
-import { test, liquid } from '../../stub/render'
+import { test, liquid, render } from '../../stub/render'
 
 describe('filters/base64', function () {
   describe('base64_encode', function () {
@@ -62,6 +62,18 @@ describe('filters/base64', function () {
 
     it('should handle boolean input', () => {
       return test('{{ "dHJ1ZQ==" | base64_decode }}', 'true')
+    })
+
+    it('should decode unpadded input', () => {
+      return test('{{ "YWJjZA" | base64_decode }}', 'abcd')
+    })
+
+    it('should throw on invalid base64', () => {
+      return expect(render('{{ "YWJj!!" | base64_decode }}')).rejects.toThrow('invalid base64 provided to base64_decode')
+    })
+
+    it('should throw on a number that is not valid base64', () => {
+      return expect(render('{{ num | base64_decode }}', { num: 5 })).rejects.toThrow('invalid base64 provided to base64_decode')
     })
   })
 
