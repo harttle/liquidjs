@@ -5,7 +5,7 @@
  */
 
 import { FilterImpl } from '../template'
-import { stringify } from '../util'
+import { stringify, assert } from '../util'
 import { base64Encode, base64Decode } from './base64-impl'
 
 export function base64_encode (this: FilterImpl, value: string | Buffer): string {
@@ -21,7 +21,8 @@ export function base64_encode (this: FilterImpl, value: string | Buffer): string
 export function base64_decode (this: FilterImpl, value: string): string {
   const str = stringify(value)
   this.context.memoryLimit.use(str.length)
-  return isBase64(str) ? base64Decode(str) : ''
+  assert(isBase64(str), 'invalid base64 provided to base64_decode')
+  return base64Decode(str)
 }
 
 function isBase64 (str: string): boolean {
