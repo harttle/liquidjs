@@ -1,6 +1,10 @@
 import { stringify } from '../util/underscore'
 
-export const url_decode = (x: string) => decodeURIComponent(stringify(x).replace(/\+/g, ' '))
+const rPercentEscapes = /(?:%[0-9A-Fa-f]{2})+/g
+
+export const url_decode = (x: string) => stringify(x)
+  .replace(/\+/g, ' ')
+  .replace(rPercentEscapes, decodeURIComponent)
 export const url_encode = (x: string) => encodeURIComponent(stringify(x)).replace(/%20/g, '+')
 export const cgi_escape = (x: string) => encodeURIComponent(stringify(x))
   .replace(/%20/g, '+')

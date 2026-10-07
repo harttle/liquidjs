@@ -15,6 +15,13 @@ describe('filters/url', () => {
       const html = liquid.parseAndRenderSync('{{ "a+b c" | url_encode | url_decode }}')
       expect(html).toEqual('a+b c')
     })
+    it('should leave a malformed escape as written', () => {
+      const html = liquid.parseAndRenderSync('{{ "%E2%9C%93+100%" | url_decode }}')
+      expect(html).toEqual('✓ 100%')
+    })
+    it('should throw on escapes that are not valid UTF-8', () => {
+      expect(() => liquid.parseAndRenderSync('{{ "caf%C3%A9%ff" | url_decode }}')).toThrow('URI malformed')
+    })
   })
 
   describe('url_encode', () => {
