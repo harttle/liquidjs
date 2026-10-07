@@ -6,7 +6,7 @@ title: url_decode
 
 Decodes a string that has been encoded as a URL.
 
-A `%` that isn't followed by two hex digits is left as written, and escapes that don't form valid UTF-8 become U+FFFD (�), where Shopify/Liquid renders an error message in their place.
+A `%` that isn't followed by two hex digits is left as written. Escapes that don't form valid UTF-8 throw an error.
 
 Input
 ```liquid

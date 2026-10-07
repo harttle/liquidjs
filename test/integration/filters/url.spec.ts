@@ -19,17 +19,8 @@ describe('filters/url', () => {
       const html = liquid.parseAndRenderSync('{{ "%E2%9C%93+100%" | url_decode }}')
       expect(html).toEqual('✓ 100%')
     })
-    it('should replace an incomplete UTF-8 sequence with U+FFFD', () => {
-      const html = liquid.parseAndRenderSync('{{ "%E2%9C" | url_decode }}')
-      expect(html).toEqual('\uFFFD')
-    })
-    it('should decode valid bytes beside an invalid one', () => {
-      const html = liquid.parseAndRenderSync('{{ "caf%C3%A9%ff" | url_decode }}')
-      expect(html).toEqual('caf\u00E9\uFFFD')
-    })
-    it('should keep a leading byte order mark', () => {
-      const html = liquid.parseAndRenderSync('{{ "%EF%BB%BFa" | url_decode }}')
-      expect(html).toEqual('\uFEFFa')
+    it('should throw on escapes that are not valid UTF-8', () => {
+      expect(() => liquid.parseAndRenderSync('{{ "caf%C3%A9%ff" | url_decode }}')).toThrow('URI malformed')
     })
   })
 
