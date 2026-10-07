@@ -26,6 +26,14 @@ describe('util/strftime', function () {
       expect(t(year2005, '%y')).toBe('05')
       expect(t(year2005, '%-y')).toBe('5')
     })
+    it('should pad %Y to 4 digits', function () {
+      const year1 = new TestDate('0001-01-01T00:00:00')
+      expect(t(year1, '%Y')).toBe('0001')
+      expect(t(year1, '%-Y')).toBe('1')
+      const yearMinus5 = new TestDate('-000005-06-15T00:00:00')
+      expect(t(yearMinus5, '%05Y')).toBe('-0005')
+      expect(t(yearMinus5, '%_5Y')).toBe('   -5')
+    })
     describe('%j', function () {
       it('should format %j as day of year', function () {
         expect(t(then, '%j')).toBe('066')
