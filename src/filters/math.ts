@@ -11,10 +11,16 @@ export const plus = argumentsToNumber((lhs: number, rhs: number) => lhs + rhs)
 export const modulo = argumentsToNumber((v: number, arg: number) => ((v % arg) + arg) % arg)
 export const times = argumentsToNumber((v: number, arg: number) => v * arg)
 
+function shiftDecimal (n: number, exponent: number) {
+  const [mantissa, power = '0'] = String(n).split('e')
+  return Number(`${mantissa}e${Number(power) + exponent}`)
+}
+
 export function round (v: number, arg = 0) {
   v = toNumber(v)
   arg = toNumber(arg)
-  const amp = Math.pow(10, arg)
-  const scaled = (v * amp) * (1 + Number.EPSILON)
-  return Math.round(scaled) / amp
+  const scaled = shiftDecimal(Math.abs(v), arg)
+  if (!(scaled <= Number.MAX_SAFE_INTEGER)) return v
+  const rounded = shiftDecimal(Math.round(scaled), -arg)
+  return v < 0 ? -rounded : rounded
 }
