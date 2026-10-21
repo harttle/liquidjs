@@ -290,6 +290,9 @@ describe('filters/array', function () {
     it('should return empty array for nil value', () => test('{{ nil | slice: 0 }}', ''))
     it('should return empty when begin is out of negative range', () => test('{{ "hello" | slice: -10, 2 }}', ''))
     it('should return empty when length is negative', () => test('{{ "Liquid" | slice: 1, -2 }}', ''))
+    it('should not split a surrogate pair at the end', () => test('{{ "a😀b" | slice: 1, 1 }}', ''))
+    it('should not split a surrogate pair at the start', () => test('{{ "a😀b" | slice: 2, 2 }}', 'b'))
+    it('should keep a whole surrogate pair', () => test('{{ "a😀b" | slice: 1, 2 }}', '😀'))
     it('should return empty array when begin is out of negative range', () => test('{{ "1,2,3,4,5" | split: "," | slice: -10, 2 | join: "," }}', ''))
   })
   describe('sort', function () {

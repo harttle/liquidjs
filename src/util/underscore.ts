@@ -42,6 +42,14 @@ export function stringify (value: any): string {
   return String(value)
 }
 
+export function sliceWholeChars (str: string, start: number, end: number): string {
+  const isHigh = (index: number) => (str.charCodeAt(index) & 0xFC00) === 0xD800
+  const isLow = (index: number) => (str.charCodeAt(index) & 0xFC00) === 0xDC00
+  if (isLow(start) && isHigh(start - 1)) start++
+  if (isHigh(end - 1) && isLow(end)) end--
+  return str.slice(start, end)
+}
+
 export function readArrayElement (arr: any[], index: number, ownPropertyOnly: boolean) {
   if (index < 0) index = arr.length + index
   if (ownPropertyOnly && !hasOwnProperty.call(arr, index)) return undefined

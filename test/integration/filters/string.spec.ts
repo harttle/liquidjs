@@ -219,6 +219,15 @@ describe('filters/string', function () {
     it('should default to 50', function () {
       return test('{{ "1234567890123456789012345678901234567890123456789abc" | truncate }}', '12345678901234567890123456789012345678901234567...')
     })
+    it('should not split a surrogate pair', function () {
+      return test('{{ "😀😀😀😀" | truncate: 6 }}', '😀...')
+    })
+    it('should not split a surrogate pair with empty ellipsis', function () {
+      return test('{{ "😀😀😀" | truncate: 5, "" }}', '😀😀')
+    })
+    it('should keep surrogate pairs that end at the cut', function () {
+      return test('{{ "😀😀😀😀" | truncate: 7 }}', '😀😀...')
+    })
   })
   describe('truncatewords', function () {
     it('should truncate to 1 words if less than 1', function () {

@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable, sliceWholeChars } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -118,7 +118,7 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   this.context.memoryLimit.use(length)
   return isArray(v)
     ? Array.prototype.slice.call(v, begin, begin + length)
-    : String.prototype.slice.call(v, begin, begin + length)
+    : sliceWholeChars(v, begin, begin + length)
 }
 
 function * matches (this: FilterImpl, value: unknown, expected: unknown): Generator<unknown, boolean, any> {

@@ -11,7 +11,7 @@
 // Hiragana (Japanese): \u3040-\u309F
 // Hangul (Korean): \uAC00-\uD7AF
 import { FilterImpl } from '../template'
-import { assert, stringify } from '../util'
+import { assert, sliceWholeChars, stringify } from '../util'
 
 const rCJKWord = /[\u4E00-\u9FFF\uF900-\uFAFF\u3400-\u4DBF\u3040-\u309F\u30A0-\u30FF\uAC00-\uD7AF]/gu
 
@@ -183,7 +183,7 @@ export function truncate (this: FilterImpl, v: string, l = 50, o = '...') {
   o = stringify(o)
   this.context.memoryLimit.use(str.length + o.length)
   if (str.length <= l) return v
-  return str.substring(0, l - o.length) + o
+  return sliceWholeChars(str, 0, Math.max(l - o.length, 0)) + o
 }
 
 export function truncatewords (this: FilterImpl, v: string, words = 15, o = '...') {
