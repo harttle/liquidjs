@@ -1,9 +1,8 @@
-import { Template, ValueToken, TopLevelToken, Liquid, Tag, Hash, Emitter, TagToken, Context } from '..'
+import { Template, ValueToken, TopLevelToken, Liquid, Tag, assert, evalToken, Hash, Emitter, TagToken, Context } from '..'
 import { BlockMode, Scope } from '../context'
 import { Parser } from '../parser'
 import { Argument, Arguments, PartialScope } from '../template'
-import { assert, isString, isValueToken } from '../util'
-import { evalToken } from '../render'
+import { isString, isValueToken } from '../util'
 import { parseFilePath, renderFilePath, ParsedFileName } from './render'
 
 export default class extends Tag {

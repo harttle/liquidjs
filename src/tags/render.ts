@@ -1,8 +1,7 @@
 import { __assign } from 'tslib'
 import { ForloopDrop } from '../drop'
-import { assert, isString, isValueToken, toEnumerable } from '../util'
-import { TopLevelToken, Liquid, Token, ValueToken, Template, TypeGuards, Tokenizer, Hash, Emitter, TagToken, Context, Tag } from '..'
-import { evalQuotedToken, evalToken } from '../render'
+import { isString, isValueToken, toEnumerable } from '../util'
+import { TopLevelToken, assert, Liquid, Token, ValueToken, Template, evalQuotedToken, TypeGuards, Tokenizer, evalToken, Hash, Emitter, TagToken, Context, Tag } from '..'
 import { Parser } from '../parser'
 import { Argument, Arguments, PartialScope } from '../template'
 

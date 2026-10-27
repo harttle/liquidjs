@@ -1,5 +1,4 @@
-import { Hash, ValueToken, Liquid, Tag, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
-import { evalToken } from '../render'
+import { Hash, ValueToken, Liquid, Tag, evalToken, Emitter, TagToken, TopLevelToken, Context, Template, ParseStream } from '..'
 import { assertEmpty, isValueToken, toEnumerable } from '../util'
 import { ForloopDrop } from '../drop/forloop-drop'
 import { Parser } from '../parser'
