@@ -62,7 +62,8 @@ const padWidths: Record<string, number> = {
   S: 2,
   U: 2,
   W: 2,
-  y: 2
+  y: 2,
+  Y: 4
 }
 
 const padSpaceChars = new Set('aAbBceklpP')
@@ -149,5 +150,6 @@ function format (d: LiquidDate, match: RegExpExecArray, memoryLimit?: Pick<Limit
   else if (flags['0']) padChar = '0'
   if (flags['-']) padWidth = 0
   memoryLimit?.use(Number(padWidth) - ret.length)
+  if (padChar === '0' && ret[0] === '-') return '-' + padStart(ret.slice(1), padWidth - 1, padChar)
   return padStart(ret, padWidth, padChar)
 }
