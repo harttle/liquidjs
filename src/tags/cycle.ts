@@ -9,19 +9,20 @@ export default class extends Tag {
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
     const begin = this.tokenizer.p
-    const maybeGroup = this.tokenizer.readValue()
+    const group = this.tokenizer.readValue()
     this.tokenizer.skipBlank()
-    if (maybeGroup && this.tokenizer.peek() === ':') {
-      this.group = maybeGroup
-      this.tokenizer.advance()
-    } else {
-      this.tokenizer.p = begin
+
+    if (group) {
+      if (this.tokenizer.peek() === ':') {
+        this.group = group
+        this.tokenizer.advance()
+      } else this.tokenizer.p = begin
     }
 
     while (!this.tokenizer.end()) {
-      const valueToken = this.tokenizer.readFilteredValue()
-      this.candidates.push(new Value(valueToken, this.liquid))
-      this.candidateTexts.push(valueToken.getText())
+      const value = this.tokenizer.readFilteredValue()
+      this.candidates.push(new Value(value, this.liquid))
+      this.candidateTexts.push(value.getText())
       this.tokenizer.readTo(',')
     }
     this.tokenizer.assert(this.candidates.length, () => `empty candidates: "${token.getText()}"`)
