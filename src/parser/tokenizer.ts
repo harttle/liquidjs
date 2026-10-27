@@ -83,7 +83,7 @@ export class Tokenizer {
   readFilter (): FilterToken | null {
     this.skipBlank()
     if (this.end()) return null
-    if (this.peek() === ')') return null
+    if (this.peek() === ')' || this.peek() === ',') return null
     this.assert(this.read() === '|', `expected "|" before filter`)
     const name = this.readIdentifier()
     if (!name.size()) {
@@ -100,7 +100,7 @@ export class Tokenizer {
         this.skipBlank()
         this.assert(this.end() || this.peek() === ',' || this.peek() === '|' || this.peek() === ')', () => `unexpected character ${this.snapshot()}`)
       } while (this.peek() === ',')
-    } else if (this.peek() === '|' || this.peek() === ')' || this.end()) {
+    } else if (this.peek() === '|' || this.peek() === ')' || this.peek() === ',' || this.end()) {
       // do nothing
     } else {
       throw this.error('expected ":" after filter name')
