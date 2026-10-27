@@ -37,7 +37,12 @@ export default class extends Tag {
     const candidate = this.candidates[idx]
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
-    return yield evalToken(candidate, ctx)
+    let val = yield evalToken(candidate, ctx)
+    const outputEscape = this.liquid.options.outputEscape
+    if (outputEscape) {
+      val = yield outputEscape.call({ context: ctx, token: this.token, liquid: this.liquid }, val)
+    }
+    return val
   }
 
   public * arguments (): Arguments {
