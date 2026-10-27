@@ -11,7 +11,7 @@ export class Render {
     return emitter.stream
   }
   public * renderTemplates (templates: Template[], ctx: Context, emitter: Emitter = new SimpleEmitter(ctx.outputLengthLimit)): Generator<unknown, string, unknown> {
-    const errors = []
+    const errors: LiquidError[] = []
     for (const tpl of templates) {
       ctx.templateLimit.use(1)
       try {

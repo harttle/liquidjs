@@ -63,7 +63,7 @@ export class RenderError extends LiquidError {
 }
 
 export class LiquidErrors extends LiquidError {
-  public constructor (public errors: RenderError[]) {
+  public constructor (public errors: LiquidError[]) {
     super(errors[0], errors[0].token)
     this.name = 'LiquidErrors'
     const s = errors.length > 1 ? 's' : ''
