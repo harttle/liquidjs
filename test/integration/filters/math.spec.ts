@@ -77,6 +77,18 @@ describe('filters/math', function () {
     it('odd number -1.005 should round correctly', () => test('{{num|round:2}}', { num: -1.005 }, '-1.01'))
     it('odd number 9.075 should round correctly', () => test('{{9.075|round:2}}', '9.08'))
     it('odd number -9.075 should round correctly', () => test('{{num|round:2}}', { num: -9.075 }, '-9.08'))
+    it('should not change integers beyond 2^50', () => {
+      return test('{{ a | round }},{{ b | round }},{{ c | round }}', { a: 1700000000000000, b: 4503599627370496, c: 9007199254740991 }, '1700000000000000,4503599627370496,9007199254740991')
+    })
+    it('should not change integers beyond 2^53', () => test('{{ num | round }}', { num: 1e21 }, '1e+21'))
+    it('should keep negative large integers', () => test('{{ num | round }}', { num: -4503599627370497 }, '-4503599627370497'))
+    it('should keep existing decimals of large numbers', () => test('{{ num | round: 6 }}', { num: 1700000000.123456 }, '1700000000.123456'))
+    it('should keep a number that has fewer decimals than requested', () => test('{{ 1.5 | round: 20 }}', '1.5'))
+    it('should round large numbers by decimal digits', () => test('{{ num | round: 2 }}', { num: 1700000000.125 }, '1700000000.13'))
+    it('should round negative numbers away from zero', () => test('{{ num | round: 1 }}', { num: -1700000000.25 }, '-1700000000.3'))
+    it('should round to tens for negative digits', () => test('{{ 1234 | round: -2 }}', '1200'))
+    it('should round half away from zero for negative digits', () => test('{{ num | round: -1 }}', { num: -15 }, '-20'))
+    it('should keep Infinity', () => test('{{ num | round: 2 }}', { num: Infinity }, 'Infinity'))
   })
   describe('times', function () {
     it('should return "6" for 3,2', () => test('{{ 3 | times: 2 }}', '6'))
