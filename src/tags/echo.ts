@@ -14,7 +14,11 @@ export default class extends Tag {
   }
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void, unknown> {
     if (!this.value) return
-    const val = yield toValue(yield this.value.value(ctx, false))
+    let val = yield toValue(yield this.value.value(ctx, false))
+    const outputEscape = this.liquid.options.outputEscape
+    if (outputEscape && !this.value.filters[this.value.filters.length - 1]?.raw) {
+      val = yield outputEscape.call({ context: ctx, token: this.token, liquid: this.liquid }, val)
+    }
     emitter.write(val)
   }
 
