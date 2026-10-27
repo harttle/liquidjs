@@ -62,4 +62,36 @@ describe('LiquidOptions#*outputEscape*', function () {
     const html = await engine.parseAndRender('{% echo x | raw %}', { x: '<img>' })
     expect(html).toBe('<img>')
   })
+
+  it('should escape {% cycle %} when outputEscape="escape"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% cycle x, "b" %}', { x: '<img>' })
+    expect(html).toBe('&lt;img&gt;')
+  })
+
+  it('should skip escape for {% cycle %} with "| raw"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% cycle x | raw, "b" %}', { x: '<img>' })
+    expect(html).toBe('<img>')
+  })
+
+  it('should escape named {% cycle %} group when outputEscape="escape"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% cycle g: x, "b" %}{% cycle g: x, "b" %}', { x: '<img>', g: 'g' })
+    expect(html).toBe('&lt;img&gt;b')
+  })
+
+  it('should skip escape for named {% cycle %} with "| raw"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% cycle g: x | raw, "b" %}{% cycle g: x | raw, "b" %}', { x: '<img>', g: 'g' })
+    expect(html).toBe('<img>b')
+  })
 })

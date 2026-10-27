@@ -366,6 +366,14 @@ describe('Tokenizer', function () {
       const token = tokenizer.readFilter()
       expect(token).toBeNull()
     })
+    it('should stop before comma after filter without args', function () {
+      const tokenizer = new Tokenizer('x | raw, "b"')
+      const token = tokenizer.readFilteredValue()
+      expect(token.getText()).toBe('x | raw')
+      expect(token.filters).toHaveLength(1)
+      expect(token.filters[0].name).toBe('raw')
+      expect(tokenizer.peek()).toBe(',')
+    })
     it('should read a filter with k/v argument', function () {
       const tokenizer = new Tokenizer(' | plus: a:1')
       const token = tokenizer.readFilter()
