@@ -1,10 +1,9 @@
-import { TopLevelToken, Liquid, ValueToken, evalToken, Emitter, TagToken, Context, Tag, Value } from '..'
+import { TopLevelToken, Liquid, ValueToken, FilteredValueToken, evalToken, Emitter, TagToken, Context, Tag, Value } from '..'
 import { Arguments } from '../template'
 import { toValue } from '../util'
 
 export default class extends Tag {
-  private candidates: Value[] = []
-  private candidateTexts: string[] = []
+  private candidates: FilteredValueToken[] = []
   private group?: ValueToken
   constructor (token: TagToken, remainTokens: TopLevelToken[], liquid: Liquid) {
     super(token, remainTokens, liquid)
@@ -21,8 +20,7 @@ export default class extends Tag {
 
     while (!this.tokenizer.end()) {
       const value = this.tokenizer.readFilteredValue()
-      this.candidates.push(new Value(value, this.liquid))
-      this.candidateTexts.push(value.getText())
+      this.candidates.push(value)
       this.tokenizer.readTo(',')
     }
     this.tokenizer.assert(this.candidates.length, () => `empty candidates: "${token.getText()}"`)
@@ -30,7 +28,7 @@ export default class extends Tag {
 
   * render (ctx: Context, emitter: Emitter): Generator<unknown, unknown, unknown> {
     const group = (yield evalToken(this.group, ctx)) as ValueToken
-    const fingerprint = `cycle:${group}:` + this.candidateTexts.join(',')
+    const fingerprint = `cycle:${group}:` + this.candidates.map(c => c.getText()).join(',')
     const groups = ctx.getRegister('cycle', {} as Record<string, number>)
     let idx = groups[fingerprint]
 
@@ -38,7 +36,7 @@ export default class extends Tag {
       idx = groups[fingerprint] = 0
     }
 
-    const candidate = this.candidates[idx]
+    const candidate = new Value(this.candidates[idx], this.liquid)
     idx = (idx + 1) % this.candidates.length
     groups[fingerprint] = idx
     let val = yield toValue(yield candidate.value(ctx, false))
