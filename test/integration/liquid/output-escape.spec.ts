@@ -38,4 +38,28 @@ describe('LiquidOptions#*outputEscape*', function () {
     const html = await engine.parseAndRender('{{"<" | raw}}')
     expect(html).toBe('<')
   })
+
+  it('should escape {% echo %} when outputEscape="escape"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% echo x %}', { x: '<img>' })
+    expect(html).toBe('&lt;img&gt;')
+  })
+
+  it('should escape {% liquid echo %} when outputEscape="escape"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% liquid echo x %}', { x: '<img>' })
+    expect(html).toBe('&lt;img&gt;')
+  })
+
+  it('should skip escape for {% echo %} with "| raw"', async function () {
+    const engine = new Liquid({
+      outputEscape: 'escape'
+    })
+    const html = await engine.parseAndRender('{% echo x | raw %}', { x: '<img>' })
+    expect(html).toBe('<img>')
+  })
 })
