@@ -1,3 +1,20 @@
+# [10.30.0](https://github.com/harttle/liquidjs/compare/v10.29.0...v10.30.0) (2026-10-01)
+
+
+### Bug Fixes
+
+* **base64_encode:** encode large input in browser builds ([#969](https://github.com/harttle/liquidjs/issues/969)) ([8aace78](https://github.com/harttle/liquidjs/commit/8aace78beb4c6b67ec1cc10cf519c82d5ffa6f3f)), closes [#967](https://github.com/harttle/liquidjs/issues/967)
+* **date:** compute %C and %y from the numeric year ([#961](https://github.com/harttle/liquidjs/issues/961)) ([e68514f](https://github.com/harttle/liquidjs/commit/e68514f0667c958b578d580d11482ae881d7b803))
+* **date:** compute %U and %W week numbers like strftime ([#958](https://github.com/harttle/liquidjs/issues/958)) ([0587ca8](https://github.com/harttle/liquidjs/commit/0587ca803fe8ce7c8cbf2769e8904ffbc67a0e58))
+* trim custom characters by Unicode code point ([#955](https://github.com/harttle/liquidjs/issues/955)) ([3fe244f](https://github.com/harttle/liquidjs/commit/3fe244f0610af74305d1c5b928ccf0fceed0b027))
+* **truncatewords:** ignore leading whitespace when counting words ([#954](https://github.com/harttle/liquidjs/issues/954)) ([65e200e](https://github.com/harttle/liquidjs/commit/65e200e22debb080073ea8adb17829789df72b4b))
+* **url_decode:** keep %2B as a literal plus when decoding ([#939](https://github.com/harttle/liquidjs/issues/939)) ([9af92f5](https://github.com/harttle/liquidjs/commit/9af92f5d8cb318fd16739fb0afd1997356f4da83))
+
+
+### Features
+
+* await promises returned by Drop.valueOf() ([#948](https://github.com/harttle/liquidjs/issues/948)) ([#953](https://github.com/harttle/liquidjs/issues/953)) ([#959](https://github.com/harttle/liquidjs/issues/959)) ([7dfa76b](https://github.com/harttle/liquidjs/commit/7dfa76b7b2559f46b71e993e002e3f434ca30814))
+
 # [10.29.0](https://github.com/harttle/liquidjs/compare/v10.28.0...v10.29.0) (2026-08-11)
 
 

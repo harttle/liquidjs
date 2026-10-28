@@ -18,7 +18,9 @@ export function date_to_xmlschema (this: FilterImpl, v: string | Date) {
 }
 
 export function date_to_rfc822 (this: FilterImpl, v: string | Date) {
-  return date.call(this, v, '%a, %d %b %Y %H:%M:%S %z')
+  const date = parseDate(v, this.context.opts, undefined, 'en-US')
+  if (!date) return v
+  return strftime(date, '%a, %d %b %Y %H:%M:%S %z', this.context.memoryLimit)
 }
 
 export function date_to_string (this: FilterImpl, v: string | Date, type?: string, style?: string) {
@@ -42,10 +44,9 @@ function stringify_date (this: FilterImpl, v: string | Date, month_type: string,
   return strftime(date, `%d ${month_type} %Y`, ml)
 }
 
-function parseDate (v: string | Date, opts: NormalizedFullOptions, timezoneOffset?: number | string): LiquidDate | undefined {
+function parseDate (v: string | Date, opts: NormalizedFullOptions, timezoneOffset?: number | string, locale = opts.locale): LiquidDate | undefined {
   let date: LiquidDate | undefined
   const defaultTimezoneOffset = timezoneOffset ?? opts.timezoneOffset
-  const locale = opts.locale
   v = toValue(v)
   if (isNil(v)) {
     return undefined

@@ -52,6 +52,11 @@ describe('base64-impl/browser', function () {
     it('should encode boolean strings', function () {
       expect(base64.base64Encode('true')).toBe('dHJ1ZQ==')
     })
+
+    it('should encode a large string', function () {
+      const str = 'Hello 🌍'.repeat(20000)
+      expect(base64.base64Encode(str)).toBe(Buffer.from(str).toString('base64'))
+    })
   })
 
   describe('#base64Decode()', function () {

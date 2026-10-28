@@ -42,6 +42,18 @@ export function stringify (value: any): string {
   return String(value)
 }
 
+export function advanceCodePoints (str: string, from: number, count: number): number {
+  let index = from
+  for (let i = 0; i < count && index < str.length; i++) index += str.codePointAt(index)! > 0xFFFF ? 2 : 1
+  return index
+}
+
+export function codePointLength (str: string): number {
+  let length = 0
+  for (let index = 0; index < str.length; index = advanceCodePoints(str, index, 1)) length++
+  return length
+}
+
 export function readArrayElement (arr: any[], index: number, ownPropertyOnly: boolean) {
   if (index < 0) index = arr.length + index
   if (ownPropertyOnly && !hasOwnProperty.call(arr, index)) return undefined

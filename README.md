@@ -247,6 +247,10 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/youdie006"><img src="https://avatars.githubusercontent.com/u/169331997?v=4?s=100" width="100px;" alt="KBS"/><br /><sub><b>KBS</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=youdie006" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jakezwang"><img src="https://avatars.githubusercontent.com/u/2645794?v=4?s=100" width="100px;" alt="Jake Wang"/><br /><sub><b>Jake Wang</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jakezwang" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://digitalmonstr.com"><img src="https://avatars.githubusercontent.com/u/115070295?v=4?s=100" width="100px;" alt="web-orbit12"/><br /><sub><b>web-orbit12</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=web-orbit12" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.aciragroup.com"><img src="https://avatars.githubusercontent.com/u/1220566?v=4?s=100" width="100px;" alt="Josef Guenther"/><br /><sub><b>Josef Guenther</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=josefguenther" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://osama-ansar.netlify.app/"><img src="https://avatars.githubusercontent.com/u/56025301?v=4?s=100" width="100px;" alt="Osama Ansar"/><br /><sub><b>Osama Ansar</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=OsamaAnsar" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

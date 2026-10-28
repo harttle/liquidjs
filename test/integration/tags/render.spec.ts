@@ -226,6 +226,21 @@ describe('tags/render', function () {
     const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
     expect(html).toBe('ColorDrop')
   })
+  it('should await async valueOf when the rendered Drop is output', async function () {
+    class ColorDrop extends Drop {
+      label = 'blue'
+      public async valueOf () {
+        return 'red!'
+      }
+    }
+    liquid.registerFilter('name', x => x.constructor.name)
+    mock({
+      '/with.html': '{% render "color" with color %}',
+      '/color.html': '{{color.label}}:{{color}}:{{color | name}}'
+    })
+    const html = await liquid.renderFile('with.html', { color: new ColorDrop() })
+    expect(html).toBe('blue:red!:ColorDrop')
+  })
 
   it('should support nested renders', async function () {
     mock({

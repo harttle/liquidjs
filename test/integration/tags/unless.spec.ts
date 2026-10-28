@@ -35,6 +35,11 @@ describe('tags/unless', function () {
     const html = await liquid.parseAndRender(src)
     return expect(html).toBe('')
   })
+  it('should keep comparable operands uncoerced', async function () {
+    const src = '{% unless empty == empty %}yes{%else%}no{%endunless%}'
+    const html = await liquid.parseAndRender(src)
+    return expect(html).toBe('yes')
+  })
 
   it('should output unless contents in order', async function () {
     const src = `

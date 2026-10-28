@@ -892,6 +892,24 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "josefguenther",
+      "name": "Josef Guenther",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1220566?v=4",
+      "profile": "https://www.aciragroup.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "OsamaAnsar",
+      "name": "Osama Ansar",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56025301?v=4",
+      "profile": "https://osama-ansar.netlify.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

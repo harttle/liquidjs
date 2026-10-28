@@ -3,9 +3,9 @@ import { Comparable } from './comparable'
 import { isObject, isString, isArray, toValue } from '../util'
 
 export class EmptyDrop extends Drop implements Comparable {
-  public equals (value: any) {
+  public * equals (value: any): Generator<unknown, boolean, any> {
     if (value instanceof EmptyDrop) return false
-    value = toValue(value)
+    value = yield toValue(value)
     if (isString(value) || isArray(value)) return value.length === 0
     if (isObject(value)) return Object.keys(value).length === 0
     return false

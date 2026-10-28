@@ -267,6 +267,26 @@ describe('filters/date_to_rfc822', function () {
     const output = liquid.parseAndRenderSync('{{ "2008-11-07T13:07:54-08:00" | date_to_rfc822 }}')
     expect(output).toEqual('Fri, 07 Nov 2008 13:07:54 -0800')
   })
+  it('should use English names regardless of locale', function () {
+    const liquid = new Liquid({ locale: 'zh-CN', preserveTimezones: true })
+    const output = liquid.parseAndRenderSync('{{ "2008-11-07T13:07:54-08:00" | date_to_rfc822 }}')
+    expect(output).toEqual('Fri, 07 Nov 2008 13:07:54 -0800')
+  })
+  it('should keep the offset of the input with preserveTimezones', function () {
+    const liquid = new Liquid({ locale: 'zh-CN', preserveTimezones: true, timezoneOffset: 0 })
+    const output = liquid.parseAndRenderSync('{{ "2008-11-07T23:30:00-08:00" | date_to_rfc822 }}')
+    expect(output).toEqual('Fri, 07 Nov 2008 23:30:00 -0800')
+  })
+  it('should convert to timezoneOffset without preserveTimezones', function () {
+    const liquid = new Liquid({ locale: 'zh-CN', timezoneOffset: 0 })
+    const output = liquid.parseAndRenderSync('{{ "2008-11-07T23:30:00-08:00" | date_to_rfc822 }}')
+    expect(output).toEqual('Sat, 08 Nov 2008 07:30:00 +0000')
+  })
+  it('should use timezoneOffset for a timestamp with preserveTimezones', function () {
+    const liquid = new Liquid({ locale: 'zh-CN', preserveTimezones: true, timezoneOffset: 480 })
+    const output = liquid.parseAndRenderSync('{{ 1226129400 | date_to_rfc822 }}')
+    expect(output).toEqual('Fri, 07 Nov 2008 23:30:00 -0800')
+  })
 })
 describe('filters/date_to_string', function () {
   const liquid = new Liquid({ preserveTimezones: true })
