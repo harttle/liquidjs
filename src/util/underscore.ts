@@ -42,12 +42,16 @@ export function stringify (value: any): string {
   return String(value)
 }
 
-export function sliceWholeChars (str: string, start: number, end: number): string {
-  const isHigh = (index: number) => (str.charCodeAt(index) & 0xFC00) === 0xD800
-  const isLow = (index: number) => (str.charCodeAt(index) & 0xFC00) === 0xDC00
-  if (isLow(start) && isHigh(start - 1)) start++
-  if (isHigh(end - 1) && isLow(end)) end--
-  return str.slice(start, end)
+export function advanceCodePoints (str: string, from: number, count: number): number {
+  let index = from
+  for (let i = 0; i < count && index < str.length; i++) index += str.codePointAt(index)! > 0xFFFF ? 2 : 1
+  return index
+}
+
+export function codePointLength (str: string): number {
+  let length = 0
+  for (let index = 0; index < str.length; index = advanceCodePoints(str, index, 1)) length++
+  return length
 }
 
 export function readArrayElement (arr: any[], index: number, ownPropertyOnly: boolean) {

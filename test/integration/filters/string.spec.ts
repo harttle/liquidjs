@@ -219,14 +219,29 @@ describe('filters/string', function () {
     it('should default to 50', function () {
       return test('{{ "1234567890123456789012345678901234567890123456789abc" | truncate }}', '12345678901234567890123456789012345678901234567...')
     })
-    it('should not split a surrogate pair', function () {
-      return test('{{ "😀😀😀😀" | truncate: 6 }}', '😀...')
+    it('should count code points rather than UTF-16 code units', function () {
+      return test('{{ "😀😀😀😀" | truncate: 6 }}', '😀😀😀😀')
     })
-    it('should not split a surrogate pair with empty ellipsis', function () {
-      return test('{{ "😀😀😀" | truncate: 5, "" }}', '😀😀')
+    it('should truncate by code points', function () {
+      return test('{{ "😀😀😀😀😀😀😀" | truncate: 6 }}', '😀😀😀...')
     })
-    it('should keep surrogate pairs that end at the cut', function () {
-      return test('{{ "😀😀😀😀" | truncate: 7 }}', '😀😀...')
+    it('should truncate by code points with empty ellipsis', function () {
+      return test('{{ "😀😀😀😀😀😀" | truncate: 5, "" }}', '😀😀😀😀😀')
+    })
+    it('should cut after a leading code point', function () {
+      return test('{{ "a😀😀😀😀😀" | truncate: 4, "" }}', 'a😀😀😀')
+    })
+    it('should count the length of the ellipsis by code points', function () {
+      return test('{{ "abcdef" | truncate: 4, "😀😀" }}', 'ab😀😀')
+    })
+    it('should count ZWJ sequences by code points', function () {
+      return test('{{ s | truncate: 3, "" }}', { s: '\u{1F468}‍\u{1F469}‍\u{1F467}' }, '\u{1F468}‍\u{1F469}')
+    })
+    it('should count combining marks by code points', function () {
+      return test('{{ s | truncate: 4, "" }}', { s: 'café' }, 'cafe')
+    })
+    it('should keep a lone surrogate in the input', function () {
+      return test('{{ s | truncate: 3, "" }}', { s: 'a\ud83db\ude00c' }, 'a\ud83db')
     })
   })
   describe('truncatewords', function () {
