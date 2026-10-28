@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, toEnumerable, advanceCodePoints, codePointLength } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -113,12 +113,12 @@ export function slice<T> (this: FilterImpl, v: T[] | string, begin: number, leng
   v = toValue(v)
   if (isNil(v)) return []
   if (!isArray(v)) v = stringify(v)
-  begin = begin < 0 ? v.length + begin : begin
+  begin = begin < 0 ? (isArray(v) ? v.length : codePointLength(v)) + begin : begin
   if (begin < 0 || length < 0) return isArray(v) ? [] : ''
   this.context.memoryLimit.use(length)
-  return isArray(v)
-    ? Array.prototype.slice.call(v, begin, begin + length)
-    : String.prototype.slice.call(v, begin, begin + length)
+  if (isArray(v)) return Array.prototype.slice.call(v, begin, begin + length)
+  const start = advanceCodePoints(v, 0, begin)
+  return v.slice(start, advanceCodePoints(v, start, length))
 }
 
 function * matches (this: FilterImpl, value: unknown, expected: unknown): Generator<unknown, boolean, any> {
