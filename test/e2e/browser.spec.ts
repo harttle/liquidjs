@@ -21,4 +21,11 @@ describe('browser', function () {
       name: 'TokenizationError'
     })
   })
+  it('should throw on invalid base64', () => {
+    const engine = new LiquidUMD()
+    return expect(engine.parseAndRender('{{ "YWJj!!" | base64_decode }}')).rejects.toMatchObject({
+      message: 'invalid base64 provided to base64_decode, line:1, col:1',
+      name: 'RenderError'
+    })
+  })
 })
