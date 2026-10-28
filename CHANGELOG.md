@@ -1,3 +1,17 @@
+## [10.30.1](https://github.com/harttle/liquidjs/compare/v10.30.0...v10.30.1) (2026-10-28)
+
+
+### Bug Fixes
+
+* apply outputEscape to {% echo %} ([46ab5d8](https://github.com/harttle/liquidjs/commit/46ab5d8835b22d679250806736a0dc980593ef8a))
+* **array_to_sentence_string:** coerce non-array input with toArray ([#968](https://github.com/harttle/liquidjs/issues/968)) ([e843466](https://github.com/harttle/liquidjs/commit/e843466b56aa28440f7a287157ecf93cf8890979)), closes [#964](https://github.com/harttle/liquidjs/issues/964)
+* **base64_decode:** throw on invalid input in every build ([#971](https://github.com/harttle/liquidjs/issues/971)) ([83bbfe0](https://github.com/harttle/liquidjs/commit/83bbfe0c491f4479f461944ff528deb3ac7ea785)), closes [#965](https://github.com/harttle/liquidjs/issues/965)
+* **date_to_rfc822:** use English day and month names ([#974](https://github.com/harttle/liquidjs/issues/974)) ([e94a1c4](https://github.com/harttle/liquidjs/commit/e94a1c4c16504a52aa14c6b2548cf88153b48f85)), closes [#973](https://github.com/harttle/liquidjs/issues/973)
+* **filters:** round must not alter large or high-precision numbers ([#980](https://github.com/harttle/liquidjs/issues/980)) ([ea22af4](https://github.com/harttle/liquidjs/commit/ea22af4b89d535b5442d9eeb63ebd8d8ea72cec1)), closes [hi#precision](https://github.com/hi/issues/precision)
+* **filters:** truncate and slice must not split surrogate pairs ([#981](https://github.com/harttle/liquidjs/issues/981)) ([57016eb](https://github.com/harttle/liquidjs/commit/57016ebce911346166d392aebb06bc884a2e6195)), closes [String#length](https://github.com/String/issues/length) [String#slice](https://github.com/String/issues/slice)
+* pad %Y to 4 digits like Ruby ([#978](https://github.com/harttle/liquidjs/issues/978)) ([95a2eed](https://github.com/harttle/liquidjs/commit/95a2eedb6c97dac47d99ed7b5bc0349cdbd31c2c))
+* **security:** apply outputEscape to {% cycle %} ([#984](https://github.com/harttle/liquidjs/issues/984)) ([2e1ebe0](https://github.com/harttle/liquidjs/commit/2e1ebe0cb3875054031e1ddcd72366f19fd218bf))
+
 # [10.30.0](https://github.com/harttle/liquidjs/compare/v10.29.0...v10.30.0) (2026-10-01)
 
 
