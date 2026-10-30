@@ -20,7 +20,7 @@ export default class extends Tag {
     this.value = new Value(this.tokenizer.readFilteredValue(), this.liquid)
   }
   * render (ctx: Context): Generator<unknown, void, unknown> {
-    ctx.bottom()[this.key] = yield this.value.value(ctx, this.liquid.options.lenientIf)
+    ctx.bottom()[this.key] = yield * this.value.value(ctx, this.liquid.options.lenientIf)
   }
 
   public * arguments (): Arguments {
