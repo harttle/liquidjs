@@ -432,4 +432,18 @@ describe('filters/string', function () {
       expect(html).toEqual('apple')
     })
   })
+  describe('newline', function () {
+    it('should add newline character', async () => {
+      const result = await liquid.parseAndRender('{{"Hello" | newline}}World')
+      expect(result).toEqual('Hello\nWorld')
+    })
+    it('should ignore existing newline characters', async () => {
+      const result = await liquid.parseAndRender('{{"Hello\n" | newline}}World')
+      expect(result).toEqual('Hello\nWorld')
+    })
+    it('should ignore windows newline characters', async () => {
+      const result = await liquid.parseAndRender('{{"Hello\r\n" | newline}}World')
+      expect(result).toEqual('Hello\nWorld')
+    })
+  })
 })
