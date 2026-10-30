@@ -17,8 +17,8 @@ export enum LookupType {
 export class Loader {
   public shouldLoadRelative: (referencedFile: string) => boolean
   private options: LoaderOptions
-  private contains: LiquidAsync<NonNullable<FS['containsSync']>>
-  private exists: LiquidAsync<FS['existsSync']>
+  private _contains?: LiquidAsync<NonNullable<FS['containsSync']>>
+  private _exists?: LiquidAsync<FS['existsSync']>
 
   constructor (options: LoaderOptions) {
     this.options = options
@@ -30,15 +30,28 @@ export class Loader {
     } else {
       this.shouldLoadRelative = (_referencedFile: string) => false
     }
-    const fs = options.fs
-    this.contains = toLiquidAsync(
-      fs.contains?.bind(fs) || (async () => true),
-      fs.containsSync?.bind(fs) || (() => true)
-    )
-    this.exists = toLiquidAsync(
-      fs.exists?.bind(fs) || (async () => false),
-      fs.existsSync?.bind(fs)
-    )
+  }
+
+  private get contains () {
+    const fs = this.options.fs
+    if (!this._contains) {
+      this._contains = toLiquidAsync(
+        fs.contains?.bind(fs) || (async () => true),
+        fs.containsSync?.bind(fs) || (() => true)
+      )
+    }
+    return this._contains
+  }
+
+  private get exists () {
+    const fs = this.options.fs
+    if (!this._exists) {
+      this._exists = toLiquidAsync(
+        fs.exists?.bind(fs) || (async () => false),
+        fs.existsSync?.bind(fs)
+      )
+    }
+    return this._exists
   }
 
   public * lookup (file: string, type: LookupType, sync?: boolean, currentFile?: string): Generator<unknown, string, string> {

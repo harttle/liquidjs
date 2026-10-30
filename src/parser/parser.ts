@@ -16,7 +16,7 @@ export class Parser {
   private cache?: LiquidCache
   private loader: Loader
   private parseLimit: Limiter
-  private readFile: LiquidAsync<FS['readFileSync']>
+  private _readFile?: LiquidAsync<FS['readFileSync']>
 
   public constructor (liquid: Liquid) {
     this.liquid = liquid
@@ -25,10 +25,15 @@ export class Parser {
     this.parseFile = this.cache ? this._parseFileCached : this._parseFile
     this.loader = new Loader(this.liquid.options)
     this.parseLimit = new Limiter('parse length', liquid.options.parseLimit)
-    this.readFile = toLiquidAsync(
-      this.fs.readFile?.bind(this.fs) || (async () => { throw new Error('readFile not implemented') }),
-      this.fs.readFileSync?.bind(this.fs)
-    )
+  }
+  private get readFile () {
+    if (!this._readFile) {
+      this._readFile = toLiquidAsync(
+        this.fs.readFile?.bind(this.fs) || (async () => { throw new Error('readFile not implemented') }),
+        this.fs.readFileSync?.bind(this.fs)
+      )
+    }
+    return this._readFile
   }
   public parse (html: string, filepath?: string): Template[] {
     html = String(html)
