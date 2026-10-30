@@ -61,15 +61,15 @@ export default class extends Tag {
 
     const childCtx = ctx.spawn()
     const scope = childCtx.bottom()
-    __assign(scope, yield hash.render(ctx))
+    __assign(scope, yield * hash.render(ctx))
     if (this.with) {
       const { value, alias } = this.with
-      scope[alias || filepath] = yield evalToken(value, ctx)
+      scope[alias || filepath] = yield * evalToken(value, ctx)
     }
 
     if (this.forBinding) {
       const { value, alias } = this.forBinding
-      const collection = toEnumerable(yield evalToken(value, ctx))
+      const collection = toEnumerable(yield * evalToken(value, ctx))
       scope['forloop'] = new ForloopDrop(collection.length, value.getText(), alias as string)
       for (const item of collection) {
         scope[alias as string] = item
@@ -171,5 +171,5 @@ function optimize (templates: Template[]): string | Template[] {
 export function * renderFilePath (file: ParsedFileName, ctx: Context, liquid: Liquid): IterableIterator<unknown> {
   if (typeof file === 'string') return file
   if (Array.isArray(file)) return liquid.renderer.renderTemplates(file, ctx)
-  return yield evalToken(file, ctx)
+  return yield * evalToken(file, ctx)
 }
