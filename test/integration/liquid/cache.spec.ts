@@ -193,5 +193,27 @@ describe('LiquidOptions#cache', function () {
       const foo2 = await engine.renderFile('another/foo')
       expect(foo2).toBe('bar2')
     })
+    it('should read templates cached by renderFile', async function () {
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: true
+      })
+      mock({ '/root/foo.html': 'foo' })
+      expect(await engine.renderFile('foo')).toBe('foo')
+      mock({ '/root/foo.html': 'bar' })
+      expect(engine.renderFileSync('foo')).toBe('foo')
+    })
+    it('should not read a pending renderFile parse', async function () {
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: true
+      })
+      mock({ '/root/foo.html': 'foo' })
+      const pending = engine.renderFile('foo')
+      expect(engine.renderFileSync('foo')).toBe('foo')
+      expect(await pending).toBe('foo')
+    })
   })
 })

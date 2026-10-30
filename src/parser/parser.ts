@@ -1,4 +1,4 @@
-import { Limiter, toPromise, assert, isTagToken, isOutputToken, ParseError, toLiquidAsync, LiquidAsync } from '../util'
+import { Limiter, toPromise, assert, isTagToken, isOutputToken, ParseError, toLiquidAsync, LiquidAsync, isPromise } from '../util'
 import { Tokenizer } from './tokenizer'
 import { ParseStream } from './parse-stream'
 import { TopLevelToken, OutputToken } from '../tokens'
@@ -75,15 +75,20 @@ export class Parser {
     const cache = this.cache!
     const key = this.loader.shouldLoadRelative(file) ? currentFile + ',' + file : type + ':' + file
     const tpls = yield cache.read(key)
-    if (tpls) return tpls
+    // sync mode cannot wait for a pending async parse, so it parses on its own
+    if (tpls && !(sync && isPromise(tpls))) return tpls
 
     const task = this._parseFile(file, sync, type, currentFile)
     // sync mode: exec the task and cache the result
-    // async mode: cache the task before exec
+    // async mode: cache the task before exec, then replace it with the result
     const taskOrTpl = sync ? yield task : toPromise(task)
     cache.write(key, taskOrTpl as any)
     // note: concurrent tasks will be reused, cache for failed task is removed until its end
-    try { return yield taskOrTpl } catch (err) { cache.remove(key); throw err }
+    try {
+      const templates = yield taskOrTpl
+      if (!sync) cache.write(key, templates)
+      return templates
+    } catch (err) { cache.remove(key); throw err }
   }
   private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], string> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)
