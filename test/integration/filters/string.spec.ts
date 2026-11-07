@@ -82,6 +82,9 @@ describe('filters/string', function () {
     it('should split by code point for an empty separator', function () {
       return test('{{ "😀ab" | split: "" | join: "|" }}', '😀|a|b')
     })
+    it('should split on any whitespace for a single space, like Ruby', function () {
+      return test('{{ "  one  two\nthree " | split: " " | join: "|" }}', 'one|two|three')
+    })
   })
   describe('upcase', function () {
     it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
