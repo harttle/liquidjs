@@ -113,9 +113,15 @@ export function rstrip (this: FilterImpl, str: string, chars?: string) {
 export function split (this: FilterImpl, v: string, arg: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
-  const arr = str.split(stringify(arg))
+  const sep = stringify(arg)
   // align to ruby split, which is the behavior of shopify/liquid
   // see: https://ruby-doc.org/core-2.4.0/String.html#method-i-split
+  // a single space splits on runs of any whitespace and ignores leading whitespace
+  if (sep === ' ') {
+    const trimmed = str.trim()
+    return trimmed === '' ? [] : trimmed.split(/\s+/)
+  }
+  const arr = str.split(sep)
   while (arr.length && arr[arr.length - 1] === '') arr.pop()
   return arr
 }
