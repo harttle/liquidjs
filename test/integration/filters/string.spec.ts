@@ -79,6 +79,9 @@ describe('filters/string', function () {
         '{{ my_array | first }}'
       return test(src, 'apples')
     })
+    it('should split on any whitespace for a single space, like Ruby', function () {
+      return test('{{ "  one  two\nthree " | split: " " | join: "|" }}', 'one|two|three')
+    })
   })
   describe('upcase', function () {
     it('should support upcase', () => test('{{ "Parker Moore" | upcase }}', 'PARKER MOORE'))
