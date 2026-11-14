@@ -97,6 +97,7 @@ export function evalQuotedToken (token: QuotedToken) {
 function * evalRangeToken (token: RangeToken, ctx: Context): IterableIterator<unknown> {
   const low = (yield evalTokenValue(token.lhs, ctx)) as unknown as number
   const high = (yield evalTokenValue(token.rhs, ctx)) as unknown as number
+  assert(!(Math.abs(low) > Number.MAX_SAFE_INTEGER || Math.abs(high) > Number.MAX_SAFE_INTEGER), 'range bounds exceed Number.MAX_SAFE_INTEGER')
   ctx.memoryLimit.use(high - low + 1)
   return range(+low, +high + 1)
 }
