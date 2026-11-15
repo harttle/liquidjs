@@ -257,6 +257,9 @@ describe('filters/array', function () {
     it('should return 0 for nil', () => test('{{ nil | size }}', '0'))
     it('should return 0 for undefined', () => test('{{ foo | size }}', '0'))
     it('should work for string', () => test('{{ "foo" | size }}', {}, '3'))
+    it('should return key count for object', () => test('{{ obj | size }}', { obj: { a: 1, b: 2 } }, '2'))
+    it('should match <object>.size notation', () => test('{{ obj | size }}|{{ obj.size }}', { obj: { a: 1, b: { c: 2 } } }, '2|2'))
+    it('should return 0 for empty object', () => test('{{ obj | size }}', { obj: {} }, '0'))
   })
   describe('first', function () {
     it('should support first', () => test(
