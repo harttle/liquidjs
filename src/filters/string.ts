@@ -113,7 +113,9 @@ export function rstrip (this: FilterImpl, str: string, chars?: string) {
 export function split (this: FilterImpl, v: string, arg: string) {
   const str = stringify(v)
   this.context.memoryLimit.use(str.length)
-  const arr = str.split(stringify(arg))
+  const sep = stringify(arg)
+  // an empty separator splits by code point, so astral characters stay whole
+  const arr = sep === '' ? Array.from(str) : str.split(sep)
   // align to ruby split, which is the behavior of shopify/liquid
   // see: https://ruby-doc.org/core-2.4.0/String.html#method-i-split
   while (arr.length && arr[arr.length - 1] === '') arr.pop()
