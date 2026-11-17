@@ -23,6 +23,10 @@ describe('filters/html', function () {
       test('{{ "1 < 2 & 3" | escape_once }}', '1 &lt; 2 &amp; 3'))
     it('should not escape twice',
       () => test('{{ "1 &lt; 2 &amp; 3" | escape_once }}', '1 &lt; 2 &amp; 3'))
+    it('should not escape existing named or decimal entities', () =>
+      test('{{ "&quot;hi&quot; &copy; &#8212; &nbsp;" | escape_once }}', '&quot;hi&quot; &copy; &#8212; &nbsp;'))
+    it('should escape & that does not start an entity', () =>
+      test('{{ "a & b &; &#x27; &c" | escape_once }}', 'a &amp; b &amp;; &amp;#x27; &amp;c'))
     it('should escape nil value to empty string', () =>
       test('{{ undefinedValue | escape_once }}', ''))
   })
