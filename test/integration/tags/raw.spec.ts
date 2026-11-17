@@ -22,4 +22,10 @@ describe('tags/raw', function () {
     const html = liquid.parseAndRenderSync('{% raw %}{{foo}}{% endraw %}')
     return expect(html).toBe('{{foo}}')
   })
+  it('should accept whitespace control on endraw', function () {
+    expect(liquid.parseAndRenderSync('{% raw %}{{ x }}{%- endraw %}')).toBe('{{ x }}')
+    expect(liquid.parseAndRenderSync('{%- raw -%}{{ x }}{%- endraw -%}')).toBe('{{ x }}')
+    expect(liquid.parseAndRenderSync('{% raw %} x {%-endraw-%} y')).toBe(' x y')
+    expect(liquid.parseAndRenderSync('{% raw %} x {% endraw-%} y')).toBe(' x y')
+  })
 })
