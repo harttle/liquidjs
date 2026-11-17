@@ -19,7 +19,7 @@ export function isPromise<T> (val: any): val is Promise<T> {
 }
 
 export function isIterator (val: any): val is IterableIterator<any> {
-  return val && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
+  return typeof val === 'object' && val !== null && isFunction(val.next) && isFunction(val.throw) && isFunction(val.return)
 }
 
 export function promisify<T1, T2> (fn: (arg1: T1, cb: (err: Error | null, result: T2) => void) => void): (arg1: T1) => Promise<T2>;

@@ -1,6 +1,6 @@
 import { evalToken } from '../render'
 import { Context } from '../context'
-import { identify, isFunction } from '../util/underscore'
+import { identify, isFunction, isPromise, isIterator } from '../util/underscore'
 import { FilterHandler, FilterImplOptions } from './filter-impl-options'
 import { FilterArg, isKeyValuePair } from '../parser/filter-arg'
 import { Liquid } from '../liquid'
@@ -24,12 +24,13 @@ export class Filter {
     this.args = token.args
     this.liquid = liquid
   }
-  public * render (value: any, context: Context): IterableIterator<unknown> {
+  public * render (value: any, context: Context): Generator<unknown, unknown, unknown> {
     const argv: any[] = []
     for (const arg of this.args as FilterArg[]) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], yield evalToken(arg[1], context)])
-      else argv.push(yield evalToken(arg, context))
+      if (isKeyValuePair(arg)) argv.push([arg[0], yield * evalToken(arg[1], context)])
+      else argv.push(yield * evalToken(arg, context))
     }
-    return yield this.handler.apply({ context, token: this.token, liquid: this.liquid }, [value, ...argv])
+    const result = this.handler.apply({ context, token: this.token, liquid: this.liquid }, [value, ...argv])
+    return isPromise(result) || isIterator(result) ? yield result : result
   }
 }
