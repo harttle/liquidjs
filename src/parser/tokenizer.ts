@@ -184,7 +184,8 @@ export class Tokenizer {
     const begin = this.p
     let leftPos = this.readTo(tagDelimiterLeft) - tagDelimiterLeft.length
     while (this.p < this.N) {
-      if (this.readIdentifier().getText() !== 'endraw') {
+      if (this.peek() === '-') this.p++
+      if (this.readIdentifier().getText().replace(/-$/, '') !== 'endraw') {
         leftPos = this.readTo(tagDelimiterLeft) - tagDelimiterLeft.length
         continue
       }
