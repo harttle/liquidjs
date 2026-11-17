@@ -116,10 +116,10 @@ export function split (this: FilterImpl, v: string, arg: string) {
   const sep = stringify(arg)
   // align to ruby split, which is the behavior of shopify/liquid
   // see: https://ruby-doc.org/core-2.4.0/String.html#method-i-split
-  // a single space splits on runs of any whitespace and ignores leading whitespace
+  // a single space splits on runs of ASCII whitespace and ignores leading whitespace
   if (sep === ' ') {
-    const trimmed = str.trim()
-    return trimmed === '' ? [] : trimmed.split(/\s+/)
+    const trimmed = str.replace(/^[ \t\n\v\f\r]+|[ \t\n\v\f\r]+$/g, '')
+    return trimmed === '' ? [] : trimmed.split(/[ \t\n\v\f\r]+/)
   }
   // an empty separator splits by code point, so astral characters stay whole
   const arr = sep === '' ? Array.from(str) : str.split(sep)
