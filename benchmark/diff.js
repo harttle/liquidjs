@@ -9,7 +9,7 @@ console.log(`Latest: ${FILE_LATEST}`)
 
 const { createEngine } = require('./engines/create-liquid')
 const local = createEngine(require(path.resolve(__dirname, '..', FILE_LOCAL)))
-const latest = createEngine(require(path.resolve(__dirname, '..', FILE_LOCAL)))
+const latest = createEngine(require(path.resolve(__dirname, '..', FILE_LATEST)))
 const data = require('./data/todolist.json')
 const tpl = path.resolve(__dirname, `templates/todolist`)
 
