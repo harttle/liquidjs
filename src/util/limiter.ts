@@ -1,9 +1,10 @@
 import { assert } from './assert'
+import { getPerformance } from './performance'
 
 export class Limiter {
   private message: string
   private base = 0
-  private limit: number
+  protected limit: number
   constructor (resource: string, limit: number) {
     this.message = `${resource} limit exceeded`
     this.limit = limit
@@ -18,5 +19,11 @@ export class Limiter {
     if (+count > 0) {
       assert(+count <= this.limit, this.message)
     }
+  }
+}
+
+export class TimeLimiter extends Limiter {
+  check (now?: number) {
+    if (this.limit !== Infinity) super.check(now ?? getPerformance().now())
   }
 }
