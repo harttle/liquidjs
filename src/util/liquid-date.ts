@@ -18,6 +18,28 @@ const dayNames = [
 ]
 const dayNamesShort = dayNames.map(name => name.slice(0, 3))
 
+const timezoneFormats = new Map<string, Intl.DateTimeFormat>()
+
+// Same output as date.toLocaleString('en-US', { timeZone }), which builds a new Intl.DateTimeFormat on every call
+function formatInTimezone (date: Date, timeZone: string): string {
+  const DateTimeFormat = getDateTimeFormat()
+  if (!DateTimeFormat) return date.toLocaleString('en-US', { timeZone })
+  let format = timezoneFormats.get(timeZone)
+  if (!format) {
+    format = new DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric'
+    })
+    timezoneFormats.set(timeZone, format)
+  }
+  return format.format(date)
+}
+
 /**
  * A date implementation with timezone info, just like Ruby date
  *
@@ -153,8 +175,8 @@ export class LiquidDate {
     return new LiquidDate(dateString, locale)
   }
   private static getTimezoneOffset (timezoneName: string, date: Date) {
-    const localDateString = date.toLocaleString('en-US', { timeZone: timezoneName })
-    const utcDateString = date.toLocaleString('en-US', { timeZone: 'UTC' })
+    const localDateString = formatInTimezone(date, timezoneName)
+    const utcDateString = formatInTimezone(date, 'UTC')
 
     const localDate = new Date(localDateString)
     const utcDate = new Date(utcDateString)

@@ -15,6 +15,16 @@ describe('LiquidDate', () => {
       expect(date.getMinutes()).toBe(26)
     })
   })
+  it('should reuse one Intl.DateTimeFormat per timezone', () => {
+    const spy = jest.spyOn(Intl, 'DateTimeFormat')
+    try {
+      const offsets = [1, 2, 3, 4, 5].map(day => new LiquidDate(`2021-10-0${day}T14:26:00.000Z`, 'en-US', 'Pacific/Chatham').getTimezoneOffset())
+      expect(offsets).toEqual([-825, -825, -825, -825, -825])
+      expect(spy.mock.calls.filter(([, options]) => options?.timeZone === 'Pacific/Chatham')).toHaveLength(1)
+    } finally {
+      spy.mockRestore()
+    }
+  })
   it('should support Date as argument', () => {
     const date = new LiquidDate(new Date('2021-10-06T14:26:00.000+08:00'), 'en-US', 0)
     expect(date.getHours()).toBe(6)
