@@ -76,6 +76,9 @@ describe('filters/date', function () {
       expect(liquid.parseAndRenderSync(tpl)).toEqual('Aug')
     })
   })
+  it('should return input that is not a valid date when a timezone is given', function () {
+    return test('{{ "not-a-date" | date: "%Y", "America/Chicago" }}|{{ "" | date: "%Y", "America/Chicago" }}', 'not-a-date|')
+  })
   it('should support "now"', function () {
     // sample: Thursday, February 2, 2023 at 6:25 pm +0000
     return test('{{ "now" | date }}', /\w+, \w+ \d+, \d\d\d\d at \d+:\d\d [ap]m [-+]\d\d\d\d/)

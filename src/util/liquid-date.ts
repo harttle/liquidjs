@@ -18,12 +18,13 @@ const dayNames = [
 ]
 const dayNamesShort = dayNames.map(name => name.slice(0, 3))
 
+const MAX_TIMEZONE_FORMATS = 100
 const timezoneFormats = new Map<string, Intl.DateTimeFormat>()
 
 // Same output as date.toLocaleString('en-US', { timeZone }), which builds a new Intl.DateTimeFormat on every call
 function formatInTimezone (date: Date, timeZone: string): string {
   const DateTimeFormat = getDateTimeFormat()
-  if (!DateTimeFormat) return date.toLocaleString('en-US', { timeZone })
+  if (!DateTimeFormat || isNaN(date.getTime())) return date.toLocaleString('en-US', { timeZone })
   let format = timezoneFormats.get(timeZone)
   if (!format) {
     format = new DateTimeFormat('en-US', {
@@ -35,6 +36,7 @@ function formatInTimezone (date: Date, timeZone: string): string {
       minute: 'numeric',
       second: 'numeric'
     })
+    if (timezoneFormats.size >= MAX_TIMEZONE_FORMATS) timezoneFormats.clear()
     timezoneFormats.set(timeZone, format)
   }
   return format.format(date)
