@@ -66,17 +66,24 @@ export default class extends Tag {
     }, collection)
 
     ctx.setRegister(continueKey, (hash['offset'] || 0) + collection.length)
-    const scope = createScope({ forloop: new ForloopDrop(collection.length, this.collection.getText(), this.variable) })
+    const forloops = ctx.getRegister<ForloopDrop[]>('forloops', [])
+    const forloop = new ForloopDrop(collection.length, this.collection.getText(), this.variable, forloops[forloops.length - 1])
+    const scope = createScope({ forloop })
     ctx.push(scope)
-    for (const item of collection) {
-      scope[this.variable] = item
+    forloops.push(forloop)
+    try {
+      for (const item of collection) {
+        scope[this.variable] = item
+        ctx.continueCalled = ctx.breakCalled = false
+        yield r.renderTemplates(this.templates, ctx, emitter)
+        if (ctx.breakCalled) break
+        scope.forloop.next()
+      }
+    } finally {
       ctx.continueCalled = ctx.breakCalled = false
-      yield r.renderTemplates(this.templates, ctx, emitter)
-      if (ctx.breakCalled) break
-      scope.forloop.next()
+      forloops.pop()
+      ctx.pop()
     }
-    ctx.continueCalled = ctx.breakCalled = false
-    ctx.pop()
   }
 
   public * children (): Generator<unknown, Template[]> {

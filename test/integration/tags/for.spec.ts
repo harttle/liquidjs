@@ -1,6 +1,7 @@
 import { Liquid } from '../../../src/liquid'
 import { Drop } from '../../../src/drop/drop'
 import { Scope } from '../../../src/context/scope'
+import { Context } from '../../../src/context/context'
 import { mock, restore } from '../../stub/mockfs'
 
 describe('tags/for', function () {
@@ -43,7 +44,7 @@ describe('tags/for', function () {
   it('should output forloop', async function () {
     const src = '{%for i in (1..1)%}{{forloop}}{%endfor%}'
     const html = await liquid.parseAndRender(src, scope)
-    return expect(html).toBe('{"i":0,"length":1,"name":"i-(1..1)"}')
+    return expect(html).toBe('{"i":0,"length":1,"name":"i-(1..1)","parentloop":null}')
   })
   it('should output forloop collection name', async function () {
     const src = '{%for c in alpha%}{{forloop.name}}-{{c}}{%endfor%}'
@@ -137,6 +138,35 @@ describe('tags/for', function () {
             'false.3.2.true.3.1.0c\n'
     const html = await liquid.parseAndRender(src, scope)
     return expect(html).toBe(dst)
+  })
+  it('should support forloop.parentloop', async function () {
+    const src = '{% for i in (1..2) %}{% for j in (1..2) %}{% for k in (1..2) %}' +
+      '{{ forloop.parentloop.parentloop.index }}{{ forloop.parentloop.index }}{{ forloop.index }} ' +
+      '{% endfor %}{% endfor %}{% endfor %}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).toBe('111 112 121 122 211 212 221 222 ')
+  })
+  it('should restore forloop.parentloop after an inner loop', async function () {
+    const src = '{% for i in (1..2) %}{% for j in (1..1) %}{% endfor %}{{ forloop.parentloop }}{% for k in (1..1) %}{{ forloop.parentloop.index }}{% endfor %}{% endfor %}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).toBe('12')
+  })
+  it('should output nested forloop with its parentloop', async function () {
+    const src = '{% for i in (1..1) %}{% for j in (1..1) %}{{ forloop }}{% endfor %}{% endfor %}'
+    const html = await liquid.parseAndRender(src, scope)
+    return expect(html).toBe('{"i":0,"length":1,"name":"j-(1..1)","parentloop":{"i":0,"length":1,"name":"i-(1..1)","parentloop":null}}')
+  })
+  it('should restore forloop.parentloop after an error in the loop body', async function () {
+    const ctx = new Context(scope)
+    await expect(liquid.parseAndRender('{% for i in (1..1) %}{% throwingTag %}{% endfor %}', ctx)).rejects.toThrow('intended render error')
+    const html = await liquid.parseAndRender('{% for i in (1..1) %}{{ forloop.parentloop == nil }}{% endfor %}', ctx)
+    return expect(html).toBe('true')
+  })
+  it('should render forloop.parentloop as nil outside nested loops', async function () {
+    const engine = new Liquid({ strictVariables: true })
+    const src = '{% for i in (1..2) %}{% if forloop.parentloop == nil %}{{ i }}{% endif %}{% endfor %}'
+    const html = await engine.parseAndRender(src)
+    return expect(html).toBe('12')
   })
 
   describe('continue', function () {
