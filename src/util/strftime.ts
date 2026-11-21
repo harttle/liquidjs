@@ -27,6 +27,24 @@ function getWeekOfYear (d: LiquidDate, startDay: number) {
   const daysSinceStartDay = (d.getDay() - startDay + 7) % 7
   return String(Math.floor((getDayOfYear(d) - 1 - daysSinceStartDay + 7) / 7))
 }
+function isoWeeksInYear (year: number) {
+  // A year has 53 ISO weeks when it starts on a Thursday, or on a Wednesday in a leap year
+  const p = (y: number) => ((y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400)) % 7 + 7) % 7
+  return p(year) === 4 || p(year - 1) === 3 ? 53 : 52
+}
+function getISOWeek (d: LiquidDate) {
+  // ISO 8601: weeks start on Monday and week 1 contains the year's first Thursday
+  let year = d.getFullYear()
+  let week = Math.floor((getDayOfYear(d) - (d.getDay() || 7) + 10) / 7)
+  if (week < 1) {
+    year -= 1
+    week = isoWeeksInYear(year)
+  } else if (week > isoWeeksInYear(year)) {
+    year += 1
+    week = 1
+  }
+  return { year, week }
+}
 function isLeapYear (d: LiquidDate) {
   const year = d.getFullYear()
   return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)))
@@ -51,6 +69,8 @@ const padWidths: Record<string, number> = {
   C: 2,
   d: 2,
   e: 2,
+  g: 2,
+  G: 4,
   H: 2,
   I: 2,
   j: 3,
@@ -61,12 +81,22 @@ const padWidths: Record<string, number> = {
   M: 2,
   S: 2,
   U: 2,
+  V: 2,
   W: 2,
   y: 2,
   Y: 4
 }
 
-const padSpaceChars = new Set('aAbBceklpP')
+const padSpaceChars = new Set('aAbBceklpPDFrRT')
+
+// conversions that expand to other conversions, as in Ruby's strftime
+const combinations: Record<string, string> = {
+  D: '%m/%d/%y',
+  F: '%Y-%m-%d',
+  r: '%I:%M:%S %p',
+  R: '%H:%M',
+  T: '%H:%M:%S'
+}
 
 function getTimezoneOffset (d: LiquidDate, opts: FormatOptions) {
   const nOffset = Math.abs(d.getTimezoneOffset())
@@ -88,6 +118,8 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   C: (d: LiquidDate) => century(d),
   d: (d: LiquidDate) => d.getDate(),
   e: (d: LiquidDate) => d.getDate(),
+  g: (d: LiquidDate) => (getISOWeek(d).year % 100 + 100) % 100,
+  G: (d: LiquidDate) => getISOWeek(d).year,
   H: (d: LiquidDate) => d.getHours(),
   I: (d: LiquidDate) => String(d.getHours() % 12 || 12),
   j: (d: LiquidDate) => getDayOfYear(d),
@@ -109,6 +141,7 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   S: (d: LiquidDate) => d.getSeconds(),
   u: (d: LiquidDate) => d.getDay() || 7,
   U: (d: LiquidDate) => getWeekOfYear(d, 0),
+  V: (d: LiquidDate) => getISOWeek(d).week,
   w: (d: LiquidDate) => d.getDay(),
   W: (d: LiquidDate) => getWeekOfYear(d, 1),
   x: (d: LiquidDate) => d.toLocaleDateString(),
@@ -122,6 +155,9 @@ const formatCodes: Record<string, FormatCodeHandler> = {
   '%': () => '%'
 }
 formatCodes.h = formatCodes.b
+for (const [conversion, pattern] of Object.entries(combinations)) {
+  formatCodes[conversion] = (d: LiquidDate, opts: FormatOptions) => strftime(d, pattern, opts.memoryLimit)
+}
 
 export function strftime (d: LiquidDate, formatStr: string, memoryLimit?: Pick<Limiter, 'use'>) {
   let output = ''

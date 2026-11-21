@@ -172,6 +172,20 @@ describe('util/strftime', function () {
       expect(t(new TestDate('2006-07-05 12:00:00'), '%U %W')).toBe('27 27')
       expect(t(new TestDate('2007-01-01 12:00:00'), '%U %W')).toBe('00 01')
     })
+    it('should format %G, %g and %V as ISO 8601 week-based year and week', function () {
+      expect(t(now, '%G-W%V-%u')).toBe('2016-W01-1')
+      expect(t(then, '%G %g %V')).toBe('2016 16 09')
+    })
+    it('should put early January days in the last ISO week of the previous year', function () {
+      expect(t(new TestDate('2016-01-03 12:00:00'), '%G %g %V')).toBe('2015 15 53')
+      expect(t(new TestDate('2021-01-03 12:00:00'), '%G %g %V')).toBe('2020 20 53')
+      expect(t(new TestDate('2010-01-03 12:00:00'), '%G %g %V')).toBe('2009 09 53')
+    })
+    it('should put late December days in the first ISO week of the next year', function () {
+      expect(t(new TestDate('2008-12-29 12:00:00'), '%G %g %V')).toBe('2009 09 01')
+      expect(t(new TestDate('2024-12-30 12:00:00'), '%G %g %V')).toBe('2025 25 01')
+      expect(t(new TestDate('2020-12-31 12:00:00'), '%G %g %V')).toBe('2020 20 53')
+    })
   })
 
   describe('Time zone', () => {
@@ -200,6 +214,22 @@ describe('util/strftime', function () {
 
     it('should format %c as local string', function () {
       expect(t(now, '%c')).toBe(now.toLocaleString())
+    })
+    it('should format %D as %m/%d/%y and %F as %Y-%m-%d', function () {
+      expect(t(now, '%D')).toBe('01/04/16')
+      expect(t(now, '%F')).toBe('2016-01-04')
+    })
+    it('should format %T as %H:%M:%S and %R as %H:%M', function () {
+      expect(t(now, '%T')).toBe('13:15:23')
+      expect(t(then, '%R')).toBe('03:05')
+    })
+    it('should format %r as %I:%M:%S %p', function () {
+      expect(t(now, '%r')).toBe('01:15:23 PM')
+      expect(t(then, '%r')).toBe('03:05:03 AM')
+    })
+    it('should pad combinations with spaces', function () {
+      expect(t(now, '%12F')).toBe('  2016-01-04')
+      expect(t(now, '%012F')).toBe('002016-01-04')
     })
   })
 
