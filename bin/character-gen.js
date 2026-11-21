@@ -41,9 +41,15 @@ export const NUMBER = 32
 export const SIGN = 64
 export const PUNCTUATION = 128
 
-export function isWord (char: string): boolean {
-  const code = char.charCodeAt(0)
-  return code >= 128 ? !TYPES[code] : !!(TYPES[code] & WORD)
+// created before the unicode entries below are added, so it holds only the 128 ASCII types
+const ASCII_TYPES = Uint8Array.from(TYPES)
+
+export function getType (code: number): number {
+  return code >= 128 ? TYPES[code] : ASCII_TYPES[code]
+}
+
+export function isWord (code: number): boolean {
+  return code >= 128 ? !TYPES[code] : !!(ASCII_TYPES[code] & WORD)
 }
 `.trim())
 
