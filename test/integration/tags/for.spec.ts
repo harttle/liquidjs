@@ -124,6 +124,24 @@ describe('tags/for', function () {
       const html = await liquid.parseAndRender(src, scope)
       return expect(html).toBe('b')
     })
+
+    it('should goto else when offset skips every item', async function () {
+      const src = '{%for c in alpha offset:3%}a{%else%}b{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('b')
+    })
+
+    it('should goto else for limit:0', async function () {
+      const src = '{%for c in alpha limit:0%}a{%else%}b{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('b')
+    })
+
+    it('should goto else when offset:continue has no items left', async function () {
+      const src = '{%for c in alpha%}{{c}}{%endfor%}{%for c in alpha offset:continue%}{{c}}{%else%}b{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('abcb')
+    })
   })
 
   it('should support for with forloop', async function () {
