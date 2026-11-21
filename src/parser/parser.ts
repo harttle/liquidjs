@@ -8,6 +8,8 @@ import { FS, Loader, LookupType } from '../fs'
 import { LiquidError, LiquidErrors } from '../util/error'
 import type { Liquid } from '../liquid'
 
+const parsing = new WeakMap<LiquidCache, Map<string, Promise<Template[]>>>()
+
 export class Parser {
   public parseFile: (file: string, sync?: boolean, type?: LookupType, currentFile?: string) => Generator<unknown, Template[], Template[] | string>
 
@@ -77,13 +79,25 @@ export class Parser {
     const tpls = yield cache.read(key)
     if (tpls) return tpls
 
-    const task = this._parseFile(file, sync, type, currentFile)
-    // sync mode: exec the task and cache the result
-    // async mode: cache the task before exec
-    const taskOrTpl = sync ? yield task : toPromise(task)
-    cache.write(key, taskOrTpl as any)
-    // note: concurrent tasks will be reused, cache for failed task is removed until its end
-    try { return yield taskOrTpl } catch (err) { cache.remove(key); throw err }
+    if (sync) {
+      const templates = yield this._parseFile(file, sync, type, currentFile)
+      cache.write(key, templates)
+      return templates
+    }
+    // async parses in progress are kept out of the cache, so sync renders never
+    // read a Promise, and are shared by concurrent renders of the same file
+    let pending = parsing.get(cache)
+    if (!pending) parsing.set(cache, pending = new Map())
+    if (pending.has(key)) return yield pending.get(key)
+    const task = toPromise(this._parseFile(file, sync, type, currentFile))
+    pending.set(key, task)
+    try {
+      const templates = yield task
+      cache.write(key, templates)
+      return templates
+    } finally {
+      pending.delete(key)
+    }
   }
   private * _parseFile (file: string, sync?: boolean, type: LookupType = LookupType.Root, currentFile?: string): Generator<unknown, Template[], string> {
     const filepath = yield this.loader.lookup(file, type, sync, currentFile)
