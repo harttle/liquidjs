@@ -255,6 +255,7 @@ Want to contribute? see [Contribution Guidelines][contribution]. Thanks goes to 
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/chinmayajha"><img src="https://avatars.githubusercontent.com/u/84258488?v=4&size=100" width="100px" height="100px" alt="Chinmay Jha"/><br /><sub><b>Chinmay Jha</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=chinmayajha" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.ryanfischback.com"><img src="https://avatars.githubusercontent.com/u/58228704?v=4&size=100" width="100px" height="100px" alt="Ryan Fischback"/><br /><sub><b>Ryan Fischback</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=RyanFischback" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/wozhenbang2004"><img src="https://avatars.githubusercontent.com/u/113896798?v=4&size=100" width="100px" height="100px" alt="Kayokoi"/><br /><sub><b>Kayokoi</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=wozhenbang2004" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://jayhemnani.in"><img src="https://avatars.githubusercontent.com/u/193022578?v=4&size=100" width="100px" height="100px" alt="Jay Hemnani"/><br /><sub><b>Jay Hemnani</b></sub></a><br /><a href="https://github.com/harttle/liquidjs/commits?author=jayhemnani9910" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
