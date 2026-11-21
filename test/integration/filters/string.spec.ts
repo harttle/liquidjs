@@ -271,11 +271,20 @@ describe('filters/string', function () {
     it('should allow multiple space chars between', function () {
       return test('{{ "1 \t2  3 \n4" | truncatewords: 3 }}', '1 2 3...')
     })
-    it('should show ellipsis if length is exactly len', function () {
-      return test('{{ "1 2 3" | truncatewords: 3 }}', '1 2 3...')
+    it('should not add the ellipsis when the word count is exactly len', function () {
+      return test('{{ "1 2 3" | truncatewords: 3 }}', '1 2 3')
+    })
+    it('should not add the ellipsis to a single word at len 1', function () {
+      return test('{{ "one" | truncatewords: 1 }}', 'one')
     })
     it('should default len to 15', function () {
-      return test('{{ "1 2 3 4 5 6 7 8 9 a b c d e f" | truncatewords }}', '1 2 3 4 5 6 7 8 9 a b c d e f...')
+      return test('{{ "a b c d e f g h i j k l m n o p q" | truncatewords }}', 'a b c d e f g h i j k l m n o...')
+    })
+    it('should keep untruncated input whitespace', function () {
+      return test('[{{ "  one   two " | truncatewords: 5 }}]', '[  one   two ]')
+    })
+    it('should not count trailing whitespace as a word', function () {
+      return test('[{{ "one two three " | truncatewords: 3 }}]', '[one two three ]')
     })
     it('should ignore leading whitespace when counting words', function () {
       return test('{{ "  Ground control to Major Tom." | truncatewords: 3 }}', 'Ground control to...')
