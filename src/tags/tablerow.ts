@@ -42,9 +42,9 @@ export default class extends Tag {
     let collection = toEnumerable(yield evalToken(this.collection, ctx))
     const args = (yield this.args.render(ctx)) as Record<string, any>
     const offset = args.offset || 0
-    const limit = (args.limit === undefined) ? collection.length : args.limit
+    const end = (args.limit === undefined) ? collection.length : Math.max(offset + args.limit, 0)
 
-    collection = collection.slice(offset, offset + limit)
+    collection = collection.slice(Math.max(offset, 0), end)
     const cols = args.cols || collection.length
 
     const r = this.liquid.renderer

@@ -59,9 +59,13 @@ export default class extends Tag {
       ? Object.keys(hash).filter(x => MODIFIERS.includes(x))
       : MODIFIERS.filter(x => hash[x] !== undefined)
 
+    let negativeOffset = 0
     collection = modifiers.reduce((collection, modifier: valueOf<typeof MODIFIERS>) => {
-      if (modifier === 'offset') return offset(collection, hash['offset'])
-      if (modifier === 'limit') return limit(collection, hash['limit'])
+      if (modifier === 'offset') {
+        negativeOffset = Math.min(Number(hash['offset']), 0) || 0
+        return offset(collection, hash['offset'])
+      }
+      if (modifier === 'limit') return limit(collection, negativeOffset ? Number(hash['limit']) + negativeOffset : hash['limit'])
       return reversed(collection)
     }, collection)
 
@@ -114,9 +118,9 @@ function reversed<T> (arr: Array<T>) {
 }
 
 function offset<T> (arr: Array<T>, count: number) {
-  return arr.slice(count)
+  return arr.slice(Math.max(count, 0))
 }
 
 function limit<T> (arr: Array<T>, count: number) {
-  return arr.slice(0, count)
+  return arr.slice(0, Math.max(count, 0))
 }
