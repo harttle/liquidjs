@@ -2,9 +2,16 @@ import { TimeLimiter } from './limiter'
 
 describe('TimeLimiter', () => {
   describe('#check()', () => {
-    afterEach(() => jest.restoreAllMocks())
+    let globalPerformance: Performance
+    beforeEach(() => {
+      globalPerformance = global.performance
+    })
+    afterEach(() => {
+      global.performance = globalPerformance
+    })
     it('should not read the clock when unlimited', () => {
-      const now = jest.spyOn(global.performance, 'now')
+      const now = jest.fn(() => 0)
+      global.performance = { now } as any as Performance
       new TimeLimiter('template render', Infinity).check()
       expect(now).not.toHaveBeenCalled()
     })
