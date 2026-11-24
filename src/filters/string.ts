@@ -192,7 +192,7 @@ export function truncatewords (this: FilterImpl, v: string, words = 15, o = '...
   const str = stringify(v)
   o = stringify(o)
   this.context.memoryLimit.use(str.length + o.length)
-  const arr = str.trimStart().split(/\s+/).filter(Boolean)
+  const arr = str.trimStart().split(/\s+/)
   if (words <= 0) words = 1
   if (arr.length <= words) return str
   return arr.slice(0, words).join(' ') + o

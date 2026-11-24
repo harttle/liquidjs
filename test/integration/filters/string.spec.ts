@@ -283,8 +283,8 @@ describe('filters/string', function () {
     it('should keep untruncated input whitespace', function () {
       return test('[{{ "  one   two " | truncatewords: 5 }}]', '[  one   two ]')
     })
-    it('should not count trailing whitespace as a word', function () {
-      return test('[{{ "one two three " | truncatewords: 3 }}]', '[one two three ]')
+    it('should count the empty field left by trailing whitespace', function () {
+      return test('[{{ "one two three " | truncatewords: 3 }}]', '[one two three...]')
     })
     it('should ignore leading whitespace when counting words', function () {
       return test('{{ "  Ground control to Major Tom." | truncatewords: 3 }}', 'Ground control to...')
