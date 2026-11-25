@@ -122,6 +122,25 @@ describe('LiquidOptions#cache', function () {
       expect(bar).toBe('bar')
       expect(coo).toBe('coo')
     })
+    it('should share a pending parse and replace it with the templates', async function () {
+      const cached: { [key: string]: unknown } = {}
+      const written: unknown[] = []
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: {
+          remove: (key: string) => { delete cached[key] },
+          read: (key: string) => cached[key] as Template[],
+          write: (key: string, value: Template[] | Promise<Template[]>) => { cached[key] = value; written.push(value) }
+        }
+      })
+      mock({ '/root/foo.html': 'foo' })
+      const results = await Promise.all([engine.renderFile('foo'), engine.renderFile('foo')])
+      expect(results).toEqual(['foo', 'foo'])
+      expect(written).toHaveLength(2)
+      expect(written[0]).toBeInstanceOf(Promise)
+      expect(written[1]).toBeInstanceOf(Array)
+    })
     it('should not cache not exist file', async function () {
       const engine = new Liquid({
         root: '/root/',
@@ -192,6 +211,28 @@ describe('LiquidOptions#cache', function () {
 
       const foo2 = await engine.renderFile('another/foo')
       expect(foo2).toBe('bar2')
+    })
+    it('should read templates cached by renderFile', async function () {
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: true
+      })
+      mock({ '/root/foo.html': 'foo' })
+      expect(await engine.renderFile('foo')).toBe('foo')
+      mock({ '/root/foo.html': 'bar' })
+      expect(engine.renderFileSync('foo')).toBe('foo')
+    })
+    it('should not read a pending renderFile parse', async function () {
+      const engine = new Liquid({
+        root: '/root/',
+        extname: '.html',
+        cache: true
+      })
+      mock({ '/root/foo.html': 'foo' })
+      const pending = engine.renderFile('foo')
+      expect(engine.renderFileSync('foo')).toBe('foo')
+      expect(await pending).toBe('foo')
     })
   })
 })

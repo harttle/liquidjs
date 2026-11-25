@@ -1,4 +1,3 @@
-import { getPerformance } from '../util/performance'
 import { toPromise, RenderError, LiquidErrors, LiquidError } from '../util'
 import { Context } from '../context'
 import { Template } from '../template'
@@ -15,10 +14,10 @@ export class Render {
     if (!emitter) {
       emitter = ctx.opts.keepOutputType ? new KeepingTypeEmitter() : new SimpleEmitter()
     }
-    ctx.renderLimit.check(getPerformance().now())
+    ctx.renderLimit.check()
     const errors = []
     for (const tpl of templates) {
-      ctx.renderLimit.check(getPerformance().now())
+      ctx.renderLimit.check()
       try {
         // if tpl.render supports emitter, it'll return empty `html`
         const html = yield tpl.render(ctx, emitter)
