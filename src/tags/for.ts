@@ -61,7 +61,7 @@ export default class extends Tag {
 
     collection = modifiers.reduce((collection, modifier: valueOf<typeof MODIFIERS>) => {
       if (modifier === 'offset') return offset(collection, hash['offset'])
-      if (modifier === 'limit') return limit(collection, hash['limit'])
+      if (modifier === 'limit') return limit(collection, hash['limit'], hash['offset'])
       return reversed(collection)
     }, collection)
 
@@ -114,9 +114,11 @@ function reversed<T> (arr: Array<T>) {
 }
 
 function offset<T> (arr: Array<T>, count: number) {
-  return arr.slice(count)
+  return arr.slice(Math.max(count, 0))
 }
 
-function limit<T> (arr: Array<T>, count: number) {
-  return arr.slice(0, count)
+// Like Ruby Liquid, the loop ends at offset + limit, so a negative offset takes away from the limit.
+function limit<T> (arr: Array<T>, count: number, offset: number) {
+  if (count === undefined) return arr
+  return arr.slice(0, Math.max(Number(count) + Math.min(Number(offset) || 0, 0), 0))
 }

@@ -140,6 +140,23 @@ describe('tags/tablerow', function () {
       const html = await liquid.parseAndRender(src)
       return expect(html).toBe(dst)
     })
+    it('should not skip items for a negative offset', async function () {
+      const src = '{% tablerow i in (1..3) offset:-1 %}{{ i }}{% endtablerow %}'
+      const dst = '<tr class="row1"><td class="col1">1</td><td class="col2">2</td><td class="col3">3</td></tr>'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).toBe(dst)
+    })
+    it('should count limit from a negative offset', async function () {
+      const src = '{% tablerow i in (1..3) offset:-1 limit:2 %}{{ i }}{% endtablerow %}'
+      const dst = '<tr class="row1"><td class="col1">1</td></tr>'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).toBe(dst)
+    })
+    it('should render nothing for a negative limit', async function () {
+      const src = '{% tablerow i in (1..3) limit:-1 %}{{ i }}{% endtablerow %}'
+      const html = await liquid.parseAndRender(src)
+      return expect(html).toBe('')
+    })
   })
   describe('break', function () {
     afterEach(restore)

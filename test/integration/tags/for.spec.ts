@@ -283,6 +283,11 @@ describe('tags/for', function () {
       return expect(liquid.parseAndRender(src, scope))
         .resolves.toBe('2 2 ')
     })
+    it('should loop nothing for a negative limit', async function () {
+      const src = '{%for i in (0..5) limit:-1%}{{i}}{%endfor%}-{%for i in (0..5) offset:1 limit:-1%}{{i}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('-')
+    })
   })
 
   describe('offset', function () {
@@ -331,6 +336,21 @@ describe('tags/for', function () {
       const arr = [1, 2, 3, 4, 5]
       const html = await liquid.parseAndRender(src, { arr1: arr, arr2: arr })
       return expect(html).toBe('12345-12345')
+    })
+    it('should not skip items for a negative offset', async function () {
+      const src = '{%for i in (0..3) offset:-2%}{{i}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('0123')
+    })
+    it('should count limit from a negative offset', async function () {
+      const src = '{%for i in (0..3) offset:-2 limit:3%}{{i}}{%endfor%}-{%for i in (0..5) offset:-2 limit:-1%}{{i}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('0-')
+    })
+    it('should continue from a negative offset', async function () {
+      const src = '{%for i in (0..3) offset:-2%}a{{i}}{%endfor%}{%for i in (0..3) offset:continue%}b{{i}}{%endfor%}'
+      const html = await liquid.parseAndRender(src, scope)
+      return expect(html).toBe('a0a1a2a3b2b3')
     })
   })
 
