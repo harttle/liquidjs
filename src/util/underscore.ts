@@ -110,6 +110,12 @@ export function isArrayLike (value: any): value is any[] {
   return value && isNumber(value.length)
 }
 
+export function readSize (obj: any) {
+  if (hasOwnProperty.call(obj, 'size') || obj['size'] !== undefined) return obj['size']
+  if (isArray(obj) || isString(obj)) return obj.length
+  if (typeof obj === 'object') return Object.keys(obj).length
+}
+
 export function isIterable (value: any): value is Iterable<any> {
   return isObject(value) && Symbol.iterator in value
 }
