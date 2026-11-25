@@ -1,4 +1,4 @@
-import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, readArrayElement, readSize, toEnumerable, advanceCodePoints, codePointLength } from '../util'
+import { toArray, argumentsToValue, toValue, stringify, caseInsensitiveCompare, orderedCompare, isArray, isNil, isArrayLike, isNumber, readArrayElement, readSize, toEnumerable, advanceCodePoints, codePointLength } from '../util'
 import { arrayIncludes, equals, evalToken, isTruthy } from '../render'
 import { Value, FilterImpl } from '../template'
 import { Tokenizer } from '../parser'
@@ -46,7 +46,10 @@ export function * sort_natural<T> (this: FilterImpl, arr: T[], property?: string
   return yield * sortBy.call(this, arr, property, caseInsensitiveCompare)
 }
 
-export const size = (v: any) => isNil(v) ? 0 : readSize(v) || 0
+export const size = (v: any) => {
+  const size = isNil(v) ? 0 : readSize(v)
+  return isNumber(size) ? size : 0
+}
 
 export function * map (this: FilterImpl, arr: Scope[], property: string): IterableIterator<unknown> {
   const results = []
