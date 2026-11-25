@@ -44,12 +44,6 @@ export default class extends Tag {
   * render (ctx: Context, emitter: Emitter): Generator<unknown, void | string, Template[]> {
     const r = this.liquid.renderer
     let collection = toEnumerable(yield * evalToken(this.collection, ctx))
-
-    if (!collection.length) {
-      yield r.renderTemplates(this.elseTemplates, ctx, emitter)
-      return
-    }
-
     const continueKey = 'continue-' + this.variable + '-' + this.collection.getText()
     ctx.push(createScope({ continue: ctx.getRegister(continueKey, {}) }))
     const hash = (yield * this.hash.render(ctx)) as Record<string, any>
@@ -66,6 +60,10 @@ export default class extends Tag {
     }, collection)
 
     ctx.setRegister(continueKey, (hash['offset'] || 0) + collection.length)
+    if (!collection.length) {
+      yield r.renderTemplates(this.elseTemplates, ctx, emitter)
+      return
+    }
     const forloops = ctx.getRegister<ForloopDrop[]>('forloops', [])
     const forloop = new ForloopDrop(collection.length, this.collection.getText(), this.variable, forloops[forloops.length - 1])
     const scope = createScope({ forloop })
