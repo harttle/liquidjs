@@ -964,6 +964,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "bardrop",
+      "name": "bardrop",
+      "avatar_url": "https://avatars.githubusercontent.com/u/100354790?v=4",
+      "profile": "https://github.com/bardrop",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
