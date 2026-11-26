@@ -3,7 +3,7 @@ import { Drop } from '../drop/drop'
 import { __assign } from 'tslib'
 import { NormalizedFullOptions, defaultOptions, RenderOptions } from '../liquid-options'
 import { createScope, Scope } from './scope'
-import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, TimeLimiter, toValue, readArrayElement, isPromise, isIterator } from '../util'
+import { hasOwnProperty, isArray, isNil, isUndefined, isString, isFunction, isNumber, toLiquid, InternalUndefinedVariableError, toValueSync, isObject, Limiter, TimeLimiter, toValue, readArrayElement, readSize, isPromise, isIterator } from '../util'
 
 type PropertyKey = string | number;
 
@@ -156,10 +156,4 @@ function readFirst (obj: Scope, ownPropertyOnly: boolean) {
 function readLast (obj: Scope, ownPropertyOnly: boolean) {
   if (isArray(obj)) return readArrayElement(obj, -1, ownPropertyOnly)
   return readJSProperty(obj, 'last', ownPropertyOnly)
-}
-
-function readSize (obj: Scope) {
-  if (hasOwnProperty.call(obj, 'size') || obj['size'] !== undefined) return obj['size']
-  if (isArray(obj) || isString(obj)) return obj.length
-  if (typeof obj === 'object') return Object.keys(obj).length
 }
