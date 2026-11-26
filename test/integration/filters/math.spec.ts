@@ -41,6 +41,7 @@ describe('filters/math', function () {
       () => test('{{ 183.357 | minus: 12 }}', '171.357'))
     it('should convert first arg as number', () => test('{{ "4" | minus: 1 }}', '3'))
     it('should convert both args as number', () => test('{{ "4" | minus: "1" }}', '3'))
+    it('should use numeric prefixes like Ruby Liquid', () => test('{{ "3 items" | minus: 1 }}', '2'))
   })
   describe('modulo', function () {
     it('should return "1" for 3,2', () => test('{{ 3 | modulo: 2 }}', '1'))
@@ -62,6 +63,8 @@ describe('filters/math', function () {
     it('should convert first arg to number', () => test('{{ "4" | plus: 2 }}', '6'))
     it('should convert both args to numbers', () => test('{{ "4" | plus: "2" }}', '6'))
     it('should convert invalid string to 0', () => test('{{ "abc" | plus: "2" }}', '2'))
+    it('should use numeric prefixes like Ruby Liquid', () => test('{{ "10px" | plus: 5 }}', '15'))
+    it('should not parse hexadecimal string prefixes', () => test('{{ "0x10" | plus: 0 }}', '0'))
     it('should support variable', () => test('{{ 4 | plus: b }}', { b: 2 }, '6'))
   })
 
@@ -96,5 +99,6 @@ describe('filters/math', function () {
     it('should return "2200.284" for 183.357,12',
       () => test('{{ 183.357 | times: 12 }}', '2200.284'))
     it('should convert string to number', () => test('{{ "24" | times: "7" }}', '168'))
+    it('should use numeric prefixes like Ruby Liquid', () => test('{{ "16px" | times: 2 }}', '32'))
   })
 })

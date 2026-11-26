@@ -81,7 +81,10 @@ export function toValue (value: any): any {
 }
 
 export function toNumber (value: any): number {
-  return +toValue(value) || 0
+  value = toValue(value)
+  if (typeof value === 'boolean') return Number(value)
+  const num = parseFloat(value)
+  return isNaN(num) ? 0 : num
 }
 
 export function isNumber (value: any): value is number {
