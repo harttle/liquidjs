@@ -28,7 +28,7 @@ export function createTrie<T = any> (input: TrieInput<T>): Trie<T> {
       const c = name[i]
       node[c] = node[c] || {}
 
-      if (i === name.length - 1 && isWord(name[i])) {
+      if (i === name.length - 1 && isWord(name.charCodeAt(i))) {
         node[c].needBoundary = true
       }
 

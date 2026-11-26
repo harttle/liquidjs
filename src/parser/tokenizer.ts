@@ -1,6 +1,6 @@
 import { FilteredValueToken, TagToken, HTMLToken, HashToken, QuotedToken, LiquidTagToken, OutputToken, ValueToken, Token, RangeToken, FilterToken, TopLevelToken, PropertyAccessToken, OperatorToken, LiteralToken, IdentifierToken, NumberToken } from '../tokens'
 import { OperatorHandler } from '../render/operator'
-import { LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, TYPES, QUOTE, BLANK, NUMBER, SIGN, isWord, isString } from '../util'
+import { LiteralValue, Trie, createTrie, ellipsis, literalValues, TokenizationError, QUOTE, BLANK, NUMBER, SIGN, getType, isWord, isString } from '../util'
 import { Operators, Expression } from '../render'
 import { NormalizedFullOptions, defaultOptions } from '../liquid-options'
 import { FilterArg } from './filter-arg'
@@ -62,7 +62,7 @@ export class Tokenizer {
       if (node['end']) info = node
     }
     if (!info) return -1
-    if (info['needBoundary'] && isWord(this.peek(i - this.p))) return -1
+    if (info['needBoundary'] && isWord(this.peek(i - this.p).charCodeAt(0))) return -1
     return i
   }
   readFilteredValue (): FilteredValueToken {
@@ -248,7 +248,7 @@ export class Tokenizer {
   readIdentifier (): IdentifierToken {
     this.skipBlank()
     const begin = this.p
-    while (!this.end() && isWord(this.peek())) ++this.p
+    while (!this.end() && isWord(this.input.charCodeAt(this.p))) ++this.p
     return new IdentifierToken(this.input, begin, this.p, this.file)
   }
 
@@ -377,7 +377,7 @@ export class Tokenizer {
         n++
       } else break
     }
-    if (digitFound && !isWord(this.peek(n))) {
+    if (digitFound && !isWord(this.peek(n).charCodeAt(0))) {
       const num = new NumberToken(this.input, this.p, this.p + n, this.file)
       this.advance(n)
       return num
@@ -469,7 +469,7 @@ export class Tokenizer {
   }
 
   peekType (n = 0) {
-    return this.p + n >= this.N ? 0 : TYPES[this.input.charCodeAt(this.p + n)]
+    return this.p + n >= this.N ? 0 : getType(this.input.charCodeAt(this.p + n))
   }
 
   peek (n = 0): string {
