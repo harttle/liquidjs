@@ -231,6 +231,11 @@ describe('Expression', function () {
       expect(await toPromise(create('(3 .. 5)').evaluate(ctx))).toEqual([3, 4, 5])
       expect(await toPromise(create('( 3 .. 5 )').evaluate(ctx))).toEqual([3, 4, 5])
     })
+    it('should truncate non-integer bounds', async function () {
+      expect(await toPromise(create('(1..3.9)').evaluate(ctx))).toEqual([1, 2, 3])
+      expect(await toPromise(create('(1.5..3.7)').evaluate(ctx))).toEqual([1, 2, 3])
+      expect(await toPromise(create('(-1.5..1.5)').evaluate(ctx))).toEqual([-1, 0, 1])
+    })
     it('should throw if .. not matched', async function () {
       expect(() => create('(3.5')).toThrow('invalid range syntax')
       expect(() => create('(3 5')).toThrow('invalid range syntax')
