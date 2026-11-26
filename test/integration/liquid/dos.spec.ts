@@ -136,6 +136,21 @@ describe('DoS related', function () {
         .toThrow('memory alloc limit exceeded')
     })
   })
+  describe('range bounds', () => {
+    it('should throw when range bounds exceed Number.MAX_SAFE_INTEGER', async () => {
+      const liquid = new Liquid({ renderLimit: 1000, memoryLimit: 1e6 })
+      const src = '{% for i in (9007199254740992..9007199254740994) %}x{% endfor %}'
+      await expect(liquid.parseAndRender(src)).rejects.toThrow('range bounds exceed Number.MAX_SAFE_INTEGER')
+      expect(() => liquid.parseAndRenderSync(src)).toThrow('range bounds exceed Number.MAX_SAFE_INTEGER')
+      expect(() => liquid.parseAndRenderSync('{% for i in (-9007199254740994..-9007199254740992) %}x{% endfor %}')).toThrow('range bounds exceed Number.MAX_SAFE_INTEGER')
+      expect(() => liquid.parseAndRenderSync('{% for i in (1..n) %}x{% endfor %}', { n: 2 ** 53 + 2 })).toThrow('range bounds exceed Number.MAX_SAFE_INTEGER')
+      expect(() => liquid.parseAndRenderSync('{% assign n = 9007199254740 | times: 10000 %}{% for i in (n..n) %}x{% endfor %}')).toThrow('range bounds exceed Number.MAX_SAFE_INTEGER')
+    })
+    it('should render ranges with undefined bounds as empty', () => {
+      const liquid = new Liquid()
+      expect(liquid.parseAndRenderSync('{% for i in (1..missing) %}x{% endfor %}')).toBe('')
+    })
+  })
   describe('strip_html ReDoS', () => {
     // Regression for O(n^2) backtracking on unclosed `<script` / `<style` openers.
     // The previous regex stalled the event loop for ~10s on 350KB of `'<script'.repeat`.
