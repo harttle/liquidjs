@@ -96,10 +96,10 @@ export function evalQuotedToken (token: QuotedToken) {
 }
 
 function * evalRangeToken (token: RangeToken, ctx: Context): Generator<unknown, unknown, unknown> {
-  const low = (yield evalTokenValue(token.lhs, ctx)) as unknown as number
-  const high = (yield evalTokenValue(token.rhs, ctx)) as unknown as number
+  const low = Math.trunc((yield evalTokenValue(token.lhs, ctx)) as unknown as number)
+  const high = Math.trunc((yield evalTokenValue(token.rhs, ctx)) as unknown as number)
   ctx.memoryLimit.use(high - low + 1)
-  return range(+low, +high + 1)
+  return range(low, high + 1)
 }
 
 function * toPostfix (tokens: Iterable<Token>): IterableIterator<Token> {
