@@ -78,9 +78,12 @@ export class Context {
   public getSync (paths: PropertyKey[]): unknown {
     return toValueSync(this._get(paths))
   }
-  public * _get (paths: (PropertyKey | Drop)[]): Generator<unknown, unknown, unknown> {
+  /**
+   * Returns the value, or a generator that finishes the lookup when a Promise or iterator is met.
+   */
+  public _get (paths: (PropertyKey | Drop)[]): unknown {
     const scope = this.findScope(paths[0] as string) // first prop should always be a string
-    return yield * this._getFromScope(scope, paths)
+    return this._getFromScope(scope, paths)
   }
   /**
    * @deprecated use `_get()` instead
@@ -88,16 +91,27 @@ export class Context {
   public getFromScope (scope: unknown, paths: PropertyKey[] | string): IterableIterator<unknown> {
     return toValueSync(this._getFromScope(scope, paths)) as IterableIterator<unknown>
   }
-  public * _getFromScope (scope: unknown, paths: (PropertyKey | Drop)[] | string, strictVariables = this.strictVariables): Generator<unknown, unknown, unknown> {
+  /**
+   * Returns the value, or a generator that finishes the lookup when a Promise or iterator is met.
+   */
+  public _getFromScope (scope: unknown, paths: (PropertyKey | Drop)[] | string, strictVariables = this.strictVariables, start = 0): unknown {
     if (isString(paths)) paths = paths.split('.')
-    for (let i = 0; i < paths.length; i++) {
+    for (let i = start; i < paths.length; i++) {
       scope = this.readProperty(scope as object, paths[i])
-      if (isPromise(scope) || isIterator(scope)) scope = yield scope
-      if (strictVariables && isUndefined(scope)) {
-        throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join!('.'))
-      }
+      if (isPromise(scope) || isIterator(scope)) return this.resumeFromScope(scope, paths, strictVariables, i)
+      this.assertDefined(scope, paths, strictVariables, i)
     }
     return scope
+  }
+  private * resumeFromScope (pending: unknown, paths: (PropertyKey | Drop)[], strictVariables: boolean, i: number): Generator<unknown, unknown, unknown> {
+    const scope = yield pending
+    this.assertDefined(scope, paths, strictVariables, i)
+    return yield this._getFromScope(scope, paths, strictVariables, i + 1)
+  }
+  private assertDefined (scope: unknown, paths: (PropertyKey | Drop)[], strictVariables: boolean, i: number) {
+    if (strictVariables && isUndefined(scope)) {
+      throw new InternalUndefinedVariableError((paths as string[]).slice(0, i + 1).join('.'))
+    }
   }
   public push (ctx: object) {
     return this.scopes.push(ctx)

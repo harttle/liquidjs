@@ -1,7 +1,7 @@
 import { Filter } from './filter'
 import { Expression } from '../render'
 import { Tokenizer } from '../parser'
-import { assert } from '../util'
+import { assert, isPromise, isIterator } from '../util'
 import type { FilteredValueToken } from '../tokens'
 import type { Liquid } from '../liquid'
 import type { Context } from '../context'
@@ -21,12 +21,22 @@ export class Value {
     this.filters = token.filters.map(token => new Filter(token, this.getFilter(liquid, token.name), liquid))
   }
 
-  public * value (ctx: Context, lenient?: boolean): Generator<unknown, unknown, unknown> {
+  /**
+   * Returns the value, or a generator that finishes the evaluation when a Promise or iterator is met.
+   */
+  public value (ctx: Context, lenient?: boolean): unknown {
     lenient = lenient || (ctx.opts.lenientIf && this.filters.length > 0 && this.filters[0].name === 'default')
-    let val = yield * this.initial.evaluate(ctx, lenient)
-
-    for (const filter of this.filters) {
-      val = yield * filter.render(val, ctx)
+    let val = this.initial.evaluate(ctx, lenient)
+    for (let i = 0; i < this.filters.length; i++) {
+      if (isPromise(val) || isIterator(val)) return this.resume(val, i, ctx)
+      val = this.filters[i].render(val, ctx)
+    }
+    return val
+  }
+  private * resume (pending: unknown, start: number, ctx: Context): Generator<unknown, unknown, unknown> {
+    let val = yield pending
+    for (let i = start; i < this.filters.length; i++) {
+      val = yield this.filters[i].render(val, ctx)
     }
     return val
   }

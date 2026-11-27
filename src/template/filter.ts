@@ -24,13 +24,31 @@ export class Filter {
     this.args = token.args
     this.liquid = liquid
   }
-  public * render (value: any, context: Context): Generator<unknown, unknown, unknown> {
-    const argv: any[] = []
-    for (const arg of this.args as FilterArg[]) {
-      if (isKeyValuePair(arg)) argv.push([arg[0], yield * evalToken(arg[1], context)])
-      else argv.push(yield * evalToken(arg, context))
+  /**
+   * Returns the result, or a Promise/generator when an argument or the filter itself is async.
+   */
+  public render (value: any, context: Context): unknown {
+    const argv: any[] = [value]
+    for (let i = 0; i < this.args.length; i++) {
+      const arg = this.evalArg(i, context)
+      if (isPromise(arg) || isIterator(arg)) return this.resume(arg, argv, i, context)
+      this.pushArg(argv, i, arg)
     }
-    const result = this.handler.apply({ context, token: this.token, liquid: this.liquid }, [value, ...argv])
-    return isPromise(result) || isIterator(result) ? yield result : result
+    return this.handler.apply({ context, token: this.token, liquid: this.liquid }, argv as [any, ...any[]])
+  }
+  private * resume (pending: unknown, argv: any[], start: number, context: Context): Generator<unknown, unknown, unknown> {
+    this.pushArg(argv, start, yield pending)
+    for (let i = start + 1; i < this.args.length; i++) {
+      this.pushArg(argv, i, yield this.evalArg(i, context))
+    }
+    return yield this.handler.apply({ context, token: this.token, liquid: this.liquid }, argv as [any, ...any[]])
+  }
+  private evalArg (i: number, context: Context) {
+    const arg = this.args[i]
+    return evalToken(isKeyValuePair(arg) ? arg[1] : arg, context)
+  }
+  private pushArg (argv: any[], i: number, value: unknown) {
+    const arg = this.args[i]
+    argv.push(isKeyValuePair(arg) ? [arg[0], value] : value)
   }
 }
