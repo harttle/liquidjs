@@ -18,7 +18,7 @@ function shiftDecimal (n: number, exponent: number) {
 
 export function round (v: number, arg = 0) {
   v = toNumber(v)
-  arg = toNumber(arg)
+  arg = Math.trunc(toNumber(arg))
   const scaled = shiftDecimal(Math.abs(v), arg)
   if (!(scaled <= Number.MAX_SAFE_INTEGER)) return v
   const rounded = shiftDecimal(Math.round(scaled), -arg)

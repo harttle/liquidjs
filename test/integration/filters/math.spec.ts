@@ -89,6 +89,8 @@ describe('filters/math', function () {
     it('should round to tens for negative digits', () => test('{{ 1234 | round: -2 }}', '1200'))
     it('should round half away from zero for negative digits', () => test('{{ num | round: -1 }}', { num: -15 }, '-20'))
     it('should keep Infinity', () => test('{{ num | round: 2 }}', { num: Infinity }, 'Infinity'))
+    it('should truncate a fractional digits argument', () => test('{{ 5.666 | round: 1.2 }},{{ 5.666 | round: 1.9 }},{{ 5.666 | round: "1.9" }}', '5.7,5.7,5.7'))
+    it('should truncate a fractional digits argument toward zero', () => test('{{ 5.666 | round: 0.5 }},{{ 1234.5 | round: -1.5 }}', '6,1230'))
   })
   describe('times', function () {
     it('should return "6" for 3,2', () => test('{{ 3 | times: 2 }}', '6'))
