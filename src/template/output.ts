@@ -7,7 +7,7 @@ import { Tokenizer } from '../parser'
 import { Liquid } from '../liquid'
 import { Filter } from './filter'
 import { FilterToken } from '../tokens'
-import { toValue } from '../util'
+import { toValue, isPromise, isIterator } from '../util'
 
 export class Output extends TemplateImpl<OutputToken> implements Template {
   value: Value
@@ -23,7 +23,10 @@ export class Output extends TemplateImpl<OutputToken> implements Template {
     }
   }
   public * render (ctx: Context, emitter: Emitter): IterableIterator<unknown> {
-    const val = yield toValue(yield * this.value.value(ctx, false))
+    let val = this.value.value(ctx, false)
+    if (isPromise(val) || isIterator(val)) val = yield val
+    val = toValue(val)
+    if (isPromise(val)) val = yield val
     emitter.write(val)
   }
 

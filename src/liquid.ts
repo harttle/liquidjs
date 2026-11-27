@@ -86,7 +86,7 @@ export class Liquid {
     return this.renderToNodeStream(templates, scope, renderOptions)
   }
 
-  public _evalValue (str: string, scope?: object | Context): IterableIterator<any> {
+  public _evalValue (str: string, scope?: object | Context): unknown {
     const value = new Value(str, this)
     const ctx = scope instanceof Context ? scope : new Context(scope, this.options, {}, { liquid: this })
     return value.value(ctx)
