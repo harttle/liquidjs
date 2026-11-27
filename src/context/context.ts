@@ -94,8 +94,11 @@ export class Context {
   /**
    * Returns the value, or a generator that finishes the lookup when a Promise or iterator is met.
    */
-  public _getFromScope (scope: unknown, paths: (PropertyKey | Drop)[] | string, strictVariables = this.strictVariables, start = 0): unknown {
+  public _getFromScope (scope: unknown, paths: (PropertyKey | Drop)[] | string, strictVariables = this.strictVariables): unknown {
     if (isString(paths)) paths = paths.split('.')
+    return this.readPath(scope, paths, strictVariables, 0)
+  }
+  private readPath (scope: unknown, paths: (PropertyKey | Drop)[], strictVariables: boolean, start: number): unknown {
     for (let i = start; i < paths.length; i++) {
       scope = this.readProperty(scope as object, paths[i])
       if (isPromise(scope) || isIterator(scope)) return this.resumeFromScope(scope, paths, strictVariables, i)
@@ -106,7 +109,7 @@ export class Context {
   private * resumeFromScope (pending: unknown, paths: (PropertyKey | Drop)[], strictVariables: boolean, i: number): Generator<unknown, unknown, unknown> {
     const scope = yield pending
     this.assertDefined(scope, paths, strictVariables, i)
-    return yield this._getFromScope(scope, paths, strictVariables, i + 1)
+    return yield this.readPath(scope, paths, strictVariables, i + 1)
   }
   private assertDefined (scope: unknown, paths: (PropertyKey | Drop)[], strictVariables: boolean, i: number) {
     if (strictVariables && isUndefined(scope)) {
