@@ -197,10 +197,14 @@ export function truncatewords (this: FilterImpl, v: string, words = 15, o = '...
   const str = stringify(v)
   o = stringify(o)
   this.context.memoryLimit.use(str.length + o.length)
-  const arr = str.trimStart().split(/\s+/)
   if (words <= 0) words = 1
-  if (arr.length <= words) return str
-  return arr.slice(0, words).join(' ') + o
+  const limit = Math.floor(words)
+  const rWord = /\S+/g
+  const kept: string[] = []
+  let match: RegExpExecArray | null
+  while (kept.length < limit && (match = rWord.exec(str))) kept.push(match[0])
+  if (kept.length < limit || rWord.lastIndex >= str.length) return str
+  return kept.join(' ') + o
 }
 
 export function normalize_whitespace (this: FilterImpl, v: string) {
