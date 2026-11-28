@@ -20,6 +20,8 @@ const dayNamesShort = dayNames.map(name => name.slice(0, 3))
 
 const MAX_TIMEZONE_FORMATS = 100
 const timezoneFormats = new Map<string, Intl.DateTimeFormat>()
+const MAX_NAME_FORMATS = 100
+const nameFormats = new Map<string, Intl.DateTimeFormat>()
 
 // Same output as date.toLocaleString('en-US', { timeZone }), which builds a new Intl.DateTimeFormat on every call
 function formatInTimezone (date: Date, timeZone: string): string {
@@ -146,7 +148,15 @@ export class LiquidDate {
     return !isNaN(this.getTime())
   }
   private format (options: Intl.DateTimeFormatOptions) {
-    return this.DateTimeFormat && this.DateTimeFormat(this.locale, options).format(this.displayDate)
+    if (!this.DateTimeFormat) return
+    const key = `${this.locale}|${JSON.stringify(options)}`
+    let format = nameFormats.get(key)
+    if (!format) {
+      format = this.DateTimeFormat(this.locale, options)
+      if (nameFormats.size >= MAX_NAME_FORMATS) nameFormats.clear()
+      nameFormats.set(key, format)
+    }
+    return format.format(this.displayDate)
   }
 
   /**
