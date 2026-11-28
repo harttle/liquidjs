@@ -25,6 +25,16 @@ describe('LiquidDate', () => {
       spy.mockRestore()
     }
   })
+  it('should reuse one Intl.DateTimeFormat per locale for month and weekday names', () => {
+    const spy = jest.spyOn(Intl, 'DateTimeFormat')
+    try {
+      const names = [1, 2, 3].map(day => new LiquidDate(`2021-10-0${day}T14:26:00.000Z`, 'fr-FR', 0).getLongMonthName())
+      expect(names).toEqual(['octobre', 'octobre', 'octobre'])
+      expect(spy.mock.calls.filter(([locale, options]) => locale === 'fr-FR' && options?.month === 'long')).toHaveLength(1)
+    } finally {
+      spy.mockRestore()
+    }
+  })
   it('should support Date as argument', () => {
     const date = new LiquidDate(new Date('2021-10-06T14:26:00.000+08:00'), 'en-US', 0)
     expect(date.getHours()).toBe(6)
